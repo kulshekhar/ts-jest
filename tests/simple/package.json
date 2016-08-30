@@ -1,0 +1,16 @@
+{
+  "jest": {
+    "automock": false,
+    "scriptPreprocessor": "../../preprocessor.js",
+    "testFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ],
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ]
+  }
+}
