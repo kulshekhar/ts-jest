@@ -10,4 +10,4 @@ mkdir node_modules/typescript-jest
 ln -s $(pwd)/preprocessor.js $(pwd)/node_modules/typescript-jest/
 ln -s $(pwd)/index.js $(pwd)/node_modules/typescript-jest/
 
-ln -s $(pwd)/node_modules $(pwd)/tests/hello_world/
+ln -s $(pwd)/node_modules $(pwd)/tests/simple/
