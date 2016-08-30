@@ -1,0 +1,44 @@
+# typescript-jest
+
+**Note:** This is currently just a hack and most likely not suitable for all setups. 
+
+This repo uses code from the [source-map-support](https://github.com/evanw/node-source-map-support) package to show errors with mapped locations.
+
+To use this in its current form, clone this repo anywhere on your disk. Run `npm install` in it.
+Create a symlink in the `node_modules` directory of your project to this directory:
+
+```sh
+ln -s path-to-typescript-jest
+```
+
+such that you effectively have a `node_modules/typescript-jest` directory.
+
+Modify your project's `package.json` so that the `jest` section looks something like:
+
+```json
+{
+  "jest": {
+    "scriptPreprocessor": "<rootDir>/node_modules/typescript-jest/preprocessor.js",
+    "testFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ],
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ],
+    "unmockedModulePathPatterns": [
+      "<rootDir>/node_modules/react/",
+      "<rootDir>/node_modules/react-dom/",
+      "<rootDir>/node_modules/react-addons-test-utils/",
+      "<rootDir>/node_modules/typescript-jest/"
+    ]
+  }
+}
+```
+
+This should allow you to write Jest tests in Typescript and be able to locate errors without any additional gymnastics.
+
+If you have any suggestions/pull requests to turn this into a useful package, just open an issue and I'll be happy to work with you to improve this.
