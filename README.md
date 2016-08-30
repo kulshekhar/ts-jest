@@ -2,6 +2,8 @@
 
 **Note:** This is currently just a hack and most likely not suitable for all setups. 
 
+## Details
+
 This repo uses code from the [source-map-support](https://github.com/evanw/node-source-map-support) package to show errors with mapped locations.
 
 To use this in its current form, clone this repo anywhere on your disk. Run `npm install` in it.
@@ -42,3 +44,19 @@ Modify your project's `package.json` so that the `jest` section looks something 
 This should allow you to write Jest tests in Typescript and be able to locate errors without any additional gymnastics.
 
 If you have any suggestions/pull requests to turn this into a useful package, just open an issue and I'll be happy to work with you to improve this.
+
+## Quickstart to run tests
+
+```sh
+git clone https://github.com/kulshekhar/typescript-jest
+cd typescript-jest
+npm install
+./test-init.sh
+npm test
+```
+
+It is assumed that `typescript` and `jest-cli` are globally installed. If not, please do so:
+
+```sh
+npm i -g typescript jest-cli
+```
