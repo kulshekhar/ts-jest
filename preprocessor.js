@@ -17,5 +17,7 @@ module.exports = {
 
       return modified;
     }
+
+    return src;
   }
 };
