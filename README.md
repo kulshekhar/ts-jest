@@ -20,7 +20,7 @@ Modify your project's `package.json` so that the `jest` section looks something 
 {
   "jest": {
     "scriptPreprocessor": "<rootDir>/node_modules/ts-jest/preprocessor.js",
-    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(js)$",
+    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
     "moduleFileExtensions": [
       "ts",
       "tsx",
