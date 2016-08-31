@@ -36,7 +36,13 @@ Modify your project's `package.json` so that the `jest` section looks something 
       "<rootDir>/node_modules/react-dom/",
       "<rootDir>/node_modules/react-addons-test-utils/",
       "<rootDir>/node_modules/typescript-jest/"
-    ]
+    ],
+    "globals": {
+      "__TS_CONFIG__": {
+        "module": "commonjs",
+        "jsx": "react"
+      }
+    }
   }
 }
 ```

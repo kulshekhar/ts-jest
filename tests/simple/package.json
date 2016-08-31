@@ -11,6 +11,12 @@
       "ts",
       "tsx",
       "js"
-    ]
+    ],
+    "globals": {
+      "__TS_CONFIG__": {
+        "module": "commonjs",
+        "jsx": "react"
+      }
+    }
   }
 }

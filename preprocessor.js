@@ -1,15 +1,12 @@
 const tsc = require('typescript');
 
 module.exports = {
-  process(src, path) {
+  process(src, path, config) {
     if (path.endsWith('.ts') || path.endsWith('.tsx')) {
       const transpiled = tsc.transpileModule(
         src,
         {
-          compilerOptions: {
-            module: tsc.ModuleKind.CommonJS,
-            jsx: tsc.JsxEmit.React
-          },
+          compilerOptions: getTSConfig(config.globals),
           fileName: path
         });
 
@@ -21,3 +18,11 @@ module.exports = {
     return src;
   }
 };
+
+function getTSConfig(globals) {
+  const config = globals.__TS_CONFIG__ || {};
+  config.module = config.module || tsc.ModuleKind.CommonJS;
+  config.jsx = config.jsx || tsc.JsxEmit.React;
+  
+  return config;
+}

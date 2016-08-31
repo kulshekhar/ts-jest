@@ -91,11 +91,7 @@ function transpileIfTypescript(path, contents) {
   if (path && (path.endsWith('.tsx') || path.endsWith('.ts'))) {
 
     transpiled = tsc.transpileModule(contents, {
-      compilerOptions: {
-        module: 'commonjs',
-        jsx: 'react',
-        inlineSourceMap: true
-      },
+      compilerOptions: getTSConfig(),
       fileName: path
     });
 
@@ -507,3 +503,13 @@ exports.install = function (options) {
     }
   }
 };
+
+function getTSConfig() {
+  // if a global __TS_CONFIG__ is set, update the compiler options based on that
+  var config = __TS_CONFIG__ || {};
+  config.module = config.module || tsc.ModuleKind.CommonJS;
+  config.jsx = config.jsx || tsc.JsxEmit.React;
+  config.inlineSourceMap = true;
+
+  return config;
+}
