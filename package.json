@@ -23,9 +23,6 @@
     "url": "https://github.com/kulshekhar/typescript-jest/issues"
   },
   "homepage": "https://github.com/kulshekhar/typescript-jest#readme",
-  "devDependencies": {
-    "source-map": "^0.5.6"
-  },
   "jest": {
     "automock": false,
     "testFileExtensions": [
@@ -34,5 +31,9 @@
     "moduleFileExtensions": [
       "js"
     ]
+  },
+  "dependencies": {
+    "source-map": "^0.5.6",
+    "typescript": "^1.8.10"
   }
 }
