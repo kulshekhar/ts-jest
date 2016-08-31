@@ -10,7 +10,7 @@ module.exports = {
           fileName: path
         });
 
-      const modified = `require('typescript-jest').install({environment: 'node', emptyCacheBetweenOperations: true});${transpiled.outputText}`;
+      const modified = `require('ts-jest').install({environment: 'node', emptyCacheBetweenOperations: true});${transpiled.outputText}`;
 
       return modified;
     }

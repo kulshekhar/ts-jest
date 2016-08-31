@@ -1,6 +1,6 @@
 {
   "name": "ts-jest",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "main": "index.ts",
   "description": "A preprocessor with sourcemap support to help use Typescript with Jest",
   "scripts": {
