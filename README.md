@@ -1,4 +1,6 @@
-# typescript-jest
+# typescript-jest 
+
+[![Build Status](https://semaphoreci.com/api/v1/k/typescript-jest/branches/master/badge.svg)](https://semaphoreci.com/k/typescript-jest)
 
 **Note:** This is currently just a hack and most likely not suitable for all setups. 
 
