@@ -1,6 +1,6 @@
 {
   "name": "ts-jest",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "main": "index.ts",
   "description": "A preprocessor with sourcemap support to help use Typescript with Jest",
   "scripts": {
@@ -24,10 +24,7 @@
   },
   "homepage": "https://github.com/kulshekhar/ts-jest#readme",
   "jest": {
-    "automock": false,
-    "testFileExtensions": [
-      "js"
-    ],
+    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(js)$",
     "moduleFileExtensions": [
       "js"
     ]

@@ -1,12 +1,7 @@
 {
   "jest": {
-    "automock": false,
     "scriptPreprocessor": "../../preprocessor.js",
-    "testFileExtensions": [
-      "ts",
-      "tsx",
-      "js"
-    ],
+    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
     "moduleFileExtensions": [
       "ts",
       "tsx",

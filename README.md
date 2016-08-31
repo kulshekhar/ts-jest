@@ -20,21 +20,11 @@ Modify your project's `package.json` so that the `jest` section looks something 
 {
   "jest": {
     "scriptPreprocessor": "<rootDir>/node_modules/ts-jest/preprocessor.js",
-    "testFileExtensions": [
-      "ts",
-      "tsx",
-      "js"
-    ],
+    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(js)$",
     "moduleFileExtensions": [
       "ts",
       "tsx",
       "js"
-    ],
-    "unmockedModulePathPatterns": [
-      "<rootDir>/node_modules/react/",
-      "<rootDir>/node_modules/react-dom/",
-      "<rootDir>/node_modules/react-addons-test-utils/",
-      "<rootDir>/node_modules/ts-jest/"
     ],
     "globals": {
       "__TS_CONFIG__": {
