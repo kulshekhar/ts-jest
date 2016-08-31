@@ -1,14 +1,14 @@
 {
-  "name": "typescript-jest",
+  "name": "ts-jest",
   "version": "0.0.1",
-  "main": "typescript-jest.ts",
+  "main": "index.ts",
   "description": "A preprocessor with sourcemap support to help use Typescript with Jest",
   "scripts": {
     "test": "jest --no-cache"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kulshekhar/typescript-jest.git"
+    "url": "git+https://github.com/kulshekhar/ts-jest.git"
   },
   "keywords": [
     "jest",
@@ -20,9 +20,9 @@
   "author": "Kulshekhar Kabra",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/kulshekhar/typescript-jest/issues"
+    "url": "https://github.com/kulshekhar/ts-jest/issues"
   },
-  "homepage": "https://github.com/kulshekhar/typescript-jest#readme",
+  "homepage": "https://github.com/kulshekhar/ts-jest#readme",
   "jest": {
     "automock": false,
     "testFileExtensions": [
