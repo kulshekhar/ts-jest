@@ -1,0 +1,6 @@
+{
+  "globalDevDependencies": {
+    "jest": "registry:dt/jest#0.9.0+20160914121351",
+    "react": "registry:dt/react#0.14.0+20160829191040"
+  }
+}
