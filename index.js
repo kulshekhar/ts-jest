@@ -511,5 +511,5 @@ function getTSConfig() {
   config.jsx = config.jsx || tsc.JsxEmit.React;
   config.inlineSourceMap = true;
 
-  return config;
+  return tsc.convertCompilerOptionsFromJson(config).options;
 }

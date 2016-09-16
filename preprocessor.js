@@ -23,6 +23,6 @@ function getTSConfig(globals) {
   const config = globals.__TS_CONFIG__ || {};
   config.module = config.module || tsc.ModuleKind.CommonJS;
   config.jsx = config.jsx || tsc.JsxEmit.React;
-  
-  return config;
+
+  return tsc.convertCompilerOptionsFromJson(config).options;
 }

@@ -1,0 +1,6 @@
+exports[`test Button renders correctly 1`] = `
+<div
+  className="button">
+  hi!
+</div>
+`;
