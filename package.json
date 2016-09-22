@@ -1,6 +1,6 @@
 {
   "name": "ts-jest",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "main": "index.ts",
   "description": "A preprocessor with sourcemap support to help use Typescript with Jest",
   "scripts": {
@@ -31,10 +31,10 @@
   },
   "dependencies": {
     "source-map": "^0.5.6",
-    "typescript": "^1.8.10"
+    "typescript": "^2.0.3"
   },
   "devDependencies": {
-    "react": "^15.3.1",
-    "react-test-renderer": "^15.3.1"
+    "react": "^15.3.2",
+    "react-test-renderer": "^15.3.2"
   }
 }
