@@ -12,7 +12,7 @@ describe('button', () => {
     const output = result.output.toString();
 
     expect(result.status).toBe(1);
-    expect(output).toContain('1 test failed, 1 test passed (2 total in 1 test suite');
+    expect(output).toContain('1 failed, 1 passed, 2 total');
     expect(stderr).toContain('✓ Button renders correctly');
     expect(stderr).toContain('✕ BadButton should throw an error on line 18');
     expect(stderr).toContain('Button.tsx:18:23');
