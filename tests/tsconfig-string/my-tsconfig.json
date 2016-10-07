@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "sourceMap": false,
+    "declaration": false,
+    "target": "ES6",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "noEmitOnError": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitAny": false,
+    "noImplicitReturns": true,
+    "removeComments": true,
+    "strictNullChecks": true,
+    "jsx": "react",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": false
+  }
+}

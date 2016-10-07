@@ -1,6 +1,6 @@
 // from: https://github.com/facebook/jest/blob/master/integration_tests/utils.js
 
-const {spawnSync} = require('child_process');
+const {spawnSync} = require('cross-spawn').sync;
 const fs = require('fs');
 const path = require('path');
 

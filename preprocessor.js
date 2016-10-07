@@ -1,4 +1,5 @@
 const tsc = require('typescript');
+const {getTSConfig} = require('./utils');
 
 module.exports = {
   process(src, path, config) {
@@ -10,19 +11,9 @@ module.exports = {
           fileName: path
         });
 
-      const modified = `require('ts-jest').install({environment: 'node', emptyCacheBetweenOperations: true});${transpiled.outputText}`;
-
-      return modified;
+      return transpiled.outputText;
     }
 
     return src;
   }
 };
-
-function getTSConfig(globals) {
-  const config = globals.__TS_CONFIG__ || {};
-  config.module = config.module || tsc.ModuleKind.CommonJS;
-  config.jsx = config.jsx || tsc.JsxEmit.React;
-
-  return tsc.convertCompilerOptionsFromJson(config).options;
-}

@@ -35,6 +35,8 @@
   },
   "devDependencies": {
     "react": "^15.3.2",
-    "react-test-renderer": "^15.3.2"
+    "react-test-renderer": "^15.3.2",
+    "jest": "16.0.1",
+    "cross-spawn": "4.0.2"
   }
 }

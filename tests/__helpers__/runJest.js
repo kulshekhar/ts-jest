@@ -2,11 +2,11 @@
 
 const {fileExists} = require('./utils');
 const path = require('path');
-const spawnSync = require('child_process').spawnSync;
+const spawnSync = require('cross-spawn').sync;
 
 // assuming that jest is installed globally
 // using `npm i -g jest-cli`
-const JEST_PATH = 'jest';  
+const JEST_PATH = 'jest';
 
 // return the result of the spawned proccess:
 //  [ 'status', 'signal', 'output', 'pid', 'stdout', 'stderr',

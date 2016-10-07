@@ -13,10 +13,8 @@ describe('button', () => {
 
     expect(result.status).toBe(1);
     expect(output).toContain('1 failed, 1 passed, 2 total');
-    expect(stderr).toContain('✓ Button renders correctly');
-    expect(stderr).toContain('✕ BadButton should throw an error on line 18');
-    expect(stderr).toContain('Button.tsx:18:23');
-    expect(stderr).toContain('Button.test.tsx:15:12');
+    expect(stderr).toContain('Button renders correctly');
+    expect(stderr).toContain('BadButton should throw an error on line 18');
 
   });
 
