@@ -1,4 +1,11 @@
 const tsc = require('typescript');
+const getTSConfig = require('./lib/get-tsconfig');
+
+const getTsCompilerOptions = (tsConfig) => {
+  return tsc
+    .convertCompilerOptionsFromJson(tsConfig.compilerOptions)
+    .options;
+};
 
 module.exports = {
   process(src, path, config) {
@@ -6,7 +13,7 @@ module.exports = {
       const transpiled = tsc.transpileModule(
         src,
         {
-          compilerOptions: getTSConfig(config.globals),
+          compilerOptions: getTsCompilerOptions(getTSConfig({ rootDir: config.rootDir })),
           fileName: path
         });
 
@@ -18,11 +25,3 @@ module.exports = {
     return src;
   }
 };
-
-function getTSConfig(globals) {
-  const config = globals.__TS_CONFIG__ || {};
-  config.module = config.module || tsc.ModuleKind.CommonJS;
-  config.jsx = config.jsx || tsc.JsxEmit.React;
-
-  return tsc.convertCompilerOptionsFromJson(config).options;
-}

@@ -1,10 +1,11 @@
-// Except a small part of the code, all of the code here is taken from 
+// Except a small part of the code, all of the code here is taken from
 // https://github.com/evanw/node-source-map-support
 
 var SourceMapConsumer = require('source-map').SourceMapConsumer;
 var path = require('path');
 var fs = require('fs');
 var tsc = require('typescript');
+var getTSConfigFromFile = require('./lib/get-tsconfig');
 
 // Only install once if called multiple times
 var errorFormatterInstalled = false;
@@ -505,11 +506,9 @@ exports.install = function (options) {
 };
 
 function getTSConfig() {
-  // if a global __TS_CONFIG__ is set, update the compiler options based on that
-  var config = __TS_CONFIG__ || {};
-  config.module = config.module || tsc.ModuleKind.CommonJS;
-  config.jsx = config.jsx || tsc.JsxEmit.React;
-  config.inlineSourceMap = true;
+  var compilerOptions = getTSConfigFromFile({ rootDir: process.cwd() })
+    .compilerOptions;
+  compilerOptions.inlineSourceMap = true;
 
-  return tsc.convertCompilerOptionsFromJson(config).options;
+  return tsc.convertCompilerOptionsFromJson(compilerOptions).options;
 }
