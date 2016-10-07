@@ -5,10 +5,10 @@ const jest = require('jest');
 const fs = require('fs');
 
 const argv = process.argv.slice(2);
-
+argv.push('--no-cache');
 // Watch unless on CI
 if (!process.env.CI) {
-  argv.push('--no-cache');
+  argv.push('--watch');
 }
 
 try {
