@@ -13,7 +13,7 @@ module.exports = {
       const transpiled = tsc.transpileModule(
         src,
         {
-          compilerOptions: getTsCompilerOptions(getTSConfig({ config })),
+          compilerOptions: getTsCompilerOptions(getTSConfig({ rootDir: config.rootDir })),
           fileName: path
         });
 

@@ -6,8 +6,9 @@
 #
 # This node_modules directory is in turn symlinked to by all the tests
 
-mkdir -p node_modules/ts-jest
+mkdir -p node_modules/ts-jest/lib
 ln -sf $(pwd)/preprocessor.js $(pwd)/node_modules/ts-jest/
+ln -sf $(pwd)/lib/get-tsconfig.js $(pwd)/node_modules/ts-jest/lib
 ln -sf $(pwd)/index.js $(pwd)/node_modules/ts-jest/
 
 ln -sf $(pwd)/node_modules $(pwd)/tests/simple/
