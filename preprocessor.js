@@ -11,7 +11,9 @@ module.exports = {
           fileName: path
         });
 
-      return transpiled.outputText;
+      const modified = `require('ts-jest').install({environment: 'node', emptyCacheBetweenOperations: true});${transpiled.outputText}`;
+
+      return modified;
     }
 
     return src;
