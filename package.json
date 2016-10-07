@@ -34,6 +34,7 @@
     "typescript": "^2.0.3"
   },
   "devDependencies": {
+    "object-path": "^0.11.2",
     "react": "^15.3.2",
     "react-test-renderer": "^15.3.2"
   }
