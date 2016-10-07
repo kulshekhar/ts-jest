@@ -5,6 +5,7 @@ var SourceMapConsumer = require('source-map').SourceMapConsumer;
 var path = require('path');
 var fs = require('fs');
 var tsc = require('typescript');
+var {getTSConfig} = require('./utils');
 
 // Only install once if called multiple times
 var errorFormatterInstalled = false;
@@ -91,7 +92,7 @@ function transpileIfTypescript(path, contents) {
   if (path && (path.endsWith('.tsx') || path.endsWith('.ts'))) {
 
     transpiled = tsc.transpileModule(contents, {
-      compilerOptions: getTSConfig(),
+      compilerOptions: addSourceMapToTSConfig(),
       fileName: path
     });
 
@@ -504,12 +505,10 @@ exports.install = function (options) {
   }
 };
 
-function getTSConfig() {
-  // if a global __TS_CONFIG__ is set, update the compiler options based on that
-  var config = __TS_CONFIG__ || {};
-  config.module = config.module || tsc.ModuleKind.CommonJS;
-  config.jsx = config.jsx || tsc.JsxEmit.React;
+function addSourceMapToTSConfig() {
+  // if a global __TS_CONFIG__ is set, update the compiler setting to include inline SourceMap
+  var config = getTSConfig({ __TS_CONFIG__: __TS_CONFIG__ });
   config.inlineSourceMap = true;
 
-  return tsc.convertCompilerOptionsFromJson(config).options;
+  return config;
 }
