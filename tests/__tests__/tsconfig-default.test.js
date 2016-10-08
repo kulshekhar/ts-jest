@@ -2,14 +2,14 @@
 
 jest.mock('path');
 
-describe('hello_world', () => {
+describe('get default ts config', () => {
 
   beforeEach(() => {
     // Set up some mocked out file info before each test
     require('path').__setBaseDir('./tests/tsconfig-default');
   });
 
-  it('should run successfully', () => {
+  it('should correctly read tsconfig.json', () => {
     const {getTSConfig} = require('../../utils');
     const result = getTSConfig();
 
