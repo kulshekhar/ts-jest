@@ -1,4 +1,5 @@
 const tsc = require('typescript');
+const {getTSConfig} = require('./utils');
 
 module.exports = {
   process(src, path, config) {
@@ -18,11 +19,3 @@ module.exports = {
     return src;
   }
 };
-
-function getTSConfig(globals) {
-  const config = globals.__TS_CONFIG__ || {};
-  config.module = config.module || tsc.ModuleKind.CommonJS;
-  config.jsx = config.jsx || tsc.JsxEmit.React;
-
-  return tsc.convertCompilerOptionsFromJson(config).options;
-}

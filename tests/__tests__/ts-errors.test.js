@@ -9,6 +9,7 @@ describe('hello_world', () => {
     const result = runJest('../simple', ['--no-cache']);
 
     const stderr = result.stderr.toString();
+    const output = result.output.toString();
 
     expect(result.status).toBe(1);
     expect(stderr).toContain('Hello.ts:11:11');
