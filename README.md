@@ -2,20 +2,30 @@
 
 [![Build Status](https://semaphoreci.com/api/v1/k/ts-jest/branches/master/badge.svg)](https://semaphoreci.com/k/ts-jest)
 
-**Note:** This is currently just a hack and might not be suitable for all setups. 
+**Note:** This is currently just a hack and might not be suitable for all setups.
 
-## Details
+## Table of Contents
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [Usage](#usage)
+- [Options](#options)
+- [How to Contribute](#how-to-contribute)
+  - [Quickstart to run tests (only if you're working on this package)](#quickstart-to-run-tests-only-if-youre-working-on-this-package)
+- [License](#license)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+## Usage
 
 > **Note:** This repo uses code from the [source-map-support](https://github.com/evanw/node-source-map-support) package to show errors with mapped locations.
 
 To use this in your project, run:
-
 ```sh
 npm install --save-dev ts-jest
 ```
-
 Modify your project's `package.json` so that the `jest` section looks something like:
-
 ```json
 {
   "jest": {
@@ -25,7 +35,28 @@ Modify your project's `package.json` so that the `jest` section looks something 
       "ts",
       "tsx",
       "js"
-    ],
+    ]
+  }
+}
+```
+This setup should allow you to write Jest tests in Typescript and be able to locate errors without any additional gymnastics.
+
+## Options
+By default this package will try to locate `tsconfig.json` and use its compiler options for your `.ts` and `.tsx` files.  
+But you are able to override this behaviour and provide another path to your config for TypeScript by using `__TS_CONFIG__` option in `globals` for `jest`:
+```json
+{
+  "jest": {
+    "globals": {
+      "__TS_CONFIG__": "my-tsconfig.json"
+    }
+  }
+}
+```
+Or even declare options for `tsc` instead of using separate config, like this:
+```json
+{
+  "jest": {
     "globals": {
       "__TS_CONFIG__": {
         "module": "commonjs",
@@ -35,25 +66,22 @@ Modify your project's `package.json` so that the `jest` section looks something 
   }
 }
 ```
+For all available options see [TypeScript docs](https://www.typescriptlang.org/docs/handbook/compiler-options.html).
 
-> **Note:** It's currently necessary to have `globals > __TS_CONFIG__` present in your `package.json` even if it is only an empty object.
-
-This setup should allow you to write Jest tests in Typescript and be able to locate errors without any additional gymnastics.
-
+## How to Contribute
 If you have any suggestions/pull requests to turn this into a useful package, just open an issue and I'll be happy to work with you to improve this.
 
-## Quickstart to run tests (only if you're working on this package)
+### Quickstart to run tests (only if you're working on this package)
 
 ```sh
 git clone https://github.com/kulshekhar/ts-jest
 cd ts-jest
 npm install
-./test-init.sh
 npm test
 ```
+> **Note:** On Windows machines you have to run `test` command with administrator privileges, because we have to create symlink for `ts-jest` in `node_modules` in order to correctly run integration tests.
 
-It is assumed that `jest-cli` is globally installed. If not, please do so:
+## License
 
-```sh
-npm i -g jest-cli
-```
+Copyright (c) Kulshekhar Kabra.  
+This source code is licensed under the [MIT license](LICENSE). 
