@@ -1,4 +1,5 @@
-'use strict';
+import { } from 'jest';
+import { } from 'node';
 
 jest.mock('path');
 
@@ -14,11 +15,11 @@ describe('get default ts config', () => {
     const result = getTSConfig();
 
     expect(result).toEqual ({
-      "target": 2,
-      "module": 1,
-      "moduleResolution": 2,
-      "noEmitOnError": false,
-      "jsx": 2
+      'target': 2,
+      'module': 1,
+      'moduleResolution': 2,
+      'noEmitOnError': false,
+      'jsx': 2
     });
   });
 
@@ -27,21 +28,21 @@ describe('get default ts config', () => {
     const result = getTSConfig();
 
     expect(result).not.toEqual ({
-      "target": 2,
-      "module": 1,
-      "moduleResolution": 2,
-      "noEmitOnError": true,
-      "jsx": 2
+      'target': 2,
+      'module': 1,
+      'moduleResolution': 2,
+      'noEmitOnError': true,
+      'jsx': 2
     });
   });
-  
+
   it('should not read inline tsconfig options', () => {
     const {getTSConfig} = require('../../dist/utils');
     const result = getTSConfig();
 
     expect(result).not.toEqual ({
-      "module": 1,
-      "jsx": 2
+      'module': 1,
+      'jsx': 2
     });
   });
 

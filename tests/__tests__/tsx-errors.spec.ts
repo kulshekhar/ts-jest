@@ -1,6 +1,7 @@
-'use strict';
+import { } from 'jest';
+import { } from 'node';
 
-const runJest = require('../__helpers__/runJest');
+import runJest from '../__helpers__/runJest';
 
 describe('button', () => {
 
@@ -9,7 +10,6 @@ describe('button', () => {
     const result = runJest('../button', ['--no-cache', '-u']);
 
     const stderr = result.stderr.toString();
-    const output = result.output.toString();
 
     expect(result.status).toBe(1);
     expect(stderr).toContain('Button.tsx:18:23');

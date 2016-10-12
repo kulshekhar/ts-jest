@@ -11,7 +11,7 @@ const JEST_PATH = 'jest';
 // return the result of the spawned proccess:
 //  [ 'status', 'signal', 'output', 'pid', 'stdout', 'stderr',
 //    'envPairs', 'options', 'args', 'file' ]
-function runJest(dir, args) {
+export default function runJest(dir, args) {
   const isRelative = dir[0] !== '/';
 
   if (isRelative) {
@@ -37,25 +37,3 @@ function runJest(dir, args) {
 
   return result;
 }
-
-// Runs `jest` with `--json` option and adds `json` property to the result obj.
-//   'success', 'startTime', 'numTotalTests', 'numTotalTestSuites',
-//   'numRuntimeErrorTestSuites', 'numPassedTests', 'numFailedTests',
-//   'numPendingTests', 'testResults'
-runJest.json = function(dir, args) {
-  args = Array.prototype.concat(args || [], '--json');
-  const result = runJest(dir, args);
-  try {
-    result.json = JSON.parse((result.stdout || '').toString());
-  } catch (e) {
-    throw new Error(`
-      Can't parse JSON.
-      ERROR: ${e.name} ${e.message}
-      STDOUT: ${result.stdout}
-      STDERR: ${result.stderr}
-    `);
-  }
-  return result;
-};
-
-module.exports = runJest;

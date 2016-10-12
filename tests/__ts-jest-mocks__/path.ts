@@ -1,7 +1,13 @@
-'use strict';
+import { } from 'jest';
+import { } from 'node';
+
+interface MockedPath {
+  __setBaseDir(newBaseDir);
+  resolve(args);
+}
 
 const path = require.requireActual('path');
-const mockePath = jest.genMockFromModule('path');
+const mockedPath = jest.genMockFromModule<MockedPath>('path');
 
 // This is a custom function that our tests can use during setup to specify
 // what the files on the "mock" filesystem should look like when any of the
@@ -14,10 +20,10 @@ function __setBaseDir(newBaseDir) {
 // A custom version of `readdirSync` that reads from the special mocked out
 // file list set via __setMockFiles
 function resolve(args) {
-  return path.resolve(baseDir, args)
+  return path.resolve(baseDir, args);
 }
 
-mockePath.__setBaseDir = __setBaseDir;
-mockePath.resolve = resolve;
+mockedPath.__setBaseDir = __setBaseDir;
+mockedPath.resolve = resolve;
 
-module.exports = mockePath;
+module.exports = mockedPath;

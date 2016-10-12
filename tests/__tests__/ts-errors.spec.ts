@@ -1,6 +1,6 @@
-'use strict';
-
-const runJest = require('../__helpers__/runJest');
+import { } from 'jest';
+import { } from 'node';
+import runJest from '../__helpers__/runJest';
 
 describe('hello_world', () => {
 
@@ -9,7 +9,6 @@ describe('hello_world', () => {
     const result = runJest('../simple', ['--no-cache']);
 
     const stderr = result.stderr.toString();
-    const output = result.output.toString();
 
     expect(result.status).toBe(1);
     expect(stderr).toContain('Hello.ts:11:11');
