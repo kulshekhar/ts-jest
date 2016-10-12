@@ -10,7 +10,7 @@ describe('get default ts config', () => {
   });
 
   it('should correctly read tsconfig.json', () => {
-    const {getTSConfig} = require('../../utils');
+    const {getTSConfig} = require('../../dist/utils');
     const result = getTSConfig();
 
     expect(result).toEqual ({
@@ -23,7 +23,7 @@ describe('get default ts config', () => {
   });
 
   it('should not read my-tsconfig.json', () => {
-    const {getTSConfig} = require('../../utils');
+    const {getTSConfig} = require('../../dist/utils');
     const result = getTSConfig();
 
     expect(result).not.toEqual ({
@@ -36,7 +36,7 @@ describe('get default ts config', () => {
   });
   
   it('should not read inline tsconfig options', () => {
-    const {getTSConfig} = require('../../utils');
+    const {getTSConfig} = require('../../dist/utils');
     const result = getTSConfig();
 
     expect(result).not.toEqual ({

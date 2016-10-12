@@ -1,0 +1,59 @@
+{
+  "rules": {
+    "class-name": true,
+    "forin": true,
+    "indent": [
+      false
+    ],
+    "label-position": true,
+    "label-undefined": true,
+    "no-arg": true,
+    "no-bitwise": true,
+    "no-console": [
+      true,
+      "debug",
+      "info",
+      "time",
+      "timeEnd",
+      "trace"
+    ],
+    "no-construct": true,
+    "no-debugger": true,
+    "no-duplicate-key": true,
+    "no-duplicate-variable": true,
+    "no-empty": false,
+    "no-eval": true,
+    "no-switch-case-fall-through": true,
+    "no-trailing-whitespace": true,
+    "no-unused-expression": true,
+    "no-unused-variable": [
+      true,
+      "react"
+    ],
+    "no-unreachable": true,
+    "no-use-before-declare": true,
+    "one-line": [
+      true,
+      "check-open-brace",
+      "check-catch",
+      "check-else"
+    ],
+    "quotemark": [
+      true,
+      "single",
+      "jsx-double"
+    ],
+    "radix": true,
+    "semicolon": [
+      true
+    ],
+    "triple-equals": [
+      true,
+      "allow-null-check"
+    ],
+    "variable-name": [
+      true,
+      "allow-pascal-case"
+    ]
+  }
+}

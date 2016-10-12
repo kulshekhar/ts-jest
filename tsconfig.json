@@ -1,10 +1,26 @@
 {
   "compilerOptions": {
-    "target": "es5",
-    "jsx": "react"
+    "sourceMap": false,
+    "declaration": true,
+    "target": "ES5",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "noEmitOnError": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitAny": false,
+    "noImplicitReturns": true,
+    "removeComments": true,
+    "strictNullChecks": false,
+    "jsx": "react",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": false,
+    "outDir": "dist",
+    "rootDir": "src"
   },
   "include": [
-    "typings/index.d.ts"
+    "src/**/*.ts",
+    "src/**/*.tsx"
   ],
   "exclude": [
     "node_modules"
