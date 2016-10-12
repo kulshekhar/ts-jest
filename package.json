@@ -34,6 +34,7 @@
   },
   "homepage": "https://github.com/kulshekhar/ts-jest#readme",
   "jest": {
+    "mocksPattern": "__ts-jest-mocks__",
     "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(js)$",
     "moduleFileExtensions": [
       "js"
