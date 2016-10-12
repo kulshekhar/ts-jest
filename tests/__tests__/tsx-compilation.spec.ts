@@ -1,6 +1,7 @@
-'use strict';
+import { } from 'jest';
+import { } from 'node';
 
-const runJest = require('../__helpers__/runJest');
+import runJest from '../__helpers__/runJest';
 
 describe('button', () => {
 

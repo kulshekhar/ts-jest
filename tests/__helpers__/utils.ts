@@ -1,3 +1,5 @@
+import { } from 'jest';
+import { } from 'node';
 // from: https://github.com/facebook/jest/blob/master/integration_tests/utils.js
 
 const {spawnSync} = require('cross-spawn').sync;
@@ -27,8 +29,8 @@ const linkJestPackage = (packageName, cwd) => {
   const packagesDir = path.resolve(__dirname, '../packages');
   const packagePath = path.resolve(packagesDir, packageName);
   const destination = path.resolve(cwd, 'node_modules/');
-  run(`mkdir -p ${destination}`);
-  return run(`ln -sf ${packagePath} ${destination}`);
+  run(`mkdir -p ${destination}`, undefined);
+  return run(`ln -sf ${packagePath} ${destination}`, undefined);
 };
 
 const fileExists = filePath => {

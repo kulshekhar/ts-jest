@@ -1,7 +1,8 @@
 {
   "name": "ts-jest",
   "version": "0.1.7",
-  "main": "index.ts",
+  "main": "index.js",
+  "types": "./dist/index.d.ts",
   "description": "A preprocessor with sourcemap support to help use Typescript with Jest",
   "scripts": {
     "build": "tsc -p .",
@@ -34,9 +35,11 @@
   },
   "homepage": "https://github.com/kulshekhar/ts-jest#readme",
   "jest": {
+    "scriptPreprocessor": "<rootDir>/node_modules/ts-jest/preprocessor.js",
     "mocksPattern": "__ts-jest-mocks__",
-    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(js)$",
+    "testRegex": "/__tests__/.*\\.(spec)\\.(ts|js)$",
     "moduleFileExtensions": [
+      "ts",
       "js"
     ]
   },
@@ -52,12 +55,13 @@
     "typescript": "latest",
     "tslint": "latest",
     
-    "react": "^15.3.2",
-    "react-test-renderer": "^15.3.2",
-    "jest": "16.0.1",
+    "react": "latest",
+    "react-test-renderer": "latest",
+    "jest": "latest",
+    "ts-jest": "latest",
 
-    "cross-spawn": "4.0.2",
-    "rimraf": "^2.5.4",
-    "doctoc": "^1.2.0"
+    "cross-spawn": "latest",
+    "rimraf": "latest",
+    "doctoc": "latest"
   }
 }
