@@ -11,15 +11,4 @@ if (!process.env.CI) {
   argv.push('--watch');
 }
 
-try {
-  fs.symlinkSync('../', './node_modules/ts-jest', 'dir');
-}
-catch (err) {
-  if (err.code !== 'EEXIST') {
-    //rethrow error
-    throw err;
-  }
-  //nothing to do, because symlink already exist and this is that we need
-}
-
 jest.run(argv);

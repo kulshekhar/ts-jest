@@ -79,7 +79,6 @@ cd ts-jest
 npm install
 npm test
 ```
-> **Note:** On Windows machines you have to run `test` command with administrator privileges, because we have to create symlink for `ts-jest` in `node_modules` in order to correctly run integration tests.
 
 ## License
 
