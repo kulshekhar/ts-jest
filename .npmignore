@@ -1,5 +1,11 @@
+# TypeScript source code
+src
+
+# Tests
 tests
-test-init.sh
+
+# Developement scripts
+scripts 
 
 # Logs
 logs
