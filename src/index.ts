@@ -504,10 +504,10 @@ exports.install = function (options) {
     }
   }
 };
-declare var __TS_CONFIG__: any;
+
 function addSourceMapToTSConfig() {
   // if a global __TS_CONFIG__ is set, update the compiler setting to include inline SourceMap
-  var config = getTSConfig({ __TS_CONFIG__: __TS_CONFIG__ });
+  var config = getTSConfig({ __TS_CONFIG__: global['__TS_CONFIG__'] });
   config.inlineSourceMap = true;
 
   return config;

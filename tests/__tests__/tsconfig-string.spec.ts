@@ -11,7 +11,7 @@ describe('get ts config from string', () => {
   });
 
   it('should correctly read my-tsconfig.json', () => {
-    const {getTSConfig} = require('../../dist/utils');
+    const {getTSConfig} = require('../../src/utils');
     const result = getTSConfig({
       '__TS_CONFIG__': 'my-tsconfig.json'
     });
@@ -26,7 +26,7 @@ describe('get ts config from string', () => {
   });
 
   it('should not read tsconfig.json', () => {
-    const {getTSConfig} = require('../../dist/utils');
+    const {getTSConfig} = require('../../src/utils');
     const result = getTSConfig({
       '__TS_CONFIG__': 'my-tsconfig.json'
     });
@@ -41,7 +41,7 @@ describe('get ts config from string', () => {
   });
 
   it('should not read inline tsconfig options', () => {
-    const {getTSConfig} = require('../../dist/utils');
+    const {getTSConfig} = require('../../src/utils');
     const result = getTSConfig({
       '__TS_CONFIG__': 'my-tsconfig.json'
     });
