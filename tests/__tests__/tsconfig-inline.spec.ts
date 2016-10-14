@@ -11,7 +11,7 @@ describe('get inline ts config', () => {
   });
 
   it('should correctly read inline tsconfig options', () => {
-    const {getTSConfig} = require('../../dist/utils');
+    const {getTSConfig} = require('../../src/utils');
     const result = getTSConfig({
       '__TS_CONFIG__': {
         'module': 'commonjs',
@@ -26,7 +26,7 @@ describe('get inline ts config', () => {
   });
 
   it('should not read tsconfig.json', () => {
-    const {getTSConfig} = require('../../dist/utils');
+    const {getTSConfig} = require('../../src/utils');
     const result = getTSConfig({
       '__TS_CONFIG__': {
         'module': 'commonjs',
@@ -44,7 +44,7 @@ describe('get inline ts config', () => {
   });
 
   it('should not read my-tsconfig.json', () => {
-    const {getTSConfig} = require('../../dist/utils');
+    const {getTSConfig} = require('../../src/utils');
     const result = getTSConfig({
       '__TS_CONFIG__': {
         'module': 'commonjs',

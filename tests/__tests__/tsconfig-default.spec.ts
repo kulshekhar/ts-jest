@@ -11,7 +11,7 @@ describe('get default ts config', () => {
   });
 
   it('should correctly read tsconfig.json', () => {
-    const {getTSConfig} = require('../../dist/utils');
+    const {getTSConfig} = require('../../src/utils');
     const result = getTSConfig();
 
     expect(result).toEqual ({
@@ -24,7 +24,7 @@ describe('get default ts config', () => {
   });
 
   it('should not read my-tsconfig.json', () => {
-    const {getTSConfig} = require('../../dist/utils');
+    const {getTSConfig} = require('../../src/utils');
     const result = getTSConfig();
 
     expect(result).not.toEqual ({
@@ -37,13 +37,29 @@ describe('get default ts config', () => {
   });
 
   it('should not read inline tsconfig options', () => {
-    const {getTSConfig} = require('../../dist/utils');
+    const {getTSConfig} = require('../../src/utils');
     const result = getTSConfig();
 
     expect(result).not.toEqual ({
       'module': 1,
       'jsx': 2
     });
+  });
+
+  it('should be same results for null/undefined/etc.', () => {
+    const {getTSConfig} = require('../../src/utils');
+    const result = getTSConfig();
+    const resultUndefinedParam = getTSConfig(undefined);
+    const resultNullParam = getTSConfig(null);
+    const resultEmptyParam = getTSConfig({});
+    const resultUndefinedContent = getTSConfig({ __TS_CONFIG__: undefined });
+    const resultNullContent = getTSConfig({ __TS_CONFIG__: null });
+
+    expect(result).toEqual(resultUndefinedParam);
+    expect(result).toEqual(resultNullParam);
+    expect(result).toEqual(resultEmptyParam);
+    expect(result).toEqual(resultUndefinedContent);
+    expect(result).toEqual(resultNullContent);
   });
 
 });
