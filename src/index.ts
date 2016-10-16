@@ -1,4 +1,4 @@
-// Except a small part of the code, all of the code here is taken from 
+// Except a small part of the code, all of the code here is taken from
 // https://github.com/evanw/node-source-map-support
 
 import { SourceMapConsumer } from 'source-map';
@@ -507,8 +507,6 @@ exports.install = function (options) {
 
 function addSourceMapToTSConfig() {
   // if a global __TS_CONFIG__ is set, update the compiler setting to include inline SourceMap
-  var config = getTSConfig({ __TS_CONFIG__: global['__TS_CONFIG__'] });
-  config.inlineSourceMap = true;
-
+  var config = getTSConfig({ __TS_CONFIG__: global['__TS_CONFIG__'] }, true);
   return config;
 }
