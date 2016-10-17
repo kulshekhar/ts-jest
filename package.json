@@ -45,16 +45,22 @@
   },
   "dependencies": {
     "typescript": "^2.0.3",
-    "source-map-support": "^0.4.4"
+    "source-map-support": "^0.4.4",
+    "glob-all": "^3.1.0",
+    "lodash.assign": "^4.2.0",
+    "lodash.partition": "^4.6.0",
+    "yargs": "^6.1.1",
+    "jest-util": "^16.0.0"
   },
   "devDependencies": {
+    "@types/es6-shim": "latest",
     "@types/jest": "latest",
     "@types/react": "latest",
     "@types/source-map-support": "latest",
     "@types/node": "latest",
     "typescript": "latest",
     "tslint": "latest",
-    
+
     "react": "latest",
     "react-test-renderer": "latest",
     "jest": "latest",

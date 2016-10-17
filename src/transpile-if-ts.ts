@@ -16,8 +16,6 @@ export function transpileIfTypescript(path, contents) {
 
 function addSourceMapToTSConfig() {
   // if a global __TS_CONFIG__ is set, update the compiler setting to include inline SourceMap
-  var config = getTSConfig({ __TS_CONFIG__: global['__TS_CONFIG__'] });
-  config.inlineSourceMap = true;
-
+  var config = getTSConfig({ __TS_CONFIG__: global['__TS_CONFIG__'] }, true);
   return config;
 }

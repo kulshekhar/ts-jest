@@ -1,4 +1,4 @@
-# ts-jest 
+# ts-jest
 
 [![Build Status](https://semaphoreci.com/api/v1/k/ts-jest/branches/master/badge.svg)](https://semaphoreci.com/k/ts-jest)
 
@@ -41,8 +41,20 @@ Modify your project's `package.json` so that the `jest` section looks something 
 ```
 This setup should allow you to write Jest tests in Typescript and be able to locate errors without any additional gymnastics.
 
+By default `jest` does not provide code coverage remapping for transpiled codes, so if you'd like to have code coverage it needs additional coverage remapping. This can be done via writing custom processing script, or configure `testResultsProcessor` to use built-in coverage remapping in `ts-jest`.
+```json
+{
+  "jest": {
+    "scriptPreprocessor": "<rootDir>/node_modules/ts-jest/preprocessor.js",
+    "testResultsProcessor": "<rootDir>/node_modules/ts-jest/coverageprocessor.js"
+  }
+}
+```
+
+> **Note:** If you're experiencing remapping failure with source lookup, it may due to pre-created cache from `jest`. It can be manually deleted, or execute with [`--no-cache`](https://facebook.github.io/jest/docs/troubleshooting.html#caching-issues) to not use those.
+
 ## Options
-By default this package will try to locate `tsconfig.json` and use its compiler options for your `.ts` and `.tsx` files.  
+By default this package will try to locate `tsconfig.json` and use its compiler options for your `.ts` and `.tsx` files.
 But you are able to override this behaviour and provide another path to your config for TypeScript by using `__TS_CONFIG__` option in `globals` for `jest`:
 ```json
 {
@@ -82,5 +94,5 @@ npm test
 
 ## License
 
-Copyright (c) Kulshekhar Kabra.  
-This source code is licensed under the [MIT license](LICENSE). 
+Copyright (c) Kulshekhar Kabra.
+This source code is licensed under the [MIT license](LICENSE).
