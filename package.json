@@ -28,7 +28,11 @@
     "react",
     "testing"
   ],
-  "author": "Kulshekhar Kabra",
+  "author": "Kulshekhar Kabra <kulshekhar@users.noreply.github.com> (https://github.com/kulshekhar)",
+  "contributors": [
+    "Ihor Chulinda <ichulinda@gmail.com> (https://github.com/Igmat)",
+    "OJ Kwon <kwon.ohjoong@gmail.com> (https://github.com/kwonoj)"
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/kulshekhar/ts-jest/issues"
