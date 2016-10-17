@@ -1,32 +1,23 @@
 import * as fs from 'fs';
-import { Storage } from './storage';
 import { transpileIfTypescript } from './transpile-if-ts';
 
 export function defaultRetrieveFileHandler(path) {
   // Trim the path to make sure there is no extra whitespace.
   path = path.trim();
-  if (path in Storage.fileContentsCache) {
-    return Storage.fileContentsCache[path];
-  }
 
+  // This was removed because it seems that we can't use cache while expecting correct results
+  // TODO: check correctness and performance with file caching 
+  // if (path in fileContentsCache) {
+  //   return fileContentsCache[path];
+  // }
+
+  var contents: string;
   try {
-    // Use SJAX if we are in the browser
-    if (Storage.isInBrowser()) {
-      var xhr = new XMLHttpRequest();
-      xhr.open('GET', path, false);
-      xhr.send(null);
-      var contents: string = null;
-      if (xhr.readyState === 4 && xhr.status === 200) {
-        contents = xhr.responseText;
-        contents = transpileIfTypescript(path, contents);
-      }
-    } else { // Otherwise, use the filesystem
-      var contents = fs.readFileSync(path, 'utf8');
-      contents = transpileIfTypescript(path, contents);
-    }
+    contents = fs.readFileSync(path, 'utf8');
+    contents = transpileIfTypescript(path, contents);
   } catch (e) {
-    var contents: string = null;
+    contents = null;
   }
 
-  return Storage.fileContentsCache[path] = contents;
+  return contents;
 }

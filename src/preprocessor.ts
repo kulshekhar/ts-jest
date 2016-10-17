@@ -1,21 +1,19 @@
-const tsc = require('typescript');
-const {getTSConfig} = require('./utils');
+import * as tsc from 'typescript';
+import { getTSConfig } from './utils';
 
-module.exports = {
-  process(src, path, config) {
-    if (path.endsWith('.ts') || path.endsWith('.tsx')) {
-      const transpiled = tsc.transpileModule(
-        src,
-        {
-          compilerOptions: getTSConfig(config.globals),
-          fileName: path
-        });
+export function process(src, path, config) {
+  if (path.endsWith('.ts') || path.endsWith('.tsx')) {
+    const transpiled = tsc.transpileModule(
+      src,
+      {
+        compilerOptions: getTSConfig(config.globals),
+        fileName: path
+      });
 
-      const modified = `require('ts-jest').install({environment: 'node', emptyCacheBetweenOperations: true});${transpiled.outputText}`;
+    const modified = `require('ts-jest').install();${transpiled.outputText}`;
 
-      return modified;
-    }
-
-    return src;
+    return modified;
   }
-};
+
+  return src;
+}
