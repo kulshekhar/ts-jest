@@ -46,11 +46,12 @@ By default `jest` does not provide code coverage remapping for transpiled codes,
 {
   "jest": {
     "scriptPreprocessor": "<rootDir>/node_modules/ts-jest/preprocessor.js",
-    "testResultsProcessor": "<rootDir>/node_modules/ts-jest/coverageprocessor.js",
-    ...
+    "testResultsProcessor": "<rootDir>/node_modules/ts-jest/coverageprocessor.js"
   }
 }
 ```
+
+> **Note:** If you're experiencing remapping failure with source lookup, it may due to pre-created cache from `jest`. It can be manually deleted, or execute with [`--no-cache`](https://facebook.github.io/jest/docs/troubleshooting.html#caching-issues) to not use those.
 
 ## Options
 By default this package will try to locate `tsconfig.json` and use its compiler options for your `.ts` and `.tsx` files.

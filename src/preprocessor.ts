@@ -7,7 +7,8 @@ const getPackageRoot = require('jest-util').getPackageRoot;
 const glob = require('glob-all');
 
 const root = getPackageRoot();
-const { collectCoverage,
+const { testRegex,
+        collectCoverage,
         coverageDirectory,
         coverageReporters,
         collectCoverageFrom,
@@ -37,9 +38,11 @@ module.exports = {
           fileName: path
         });
 
-      //store transpiled code contains source map into cache
+      //store transpiled code contains source map into cache, except test cases
       if (global.__ts_coverage__cache__) {
-        global.__ts_coverage__cache__.sourceCache[path] = transpiled.outputText;
+        if (!testRegex || !path.match(testRegex)) {
+            global.__ts_coverage__cache__.sourceCache[path] = transpiled.outputText;
+        }
       }
 
       const modified = `require('ts-jest').install({environment: 'node', emptyCacheBetweenOperations: true});${transpiled.outputText}`;
