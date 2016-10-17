@@ -11,6 +11,7 @@
     "noImplicitReturns": true,
     "removeComments": true,
     "strictNullChecks": false,
+    "inlineSourceMap": true,
     "jsx": "react",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
