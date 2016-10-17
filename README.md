@@ -54,7 +54,7 @@ By default `jest` does not provide code coverage remapping for transpiled codes,
 > **Note:** If you're experiencing remapping failure with source lookup, it may due to pre-created cache from `jest`. It can be manually deleted, or execute with [`--no-cache`](https://facebook.github.io/jest/docs/troubleshooting.html#caching-issues) to not use those.
 
 ## Options
-By default this package will try to locate `tsconfig.json` and use its compiler options for your `.ts` and `.tsx` files.
+By default this package will try to locate `tsconfig.json` and use its compiler options for your `.ts` and `.tsx` files.  
 But you are able to override this behaviour and provide another path to your config for TypeScript by using `__TS_CONFIG__` option in `globals` for `jest`:
 ```json
 {
@@ -94,5 +94,5 @@ npm test
 
 ## License
 
-Copyright (c) Kulshekhar Kabra.
+Copyright (c) [Authors](AUTHORS).  
 This source code is licensed under the [MIT license](LICENSE).
