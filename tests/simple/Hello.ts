@@ -8,6 +8,16 @@ export class Hello {
       greeting
     `;
 
+    this.unexcuted(() => { });
+
     throw new Error('Hello error!');
+  }
+
+  public unexcuted(action: () => void = () => {}): void {
+    if (action) {
+        action();
+    } else {
+        console.log('unexcuted');
+    }
   }
 }
