@@ -69,7 +69,6 @@
     "jest": "~16.0.2"
   },
   "devDependencies": {
-    "@types/es6-shim": "latest",
     "@types/jest": "latest",
     "@types/react": "latest",
     "@types/source-map-support": "latest",
