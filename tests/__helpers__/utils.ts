@@ -6,7 +6,7 @@ const {spawnSync} = require('cross-spawn').sync;
 const fs = require('fs');
 const path = require('path');
 
-const run = (cmd, cwd) => {
+export function run(cmd, cwd) {
   const args = cmd.split(/\s/).slice(1);
   const spawnOptions = {cwd};
   const result = spawnSync(cmd.split(/\s/)[0], args, spawnOptions);
@@ -25,7 +25,7 @@ const run = (cmd, cwd) => {
   return result;
 };
 
-const linkJestPackage = (packageName, cwd) => {
+export function linkJestPackage(packageName, cwd) {
   const packagesDir = path.resolve(__dirname, '../packages');
   const packagePath = path.resolve(packagesDir, packageName);
   const destination = path.resolve(cwd, 'node_modules/');
@@ -33,17 +33,11 @@ const linkJestPackage = (packageName, cwd) => {
   return run(`ln -sf ${packagePath} ${destination}`, undefined);
 };
 
-const fileExists = filePath => {
+export function fileExists(filePath) {
   try {
     fs.accessSync(filePath, fs.F_OK);
     return true;
   } catch (e) {
     return false;
   }
-};
-
-module.exports = {
-  fileExists,
-  linkJestPackage,
-  run,
 };
