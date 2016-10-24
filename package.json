@@ -8,7 +8,7 @@
     "build": "tsc -p .",
     "build:watch": "tsc -p . -w",
 
-    "clean": "rimraf dist/**/*",
+    "clean": "rimraf dist/**/* && rimraf tests/simple/coverage/**/*",
     "clean-build": "npm run clean && npm run build",
 
     "pretest": "npm run clean-build",
@@ -42,6 +42,14 @@
     "scriptPreprocessor": "<rootDir>/node_modules/ts-jest/preprocessor.js",
     "mocksPattern": "__ts-jest-mocks__",
     "testRegex": "/__tests__/.*\\.(spec)\\.(ts|js)$",
+    "coverageReporters": [
+      "text"
+    ],
+    "coverageDirectory": "test_coverage_dir",
+    "collectCoverageFrom": [
+      "src/**/*.tsx",
+      "src/**/*.ts"
+    ],
     "moduleFileExtensions": [
       "ts",
       "js"
@@ -53,6 +61,7 @@
     "glob-all": "^3.1.0",
     "lodash.assign": "^4.2.0",
     "lodash.partition": "^4.6.0",
+    "remap-istanbul": "^0.7.0",
     "yargs": "^6.1.1",
     "jest-util": "^16.0.0"
   },

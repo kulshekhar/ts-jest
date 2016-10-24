@@ -15,9 +15,9 @@ function processResult(result: any): void {
   }
 
   const coverage = result.testResults.map(value => value.coverage);
-  const coveredFiles = coverage.reduce((acc, x) =>  acc.concat(Object.keys(x)), []);
+  const coveredFiles = coverage.reduce((acc, x) => acc.concat(Object.keys(x)), []);
   const uncoveredFiles = partition(coverageCollectFiles, x => coveredFiles.includes(x))[1];
-  const coverageOutputPath = path.join(coverageConfig.coverageDirectory, 'remapped');
+  const coverageOutputPath = path.join(coverageConfig.coverageDirectory || 'coverage', 'remapped');
 
   //generate 'empty' coverage against uncovered files
   const emptyCoverage = uncoveredFiles.map(x => {
@@ -41,6 +41,7 @@ function processResult(result: any): void {
   writeReport(coverageCollector, 'html', {}, path.join(coverageOutputPath, 'html'));
   writeReport(coverageCollector, 'lcovonly', {}, path.join(coverageOutputPath, 'lcov.info'));
   writeReport(coverageCollector, 'json', {}, path.join(coverageOutputPath, 'coverage.json'));
+  writeReport(coverageCollector, 'text', {}, path.join(coverageOutputPath, 'coverage.txt'));
 }
 
 module.exports = processResult;

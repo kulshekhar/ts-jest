@@ -35,7 +35,7 @@ export function process(src, path, config) {
     const transpiled = tsc.transpileModule(
       src,
       {
-        compilerOptions: getTSConfig(config.globals),
+        compilerOptions: getTSConfig(config.globals, collectCoverage),
         fileName: path
       });
 

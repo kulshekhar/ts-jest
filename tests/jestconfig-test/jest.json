@@ -1,0 +1,16 @@
+{
+  "rootDir": "./",
+  "scriptPreprocessor": "<rootDir>/node_modules/ts-jest/preprocessor.js",
+  "testResultsProcessor": "<rootDir>/node_modules/ts-jest/coverageprocessor.js",
+  "testRegex": "/specs/.*\\.spec\\.(ts|tsx|js)$",
+  "testEnvironment": "jsdom",
+  "coverageReporters": ["html", "json", "text"],
+  "coverageDirectory": "test_coverage_dir",
+  "moduleFileExtensions": ["ts", "tsx", "js", "json"],
+  "collectCoverageFrom": ["src/**/*.tsx", "src/**/*.ts"],
+  "coverageThreshold": {
+    "global": {
+      "statements": 95
+    }
+  }
+}
