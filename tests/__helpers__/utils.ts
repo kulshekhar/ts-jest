@@ -8,7 +8,7 @@ const path = require('path');
 
 export function run(cmd, cwd) {
   const args = cmd.split(/\s/).slice(1);
-  const spawnOptions = {cwd};
+  const spawnOptions = { cwd };
   const result = spawnSync(cmd.split(/\s/)[0], args, spawnOptions);
 
   if (result.status !== 0) {
