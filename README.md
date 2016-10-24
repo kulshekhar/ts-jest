@@ -1,6 +1,6 @@
 # ts-jest
 
-[![Build Status](https://semaphoreci.com/api/v1/k/ts-jest/branches/master/badge.svg)](https://semaphoreci.com/k/ts-jest)
+[![Build Status](https://api.travis-ci.org/kulshekhar/ts-jest.svg?branch=master)](https://travis-ci.org/kulshekhar/ts-jest)
 
 ## Table of Contents
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
