@@ -2,8 +2,6 @@
 
 [![Build Status](https://semaphoreci.com/api/v1/k/ts-jest/branches/master/badge.svg)](https://semaphoreci.com/k/ts-jest)
 
-**Note:** This is currently just a hack and might not be suitable for all setups.
-
 ## Table of Contents
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -18,8 +16,6 @@
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Usage
-
-> **Note:** This repo uses code from the [source-map-support](https://github.com/evanw/node-source-map-support) package to show errors with mapped locations.
 
 To use this in your project, run:
 ```sh
