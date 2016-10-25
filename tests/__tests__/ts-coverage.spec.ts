@@ -17,7 +17,7 @@ All files  |    90.91 |       50 |       80 |    88.89 |                |
   it('should run successfully', () => {
     runJest('../simple', ['--no-cache', '--coverage']);
 
-    const coveragePath = path.normalize('tests/simple/coverage/remapped/coverage.txt');
+    const coveragePath = './tests/simple/coverage/remapped/coverage.txt';
 
     expect(fs.existsSync(coveragePath)).toBeTruthy();
     expect(fs.readFileSync(coveragePath, 'utf-8')).toEqual(snapshot);
