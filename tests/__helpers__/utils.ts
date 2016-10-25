@@ -1,9 +1,9 @@
 import { } from 'jest';
 import { } from 'node';
+import * as fs from 'fs';
 // from: https://github.com/facebook/jest/blob/master/integration_tests/utils.js
 
 const {spawnSync} = require('cross-spawn').sync;
-const fs = require('fs');
 const path = require('path');
 
 const run = (cmd, cwd) => {
@@ -34,8 +34,9 @@ const linkJestPackage = (packageName, cwd) => {
 };
 
 const fileExists = filePath => {
+  const F_OK = fs.constants && fs.constants.F_OK || <number>fs['F_OK'];
   try {
-    fs.accessSync(filePath, fs.F_OK);
+    fs.accessSync(filePath, F_OK);
     return true;
   } catch (e) {
     return false;

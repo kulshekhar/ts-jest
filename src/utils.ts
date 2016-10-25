@@ -25,8 +25,9 @@ function loadJestConfigFromFile(filePath, argv) {
 }
 
 function loadJestConfigFromPackage(filePath, argv) {
+  const R_OK = fs.constants && fs.constants.R_OK || <number>fs['R_OK'];
   try {
-    fs.accessSync(filePath, fs.constants.R_OK);
+    fs.accessSync(filePath, R_OK);
   } catch (e) {
     return null;
   }
