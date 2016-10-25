@@ -5,6 +5,9 @@ logs
 *.log
 npm-debug.log*
 
+# nodist config for testing in different versions of node
+.node-version
+
 # Runtime data
 pids
 *.pid
