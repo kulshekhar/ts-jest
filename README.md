@@ -1,6 +1,8 @@
 # ts-jest
 
-[![Build Status](https://api.travis-ci.org/kulshekhar/ts-jest.svg?branch=master)](https://travis-ci.org/kulshekhar/ts-jest)
+[![Build Status for node v7](https://travis-badges.herokuapp.com/repos/kulshekhar/ts-jest/branches/master?job=0)](https://travis-ci.org/kulshekhar/ts-jest)
+[![Build Status for node v6](https://travis-badges.herokuapp.com/repos/kulshekhar/ts-jest/branches/master?job=1)](https://travis-ci.org/kulshekhar/ts-jest)
+[![Build Status for node v4](https://travis-badges.herokuapp.com/repos/kulshekhar/ts-jest/branches/master?job=2)](https://travis-ci.org/kulshekhar/ts-jest)
 
 ## Table of Contents
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
