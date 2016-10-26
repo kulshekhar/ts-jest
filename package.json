@@ -1,6 +1,6 @@
 {
   "name": "ts-jest",
-  "version": "0.1.9",
+  "version": "0.1.10",
   "main": "index.js",
   "types": "./dist/index.d.ts",
   "description": "A preprocessor with sourcemap support to help use Typescript with Jest",
@@ -62,8 +62,10 @@
     "lodash.assign": "^4.2.0",
     "lodash.partition": "^4.6.0",
     "remap-istanbul": "^0.7.0",
+    "istanbul-lib-instrument": "^1.2.0",
     "yargs": "^6.1.1",
-    "jest-util": "^16.0.0"
+    "jest-util": "^16.0.2",
+    "jest-config": "^16.0.2"
   },
   "devDependencies": {
     "@types/es6-shim": "latest",
@@ -77,7 +79,6 @@
     "react": "latest",
     "react-test-renderer": "latest",
     "jest": "latest",
-    "jest-config": "latest",
     "ts-jest": "latest",
 
     "cross-spawn": "latest",
