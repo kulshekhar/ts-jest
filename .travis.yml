@@ -1,5 +1,6 @@
 language: node_js
 node_js:
+  - "7"
   - "6"
   - "4"
 before_install:
@@ -9,4 +10,5 @@ sudo: false
 
 matrix:
   allow_failures:
+    - node_js: "7"
     - node_js: "4"
