@@ -77,6 +77,7 @@ Or even declare options for `tsc` instead of using separate config, like this:
 }
 ```
 For all available options see [TypeScript docs](https://www.typescriptlang.org/docs/handbook/compiler-options.html).
+> **Note:** You can't target `ES6` while using `node v4` in your test environment.
 
 ## How to Contribute
 If you have any suggestions/pull requests to turn this into a useful package, just open an issue and I'll be happy to work with you to improve this.
