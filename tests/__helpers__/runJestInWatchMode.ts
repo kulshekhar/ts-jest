@@ -1,9 +1,8 @@
 // from: https://github.com/facebook/jest/blob/master/integration_tests/runJest.js
 import { ChildProcess, SpawnOptions } from 'child_process';
-
 import { fileExists } from './utils';
 const path = require('path');
-const spawnSync: (command: string, args?: string[], options?: SpawnOptions) => ChildProcess = require('cross-spawn');
+const spawn: (command: string, args?: string[], options?: SpawnOptions) => ChildProcess = require('cross-spawn-with-kill');
 
 // assuming that jest is installed globally
 // using `npm i -g jest-cli`
@@ -31,7 +30,7 @@ export default function runJestInWatchMode(dir, args?: any[]) {
   args = (args !== undefined) ? args : [];
   args.push('--watchAll');
 
-  const process = spawnSync(JEST_PATH, args, {
+  const process = spawn(JEST_PATH, args, {
     cwd: dir,
   });
   let getStderrAsync = () => {

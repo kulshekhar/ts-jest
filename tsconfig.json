@@ -2,7 +2,7 @@
   "compilerOptions": {
     "sourceMap": false,
     "declaration": true,
-    "target": "es2017",
+    "target": "ES6",
     "module": "commonjs",
     "moduleResolution": "node",
     "noEmitOnError": true,
@@ -17,11 +17,7 @@
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": false,
     "outDir": "dist",
-    "rootDir": "src",
-    "lib": [
-      "dom",
-      "es2017"
-    ]
+    "rootDir": "src"
   },
   "include": [
     "src/**/*.ts",

@@ -2,7 +2,7 @@
   "compilerOptions": {
     "sourceMap": false,
     "declaration": true,
-    "target": "es2017",
+    "target": "ES6",
     "module": "commonjs",
     "moduleResolution": "node",
     "noEmitOnError": true,
@@ -14,11 +14,7 @@
     "jsx": "react",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "allowSyntheticDefaultImports": false,
-    "lib": [
-      "dom",
-      "es2017"
-    ]
+    "allowSyntheticDefaultImports": false
   },
   "include": [
     "**/*.ts",
