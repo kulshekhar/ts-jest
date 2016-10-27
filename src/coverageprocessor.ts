@@ -15,7 +15,7 @@ function processResult(result: any): void {
   }
 
   const coverage = result.testResults.map(value => value.coverage);
-  const coveredFiles = coverage.reduce((acc, x) => acc.concat(Object.keys(x)), []);
+  const coveredFiles = coverage.reduce((acc, x) => x ? acc.concat(Object.keys(x)) : acc, []);
   const uncoveredFiles = partition(coverageCollectFiles, x => coveredFiles.includes(x))[1];
   const coverageOutputPath = path.join(coverageConfig.coverageDirectory || 'coverage', 'remapped');
 
@@ -28,7 +28,7 @@ function processResult(result: any): void {
     return ret;
   });
 
-  const mergedCoverage = loadCoverage(coverage.concat(emptyCoverage), { readJSON: (t) => t });
+  const mergedCoverage = loadCoverage(coverage.concat(emptyCoverage), { readJSON: (t) => t ? t : {} });
   const coverageCollector = remap(mergedCoverage, {
     readFile: (x) => {
       const key = path.normalize(x);
