@@ -1,5 +1,6 @@
 import { } from 'jest';
 import { } from 'node';
+import { ChildProcess } from 'child_process';
 import * as fs from 'fs';
 import * as path from 'path';
 import runJestInWatchMode from '../__helpers__/runJestInWatchMode';
@@ -82,7 +83,7 @@ describe('Hello Class', () => {
 `;
 
 describe('hello_world', () => {
-  let result;
+  let result: { process: ChildProcess, getStderrAsync: () => Promise<string> };
 
   beforeAll(() => {
     result = runJestInWatchMode('../watch-test');
