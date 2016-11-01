@@ -19,12 +19,15 @@ function processResult(result: any): void {
   const uncoveredFiles = partition(coverageCollectFiles, x => coveredFiles.includes(x))[1];
   const coverageOutputPath = path.join(coverageConfig.coverageDirectory || 'coverage', 'remapped');
 
-  //generate 'empty' coverage against uncovered files
+  //generate 'empty' coverage against uncovered files.
+  //If source is non-ts passed by allowJS, return empty since not able to lookup from cache
   const emptyCoverage = uncoveredFiles.map(x => {
-    const instrumenter = istanbulInstrument.createInstrumenter();
-    instrumenter.instrumentSync(sourceCache[x], x);
-    const ret = {};
-    ret[x] = instrumenter.fileCoverage;
+    var ret = {};
+    if (sourceCache[x]) {
+        var instrumenter = istanbulInstrument.createInstrumenter();
+        instrumenter.instrumentSync(sourceCache[x], x);
+        ret[x] = instrumenter.fileCoverage;
+    }
     return ret;
   });
 
