@@ -4,6 +4,7 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "noEmitOnError": false,
-    "jsx": "react"
+    "jsx": "react",
+    "allowJs": true
   }
 }
