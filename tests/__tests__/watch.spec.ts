@@ -83,7 +83,7 @@ describe('Hello Class', () => {
 `;
 
 describe('hello_world', () => {
-  let result: { process: ChildProcess, getStderrAsync: () => Promise<string> };
+  let result: { childProcess: ChildProcess, getStderrAsync: () => Promise<string> };
 
   beforeAll(() => {
     result = runJestInWatchMode('../watch-test');
@@ -110,7 +110,7 @@ describe('hello_world', () => {
   });
 
   afterAll(() => {
-    result.process.kill();
+    result.childProcess.kill();
     // revert changes back
     fs.writeFileSync(path.resolve(__dirname, '../watch-test/Hello.ts'), helloFile);
     fs.writeFileSync(path.resolve(__dirname, '../watch-test/__tests__/Hello.test.ts'), testFile);
