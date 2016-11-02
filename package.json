@@ -81,6 +81,7 @@
     "jest": "latest",
     "ts-jest": "latest",
     "cross-spawn": "latest",
+    "cross-spawn-with-kill": "latest",
     "rimraf": "latest",
     "doctoc": "latest"
   }
