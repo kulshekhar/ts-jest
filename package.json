@@ -7,13 +7,10 @@
   "scripts": {
     "build": "tsc -p .",
     "build:watch": "tsc -p . -w",
-
     "clean": "rimraf dist/**/* && rimraf tests/simple/coverage/**/*",
     "clean-build": "npm run clean && npm run build",
-
     "pretest": "npm run clean-build",
     "test": "node scripts/tests.js",
-
     "doc": "doctoc .",
     "prepublish": "npm run clean-build"
   },
@@ -56,15 +53,16 @@
     ]
   },
   "dependencies": {
-    "source-map-support": "^0.4.4",
     "glob-all": "^3.1.0",
+    "istanbul-lib-instrument": "^1.2.0",
+    "jest-config": "^16.0.2",
+    "jest-util": "^16.0.2",
     "lodash.assign": "^4.2.0",
+    "lodash.includes": "^4.3.0",
     "lodash.partition": "^4.6.0",
     "remap-istanbul": "^0.7.0",
-    "istanbul-lib-instrument": "^1.2.0",
-    "yargs": "^6.1.1",
-    "jest-util": "^16.0.2",
-    "jest-config": "^16.0.2"
+    "source-map-support": "^0.4.4",
+    "yargs": "^6.1.1"
   },
   "peerDependencies": {
     "typescript": "~2.0.6",
@@ -78,12 +76,10 @@
     "@types/node": "latest",
     "typescript": "next",
     "tslint": "next",
-
     "react": "latest",
     "react-test-renderer": "latest",
     "jest": "latest",
     "ts-jest": "latest",
-
     "cross-spawn": "latest",
     "rimraf": "latest",
     "doctoc": "latest"

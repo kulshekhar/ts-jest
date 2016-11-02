@@ -2,6 +2,7 @@ declare const global: any;
 
 import * as path from 'path';
 
+const includes = require('lodash.includes');
 const partition = require('lodash.partition');
 const loadCoverage = require('remap-istanbul/lib/loadCoverage');
 const remap = require('remap-istanbul/lib/remap');
@@ -16,15 +17,18 @@ function processResult(result: any): void {
 
   const coverage = result.testResults.map(value => value.coverage);
   const coveredFiles = coverage.reduce((acc, x) => x ? acc.concat(Object.keys(x)) : acc, []);
-  const uncoveredFiles = partition(coverageCollectFiles, x => coveredFiles.includes(x))[1];
+  const uncoveredFiles = partition(coverageCollectFiles, x => includes(coveredFiles, x))[1];
   const coverageOutputPath = path.join(coverageConfig.coverageDirectory || 'coverage', 'remapped');
 
-  //generate 'empty' coverage against uncovered files
+  //generate 'empty' coverage against uncovered files.
+  //If source is non-ts passed by allowJS, return empty since not able to lookup from cache
   const emptyCoverage = uncoveredFiles.map(x => {
-    const instrumenter = istanbulInstrument.createInstrumenter();
-    instrumenter.instrumentSync(sourceCache[x], x);
-    const ret = {};
-    ret[x] = instrumenter.fileCoverage;
+    var ret = {};
+    if (sourceCache[x]) {
+        var instrumenter = istanbulInstrument.createInstrumenter();
+        instrumenter.instrumentSync(sourceCache[x], x);
+        ret[x] = instrumenter.fileCoverage;
+    }
     return ret;
   });
 
