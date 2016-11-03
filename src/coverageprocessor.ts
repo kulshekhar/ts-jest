@@ -10,10 +10,9 @@ const writeReport = require('remap-istanbul/lib/writeReport');
 const istanbulInstrument = require('istanbul-lib-instrument');
 
 function processResult(result: any): void {
+  if (!global.__ts_coverage__cache__) return;
   const { coverageConfig, sourceCache, coverageCollectFiles } = global.__ts_coverage__cache__;
-  if (!coverageConfig.collectCoverage) {
-    return;
-  }
+  if (!coverageConfig.collectCoverage) return;
 
   const coverage = result.testResults.map(value => value.coverage);
   const coveredFiles = coverage.reduce((acc, x) => x ? acc.concat(Object.keys(x)) : acc, []);
