@@ -18,7 +18,9 @@ environment:
 # get the latest stable version of Node 0.STABLE.latest
 install:
   - ps: Install-Product node $env:nodejs_version
+  - set CI=true
   - npm i -g npm@latest
+  - set PATH=%APPDATA%\npm;%PATH%
   - npm install
 
 build: off
