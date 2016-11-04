@@ -3,6 +3,7 @@
 [![Build Status for node v7](https://travis-badges.herokuapp.com/repos/kulshekhar/ts-jest/branches/master?job=0)](https://travis-ci.org/kulshekhar/ts-jest)
 [![Build Status for node v6](https://travis-badges.herokuapp.com/repos/kulshekhar/ts-jest/branches/master?job=1)](https://travis-ci.org/kulshekhar/ts-jest)
 [![Build Status for node v4](https://travis-badges.herokuapp.com/repos/kulshekhar/ts-jest/branches/master?job=2)](https://travis-ci.org/kulshekhar/ts-jest)
+[![Build Status for Windows](https://ci.appveyor.com/api/projects/status/gknb1pl72o0w0coc?svg=true)](https://ci.appveyor.com/project/Igmat/ts-jest)
 
 ## Table of Contents
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
