@@ -18,6 +18,7 @@ environment:
 # get the latest stable version of Node 0.STABLE.latest
 install:
   - ps: Install-Product node $env:nodejs_version
+  - npm i -g npm@latest
   - npm install
 
 build: off
