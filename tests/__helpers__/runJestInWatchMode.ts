@@ -42,13 +42,18 @@ export default function runJestInWatchMode(dir, args?: any[]) {
       childProcess[strm].on('data', (data) => {
         stderr += data.toString();
         if (data.toString().includes('Ran all')) {
-          resolve(stderr);
-          childProcess[strm].removeAllListeners('data');
         }
       });
+      childProcess[strm].on('end', () => {
+        resolve(stderr);
+        childProcess[strm].removeAllListeners('data');
+      });
+      childProcess[strm].on('close', () => {
+        resolve(stderr);
+        childProcess[strm].removeAllListeners('data');
+      });
+
       childProcess[strm].on('error', reject);
-      childProcess[strm].on('close', reject);
-      childProcess[strm].on('end', reject);
     });
   };
 
