@@ -35,25 +35,16 @@ export default function runJestInWatchMode(dir, args?: any[]) {
   const childProcess = spawn(JEST_PATH, args, {
     cwd: dir,
   });
-
-  let getStderrAsync = (strm = 'stderr') => {
-    return new Promise((resolve: (value: string) => void, reject: (reason: string) => void) => {
+  let getStderrAsync = () => {
+    return new Promise((resolve: (value: string) => void) => {
       let stderr = '';
-      childProcess[strm].on('data', (data) => {
+      childProcess.stderr.on('data', (data) => {
         stderr += data.toString();
         if (data.toString().includes('Ran all')) {
+          resolve(stderr);
+          childProcess.stderr.removeAllListeners('data');
         }
       });
-      childProcess[strm].on('end', () => {
-        resolve(stderr);
-        childProcess[strm].removeAllListeners('data');
-      });
-      childProcess[strm].on('close', () => {
-        resolve(stderr);
-        childProcess[strm].removeAllListeners('data');
-      });
-
-      childProcess[strm].on('error', reject);
     });
   };
 

@@ -47,7 +47,7 @@ describe('Hello Class', () => {
 `;
 
 describe('hello_world', () => {
-  let result: { childProcess: ChildProcess, getStderrAsync: (stream?: string) => Promise<string> };
+  let result: { childProcess: ChildProcess, getStderrAsync: () => Promise<string> };
   let DEFAULT_TIMEOUT_INTERVAL: number;
 
   beforeAll(() => {
@@ -60,11 +60,11 @@ describe('hello_world', () => {
     return result.getStderrAsync().then((stderr) => {
       expect(stderr).toContain('Hello.ts:13:11');
       expect(stderr).toContain('Hello.test.ts:9:19');
-    }).catch((e) => { });
+    });
   });
 
   it('should show the correct error locations in the typescript files with changes in source file', () => {
-    let promise = result.getStderrAsync('stderr').then((stderr) => {
+    let promise = result.getStderrAsync().then((stderr) => {
       console.log('########');
       expect(stderr).toContain('Hello.ts:11:11');
       expect(stderr).toContain('Hello.test.ts:9:19');
@@ -75,17 +75,16 @@ describe('hello_world', () => {
   });
 
   it('should show the correct error locations in the typescript files with changes in source file and test file', () => {
-    // fs.writeFileSync(path.resolve(__dirname, '../watch-test/__tests__/Hello.test.ts'), testFileUpdate);
-    // let promise = result.getStderrAsync().then((stderr) => {
-    //   expect(stderr).toContain('Hello.ts:11:11');
-    //   expect(stderr).toContain('Hello.test.ts:11:19');
-    // }).catch((e) => { });
-    // return promise;
+    let promise = result.getStderrAsync().then((stderr) => {
+      expect(stderr).toContain('Hello.ts:11:11');
+      expect(stderr).toContain('Hello.test.ts:11:19');
+    });
+    fs.writeFileSync(path.resolve(__dirname, '../watch-test/__tests__/Hello.test.ts'), testFileUpdate);
+    return promise;
   });
 
   afterAll(() => {
     result.childProcess.kill();
-    result = null;
     // revert changes back
     jasmine['DEFAULT_TIMEOUT_INTERVAL'] = DEFAULT_TIMEOUT_INTERVAL;
     fs.writeFileSync(path.resolve(__dirname, '../watch-test/Hello.ts'), helloFile);
