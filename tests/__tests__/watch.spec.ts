@@ -85,6 +85,7 @@ describe('hello_world', () => {
 
   afterAll(() => {
     result.childProcess.kill();
+    result = null;
     // revert changes back
     jasmine['DEFAULT_TIMEOUT_INTERVAL'] = DEFAULT_TIMEOUT_INTERVAL;
     fs.writeFileSync(path.resolve(__dirname, '../watch-test/Hello.ts'), helloFile);

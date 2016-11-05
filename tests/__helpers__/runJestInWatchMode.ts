@@ -48,8 +48,7 @@ export default function runJestInWatchMode(dir, args?: any[]) {
       });
       childProcess.stderr.on('error', reject);
       childProcess.stderr.on('close', reject);
-      childProcess.stderr.on('drain', reject);
-      childProcess.stderr.on('finish', reject);
+      childProcess.stderr.on('end', reject);
     });
   };
 
