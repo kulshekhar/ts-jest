@@ -35,6 +35,7 @@ export default function runJestInWatchMode(dir, args?: any[]) {
   const childProcess = spawn(JEST_PATH, args, {
     cwd: dir,
   });
+
   let getStderrAsync = () => {
     return new Promise((resolve: (value: string) => void, reject: (reason: string) => void) => {
       let stderr = '';
@@ -45,11 +46,10 @@ export default function runJestInWatchMode(dir, args?: any[]) {
           childProcess.stderr.removeAllListeners('data');
         }
       });
-
-      childProcess.on('error', reject);
-      childProcess.on('close', reject);
-      childProcess.on('exit', reject);
-      childProcess.on('disconnect', reject);
+      childProcess.stderr.on('error', reject);
+      childProcess.stderr.on('close', reject);
+      childProcess.stderr.on('drain', reject);
+      childProcess.stderr.on('finish', reject);
     });
   };
 
