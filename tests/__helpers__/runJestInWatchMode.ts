@@ -36,19 +36,19 @@ export default function runJestInWatchMode(dir, args?: any[]) {
     cwd: dir,
   });
 
-  let getStderrAsync = () => {
+  let getStderrAsync = ([strm = 'stderr']) => {
     return new Promise((resolve: (value: string) => void, reject: (reason: string) => void) => {
       let stderr = '';
-      childProcess.stderr.on('data', (data) => {
+      childProcess[strm].on('data', (data) => {
         stderr += data.toString();
         if (data.toString().includes('Ran all')) {
           resolve(stderr);
-          childProcess.stderr.removeAllListeners('data');
+          childProcess[strm].removeAllListeners('data');
         }
       });
-      childProcess.stderr.on('error', reject);
-      childProcess.stderr.on('close', reject);
-      childProcess.stderr.on('end', reject);
+      childProcess[strm].on('error', reject);
+      childProcess[strm].on('close', reject);
+      childProcess[strm].on('end', reject);
     });
   };
 
