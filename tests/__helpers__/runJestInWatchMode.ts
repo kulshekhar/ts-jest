@@ -36,7 +36,7 @@ export default function runJestInWatchMode(dir, args?: any[]) {
     cwd: dir,
   });
 
-  let getStderrAsync = ([strm = 'stderr']) => {
+  let getStderrAsync = (strm = 'stderr') => {
     return new Promise((resolve: (value: string) => void, reject: (reason: string) => void) => {
       let stderr = '';
       childProcess[strm].on('data', (data) => {

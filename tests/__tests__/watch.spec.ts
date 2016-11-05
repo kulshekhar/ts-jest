@@ -47,7 +47,7 @@ describe('Hello Class', () => {
 `;
 
 describe('hello_world', () => {
-  let result: { childProcess: ChildProcess, getStderrAsync: () => Promise<string> };
+  let result: { childProcess: ChildProcess, getStderrAsync: (stream?: string) => Promise<string> };
   let DEFAULT_TIMEOUT_INTERVAL: number;
 
   beforeAll(() => {
@@ -64,7 +64,7 @@ describe('hello_world', () => {
   });
 
   it('should show the correct error locations in the typescript files with changes in source file', () => {
-    let promise = result.getStderrAsync('stdout').then((stderr) => {
+    let promise = result.getStderrAsync('stderr').then((stderr) => {
       console.log('########');
       expect(stderr).toContain('Hello.ts:11:11');
       expect(stderr).toContain('Hello.test.ts:9:19');
