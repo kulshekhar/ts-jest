@@ -58,19 +58,18 @@ describe('hello_world', () => {
 
   it('should show the correct error locations in the typescript files without changes', () => {
     return result.getStderrAsync().then((stderr) => {
-      console.log('##########');
       expect(stderr).toContain('Hello.ts:13:11');
       expect(stderr).toContain('Hello.test.ts:9:19');
     }).catch((e) => { });
   });
 
   it('should show the correct error locations in the typescript files with changes in source file', () => {
-    // fs.writeFileSync(path.resolve(__dirname, '../watch-test/Hello.ts'), helloFileUpdate);
-    // let promise = result.getStderrAsync().then((stderr) => {
-    //   expect(stderr).toContain('Hello.ts:11:11');
-    //   expect(stderr).toContain('Hello.test.ts:9:19');
-    // }).catch((e) => { });
-    // return promise;
+    let promise = result.getStderrAsync().then((stderr) => {
+      expect(stderr).toContain('Hello.ts:11:11');
+      expect(stderr).toContain('Hello.test.ts:9:19');
+    }).catch((e) => { });
+    fs.writeFileSync(path.resolve(__dirname, '../watch-test/Hello.ts'), helloFileUpdate);
+    return promise;
   });
 
   it('should show the correct error locations in the typescript files with changes in source file and test file', () => {
