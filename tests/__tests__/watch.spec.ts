@@ -70,7 +70,7 @@ describe('hello_world', () => {
       expect(stderr).toContain('Hello.test.ts:11:19');
     }).catch((e) => { console.log(':::::::::::2'); });
     fs.writeFileSync(path.resolve(__dirname, '../watch-test/__tests__/Hello.test.ts'), testFileUpdate);
-    console.log('>>>>>>>>>>>');
+    console.log('>>>>>>>>>>>2');
     return promise;
   });
 
@@ -87,6 +87,7 @@ describe('hello_world', () => {
 
   afterAll(() => {
     result.childProcess.kill();
+    console.log('CHILDPROCESS: ', result.childProcess);
     // revert changes back
     jasmine['DEFAULT_TIMEOUT_INTERVAL'] = DEFAULT_TIMEOUT_INTERVAL;
     fs.writeFileSync(path.resolve(__dirname, '../watch-test/Hello.ts'), helloFile);
