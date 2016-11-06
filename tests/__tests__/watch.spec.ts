@@ -62,7 +62,8 @@ describe('hello_world', () => {
     return result.getStderrAsync().then((stderr) => {
       expect(stderr).toContain('Hello.ts:13:11');
       expect(stderr).toContain('Hello.test.ts:9:19');
-    }).catch((e) => { });
+      result.childProcess.kill();
+    }).catch((e) => { result.childProcess.kill(); });
   });
 
   it('should show the correct error locations in the typescript files with changes in source file and test file', () => {
@@ -70,7 +71,8 @@ describe('hello_world', () => {
     let promise = result.getStderrAsync().then((stderr) => {
       expect(stderr).toContain('Hello.ts:11:11');
       expect(stderr).toContain('Hello.test.ts:11:19');
-    }).catch((e) => { });
+      result.childProcess.kill();
+    }).catch((e) => { result.childProcess.kill(); });
     fs.writeFileSync(path.resolve(__dirname, '../watch-test/__tests__/Hello.test.ts'), testFileUpdate);
     return promise;
   });
@@ -80,7 +82,8 @@ describe('hello_world', () => {
     let promise = result.getStderrAsync().then((stderr) => {
       expect(stderr).toContain('Hello.ts:11:11');
       expect(stderr).toContain('Hello.test.ts:9:19');
-    }).catch((e) => { });
+      result.childProcess.kill();
+    }).catch((e) => { result.childProcess.kill(); });
     fs.writeFileSync(path.resolve(__dirname, '../watch-test/Hello.ts'), helloFileUpdate);
     return promise;
   });
