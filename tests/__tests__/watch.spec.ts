@@ -51,7 +51,7 @@ describe('hello_world', () => {
   let DEFAULT_TIMEOUT_INTERVAL: number;
   let stage = '';
 
-  beforeAll(() => {
+  beforeEach(() => {
     result = runJestInWatchMode('../watch-test');
     DEFAULT_TIMEOUT_INTERVAL = jasmine['DEFAULT_TIMEOUT_INTERVAL'];
     jasmine['DEFAULT_TIMEOUT_INTERVAL'] = 10000;
@@ -88,7 +88,7 @@ describe('hello_world', () => {
     return promise;
   });
 
-  afterAll(() => {
+  afterEach(() => {
     const pid = result.childProcess.pid;
     console.log(`After stage: ${stage} - ${pid}`);
     result.childProcess.kill();
