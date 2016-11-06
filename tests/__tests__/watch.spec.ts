@@ -64,13 +64,13 @@ describe('hello_world', () => {
   });
 
   it('should show the correct error locations in the typescript files with changes in source file and test file', () => {
-    console.log('########2');
     let promise = result.getStderrAsync().then((stderr) => {
+      console.log('########2');
       expect(stderr).toContain('Hello.ts:11:11');
       expect(stderr).toContain('Hello.test.ts:11:19');
     }).catch((e) => { console.log(':::::::::::2'); });
     fs.writeFileSync(path.resolve(__dirname, '../watch-test/__tests__/Hello.test.ts'), testFileUpdate);
-    console.log('>>>>>>>>>>>3');
+    console.log('>>>>>>>>>>>');
     return promise;
   });
 
