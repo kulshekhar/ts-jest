@@ -62,8 +62,8 @@ describe('hello_world', () => {
     return result.getStderrAsync().then((stderr) => {
       expect(stderr).toContain('Hello.ts:13:11');
       expect(stderr).toContain('Hello.test.ts:9:19');
-      result.childProcess.kill();
-    }).catch((e) => { result.childProcess.kill(); });
+      killProcess(result.childProcess.pid);
+    }).catch((e) => { killProcess(result.childProcess.pid); });
   });
 
   it('should show the correct error locations in the typescript files with changes in source file and test file', () => {
@@ -71,8 +71,8 @@ describe('hello_world', () => {
     let promise = result.getStderrAsync().then((stderr) => {
       expect(stderr).toContain('Hello.ts:11:11');
       expect(stderr).toContain('Hello.test.ts:11:19');
-      result.childProcess.kill();
-    }).catch((e) => { result.childProcess.kill(); });
+      killProcess(result.childProcess.pid);
+    }).catch((e) => { killProcess(result.childProcess.pid); });
     fs.writeFileSync(path.resolve(__dirname, '../watch-test/__tests__/Hello.test.ts'), testFileUpdate);
     return promise;
   });
@@ -82,8 +82,8 @@ describe('hello_world', () => {
     let promise = result.getStderrAsync().then((stderr) => {
       expect(stderr).toContain('Hello.ts:11:11');
       expect(stderr).toContain('Hello.test.ts:9:19');
-      result.childProcess.kill();
-    }).catch((e) => { result.childProcess.kill(); });
+      killProcess(result.childProcess.pid);
+    }).catch((e) => { killProcess(result.childProcess.pid); });
     fs.writeFileSync(path.resolve(__dirname, '../watch-test/Hello.ts'), helloFileUpdate);
     return promise;
   });
@@ -92,6 +92,7 @@ describe('hello_world', () => {
     const pid = result.childProcess.pid;
     console.log(`After stage: ${stage} - ${pid}`);
     result.childProcess.kill();
+    killProcess(result.childProcess.pid);
     exec('tasklist', (err, stdout, stderr) => {
       var lines = stdout.toString().split('\n');
       var results = new Array();
@@ -112,3 +113,9 @@ describe('hello_world', () => {
     fs.writeFileSync(path.resolve(__dirname, '../watch-test/__tests__/Hello.test.ts'), testFile);
   });
 });
+
+function killProcess(pid: number) {
+  exec(`taskkill /pid ${pid} /f`, (err, stdout, stderr) => {
+    console.log(`MANUAL PROCESS SHUTDOWN: ${err}, ${stdout}, ${stderr}`);
+  });
+}
