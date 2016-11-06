@@ -50,7 +50,7 @@ describe('hello_world', () => {
   let result: { childProcess: ChildProcess, getStderrAsync: () => Promise<string> };
   let DEFAULT_TIMEOUT_INTERVAL: number;
 
-  beforeAll(() => {
+  beforeEach(() => {
     result = runJestInWatchMode('../watch-test');
     DEFAULT_TIMEOUT_INTERVAL = jasmine['DEFAULT_TIMEOUT_INTERVAL'];
     jasmine['DEFAULT_TIMEOUT_INTERVAL'] = 10000;
@@ -81,7 +81,7 @@ describe('hello_world', () => {
     return promise;
   });
 
-  afterAll(() => {
+  afterEach(() => {
     result.childProcess.kill();
     // revert changes back
     jasmine['DEFAULT_TIMEOUT_INTERVAL'] = DEFAULT_TIMEOUT_INTERVAL;
