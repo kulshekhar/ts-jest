@@ -1,6 +1,6 @@
 import { } from 'jest';
 import { } from 'node';
-import { ChildProcess } from 'child_process';
+import { ChildProcess, exec } from 'child_process';
 import * as fs from 'fs';
 import * as path from 'path';
 import runJestInWatchMode from '../__helpers__/runJestInWatchMode';
@@ -49,6 +49,7 @@ describe('Hello Class', () => {
 describe('hello_world', () => {
   let result: { childProcess: ChildProcess, getStderrAsync: () => Promise<string> };
   let DEFAULT_TIMEOUT_INTERVAL: number;
+  let stage = '';
 
   beforeAll(() => {
     result = runJestInWatchMode('../watch-test');
@@ -57,37 +58,51 @@ describe('hello_world', () => {
   });
 
   it('should show the correct error locations in the typescript files without changes', () => {
+    stage = 'FIRST';
     return result.getStderrAsync().then((stderr) => {
       expect(stderr).toContain('Hello.ts:13:11');
       expect(stderr).toContain('Hello.test.ts:9:19');
-    });
+    }).catch((e) => { });
   });
 
   it('should show the correct error locations in the typescript files with changes in source file and test file', () => {
+    stage = 'SECOND';
     let promise = result.getStderrAsync().then((stderr) => {
-      console.log('########2');
       expect(stderr).toContain('Hello.ts:11:11');
       expect(stderr).toContain('Hello.test.ts:11:19');
-    }).catch((e) => { console.log(':::::::::::2'); });
+    }).catch((e) => { });
     fs.writeFileSync(path.resolve(__dirname, '../watch-test/__tests__/Hello.test.ts'), testFileUpdate);
-    console.log('>>>>>>>>>>>2');
     return promise;
   });
 
   it('should show the correct error locations in the typescript files with changes in source file', () => {
+    stage = 'THIRD';
     let promise = result.getStderrAsync().then((stderr) => {
-      console.log('########1');
       expect(stderr).toContain('Hello.ts:11:11');
       expect(stderr).toContain('Hello.test.ts:9:19');
-    }).catch((e) => { console.log(':::::::::::1'); });
+    }).catch((e) => { });
     fs.writeFileSync(path.resolve(__dirname, '../watch-test/Hello.ts'), helloFileUpdate);
-    console.log('>>>>>>>>>>>1');
     return promise;
   });
 
   afterAll(() => {
+    const pid = result.childProcess.pid;
+    console.log(`After stage: ${stage} - ${pid}`);
     result.childProcess.kill();
-    console.log('CHILDPROCESS: ', result.childProcess);
+    exec('tasklist', (err, stdout, stderr) => {
+      var lines = stdout.toString().split('\n');
+      var results = new Array();
+      lines.forEach(function (line) {
+        console.log(`>>>>> ${line}`);
+        var parts = line.split('=');
+        parts.forEach(function (items) {
+          if (items.toString().indexOf(`${pid}`) > -1) {
+            console.log(items.toString().substring(0, items.toString().indexOf(`${pid}`)));
+          }
+        })
+      });
+    });
+
     // revert changes back
     jasmine['DEFAULT_TIMEOUT_INTERVAL'] = DEFAULT_TIMEOUT_INTERVAL;
     fs.writeFileSync(path.resolve(__dirname, '../watch-test/Hello.ts'), helloFile);
