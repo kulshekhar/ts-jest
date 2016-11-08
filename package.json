@@ -7,7 +7,7 @@
   "scripts": {
     "build": "tsc -p .",
     "build:watch": "tsc -p . -w",
-    "clean": "rimraf dist/**/* && rimraf tests/simple/coverage/**/*",
+    "clean": "rimraf dist/**/* && rimraf tests/simple/coverage/**/* && rimraf tests/simple-async/coverage/**/*",
     "clean-build": "npm run clean && npm run build",
     "pretest": "npm run clean-build",
     "test": "node scripts/tests.js",
