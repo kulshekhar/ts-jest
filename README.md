@@ -4,6 +4,8 @@
 [![Build Status for node v6](https://travis-badges.herokuapp.com/repos/kulshekhar/ts-jest/branches/master?job=1)](https://travis-ci.org/kulshekhar/ts-jest)
 [![Build Status for node v4](https://travis-badges.herokuapp.com/repos/kulshekhar/ts-jest/branches/master?job=2)](https://travis-ci.org/kulshekhar/ts-jest)
 [![Build Status for Windows](https://ci.appveyor.com/api/projects/status/gknb1pl72o0w0coc?svg=true)](https://ci.appveyor.com/project/Igmat/ts-jest)
+[![npm version](https://badge.fury.io/js/ts-jest.svg)](https://badge.fury.io/js/ts-jest)
+[![dependencies](https://david-dm.org/kulshekhar/ts-jest.svg)](https://www.npmjs.com/package/ts-jest)
 
 ## Table of Contents
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
