@@ -12,6 +12,7 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
 
+- [Versioning](#versioning)
 - [Usage](#usage)
 - [Options](#options)
 - [How to Contribute](#how-to-contribute)
