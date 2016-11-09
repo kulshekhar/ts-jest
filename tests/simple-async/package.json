@@ -1,10 +1,14 @@
 {
   "jest": {
     "rootDir": "./",
-    "scriptPreprocessor": "../../preprocessor.js",
+    "transform": {
+      ".(ts|tsx)": "../../preprocessor.js"
+    },
     "testResultsProcessor": "../../coverageprocessor.js",
     "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
-    "coverageReporters": ["json"],
+    "coverageReporters": [
+      "json"
+    ],
     "collectCoverageFrom": [
       "Hello.ts",
       "NullCoverage.js"

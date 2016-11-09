@@ -18,6 +18,10 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
+## Versioning
+From version `"jest": "17.0.0"` we are using same MAJOR.MINOR as [`Jest`](https://github.com/facebook/jest).  
+For `"jest": "< 17.0.0"` use `"ts-jest": "0.1.13"`.
+
 ## Usage
 
 To use this in your project, run:
@@ -28,7 +32,9 @@ Modify your project's `package.json` so that the `jest` section looks something 
 ```json
 {
   "jest": {
-    "scriptPreprocessor": "<rootDir>/node_modules/ts-jest/preprocessor.js",
+    "transform": {
+      ".(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+    },
     "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
     "moduleFileExtensions": [
       "ts",
@@ -44,7 +50,9 @@ By default `jest` does not provide code coverage remapping for transpiled codes,
 ```json
 {
   "jest": {
-    "scriptPreprocessor": "<rootDir>/node_modules/ts-jest/preprocessor.js",
+    "transform": {
+      ".(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+    },
     "testResultsProcessor": "<rootDir>/node_modules/ts-jest/coverageprocessor.js"
   }
 }
