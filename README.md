@@ -23,7 +23,7 @@
 
 ## Versioning
 From version `"jest": "17.0.0"` we are using same MAJOR.MINOR as [`Jest`](https://github.com/facebook/jest).  
-For `"jest": "< 17.0.0"` use `"ts-jest": "0.1.13"`.
+For `"jest": "< 17.0.0"` use `"ts-jest": "0.1.13"`. Docs for it see [here](https://github.com/kulshekhar/ts-jest/blob/e1f95e524ed62091736f70abf63530f1f107ec03/README.md).
 
 ## Usage
 
