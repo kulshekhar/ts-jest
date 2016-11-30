@@ -11,9 +11,9 @@ init:
 # what combinations to test
 environment:
   matrix:
-    - nodejs_version: 4
+    # - nodejs_version: 4
     - nodejs_version: 6
-    - nodejs_version: 7
+    # - nodejs_version: 7
 
 # get the latest stable version of Node 0.STABLE.latest
 install:
@@ -28,4 +28,4 @@ build: off
 test_script:
   - node --version
   - npm --version
-  - cmd: npm test --no-color
+  - npm test --no-color
