@@ -50,7 +50,7 @@ describe('hello_world', () => {
   let result: { childProcess: ChildProcess, getStderrAsync: () => Promise<string> };
   let DEFAULT_TIMEOUT_INTERVAL: number;
 
-  beforeAll(() => {
+  beforeEach(() => {
     result = runJestInWatchMode('../watch-test');
     DEFAULT_TIMEOUT_INTERVAL = jasmine['DEFAULT_TIMEOUT_INTERVAL'];
     jasmine['DEFAULT_TIMEOUT_INTERVAL'] = 10000;
@@ -73,6 +73,7 @@ describe('hello_world', () => {
   });
 
   it('should show the correct error locations in the typescript files with changes in source file and test file', () => {
+    fs.writeFileSync(path.resolve(__dirname, '../watch-test/Hello.ts'), helloFileUpdate);
     let promise = result.getStderrAsync().then((stderr) => {
       expect(stderr).toContain('Hello.ts:11:11');
       expect(stderr).toContain('Hello.test.ts:11:19');
@@ -81,7 +82,7 @@ describe('hello_world', () => {
     return promise;
   });
 
-  afterAll(() => {
+  afterEach(() => {
     result.childProcess.kill();
     // revert changes back
     jasmine['DEFAULT_TIMEOUT_INTERVAL'] = DEFAULT_TIMEOUT_INTERVAL;
