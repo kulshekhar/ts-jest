@@ -43,3 +43,7 @@ jspm_packages
 
 # We need to include this folders, because they are mocks for integration tests
 !tests/**/node_modules
+
+.vscode
+.idea
+**/node_modules
