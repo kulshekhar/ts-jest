@@ -3,7 +3,7 @@
 [![Build Status for node v7](https://travis-badges.herokuapp.com/repos/kulshekhar/ts-jest/branches/master?job=0)](https://travis-ci.org/kulshekhar/ts-jest)
 [![Build Status for node v6](https://travis-badges.herokuapp.com/repos/kulshekhar/ts-jest/branches/master?job=1)](https://travis-ci.org/kulshekhar/ts-jest)
 [![Build Status for node v4](https://travis-badges.herokuapp.com/repos/kulshekhar/ts-jest/branches/master?job=2)](https://travis-ci.org/kulshekhar/ts-jest)
-[![Build Status for Windows](https://ci.appveyor.com/api/projects/status/gknb1pl72o0w0coc?svg=true)](https://ci.appveyor.com/project/Igmat/ts-jest)
+[![Build Status for Windows](https://ci.appveyor.com/api/projects/status/g8tt9qd7usv0tolb?svg=true)](https://ci.appveyor.com/project/kulshekhar/ts-jest)
 [![npm version](https://badge.fury.io/js/ts-jest.svg)](https://badge.fury.io/js/ts-jest)
 [![dependencies](https://david-dm.org/kulshekhar/ts-jest.svg)](https://www.npmjs.com/package/ts-jest)
 
