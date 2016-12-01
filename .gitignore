@@ -46,4 +46,3 @@ jspm_packages
 
 .vscode
 .idea
-**/node_modules
