@@ -41,8 +41,5 @@ jspm_packages
 # Optional REPL history
 .node_repl_history
 
-# We need to include this folders, because they are mocks for integration tests
-!tests/**/node_modules
-
 .vscode
 .idea
