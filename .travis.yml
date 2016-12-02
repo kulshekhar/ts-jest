@@ -7,7 +7,3 @@ before_install:
   - npm i -g npm@latest
 
 sudo: false
-
-matrix:
-  allow_failures:
-    - node_js: "7"
