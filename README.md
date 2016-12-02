@@ -15,6 +15,7 @@
 - [Versioning](#versioning)
 - [Usage](#usage)
 - [Options](#options)
+  - [Known limitations for TS compiler options](#known-limitations-for-ts-compiler-options)
 - [How to Contribute](#how-to-contribute)
   - [Quickstart to run tests (only if you're working on this package)](#quickstart-to-run-tests-only-if-youre-working-on-this-package)
 - [License](#license)
@@ -89,7 +90,16 @@ Or even declare options for `tsc` instead of using separate config, like this:
 }
 ```
 For all available options see [TypeScript docs](https://www.typescriptlang.org/docs/handbook/compiler-options.html).
-> **Note:** You can't target `ES6` while using `node v4` in your test environment.
+
+### Known limitations for TS compiler options 
+- You can't use `"target": "ES6"` while using `node v4` in your test environment;
+- You can't use `"react": "preserve"` for now (see [progress of this issue](https://github.com/kulshekhar/ts-jest/issues/63));
+- If you use `"baseUrl": "<path_to_your_sources>"`, you have also change `jest config` a little bit:
+```json
+"jest": {
+  "moduleDirectories": ["node_modules", "<path_to_your_sources>"]
+}
+``` 
 
 ## How to Contribute
 If you have any suggestions/pull requests to turn this into a useful package, just open an issue and I'll be happy to work with you to improve this.
