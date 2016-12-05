@@ -94,7 +94,7 @@ For all available options see [TypeScript docs](https://www.typescriptlang.org/d
 ### Known limitations for TS compiler options 
 - You can't use `"target": "ES6"` while using `node v4` in your test environment;
 - You can't use `"react": "preserve"` for now (see [progress of this issue](https://github.com/kulshekhar/ts-jest/issues/63));
-- If you use `"baseUrl": "<path_to_your_sources>"`, you have also change `jest config` a little bit:
+- If you use `"baseUrl": "<path_to_your_sources>"`, you also have to change `jest config` a little bit:
 ```json
 "jest": {
   "moduleDirectories": ["node_modules", "<path_to_your_sources>"]
