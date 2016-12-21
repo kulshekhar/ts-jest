@@ -9,10 +9,10 @@ const remap = require('remap-istanbul/lib/remap');
 const writeReport = require('remap-istanbul/lib/writeReport');
 const istanbulInstrument = require('istanbul-lib-instrument');
 
-function processResult(result: any): void {
-  if (!global.__ts_coverage__cache__) return;
+function processResult<T extends any>(result: T): T {
+  if (!global.__ts_coverage__cache__) return result;
   const { coverageConfig, sourceCache, coverageCollectFiles } = global.__ts_coverage__cache__;
-  if (!coverageConfig.collectCoverage) return;
+  if (!coverageConfig.collectCoverage) return result;
 
   const coverage = result.testResults.map(value => value.coverage);
   const coveredFiles = coverage.reduce((acc, x) => x ? acc.concat(Object.keys(x)) : acc, []);
@@ -45,6 +45,7 @@ function processResult(result: any): void {
   writeReport(coverageCollector, 'lcovonly', {}, path.join(coverageOutputPath, 'lcov.info'));
   writeReport(coverageCollector, 'json', {}, path.join(coverageOutputPath, 'coverage.json'));
   writeReport(coverageCollector, 'text', {}, path.join(coverageOutputPath, 'coverage.txt'));
+  return result;
 }
 
 module.exports = processResult;
