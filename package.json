@@ -1,6 +1,6 @@
 {
   "name": "ts-jest",
-  "version": "17.0.3",
+  "version": "18.0.0",
   "main": "index.js",
   "types": "./dist/index.d.ts",
   "description": "A preprocessor with sourcemap support to help use Typescript with Jest",
@@ -67,7 +67,7 @@
   },
   "peerDependencies": {
     "typescript": "^2.0.6 || ^2.1.0-dev || ^2.2.0-dev",
-    "jest": "~17.0.0"
+    "jest": "~18.0.0"
   },
   "devDependencies": {
     "@types/es6-shim": "latest",
@@ -82,7 +82,7 @@
     "cross-spawn": "latest",
     "cross-spawn-with-kill": "latest",
     "doctoc": "latest",
-    "jest": "^17.0.0",
+    "jest": "^18.0.0",
     "react": "latest",
     "react-test-renderer": "latest",
     "rimraf": "latest",
