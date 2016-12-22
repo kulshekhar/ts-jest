@@ -2,12 +2,13 @@ declare const global: any;
 
 import * as path from 'path';
 
-const includes = require('lodash.includes');
-const partition = require('lodash.partition');
+import includes = require('lodash.includes');
+import partition = require('lodash.partition');
 const loadCoverage = require('remap-istanbul/lib/loadCoverage');
 const remap = require('remap-istanbul/lib/remap');
 const writeReport = require('remap-istanbul/lib/writeReport');
 const istanbulInstrument = require('istanbul-lib-instrument');
+import pickBy = require('lodash.pickby')
 
 function processResult<T extends any>(result: T): T {
   if (!global.__ts_coverage__cache__) return result;
