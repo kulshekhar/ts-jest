@@ -78,7 +78,7 @@
     "tslint": "next",
     "react": "latest",
     "react-test-renderer": "latest",
-    "jest": "latest",
+    "jest": "^17.0.0",
     "ts-jest": "latest",
     "cross-spawn": "latest",
     "cross-spawn-with-kill": "latest",
