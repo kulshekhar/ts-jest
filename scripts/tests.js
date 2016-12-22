@@ -24,7 +24,7 @@ function getDirectories(rootDir) {
 }
 
 function getFiles(rootDir) {
-    return fs.readdirSync(rootDir).filter(function(file) {
+    return fs.readdirSync(rootDir).filter(function (file) {
         return !fs.statSync(path.join(rootDir, file)).isDirectory();
     });
 }
@@ -38,7 +38,7 @@ function createIntegrationMock() {
     const testCaseFolders = getDirectories(testsRoot).filter(function (testDir) {
         return !(testDir.startsWith('__') && testDir.endsWith('__'));
     });
-    const filesToMock = getFiles('dist').filter(function(fileName) {
+    const filesToMock = getFiles('dist').filter(function (fileName) {
         return fileName.endsWith('.js')
     })
     for (let i = 0; i < testCaseFolders.length; i++) {
