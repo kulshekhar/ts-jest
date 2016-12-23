@@ -1,6 +1,6 @@
 {
   "name": "ts-jest",
-  "version": "17.0.3",
+  "version": "18.0.0",
   "main": "index.js",
   "types": "./dist/index.d.ts",
   "description": "A preprocessor with sourcemap support to help use Typescript with Jest",
@@ -60,29 +60,34 @@
     "lodash.assign": "^4.2.0",
     "lodash.includes": "^4.3.0",
     "lodash.partition": "^4.6.0",
+    "lodash.pickby": "^4.6.0",
     "remap-istanbul": "^0.7.0",
     "source-map-support": "^0.4.4",
     "yargs": "^6.1.1"
   },
   "peerDependencies": {
     "typescript": "^2.0.6 || ^2.1.0-dev || ^2.2.0-dev",
-    "jest": "~17.0.0"
+    "jest": "~18.0.0"
   },
   "devDependencies": {
     "@types/es6-shim": "latest",
     "@types/jest": "latest",
+    "@types/lodash.assign": "latest",
+    "@types/lodash.includes": "latest",
+    "@types/lodash.partition": "latest",
+    "@types/lodash.pickby": "latest",
+    "@types/node": "latest",
     "@types/react": "latest",
     "@types/source-map-support": "latest",
-    "@types/node": "latest",
-    "typescript": "next",
-    "tslint": "next",
-    "react": "latest",
-    "react-test-renderer": "latest",
-    "jest": "^17.0.0",
-    "ts-jest": "latest",
     "cross-spawn": "latest",
     "cross-spawn-with-kill": "latest",
+    "doctoc": "latest",
+    "jest": "^18.0.0",
+    "react": "latest",
+    "react-test-renderer": "latest",
     "rimraf": "latest",
-    "doctoc": "latest"
+    "ts-jest": "latest",
+    "tslint": "next",
+    "typescript": "next"
   }
 }

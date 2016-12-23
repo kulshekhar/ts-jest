@@ -2,7 +2,7 @@ import * as tsc from 'typescript';
 import * as path from 'path';
 import * as fs from 'fs';
 
-const assign = require('lodash.assign');
+import assign = require('lodash.assign');
 const normalize = require('jest-config').normalize;
 const setFromArgv = require('jest-config/build/setFromArgv');
 

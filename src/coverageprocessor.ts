@@ -1,21 +1,41 @@
-declare const global: any;
+declare const global: {
+  __ts_coverage__cache__: {
+    coverageConfig: any;
+    sourceCache: any[];
+    coverageCollectFiles: any[];
+  }
+}
 
 import * as path from 'path';
 
-const includes = require('lodash.includes');
-const partition = require('lodash.partition');
+import includes = require('lodash.includes');
+import partition = require('lodash.partition');
 const loadCoverage = require('remap-istanbul/lib/loadCoverage');
 const remap = require('remap-istanbul/lib/remap');
 const writeReport = require('remap-istanbul/lib/writeReport');
 const istanbulInstrument = require('istanbul-lib-instrument');
+import pickBy = require('lodash.pickby')
 
-function processResult(result: any): void {
-  if (!global.__ts_coverage__cache__) return;
+interface CoverageMap {
+  merge: (data: Object) => void;
+  getCoverageSummary: () => Object;
+  data: Object;
+  addFileCoverage: (fileCoverage: Object) => void;
+}
+
+// full type https://github.com/facebook/jest/blob/master/types/TestResult.js
+interface Result {
+  coverageMap: CoverageMap;
+}
+
+function processResult(result: Result): Result {
+  if (!global.__ts_coverage__cache__) return result;
   const { coverageConfig, sourceCache, coverageCollectFiles } = global.__ts_coverage__cache__;
-  if (!coverageConfig.collectCoverage) return;
+  if (!coverageConfig.collectCoverage) return result;
 
-  const coverage = result.testResults.map(value => value.coverage);
-  const coveredFiles = coverage.reduce((acc, x) => x ? acc.concat(Object.keys(x)) : acc, []);
+  const coveredFiles = Object.keys(sourceCache)
+  const coverage = [pickBy(result.coverageMap.data, (_, fileName) => includes(coveredFiles, fileName))]
+
   const uncoveredFiles = partition(coverageCollectFiles, x => includes(coveredFiles, x))[1];
   const coverageOutputPath = path.join(coverageConfig.coverageDirectory || 'coverage', 'remapped');
 
@@ -45,6 +65,7 @@ function processResult(result: any): void {
   writeReport(coverageCollector, 'lcovonly', {}, path.join(coverageOutputPath, 'lcov.info'));
   writeReport(coverageCollector, 'json', {}, path.join(coverageOutputPath, 'coverage.json'));
   writeReport(coverageCollector, 'text', {}, path.join(coverageOutputPath, 'coverage.txt'));
+  return result;
 }
 
 module.exports = processResult;
