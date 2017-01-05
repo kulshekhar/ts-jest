@@ -64,6 +64,32 @@ By default `jest` does not provide code coverage remapping for transpiled codes,
 
 > **Note:** If you're experiencing remapping failure with source lookup, it may due to pre-created cache from `jest`. It can be manually deleted, or execute with [`--no-cache`](https://facebook.github.io/jest/docs/troubleshooting.html#caching-issues) to not use those.
 
+### React Native
+
+There is a few additional steps if you want to use it with React Native.
+
+Install `babel-jest` and `babel-preset-react-native` modules.
+
+```sh
+npm install -D babel-jest babel-preset-react-native
+```
+
+Ensure `.babelrc` contains:
+
+```json
+{
+  "presets": ["react-native"]
+}
+```
+
+In `package.json`, inside `jest` section, the `transform` should be like this:
+```json
+"transform": {
+  "^.+\\.js$": "<rootDir>/node_modules/babel-jest",
+  ".(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+}
+```
+
 ## Options
 By default this package will try to locate `tsconfig.json` and use its compiler options for your `.ts` and `.tsx` files.  
 But you are able to override this behaviour and provide another path to your config for TypeScript by using `__TS_CONFIG__` option in `globals` for `jest`:
