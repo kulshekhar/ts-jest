@@ -52,4 +52,35 @@ describe('get ts config from string', () => {
     });
   });
 
+  it('should correctly resolve the "extends" directive', () => {
+    const {getTSConfig} = require('../../src/utils');
+    const result = getTSConfig({
+      '__TS_CONFIG__': 'extends-tsconfig.json'
+    });
+
+    expect(result).toEqual ({
+      'target': 2,
+      'module': 1,
+      'moduleResolution': 2,
+      'noEmitOnError': true,
+      'jsx': 2
+    });
+  });
+
+  it('should correctly override any config in the "extends" directive', () => {
+    const {getTSConfig} = require('../../src/utils');
+    const result = getTSConfig({
+      '__TS_CONFIG__': 'extends-with-overrides-tsconfig.json'
+    });
+
+    expect(result).toEqual ({
+      'target': 1,
+      'module': 1,
+      'moduleResolution': 2,
+      'noEmitOnError': true,
+      'jsx': 2,
+      'noImplicitAny': true
+    });
+  });
+
 });
