@@ -73,7 +73,14 @@ export function getTSConfig(globals, collectCoverage: boolean = false) {
     config = 'tsconfig.json';
   }
   if (typeof config === 'string') {
-    config = require(path.resolve(config)).compilerOptions;
+    const configPath = path.resolve(config);
+    const external = require(configPath);
+    config = external.compilerOptions || {};
+
+    if (typeof external.extends === 'string') {
+      const parentConfigPath = path.join(path.dirname(configPath), external.extends);
+      config = Object.assign({}, require(parentConfigPath).compilerOptions, config);
+    }
   }
   config.module = config.module || tsc.ModuleKind.CommonJS;
   config.jsx = config.jsx || tsc.JsxEmit.React;

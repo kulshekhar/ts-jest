@@ -3,7 +3,9 @@ import { } from 'node';
 
 interface MockedPath {
   __setBaseDir(newBaseDir);
-  resolve(args);
+  resolve(...args);
+  dirname(...args);
+  join(...args);
 }
 
 const path = require.requireActual('path');
@@ -19,11 +21,13 @@ function __setBaseDir(newBaseDir) {
 
 // A custom version of `readdirSync` that reads from the special mocked out
 // file list set via __setMockFiles
-function resolve(args) {
-  return path.resolve(baseDir, args);
+function resolve(...args) {
+  return path.resolve(baseDir, ...args);
 }
 
 mockedPath.__setBaseDir = __setBaseDir;
 mockedPath.resolve = resolve;
+mockedPath.dirname = path.dirname;
+mockedPath.join = path.join;
 
 module.exports = mockedPath;
