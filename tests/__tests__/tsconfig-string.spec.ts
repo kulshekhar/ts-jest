@@ -1,5 +1,6 @@
 import { } from 'jest';
 import { } from 'node';
+import * as ts from 'typescript';
 
 jest.mock('path');
 
@@ -17,11 +18,11 @@ describe('get ts config from string', () => {
     });
 
     expect(result).toEqual ({
-      'target': 2,
-      'module': 1,
-      'moduleResolution': 2,
+      'target': ts.ScriptTarget.ES2015,
+      'module': ts.ModuleKind.CommonJS,
+      'moduleResolution': ts.ModuleResolutionKind.NodeJs,
       'noEmitOnError': true,
-      'jsx': 2
+      'jsx': ts.JsxEmit.React
     });
   });
 
@@ -32,11 +33,11 @@ describe('get ts config from string', () => {
     });
 
     expect(result).not.toEqual ({
-      'target': 2,
-      'module': 1,
-      'moduleResolution': 2,
+      'target': ts.ScriptTarget.ES2015,
+      'module': ts.ModuleKind.CommonJS,
+      'moduleResolution': ts.ModuleResolutionKind.NodeJs,
       'noEmitOnError': false,
-      'jsx': 2
+      'jsx': ts.JsxEmit.React
     });
   });
 
@@ -47,8 +48,8 @@ describe('get ts config from string', () => {
     });
 
     expect(result).not.toEqual ({
-      'module': 1,
-      'jsx': 2
+      'target': ts.ScriptTarget.ES5,
+      'jsx': ts.JsxEmit.React
     });
   });
 
@@ -59,11 +60,11 @@ describe('get ts config from string', () => {
     });
 
     expect(result).toEqual ({
-      'target': 2,
-      'module': 1,
-      'moduleResolution': 2,
+      'target': ts.ScriptTarget.ES2015,
+      'module': ts.ModuleKind.CommonJS,
+      'moduleResolution': ts.ModuleResolutionKind.NodeJs,
       'noEmitOnError': true,
-      'jsx': 2
+      'jsx': ts.JsxEmit.React
     });
   });
 
@@ -74,11 +75,11 @@ describe('get ts config from string', () => {
     });
 
     expect(result).toEqual ({
-      'target': 1,
-      'module': 1,
-      'moduleResolution': 2,
+      'target': ts.ScriptTarget.ES5,
+      'module': ts.ModuleKind.CommonJS,
+      'moduleResolution': ts.ModuleResolutionKind.NodeJs,
       'noEmitOnError': true,
-      'jsx': 2,
+      'jsx': ts.JsxEmit.React,
       'noImplicitAny': true
     });
   });
