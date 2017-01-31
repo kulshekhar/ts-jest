@@ -7,5 +7,7 @@ before_install:
   - npm i -g npm@latest
   - echo '>>>>>>>>>>'
   - sysctl fs.inotify.max_user_watches
+  - sudo sysctl fs.inotify.max_user_watches=524288
+  - sysctl fs.inotify.max_user_watches
 
-sudo: false
+sudo: required
