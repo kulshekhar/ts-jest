@@ -66,8 +66,7 @@ if (!process.env.CI) {
 // omit tests for watch cases if it runned on AppVeyor due to this issues:
 // https://github.com/kulshekhar/ts-jest/issues/53
 // http://help.appveyor.com/discussions/problems/5500-nodejs-child-process-with-watch-and-stderr-problem
-if (process.env.AppVeyor) {
-    argv.push('--testPathPattern', '^(?!(.*watch\.spec\.ts$)).*');
-}
+
+argv.push('--testPathPattern', '^(?!(.*watch\.spec\.ts$)).*');
 
 jest.run(argv);
