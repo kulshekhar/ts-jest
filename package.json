@@ -58,6 +58,8 @@
   "dependencies": {
     "glob-all": "^3.1.0",
     "istanbul-lib-instrument": "^1.2.0",
+    "jest-config": "^18.1.0",
+    "jest-util": "^18.1.0",
     "lodash.assign": "^4.2.0",
     "lodash.includes": "^4.3.0",
     "lodash.partition": "^4.6.0",
