@@ -2,7 +2,7 @@ declare var jest, describe, it, expect;
 
 import { checkStrictValid } from '../Strict-valid';
 
-describe('Valid Strict', () => {
+describe('Strict1', () => {
 
   it('should not throw an error', () => {
 

@@ -1,6 +1,6 @@
 {
   "name": "ts-jest",
-  "version": "18.0.3",
+  "version": "19.0.0",
   "main": "index.js",
   "types": "./dist/index.d.ts",
   "description": "A preprocessor with sourcemap support to help use Typescript with Jest",
@@ -40,7 +40,6 @@
     "transform": {
       ".(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
     },
-    "mocksPattern": "__ts-jest-mocks__",
     "testRegex": "/__tests__/.*\\.(spec)\\.(ts|js)$",
     "coverageReporters": [
       "text"
@@ -58,8 +57,8 @@
   "dependencies": {
     "glob-all": "^3.1.0",
     "istanbul-lib-instrument": "^1.2.0",
-    "jest-config": "^18.1.0",
-    "jest-util": "^18.1.0",
+    "jest-config": "^19.0.0",
+    "jest-util": "^19.0.0",
     "lodash.assign": "^4.2.0",
     "lodash.includes": "^4.3.0",
     "lodash.partition": "^4.6.0",
@@ -69,8 +68,8 @@
     "yargs": "^6.1.1"
   },
   "peerDependencies": {
-    "typescript": "^2.0.6 || ^2.1.0-dev || ^2.2.0-dev",
-    "jest": "^18.0.0"
+    "typescript": "^2.1.0 || ^2.2.0-dev",
+    "jest": "^19.0.0"
   },
   "devDependencies": {
     "@types/es6-shim": "latest",
@@ -85,12 +84,12 @@
     "cross-spawn": "latest",
     "cross-spawn-with-kill": "latest",
     "doctoc": "latest",
-    "jest": "^18.0.0",
+    "jest": "^19.0.0",
     "react": "latest",
     "react-test-renderer": "latest",
     "rimraf": "latest",
     "ts-jest": "latest",
     "tslint": "next",
-    "typescript": "next"
+    "typescript": "latest"
   }
 }

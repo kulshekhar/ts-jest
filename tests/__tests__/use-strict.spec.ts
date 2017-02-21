@@ -18,7 +18,7 @@ describe('use strict', () => {
 
   it('should work with "use strict"', () => {
 
-    const result = runJest('../use-strict', ['--no-cache', '-t', 'Valid Strict']);
+    const result = runJest('../use-strict', ['--no-cache', '-t', 'Strict1']);
 
     expect(result.status).toBe(0);
 

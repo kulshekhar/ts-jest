@@ -44,9 +44,9 @@ function processResult(result: Result): Result {
   const emptyCoverage = uncoveredFiles.map(x => {
     var ret = {};
     if (sourceCache[x]) {
-        var instrumenter = istanbulInstrument.createInstrumenter();
-        instrumenter.instrumentSync(sourceCache[x], x);
-        ret[x] = instrumenter.fileCoverage;
+      var instrumenter = istanbulInstrument.createInstrumenter();
+      instrumenter.instrumentSync(sourceCache[x], x);
+      ret[x] = instrumenter.fileCoverage;
     }
     return ret;
   });

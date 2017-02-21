@@ -21,7 +21,7 @@ function loadJestConfigFromFile(filePath, argv) {
   config.rootDir = config.rootDir ?
     path.resolve(path.dirname(filePath), config.rootDir) :
     process.cwd();
-    return normalize(config, argv);
+  return normalize(config, argv);
 }
 
 function loadJestConfigFromPackage(filePath, argv) {
