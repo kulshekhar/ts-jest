@@ -1,6 +1,6 @@
 declare var jest, describe, it, expect;
 
-import {Hello} from '../Hello';
+import { Hello } from '../Hello';
 
 describe('Hello Class', () => {
 

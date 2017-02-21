@@ -13,11 +13,11 @@ export class Hello {
     throw new Error('Hello error!');
   }
 
-  public unexcuted(action: () => void = () => {}): void {
+  public unexcuted(action: () => void = () => { }): void {
     if (action) {
-        action();
+      action();
     } else {
-        console.log('unexcuted');
+      console.log('unexcuted');
     }
   }
 }

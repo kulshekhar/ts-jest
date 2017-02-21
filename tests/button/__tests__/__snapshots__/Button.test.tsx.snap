@@ -1,6 +1,9 @@
-exports[`test Button renders correctly 1`] = `
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Button renders correctly 1`] = `
 <div
-  className="button">
+  className="button"
+>
   hi!
 </div>
 `;

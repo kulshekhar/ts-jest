@@ -20,7 +20,10 @@ describe('get json jest config', () => {
       }
     });
 
-    const { collectCoverage, coverageReporters, coverageDirectory, collectCoverageFrom} = getJestConfig(getPackageRoot());
+    const jestConfig = getJestConfig(getPackageRoot());
+
+    const { collectCoverage } = jestConfig;
+    const { coverageReporters, coverageDirectory, collectCoverageFrom} = jestConfig.config;
 
     expect(collectCoverage).toBeUndefined();
     expect(coverageReporters).toEqual(['html', 'json', 'text']);
@@ -38,7 +41,10 @@ describe('get json jest config', () => {
       }
     });
 
-    const { collectCoverage, coverageReporters, coverageDirectory, collectCoverageFrom} = getJestConfig(getPackageRoot());
+    const jestConfig = getJestConfig(getPackageRoot());
+
+    const { collectCoverage } = jestConfig;
+    const { coverageReporters, coverageDirectory, collectCoverageFrom} = jestConfig.config;
 
     expect(collectCoverage).toBeTruthy();
     expect(coverageReporters).toEqual(['html', 'json', 'text']);

@@ -8,14 +8,15 @@ const getPackageRoot = require('jest-util').getPackageRoot;
 declare const global: any;
 
 const root = getPackageRoot();
+const jestConfig = getJestConfig(root);
+const { collectCoverage } = jestConfig;
 const {
     testRegex,
-    collectCoverage,
     coverageDirectory,
     coverageReporters,
     collectCoverageFrom,
     testResultsProcessor
-} = getJestConfig(root);
+} = jestConfig.config;
 
 //setting up cache to global object to resultprocessor consume
 if (testResultsProcessor) {
