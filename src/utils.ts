@@ -57,14 +57,10 @@ function readRawConfig(argv, root) {
 }
 
 export function getJestConfig(root) {
-  try {
-    const yargs = require('yargs');
-    const argv = yargs(process.argv.slice(2)).argv;
-    const rawConfig = readRawConfig(argv, root);
-    return Object.freeze(setFromArgv(rawConfig, argv));
-  } catch (e) {
-    return {};
-  }
+  const yargs = require('yargs');
+  const argv = yargs(process.argv.slice(2)).argv;
+  const rawConfig = readRawConfig(argv, root);
+  return Object.freeze(setFromArgv(rawConfig, argv));
 }
 
 export function getTSConfig(globals, collectCoverage: boolean = false) {
