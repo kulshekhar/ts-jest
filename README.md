@@ -116,7 +116,7 @@ Or even declare options for `tsc` instead of using separate config, like this:
   }
 }
 ```
-Note that, `module` property will be overwritten to `commonjs` since that is the format Jest expects.
+Note that the `module` property will be overwritten to `commonjs` since that is the format Jest expects.
 
 For all available options see [TypeScript docs](https://www.typescriptlang.org/docs/handbook/compiler-options.html).
 
