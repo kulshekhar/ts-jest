@@ -63,4 +63,16 @@ describe('get default ts config', () => {
     expect(result).toEqual(resultNullContent);
   });
 
+  it('should set the module to CommonJS if it is not', () => {
+    const {getTSConfig} = require('../../src/utils');
+    const config = getTSConfig({
+      '__TS_CONFIG__': {
+        'module': 'es2015'
+      }
+    });
+    console.log(config)
+
+    expect(config.module).toBe(ts.ModuleKind.CommonJS);
+  });
+
 });

@@ -78,7 +78,10 @@ export function getTSConfig(globals, collectCoverage: boolean = false) {
       config = Object.assign({}, require(parentConfigPath).compilerOptions, config);
     }
   }
-  config.module = config.module || tsc.ModuleKind.CommonJS;
+
+
+
+  config.module = 'commonjs';
   config.jsx = config.jsx || tsc.JsxEmit.React;
 
   //inline source with source map for remapping coverage
