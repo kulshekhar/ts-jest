@@ -79,8 +79,6 @@ export function getTSConfig(globals, collectCoverage: boolean = false) {
     }
   }
 
-
-
   config.module = 'commonjs';
   config.jsx = config.jsx || tsc.JsxEmit.React;
 

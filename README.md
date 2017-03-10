@@ -93,7 +93,7 @@ In `package.json`, inside `jest` section, the `transform` should be like this:
 ## Options
 By default this package will try to locate `tsconfig.json` and use its compiler options for your `.ts` and `.tsx` files.
 
-Additionaly, `module` property will be overwritten to `commonjs` since is what Jest expects.
+Additionaly, `module` property will be overwritten to `commonjs` since that is the format Jest expects
 
 But you are able to override this behaviour and provide another path to your config for TypeScript by using `__TS_CONFIG__` option in `globals` for `jest`:
 ```json
