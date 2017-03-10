@@ -23,7 +23,7 @@
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Versioning
-From version `"jest": "17.0.0"` we are using same MAJOR.MINOR as [`Jest`](https://github.com/facebook/jest).  
+From version `"jest": "17.0.0"` we are using same MAJOR.MINOR as [`Jest`](https://github.com/facebook/jest).
 For `"jest": "< 17.0.0"` use `"ts-jest": "0.1.13"`. Docs for it see [here](https://github.com/kulshekhar/ts-jest/blob/e1f95e524ed62091736f70abf63530f1f107ec03/README.md).
 
 ## Usage
@@ -91,7 +91,10 @@ In `package.json`, inside `jest` section, the `transform` should be like this:
 ```
 
 ## Options
-By default this package will try to locate `tsconfig.json` and use its compiler options for your `.ts` and `.tsx` files.  
+By default this package will try to locate `tsconfig.json` and use its compiler options for your `.ts` and `.tsx` files.
+
+Additionaly, `module` property will be overwritten to `commonjs` since that is the format Jest expects
+
 But you are able to override this behaviour and provide another path to your config for TypeScript by using `__TS_CONFIG__` option in `globals` for `jest`:
 ```json
 {
@@ -117,7 +120,7 @@ Or even declare options for `tsc` instead of using separate config, like this:
 ```
 For all available options see [TypeScript docs](https://www.typescriptlang.org/docs/handbook/compiler-options.html).
 
-### Known limitations for TS compiler options 
+### Known limitations for TS compiler options
 - You can't use `"target": "ES6"` while using `node v4` in your test environment;
 - You can't use `"react": "preserve"` for now (see [progress of this issue](https://github.com/kulshekhar/ts-jest/issues/63));
 - If you use `"baseUrl": "<path_to_your_sources>"`, you also have to change `jest config` a little bit:
@@ -125,7 +128,7 @@ For all available options see [TypeScript docs](https://www.typescriptlang.org/d
 "jest": {
   "moduleDirectories": ["node_modules", "<path_to_your_sources>"]
 }
-``` 
+```
 
 ## How to Contribute
 If you have any suggestions/pull requests to turn this into a useful package, just open an issue and I'll be happy to work with you to improve this.
@@ -141,5 +144,5 @@ npm test
 
 ## License
 
-Copyright (c) [Authors](AUTHORS).  
+Copyright (c) [Authors](AUTHORS).
 This source code is licensed under the [MIT license](LICENSE).
