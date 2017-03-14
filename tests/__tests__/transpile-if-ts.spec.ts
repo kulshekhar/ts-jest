@@ -1,6 +1,6 @@
 import { transpileIfTypescript } from '../../src';
 
-describe.only('transpileIfTypescript', () => {
+describe('transpileIfTypescript', () => {
     it('should ignore anything non-TS', () => {
         const contents = 'unaltered';
         expect(transpileIfTypescript('some.js', contents)).toBe(contents);
