@@ -1,6 +1,7 @@
 import { defaultRetrieveFileHandler } from './default-retrieve-file-handler';
 import * as sourceMapSupport from 'source-map-support';
 
+export { transpileIfTypescript } from './transpile-if-ts';
 export function install() {
   var options: sourceMapSupport.Options = {};
   options.retrieveFile = defaultRetrieveFileHandler;
