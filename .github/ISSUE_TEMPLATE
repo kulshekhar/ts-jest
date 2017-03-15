@@ -1,0 +1,21 @@
+- Issue
+
+[describe the issue here]
+
+
+
+- Expected behavior
+
+[describe the expected behavior here]
+
+
+
+- Link to a minimal repo that reproduces this issue
+
+[If you haven't already, create the smallest possible repo that reproduces this issue by running `npm install` and `npm test`. This will speed up any fixes that this issue might need]
+
+
+
+- Optional (but highly recommended) - Configure Travis (or your favorite system) with the minimal repo
+
+This allows potential solutions to be tested against the minimal repo. This saves everyone time and avoids a lot of back and forth.
