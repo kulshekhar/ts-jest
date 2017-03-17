@@ -55,6 +55,7 @@
     ]
   },
   "dependencies": {
+    "fs-extra": "^2.1.2",
     "glob-all": "^3.1.0",
     "istanbul-lib-instrument": "^1.2.0",
     "jest-config": "^19.0.0",
@@ -73,6 +74,7 @@
   },
   "devDependencies": {
     "@types/es6-shim": "latest",
+    "@types/fs-extra": "^2.0.0",
     "@types/jest": "latest",
     "@types/lodash.assign": "latest",
     "@types/lodash.includes": "latest",
