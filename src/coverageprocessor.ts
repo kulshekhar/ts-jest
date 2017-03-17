@@ -36,10 +36,12 @@ function processResult(result: Result): Result {
   let sourceCache = {};
   let coveredFiles = [];
 
-  walkDir(path.join(jestConfig.cacheDirectory, '/ts-jest/')).map((p) => {
-    let filename = root + p.replace(path.join(jestConfig.cacheDirectory, '/ts-jest/'), '');
+  let basepath = path.join(jestConfig.cacheDirectory, '/ts-jest/');
+  let cachedFiles = fs.readdirSync(basepath);
+  cachedFiles.map((p) => {
+    let filename = new Buffer(p.replace(basepath, ''), 'base64').toString('utf8');
     coveredFiles.push(filename);
-    sourceCache[filename] = fs.readFileSync(p, 'utf8');
+    sourceCache[filename] = fs.readFileSync(path.join(basepath, p), 'ascii');
   });
 
   if (!jestConfig.testResultsProcessor) return result;
@@ -96,18 +98,6 @@ function processResult(result: Result): Result {
   writeReport(coverageCollector, 'json', {}, path.join(coverageOutputPath, 'coverage.json'));
   writeReport(coverageCollector, 'text', {}, path.join(coverageOutputPath, 'coverage.txt'));
   return result;
-}
-
-function walkDir(root) {
-  const stat = fs.statSync(root);
-
-  if (stat.isDirectory()) {
-    const dirs = fs.readdirSync(root).filter(item => !item.startsWith('.'));
-    let results = dirs.map(sub => walkDir(`${root}/${sub}`));
-    return [].concat(...results);
-  } else {
-    return root;
-  }
 }
 
 module.exports = processResult;
