@@ -37,7 +37,7 @@ function processResult(result: Result): Result {
   let coveredFiles = [];
 
   walkDir(path.join(jestConfig.cacheDirectory, '/ts-jest/')).map((p) => {
-    let filename = p.replace(path.join(jestConfig.cacheDirectory, '/ts-jest/'), '');
+    let filename = root + p.replace(path.join(jestConfig.cacheDirectory, '/ts-jest/'), '');
     coveredFiles.push(filename);
     sourceCache[filename] = fs.readFileSync(p, 'utf8');
   });

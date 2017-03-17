@@ -6,6 +6,7 @@ const glob = require('glob-all');
 const nodepath = require('path');
 
 export function process(src, path, config) {
+    const root = require('jest-util').getPackageRoot();
     if (path.endsWith('.ts') || path.endsWith('.tsx')) {
         const transpiled = tsc.transpileModule(
             src,
@@ -16,7 +17,7 @@ export function process(src, path, config) {
 
         //store transpiled code contains source map into cache, except test cases
         if (!config.testRegex || !path.match(config.testRegex)) {
-            fs.outputFileSync(nodepath.join(config.cacheDirectory, '/ts-jest/', path), transpiled.outputText);
+            fs.outputFileSync(nodepath.join(config.cacheDirectory, '/ts-jest/', path.replace(root, '')), transpiled.outputText);
         }
 
         const start = transpiled.outputText.length > 12 ? transpiled.outputText.substr(1, 10) : '';
