@@ -35,6 +35,7 @@ function processResult(result: Result): Result {
   const jestConfig = getJestConfig(root).config;
   let sourceCache = {};
   let coveredFiles = [];
+
   walkDir(path.join(jestConfig.cacheDirectory, '/ts-jest/')).map((p) => {
     let filename = p.replace(path.join(jestConfig.cacheDirectory, '/ts-jest/'), '');
     coveredFiles.push(filename);
@@ -42,21 +43,28 @@ function processResult(result: Result): Result {
   });
 
   if (!jestConfig.testResultsProcessor) return result;
+
   const coverageConfig = {
-    collectCoverage: jestConfig.collectCoverage,
+    collectCoverage: jestConfig.collectCoverage ? jestConfig.collectCoverage : true,
     coverageDirectory: jestConfig.coverageDirectory ? jestConfig.coverageDirectory : './coverage/',
     coverageReporters: jestConfig.coverageReporters
   };
+
   const coverageCollectFiles =
-      jestConfig.collectCoverage &&
+      coverageConfig.collectCoverage &&
       jestConfig.testResultsProcessor &&
       jestConfig.collectCoverageFrom &&
       jestConfig.collectCoverageFrom.length ?
             glob.sync(jestConfig.collectCoverageFrom).map(x => path.resolve(root, x)) : [];
-  if (!coverageConfig.collectCoverage) return result;
-  console.log(coverageConfig);
 
-  const coverage = [pickBy(result.coverageMap.data, (_, fileName) => includes(coveredFiles, fileName))];
+  if (!coverageConfig.collectCoverage) return result;
+
+  let coverage;
+  try {
+    coverage = [pickBy(result.coverageMap.data, (_, fileName) => includes(coveredFiles, fileName))];
+  } catch(e) {
+    return result;
+  }
 
   const uncoveredFiles = partition(coverageCollectFiles, x => includes(coveredFiles, x))[1];
   const coverageOutputPath = path.join(coverageConfig.coverageDirectory || 'coverage', 'remapped');
