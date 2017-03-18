@@ -21,9 +21,11 @@ export function process(src, path, config) {
 
         const start = transpiled.outputText.length > 12 ? transpiled.outputText.substr(1, 10) : '';
 
-        return start === 'use strict'
+        const modified = start === 'use strict'
             ? `'use strict';require('ts-jest').install();${transpiled.outputText}`
             : `require('ts-jest').install();${transpiled.outputText}`;
+
+        return modified;
     }
 
     return src;
