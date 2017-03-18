@@ -6,11 +6,20 @@ const glob = require('glob-all');
 const nodepath = require('path');
 
 export function process(src, path, config) {
-    if (path.endsWith('.ts') || path.endsWith('.tsx')) {
+    const compilerOptions = getTSConfig(config.globals, config.collectCoverage);
+    
+    const isTsFile = path.endsWith('.ts') || path.endsWith('.tsx');
+    const isJsFile = path.endsWith('.js') || path.endsWith('.jsx');
+    
+    const processFile = compilerOptions.allowJs === true 
+        ? isTsFile || isJsFile
+        : isTsFile;
+          
+    if (processFile) {
         const transpiled = tsc.transpileModule(
             src,
             {
-                compilerOptions: getTSConfig(config.globals, config.collectCoverage),
+                compilerOptions: compilerOptions,
                 fileName: path
             });
 
