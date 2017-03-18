@@ -12,10 +12,10 @@ describe('get default ts config', () => {
   });
 
   it('should correctly read tsconfig.json', () => {
-    const {getTSConfig} = require('../../src/utils');
+    const { getTSConfig } = require('../../src/utils');
     const result = getTSConfig();
 
-    expect(result).toEqual ({
+    expect(result).toEqual({
       'target': ts.ScriptTarget.ES2015,
       'module': ts.ModuleKind.CommonJS,
       'moduleResolution': ts.ModuleResolutionKind.NodeJs,
@@ -25,10 +25,10 @@ describe('get default ts config', () => {
   });
 
   it('should not read my-tsconfig.json', () => {
-    const {getTSConfig} = require('../../src/utils');
+    const { getTSConfig } = require('../../src/utils');
     const result = getTSConfig();
 
-    expect(result).not.toEqual ({
+    expect(result).not.toEqual({
       'target': ts.ScriptTarget.ES2015,
       'module': ts.ModuleKind.CommonJS,
       'moduleResolution': ts.ModuleResolutionKind.NodeJs,
@@ -38,17 +38,17 @@ describe('get default ts config', () => {
   });
 
   it('should not read inline tsconfig options', () => {
-    const {getTSConfig} = require('../../src/utils');
+    const { getTSConfig } = require('../../src/utils');
     const result = getTSConfig();
 
-    expect(result).not.toEqual ({
+    expect(result).not.toEqual({
       'module': ts.ModuleKind.CommonJS,
       'jsx': ts.JsxEmit.React
     });
   });
 
   it('should be same results for null/undefined/etc.', () => {
-    const {getTSConfig} = require('../../src/utils');
+    const { getTSConfig } = require('../../src/utils');
     const result = getTSConfig();
     const resultUndefinedParam = getTSConfig(undefined);
     const resultNullParam = getTSConfig(null);
@@ -64,13 +64,12 @@ describe('get default ts config', () => {
   });
 
   it('should set the module to CommonJS if it is not', () => {
-    const {getTSConfig} = require('../../src/utils');
+    const { getTSConfig } = require('../../src/utils');
     const config = getTSConfig({
       '__TS_CONFIG__': {
         'module': 'es2015'
       }
     });
-    console.log(config)
 
     expect(config.module).toBe(ts.ModuleKind.CommonJS);
   });
