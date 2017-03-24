@@ -66,6 +66,7 @@
     "lodash.pickby": "^4.6.0",
     "remap-istanbul": "^0.7.0",
     "source-map-support": "^0.4.4",
+    "tsconfig": "^6.0.0",
     "yargs": "^6.1.1"
   },
   "peerDependencies": {

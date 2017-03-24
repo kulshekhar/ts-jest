@@ -1,6 +1,7 @@
 import * as tsc from 'typescript';
 import * as path from 'path';
 import * as fs from 'fs';
+import * as tsconfig from 'tsconfig';
 
 import assign = require('lodash.assign');
 const normalize = require('jest-config').normalize;
@@ -70,7 +71,8 @@ export function getTSConfig(globals, collectCoverage: boolean = false) {
   }
   if (typeof config === 'string') {
     const configPath = path.resolve(config);
-    const external = require(configPath);
+    const fileContent = fs.readFileSync(configPath, 'utf8');
+    const external = tsconfig.parse(fileContent, configPath);
     config = external.compilerOptions || {};
 
     if (typeof external.extends === 'string') {
