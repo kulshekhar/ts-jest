@@ -1,6 +1,6 @@
 // from: https://github.com/facebook/jest/blob/master/integration_tests/runJest.js
 
-const {fileExists} = require('./utils');
+const { fileExists } = require('./utils');
 const path = require('path');
 const spawnSync = require('cross-spawn').sync;
 
