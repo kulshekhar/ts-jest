@@ -77,7 +77,8 @@ export function getTSConfig(globals, collectCoverage: boolean = false) {
 
     if (typeof external.extends === 'string') {
       const parentConfigPath = path.join(path.dirname(configPath), external.extends);
-      config = Object.assign({}, require(parentConfigPath).compilerOptions, config);
+      const includedContent = fs.readFileSync(parentConfigPath, 'utf8');
+      config = Object.assign({}, tsconfig.parse(includedContent, parentConfigPath).compilerOptions, config);
     }
   }
 
