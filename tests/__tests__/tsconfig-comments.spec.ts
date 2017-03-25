@@ -2,6 +2,7 @@ import { } from 'jest';
 import { } from 'node';
 import * as ts from 'typescript';
 import * as fs from 'fs';
+import * as tsconfig from 'tsconfig';
 
 jest.mock('path');
 
@@ -26,9 +27,18 @@ describe('parse tsconfig with comments', () => {
     expect(() => {
       JSON.parse(fs.readFileSync(configFile1, 'utf8'));
     }).toThrowError();
+
     expect(() => {
       JSON.parse(fs.readFileSync(configFile2, 'utf8'));
     }).toThrowError();
+
+  });
+
+  it('one config file should extend the other', () => {
+    const content = fs.readFileSync(configFile1, 'utf8');
+    const config = tsconfig.parse(content, configFile1);
+
+    expect(config.extends).toEqual('allows-comments2.json');
   });
 
   it('should correctly read allow-comments.json', () => {
