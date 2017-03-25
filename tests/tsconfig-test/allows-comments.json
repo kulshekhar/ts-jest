@@ -1,4 +1,5 @@
 {
+  "extends": "allows-comments2.json",
   "compilerOptions": {
     // some comments
   }
