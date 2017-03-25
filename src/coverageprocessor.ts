@@ -7,7 +7,7 @@ const remap = require('remap-istanbul/lib/remap');
 const writeReport = require('remap-istanbul/lib/writeReport');
 const istanbulInstrument = require('istanbul-lib-instrument');
 import pickBy = require('lodash.pickby')
-import {getJestConfig} from './utils';
+import { getJestConfig } from './utils';
 const glob = require('glob-all');
 
 interface CoverageMap {
@@ -18,11 +18,11 @@ interface CoverageMap {
 }
 
 declare const global: {
-    __ts_coverage__cache__: {
-        coverageConfig: any;
-        sourceCache: any[];
-        coverageCollectFiles: any[];
-    }
+  __ts_coverage__cache__: {
+    coverageConfig: any;
+    sourceCache: any[];
+    coverageCollectFiles: any[];
+  }
 };
 
 // full type https://github.com/facebook/jest/blob/master/types/TestResult.js
@@ -37,6 +37,9 @@ function processResult(result: Result): Result {
   let coveredFiles = [];
 
   let basepath = path.join(jestConfig.cacheDirectory, '/ts-jest/');
+  if (!fs.existsSync(basepath)) {
+    fs.mkdirSync(basepath)
+  }
   let cachedFiles = fs.readdirSync(basepath);
   cachedFiles.map((p) => {
     let filename = new Buffer(p.replace(basepath, ''), 'base64').toString('utf8');
@@ -53,18 +56,18 @@ function processResult(result: Result): Result {
   };
 
   const coverageCollectFiles =
-      coverageConfig.collectCoverage &&
+    coverageConfig.collectCoverage &&
       jestConfig.testResultsProcessor &&
       jestConfig.collectCoverageFrom &&
       jestConfig.collectCoverageFrom.length ?
-            glob.sync(jestConfig.collectCoverageFrom).map(x => path.resolve(root, x)) : [];
+      glob.sync(jestConfig.collectCoverageFrom).map(x => path.resolve(root, x)) : [];
 
   if (!coverageConfig.collectCoverage) return result;
 
   let coverage;
   try {
     coverage = [pickBy(result.coverageMap.data, (_, fileName) => includes(coveredFiles, fileName))];
-  } catch(e) {
+  } catch (e) {
     return result;
   }
 
@@ -73,7 +76,7 @@ function processResult(result: Result): Result {
 
   // //generate 'empty' coverage against uncovered files.
   // //If source is non-ts passed by allowJS, return empty since not able to lookup from cache
-  const emptyCoverage = uncoveredFiles.map((x:string) => {
+  const emptyCoverage = uncoveredFiles.map((x: string) => {
     let ret = {};
     if (sourceCache[x]) {
       let instrumenter = istanbulInstrument.createInstrumenter();
