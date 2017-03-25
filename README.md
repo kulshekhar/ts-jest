@@ -1,5 +1,7 @@
 # ts-jest
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/kulshekhar/ts-jest.svg)](https://greenkeeper.io/)
+
 [![NPM downloads](https://img.shields.io/npm/dm/ts-jest.svg?style=flat)](https://npmjs.org/package/ts-jest)
 [![Build Status for node v7](https://travis-badges.herokuapp.com/repos/kulshekhar/ts-jest/branches/master?job=0)](https://travis-ci.org/kulshekhar/ts-jest)
 [![Build Status for node v6](https://travis-badges.herokuapp.com/repos/kulshekhar/ts-jest/branches/master?job=1)](https://travis-ci.org/kulshekhar/ts-jest)
