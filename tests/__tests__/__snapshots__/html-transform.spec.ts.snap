@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`transforms html if config.globals.__TRANSFORM_HTML__ is set 1`] = `
+"module.exports=\`<div class=\\"html-test\\">
+  <span class=\\"html-test__element\\">This is element</span>
+</div>\`;"
+`;
+
+exports[`transforms html if config.globals.__TRANSFORM_HTML__ is set 2`] = `
+"<div class=\\"html-test\\">
+  <span class=\\"html-test__element\\">This is element</span>
+</div>"
+`;
