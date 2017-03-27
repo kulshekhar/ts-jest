@@ -1,6 +1,6 @@
 # ts-jest
 
-[![npm version](https://badge.fury.io/js/ts-jest.svg)](https://badge.fury.io/js/ts-jest) 
+[![npm version](https://badge.fury.io/js/ts-jest.svg)](https://badge.fury.io/js/ts-jest)
 [![NPM downloads](https://img.shields.io/npm/dm/ts-jest.svg?style=flat)](https://npmjs.org/package/ts-jest)
 [![Greenkeeper badge](https://badges.greenkeeper.io/kulshekhar/ts-jest.svg)](https://greenkeeper.io/)
 
@@ -121,6 +121,29 @@ Or even declare options for `tsc` instead of using separate config, like this:
 }
 ```
 Note that the `module` property will be overwritten to `commonjs` since that is the format Jest expects.
+
+When using Jest with Angular (a.k.a Angular 2) apps you will likely need to parse HTML templates. If you're unable to add `html-loader` to webpack config (e.g. because you don't want to eject from `angular-cli`) you can do so by defining `__TRANSFORM_HTML__` key in `globals` for `jest`.
+
+```json
+{
+  "jest": {
+    "globals": {
+      "__TRANSFORM_HTML__": true
+    }
+  }
+}
+```
+
+You'll also need to extend your `transform` regex with `html` extension:
+```json
+{
+  "jest": {
+    "transform": {
+      "^.+\\.(ts|tsx|js|html)$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+    }
+  }
+}
+```
 
 For all available options see [TypeScript docs](https://www.typescriptlang.org/docs/handbook/compiler-options.html).
 
