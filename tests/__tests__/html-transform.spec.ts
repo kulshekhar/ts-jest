@@ -8,16 +8,7 @@ const path = '/path/to/file.html';
 const config = {
   globals: {
     __TRANSFORM_HTML__: true
-  },
-  transform: {
-    ".(ts|tsx|html)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
-  },
-  testRegex: "/specs/.*\\.spec\\.(ts|tsx|js)$",
-  moduleFileExtensions: [
-    "ts",
-    "tsx",
-    "js"
-  ]
+  }
 };
 
 test('transforms html if config.globals.__TRANSFORM_HTML__ is set', () => {
