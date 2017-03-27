@@ -12,7 +12,7 @@ export function process(src, path, config) {
     const isJsFile = path.endsWith('.js') || path.endsWith('.jsx');
     const isHtmlFile = path.endsWith('.html');
 
-    if (isHtmlFile && config.__TRANSFORM_HTML__) {
+    if (isHtmlFile && config.globals.__TRANSFORM_HTML__) {
       src = 'module.exports=`' + src + '`;';
     }
 

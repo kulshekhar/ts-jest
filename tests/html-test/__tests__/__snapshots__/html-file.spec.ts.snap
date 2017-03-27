@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`html to be transformed 1`] = `
+"module.exports=\`<div class=\\"html-test\\">
+  <span class=\\"html-test__element\\">This is element</span>
+</div>\`;"
+`;
