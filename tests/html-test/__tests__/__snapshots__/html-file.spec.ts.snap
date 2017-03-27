@@ -5,3 +5,9 @@ exports[`html to be transformed 1`] = `
   <span class=\\"html-test__element\\">This is element</span>
 </div>\`;"
 `;
+
+exports[`html to be transformed 2`] = `
+"<div class=\\"html-test\\">
+  <span class=\\"html-test__element\\">This is element</span>
+</div>"
+`;
