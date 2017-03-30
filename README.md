@@ -66,7 +66,9 @@ By default `jest` does not provide code coverage remapping for transpiled codes,
 }
 ```
 
-> **Note:** If you're experiencing remapping failure with source lookup, it may due to pre-created cache from `jest`. It can be manually deleted, or execute with [`--no-cache`](https://facebook.github.io/jest/docs/troubleshooting.html#caching-issues) to not use those.
+> **Notes:**
+> * If you're experiencing remapping failure with source lookup, it may due to pre-created cache from `jest`. It can be manually deleted, or execute with [`--no-cache`](https://facebook.github.io/jest/docs/troubleshooting.html#caching-issues) to not use those.
+> * Remapped reports will be copied to `remapped` directory in coverage directory (e.g. `coverage/remapped`).
 
 ### React Native
 
