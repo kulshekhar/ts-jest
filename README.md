@@ -4,9 +4,7 @@
 [![NPM downloads](https://img.shields.io/npm/dm/ts-jest.svg?style=flat)](https://npmjs.org/package/ts-jest)
 [![Greenkeeper badge](https://badges.greenkeeper.io/kulshekhar/ts-jest.svg)](https://greenkeeper.io/)
 
-[![Build Status for node v7](https://travis-badges.herokuapp.com/repos/kulshekhar/ts-jest/branches/master?job=0)](https://travis-ci.org/kulshekhar/ts-jest)
-[![Build Status for node v6](https://travis-badges.herokuapp.com/repos/kulshekhar/ts-jest/branches/master?job=1)](https://travis-ci.org/kulshekhar/ts-jest)
-[![Build Status for node v4](https://travis-badges.herokuapp.com/repos/kulshekhar/ts-jest/branches/master?job=2)](https://travis-ci.org/kulshekhar/ts-jest)
+[![Build Status for linux](https://travis-ci.org/kulshekhar/ts-jest.svg?branch=master)](https://travis-ci.org/kulshekhar/ts-jest)
 [![Build Status for Windows](https://ci.appveyor.com/api/projects/status/g8tt9qd7usv0tolb/branch/master?svg=true)](https://ci.appveyor.com/project/kulshekhar/ts-jest/branch/master)
 
 
