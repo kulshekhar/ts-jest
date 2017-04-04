@@ -89,6 +89,10 @@ export function getTSConfig(globals, collectCoverage: boolean = false) {
     }
   }
 
+  if (config.inlineSourceMap !== false) {
+    config.inlineSourceMap = true;
+  }
+
   config.jsx = config.jsx || tsc.JsxEmit.React;
 
   //inline source with source map for remapping coverage
