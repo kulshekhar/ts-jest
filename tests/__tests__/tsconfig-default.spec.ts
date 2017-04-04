@@ -63,12 +63,36 @@ describe('get default ts config', () => {
     expect(result).toEqual(resultNullContent);
   });
 
-  it('should set the module to CommonJS if it is not', () => {
+  it('should not change the module if it is loaded from the Jest config global', () => {
     const { getTSConfig } = require('../../src/utils');
     const config = getTSConfig({
       '__TS_CONFIG__': {
         'module': 'es2015'
       }
+    });
+
+    expect(config.module).toBe(ts.ModuleKind.ES2015);
+  });
+
+  it('should not change the module if it is loaded from a non-default config file', () => {
+    const { getTSConfig } = require('../../src/utils');
+    const config = getTSConfig({
+      '__TS_CONFIG__': 'tsconfig-module/custom-config.json'
+    });
+
+    expect(config.module).toBe(ts.ModuleKind.ES2015);
+  });
+
+  it('should set the module to CommonJS if it is not, when loading from the default tsconfig file', () => {
+
+    // set the base directory such that we can use 'tsconfig.json' as the 
+    // config file name instead of 'dir/tsconfig.json'
+    require('path').__setBaseDir('./tests/tsconfig-test/tsconfig-module');
+
+    const { getTSConfig } = require('../../src/utils');
+
+    const config = getTSConfig({
+      '__TS_CONFIG__': 'tsconfig.json'
     });
 
     expect(config.module).toBe(ts.ModuleKind.CommonJS);

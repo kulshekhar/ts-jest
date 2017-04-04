@@ -65,12 +65,11 @@ export function getJestConfig(root) {
 }
 
 export function getTSConfig(globals, collectCoverage: boolean = false) {
-  let config = (globals && globals.__TS_CONFIG__) ? globals.__TS_CONFIG__ : undefined;
-  if (config === undefined) {
-    config = 'tsconfig.json';
-  }
+  let config = (globals && globals.__TS_CONFIG__) ? globals.__TS_CONFIG__ : 'tsconfig.json';
+
   if (typeof config === 'string') {
-    const configPath = path.resolve(config);
+    const configFileName = config;
+    const configPath = path.resolve(configFileName);
     const fileContent = fs.readFileSync(configPath, 'utf8');
     const external = tsconfig.parse(fileContent, configPath);
     config = external.compilerOptions || {};
@@ -80,9 +79,16 @@ export function getTSConfig(globals, collectCoverage: boolean = false) {
       const includedContent = fs.readFileSync(parentConfigPath, 'utf8');
       config = Object.assign({}, tsconfig.parse(includedContent, parentConfigPath).compilerOptions, config);
     }
+
+    if (configFileName === 'tsconfig.json') {
+      // hardcode module to 'commonjs' in case the config is being loaded
+      // from the default tsconfig file. This is to ensure that coverage 
+      // works well. If there's a need to override, it can be done using 
+      // the global __TS_CONFIG__ setting in Jest config
+      config.module = 'commonjs';
+    }
   }
 
-  config.module = 'commonjs';
   config.jsx = config.jsx || tsc.JsxEmit.React;
 
   //inline source with source map for remapping coverage

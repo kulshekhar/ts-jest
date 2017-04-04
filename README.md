@@ -120,7 +120,7 @@ Or even declare options for `tsc` instead of using separate config, like this:
   }
 }
 ```
-Note that the `module` property will be overwritten to `commonjs` since that is the format Jest expects.
+Note that if you haven't explicitly set the `module` property in the `__TS_CONFIG__` setting (either directly or through a separate configuration file), it will be overwritten to `commonjs` (regardless of the value in `tsconfig.json`) since that is the format Jest expects. This only happens during testing.
 
 When using Jest with Angular (a.k.a Angular 2) apps you will likely need to parse HTML templates. If you're unable to add `html-loader` to webpack config (e.g. because you don't want to eject from `angular-cli`) you can do so by defining `__TRANSFORM_HTML__` key in `globals` for `jest`.
 
