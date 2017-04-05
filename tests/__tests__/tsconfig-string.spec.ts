@@ -12,12 +12,13 @@ describe('get ts config from string', () => {
   });
 
   it('should correctly read my-tsconfig.json', () => {
-    const {getTSConfig} = require('../../src/utils');
+    const { getTSConfig } = require('../../src/utils');
     const result = getTSConfig({
       '__TS_CONFIG__': 'my-tsconfig.json'
     });
 
-    expect(result).toEqual ({
+    expect(result).toEqual({
+      'inlineSourceMap': true,
       'target': ts.ScriptTarget.ES2015,
       'module': ts.ModuleKind.CommonJS,
       'moduleResolution': ts.ModuleResolutionKind.NodeJs,
@@ -27,12 +28,12 @@ describe('get ts config from string', () => {
   });
 
   it('should not read tsconfig.json', () => {
-    const {getTSConfig} = require('../../src/utils');
+    const { getTSConfig } = require('../../src/utils');
     const result = getTSConfig({
       '__TS_CONFIG__': 'my-tsconfig.json'
     });
 
-    expect(result).not.toEqual ({
+    expect(result).not.toEqual({
       'target': ts.ScriptTarget.ES2015,
       'module': ts.ModuleKind.CommonJS,
       'moduleResolution': ts.ModuleResolutionKind.NodeJs,
@@ -42,24 +43,25 @@ describe('get ts config from string', () => {
   });
 
   it('should not read inline tsconfig options', () => {
-    const {getTSConfig} = require('../../src/utils');
+    const { getTSConfig } = require('../../src/utils');
     const result = getTSConfig({
       '__TS_CONFIG__': 'my-tsconfig.json'
     });
 
-    expect(result).not.toEqual ({
+    expect(result).not.toEqual({
       'target': ts.ScriptTarget.ES5,
       'jsx': ts.JsxEmit.React
     });
   });
 
   it('should correctly resolve the "extends" directive', () => {
-    const {getTSConfig} = require('../../src/utils');
+    const { getTSConfig } = require('../../src/utils');
     const result = getTSConfig({
       '__TS_CONFIG__': 'extends-tsconfig.json'
     });
 
-    expect(result).toEqual ({
+    expect(result).toEqual({
+      'inlineSourceMap': true,
       'target': ts.ScriptTarget.ES2015,
       'module': ts.ModuleKind.CommonJS,
       'moduleResolution': ts.ModuleResolutionKind.NodeJs,
@@ -69,12 +71,13 @@ describe('get ts config from string', () => {
   });
 
   it('should correctly override any config in the "extends" directive', () => {
-    const {getTSConfig} = require('../../src/utils');
+    const { getTSConfig } = require('../../src/utils');
     const result = getTSConfig({
       '__TS_CONFIG__': 'extends-with-overrides-tsconfig.json'
     });
 
-    expect(result).toEqual ({
+    expect(result).toEqual({
+      'inlineSourceMap': true,
       'target': ts.ScriptTarget.ES5,
       'module': ts.ModuleKind.CommonJS,
       'moduleResolution': ts.ModuleResolutionKind.NodeJs,

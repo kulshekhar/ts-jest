@@ -12,7 +12,7 @@ describe('get inline ts config', () => {
   });
 
   it('should correctly read inline tsconfig options', () => {
-    const {getTSConfig} = require('../../src/utils');
+    const { getTSConfig } = require('../../src/utils');
     const result = getTSConfig({
       '__TS_CONFIG__': {
         'module': 'commonjs',
@@ -20,14 +20,15 @@ describe('get inline ts config', () => {
       }
     });
 
-    expect(result).toEqual ({
+    expect(result).toEqual({
+      'inlineSourceMap': true,
       'module': ts.ModuleKind.CommonJS,
       'jsx': ts.JsxEmit.React
     });
   });
 
   it('should not read tsconfig.json', () => {
-    const {getTSConfig} = require('../../src/utils');
+    const { getTSConfig } = require('../../src/utils');
     const result = getTSConfig({
       '__TS_CONFIG__': {
         'module': 'commonjs',
@@ -35,7 +36,7 @@ describe('get inline ts config', () => {
       }
     });
 
-    expect(result).not.toEqual ({
+    expect(result).not.toEqual({
       'target': ts.ScriptTarget.ES2015,
       'module': ts.ModuleKind.CommonJS,
       'moduleResolution': ts.ModuleResolutionKind.NodeJs,
@@ -45,7 +46,7 @@ describe('get inline ts config', () => {
   });
 
   it('should not read my-tsconfig.json', () => {
-    const {getTSConfig} = require('../../src/utils');
+    const { getTSConfig } = require('../../src/utils');
     const result = getTSConfig({
       '__TS_CONFIG__': {
         'module': 'commonjs',
@@ -53,7 +54,7 @@ describe('get inline ts config', () => {
       }
     });
 
-    expect(result).not.toEqual ({
+    expect(result).not.toEqual({
       'target': ts.ScriptTarget.ES2015,
       'module': ts.ModuleKind.CommonJS,
       'moduleResolution': ts.ModuleResolutionKind.NodeJs,
