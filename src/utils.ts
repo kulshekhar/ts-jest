@@ -88,6 +88,8 @@ export function getTSConfig(globals, collectCoverage: boolean = false) {
       config.module = 'commonjs';
     }
   }
+  
+  config.module = config.module || 'commonjs';
 
   if (config.inlineSourceMap !== false) {
     config.inlineSourceMap = true;
