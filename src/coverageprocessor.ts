@@ -43,6 +43,8 @@ function processResult(result: Result): Result {
   let cachedFiles = fs.readdirSync(basepath);
   cachedFiles.map((p) => {
     let filename = new Buffer(p.replace(basepath, ''), 'base64').toString('utf8');
+    // add back root part of filename
+    filename = root + filename;
     coveredFiles.push(filename);
     sourceCache[filename] = fs.readFileSync(path.join(basepath, p), 'ascii');
   });

@@ -6,6 +6,7 @@ const glob = require('glob-all');
 const nodepath = require('path');
 
 export function process(src, path, config) {
+    const root = require('jest-util').getPackageRoot();
     const compilerOptions = getTSConfig(config.globals, config.collectCoverage);
 
     const isTsFile = path.endsWith('.ts') || path.endsWith('.tsx');
@@ -27,6 +28,9 @@ export function process(src, path, config) {
                 compilerOptions: compilerOptions,
                 fileName: path
             });
+
+        // strip root part from path
+        path = path.replace(root, '');
 
         //store transpiled code contains source map into cache, except test cases
         if (!config.testRegex || !path.match(config.testRegex)) {
