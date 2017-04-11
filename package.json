@@ -70,7 +70,7 @@
     "yargs": "^7.0.2"
   },
   "peerDependencies": {
-    "typescript": "^2.1.0 || ^2.2.0-dev",
+    "typescript": "^2.1.0",
     "jest": "^19.0.0"
   },
   "devDependencies": {
