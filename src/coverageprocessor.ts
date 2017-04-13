@@ -6,7 +6,7 @@ const loadCoverage = require('remap-istanbul/lib/loadCoverage');
 const remap = require('remap-istanbul/lib/remap');
 const writeReport = require('remap-istanbul/lib/writeReport');
 const istanbulInstrument = require('istanbul-lib-instrument');
-import pickBy = require('lodash.pickby')
+import pickBy = require('lodash.pickby');
 import { getJestConfig } from './utils';
 const glob = require('glob-all');
 
@@ -38,12 +38,15 @@ function processResult(result: Result): Result {
 
   let basepath = path.join(jestConfig.cacheDirectory, '/ts-jest/');
   if (!fs.existsSync(basepath)) {
-    fs.mkdirSync(basepath)
+    fs.mkdirSync(basepath);
   }
   let cachedFiles = fs.readdirSync(basepath);
   cachedFiles.map((p) => {
     let filename = new Buffer(p.replace(basepath, ''), 'base64').toString('utf8');
     // add back root part of filename
+    // the root part was removed in the preprocessor.ts file to get shorter file names
+    // long file names could be problematic in some OS
+    // see https://github.com/kulshekhar/ts-jest/issues/158
     filename = root + filename;
     coveredFiles.push(filename);
     sourceCache[filename] = fs.readFileSync(path.join(basepath, p), 'ascii');
