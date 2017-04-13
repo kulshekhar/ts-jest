@@ -47,7 +47,7 @@ function processResult(result: Result): Result {
     // the root part was removed in the preprocessor.ts file to get shorter file names
     // long file names could be problematic in some OS
     // see https://github.com/kulshekhar/ts-jest/issues/158
-    filename = root + filename;
+    // filename = root + filename;
     coveredFiles.push(filename);
     sourceCache[filename] = fs.readFileSync(path.join(basepath, p), 'ascii');
   });

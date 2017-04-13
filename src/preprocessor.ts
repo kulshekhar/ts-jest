@@ -1,6 +1,6 @@
 import * as fs from 'fs-extra';
 import * as tsc from 'typescript';
-import {getTSConfig} from './utils';
+import { getTSConfig } from './utils';
 // TODO: rework next to ES6 style imports
 const glob = require('glob-all');
 const nodepath = require('path');
@@ -14,7 +14,7 @@ export function process(src, path, config) {
     const isHtmlFile = path.endsWith('.html');
 
     if (isHtmlFile && config.globals.__TRANSFORM_HTML__) {
-      src = 'module.exports=`' + src + '`;';
+        src = 'module.exports=`' + src + '`;';
     }
 
     const processFile = compilerOptions.allowJs === true
@@ -33,7 +33,7 @@ export function process(src, path, config) {
         // this results in a shorter filename which will also make the encoded base64 filename for the cache shorter
         // long file names could be problematic in some OS
         // see https://github.com/kulshekhar/ts-jest/issues/158
-        path = path.startsWith(root) ? path.substr(root.length) : path;
+        // path = path.startsWith(root) ? path.substr(root.length) : path;
 
         //store transpiled code contains source map into cache, except test cases
         if (!config.testRegex || !path.match(config.testRegex)) {
