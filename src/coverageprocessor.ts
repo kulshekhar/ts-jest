@@ -56,7 +56,7 @@ function processResult(result: Result): Result {
 
   const coverageConfig = {
     collectCoverage: jestConfig.collectCoverage ? jestConfig.collectCoverage : true,
-    coverageDirectory: jestConfig.coverageDirectory ? jestConfig.coverageDirectory : './coverage/',
+    coverageDirectory: jestConfig.coverageDirectory ? jestConfig.coverageDirectory : path.join(root, 'coverage'),
     coverageReporters: jestConfig.coverageReporters
   };
 
@@ -104,7 +104,7 @@ function processResult(result: Result): Result {
   writeReport(coverageCollector, 'html', {}, path.join(coverageOutputPath, 'html'));
   writeReport(coverageCollector, 'lcovonly', {}, path.join(coverageOutputPath, 'lcov.info'));
   writeReport(coverageCollector, 'json', {}, path.join(coverageOutputPath, 'coverage.json'));
-  writeReport(coverageCollector, 'text', {}, path.join(coverageOutputPath, 'coverage.txt'));
+  writeReport(coverageCollector, 'text', { dir: '/' }, path.join(coverageOutputPath, 'coverage.txt'));
   return result;
 }
 
