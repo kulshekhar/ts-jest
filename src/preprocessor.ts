@@ -4,6 +4,7 @@ import { getTSConfig } from './utils';
 // TODO: rework next to ES6 style imports
 const glob = require('glob-all');
 const nodepath = require('path');
+const crypto = require('crypto');
 
 export function process(src, path, config) {
     const root = require('jest-util').getPackageRoot();
@@ -37,7 +38,7 @@ export function process(src, path, config) {
 
         //store transpiled code contains source map into cache, except test cases
         if (!config.testRegex || !path.match(config.testRegex)) {
-            fs.outputFileSync(nodepath.join(config.cacheDirectory, '/ts-jest/', new Buffer(path).toString('base64')), transpiled.outputText);
+            fs.outputFileSync(nodepath.join(config.cacheDirectory, '/ts-jest/', crypto.createHash('md5').update(path).digest('hex')), transpiled.outputText);
         }
 
         const start = transpiled.outputText.length > 12 ? transpiled.outputText.substr(1, 10) : '';
