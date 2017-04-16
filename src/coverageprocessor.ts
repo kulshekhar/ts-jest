@@ -54,9 +54,13 @@ function processResult(result: Result): Result {
 
   if (!jestConfig.testResultsProcessor) return result;
 
+  if (jestConfig.coverageDirectory && jestConfig.coverageDirectory.startsWith(root)) {
+    jestConfig.coverageDirectory = '.' + jestConfig.coverageDirectory.substr(root.length);
+  }
+
   const coverageConfig = {
     collectCoverage: jestConfig.collectCoverage ? jestConfig.collectCoverage : true,
-    coverageDirectory: jestConfig.coverageDirectory ? jestConfig.coverageDirectory : './coverage/',
+    coverageDirectory: jestConfig.coverageDirectory ? jestConfig.coverageDirectory : './coverage',
     coverageReporters: jestConfig.coverageReporters
   };
 
