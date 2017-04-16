@@ -24,4 +24,12 @@ All files         |    71.43 |    33.33 |    66.67 |    66.67 |                |
     expect(fs.readFileSync(coveragePath, 'utf-8')).toEqual(snapshot);
   });
 
+  it('should run successfully with a custom coverage directory', () => {
+    runJest('../simple', ['--no-cache', '--coverage', '--config', '../simple/with-coverage-dir.json']);
+
+    const coveragePath = path.resolve('./tests/simple/coverage-custom/remapped/coverage.txt');
+
+    expect(fs.statSync(coveragePath).isFile()).toBeTruthy();
+  });
+
 });
