@@ -4,8 +4,9 @@ import { getTSConfig } from './utils';
 // TODO: rework next to ES6 style imports
 const glob = require('glob-all');
 const nodepath = require('path');
+const babelJest = require('babel-jest');
 
-export function process(src, path, config) {
+export function process(src, path, config, transformOptions) {
     const root = require('jest-util').getPackageRoot();
     const compilerOptions = getTSConfig(config.globals, config.collectCoverage);
 
@@ -22,12 +23,22 @@ export function process(src, path, config) {
         : isTsFile;
 
     if (processFile) {
-        const transpiled = tsc.transpileModule(
+        const tsTranspiled = tsc.transpileModule(
             src,
             {
                 compilerOptions: compilerOptions,
                 fileName: path
-            });
+            }
+        );
+
+        const outputText = compilerOptions.allowSyntheticDefaultImports
+            ? babelJest.process(
+                  tsTranspiled.outputText,
+                  path + '.js', // babel-jest only likes .js files ¯\_(ツ)_/¯
+                  config,
+                  transformOptions
+              )
+            : tsTranspiled.outputText;
 
         // strip root part from path
         // this results in a shorter filename which will also make the encoded base64 filename for the cache shorter
@@ -37,16 +48,17 @@ export function process(src, path, config) {
 
         //store transpiled code contains source map into cache, except test cases
         if (!config.testRegex || !path.match(config.testRegex)) {
-            fs.outputFileSync(nodepath.join(config.cacheDirectory, '/ts-jest/', new Buffer(path).toString('base64')), transpiled.outputText);
+            fs.outputFileSync(nodepath.join(config.cacheDirectory, '/ts-jest/', new Buffer(path).toString('base64')), outputText);
         }
 
-        const start = transpiled.outputText.length > 12 ? transpiled.outputText.substr(1, 10) : '';
+        const start = outputText.length > 12 ? outputText.substr(1, 10) : '';
 
         const modified = start === 'use strict'
-            ? `'use strict';require('ts-jest').install();${transpiled.outputText}`
-            : `require('ts-jest').install();${transpiled.outputText}`;
+            ? `'use strict';require('ts-jest').install();${outputText}`
+            : `require('ts-jest').install();${outputText}`;
 
         return modified;
+
     }
 
     return src;

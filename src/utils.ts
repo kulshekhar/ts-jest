@@ -82,13 +82,13 @@ export function getTSConfig(globals, collectCoverage: boolean = false) {
 
     if (configFileName === 'tsconfig.json') {
       // hardcode module to 'commonjs' in case the config is being loaded
-      // from the default tsconfig file. This is to ensure that coverage 
-      // works well. If there's a need to override, it can be done using 
+      // from the default tsconfig file. This is to ensure that coverage
+      // works well. If there's a need to override, it can be done using
       // the global __TS_CONFIG__ setting in Jest config
       config.module = 'commonjs';
     }
   }
-  
+
   config.module = config.module || 'commonjs';
 
   if (config.inlineSourceMap !== false) {
@@ -107,5 +107,10 @@ export function getTSConfig(globals, collectCoverage: boolean = false) {
     config.inlineSources = true;
   }
 
+  if (config.allowSyntheticDefaultImports) {
+    // compile ts to es2015 and transform with babel afterwards
+    config.module = 'es2015';
+    config.target = 'es2015';
+  }
   return tsc.convertCompilerOptionsFromJson(config, undefined).options;
 }
