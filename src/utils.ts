@@ -1,4 +1,3 @@
-import * as tsc from 'typescript';
 import * as path from 'path';
 import * as fs from 'fs';
 import * as tsconfig from 'tsconfig';
@@ -64,6 +63,14 @@ export function getJestConfig(root) {
   return Object.freeze(setFromArgv(rawConfig, argv));
 }
 
+export function getTsc(globals) {
+  const tsPath = globals && globals.__TS_PATH__;
+  if (typeof tsPath === 'string') {
+    return require(tsPath);
+  }
+  return require('typescript');
+}
+
 export function getTSConfig(globals, collectCoverage: boolean = false) {
   let config = (globals && globals.__TS_CONFIG__) ? globals.__TS_CONFIG__ : 'tsconfig.json';
 
@@ -82,18 +89,20 @@ export function getTSConfig(globals, collectCoverage: boolean = false) {
 
     if (configFileName === 'tsconfig.json') {
       // hardcode module to 'commonjs' in case the config is being loaded
-      // from the default tsconfig file. This is to ensure that coverage 
-      // works well. If there's a need to override, it can be done using 
+      // from the default tsconfig file. This is to ensure that coverage
+      // works well. If there's a need to override, it can be done using
       // the global __TS_CONFIG__ setting in Jest config
       config.module = 'commonjs';
     }
   }
-  
+
   config.module = config.module || 'commonjs';
 
   if (config.inlineSourceMap !== false) {
     config.inlineSourceMap = true;
   }
+
+  const tsc = getTsc(globals);
 
   config.jsx = config.jsx || tsc.JsxEmit.React;
 

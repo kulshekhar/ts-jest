@@ -1,6 +1,5 @@
 import * as fs from 'fs-extra';
-import * as tsc from 'typescript';
-import { getTSConfig } from './utils';
+import { getTsc, getTSConfig } from './utils';
 // TODO: rework next to ES6 style imports
 const glob = require('glob-all');
 const nodepath = require('path');
@@ -22,6 +21,7 @@ export function process(src, path, config) {
         : isTsFile;
 
     if (processFile) {
+        const tsc = getTsc(config.globals);
         const transpiled = tsc.transpileModule(
             src,
             {
