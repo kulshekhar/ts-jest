@@ -94,6 +94,26 @@ In `package.json`, inside `jest` section, the `transform` should be like this:
 }
 ```
 
+Fully completed jest section should look like this:
+
+```json
+"jest": {
+    "preset": "react-native",
+    "transform": {
+      "^.+\\.js$": "<rootDir>/node_modules/babel-jest",
+      ".(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+    },
+    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ]
+  }
+```
+If only testing typescript files then remove the `js` option in the testRegex.
+
+
 ## Options
 By default this package will try to locate `tsconfig.json` and use its compiler options for your `.ts` and `.tsx` files.
 
