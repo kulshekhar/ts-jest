@@ -1,6 +1,6 @@
 {
   "name": "ts-jest",
-  "version": "19.0.11",
+  "version": "19.0.12",
   "main": "index.js",
   "types": "./dist/index.d.ts",
   "description": "A preprocessor with sourcemap support to help use Typescript with Jest",
