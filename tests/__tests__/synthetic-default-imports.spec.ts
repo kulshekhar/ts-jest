@@ -18,7 +18,7 @@ describe('synthetic default imports', () => {
   it('should work when the compiler option is true', () => {
 
     const result = runJest('../synthetic-default', ['--no-cache']);
-    console.log(result.stderr); // includes 'eferenceError: regeneratorRuntime is not defined
+    console.log(result.stderr); // includes 'referenceError: regeneratorRuntime is not defined
     expect(result.status).toBe(0);
 
   });
