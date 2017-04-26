@@ -4,7 +4,11 @@ import { getTSConfig } from './utils';
 // TODO: rework next to ES6 style imports
 const glob = require('glob-all');
 const nodepath = require('path');
-const babelJest = require('babel-jest').createTransformer({presets: ['es2015']});
+const babelJest = require('babel-jest')
+  .createTransformer({
+      presets: [],
+      plugins: ['transform-es2015-modules-commonjs']
+  });
 
 export function process(src, path, config, transformOptions) {
     const root = require('jest-util').getPackageRoot();
