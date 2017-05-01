@@ -77,7 +77,7 @@
   },
   "devDependencies": {
     "@types/es6-shim": "latest",
-    "@types/fs-extra": "^2.0.0",
+    "@types/fs-extra": "^3.0.0",
     "@types/jest": "latest",
     "@types/lodash.assign": "latest",
     "@types/lodash.includes": "latest",
