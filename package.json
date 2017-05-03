@@ -69,7 +69,7 @@
     "remap-istanbul": "^0.9.5",
     "source-map-support": "^0.4.4",
     "tsconfig": "^6.0.0",
-    "yargs": "^7.0.2"
+    "yargs": "^8.0.1"
   },
   "peerDependencies": {
     "jest": "^19.0.0",
