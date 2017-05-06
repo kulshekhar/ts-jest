@@ -1,6 +1,5 @@
-const getPackageRoot = require('jest-util').getPackageRoot;
-
 describe('get json jest config', () => {
+  const pkgDir = require('pkg-dir');
   let yargsMock;
   let getJestConfig;
 
@@ -20,10 +19,10 @@ describe('get json jest config', () => {
       }
     });
 
-    const jestConfig = getJestConfig(getPackageRoot());
+    const jestConfig = getJestConfig(pkgDir.sync());
 
     const { collectCoverage } = jestConfig;
-    const { coverageReporters, coverageDirectory, collectCoverageFrom} = jestConfig.config;
+    const { coverageReporters, coverageDirectory, collectCoverageFrom } = jestConfig.options;
 
     expect(collectCoverage).toBeUndefined();
     expect(coverageReporters).toEqual(['html', 'json', 'text']);
@@ -41,10 +40,10 @@ describe('get json jest config', () => {
       }
     });
 
-    const jestConfig = getJestConfig(getPackageRoot());
+    const jestConfig = getJestConfig(pkgDir.sync());
 
     const { collectCoverage } = jestConfig;
-    const { coverageReporters, coverageDirectory, collectCoverageFrom} = jestConfig.config;
+    const { coverageReporters, coverageDirectory, collectCoverageFrom } = jestConfig.options;
 
     expect(collectCoverage).toBeTruthy();
     expect(coverageReporters).toEqual(['html', 'json', 'text']);

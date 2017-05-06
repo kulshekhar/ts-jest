@@ -31,8 +31,8 @@ interface Result {
 }
 
 function processResult(result: Result): Result {
-  const root = require('jest-util').getPackageRoot();
-  const jestConfig = getJestConfig(root).config;
+  const root = require('pkg-dir').sync();
+  const jestConfig = getJestConfig(root).options;
   let sourceCache = {};
   let coveredFiles = [];
 

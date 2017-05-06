@@ -5,13 +5,13 @@ import { getTSConfig } from './utils';
 const glob = require('glob-all');
 const nodepath = require('path');
 const babelJest = require('babel-jest')
-  .createTransformer({
-      presets: [],
-      plugins: ['transform-es2015-modules-commonjs']
-  });
+    .createTransformer({
+        presets: [],
+        plugins: ['transform-es2015-modules-commonjs']
+    });
 
 export function process(src, path, config, transformOptions) {
-    const root = require('jest-util').getPackageRoot();
+    const root = require('pkg-dir').sync();
     const compilerOptions = getTSConfig(config.globals, config.collectCoverage);
 
     const isTsFile = path.endsWith('.ts') || path.endsWith('.tsx');
@@ -37,11 +37,11 @@ export function process(src, path, config, transformOptions) {
 
         const outputText = compilerOptions.allowSyntheticDefaultImports
             ? babelJest.process(
-                  tsTranspiled.outputText,
-                  path + '.js', // babel-jest only likes .js files ¯\_(ツ)_/¯
-                  config,
-                  transformOptions
-              )
+                tsTranspiled.outputText,
+                path + '.js', // babel-jest only likes .js files ¯\_(ツ)_/¯
+                config,
+                transformOptions
+            )
             : tsTranspiled.outputText;
 
         // strip root part from path
