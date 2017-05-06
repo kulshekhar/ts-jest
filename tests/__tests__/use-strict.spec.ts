@@ -4,7 +4,7 @@ import runJest from '../__helpers__/runJest';
 
 describe('use strict', () => {
 
-  fit('should show the error locations for "use strict" violations', () => {
+  it('should show the error locations for "use strict" violations', () => {
 
     const result = runJest('../use-strict', ['--no-cache', '-t', 'Invalid Strict']);
 
