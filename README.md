@@ -52,6 +52,12 @@ Modify your project's `package.json` so that the `jest` section looks something 
 ```
 This setup should allow you to write Jest tests in Typescript and be able to locate errors without any additional gymnastics.
 
+### Coverage
+
+Prior to version `20.0.0`, coverage reports could be obtained using the inbuilt coverage processor in `ts-jest`. Starting with version `20.0.0`, `ts-jest` delegates coverage processing to jest and no longer includes a coverage processor.
+
+To generate coverage results, set the `mapCoverage` property in the `jest` configuration section to `true`.
+
 ### React Native
 
 There is a few additional steps if you want to use it with React Native.
