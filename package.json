@@ -55,7 +55,7 @@
     ]
   },
   "dependencies": {
-    "babel-jest": "^19.0.0",
+    "babel-jest": "^20.0.0",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.24.1",
     "fs-extra": "^3.0.0",
     "glob-all": "^3.1.0",
