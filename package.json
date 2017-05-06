@@ -89,7 +89,7 @@
     "cross-spawn": "latest",
     "cross-spawn-with-kill": "latest",
     "doctoc": "latest",
-    "jest": "^19.0.0",
+    "jest": "^20.0.0",
     "react": "latest",
     "react-test-renderer": "latest",
     "rimraf": "latest",
