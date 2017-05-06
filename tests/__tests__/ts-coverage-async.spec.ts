@@ -16,12 +16,14 @@ All files         |    66.67 |    33.33 |    66.67 |    61.54 |                |
 `;
 
   it('should run successfully', () => {
-    runJest('../simple-async', ['--no-cache', '--coverage']);
+    const result = runJest('../simple-async', ['--no-cache', '--coverage']);
 
-    const coveragePath = path.resolve('./tests/simple-async/coverage/remapped/coverage.txt');
+    const output = result.stdout.toString();
 
-    expect(fs.statSync(coveragePath).isFile()).toBeTruthy();
-    expect(fs.readFileSync(coveragePath, 'utf-8')).toEqual(snapshot);
+    expect(output).toContain('Statements   : 66.67% ( 10/15 )');
+    expect(output).toContain('Branches     : 33.33% ( 2/6 )');
+    expect(output).toContain('Functions    : 66.67% ( 4/6 )');
+    expect(output).toContain('Lines        : 61.54% ( 8/13 )');
   });
 
 });

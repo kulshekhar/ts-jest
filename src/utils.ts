@@ -3,7 +3,6 @@ import * as path from 'path';
 import * as fs from 'fs';
 import * as tsconfig from 'tsconfig';
 
-import assign = require('lodash.assign');
 const normalize = require('jest-config').normalize;
 const setFromArgv = require('jest-config/build/setFromArgv');
 
@@ -48,7 +47,7 @@ function readRawConfig(argv, root) {
   }
 
   if (typeof rawConfig === 'object') {
-    const config = assign({}, rawConfig);
+    const config = Object.assign({}, rawConfig);
     config.rootDir = config.rootDir || root;
     return normalize(config, argv);
   }

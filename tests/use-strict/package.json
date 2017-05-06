@@ -3,7 +3,7 @@
     "transform": {
       ".(ts|tsx)": "../../preprocessor.js"
     },
-    "testResultsProcessor": "../../coverageprocessor.js",
+    "mapCoverage": true,
     "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
     "moduleFileExtensions": [
       "ts",

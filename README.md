@@ -52,21 +52,11 @@ Modify your project's `package.json` so that the `jest` section looks something 
 ```
 This setup should allow you to write Jest tests in Typescript and be able to locate errors without any additional gymnastics.
 
-By default `jest` does not provide code coverage remapping for transpiled codes, so if you'd like to have code coverage it needs additional coverage remapping. This can be done via writing custom processing script, or configure `testResultsProcessor` to use built-in coverage remapping in `ts-jest`.
-```json
-{
-  "jest": {
-    "transform": {
-      ".(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
-    },
-    "testResultsProcessor": "<rootDir>/node_modules/ts-jest/coverageprocessor.js"
-  }
-}
-```
+### Coverage
 
-> **Notes:**
-> * If you're experiencing remapping failure with source lookup, it may due to pre-created cache from `jest`. It can be manually deleted, or execute with [`--no-cache`](https://facebook.github.io/jest/docs/troubleshooting.html#caching-issues) to not use those.
-> * Remapped reports will be copied to `remapped` directory in coverage directory (e.g. `coverage/remapped`).
+Prior to version `20.0.0`, coverage reports could be obtained using the inbuilt coverage processor in `ts-jest`. Starting with version `20.0.0`, `ts-jest` delegates coverage processing to jest and no longer includes a coverage processor.
+
+To generate coverage results, set the `mapCoverage` property in the `jest` configuration section to `true`.
 
 ### React Native
 

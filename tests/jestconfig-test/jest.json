@@ -3,7 +3,7 @@
   "transform": {
     ".(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
   },
-  "testResultsProcessor": "<rootDir>/node_modules/ts-jest/coverageprocessor.js",
+  "mapCoverage": true,
   "testRegex": "/specs/.*\\.spec\\.(ts|tsx|js)$",
   "testEnvironment": "jsdom",
   "coverageReporters": [
