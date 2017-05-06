@@ -10,6 +10,7 @@ describe('use strict', () => {
 
     const stderr = result.stderr.toString();
 
+    expect(result.status).toBe(1);
     expect(stderr).toContain('Strict.ts:4:4');
     expect(stderr).toContain('Strict.test.ts:9:5');
 
