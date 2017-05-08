@@ -68,7 +68,7 @@
   },
   "peerDependencies": {
     "jest": "^20.0.0",
-    "typescript": "^2.1.0"
+    "typescript": "2.x"
   },
   "devDependencies": {
     "@types/es6-shim": "latest",
