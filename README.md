@@ -58,6 +58,8 @@ Prior to version `20.0.0`, coverage reports could be obtained using the inbuilt 
 
 To generate coverage results, set the `mapCoverage` property in the `jest` configuration section to `true`.
 
+> Please note that the `outDir` property in the `jest` configuration section is removed in coverage mode, due to [#201](https://github.com/kulshekhar/ts-jest/issues/201).
+
 ### React Native
 
 There is a few additional steps if you want to use it with React Native.
