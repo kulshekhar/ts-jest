@@ -98,12 +98,14 @@ export function getTSConfig(globals, collectCoverage: boolean = false) {
 
   //inline source with source map for remapping coverage
   if (collectCoverage) {
-    if (config.sourceMap) {
-      delete config.sourceMap;
-    }
+    delete config.sourceMap;
 
     config.inlineSourceMap = true;
     config.inlineSources = true;
+
+    // the coverage report is broken if `.outDir` is set
+    // see https://github.com/kulshekhar/ts-jest/issues/201
+    delete config.outDir;
   }
 
   if (config.allowSyntheticDefaultImports) {
