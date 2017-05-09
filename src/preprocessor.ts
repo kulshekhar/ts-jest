@@ -1,6 +1,6 @@
 import * as fs from 'fs-extra';
 import * as tsc from 'typescript';
-import { getTSConfig } from './utils';
+import { getTSConfig, getJestConfig } from './utils';
 // TODO: rework next to ES6 style imports
 const glob = require('glob-all');
 const nodepath = require('path');
@@ -12,7 +12,8 @@ const babelJest = require('babel-jest')
 
 export function process(src, path, config, transformOptions) {
     const root = require('pkg-dir').sync();
-    const compilerOptions = getTSConfig(config.globals, config.collectCoverage);
+    const jestConfig = getJestConfig(root);
+    const compilerOptions = getTSConfig(config.globals, jestConfig.collectCoverage);
 
     const isTsFile = path.endsWith('.ts') || path.endsWith('.tsx');
     const isJsFile = path.endsWith('.js') || path.endsWith('.jsx');
