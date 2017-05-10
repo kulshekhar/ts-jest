@@ -1,6 +1,6 @@
 import * as fs from 'fs-extra';
 import * as tsc from 'typescript';
-import { getTSConfig, getJestConfig } from './utils';
+import { getTSConfig } from './utils';
 // TODO: rework next to ES6 style imports
 const glob = require('glob-all');
 const nodepath = require('path');
@@ -10,10 +10,11 @@ const babelJest = require('babel-jest')
         plugins: ['transform-es2015-modules-commonjs']
     });
 
-export function process(src, path, config, transformOptions) {
+export function process(src, path, config, transformOptions: any = {}) {
     const root = require('pkg-dir').sync();
-    const jestConfig = getJestConfig(root);
-    const compilerOptions = getTSConfig(config.globals, jestConfig.collectCoverage);
+    // transformOptions.instrument is a proxy for collectCoverage
+    // https://github.com/kulshekhar/ts-jest/issues/201#issuecomment-300572902
+    const compilerOptions = getTSConfig(config.globals, transformOptions.instrument);
 
     const isTsFile = path.endsWith('.ts') || path.endsWith('.tsx');
     const isJsFile = path.endsWith('.js') || path.endsWith('.jsx');
