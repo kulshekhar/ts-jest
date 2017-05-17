@@ -74,7 +74,8 @@ Ensure `.babelrc` contains:
 
 ```json
 {
-  "presets": ["react-native"]
+  "presets": ["react-native"],
+  "sourceMaps": "inline"
 }
 ```
 
@@ -105,6 +106,18 @@ Fully completed jest section should look like this:
 ```
 If only testing typescript files then remove the `js` option in the testRegex.
 
+You might want to use ES6 default imports, which will allow you to write things like
+`import React from 'react';`
+
+In that case you can add the following to your `.tsconfig`
+```json
+        "allowSyntheticDefaultImports": true
+```
+
+This will make ts-loader send the compiled typescript code through babel, and the above import will resolve.
+
+This configuration will allow `debugger` statements to work properly in both WebStorm and VSCode.
+Breakpoints currently only work in WebStorm.
 
 ## Options
 By default this package will try to locate `tsconfig.json` and use its compiler options for your `.ts` and `.tsx` files.
