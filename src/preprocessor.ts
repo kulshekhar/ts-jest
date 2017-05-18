@@ -1,6 +1,6 @@
 import * as fs from 'fs-extra';
 import * as tsc from 'typescript';
-import { getTSConfig } from './utils';
+import { getTSConfig, getTSJestConfig } from './utils';
 // TODO: rework next to ES6 style imports
 const glob = require('glob-all');
 const nodepath = require('path');
@@ -9,8 +9,12 @@ const babelJest = require('babel-jest')
         presets: [],
         plugins: ['transform-es2015-modules-commonjs']
     });
+let tsJestConfig;
 
 export function process(src, path, config, transformOptions: any = {}) {
+    if (tsJestConfig === undefined) {
+        tsJestConfig = getTSJestConfig(config.globals);
+    }
     const root = require('pkg-dir').sync();
     // transformOptions.instrument is a proxy for collectCoverage
     // https://github.com/kulshekhar/ts-jest/issues/201#issuecomment-300572902
@@ -37,14 +41,15 @@ export function process(src, path, config, transformOptions: any = {}) {
             }
         );
 
-        const outputText = compilerOptions.allowSyntheticDefaultImports
-            ? babelJest.process(
-                tsTranspiled.outputText,
-                path + '.js', // babel-jest only likes .js files ¯\_(ツ)_/¯
-                config,
-                transformOptions
-            )
-            : tsTranspiled.outputText;
+        const outputText =
+            compilerOptions.allowSyntheticDefaultImports && !tsJestConfig.skipBabel
+                ? babelJest.process(
+                    tsTranspiled.outputText,
+                    path + '.js', // babel-jest only likes .js files ¯\_(ツ)_/¯
+                    config,
+                    transformOptions
+                )
+                : tsTranspiled.outputText;
 
         // strip root part from path
         // this results in a shorter filename which will also make the encoded base64 filename for the cache shorter

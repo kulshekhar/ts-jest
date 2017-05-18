@@ -99,4 +99,30 @@ describe('get default ts config', () => {
     expect(config.module).toBe(ts.ModuleKind.CommonJS);
   });
 
+  it('should correctly read the ts-jest object within jest settings', () => {
+    require('path').__setBaseDir('./tests/tsconfig-test/tsconfig-module');
+
+    const { getTSJestConfig } = require('../../src/utils');
+
+    const config1 = getTSJestConfig({
+      'ts-jest': {
+        'skipBabel': true
+      },
+    });
+
+    expect(config1.skipBabel).toBe(true);
+
+    const config2 = getTSJestConfig({
+      'ts-jest': {
+        'skipBabel': false
+      },
+    });
+
+    expect(config2.skipBabel).toBe(false);
+
+    expect(getTSJestConfig({ 'ts-jest': {} })).toEqual({})
+    expect(getTSJestConfig({})).toEqual({})
+    expect(getTSJestConfig()).toEqual({})
+  });
+
 });
