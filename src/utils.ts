@@ -63,8 +63,13 @@ export function getJestConfig(root) {
   return Object.freeze(setFromArgv(rawConfig, argv));
 }
 
+export function getTSJestConfig(globals) {
+  return (globals && globals['ts-jest']) ? globals['ts-jest'] : {};
+}
+
 export function getTSConfig(globals, collectCoverage: boolean = false) {
   let config = (globals && globals.__TS_CONFIG__) ? globals.__TS_CONFIG__ : 'tsconfig.json';
+  const skipBabel = getTSJestConfig(globals).skipBabel;
 
   if (typeof config === 'string') {
     const configFileName = config;
@@ -108,7 +113,7 @@ export function getTSConfig(globals, collectCoverage: boolean = false) {
     delete config.outDir;
   }
 
-  if (config.allowSyntheticDefaultImports) {
+  if (config.allowSyntheticDefaultImports && !skipBabel) {
     // compile ts to es2015 and transform with babel afterwards
     config.module = 'es2015';
   }
