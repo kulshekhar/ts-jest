@@ -55,19 +55,19 @@
     ]
   },
   "dependencies": {
-    "babel-jest": "^20.0.0",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.24.1",
     "fs-extra": "^3.0.0",
     "glob-all": "^3.1.0",
-    "jest-config": "^20.0.0",
-    "jest-util": "^20.0.0",
     "pkg-dir": "^2.0.0",
     "source-map-support": "^0.4.4",
     "tsconfig": "^6.0.0",
     "yargs": "^8.0.1"
   },
   "peerDependencies": {
+    "babel-jest": "^20.0.0",
     "jest": "^20.0.0",
+    "jest-config": "^20.0.0",
+    "jest-util": "^20.0.0",
     "typescript": "2.x"
   },
   "devDependencies": {
@@ -77,10 +77,13 @@
     "@types/node": "latest",
     "@types/react": "latest",
     "@types/source-map-support": "latest",
+    "babel-jest": "^20.0.0",
     "cross-spawn": "latest",
     "cross-spawn-with-kill": "latest",
     "doctoc": "latest",
     "jest": "^20.0.0",
+    "jest-config": "^20.0.0",
+    "jest-util": "^20.0.0",
     "react": "latest",
     "react-test-renderer": "latest",
     "rimraf": "latest",
