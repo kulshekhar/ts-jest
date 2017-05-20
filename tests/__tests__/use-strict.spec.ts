@@ -1,5 +1,3 @@
-import { } from 'jest';
-import { } from 'node';
 import runJest from '../__helpers__/runJest';
 
 describe('use strict', () => {

@@ -1,18 +1,18 @@
-import { } from 'jest';
-import { } from 'node';
-import * as ts from 'typescript';
-
 jest.mock('path');
+
+import {getTSConfig} from '../../dist/utils';
+import * as ts from 'typescript';
+import * as path from 'path';
+
 
 describe('get ts config from string', () => {
 
   beforeEach(() => {
     // Set up some mocked out file info before each test
-    require('path').__setBaseDir('./tests/tsconfig-test');
+      (path as any).__setBaseDir('./tests/tsconfig-test');
   });
 
   it('should correctly read my-tsconfig.json', () => {
-    const { getTSConfig } = require('../../src/utils');
     const result = getTSConfig({
       '__TS_CONFIG__': 'my-tsconfig.json'
     });
@@ -28,7 +28,7 @@ describe('get ts config from string', () => {
   });
 
   it('should not read tsconfig.json', () => {
-    const { getTSConfig } = require('../../src/utils');
+
     const result = getTSConfig({
       '__TS_CONFIG__': 'my-tsconfig.json'
     });
@@ -43,7 +43,7 @@ describe('get ts config from string', () => {
   });
 
   it('should not read inline tsconfig options', () => {
-    const { getTSConfig } = require('../../src/utils');
+
     const result = getTSConfig({
       '__TS_CONFIG__': 'my-tsconfig.json'
     });
@@ -55,7 +55,7 @@ describe('get ts config from string', () => {
   });
 
   it('should correctly resolve the "extends" directive', () => {
-    const { getTSConfig } = require('../../src/utils');
+
     const result = getTSConfig({
       '__TS_CONFIG__': 'extends-tsconfig.json'
     });
@@ -71,7 +71,6 @@ describe('get ts config from string', () => {
   });
 
   it('should correctly override any config in the "extends" directive', () => {
-    const { getTSConfig } = require('../../src/utils');
     const result = getTSConfig({
       '__TS_CONFIG__': 'extends-with-overrides-tsconfig.json'
     });

@@ -1,6 +1,4 @@
 import runJest from '../__helpers__/runJest';
-import * as fs from 'fs';
-import * as path from 'path';
 
 describe('hello_world', () => {
 

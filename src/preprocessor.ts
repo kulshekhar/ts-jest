@@ -1,10 +1,10 @@
 import * as fs from 'fs-extra';
 import * as tsc from 'typescript';
 import { getTSConfig, getTSJestConfig } from './utils';
-// TODO: rework next to ES6 style imports
-const glob = require('glob-all');
-const nodepath = require('path');
-const babelJest = require('babel-jest')
+import * as nodepath from 'path';
+import * as babel from 'babel-jest';
+
+const babelJest = babel
     .createTransformer({
         presets: [],
         plugins: ['transform-es2015-modules-commonjs']

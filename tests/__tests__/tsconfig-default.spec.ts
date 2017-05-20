@@ -1,19 +1,19 @@
-import { } from 'jest';
-import { } from 'node';
-import * as ts from 'typescript'
-
 jest.mock('path');
+
+import * as ts from 'typescript';
+import {getTSConfig} from '../../src/utils';
+import * as path from 'path';
+
 
 describe('get default ts config', () => {
 
   beforeEach(() => {
     // Set up some mocked out file info before each test
-    require('path').__setBaseDir('./tests/tsconfig-test');
+      (path as any).__setBaseDir('./tests/tsconfig-test');
   });
 
   it('should correctly read tsconfig.json', () => {
-    const { getTSConfig } = require('../../src/utils');
-    const result = getTSConfig();
+    const result = getTSConfig(null);
 
     expect(result).toEqual({
       'inlineSourceMap': true,
@@ -26,8 +26,7 @@ describe('get default ts config', () => {
   });
 
   it('should not read my-tsconfig.json', () => {
-    const { getTSConfig } = require('../../src/utils');
-    const result = getTSConfig();
+    const result = getTSConfig(null);
 
     expect(result).not.toEqual({
       'target': ts.ScriptTarget.ES2015,
@@ -39,8 +38,7 @@ describe('get default ts config', () => {
   });
 
   it('should not read inline tsconfig options', () => {
-    const { getTSConfig } = require('../../src/utils');
-    const result = getTSConfig();
+    const result = getTSConfig(null);
 
     expect(result).not.toEqual({
       'module': ts.ModuleKind.CommonJS,
@@ -49,8 +47,7 @@ describe('get default ts config', () => {
   });
 
   it('should be same results for null/undefined/etc.', () => {
-    const { getTSConfig } = require('../../src/utils');
-    const result = getTSConfig();
+    const result = getTSConfig(null);
     const resultUndefinedParam = getTSConfig(undefined);
     const resultNullParam = getTSConfig(null);
     const resultEmptyParam = getTSConfig({});
@@ -65,7 +62,6 @@ describe('get default ts config', () => {
   });
 
   it('should not change the module if it is loaded from the Jest config global', () => {
-    const { getTSConfig } = require('../../src/utils');
     const config = getTSConfig({
       '__TS_CONFIG__': {
         'module': 'es2015'
@@ -76,7 +72,6 @@ describe('get default ts config', () => {
   });
 
   it('should not change the module if it is loaded from a non-default config file', () => {
-    const { getTSConfig } = require('../../src/utils');
     const config = getTSConfig({
       '__TS_CONFIG__': 'tsconfig-module/custom-config.json'
     });
@@ -86,11 +81,9 @@ describe('get default ts config', () => {
 
   it('should set the module to CommonJS if it is not, when loading from the default tsconfig file', () => {
 
-    // set the base directory such that we can use 'tsconfig.json' as the 
+    // set the base directory such that we can use 'tsconfig.json' as the
     // config file name instead of 'dir/tsconfig.json'
     require('path').__setBaseDir('./tests/tsconfig-test/tsconfig-module');
-
-    const { getTSConfig } = require('../../src/utils');
 
     const config = getTSConfig({
       '__TS_CONFIG__': 'tsconfig.json'
@@ -120,9 +113,9 @@ describe('get default ts config', () => {
 
     expect(config2.skipBabel).toBe(false);
 
-    expect(getTSJestConfig({ 'ts-jest': {} })).toEqual({})
-    expect(getTSJestConfig({})).toEqual({})
-    expect(getTSJestConfig()).toEqual({})
+    expect(getTSJestConfig({ 'ts-jest': {} })).toEqual({});
+    expect(getTSJestConfig({})).toEqual({});
+    expect(getTSJestConfig()).toEqual({});
   });
 
 });

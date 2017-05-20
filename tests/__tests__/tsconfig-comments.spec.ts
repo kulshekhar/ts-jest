@@ -1,10 +1,8 @@
-import { } from 'jest';
-import { } from 'node';
-import * as ts from 'typescript';
+jest.mock('path');
 import * as fs from 'fs';
 import * as tsconfig from 'tsconfig';
+import {getTSConfig} from '../../src/utils';
 
-jest.mock('path');
 
 describe('parse tsconfig with comments', () => {
   const configFile1 = './tests/tsconfig-test/allows-comments.json';
@@ -42,8 +40,6 @@ describe('parse tsconfig with comments', () => {
   });
 
   it('should correctly read allow-comments.json', () => {
-    const { getTSConfig } = require('../../src/utils');
-
     expect(() => {
       getTSConfig({
         '__TS_CONFIG__': 'allows-comments.json'
