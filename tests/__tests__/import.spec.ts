@@ -1,6 +1,3 @@
-import { } from 'jest';
-import { } from 'node';
-import * as path from 'path';
 import runJest from '../__helpers__/runJest';
 
 describe('import with relative and absolute paths', () => {
