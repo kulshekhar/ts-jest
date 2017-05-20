@@ -58,7 +58,6 @@
     "babel-jest": "^20.0.0",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.24.1",
     "fs-extra": "^3.0.0",
-    "glob-all": "^3.1.0",
     "jest-config": "^20.0.0",
     "jest-util": "^20.0.0",
     "pkg-dir": "^2.0.0",
