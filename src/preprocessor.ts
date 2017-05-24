@@ -1,8 +1,10 @@
 import * as fs from 'fs-extra';
+import * as crypto from 'crypto';
 import * as tsc from 'typescript';
 import { getTSConfig, getTSJestConfig } from './utils';
 import * as nodepath from 'path';
 import * as babel from 'babel-jest';
+import { TransformOptions, Path, JestConfig } from "./jest-types";
 
 const babelJest = babel
     .createTransformer({
@@ -11,7 +13,12 @@ const babelJest = babel
     });
 let tsJestConfig;
 
-export function process(src, path, config, transformOptions: any = {}) {
+export function process(
+    src: string,
+    path: string,
+    config: JestConfig,
+    transformOptions: TransformOptions) {
+
     if (tsJestConfig === undefined) {
         tsJestConfig = getTSJestConfig(config.globals);
     }
@@ -73,4 +80,20 @@ export function process(src, path, config, transformOptions: any = {}) {
     }
 
     return src;
+}
+
+export function getCacheKey(
+    fileData: string,
+    filePath: Path,
+    configStr: string,
+    options: TransformOptions): string {
+
+    const jestConfig: JestConfig = JSON.parse(configStr);
+    const tsConfig = getTSConfig(jestConfig.globals, options.instrument);
+
+    return crypto.createHash('md5')
+        .update(JSON.stringify(tsConfig), 'utf8')
+        .update(fileData + filePath + configStr, 'utf8')
+        .update(fs.readFileSync(filePath))
+        .digest('hex');
 }
