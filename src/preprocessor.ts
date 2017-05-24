@@ -17,7 +17,7 @@ export function process(
     src: string,
     path: string,
     config: JestConfig,
-    transformOptions: TransformOptions) {
+    transformOptions: TransformOptions = { instrument: false }) {
 
     if (tsJestConfig === undefined) {
         tsJestConfig = getTSJestConfig(config.globals);
@@ -86,7 +86,7 @@ export function getCacheKey(
     fileData: string,
     filePath: Path,
     configStr: string,
-    options: TransformOptions): string {
+    options: TransformOptions = { instrument: false }): string {
 
     const jestConfig: JestConfig = JSON.parse(configStr);
     const tsConfig = getTSConfig(jestConfig.globals, options.instrument);
