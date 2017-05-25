@@ -15,7 +15,7 @@ let tsJestConfig;
 
 export function process(
     src: string,
-    path: string,
+    path: Path,
     config: JestConfig,
     transformOptions: TransformOptions = { instrument: false }) {
 
