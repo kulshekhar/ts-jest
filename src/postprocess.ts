@@ -5,8 +5,7 @@ import * as jestPreset from 'babel-preset-jest';
 import { JestConfig, PostProcessorOptions, TransformOptions } from './jest-types';
 import * as babel from 'babel-core';
 
-
-export const createTransformer = (options: PostProcessorOptions) => {
+export const createBabelTransformer = (options: PostProcessorOptions) => {
 	options = {...options,
 		plugins: (options && options.plugins) || [],
 		presets: ((options && options.presets) || []).concat([jestPreset]),

@@ -4,9 +4,9 @@ import * as tsc from 'typescript';
 import { getTSConfig, getTSJestConfig } from './utils';
 import * as nodepath from 'path';
 import { TransformOptions, Path, JestConfig } from './jest-types';
-import { createTransformer } from './postprocess';
+import { createBabelTransformer } from './postprocess';
 
-const babelJestTransformer = createTransformer({
+const babelJestTransformer = createBabelTransformer({
         presets: [],
         plugins: ['transform-es2015-modules-commonjs']
     });
