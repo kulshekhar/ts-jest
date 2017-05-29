@@ -3,13 +3,14 @@ import * as crypto from 'crypto';
 import * as tsc from 'typescript';
 import { getTSConfig, getTSJestConfig } from './utils';
 import * as nodepath from 'path';
-import { TransformOptions, Path, JestConfig } from "./jest-types";
+import { TransformOptions, Path, JestConfig } from './jest-types';
 import { createTransformer } from './postprocess';
 
-const babelJest = createTransformer({
+const babelJestTransformer = createTransformer({
         presets: [],
         plugins: ['transform-es2015-modules-commonjs']
     });
+
 let tsJestConfig;
 
 export function process(
@@ -49,7 +50,7 @@ export function process(
 
         const outputText =
             compilerOptions.allowSyntheticDefaultImports && !tsJestConfig.skipBabel
-                ? babelJest.process(
+                ? babelJestTransformer.process(
                     tsTranspiled.outputText,
                     path + '.js', // babel-jest only likes .js files ¯\_(ツ)_/¯
                     config,
