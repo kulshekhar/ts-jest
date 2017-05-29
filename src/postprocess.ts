@@ -1,5 +1,6 @@
 /**
- * Postprocess step. Stolen from babel-jest: https://github.com/facebook/jest/blob/master/packages/babel-jest/src/index.js
+ * Postprocess step. Based on babel-jest: https://github.com/facebook/jest/blob/master/packages/babel-jest/src/index.js
+ * https://github.com/facebook/jest/blob/9b157c3a7c325c3971b2aabbe4c8ab4ce0b0c56d/packages/babel-jest/src/index.js
  */
 import * as jestPreset from 'babel-preset-jest';
 import { JestConfig, PostProcessHook, PostProcessorOptions, TransformOptions } from './jest-types';
@@ -17,10 +18,10 @@ function createBabelTransformer(options: PostProcessorOptions) {
 	delete options.filename;
 
 	return (src: string,
-	        filename: string,
-	        config: JestConfig,
-	        transformOptions: TransformOptions): string => {
-		const theseOptions = Object.assign({filename}, options);
+		filename: string,
+		config: JestConfig,
+		transformOptions: TransformOptions): string => {
+		const theseOptions = Object.assign({ filename }, options);
 		if (transformOptions && transformOptions.instrument) {
 			theseOptions.auxiliaryCommentBefore = ' istanbul ignore next ';
 			// Copied from jest-runtime transform.js
@@ -39,11 +40,11 @@ function createBabelTransformer(options: PostProcessorOptions) {
 	};
 }
 
-export const getPostProcessHook = (tsCompilerOptions: CompilerOptions, jestConfig: JestConfig, tsJestConfig : any): PostProcessHook => {
-	if (tsJestConfig.skipBabel){
+export const getPostProcessHook = (tsCompilerOptions: CompilerOptions, jestConfig: JestConfig, tsJestConfig: any): PostProcessHook => {
+	if (tsJestConfig.skipBabel) {
 		return (src) => src; //Identity function
 	}
-	
+
 	//If we're not skipping babel
 	if (tsCompilerOptions.allowSyntheticDefaultImports) {
 		const plugins = ['transform-es2015-modules-commonjs'];
