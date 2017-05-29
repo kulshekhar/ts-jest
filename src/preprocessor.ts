@@ -3,15 +3,12 @@ import * as crypto from 'crypto';
 import * as tsc from 'typescript';
 import { getTSConfig, getTSJestConfig } from './utils';
 import * as nodepath from 'path';
-import { TransformOptions, Path, JestConfig } from './jest-types';
-import { createBabelTransformer } from './postprocess';
+import { TransformOptions, Path, JestConfig, PostProcessHook } from './jest-types';
+import { getPostProcessHook } from './postprocess';
 
-const babelJestTransformer = createBabelTransformer({
-        presets: [],
-        plugins: ['transform-es2015-modules-commonjs']
-    });
 
 let tsJestConfig;
+let postHook : PostProcessHook;
 
 export function process(
     src: string,
@@ -30,6 +27,7 @@ export function process(
     const isTsFile = path.endsWith('.ts') || path.endsWith('.tsx');
     const isJsFile = path.endsWith('.js') || path.endsWith('.jsx');
     const isHtmlFile = path.endsWith('.html');
+	postHook = getPostProcessHook(compilerOptions, config, tsJestConfig);
 
     if (isHtmlFile && config.globals.__TRANSFORM_HTML__) {
         src = 'module.exports=`' + src + '`;';
@@ -48,15 +46,12 @@ export function process(
             }
         );
 
-        const outputText =
-            compilerOptions.allowSyntheticDefaultImports && !tsJestConfig.skipBabel
-                ? babelJestTransformer.process(
+        const outputText = postHook(
                     tsTranspiled.outputText,
                     path + '.js', // babel-jest only likes .js files ¯\_(ツ)_/¯
                     config,
                     transformOptions
-                )
-                : tsTranspiled.outputText;
+                );
 
         // strip root part from path
         // this results in a shorter filename which will also make the encoded base64 filename for the cache shorter

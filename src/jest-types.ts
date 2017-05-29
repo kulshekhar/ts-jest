@@ -22,6 +22,10 @@ export interface PostProcessorOptions {
   filename?: string;
 }
 
+export interface PostProcessHook {
+	(src: string, filename: string, config: JestConfig, transformOptions: TransformOptions) : string;
+}
+
 export type JestConfig = Partial<FullJestConfig>;
 
 export type FullJestConfig = {
