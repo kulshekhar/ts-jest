@@ -15,7 +15,16 @@ export type HasteConfig = {
   providesModuleNodeModules: Array<string>;
 };
 
-export type JestConfig = {
+export interface PostProcessorOptions {
+  plugins? : any[];
+  presets?: any[];
+  cacheDirectory? : string;
+  filename?: string;
+}
+
+export type JestConfig = Partial<FullJestConfig>;
+
+export type FullJestConfig = {
   automock: boolean;
   browser: boolean;
   cache: boolean;

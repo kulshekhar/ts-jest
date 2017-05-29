@@ -3,11 +3,10 @@ import * as crypto from 'crypto';
 import * as tsc from 'typescript';
 import { getTSConfig, getTSJestConfig } from './utils';
 import * as nodepath from 'path';
-import * as babel from 'babel-jest';
 import { TransformOptions, Path, JestConfig } from "./jest-types";
+import { createTransformer } from './postprocess';
 
-const babelJest = babel
-    .createTransformer({
+const babelJest = createTransformer({
         presets: [],
         plugins: ['transform-es2015-modules-commonjs']
     });
