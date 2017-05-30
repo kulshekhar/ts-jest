@@ -206,7 +206,7 @@ your Jest configuration:
 }
 ```
 
-This will ignore **all** packages in your scope `@foo`.
+This will ignore everything for transpilation **but** `@foo`.
 
 ## How to Contribute
 If you have any suggestions/pull requests to turn this into a useful package, just open an issue and I'll be happy to work with you to improve this.
