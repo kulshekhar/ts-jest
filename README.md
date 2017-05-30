@@ -206,7 +206,7 @@ your Jest configuration:
 }
 ```
 
-This will ignore everything for transpilation **but** `@foo`.
+By default Jest ignores everything in `node_modules`. This setting prevents Jest from ignoring the package you're interested in, in this case `@foo`, while continuing to ignore everything else in `node_modules`.
 
 ## How to Contribute
 If you have any suggestions/pull requests to turn this into a useful package, just open an issue and I'll be happy to work with you to improve this.
