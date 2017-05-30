@@ -8,7 +8,6 @@ import { getPostProcessHook } from './postprocess';
 
 
 let tsJestConfig;
-let postHook : PostProcessHook;
 
 export function process(
     src: string,
@@ -27,7 +26,7 @@ export function process(
     const isTsFile = path.endsWith('.ts') || path.endsWith('.tsx');
     const isJsFile = path.endsWith('.js') || path.endsWith('.jsx');
     const isHtmlFile = path.endsWith('.html');
-	postHook = getPostProcessHook(compilerOptions, config, tsJestConfig);
+    let postHook = getPostProcessHook(compilerOptions, config, tsJestConfig);
 
     if (isHtmlFile && config.globals.__TRANSFORM_HTML__) {
         src = 'module.exports=`' + src + '`;';
@@ -47,11 +46,11 @@ export function process(
         );
 
         const outputText = postHook(
-                    tsTranspiled.outputText,
-                    path + '.js', // babel-jest only likes .js files ¯\_(ツ)_/¯
-                    config,
-                    transformOptions
-                );
+            tsTranspiled.outputText,
+            path,
+            config,
+            transformOptions
+        );
 
         // strip root part from path
         // this results in a shorter filename which will also make the encoded base64 filename for the cache shorter
