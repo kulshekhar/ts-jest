@@ -6,7 +6,7 @@ const globalConfig = {
 		'/tmp/cacheStuff',
 	globals: {
 		__TS_CONFIG__: {
-		
+			jsx: 'react',
 		}
 	}
 };
