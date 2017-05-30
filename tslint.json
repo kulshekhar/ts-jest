@@ -2,9 +2,6 @@
   "rules": {
     "class-name": true,
     "forin": true,
-    "indent": [
-      false
-    ],
     "label-position": true,
     "label-undefined": true,
     "no-arg": true,
@@ -23,7 +20,6 @@
     "no-empty": false,
     "no-eval": true,
     "no-switch-case-fall-through": true,
-    "no-trailing-whitespace": true,
     "no-unused-expression": true,
     "no-unused-variable": [
       true,

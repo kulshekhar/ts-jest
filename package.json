@@ -1,6 +1,6 @@
 {
   "name": "ts-jest",
-  "version": "20.0.4",
+  "version": "20.0.5",
   "main": "index.js",
   "types": "./dist/index.d.ts",
   "description": "A preprocessor with sourcemap support to help use Typescript with Jest",
@@ -51,12 +51,15 @@
     ],
     "moduleFileExtensions": [
       "ts",
-      "js"
+      "js",
+      "json"
     ]
   },
   "dependencies": {
-    "babel-jest": "^20.0.0",
+    "babel-core": "^6.24.1",
+    "babel-plugin-istanbul": "^4.1.4",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.24.1",
+    "babel-preset-jest": "^20.0.3",
     "fs-extra": "^3.0.0",
     "jest-config": "^20.0.0",
     "jest-util": "^20.0.0",

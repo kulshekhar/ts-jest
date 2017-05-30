@@ -1,4 +1,4 @@
-import { getCacheKey } from "../../src/preprocessor";
+import { getCacheKey } from '../../src/preprocessor';
 
 describe('getCacheKey', () => {
   const src = 'console.log(123);';
@@ -20,13 +20,13 @@ describe('getCacheKey', () => {
   const originalHash = getCacheKey(src, filepath, configStr);
 
   it('should change hash when src changes', () => {
-    const newSrc = 'console.log(1234);'
+    const newSrc = 'console.log(1234);';
     const newHash = getCacheKey(newSrc, filepath, configStr);
     expect(newHash).not.toBe(originalHash);
   });
 
   it('should change hash when filepath changes', () => {
-    const newPath = '/tmp/newfilepath'
+    const newPath = '/tmp/newfilepath';
     const newHash = getCacheKey(src, newPath, configStr);
     expect(newHash).not.toBe(originalHash);
   });
