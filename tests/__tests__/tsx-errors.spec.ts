@@ -1,6 +1,6 @@
 import runJest from '../__helpers__/runJest';
 
-describe('button', () => {
+describe('TSX Errors', () => {
 
   it('should show the correct error locations in the typescript files', () => {
 

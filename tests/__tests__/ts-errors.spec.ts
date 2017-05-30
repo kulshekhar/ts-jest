@@ -1,6 +1,6 @@
 import runJest from '../__helpers__/runJest';
 
-describe('hello_world', () => {
+describe('Typescript errors', () => {
 
   it('should show the correct error locations in the typescript files', () => {
 

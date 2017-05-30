@@ -1,8 +1,8 @@
 import runJest from '../__helpers__/runJest';
 
-describe('hello_world', () => {
+describe('TS Compilation', () => {
 
-  it('should run successfully', () => {
+  it('should compile typescript succesfully', () => {
 
     const result = runJest('../simple', ['--no-cache']);
 
