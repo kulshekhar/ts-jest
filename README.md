@@ -17,8 +17,12 @@
 
 - [Versioning](#versioning)
 - [Usage](#usage)
+  - [Coverage](#coverage)
+  - [React Native](#react-native)
 - [Options](#options)
   - [Known limitations for TS compiler options](#known-limitations-for-ts-compiler-options)
+- [Tips](#tips)
+  - [Importing packages written in TypeScript](#importing-packages-written-in-typescript)
 - [How to Contribute](#how-to-contribute)
   - [Quickstart to run tests (only if you're working on this package)](#quickstart-to-run-tests-only-if-youre-working-on-this-package)
 - [License](#license)
@@ -182,6 +186,27 @@ For all available options see [TypeScript docs](https://www.typescriptlang.org/d
   "moduleDirectories": ["node_modules", "<path_to_your_sources>"]
 }
 ```
+
+## Tips
+
+### Importing packages written in TypeScript
+
+If you have dependencies on npm packages that are written in TypeScript but are
+**not** published in ES5 you have to tweak your configuration. For example
+you depend on a private scoped package `@foo/bar` you have to add following to
+your Jest configuration:
+
+```js
+{
+  // ...
+  "transformIgnorePatterns": [
+    "<rootDir>/node_modules/(?!@foo)"
+  ]
+  // ...
+}
+```
+
+This will ignore **all** packages in your scope `@foo`.
 
 ## How to Contribute
 If you have any suggestions/pull requests to turn this into a useful package, just open an issue and I'll be happy to work with you to improve this.
