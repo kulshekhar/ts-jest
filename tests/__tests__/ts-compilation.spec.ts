@@ -12,7 +12,7 @@ describe('TS Compilation', () => {
     expect(result.status).toBe(1);
     expect(output).toContain('1 failed, 1 total');
     expect(stderr).toContain('Hello Class');
-    expect(stderr).toContain('should throw an error on line 13');
+    expect(stderr).toContain('should throw an error on line 18');
 
   });
 

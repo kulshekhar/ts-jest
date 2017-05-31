@@ -1,3 +1,8 @@
+interface FooInterface {
+    foo: string,
+    bar: number, //This interface should be stripped and the line numbers should still fit.
+}
+
 export class Hello {
   constructor() {
     const greeting = `
