@@ -53,8 +53,10 @@ export const getPostProcessHook = (tsCompilerOptions: CompilerOptions, jestConfi
 			plugins: plugins,
 		});
 	}
-	return createBabelTransformer({
+    return (src) => src; //Identity function
+
+    /*return createBabelTransformer({
 		presets: [],
 		plugins: [],
-	});
+	});*/
 };

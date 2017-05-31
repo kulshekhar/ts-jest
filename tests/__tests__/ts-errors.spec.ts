@@ -14,4 +14,15 @@ describe('Typescript errors', () => {
 
   });
 
+    it('Should show the correct error locations in async typescript files', async () => {
+        const result = runJest('../simple-async', ['--no-cache']);
+
+        const stderr = result.stderr.toString();
+
+        expect(result.status).toBe(1);
+        expect(stderr).toContain('Hello.ts:13:11');
+        expect(stderr).toContain('Hello.test.ts:9:21');
+    });
+
+
 });
