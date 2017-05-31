@@ -3,9 +3,9 @@
  * https://github.com/facebook/jest/blob/9b157c3a7c325c3971b2aabbe4c8ab4ce0b0c56d/packages/babel-jest/src/index.js
  */
 import * as jestPreset from 'babel-preset-jest';
-import {JestConfig, PostProcessHook, PostProcessorOptions, TransformOptions} from './jest-types';
+import { JestConfig, PostProcessHook, PostProcessorOptions, TransformOptions } from './jest-types';
 import * as babel from 'babel-core';
-import {CompilerOptions} from 'typescript/lib/typescript';
+import { CompilerOptions } from 'typescript/lib/typescript';
 
 function createBabelTransformer(options: PostProcessorOptions) {
     options = {
