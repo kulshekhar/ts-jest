@@ -9,7 +9,7 @@ describe('TSX Errors', () => {
     const stderr = result.stderr.toString();
 
     expect(result.status).toBe(1);
-    expect(stderr).toContain('Button.tsx:18:23');
+    expect(stderr).toContain('Button.tsx:18:17');
     expect(stderr).toContain('Button.test.tsx:15:12');
 
   });
