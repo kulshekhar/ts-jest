@@ -1,7 +1,7 @@
 [*.ts]
 indent_style = space
-indent_size = 1
+indent_size = 4
 
 [*.tsx]
 indent_style = space
-indent_size = 1
+indent_size = 4
