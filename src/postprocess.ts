@@ -18,10 +18,10 @@ function createBabelTransformer(options: PostProcessorOptions) {
     delete options.filename;
 
     return (src: string,
-            filename: string,
-            config: JestConfig,
-            transformOptions: TransformOptions): string => {
-        const theseOptions = Object.assign({filename}, options);
+        filename: string,
+        config: JestConfig,
+        transformOptions: TransformOptions): string => {
+        const theseOptions = Object.assign({ filename }, options);
         if (transformOptions && transformOptions.instrument) {
             theseOptions.auxiliaryCommentBefore = ' istanbul ignore next ';
             // Copied from jest-runtime transform.js
@@ -36,6 +36,11 @@ function createBabelTransformer(options: PostProcessorOptions) {
                 ],
             ]);
         }
+
+        // force the sourceMaps property to be 'inline' during testing 
+        // to help generate accurage sourcemaps. 
+        theseOptions.sourceMaps = 'inline';
+
         return babel.transform(src, theseOptions).code;
     };
 }
