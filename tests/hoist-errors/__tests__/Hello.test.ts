@@ -11,7 +11,7 @@ jest.mock('path');
 
 describe('Hello Class', () => {
 
-  it('should throw an error on line 30', () => {
+  it('should throw an error on line 22', () => {
 
     const hello = new Hello();
 

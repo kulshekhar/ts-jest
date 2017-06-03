@@ -17,7 +17,9 @@ describe('Jest.mock() calls', () => {
         const stderr = result.stderr.toString();
 
         expect(result.status).toBe(1);
-        expect(stderr).toContain('Hello.ts:30');
-        expect(stderr).toContain('Hello.test.ts:16');
+        expect(stderr).toContain('Hello.ts:22');
+        // The actual error occurs at line 16. However, because the mock calls
+        // are hoisted, this changes - in this case, to 26
+        expect(stderr).toContain('Hello.test.ts:26');
     });
 });
