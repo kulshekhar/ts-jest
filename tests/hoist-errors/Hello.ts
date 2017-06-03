@@ -1,7 +1,11 @@
 interface FooInterface {
-    foo: string,
-    bar: number, //This interface should be stripped and the line numbers should still fit.
+  foo: string,
+  bar: number, //This interface should be stripped and the line numbers should still fit.
 }
+
+export const foo = () => {
+  console.log('foo');
+};
 
 export class Hello {
   constructor() {

@@ -44,7 +44,7 @@ describe('Hello Class', () => {
 });
 `;
 
-describe('hello_world', () => {
+describe('Typescript watch tests', () => {
   let result: { childProcess: ChildProcess, getStderrAsync: () => Promise<string> };
   let DEFAULT_TIMEOUT_INTERVAL: number;
 

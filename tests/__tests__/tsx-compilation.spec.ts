@@ -1,8 +1,8 @@
 import runJest from '../__helpers__/runJest';
 
-describe('button', () => {
+describe('TSX Compilation', () => {
 
-  it('should run successfully', () => {
+  it('Should compile a button succesfully', () => {
 
     const result = runJest('../button', ['--no-cache', '-u']);
 

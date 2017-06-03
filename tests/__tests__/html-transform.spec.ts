@@ -11,8 +11,10 @@ const config = {
   }
 };
 
-test('transforms html if config.globals.__TRANSFORM_HTML__ is set', () => {
-  expect(process(source, path, config)).toMatchSnapshot();
-  delete config.globals.__TRANSFORM_HTML__;
-  expect(process(source, path, config)).toMatchSnapshot();
+describe('Html transforms', () => {
+  it('transforms html if config.globals.__TRANSFORM_HTML__ is set', () => {
+    expect(process(source, path, config)).toMatchSnapshot();
+    delete config.globals.__TRANSFORM_HTML__;
+    expect(process(source, path, config)).toMatchSnapshot();
+  });
 });

@@ -1,8 +1,8 @@
 import runJest from '../__helpers__/runJest';
 
-describe('hello_world', () => {
+describe('TS Compilation', () => {
 
-  it('should run successfully', () => {
+  it('should compile typescript succesfully', () => {
 
     const result = runJest('../simple', ['--no-cache']);
 
@@ -12,7 +12,7 @@ describe('hello_world', () => {
     expect(result.status).toBe(1);
     expect(output).toContain('1 failed, 1 total');
     expect(stderr).toContain('Hello Class');
-    expect(stderr).toContain('should throw an error on line 11');
+    expect(stderr).toContain('should throw an error on line 18');
 
   });
 
