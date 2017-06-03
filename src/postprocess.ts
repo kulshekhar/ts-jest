@@ -12,7 +12,12 @@ function createBabelTransformer(options: PostProcessorOptions) {
         ...options,
         plugins: (options && options.plugins) || [],
         presets: ((options && options.presets) || []).concat([jestPreset]),
+        // If retainLines isn't set to true, the line numbers
+        // are off by 1
         retainLines: true,
+        // force the sourceMaps property to be 'inline' during testing 
+        // to help generate accurage sourcemaps. 
+        sourceMaps: 'inline'
     };
     delete options.cacheDirectory;
     delete options.filename;
@@ -36,10 +41,6 @@ function createBabelTransformer(options: PostProcessorOptions) {
                 ],
             ]);
         }
-
-        // force the sourceMaps property to be 'inline' during testing 
-        // to help generate accurage sourcemaps. 
-        theseOptions.sourceMaps = 'inline';
 
         return babel.transform(src, theseOptions).code;
     };
