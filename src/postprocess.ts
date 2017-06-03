@@ -16,7 +16,7 @@ function createBabelTransformer(options: PostProcessorOptions) {
         // are off by 1
         retainLines: true,
         // force the sourceMaps property to be 'inline' during testing 
-        // to help generate accurage sourcemaps. 
+        // to help generate accurate sourcemaps. 
         sourceMaps: 'inline'
     };
     delete options.cacheDirectory;
