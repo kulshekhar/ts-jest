@@ -9,7 +9,7 @@
 
 > Note: Looking for collaborators. [Want to help improve ts-jest?](https://github.com/kulshekhar/ts-jest/issues/223)
 
-`ts-jest` is a TypeScript preprocessor for Jest with sourceMap support and 
+`ts-jest` is a TypeScript preprocessor for Jest with source map support and 
 sensible defaults that quickly allows you to start testing TypeScript with Jest.
 
 ## Table of Contents
@@ -83,23 +83,23 @@ To generate coverage results, set the `mapCoverage` property in the `jest` confi
 `ts-jest` tries to ship with sensible defaults, to get you on your feet as quickly as possible.
 
 ### Sourcemap support
-SourceMaps should work out of the box, that means your stack traces should have the correct line numbers,
-and you're able to step through the typescript code using a debugger.
+Sourcemaps should work out of the box. That means your stack traces should have the correct line numbers,
+and you should be able to step through the TypeScript code using a debugger.
 
 ### Automatically finds tsconfig.json
 `ts-jest` automatically located your `tsconfig` file.
-If you want to run typescript with a special configuration, you [also can](#tsconfig) //TODO
+If you want to compile typescript with a special configuration, you [also can](#tsconfig)
 
 ### Supports synthetic modules 
-If you're on a codebase where you're using synthetic default exports, e.g. 
+If you're on a codebase where you're using synthetic default imports, e.g. 
 ```javascript 1.6
-//Regular default exports
+//Regular imports
 import * as React from 'react';
 
-//Synthetic default exports:
+//Synthetic default imports:
 import React from 'react';
 ```
-`ts-jest` tries to support that. If `allowSyntheticDefaultExports` is set to true in your `tsconfig` file, it uses babel
+`ts-jest` tries to support that. If `allowSyntheticDefaultImports` is set to true in your `tsconfig` file, it uses babel
 to automatically create the synthetic default exports for you - nothing else needed. 
 You can opt-out of this behaviour with the [skipBabel flag](#skipping-babel)
 
@@ -205,19 +205,6 @@ Fully completed jest section should look like this:
   }
 ```
 If only testing typescript files then remove the `js` option in the testRegex.
-
-You might want to use ES6 default imports, which will allow you to write things like
-`import React from 'react';`
-
-In that case you can add the following to your `tsconfig`
-```json
-        "allowSyntheticDefaultImports": true
-```
-
-This will make ts-loader send the compiled typescript code through babel, and the above import will resolve.
-
-This configuration will allow `debugger` statements to work properly in both WebStorm and VSCode.
-Breakpoints currently only work in WebStorm.
 
 ## Angular 2
 When using Jest with Angular (a.k.a Angular 2) apps you will likely need to parse HTML templates. If you're unable to add `html-loader` to webpack config (e.g. because you don't want to eject from `angular-cli`) you can do so by defining `__TRANSFORM_HTML__` key in `globals` for `jest`.
