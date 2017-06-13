@@ -9,8 +9,7 @@
 
 > Note: Looking for collaborators. [Want to help improve ts-jest?](https://github.com/kulshekhar/ts-jest/issues/223)
 
-`ts-jest` is a TypeScript preprocessor for Jest with source map support and 
-sensible defaults that quickly allows you to start testing TypeScript with Jest.
+`ts-jest` is a TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript.
 
 ## Table of Contents
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
@@ -20,7 +19,7 @@ sensible defaults that quickly allows you to start testing TypeScript with Jest.
 - [Usage](#usage)
   - [Versioning](#versioning)
   - [Coverage](#coverage)
-- [Sensible Defaults](#sensible-defaults)
+- [Default Setup](#default-setup)
   - [Sourcemap support](#sourcemap-support)
   - [Automatically finds tsconfig.json](#automatically-finds-tsconfigjson)
   - [Supports synthetic modules](#supports-synthetic-modules)
@@ -35,7 +34,7 @@ sensible defaults that quickly allows you to start testing TypeScript with Jest.
   - [Importing packages written in TypeScript](#importing-packages-written-in-typescript)
 - [Known Limitations](#known-limitations)
   - [Known limitations for TS compiler options](#known-limitations-for-ts-compiler-options)
-  - [Known Limitations for autohoisting](#known-limitations-for-autohoisting)
+  - [Known Limitations for hoisting](#known-limitations-for-hoisting)
   - [Current limitations for breakpoints](#current-limitations-for-breakpoints)
 - [How to Contribute](#how-to-contribute)
   - [Quickstart to run tests (only if you're working on this package)](#quickstart-to-run-tests-only-if-youre-working-on-this-package)
@@ -79,7 +78,7 @@ To generate coverage results, set the `mapCoverage` property in the `jest` confi
 
 > Please note that the `outDir` property in the `jest` configuration section is removed in coverage mode, due to [#201](https://github.com/kulshekhar/ts-jest/issues/201).
 
-## Sensible Defaults
+## Default Setup
 `ts-jest` tries to ship with sensible defaults, to get you on your feet as quickly as possible.
 
 ### Sourcemap support
@@ -88,7 +87,7 @@ and you should be able to step through the TypeScript code using a debugger.
 
 ### Automatically finds tsconfig.json
 `ts-jest` automatically located your `tsconfig` file.
-If you want to compile typescript with a special configuration, you [also can](#tsconfig)
+If you want to compile typescript with a special configuration, you [can do that too](#tsconfig)
 
 ### Supports synthetic modules 
 If you're on a codebase where you're using synthetic default imports, e.g. 
@@ -105,17 +104,19 @@ You can opt-out of this behaviour with the [skipBabel flag](#skipping-babel)
 
 ### Supports automatic of jest.mock() calls
 [Just like Jest](https://facebook.github.io/jest/docs/manual-mocks.html#using-with-es-module-imports) `ts-jest`
-automatically hoists your `jest.mock()` calls to the top of your file.
+automatically uses babel to hoist your `jest.mock()` calls to the top of your file.
 You can opt-out of this behaviour with the [skipBabel flag](#skipping-babel)
 
 ## Configuration
-Sometimes you just need a little extra configurability. 
+If the default setup doesn't address your requirements, you can create a custom setup to suit your project.
 
 ### tsconfig
 By default this package will try to locate `tsconfig.json` and use its compiler options for your `.ts` and `.tsx` files.
 
-You are able to override this behaviour and provide another path to your config for TypeScript by using `__TS_CONFIG__` option in `globals` for `jest`:
-```json
+You can override this behaviour by pointing ts-jest to a custom TypeScript configuration file.
+You can do this by setting the `__TS_CONFIG__` option in globals for jest to the path of the
+custom configuration file (relative to the project's root directory)```json
+```
 {
   "jest": {
     "globals": {
@@ -142,7 +143,8 @@ For all available `tsc` options see [TypeScript docs](https://www.typescriptlang
 Note that if you haven't explicitly set the `module` property in the `__TS_CONFIG__` setting (either directly or through a separate configuration file), it will be overwritten to `commonjs` (regardless of the value in `tsconfig.json`) since that is the format Jest expects. This only happens during testing.
 
 ### Skipping Babel
-If you want to skip the babel transpilation step in ts-jest, you can. This means `jest.mock()` calls will not be hoisted to the top,
+If you don't use mocks, or synthetic default imports you can skip the babel-transpilation step.
+This means `jest.mock()` calls will not be hoisted to the top,
 and synthetic default exports will never be created.
 Simply add skipBabel to your global variables under the `ts-jest` key:
 ```json
@@ -262,7 +264,7 @@ By default Jest ignores everything in `node_modules`. This setting prevents Jest
 }
 ```
 
-### Known Limitations for autohoisting
+### Known Limitations for hoisting
 If the `jest.mock()` calls is placed after actual code, (e.g. after functions or classes) and `skipBabel` is not set,
 the line numbers in stacktraces will be off.
 We suggest placing the `jest.mock()` calls after the imports, but before any actual code.
