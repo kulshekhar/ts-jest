@@ -9,46 +9,39 @@
 
 > Note: Looking for collaborators. [Want to help improve ts-jest?](https://github.com/kulshekhar/ts-jest/issues/223)
 
-ts-jest is a TypeScript preprocessor with sensible defaults, that quickly allows you to get going, testing typescript code with jest.
+`ts-jest` is a TypeScript preprocessor for Jest with sourceMap support and 
+sensible defaults that quickly allows you to start testing TypeScript with Jest.
 
 ## Table of Contents
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
 
-- [Versioning](#versioning)
 - [Usage](#usage)
+  - [Versioning](#versioning)
   - [Coverage](#coverage)
+- [Sensible Defaults](#sensible-defaults)
+  - [Sourcemap support](#sourcemap-support)
+  - [Automatically finds tsconfig.json](#automatically-finds-tsconfigjson)
+  - [Supports synthetic modules](#supports-synthetic-modules)
+  - [Supports automatic of jest.mock() calls](#supports-automatic-of-jestmock-calls)
+- [Configuration](#configuration)
+  - [tsconfig](#tsconfig)
+  - [Skipping Babel](#skipping-babel)
+- [Use cases](#use-cases)
   - [React Native](#react-native)
-- [Options](#options)
-  - [Known limitations for TS compiler options](#known-limitations-for-ts-compiler-options)
+- [Angular 2](#angular-2)
 - [Tips](#tips)
   - [Importing packages written in TypeScript](#importing-packages-written-in-typescript)
+- [Known Limitations](#known-limitations)
+  - [Known limitations for TS compiler options](#known-limitations-for-ts-compiler-options)
+  - [Known Limitations for autohoisting](#known-limitations-for-autohoisting)
+  - [Current limitations for breakpoints](#current-limitations-for-breakpoints)
 - [How to Contribute](#how-to-contribute)
   - [Quickstart to run tests (only if you're working on this package)](#quickstart-to-run-tests-only-if-youre-working-on-this-package)
 - [License](#license)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
-
-
-    short intro
-    Usage
-    Sensible defaults
-        sourcemap support
-        Autolocates tsconfig
-        Automatic transpilation of modules if enabled in tsconfig (mention skipbabel)
-        Supports hoisting of jest.mock, mention skipBabel and limitations
-    Configuration, for when you need that little extra
-        TS_CONFIG stuff
-        skipBabel flag
-    Use cases
-        Angular 2 (compile html stuff)
-        React native
-    Limitations
-        Current limitations
-    Tips
-        same as now
-
 
 ## Usage
 
@@ -87,14 +80,15 @@ To generate coverage results, set the `mapCoverage` property in the `jest` confi
 > Please note that the `outDir` property in the `jest` configuration section is removed in coverage mode, due to [#201](https://github.com/kulshekhar/ts-jest/issues/201).
 
 ## Sensible Defaults
-ts-jest tries to ship with sensible defaults, to get you on your feet as quickly as possible.
+`ts-jest` tries to ship with sensible defaults, to get you on your feet as quickly as possible.
 
 ### Sourcemap support
-Sourcemaps should work out of the box, that means your stacktraces should have the correct line numbers,
-and your breakpoints should work.
+SourceMaps should work out of the box, that means your stack traces should have the correct line numbers,
+and you're able to step through the typescript code using a debugger.
 
-### Automatically finds .tsconfig.json
-ts-jest automatically finds your .tsconfig.json and uses that. If you want to run typescript with a special configuration, you [also can](#ADDLINK)//TODO
+### Automatically finds tsconfig.json
+`ts-jest` automatically located your `tsconfig` file.
+If you want to run typescript with a special configuration, you [also can](#tsconfig) //TODO
 
 ### Supports synthetic modules 
 If you're on a codebase where you're using synthetic default exports, e.g. 
@@ -105,23 +99,22 @@ import * as React from 'react';
 //Synthetic default exports:
 import React from 'react';
 ```
-ts-jest tries to support that. If `allowSyntheticDefaultExports` is set to true in your tsconfig file, it uses babel
+`ts-jest` tries to support that. If `allowSyntheticDefaultExports` is set to true in your `tsconfig` file, it uses babel
 to automatically create the synthetic default exports for you - nothing else needed. 
-You can opt-out of this behaviour with the [skipBabel flag](#Skipping Babel)
+You can opt-out of this behaviour with the [skipBabel flag](#skipping-babel)
 
 ### Supports automatic of jest.mock() calls
-[Just like Jest](https://facebook.github.io/jest/docs/manual-mocks.html#using-with-es-module-imports) ts-jest
+[Just like Jest](https://facebook.github.io/jest/docs/manual-mocks.html#using-with-es-module-imports) `ts-jest`
 automatically hoists your `jest.mock()` calls to the top of your file.
-You can opt-out of this behaviour with the [skipBabel flag](#Skipping Babel)
+You can opt-out of this behaviour with the [skipBabel flag](#skipping-babel)
 
 ## Configuration
 Sometimes you just need a little extra configurability. 
 
-
 ### tsconfig
 By default this package will try to locate `tsconfig.json` and use its compiler options for your `.ts` and `.tsx` files.
 
-But you are able to override this behaviour and provide another path to your config for TypeScript by using `__TS_CONFIG__` option in `globals` for `jest`:
+You are able to override this behaviour and provide another path to your config for TypeScript by using `__TS_CONFIG__` option in `globals` for `jest`:
 ```json
 {
   "jest": {
@@ -216,7 +209,7 @@ If only testing typescript files then remove the `js` option in the testRegex.
 You might want to use ES6 default imports, which will allow you to write things like
 `import React from 'react';`
 
-In that case you can add the following to your `.tsconfig`
+In that case you can add the following to your `tsconfig`
 ```json
         "allowSyntheticDefaultImports": true
 ```
@@ -286,6 +279,10 @@ By default Jest ignores everything in `node_modules`. This setting prevents Jest
 If the `jest.mock()` calls is placed after actual code, (e.g. after functions or classes) and `skipBabel` is not set,
 the line numbers in stacktraces will be off.
 We suggest placing the `jest.mock()` calls after the imports, but before any actual code.
+
+### Current limitations for breakpoints
+Breakpoints currently work in WebStorm, but not Visual Studio Code. `debugger`; statements work in both, and will
+map the TypeScript code correctly to the transpiled Javascript.
 
 ## How to Contribute
 If you have any suggestions/pull requests to turn this into a useful package, just open an issue and I'll be happy to work with you to improve this.
