@@ -3,8 +3,9 @@ import * as crypto from 'crypto';
 import * as tsc from 'typescript';
 import { getTSConfig, getTSJestConfig } from './utils';
 import * as nodepath from 'path';
-import { TransformOptions, Path, JestConfig, PostProcessHook } from './jest-types';
+import { TransformOptions, Path, JestConfig } from './jest-types';
 import { getPostProcessHook } from './postprocess';
+import * as pkgDir from 'pkg-dir';
 
 
 let tsJestConfig;
@@ -18,7 +19,7 @@ export function process(
     if (tsJestConfig === undefined) {
         tsJestConfig = getTSJestConfig(config.globals);
     }
-    const root = require('pkg-dir').sync();
+    const root = pkgDir.sync();
     // transformOptions.instrument is a proxy for collectCoverage
     // https://github.com/kulshekhar/ts-jest/issues/201#issuecomment-300572902
     const compilerOptions = getTSConfig(config.globals, transformOptions.instrument);

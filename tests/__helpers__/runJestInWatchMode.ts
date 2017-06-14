@@ -1,7 +1,8 @@
 // from: https://github.com/facebook/jest/blob/master/integration_tests/runJest.js
 import { ChildProcess, SpawnOptions } from 'child_process';
 import { fileExists } from './utils';
-const path = require('path');
+import * as path from 'path';
+
 const spawn: (command: string, args?: string[], options?: SpawnOptions) => ChildProcess = (process.platform === 'win32')
   ? require('cross-spawn-with-kill')
   : require('cross-spawn');

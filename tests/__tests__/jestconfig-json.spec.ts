@@ -1,13 +1,13 @@
+import * as pkgDir from 'pkg-dir';
+import { getJestConfig } from '../../src/utils';
+
 describe('get json jest config', () => {
-  const pkgDir = require('pkg-dir');
   let yargsMock;
-  let getJestConfig;
 
   beforeEach(() => {
     jest.resetModules();
     yargsMock = jest.fn();
     jest.setMock('yargs', yargsMock);
-    getJestConfig = require('../../src/utils').getJestConfig;
   });
 
   it('should able to read config from json', () => {

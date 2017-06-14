@@ -2,9 +2,8 @@ import * as tsc from 'typescript';
 import * as path from 'path';
 import * as fs from 'fs';
 import * as tsconfig from 'tsconfig';
-
-const normalize = require('jest-config').normalize;
-const setFromArgv = require('jest-config/build/setFromArgv');
+import {normalize} from 'jest-config';
+import * as setFromArgv from 'jest-config/build/setfromArgv';
 
 function parseConfig(argv) {
   if (argv.config && typeof argv.config === 'string') {

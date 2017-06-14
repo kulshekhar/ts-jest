@@ -1,8 +1,8 @@
 // from: https://github.com/facebook/jest/blob/master/integration_tests/runJest.js
 
-const { fileExists } = require('./utils');
-const path = require('path');
-const spawnSync = require('cross-spawn').sync;
+import { fileExists } from './utils';
+import * as path from 'path';
+import {sync as spawnSync} from 'cross-spawn';
 
 // assuming that jest is installed globally
 // using `npm i -g jest-cli`

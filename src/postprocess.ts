@@ -6,6 +6,7 @@ import * as jestPreset from 'babel-preset-jest';
 import { JestConfig, PostProcessHook, PostProcessorOptions, TransformOptions } from './jest-types';
 import * as babel from 'babel-core';
 import { CompilerOptions } from 'typescript/lib/typescript';
+import istanbulPlugin from 'babel-plugin-istanbul';
 
 function createBabelTransformer(options: PostProcessorOptions) {
     options = {
@@ -32,7 +33,7 @@ function createBabelTransformer(options: PostProcessorOptions) {
             // Copied from jest-runtime transform.js
             theseOptions.plugins = theseOptions.plugins.concat([
                 [
-                    require('babel-plugin-istanbul').default,
+                    istanbulPlugin,
                     {
                         // files outside `cwd` will not be instrumented
                         cwd: config.rootDir,

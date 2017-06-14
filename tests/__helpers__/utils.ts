@@ -2,9 +2,9 @@ import { } from 'jest';
 import { } from 'node';
 import * as fs from 'fs';
 // from: https://github.com/facebook/jest/blob/master/integration_tests/utils.js
-
-const {spawnSync} = require('cross-spawn').sync;
-const path = require('path');
+import {sync} from 'cross-spawn';
+import {sync as spawnSync} from 'cross-spawn';
+import * as path from 'path';
 
 export function run(cmd, cwd) {
   const args = cmd.split(/\s/).slice(1);
@@ -23,7 +23,7 @@ export function run(cmd, cwd) {
   }
 
   return result;
-};
+}
 
 export function linkJestPackage(packageName, cwd) {
   const packagesDir = path.resolve(__dirname, '../packages');
@@ -31,7 +31,7 @@ export function linkJestPackage(packageName, cwd) {
   const destination = path.resolve(cwd, 'node_modules/');
   run(`mkdir -p ${destination}`, undefined);
   return run(`ln -sf ${packagePath} ${destination}`, undefined);
-};
+}
 
 export function fileExists(filePath) {
   const F_OK = fs.constants && fs.constants.F_OK || <number>fs['F_OK'];
@@ -41,4 +41,4 @@ export function fileExists(filePath) {
   } catch (e) {
     return false;
   }
-};
+}
