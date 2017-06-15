@@ -1,7 +1,9 @@
+import { MockedPath } from '../__mocks__/path';
 jest.mock('path');
 import * as fs from 'fs';
 import * as tsconfig from 'tsconfig';
 import {getTSConfig} from '../../src/utils';
+import * as path from 'path';
 
 
 describe('parse tsconfig with comments', () => {
@@ -10,7 +12,7 @@ describe('parse tsconfig with comments', () => {
 
   beforeEach(() => {
     // Set up some mocked out file info before each test
-    require('path').__setBaseDir('./tests/tsconfig-test');
+    (path as any as MockedPath).__setBaseDir('./tests/tsconfig-test');
   });
 
   it('the two config files should exist', () => {

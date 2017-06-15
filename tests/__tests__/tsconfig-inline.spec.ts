@@ -1,14 +1,15 @@
+import { MockedPath } from '../__mocks__/path';
 jest.mock('path');
 
 import * as ts from 'typescript';
 import {getTSConfig} from '../../src/utils';
-
+import * as path from 'path';
 
 describe('get inline ts config', () => {
 
   beforeEach(() => {
     // Set up some mocked out file info before each test
-    require('path').__setBaseDir('./tests/tsconfig-test');
+      (path as any as MockedPath).__setBaseDir('./tests/tsconfig-test');
   });
 
   it('should correctly read inline tsconfig options', () => {

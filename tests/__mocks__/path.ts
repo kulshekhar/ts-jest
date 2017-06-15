@@ -1,7 +1,4 @@
-import { } from 'jest';
-import { } from 'node';
-
-interface MockedPath {
+export interface MockedPath {
   __setBaseDir(newBaseDir);
   resolve(...args);
   dirname(...args);

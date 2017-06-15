@@ -1,3 +1,4 @@
+import { MockedPath } from '../__mocks__/path';
 jest.mock('path');
 
 import * as ts from 'typescript';
@@ -9,7 +10,7 @@ describe('get default ts config', () => {
 
   beforeEach(() => {
     // Set up some mocked out file info before each test
-      (path as any).__setBaseDir('./tests/tsconfig-test');
+      (path as any as MockedPath).__setBaseDir('./tests/tsconfig-test');
   });
 
   it('should correctly read tsconfig.json', () => {
@@ -83,7 +84,7 @@ describe('get default ts config', () => {
 
     // set the base directory such that we can use 'tsconfig.json' as the
     // config file name instead of 'dir/tsconfig.json'
-    require('path').__setBaseDir('./tests/tsconfig-test/tsconfig-module');
+    (path as any as MockedPath).__setBaseDir('./tests/tsconfig-test/tsconfig-module');
 
     const config = getTSConfig({
       '__TS_CONFIG__': 'tsconfig.json'
@@ -93,7 +94,7 @@ describe('get default ts config', () => {
   });
 
   it('should correctly read the ts-jest object within jest settings', () => {
-    require('path').__setBaseDir('./tests/tsconfig-test/tsconfig-module');
+    (path as any as MockedPath).__setBaseDir('./tests/tsconfig-test/tsconfig-module');
 
     const { getTSJestConfig } = require('../../src/utils');
 
