@@ -1,7 +1,6 @@
 import { MockedPath } from '../__mocks__/path';
 jest.mock('path');
 import * as fs from 'fs';
-import * as tsconfig from 'tsconfig';
 import {getTSConfig} from '../../src/utils';
 import * as path from 'path';
 
@@ -35,10 +34,13 @@ describe('parse tsconfig with comments', () => {
   });
 
   it('one config file should extend the other', () => {
-    const content = fs.readFileSync(configFile1, 'utf8');
-    const config = tsconfig.parse(content, configFile1);
+    const config = getTSConfig({
+      __TS_CONFIG__: 'allows-comments.json'
+    });
 
-    expect(config.extends).toEqual('allows-comments2.json');
+    // allows-comments.json does not contain a "pretty" field,
+    // while allows-comments2.json does. Default value would be "false".
+    expect(config.pretty).toEqual(true);
   });
 
   it('should correctly read allow-comments.json', () => {
