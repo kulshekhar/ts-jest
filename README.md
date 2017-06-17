@@ -46,7 +46,7 @@
 
 To use this in your project, run:
 ```sh
-npm install --save-dev ts-jest
+npm install --save-dev ts-jest @types/jest"
 ```
 Modify your project's `package.json` so that the `jest` section looks something like:
 ```json
