@@ -89,8 +89,8 @@ and you should be able to step through the TypeScript code using a debugger.
 `ts-jest` automatically located your `tsconfig` file.
 If you want to compile typescript with a special configuration, you [can do that too](#tsconfig)
 
-### Supports synthetic modules 
-If you're on a codebase where you're using synthetic default imports, e.g. 
+### Supports synthetic modules
+If you're on a codebase where you're using synthetic default imports, e.g.
 ```javascript 1.6
 //Regular imports
 import * as React from 'react';
@@ -99,7 +99,7 @@ import * as React from 'react';
 import React from 'react';
 ```
 `ts-jest` tries to support that. If `allowSyntheticDefaultImports` is set to true in your `tsconfig` file, it uses babel
-to automatically create the synthetic default exports for you - nothing else needed. 
+to automatically create the synthetic default exports for you - nothing else needed.
 You can opt-out of this behaviour with the [skipBabel flag](#skipping-babel)
 
 ### Supports automatic of jest.mock() calls
@@ -263,6 +263,10 @@ By default Jest ignores everything in `node_modules`. This setting prevents Jest
   "moduleDirectories": ["node_modules", "<path_to_your_sources>"]
 }
 ```
+### TS compiler && error reporting
+- Only syntactic errors are reported by the [tsc `transpileModule`](https://github.com/Microsoft/TypeScript/issues/4864#issuecomment-141567247)
+- Non syntactic errors do not show up in [Jest](https://github.com/facebook/jest/issues/2168)  
+- A workaround is to call the ts compiler before calling Jest `tsc --noEmit -p . && jest`
 
 ### Known Limitations for hoisting
 If the `jest.mock()` calls is placed after actual code, (e.g. after functions or classes) and `skipBabel` is not set,
