@@ -38,7 +38,7 @@
   "homepage": "https://github.com/kulshekhar/ts-jest#readme",
   "jest": {
     "transform": {
-      ".(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+      ".(ts|tsx)": "<rootDir>/dist/preprocessor.js"
     },
     "testRegex": "/__tests__/.*\\.(spec)\\.(ts|js)$",
     "coverageReporters": [
@@ -66,7 +66,6 @@
     "jest-util": "^20.0.0",
     "pkg-dir": "^2.0.0",
     "source-map-support": "^0.4.4",
-    "tsconfig": "^6.0.0",
     "yargs": "^8.0.1"
   },
   "peerDependencies": {

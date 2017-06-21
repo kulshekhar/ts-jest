@@ -2474,9 +2474,10 @@ trough@^1.0.0:
   resolved "https://registry.yarnpkg.com/trough/-/trough-1.0.0.tgz#6bdedfe7f2aa49a6f3c432257687555957f342fd"
 
 ts-jest@latest:
-  version "20.0.5"
-  resolved "https://registry.yarnpkg.com/ts-jest/-/ts-jest-20.0.5.tgz#6cb151e718e8739529d0a79459e09f7280fe044f"
+  version "20.0.6"
+  resolved "https://registry.yarnpkg.com/ts-jest/-/ts-jest-20.0.6.tgz#39c2810c05d6f6908dac15929dae206b494b73f4"
   dependencies:
+    "@types/babel-core" "^6.7.14"
     babel-core "^6.24.1"
     babel-plugin-istanbul "^4.1.4"
     babel-plugin-transform-es2015-modules-commonjs "^6.24.1"

@@ -1,7 +1,6 @@
 import * as tsc from 'typescript';
 import * as path from 'path';
 import * as fs from 'fs';
-import * as tsconfig from 'tsconfig';
 import {normalize} from 'jest-config';
 const setFromArgv = require('jest-config/build/setFromArgv');
 // import * as setFromArgv from 'jest-config/build/setfromArgv';
@@ -67,39 +66,62 @@ export function getTSJestConfig(globals) {
   return (globals && globals['ts-jest']) ? globals['ts-jest'] : {};
 }
 
+function formatTscParserErrors(errors: tsc.Diagnostic[]) {
+  return errors.map(s => JSON.stringify(s, null, 4)).join('\n');
+}
+
+function readCompilerOptions(configPath: string) {
+  // First step: Let tsc pick up the config.
+  const loaded = tsc.readConfigFile(configPath, file => {
+    const read = tsc.sys.readFile(file);
+    // See https://github.com/Microsoft/TypeScript/blob/a757e8428410c2196886776785c16f8f0c2a62d9/src/compiler/sys.ts#L203 :
+    // `readFile` returns `undefined` in case the file does not exist!
+    if (!read) {
+      throw new Error(`ENOENT: no such file or directory, open '${configPath}'`);
+    }
+    return read;
+  });
+  // In case of an error, we cannot go further - the config is malformed.
+  if (loaded.error) {
+    throw new Error(JSON.stringify(loaded.error, null, 4));
+  }
+
+  // Second step: Parse the config, resolving all potential references.
+  const basePath = path.dirname(configPath); // equal to "getDirectoryPath" from ts, at least in our case.
+  const parsedConfig = tsc.parseJsonConfigFileContent(loaded.config, tsc.sys, basePath);
+  // In case the config is present, it already contains possibly merged entries from following the
+  // 'extends' entry, thus it is not required to follow it manually.
+  // This procedure does NOT throw, but generates a list of errors that can/should be evaluated.
+  if (parsedConfig.errors.length > 0) {
+    const formattedErrors = formatTscParserErrors(parsedConfig.errors);
+    throw new Error(`Some errors occurred while attempting to read from ${configPath}: ${formattedErrors}`);
+  }
+  return parsedConfig.options;
+}
+
 export function getTSConfig(globals, collectCoverage: boolean = false) {
   let config = (globals && globals.__TS_CONFIG__) ? globals.__TS_CONFIG__ : 'tsconfig.json';
   const skipBabel = getTSJestConfig(globals).skipBabel;
+  const isReferencedExternalFile = typeof config === 'string';
 
-  if (typeof config === 'string') {
+  if (isReferencedExternalFile) {
     const configFileName = config;
-    const configPath = path.resolve(configFileName);
-    const fileContent = fs.readFileSync(configPath, 'utf8');
-    const external = tsconfig.parse(fileContent, configPath);
-    config = external.compilerOptions || {};
+    const configPath = path.resolve(config);
 
-    if (typeof external.extends === 'string') {
-      const parentConfigPath = path.join(path.dirname(configPath), external.extends);
-      const includedContent = fs.readFileSync(parentConfigPath, 'utf8');
-      config = Object.assign({}, tsconfig.parse(includedContent, parentConfigPath).compilerOptions, config);
-    }
+    config = readCompilerOptions(configPath);
 
     if (configFileName === 'tsconfig.json') {
       // hardcode module to 'commonjs' in case the config is being loaded
       // from the default tsconfig file. This is to ensure that coverage
       // works well. If there's a need to override, it can be done using
       // the global __TS_CONFIG__ setting in Jest config
-      config.module = 'commonjs';
+      config.module = tsc.ModuleKind.CommonJS;
     }
   }
-
-  config.module = config.module || 'commonjs';
 
   if (config.inlineSourceMap !== false) {
     config.inlineSourceMap = true;
   }
-
-  config.jsx = config.jsx || tsc.JsxEmit.React;
 
   //inline source with source map for remapping coverage
   if (collectCoverage) {
@@ -113,9 +135,30 @@ export function getTSConfig(globals, collectCoverage: boolean = false) {
     delete config.outDir;
   }
 
-  if (config.allowSyntheticDefaultImports && !skipBabel) {
-    // compile ts to es2015 and transform with babel afterwards
-    config.module = 'es2015';
+  // Note: If we had to read the inline configuration, it's required to set the fields
+  // to their string properties, and convert the result accordingly afterwards.
+  // In case of an external file, reading the config file already converted it as well, and
+  // an additional attempt would lead to errors.
+  if (isReferencedExternalFile) {
+    config.jsx = config.jsx || tsc.JsxEmit.React;
+    config.module = config.module || tsc.ModuleKind.CommonJS;
+    if (config.allowSyntheticDefaultImports && !skipBabel) {
+      // compile ts to es2015 and transform with babel afterwards
+      config.module = tsc.ModuleKind.ES2015;
+    }
+    return config;
+  } else {
+    config.jsx = config.jsx || 'react';
+    config.module = config.module || 'commmonjs';
+    if (config.allowSyntheticDefaultImports && !skipBabel) {
+      // compile ts to es2015 and transform with babel afterwards
+      config.module = 'es2015';
+    }
+    const converted = tsc.convertCompilerOptionsFromJson(config, undefined);
+    if (converted.errors && converted.errors.length > 0) {
+      const formattedErrors = formatTscParserErrors(converted.errors);
+      throw new Error(`Some errors occurred while attempting to convert ${JSON.stringify(config)}: ${formattedErrors}`);
+    }
+    return converted.options;
   }
-  return tsc.convertCompilerOptionsFromJson(config, undefined).options;
 }
