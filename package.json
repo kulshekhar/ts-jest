@@ -88,6 +88,6 @@
     "rimraf": "latest",
     "ts-jest": "latest",
     "tslint": "next",
-    "typescript": "latest"
+    "typescript": "^2.4.1"
   }
 }
