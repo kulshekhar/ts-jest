@@ -1,0 +1,17 @@
+{
+  "globals": {
+    "__TS_CONFIG__": "tsconfig.allowdefaultimports.json",
+    "ts-jest": {
+      "skipBabel": true
+    }
+  },
+  "transform": {
+    ".(ts|tsx)": "../../preprocessor.js"
+  },
+  "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
+  "moduleFileExtensions": [
+    "ts",
+    "tsx",
+    "js"
+  ]
+}

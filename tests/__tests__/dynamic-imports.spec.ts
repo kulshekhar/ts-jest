@@ -10,4 +10,12 @@ describe('Dynamic imports', () => {
 
   });
 
+  it('should work with synthetic default imports', () => {
+
+    const result = runJest('../dynamic-imports', ['--no-cache', '--config', 'jest.allowdefaultimports.json']);
+
+    expect(result.status).toBe(0);
+
+  });
+
 });
