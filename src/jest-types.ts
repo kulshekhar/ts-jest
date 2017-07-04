@@ -16,14 +16,16 @@ export type HasteConfig = {
 };
 
 export interface PostProcessorOptions {
-  plugins? : any[];
+  plugins?: any[];
   presets?: any[];
-  cacheDirectory? : string;
+  cacheDirectory?: string;
   filename?: string;
+  retainLines?: boolean;
+  sourceMaps?: string;
 }
 
 export interface PostProcessHook {
-	(src: string, filename: string, config: JestConfig, transformOptions: TransformOptions) : string;
+  (src: string, filename: string, config: JestConfig, transformOptions: TransformOptions): string;
 }
 
 export type JestConfig = Partial<FullJestConfig>;
