@@ -7,26 +7,24 @@ import { TransformOptions, Path, JestConfig } from './jest-types';
 import { getPostProcessHook } from './postprocess';
 import * as pkgDir from 'pkg-dir';
 
-
-let tsJestConfig;
-
 export function process(
     src: string,
     path: Path,
     config: JestConfig,
     transformOptions: TransformOptions = { instrument: false }) {
-
-    if (tsJestConfig === undefined) {
-        tsJestConfig = getTSJestConfig(config.globals);
-    }
+  
+    const compilerOptions = getTSConfig(config.globals, transformOptions.instrument);
+    const tsJestConfig = getTSJestConfig(config.globals);
+    
     const root = pkgDir.sync();
     // transformOptions.instrument is a proxy for collectCoverage
     // https://github.com/kulshekhar/ts-jest/issues/201#issuecomment-300572902
-    const compilerOptions = getTSConfig(config.globals, transformOptions.instrument);
 
     const isTsFile = path.endsWith('.ts') || path.endsWith('.tsx');
     const isJsFile = path.endsWith('.js') || path.endsWith('.jsx');
     const isHtmlFile = path.endsWith('.html');
+    
+    
     let postHook = getPostProcessHook(compilerOptions, config, tsJestConfig);
 
     if (isHtmlFile && config.globals.__TRANSFORM_HTML__) {

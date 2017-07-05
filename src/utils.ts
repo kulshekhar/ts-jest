@@ -2,6 +2,7 @@ import * as tsc from 'typescript';
 import * as path from 'path';
 import * as fs from 'fs';
 import {normalize} from 'jest-config';
+import { TsJestConfig } from './jest-types';
 const setFromArgv = require('jest-config/build/setFromArgv');
 // import * as setFromArgv from 'jest-config/build/setfromArgv';
 
@@ -62,7 +63,7 @@ export function getJestConfig(root) {
   return Object.freeze(setFromArgv(rawConfig, argv));
 }
 
-export function getTSJestConfig(globals) {
+export function getTSJestConfig(globals: any) : TsJestConfig {
   return (globals && globals['ts-jest']) ? globals['ts-jest'] : {};
 }
 

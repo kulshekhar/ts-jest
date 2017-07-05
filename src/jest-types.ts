@@ -1,12 +1,13 @@
-export type TransformOptions = {
+import { TransformOptions as BabelTransformOpts } from 'babel-core';
+export interface TransformOptions {
   instrument: boolean;
-};
+}
 
 export type Path = string;
 
 export type Glob = string;
 
-export type ConfigGlobals = { [key: string]: any };
+export type ConfigGlobals = { [key: string]: any};
 
 export type HasteConfig = {
   defaultPlatform?: string | null;
@@ -15,13 +16,9 @@ export type HasteConfig = {
   providesModuleNodeModules: Array<string>;
 };
 
-export interface PostProcessorOptions {
-  plugins?: any[];
-  presets?: any[];
+
+export interface BabelTransformOptions extends BabelTransformOpts{
   cacheDirectory?: string;
-  filename?: string;
-  retainLines?: boolean;
-  sourceMaps?: string;
 }
 
 export interface PostProcessHook {
@@ -65,3 +62,8 @@ export type FullJestConfig = {
   transformIgnorePatterns: Array<Glob>;
   unmockedModulePathPatterns: Array<string> | null;
 };
+
+export interface TsJestConfig {
+	skipBabel?: boolean;
+	useBabelrc?: boolean;
+}

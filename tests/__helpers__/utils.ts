@@ -1,8 +1,5 @@
-import { } from 'jest';
-import { } from 'node';
 import * as fs from 'fs';
 // from: https://github.com/facebook/jest/blob/master/integration_tests/utils.js
-import {sync} from 'cross-spawn';
 import {sync as spawnSync} from 'cross-spawn';
 import * as path from 'path';
 
