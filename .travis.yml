@@ -4,7 +4,7 @@ node_js:
   - "6"
   - "4"
 before_install:
-  - npm i -g npm@latest
+  - npm i -g npm@latest tslint
   - sudo sysctl fs.inotify.max_user_watches=524288
 
 sudo: required
