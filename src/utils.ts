@@ -2,7 +2,6 @@ import * as tsc from 'typescript';
 import * as path from 'path';
 import * as fs from 'fs';
 import {normalize} from 'jest-config';
-import { TsJestConfig } from './jest-types';
 const setFromArgv = require('jest-config/build/setFromArgv');
 // import * as setFromArgv from 'jest-config/build/setfromArgv';
 
@@ -63,7 +62,7 @@ export function getJestConfig(root) {
   return Object.freeze(setFromArgv(rawConfig, argv));
 }
 
-export function getTSJestConfig(globals: any) : TsJestConfig {
+export function getTSJestConfig(globals) {
   return (globals && globals['ts-jest']) ? globals['ts-jest'] : {};
 }
 
@@ -100,8 +99,24 @@ function readCompilerOptions(configPath: string) {
   return parsedConfig.options;
 }
 
+export function getTSConfigOptionFromConfig(globals: any) {
+  if (!globals) return 'tsconfig.json';
+  
+  const tsJestConfig = getTSJestConfig(globals);
+
+  if (('__TS_CONFIG__' in globals) && globals.__TS_CONFIG__) {
+    return globals.__TS_CONFIG__;
+  } else if ('tsConfigFile' in tsJestConfig && tsJestConfig.tsConfigFile) {
+    return tsJestConfig.tsConfigFile;
+  } else if ('tsConfig' in tsJestConfig && tsJestConfig.tsConfig) {
+    return tsJestConfig.tsConfig;
+  }
+  
+  return 'tsconfig.json';
+}
+
 export function getTSConfig(globals, collectCoverage: boolean = false) {
-  let config = (globals && globals.__TS_CONFIG__) ? globals.__TS_CONFIG__ : 'tsconfig.json';
+  let config = getTSConfigOptionFromConfig(globals);
   const skipBabel = getTSJestConfig(globals).skipBabel;
   const isReferencedExternalFile = typeof config === 'string';
 
