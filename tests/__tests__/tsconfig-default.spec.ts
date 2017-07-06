@@ -47,50 +47,115 @@ describe('get default ts config', () => {
     });
   });
 
-  it('should be same results for null/undefined/etc.', () => {
-    const result = getTSConfig(null);
-    const resultUndefinedParam = getTSConfig(undefined);
-    const resultNullParam = getTSConfig(null);
-    const resultEmptyParam = getTSConfig({});
-    const resultUndefinedContent = getTSConfig({ __TS_CONFIG__: undefined });
-    const resultNullContent = getTSConfig({ __TS_CONFIG__: null });
 
-    expect(result).toEqual(resultUndefinedParam);
-    expect(result).toEqual(resultNullParam);
-    expect(result).toEqual(resultEmptyParam);
-    expect(result).toEqual(resultUndefinedContent);
-    expect(result).toEqual(resultNullContent);
-  });
+  describe('old behaviour (__TS_CONFIG__)', () => {
 
-  it('should not change the module if it is loaded from the Jest config global', () => {
-    const config = getTSConfig({
-      '__TS_CONFIG__': {
-        'module': 'es2015'
-      }
+    it('should be same results for null/undefined/etc.', () => {
+      const result = getTSConfig(null);
+      const resultUndefinedParam = getTSConfig(undefined);
+      const resultNullParam = getTSConfig(null);
+      const resultEmptyParam = getTSConfig({});
+      const resultUndefinedContent = getTSConfig({ __TS_CONFIG__: undefined });
+      const resultNullContent = getTSConfig({ __TS_CONFIG__: null });
+
+      expect(result).toEqual(resultUndefinedParam);
+      expect(result).toEqual(resultNullParam);
+      expect(result).toEqual(resultEmptyParam);
+      expect(result).toEqual(resultUndefinedContent);
+      expect(result).toEqual(resultNullContent);
     });
 
-    expect(config.module).toBe(ts.ModuleKind.ES2015);
-  });
+    it('should not change the module if it is loaded from the Jest config global', () => {
+      const config = getTSConfig({
+        '__TS_CONFIG__': {
+          'module': 'es2015'
+        }
+      });
 
-  it('should not change the module if it is loaded from a non-default config file', () => {
-    const config = getTSConfig({
-      '__TS_CONFIG__': 'tsconfig-module/custom-config.json'
+      expect(config.module).toBe(ts.ModuleKind.ES2015);
     });
 
-    expect(config.module).toBe(ts.ModuleKind.ES2015);
-  });
+    it('should not change the module if it is loaded from a non-default config file', () => {
+      const config = getTSConfig({
+        '__TS_CONFIG__': 'tsconfig-module/custom-config.json'
+      });
 
-  it('should set the module to CommonJS if it is not, when loading from the default tsconfig file', () => {
-
-    // set the base directory such that we can use 'tsconfig.json' as the
-    // config file name instead of 'dir/tsconfig.json'
-    (path as any as MockedPath).__setBaseDir('./tests/tsconfig-test/tsconfig-module');
-
-    const config = getTSConfig({
-      '__TS_CONFIG__': 'tsconfig.json'
+      expect(config.module).toBe(ts.ModuleKind.ES2015);
     });
 
-    expect(config.module).toBe(ts.ModuleKind.CommonJS);
+    it('should set the module to CommonJS if it is not, when loading from the default tsconfig file', () => {
+
+      // set the base directory such that we can use 'tsconfig.json' as the
+      // config file name instead of 'dir/tsconfig.json'
+      (path as any as MockedPath).__setBaseDir('./tests/tsconfig-test/tsconfig-module');
+
+      const config = getTSConfig({
+        '__TS_CONFIG__': 'tsconfig.json'
+      });
+
+      expect(config.module).toBe(ts.ModuleKind.CommonJS);
+    });
+
+  });
+
+  describe('new behaviour (tsConfigFile & tsConfig)', () => {
+
+    it('should be same results for null/undefined/etc.', () => {
+      const result = getTSConfig(null);
+      const resultUndefinedParam = getTSConfig(undefined);
+      const resultNullParam = getTSConfig(null);
+      const resultEmptyParam = getTSConfig({});
+      const resultUndefinedContentFile = getTSConfig({ 'ts-jest': { tsConfigFile: undefined }});
+      const resultUndefinedContent = getTSConfig({ 'ts-jest': { tsConfig: undefined }});
+      const resultNullContentFile = getTSConfig({ 'ts-jest': { tsConfigFile: null }});
+      const resultNullContent = getTSConfig({ 'ts-jest': { tsConfig: null }});
+
+      expect(result).toEqual(resultUndefinedParam);
+      expect(result).toEqual(resultNullParam);
+      expect(result).toEqual(resultEmptyParam);
+      expect(result).toEqual(resultUndefinedContentFile);
+      expect(result).toEqual(resultUndefinedContent);
+      expect(result).toEqual(resultNullContentFile);
+      expect(result).toEqual(resultNullContent);
+    });
+
+    it('should not change the module if it is loaded from the Jest config global', () => {
+      const config = getTSConfig({
+        'ts-jest': {
+          tsConfig: {
+            'module': 'es2015'
+          }
+        }
+      });
+
+      expect(config.module).toBe(ts.ModuleKind.ES2015);
+    });
+
+    it('should not change the module if it is loaded from a non-default config file', () => {
+      const config = getTSConfig({
+        'ts-jest': {
+          'tsConfigFile': 'tsconfig-module/custom-config.json'
+        }
+      });
+
+      expect(config.module).toBe(ts.ModuleKind.ES2015);
+    });
+
+    it('should set the module to CommonJS if it is not, when loading from the default tsconfig file', () => {
+
+      // set the base directory such that we can use 'tsconfig.json' as the
+      // config file name instead of 'dir/tsconfig.json'
+      (path as any as MockedPath).__setBaseDir('./tests/tsconfig-test/tsconfig-module');
+
+      const config = getTSConfig({
+        'ts-jest': {
+          'tsConfigFile': 'tsconfig.json'
+        }
+      });
+
+      expect(config.module).toBe(ts.ModuleKind.CommonJS);
+    });
+
   });
 
   it('should correctly read the ts-jest object within jest settings', () => {

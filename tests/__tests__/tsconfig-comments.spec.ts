@@ -33,22 +33,53 @@ describe('parse tsconfig with comments', () => {
 
   });
 
-  it('one config file should extend the other', () => {
-    const config = getTSConfig({
-      __TS_CONFIG__: 'allows-comments.json'
+  describe('old behaviour (__TS_CONFIG__)', () => {
+
+    it('one config file should extend the other', () => {
+      const config = getTSConfig({
+        __TS_CONFIG__: 'allows-comments.json'
+      });
+
+      // allows-comments.json does not contain a "pretty" field,
+      // while allows-comments2.json does. Default value would be "false".
+      expect(config.pretty).toEqual(true);
     });
 
-    // allows-comments.json does not contain a "pretty" field,
-    // while allows-comments2.json does. Default value would be "false".
-    expect(config.pretty).toEqual(true);
-  });
+    it('should correctly read allow-comments.json', () => {
+      expect(() => {
+        getTSConfig({
+          '__TS_CONFIG__': 'allows-comments.json'
+        });
+      }).not.toThrow();
+    });
 
-  it('should correctly read allow-comments.json', () => {
-    expect(() => {
-      getTSConfig({
-        '__TS_CONFIG__': 'allows-comments.json'
+  });
+  
+
+  describe('new behaviour (tsConfigFile & tsConfig)', () => {
+
+    it('one config file should extend the other', () => {
+      const config = getTSConfig({
+        'ts-jest': {
+          tsConfigFile: 'allows-comments.json'
+        }
       });
-    }).not.toThrow();
+
+      // allows-comments.json does not contain a "pretty" field,
+      // while allows-comments2.json does. Default value would be "false".
+      expect(config.pretty).toEqual(true);
+    });
+
+    it('should correctly read allow-comments.json', () => {
+      expect(() => {
+        getTSConfig({
+          'ts-jest': {
+            tsConfigFile: 'allows-comments.json'
+          }
+        });
+      }).not.toThrow();
+    });
+
   });
 
 });
