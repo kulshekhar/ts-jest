@@ -6,12 +6,12 @@ export function defaultRetrieveFileHandler(path) {
   path = path.trim();
 
   // This was removed because it seems that we can't use cache while expecting correct results
-  // TODO: check correctness and performance with file caching 
+  // TODO: check correctness and performance with file caching
   // if (path in fileContentsCache) {
   //   return fileContentsCache[path];
   // }
 
-  var contents: string;
+  let contents: string;
   try {
     contents = fs.readFileSync(path, 'utf8');
     contents = transpileIfTypescript(path, contents);

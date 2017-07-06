@@ -1,11 +1,11 @@
-import * as fs from 'fs-extra';
 import * as crypto from 'crypto';
-import * as tsc from 'typescript';
-import { getTSConfig, getTSJestConfig } from './utils';
+import * as fs from 'fs-extra';
 import * as nodepath from 'path';
-import { TransformOptions, Path, JestConfig } from './jest-types';
-import { getPostProcessHook } from './postprocess';
 import * as pkgDir from 'pkg-dir';
+import * as tsc from 'typescript';
+import { JestConfig, Path, TransformOptions } from './jest-types';
+import { getPostProcessHook } from './postprocess';
+import { getTSConfig, getTSJestConfig } from './utils';
 
 export function process(
     src: string,
@@ -24,8 +24,7 @@ export function process(
     const isJsFile = path.endsWith('.js') || path.endsWith('.jsx');
     const isHtmlFile = path.endsWith('.html');
 
-
-    let postHook = getPostProcessHook(compilerOptions, config, tsJestConfig);
+    const postHook = getPostProcessHook(compilerOptions, config, tsJestConfig);
 
     if (isHtmlFile && config.globals.__TRANSFORM_HTML__) {
         src = 'module.exports=`' + src + '`;';
@@ -39,16 +38,16 @@ export function process(
         const tsTranspiled = tsc.transpileModule(
             src,
             {
-                compilerOptions: compilerOptions,
-                fileName: path
-            }
+                compilerOptions,
+                fileName: path,
+            },
         );
 
         const outputText = postHook(
             tsTranspiled.outputText,
             path,
             config,
-            transformOptions
+            transformOptions,
         );
 
         // strip root part from path
@@ -57,9 +56,13 @@ export function process(
         // see https://github.com/kulshekhar/ts-jest/issues/158
         path = path.startsWith(root) ? path.substr(root.length) : path;
 
-        //store transpiled code contains source map into cache, except test cases
+        // store transpiled code contains source map into cache, except test cases
         if (!config.testRegex || !path.match(config.testRegex)) {
-            fs.outputFileSync(nodepath.join(config.cacheDirectory, '/ts-jest/', new Buffer(path).toString('base64')), outputText);
+            const outputFilePath = nodepath.join(
+                config.cacheDirectory, '/ts-jest/',
+                new Buffer(path).toString('base64'));
+
+            fs.outputFileSync(outputFilePath, outputText);
         }
 
         const start = outputText.length > 12 ? outputText.substr(1, 10) : '';
