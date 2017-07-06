@@ -56,9 +56,13 @@ export function process(
         // see https://github.com/kulshekhar/ts-jest/issues/158
         path = path.startsWith(root) ? path.substr(root.length) : path;
 
-        //store transpiled code contains source map into cache, except test cases
+        // store transpiled code contains source map into cache, except test cases
         if (!config.testRegex || !path.match(config.testRegex)) {
-            fs.outputFileSync(nodepath.join(config.cacheDirectory, '/ts-jest/', new Buffer(path).toString('base64')), outputText);
+            const outputFilePath = nodepath.join(
+                config.cacheDirectory, '/ts-jest/',
+                new Buffer(path).toString('base64'));
+
+            fs.outputFileSync(outputFilePath, outputText);
         }
 
         const start = outputText.length > 12 ? outputText.substr(1, 10) : '';

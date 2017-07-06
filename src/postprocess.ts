@@ -6,7 +6,14 @@ import * as babel from 'babel-core';
 import istanbulPlugin from 'babel-plugin-istanbul';
 import * as jestPreset from 'babel-preset-jest';
 import { CompilerOptions } from 'typescript/lib/typescript';
-import { BabelTransformOptions, JestConfig, PostProcessHook, TransformOptions, TsJestConfig, FullJestConfig } from './jest-types';
+import {
+    BabelTransformOptions,
+    FullJestConfig,
+    JestConfig,
+    PostProcessHook,
+    TransformOptions,
+    TsJestConfig,
+} from './jest-types';
 
 function createBabelTransformer(options: BabelTransformOptions) {
     options = {
@@ -23,10 +30,12 @@ function createBabelTransformer(options: BabelTransformOptions) {
     delete options.cacheDirectory;
     delete options.filename;
 
-    return (src: string,
+    return (
+        src: string,
         filename: string,
         config: JestConfig,
         transformOptions: TransformOptions): string => {
+
         const theseOptions = Object.assign({ filename }, options);
         if (transformOptions && transformOptions.instrument) {
             theseOptions.auxiliaryCommentBefore = ' istanbul ignore next ';
@@ -47,20 +56,24 @@ function createBabelTransformer(options: BabelTransformOptions) {
     };
 }
 
-export const getPostProcessHook = (tsCompilerOptions: CompilerOptions, jestConfig: JestConfig, tsJestConfig: TsJestConfig): PostProcessHook => {
+export const getPostProcessHook = (
+    tsCompilerOptions: CompilerOptions,
+    jestConfig: JestConfig,
+    tsJestConfig: TsJestConfig): PostProcessHook => {
+
     if (tsJestConfig.skipBabel) {
-        return (src) => src; //Identity function
+        return (src) => src; // Identity function
     }
 
     const plugins = [];
-    //If we're not skipping babel
+    // If we're not skipping babel
     if (tsCompilerOptions.allowSyntheticDefaultImports) {
         plugins.push('transform-es2015-modules-commonjs');
     }
 
     return createBabelTransformer({
-        presets: [],
-        plugins,
         babelrc: tsJestConfig.useBabelrc || false,
+        plugins,
+        presets: [],
     });
 };

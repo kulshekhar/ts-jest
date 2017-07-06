@@ -3,8 +3,10 @@ import { normalize } from 'jest-config';
 import * as path from 'path';
 import * as tsc from 'typescript';
 import { TsJestConfig } from './jest-types';
+/* tslint:disable */
 const setFromArgv = require('jest-config/build/setFromArgv');
 // import * as setFromArgv from 'jest-config/build/setfromArgv';
+/* tslint:enable */
 
 function parseConfig(argv) {
   if (argv.config && typeof argv.config === 'string') {
@@ -25,7 +27,9 @@ function loadJestConfigFromFile(filePath, argv) {
 }
 
 function loadJestConfigFromPackage(filePath, argv) {
+  /* tslint:disable */
   const R_OK = fs.constants && fs.constants.R_OK || fs['R_OK'] as number;
+  /* tslint:enable */
   try {
     fs.accessSync(filePath, R_OK);
   } catch (e) {
@@ -75,7 +79,8 @@ function readCompilerOptions(configPath: string) {
   // First step: Let tsc pick up the config.
   const loaded = tsc.readConfigFile(configPath, (file) => {
     const read = tsc.sys.readFile(file);
-    // See https://github.com/Microsoft/TypeScript/blob/a757e8428410c2196886776785c16f8f0c2a62d9/src/compiler/sys.ts#L203 :
+    // See
+    // https://github.com/Microsoft/TypeScript/blob/a757e8428410c2196886776785c16f8f0c2a62d9/src/compiler/sys.ts#L203 :
     // `readFile` returns `undefined` in case the file does not exist!
     if (!read) {
       throw new Error(`ENOENT: no such file or directory, open '${configPath}'`);
@@ -124,7 +129,7 @@ export function getTSConfig(globals, collectCoverage: boolean = false) {
     config.inlineSourceMap = true;
   }
 
-  //inline source with source map for remapping coverage
+  // inline source with source map for remapping coverage
   if (collectCoverage) {
     delete config.sourceMap;
 

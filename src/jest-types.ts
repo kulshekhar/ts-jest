@@ -1,4 +1,5 @@
 import { TransformOptions as BabelTransformOpts } from 'babel-core';
+
 export interface TransformOptions {
   instrument: boolean;
 }
@@ -20,7 +21,11 @@ export interface BabelTransformOptions extends BabelTransformOpts {
   cacheDirectory?: string;
 }
 
-export type PostProcessHook = (src: string, filename: string, config: JestConfig, transformOptions: TransformOptions) => string;
+export type PostProcessHook = (
+  src: string,
+  filename: string,
+  config: JestConfig,
+  transformOptions: TransformOptions) => string;
 
 export type JestConfig = Partial<FullJestConfig>;
 
