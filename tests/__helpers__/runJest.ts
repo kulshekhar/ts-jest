@@ -11,7 +11,7 @@ const JEST_PATH = 'jest';
 // return the result of the spawned proccess:
 //  [ 'status', 'signal', 'output', 'pid', 'stdout', 'stderr',
 //    'envPairs', 'options', 'args', 'file' ]
-export default function runJest(dir, args) {
+export default function runJest(dir: string, args: string[]) {
   const isRelative = dir[0] !== '/';
 
   if (isRelative) {
@@ -27,6 +27,7 @@ export default function runJest(dir, args) {
       the global package.json, which will send Jest into infinite loop.
     `);
   }
+  
 
   const result = spawnSync(JEST_PATH, args || [], {
     cwd: dir,

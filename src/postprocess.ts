@@ -3,12 +3,12 @@
  * https://github.com/facebook/jest/blob/9b157c3a7c325c3971b2aabbe4c8ab4ce0b0c56d/packages/babel-jest/src/index.js
  */
 import * as jestPreset from 'babel-preset-jest';
-import { JestConfig, PostProcessHook, PostProcessorOptions, TransformOptions } from './jest-types';
+import { BabelTransformOptions, JestConfig, PostProcessHook, TransformOptions, TsJestConfig } from './jest-types';
 import * as babel from 'babel-core';
 import { CompilerOptions } from 'typescript/lib/typescript';
 import istanbulPlugin from 'babel-plugin-istanbul';
 
-function createBabelTransformer(options: PostProcessorOptions) {
+function createBabelTransformer(options: BabelTransformOptions) {
     options = {
         ...options,
         plugins: (options && options.plugins) || [],
@@ -22,7 +22,7 @@ function createBabelTransformer(options: PostProcessorOptions) {
     };
     delete options.cacheDirectory;
     delete options.filename;
-
+    
     return (src: string,
         filename: string,
         config: JestConfig,
@@ -47,7 +47,7 @@ function createBabelTransformer(options: PostProcessorOptions) {
     };
 }
 
-export const getPostProcessHook = (tsCompilerOptions: CompilerOptions, jestConfig: JestConfig, tsJestConfig: any): PostProcessHook => {
+export const getPostProcessHook = (tsCompilerOptions: CompilerOptions, jestConfig: JestConfig, tsJestConfig: TsJestConfig): PostProcessHook => {
     if (tsJestConfig.skipBabel) {
         return (src) => src; //Identity function
     }
@@ -62,5 +62,6 @@ export const getPostProcessHook = (tsCompilerOptions: CompilerOptions, jestConfi
     return createBabelTransformer({
         presets: [],
         plugins: plugins,
+        babelrc: tsJestConfig.useBabelrc || false
     });
 };

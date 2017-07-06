@@ -1,4 +1,5 @@
-export type TransformOptions = {
+import { TransformOptions as BabelTransformOpts } from 'babel-core';
+export interface TransformOptions {
   instrument: boolean;
 };
 
@@ -15,18 +16,14 @@ export type HasteConfig = {
   providesModuleNodeModules: Array<string>;
 };
 
-export interface PostProcessorOptions {
-  plugins?: any[];
-  presets?: any[];
+
+export interface BabelTransformOptions extends BabelTransformOpts {
   cacheDirectory?: string;
-  filename?: string;
-  retainLines?: boolean;
-  sourceMaps?: string;
-}
+};
 
 export interface PostProcessHook {
   (src: string, filename: string, config: JestConfig, transformOptions: TransformOptions): string;
-}
+};
 
 export type JestConfig = Partial<FullJestConfig>;
 
@@ -65,3 +62,9 @@ export type FullJestConfig = {
   transformIgnorePatterns: Array<Glob>;
   unmockedModulePathPatterns: Array<string> | null;
 };
+
+export interface TsJestConfig {
+  skipBabel?: boolean;
+  useBabelrc?: boolean;
+};
+
