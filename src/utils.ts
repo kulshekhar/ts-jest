@@ -68,11 +68,7 @@ export function getJestConfig(root) {
   return Object.freeze(setFromArgv(rawConfig, argv));
 }
 
-<<<<<<< HEAD
-export function getTSJestConfig(globals) {
-=======
 export function getTSJestConfig(globals: any): TsJestConfig {
->>>>>>> f7b8313
   return (globals && globals['ts-jest']) ? globals['ts-jest'] : {};
 }
 
