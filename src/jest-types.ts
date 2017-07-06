@@ -1,13 +1,13 @@
 import { TransformOptions as BabelTransformOpts } from 'babel-core';
 export interface TransformOptions {
   instrument: boolean;
-}
+};
 
 export type Path = string;
 
 export type Glob = string;
 
-export type ConfigGlobals = { [key: string]: any};
+export type ConfigGlobals = { [key: string]: any };
 
 export type HasteConfig = {
   defaultPlatform?: string | null;
@@ -17,7 +17,7 @@ export type HasteConfig = {
 };
 
 
-export interface BabelTransformOptions extends BabelTransformOpts{
+export interface BabelTransformOptions extends BabelTransformOpts {
   cacheDirectory?: string;
 };
 
@@ -64,7 +64,7 @@ export type FullJestConfig = {
 };
 
 export interface TsJestConfig {
-	skipBabel?: boolean;
-	useBabelrc?: boolean;
+  skipBabel?: boolean;
+  useBabelrc?: boolean;
 };
-                          
+
