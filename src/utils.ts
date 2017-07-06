@@ -105,6 +105,7 @@ export function getTSConfigOptionFromConfig(globals: any) {
   const tsJestConfig = getTSJestConfig(globals);
 
   if (('__TS_CONFIG__' in globals) && globals.__TS_CONFIG__) {
+    console.warn('Using globals > __TS_CONFIG__ option for setting TS config is deprecated. Please set config using this option: globals > ts-jest > tsConfig (object) or tsConfigFile (string). More information at https://github.com/kulshekhar/ts-jest#tsconfig');
     return globals.__TS_CONFIG__;
   } else if ('tsConfigFile' in tsJestConfig && tsJestConfig.tsConfigFile) {
     return tsJestConfig.tsConfigFile;
