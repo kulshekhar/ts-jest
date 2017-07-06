@@ -115,28 +115,13 @@ By default this package will try to locate `tsconfig.json` and use its compiler 
 
 You can override this behaviour by pointing ts-jest to a custom TypeScript configuration file.
 You can do this by setting the `tsConfigFile` option in your global variables under the `ts-jest` key to path of the
-custom configuration file (relative to the project's root directory) (__TS_CONFIG__ is deprecated)
+custom configuration file (relative to the project's root directory) *__TS_CONFIG__ is deprecated*
 ```json
 {
   "jest": {
     "globals": {
       "ts-jest": {
         "tsConfigFile": "my-tsconfig.json"
-      }
-    }
-  }
-}
-```
-Or even declare options for `tsc` instead of using separate config, like this:
-```json
-{
-  "jest": {
-    "globals": {
-      "ts-jest": {
-        "tsConfig": {
-          "module": "commonjs",
-          "jsx": "react"
-        }
       }
     }
   }
