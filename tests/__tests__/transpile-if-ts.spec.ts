@@ -11,9 +11,15 @@ describe('transpileIfTypescript', () => {
         expect(transpileIfTypescript('some.tsx', ts)).toMatch('var x = "anything";');
     });
 
+    it('should be possible to pass a custom config (Deprecated)', () => {
+        const customTsConfigFile = 'not-existant.json';
+        const customConfig = { __TS_CONFIG__: customTsConfigFile };
+        expect(() => transpileIfTypescript('some.ts', '', customConfig)).toThrow(new RegExp(customTsConfigFile));
+    });
+
     it('should be possible to pass a custom config', () => {
         const customTsConfigFile = 'not-existant.json';
-        const customConfig = { __TS_CONFIG__: customTsConfigFile};
+        const customConfig = { 'ts-jest': { tsConfigFile: customTsConfigFile }};
         expect(() => transpileIfTypescript('some.ts', '', customConfig)).toThrow(new RegExp(customTsConfigFile));
     });
 });
