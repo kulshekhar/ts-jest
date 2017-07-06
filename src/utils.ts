@@ -116,8 +116,6 @@ export function getTSConfigOptionFromConfig(globals: any) {
     return globals.__TS_CONFIG__;
   } else if ('tsConfigFile' in tsJestConfig && tsJestConfig.tsConfigFile) {
     return tsJestConfig.tsConfigFile;
-  } else if ('tsConfig' in tsJestConfig && tsJestConfig.tsConfig) {
-    return tsJestConfig.tsConfig;
   }
   
   return 'tsconfig.json';
@@ -127,7 +125,7 @@ export function mockGlobalTSConfigSchema(globals: any) {
   const config = getTSConfigOptionFromConfig(globals);
   return typeof config === 'string' ?
     { 'ts-jest': { tsConfigFile: config }} :
-    { 'ts-jest': { tsConfig: config }};
+    { __TS_CONFIG__: config }};
 }
 
 export function getTSConfig(globals, collectCoverage: boolean = false) {
