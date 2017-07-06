@@ -106,29 +106,13 @@ describe('get default ts config', () => {
       const resultNullParam = getTSConfig(null);
       const resultEmptyParam = getTSConfig({});
       const resultUndefinedContentFile = getTSConfig({ 'ts-jest': { tsConfigFile: undefined }});
-      const resultUndefinedContent = getTSConfig({ 'ts-jest': { tsConfig: undefined }});
       const resultNullContentFile = getTSConfig({ 'ts-jest': { tsConfigFile: null }});
-      const resultNullContent = getTSConfig({ 'ts-jest': { tsConfig: null }});
 
       expect(result).toEqual(resultUndefinedParam);
       expect(result).toEqual(resultNullParam);
       expect(result).toEqual(resultEmptyParam);
       expect(result).toEqual(resultUndefinedContentFile);
-      expect(result).toEqual(resultUndefinedContent);
       expect(result).toEqual(resultNullContentFile);
-      expect(result).toEqual(resultNullContent);
-    });
-
-    it('should not change the module if it is loaded from the Jest config global', () => {
-      const config = getTSConfig({
-        'ts-jest': {
-          tsConfig: {
-            'module': 'es2015'
-          }
-        }
-      });
-
-      expect(config.module).toBe(ts.ModuleKind.ES2015);
     });
 
     it('should not change the module if it is loaded from a non-default config file', () => {
