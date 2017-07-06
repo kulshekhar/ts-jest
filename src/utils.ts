@@ -115,6 +115,13 @@ export function getTSConfigOptionFromConfig(globals: any) {
   return 'tsconfig.json';
 }
 
+export function mockGlobalTSConfigSchema(globals: any) {
+  const config = getTSConfigOptionFromConfig(globals);
+  return typeof config === 'string' ?
+    { 'ts-jest': { tsConfigFile: config }} :
+    { 'ts-jest': { tsConfig: config }};
+}
+
 export function getTSConfig(globals, collectCoverage: boolean = false) {
   let config = getTSConfigOptionFromConfig(globals);
   const skipBabel = getTSJestConfig(globals).skipBabel;
