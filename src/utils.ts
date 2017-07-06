@@ -1,7 +1,7 @@
-import * as tsc from 'typescript';
-import * as path from 'path';
 import * as fs from 'fs';
-import {normalize} from 'jest-config';
+import { normalize } from 'jest-config';
+import * as path from 'path';
+import * as tsc from 'typescript';
 import { TsJestConfig } from './jest-types';
 const setFromArgv = require('jest-config/build/setFromArgv');
 // import * as setFromArgv from 'jest-config/build/setfromArgv';
@@ -25,7 +25,7 @@ function loadJestConfigFromFile(filePath, argv) {
 }
 
 function loadJestConfigFromPackage(filePath, argv) {
-  const R_OK = fs.constants && fs.constants.R_OK || <number>fs['R_OK'];
+  const R_OK = fs.constants && fs.constants.R_OK || fs['R_OK'] as number;
   try {
     fs.accessSync(filePath, R_OK);
   } catch (e) {
@@ -63,17 +63,17 @@ export function getJestConfig(root) {
   return Object.freeze(setFromArgv(rawConfig, argv));
 }
 
-export function getTSJestConfig(globals: any) : TsJestConfig {
+export function getTSJestConfig(globals: any): TsJestConfig {
   return (globals && globals['ts-jest']) ? globals['ts-jest'] : {};
 }
 
 function formatTscParserErrors(errors: tsc.Diagnostic[]) {
-  return errors.map(s => JSON.stringify(s, null, 4)).join('\n');
+  return errors.map((s) => JSON.stringify(s, null, 4)).join('\n');
 }
 
 function readCompilerOptions(configPath: string) {
   // First step: Let tsc pick up the config.
-  const loaded = tsc.readConfigFile(configPath, file => {
+  const loaded = tsc.readConfigFile(configPath, (file) => {
     const read = tsc.sys.readFile(file);
     // See https://github.com/Microsoft/TypeScript/blob/a757e8428410c2196886776785c16f8f0c2a62d9/src/compiler/sys.ts#L203 :
     // `readFile` returns `undefined` in case the file does not exist!
