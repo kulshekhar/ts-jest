@@ -9,8 +9,9 @@
     "build:watch": "tsc -p . -w",
     "clean": "rimraf dist/**/* && rimraf tests/simple/coverage/**/* && rimraf tests/simple-async/coverage/**/*",
     "clean-build": "npm run clean && npm run build",
-    "pretest": "npm run clean-build",
+    "pretest": "npm run tslint && npm run clean-build",
     "test": "node scripts/tests.js",
+    "tslint": "tslint src/*.ts",
     "doc": "doctoc .",
     "prepublish": "npm run clean-build"
   },
