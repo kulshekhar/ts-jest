@@ -3,8 +3,8 @@ jest.mock('path');
 
 import * as ts from 'typescript';
 import {getTSConfig} from '../../src/utils';
+import runJest from '../__helpers__/runJest';
 import * as path from 'path';
-
 
 describe('get default ts config', () => {
 
@@ -47,8 +47,14 @@ describe('get default ts config', () => {
     });
   });
 
-
   describe('old behaviour (__TS_CONFIG__)', () => {
+
+    it('should show a warning when using deprecated option', () => {
+      const output = runJest('../deprecated-tsconfig', ['--no-cache']);
+      expect(output.stderr).toContain(`Using globals > __TS_CONFIG__ option for setting TS config is deprecated.
+Please set config using this option:\nglobals > ts-jest > tsConfigFile (string).
+More information at https://github.com/kulshekhar/ts-jest#tsconfig`);
+    });
 
     it('should be same results for null/undefined/etc.', () => {
       const result = getTSConfig(null);
@@ -67,9 +73,9 @@ describe('get default ts config', () => {
 
     it('should not change the module if it is loaded from the Jest config global', () => {
       const config = getTSConfig({
-        '__TS_CONFIG__': {
-          'module': 'es2015'
-        }
+        __TS_CONFIG__: {
+          module: 'es2015',
+        },
       });
 
       expect(config.module).toBe(ts.ModuleKind.ES2015);
