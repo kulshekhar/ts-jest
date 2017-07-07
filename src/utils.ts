@@ -4,6 +4,7 @@ import * as path from 'path';
 import * as tsc from 'typescript';
 import { TsJestConfig } from './jest-types';
 /* tslint:disable */
+
 const setFromArgv = require('jest-config/build/setFromArgv');
 // import * as setFromArgv from 'jest-config/build/setfromArgv';
 /* tslint:enable */
@@ -105,8 +106,32 @@ function readCompilerOptions(configPath: string) {
   return parsedConfig.options;
 }
 
+export function getTSConfigOptionFromConfig(globals: any) {
+  if (!globals) { return 'tsconfig.json'; }
+
+  const tsJestConfig = getTSJestConfig(globals);
+
+  if (globals.__TS_CONFIG__) {
+    console.warn(`Using globals > __TS_CONFIG__ option for setting TS config is deprecated.
+Please set config using this option:\nglobals > ts-jest > tsConfigFile (string).
+More information at https://github.com/kulshekhar/ts-jest#tsconfig`);
+    return globals.__TS_CONFIG__;
+  } else if (tsJestConfig.tsConfigFile) {
+    return tsJestConfig.tsConfigFile;
+  }
+
+  return 'tsconfig.json';
+}
+
+export function mockGlobalTSConfigSchema(globals: any) {
+  const config = getTSConfigOptionFromConfig(globals);
+  return (typeof config === 'string') ?
+    { 'ts-jest': { tsConfigFile: config }} :
+    { __TS_CONFIG__: config };
+}
+
 export function getTSConfig(globals, collectCoverage: boolean = false) {
-  let config = (globals && globals.__TS_CONFIG__) ? globals.__TS_CONFIG__ : 'tsconfig.json';
+  let config = getTSConfigOptionFromConfig(globals);
   const skipBabel = getTSJestConfig(globals).skipBabel;
   const isReferencedExternalFile = typeof config === 'string';
 

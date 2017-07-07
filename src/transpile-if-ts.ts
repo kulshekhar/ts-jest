@@ -1,13 +1,11 @@
 import * as tsc from 'typescript';
-import { getTSConfig } from './utils';
+import { getTSConfig, mockGlobalTSConfigSchema } from './utils';
 
 export function transpileIfTypescript(path, contents, config?) {
   if (path && (path.endsWith('.tsx') || path.endsWith('.ts'))) {
 
-    const transpiled = tsc.transpileModule(contents, {
-      /* tslint:disable */
-      compilerOptions: getTSConfig(config || { __TS_CONFIG__: global['__TS_CONFIG__'] }, true),
-      /* tslint:enable */
+    let transpiled = tsc.transpileModule(contents, {
+      compilerOptions: getTSConfig(config || mockGlobalTSConfigSchema(global), true),
       fileName: path,
     });
 

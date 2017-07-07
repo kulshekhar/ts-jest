@@ -114,33 +114,24 @@ If the default setup doesn't address your requirements, you can create a custom 
 By default this package will try to locate `tsconfig.json` and use its compiler options for your `.ts` and `.tsx` files.
 
 You can override this behaviour by pointing ts-jest to a custom TypeScript configuration file.
-You can do this by setting the `__TS_CONFIG__` option in globals for jest to the path of the
-custom configuration file (relative to the project's root directory)```json
-```
-{
-  "jest": {
-    "globals": {
-      "__TS_CONFIG__": "my-tsconfig.json"
-    }
-  }
-}
-```
-Or even declare options for `tsc` instead of using separate config, like this:
+You can do this by setting the `tsConfigFile` option in your global variables under the `ts-jest` key to path of the
+custom configuration file (relative to the project's root directory) *__TS_CONFIG__ is deprecated*
 ```json
 {
   "jest": {
     "globals": {
-      "__TS_CONFIG__": {
-        "module": "commonjs",
-        "jsx": "react"
+      "ts-jest": {
+        "tsConfigFile": "my-tsconfig.json"
       }
     }
   }
 }
 ```
+**Warning: Using __TS_CONFIG__ option in globals is deprecated and soon will be removed.**
+
 For all available `tsc` options see [TypeScript docs](https://www.typescriptlang.org/docs/handbook/compiler-options.html).
 
-Note that if you haven't explicitly set the `module` property in the `__TS_CONFIG__` setting (either directly or through a separate configuration file), it will be overwritten to `commonjs` (regardless of the value in `tsconfig.json`) since that is the format Jest expects. This only happens during testing.
+Note that if you haven't explicitly set the `module` property through a separate configuration file with `tsConfigFile`, it will be overwritten to `commonjs` (regardless of the value in `tsconfig.json`) since that is the format Jest expects. This only happens during testing.
 
 ### Skipping Babel
 If you don't use mocks, or synthetic default imports you can skip the babel-transpilation step.
