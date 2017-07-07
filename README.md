@@ -131,7 +131,7 @@ custom configuration file (relative to the project's root directory) *__TS_CONFI
 
 For all available `tsc` options see [TypeScript docs](https://www.typescriptlang.org/docs/handbook/compiler-options.html).
 
-Note that if you haven't explicitly set the `module` property in the `tsConfig` setting (either directly or through a separate configuration file with `tsConfigFile`), it will be overwritten to `commonjs` (regardless of the value in `tsconfig.json`) since that is the format Jest expects. This only happens during testing.
+Note that if you haven't explicitly set the `module` property through a separate configuration file with `tsConfigFile`, it will be overwritten to `commonjs` (regardless of the value in `tsconfig.json`) since that is the format Jest expects. This only happens during testing.
 
 ### Skipping Babel
 If you don't use mocks, or synthetic default imports you can skip the babel-transpilation step.
