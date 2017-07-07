@@ -68,4 +68,5 @@ export interface FullJestConfig {
 export interface TsJestConfig {
   skipBabel?: boolean;
   useBabelrc?: boolean;
+  tsConfigFile?: String;
 }

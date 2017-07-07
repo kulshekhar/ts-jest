@@ -107,25 +107,28 @@ function readCompilerOptions(configPath: string) {
 }
 
 export function getTSConfigOptionFromConfig(globals: any) {
-  if (!globals) return 'tsconfig.json';
-  
+  if (!globals) { return 'tsconfig.json'; }
+
   const tsJestConfig = getTSJestConfig(globals);
 
   if (('__TS_CONFIG__' in globals) && globals.__TS_CONFIG__) {
-    console.warn('Using globals > __TS_CONFIG__ option for setting TS config is deprecated. Please set config using this option:\nglobals > ts-jest > tsConfig (object) or tsConfigFile (string). More information at https://github.com/kulshekhar/ts-jest#tsconfig');
+    console.warn(`Using globals > __TS_CONFIG__ option for setting TS config is deprecated. 
+
+Please set config using this option:\nglobals > ts-jest > tsConfig (object) or tsConfigFile 
+(string). More information at https://github.com/kulshekhar/ts-jest#tsconfig`);
     return globals.__TS_CONFIG__;
   } else if ('tsConfigFile' in tsJestConfig && tsJestConfig.tsConfigFile) {
     return tsJestConfig.tsConfigFile;
   }
-  
+
   return 'tsconfig.json';
 }
 
 export function mockGlobalTSConfigSchema(globals: any) {
   const config = getTSConfigOptionFromConfig(globals);
-  return typeof config === 'string' ?
+  return (typeof config === 'string') ?
     { 'ts-jest': { tsConfigFile: config }} :
-    { __TS_CONFIG__: config }};
+    { __TS_CONFIG__: config };
 }
 
 export function getTSConfig(globals, collectCoverage: boolean = false) {
