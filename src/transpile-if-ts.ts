@@ -1,5 +1,5 @@
 import * as tsc from 'typescript';
-import { getTSConfig, getTSConfigOptionFromConfig, mockGlobalTSConfigSchema } from './utils';
+import { getTSConfig, mockGlobalTSConfigSchema } from './utils';
 
 export function transpileIfTypescript(path, contents, config?) {
   if (path && (path.endsWith('.tsx') || path.endsWith('.ts'))) {
