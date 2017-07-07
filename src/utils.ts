@@ -112,9 +112,9 @@ export function getTSConfigOptionFromConfig(globals: any) {
   const tsJestConfig = getTSJestConfig(globals);
 
   if (globals.__TS_CONFIG__) {
-    console.warn(`Using globals > __TS_CONFIG__ option for setting TS config is deprecated. 
-Please set config using this option:\nglobals > ts-jest > tsConfig (object) or tsConfigFile 
-(string). More information at https://github.com/kulshekhar/ts-jest#tsconfig`);
+    console.warn(`Using globals > __TS_CONFIG__ option for setting TS config is deprecated.
+Please set config using this option:\nglobals > ts-jest > tsConfigFile (string).
+More information at https://github.com/kulshekhar/ts-jest#tsconfig`);
     return globals.__TS_CONFIG__;
   } else if (tsJestConfig.tsConfigFile) {
     return tsJestConfig.tsConfigFile;
