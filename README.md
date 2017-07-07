@@ -115,7 +115,8 @@ By default this package will try to locate `tsconfig.json` and use its compiler 
 
 You can override this behaviour by pointing ts-jest to a custom TypeScript configuration file.
 You can do this by setting the `tsConfigFile` option in your global variables under the `ts-jest` key to path of the
-custom configuration file (relative to the project's root directory) *__TS_CONFIG__ is deprecated*
+custom configuration file (relative to the project's root directory) 
+
 ```json
 {
   "jest": {
@@ -127,7 +128,7 @@ custom configuration file (relative to the project's root directory) *__TS_CONFI
   }
 }
 ```
-**Warning: Using __TS_CONFIG__ option in globals is deprecated and soon will be removed.**
+**Warning: Using \_\_TS_CONFIG__ option in globals is deprecated and soon will be removed.**
 
 For all available `tsc` options see [TypeScript docs](https://www.typescriptlang.org/docs/handbook/compiler-options.html).
 
