@@ -62,7 +62,7 @@
     "babel-plugin-istanbul": "^4.1.4",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.24.1",
     "babel-preset-jest": "^20.0.3",
-    "fs-extra": "^3.0.0",
+    "fs-extra": "^4.0.0",
     "jest-config": "^20.0.0",
     "jest-util": "^20.0.0",
     "pkg-dir": "^2.0.0",
