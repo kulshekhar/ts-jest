@@ -152,23 +152,6 @@ Simply add skipBabel to your global variables under the `ts-jest` key:
 }
 ```
 
-### Use customized .babalrc
-By default, `ts-jest` use only the embedded .babelrc file.
-It should work in most cases, and keep configuration simple.
-In case your tests need special .babelrc settings to work,
-set `"useBabelrc": true` to tell `ts-jest` read your .babelrc.
-```json
-{
-  "jest": {
-    "globals": {
-      "ts-jest": {
-        "useBabelrc": true
-      }
-    }
-  }
-}
-```
-
 ## Use cases
 
 ### React Native
@@ -261,33 +244,6 @@ your Jest configuration:
 
 By default Jest ignores everything in `node_modules`. This setting prevents Jest from ignoring the package you're interested in, in this case `@foo`, while continuing to ignore everything else in `node_modules`.
 
-### Test code w/ ES (Webpack 2+) dynamic import
-Newest Webpack introduced ES dynamic import which cannot be handled by babel without plugins even with env preset.
-In development usually use `babel-plugin-syntax-dynamic-import` to prevent errors.
-But in tests it have to be converted to commonjs' require:
-```
-npm install -D babel-plugin-syntax-dynamic-import babel-plugin-dynamic-import-node
-```
-```
-// .babalrc
-{
-  // ...
-  "plugins"      : [
-    "syntax-dynamic-import"
-  ],
-  "env"          : {
-    "test": {
-      "plugins": [
-       "dynamic-import-node"
-      ]
-    }
-  }
-}
-```
-
-Notice, by default `ts-jest` will not use project .babelrc,
-so `"useBabelrc": true` must be set.
-(See [Use customized .babalrc](#user-content-use-customized-babalrc) above)
 
 ## Known Limitations
 ### Known limitations for TS compiler options
