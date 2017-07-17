@@ -152,6 +152,22 @@ Simply add skipBabel to your global variables under the `ts-jest` key:
 }
 ```
 
+### Using `.babelrc`
+
+When using Babel, ts-jest, by default, doesn't use the `.babelrc` file. If you want ts-jest to use `.babelrc`, you should set the `globals > ts-jest > useBabelrc` flag to `true`.
+
+```json
+{
+  "jest": {
+    "globals": {
+      "ts-jest": {
+        "useBabelrc": true
+      }
+    }
+  }
+}
+```
+
 ## Use cases
 
 ### React Native
