@@ -285,19 +285,9 @@ npm install -D babel-plugin-syntax-dynamic-import babel-plugin-dynamic-import-no
 }
 ```
 
-Notice, by default `ts-jest` will not use project .babelrc, so `"useBabelrc": true` must be set.
-```json
-// package.json
-{
-  "jest": {
-    "globals": {
-      "ts-jest": {
-        "useBabelrc": true
-      }
-    }
-  }
-}
-```
+Notice, by default `ts-jest` will not use project .babelrc,
+so `"useBabelrc": true` must be set.
+(See [Use customized .babalrc](#user-content-use-customized-babalrc) above)
 
 ## Known Limitations
 ### Known limitations for TS compiler options
