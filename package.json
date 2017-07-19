@@ -28,9 +28,10 @@
   ],
   "author": "Kulshekhar Kabra <kulshekhar@users.noreply.github.com> (https://github.com/kulshekhar)",
   "contributors": [
+    "brian ruddy <briancruddy@gmail.com> (https://github.com/bcruddy)",
+    "Emil Persson <emil.n.persson@gmail.com> (https://github.com/emilniklas)",
     "Ihor Chulinda <ichulinda@gmail.com> (https://github.com/Igmat)",
-    "OJ Kwon <kwon.ohjoong@gmail.com> (https://github.com/kwonoj)",
-    "Emil Persson <emil.n.persson@gmail.com> (https://github.com/emilniklas)"
+    "OJ Kwon <kwon.ohjoong@gmail.com> (https://github.com/kwonoj)"
   ],
   "license": "MIT",
   "bugs": {
