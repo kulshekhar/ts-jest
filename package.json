@@ -76,7 +76,7 @@
   },
   "devDependencies": {
     "@types/es6-shim": "latest",
-    "@types/fs-extra": "^3.0.0",
+    "@types/fs-extra": "^4.0.0",
     "@types/jest": "latest",
     "@types/node": "latest",
     "@types/react": "latest",
