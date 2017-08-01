@@ -180,7 +180,7 @@ export function getTSConfig(globals, collectCoverage: boolean = false) {
     return config;
   } else {
     config.jsx = config.jsx || 'react';
-    config.module = config.module || 'commmonjs';
+    config.module = config.module || 'commonjs';
     if (config.allowSyntheticDefaultImports && !skipBabel) {
       // compile ts to es2015 and transform with babel afterwards
       config.module = 'es2015';
