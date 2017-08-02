@@ -130,10 +130,18 @@ export function mockGlobalTSConfigSchema(globals: any) {
     { __TS_CONFIG__: config };
 }
 
+const tsConfigCache: { [key: string]: any } = {};
 export function getTSConfig(globals, collectCoverage: boolean = false) {
   let config = getTSConfigOptionFromConfig(globals);
   const skipBabel = getTSJestConfig(globals).skipBabel;
   const isReferencedExternalFile = typeof config === 'string';
+
+  // check cache before resolving configuration
+  // NB: config is a string unless taken from __TS_CONFIG__, which should be immutable (and is deprecated anyways)
+  const tsConfigCacheKey = JSON.stringify([skipBabel, collectCoverage, isReferencedExternalFile ? config : undefined]);
+  if (tsConfigCacheKey in tsConfigCache) {
+    return tsConfigCache[tsConfigCacheKey];
+  }
 
   if (isReferencedExternalFile) {
     const configFileName = config;
@@ -170,6 +178,7 @@ export function getTSConfig(globals, collectCoverage: boolean = false) {
   // to their string properties, and convert the result accordingly afterwards.
   // In case of an external file, reading the config file already converted it as well, and
   // an additional attempt would lead to errors.
+  let result;
   if (isReferencedExternalFile) {
     config.jsx = config.jsx || tsc.JsxEmit.React;
     config.module = config.module || tsc.ModuleKind.CommonJS;
@@ -177,7 +186,7 @@ export function getTSConfig(globals, collectCoverage: boolean = false) {
       // compile ts to es2015 and transform with babel afterwards
       config.module = tsc.ModuleKind.ES2015;
     }
-    return config;
+    result = config;
   } else {
     config.jsx = config.jsx || 'react';
     config.module = config.module || 'commmonjs';
@@ -190,6 +199,10 @@ export function getTSConfig(globals, collectCoverage: boolean = false) {
       const formattedErrors = formatTscParserErrors(converted.errors);
       throw new Error(`Some errors occurred while attempting to convert ${JSON.stringify(config)}: ${formattedErrors}`);
     }
-    return converted.options;
+    result = converted.options;
   }
+
+  // cache result for future requests
+  tsConfigCache[tsConfigCacheKey] = result;
+  return result;
 }
