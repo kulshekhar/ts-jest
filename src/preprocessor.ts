@@ -78,6 +78,7 @@ export function process(
     return src;
 }
 
+let tsConfig = undefined;
 export function getCacheKey(
     fileData: string,
     filePath: Path,
@@ -85,7 +86,9 @@ export function getCacheKey(
     options: TransformOptions = { instrument: false }): string {
 
     const jestConfig: JestConfig = JSON.parse(configStr);
-    const tsConfig = getTSConfig(jestConfig.globals, options.instrument);
+    if (!tsConfig) {
+        tsConfig = getTSConfig(jestConfig.globals, options.instrument);
+    }
 
     return crypto.createHash('md5')
         .update(JSON.stringify(tsConfig), 'utf8')
