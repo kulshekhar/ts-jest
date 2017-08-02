@@ -71,5 +71,6 @@ export interface FullJestConfig {
 export interface TsJestConfig {
   skipBabel?: boolean;
   useBabelrc?: boolean;
+  babelConfig?: BabelTransformOpts;
   tsConfigFile?: String;
 }
