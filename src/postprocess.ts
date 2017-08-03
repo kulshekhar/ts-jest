@@ -15,18 +15,22 @@ import {
     TsJestConfig,
 } from './jest-types';
 
-function createBabelTransformer(options: BabelTransformOptions) {
+function createBabelTransformer(options: BabelTransformOptions, useSourceMaps: boolean) {
     options = {
         ...options,
         plugins: (options && options.plugins) || [],
         presets: ((options && options.presets) || []).concat([jestPreset]),
+    };
+
+    if (useSourceMaps !== false) {
         // If retainLines isn't set to true, the line numbers
         // are off by 1
-        retainLines: true,
+        options.retainLines = true;
         // force the sourceMaps property to be 'inline' during testing
         // to help generate accurate sourcemaps.
-        sourceMaps: 'inline',
-    };
+        options.sourceMaps = 'inline';
+    }
+
     delete options.cacheDirectory;
     delete options.filename;
 
@@ -75,5 +79,5 @@ export const getPostProcessHook = (
         babelrc: tsJestConfig.useBabelrc || false,
         plugins,
         presets: [],
-    });
+    }, tsCompilerOptions.sourceMap);
 };
