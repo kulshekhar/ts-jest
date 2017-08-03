@@ -138,6 +138,8 @@ export function getTSConfig(globals, collectCoverage: boolean = false) {
 
   // check cache before resolving configuration
   // NB: config is a string unless taken from __TS_CONFIG__, which should be immutable (and is deprecated anyways)
+  // NB: We use JSON.stringify() to create a consistent, unique signature. Although it lacks a uniform
+  //     shape, this is simpler and faster than using the crypto package to generate a hash signature.
   const tsConfigCacheKey = JSON.stringify([skipBabel, collectCoverage, isReferencedExternalFile ? config : undefined]);
   if (tsConfigCacheKey in tsConfigCache) {
     return tsConfigCache[tsConfigCacheKey];
