@@ -59,7 +59,8 @@ Modify your project's `package.json` so that the `jest` section looks something 
     "moduleFileExtensions": [
       "ts",
       "tsx",
-      "js"
+      "js",
+      "json"
     ]
   }
 }
