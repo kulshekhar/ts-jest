@@ -1,4 +1,5 @@
 import { getCacheKey } from '../../src/preprocessor';
+import { TransformOptions } from '../../src/jest-types'
 
 describe('getCacheKey', () => {
   const src = 'console.log(123);';
@@ -17,7 +18,8 @@ describe('getCacheKey', () => {
     },
     "testRegex": "(/__tests__/.*|\\\\.(test|spec))\\\\.(ts|tsx|js)$"
   }`;
-  const originalHash = getCacheKey(src, filepath, configStr);
+  const options: TransformOptions = { instrument: false };
+  const originalHash = getCacheKey(src, filepath, configStr, options);
 
   it('should change hash when src changes', () => {
     const newSrc = 'console.log(1234);';
@@ -37,4 +39,9 @@ describe('getCacheKey', () => {
     expect(newHash).not.toBe(originalHash);
   });
 
+  it('should change hash when transform options change', () => {
+    const newOptions: TransformOptions = { instrument: true };
+    const newHash = getCacheKey(src, filepath, configStr, newOptions);
+    expect(newHash).not.toBe(originalHash);
+  });
 });

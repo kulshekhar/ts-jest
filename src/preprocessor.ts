@@ -89,6 +89,7 @@ export function getCacheKey(
 
     return crypto.createHash('md5')
         .update(JSON.stringify(tsConfig), 'utf8')
+        .update(JSON.stringify(options), 'utf8')
         .update(fileData + filePath + configStr, 'utf8')
         .digest('hex');
 }
