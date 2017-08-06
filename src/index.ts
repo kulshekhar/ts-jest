@@ -5,9 +5,6 @@ export { transpileIfTypescript } from './transpile-if-ts';
 export function install() {
   const options: sourceMapSupport.Options = {};
   options.retrieveFile = defaultRetrieveFileHandler;
-  options.emptyCacheBetweenOperations = true; // left here only for
-  // sourceMapCache TODO: check this for correctness and performance with
-  // false value
 
   /* tslint:disable */
   // disabling tslint because the types for the source-map-support version
