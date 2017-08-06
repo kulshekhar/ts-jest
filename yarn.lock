@@ -37,9 +37,9 @@
   version "0.31.33"
   resolved "https://registry.yarnpkg.com/@types/es6-shim/-/es6-shim-0.31.33.tgz#4792bdecc8c7f09a7e086968cfbb8058e459379d"
 
-"@types/fs-extra@^3.0.0":
-  version "3.0.2"
-  resolved "https://registry.yarnpkg.com/@types/fs-extra/-/fs-extra-3.0.2.tgz#00cbf48563f377f9ce5cf24237b21b3d9779e055"
+"@types/fs-extra@^4.0.0":
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/@types/fs-extra/-/fs-extra-4.0.0.tgz#1dd742ad5c9bce308f7a52d02ebc01421bc9102f"
   dependencies:
     "@types/node" "*"
 

@@ -59,7 +59,6 @@
     ]
   },
   "dependencies": {
-    "@types/babel-core": "^6.7.14",
     "babel-core": "^6.24.1",
     "babel-plugin-istanbul": "^4.1.4",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.24.1",
@@ -76,6 +75,7 @@
     "typescript": "2.x"
   },
   "devDependencies": {
+    "@types/babel-core": "^6.7.14",
     "@types/es6-shim": "latest",
     "@types/fs-extra": "^4.0.0",
     "@types/jest": "latest",
