@@ -4,6 +4,7 @@
         "tslint:recommended"
     ],
     "rules": {
+        "arrow-parens": false,
         "quotemark": [
             true,
             "single",
