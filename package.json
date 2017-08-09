@@ -92,6 +92,7 @@
     "husky": "^0.14.3",
     "jest": "^20.0.0",
     "lint-staged": "^4.0.3",
+    "prettier": "^1.5.3",
     "react": "latest",
     "react-test-renderer": "latest",
     "rimraf": "latest",
