@@ -12,7 +12,7 @@ describe('use strict', () => {
 
     expect(result.status).toBe(1);
     expect(stderr).toContain('Strict.ts:4:4');
-    expect(stderr).toContain('Strict.test.ts:9:5');
+    expect(stderr).toContain('Strict.test.ts:7:5');
   });
 
   it('should work with "use strict"', () => {

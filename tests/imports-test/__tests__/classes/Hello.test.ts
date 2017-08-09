@@ -1,5 +1,3 @@
-declare var jest, describe, it, expect;
-
 import { Hello } from 'classes/Hello';
 
 describe('Hello Class absolute', () => {

@@ -8,7 +8,7 @@ describe('Typescript errors', () => {
 
     expect(result.status).toBe(1);
     expect(stderr).toContain('Hello.ts:18:11');
-    expect(stderr).toContain('Hello.test.ts:9:19');
+    expect(stderr).toContain('Hello.test.ts:7:19');
   });
 
   it('Should show the correct error locations in async typescript files', async () => {
@@ -18,6 +18,6 @@ describe('Typescript errors', () => {
 
     expect(result.status).toBe(1);
     expect(stderr).toContain('Hello.ts:13:11');
-    expect(stderr).toContain('Hello.test.ts:9:21');
+    expect(stderr).toContain('Hello.test.ts:7:12');
   });
 });

@@ -18,8 +18,8 @@ describe('Jest.mock() calls', () => {
     expect(stderr).toContain('Hello.ts:22:11');
 
     // The actual error occurs at line 16. However, because the mock calls
-    // are hoisted, this changes - in this case, to 26
+    // are hoisted, this changes - in this case, to 22
     // The column numbers are accurate.
-    expect(stderr).toContain('Hello.test.ts:26:19');
+    expect(stderr).toContain('Hello.test.ts:22:19');
   });
 });
