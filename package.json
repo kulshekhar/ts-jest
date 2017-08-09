@@ -16,7 +16,7 @@
     "prepublish": "npm run clean-build",
     "precommit": "lint-staged",
     "postcommit": "git reset",
-    "format": "prettier --write \"{src,scripts,tests}/**/*.{js,ts}\""
+    "format": "prettier --single-quote --trailing-comma all --write \"{src,scripts,tests}/**/*.{js,ts}\""
   },
   "repository": {
     "type": "git",
@@ -102,7 +102,7 @@
   },
   "lint-staged": {
     "*.{ts,js}": [
-      "prettier --write --use-tabs --single-quote --trailing-comma all",
+      "prettier --write --single-quote --trailing-comma all",
       "git add"
     ]
   }
