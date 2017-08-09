@@ -14,14 +14,18 @@ describe('get package json config', () => {
     yargsMock.mockReturnValueOnce({
       argv: {
         _: [],
-        '$0': 'node_modules\\jest\\bin\\jest.js'
-      }
+        $0: 'node_modules\\jest\\bin\\jest.js',
+      },
     });
 
     const jestConfig = getJestConfig(pkgDir.sync());
 
     const { collectCoverage } = jestConfig;
-    const { coverageReporters, coverageDirectory, collectCoverageFrom } = jestConfig.options;
+    const {
+      coverageReporters,
+      coverageDirectory,
+      collectCoverageFrom,
+    } = jestConfig.options;
 
     expect(collectCoverage).toBeUndefined();
     expect(coverageReporters).toEqual(['text']);
@@ -33,14 +37,18 @@ describe('get package json config', () => {
       argv: {
         _: [],
         coverage: true,
-        '$0': 'node_modules\\jest\\bin\\jest.js'
-      }
+        $0: 'node_modules\\jest\\bin\\jest.js',
+      },
     });
 
     const jestConfig = getJestConfig(pkgDir.sync());
 
     const { collectCoverage } = jestConfig;
-    const { coverageReporters, coverageDirectory, collectCoverageFrom } = jestConfig.options;
+    const {
+      coverageReporters,
+      coverageDirectory,
+      collectCoverageFrom,
+    } = jestConfig.options;
 
     expect(collectCoverage).toBeTruthy();
     expect(coverageReporters).toEqual(['text']);

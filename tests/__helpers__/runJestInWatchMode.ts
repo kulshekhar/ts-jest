@@ -3,9 +3,14 @@ import { ChildProcess, SpawnOptions } from 'child_process';
 import { fileExists } from './utils';
 import * as path from 'path';
 
-const spawn: (command: string, args?: string[], options?: SpawnOptions) => ChildProcess = (process.platform === 'win32')
-  ? require('cross-spawn-with-kill')
-  : require('cross-spawn');
+const spawn: (
+  command: string,
+  args?: string[],
+  options?: SpawnOptions,
+) => ChildProcess =
+  process.platform === 'win32'
+    ? require('cross-spawn-with-kill')
+    : require('cross-spawn');
 
 // assuming that jest is installed globally
 // using `npm i -g jest-cli`
@@ -30,7 +35,7 @@ export default function runJestInWatchMode(dir, args?: any[]) {
       the global package.json, which will send Jest into infinite loop.
     `);
   }
-  args = (args !== undefined) ? args : [];
+  args = args !== undefined ? args : [];
   args.push('--watchAll');
 
   const childProcess = spawn(JEST_PATH, args, {
@@ -39,7 +44,7 @@ export default function runJestInWatchMode(dir, args?: any[]) {
   let getStderrAsync = () => {
     return new Promise((resolve: (value: string) => void) => {
       let stderr = '';
-      childProcess.stderr.on('data', (data) => {
+      childProcess.stderr.on('data', data => {
         stderr += data.toString();
         if (data.toString().includes('Ran all')) {
           resolve(stderr);

@@ -13,7 +13,7 @@ const mockedPath = jest.genMockFromModule<MockedPath>('path');
 // `fs` APIs are used.
 let baseDir = '';
 function __setBaseDir(newBaseDir) {
-    baseDir = newBaseDir;
+  baseDir = newBaseDir;
 }
 
 // A custom version of `readdirSync` that reads from the special mocked out

@@ -8,10 +8,10 @@ export class Hello {
       greeting
     `;
 
-    this.unexcuted(() => { });
+    this.unexcuted(() => {});
   }
 
-  public unexcuted(action: () => void = () => { }): void {
+  public unexcuted(action: () => void = () => {}): void {
     if (action) {
       action();
     } else {

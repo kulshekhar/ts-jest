@@ -2,4 +2,4 @@
 
 export function checkStrict() {
   v = 33;
-};
+}

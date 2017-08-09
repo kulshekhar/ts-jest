@@ -15,14 +15,18 @@ describe('get json jest config', () => {
       argv: {
         _: [],
         config: 'tests/jestconfig-test/jest.json',
-        '$0': 'node_modules\\jest\\bin\\jest.js'
-      }
+        $0: 'node_modules\\jest\\bin\\jest.js',
+      },
     });
 
     const jestConfig = getJestConfig(pkgDir.sync());
 
     const { collectCoverage } = jestConfig;
-    const { coverageReporters, coverageDirectory, collectCoverageFrom } = jestConfig.options;
+    const {
+      coverageReporters,
+      coverageDirectory,
+      collectCoverageFrom,
+    } = jestConfig.options;
 
     expect(collectCoverage).toBeUndefined();
     expect(coverageReporters).toEqual(['html', 'json', 'text']);
@@ -36,14 +40,18 @@ describe('get json jest config', () => {
         _: [],
         coverage: true,
         config: 'tests/jestconfig-test/jest.json',
-        '$0': 'node_modules\\jest\\bin\\jest.js'
-      }
+        $0: 'node_modules\\jest\\bin\\jest.js',
+      },
     });
 
     const jestConfig = getJestConfig(pkgDir.sync());
 
     const { collectCoverage } = jestConfig;
-    const { coverageReporters, coverageDirectory, collectCoverageFrom } = jestConfig.options;
+    const {
+      coverageReporters,
+      coverageDirectory,
+      collectCoverageFrom,
+    } = jestConfig.options;
 
     expect(collectCoverage).toBeTruthy();
     expect(coverageReporters).toEqual(['html', 'json', 'text']);

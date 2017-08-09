@@ -8,12 +8,12 @@ export class Hello {
       greeting
     `;
 
-    this.unexcuted(() => { });
+    this.unexcuted(() => {});
 
     throw new Error('Hello error!');
   }
 
-  public unexcuted(action: () => void = () => { }): void {
+  public unexcuted(action: () => void = () => {}): void {
     if (action) {
       action();
     } else {

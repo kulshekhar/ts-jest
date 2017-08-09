@@ -8,7 +8,9 @@ export type Path = string;
 
 export type Glob = string;
 
-export interface ConfigGlobals { [key: string]: any; }
+export interface ConfigGlobals {
+  [key: string]: any;
+}
 
 export interface HasteConfig {
   defaultPlatform?: string | null;
@@ -25,7 +27,8 @@ export type PostProcessHook = (
   src: string,
   filename: string,
   config: JestConfig,
-  transformOptions: TransformOptions) => string;
+  transformOptions: TransformOptions,
+) => string;
 
 export type JestConfig = Partial<FullJestConfig>;
 

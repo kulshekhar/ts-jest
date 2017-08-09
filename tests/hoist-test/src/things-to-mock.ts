@@ -1,10 +1,7 @@
-
-
-export class SomeClass {
-}
+export class SomeClass {}
 
 export const SomeFunctionDeclaredAsConst = () => 'originalValue';
 
-export function SomeFunction(){
-    return 'original';
+export function SomeFunction() {
+  return 'original';
 }

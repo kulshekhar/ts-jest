@@ -21,15 +21,15 @@ function parseConfig(argv) {
 
 function loadJestConfigFromFile(filePath, argv) {
   const config = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
-  config.rootDir = config.rootDir ?
-    path.resolve(path.dirname(filePath), config.rootDir) :
-    process.cwd();
+  config.rootDir = config.rootDir
+    ? path.resolve(path.dirname(filePath), config.rootDir)
+    : process.cwd();
   return normalize(config, argv);
 }
 
 function loadJestConfigFromPackage(filePath, argv) {
   /* tslint:disable */
-  const R_OK = fs.constants && fs.constants.R_OK || fs['R_OK'] as number;
+  const R_OK = (fs.constants && fs.constants.R_OK) || (fs['R_OK'] as number);
   /* tslint:enable */
   try {
     fs.accessSync(filePath, R_OK);
@@ -57,7 +57,10 @@ function readRawConfig(argv, root) {
     return normalize(config, argv);
   }
 
-  const packageConfig = loadJestConfigFromPackage(path.join(root, 'package.json'), argv);
+  const packageConfig = loadJestConfigFromPackage(
+    path.join(root, 'package.json'),
+    argv,
+  );
   return packageConfig || normalize({ rootDir: root }, argv);
 }
 
@@ -69,22 +72,24 @@ export function getJestConfig(root) {
 }
 
 export function getTSJestConfig(globals: any): TsJestConfig {
-  return (globals && globals['ts-jest']) ? globals['ts-jest'] : {};
+  return globals && globals['ts-jest'] ? globals['ts-jest'] : {};
 }
 
 function formatTscParserErrors(errors: tsc.Diagnostic[]) {
-  return errors.map((s) => JSON.stringify(s, null, 4)).join('\n');
+  return errors.map(s => JSON.stringify(s, null, 4)).join('\n');
 }
 
 function readCompilerOptions(configPath: string) {
   // First step: Let tsc pick up the config.
-  const loaded = tsc.readConfigFile(configPath, (file) => {
+  const loaded = tsc.readConfigFile(configPath, file => {
     const read = tsc.sys.readFile(file);
     // See
     // https://github.com/Microsoft/TypeScript/blob/a757e8428410c2196886776785c16f8f0c2a62d9/src/compiler/sys.ts#L203 :
     // `readFile` returns `undefined` in case the file does not exist!
     if (!read) {
-      throw new Error(`ENOENT: no such file or directory, open '${configPath}'`);
+      throw new Error(
+        `ENOENT: no such file or directory, open '${configPath}'`,
+      );
     }
     return read;
   });
@@ -95,19 +100,27 @@ function readCompilerOptions(configPath: string) {
 
   // Second step: Parse the config, resolving all potential references.
   const basePath = path.dirname(configPath); // equal to "getDirectoryPath" from ts, at least in our case.
-  const parsedConfig = tsc.parseJsonConfigFileContent(loaded.config, tsc.sys, basePath);
+  const parsedConfig = tsc.parseJsonConfigFileContent(
+    loaded.config,
+    tsc.sys,
+    basePath,
+  );
   // In case the config is present, it already contains possibly merged entries from following the
   // 'extends' entry, thus it is not required to follow it manually.
   // This procedure does NOT throw, but generates a list of errors that can/should be evaluated.
   if (parsedConfig.errors.length > 0) {
     const formattedErrors = formatTscParserErrors(parsedConfig.errors);
-    throw new Error(`Some errors occurred while attempting to read from ${configPath}: ${formattedErrors}`);
+    throw new Error(
+      `Some errors occurred while attempting to read from ${configPath}: ${formattedErrors}`,
+    );
   }
   return parsedConfig.options;
 }
 
 export function getTSConfigOptionFromConfig(globals: any) {
-  if (!globals) { return 'tsconfig.json'; }
+  if (!globals) {
+    return 'tsconfig.json';
+  }
 
   const tsJestConfig = getTSJestConfig(globals);
 
@@ -125,9 +138,9 @@ More information at https://github.com/kulshekhar/ts-jest#tsconfig`);
 
 export function mockGlobalTSConfigSchema(globals: any) {
   const config = getTSConfigOptionFromConfig(globals);
-  return (typeof config === 'string') ?
-    { 'ts-jest': { tsConfigFile: config }} :
-    { __TS_CONFIG__: config };
+  return typeof config === 'string'
+    ? { 'ts-jest': { tsConfigFile: config } }
+    : { __TS_CONFIG__: config };
 }
 
 const tsConfigCache: { [key: string]: any } = {};
@@ -140,7 +153,11 @@ export function getTSConfig(globals, collectCoverage: boolean = false) {
   // NB: config is a string unless taken from __TS_CONFIG__, which should be immutable (and is deprecated anyways)
   // NB: We use JSON.stringify() to create a consistent, unique signature. Although it lacks a uniform
   //     shape, this is simpler and faster than using the crypto package to generate a hash signature.
-  const tsConfigCacheKey = JSON.stringify([skipBabel, collectCoverage, isReferencedExternalFile ? config : undefined]);
+  const tsConfigCacheKey = JSON.stringify([
+    skipBabel,
+    collectCoverage,
+    isReferencedExternalFile ? config : undefined,
+  ]);
   if (tsConfigCacheKey in tsConfigCache) {
     return tsConfigCache[tsConfigCacheKey];
   }
@@ -199,7 +216,11 @@ export function getTSConfig(globals, collectCoverage: boolean = false) {
     const converted = tsc.convertCompilerOptionsFromJson(config, undefined);
     if (converted.errors && converted.errors.length > 0) {
       const formattedErrors = formatTscParserErrors(converted.errors);
-      throw new Error(`Some errors occurred while attempting to convert ${JSON.stringify(config)}: ${formattedErrors}`);
+      throw new Error(
+        `Some errors occurred while attempting to convert ${JSON.stringify(
+          config,
+        )}: ${formattedErrors}`,
+      );
     }
     result = converted.options;
   }
