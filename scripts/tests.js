@@ -45,7 +45,7 @@ function createIntegrationMock() {
     const testCaseNodeModules = path.join(
       testsRoot,
       testCaseFolders[i],
-      'node_modules',
+      'node_modules'
     );
     if (!dirExists(testCaseNodeModules)) {
       fs.mkdirSync(testCaseNodeModules);
@@ -55,7 +55,7 @@ function createIntegrationMock() {
         const integrationMockPath = path.join(testCaseModuleFolder, fileName);
         fs.appendFileSync(
           integrationMockPath,
-          getIntegrationMockContent(fileName),
+          getIntegrationMockContent(fileName)
         );
       });
     }
