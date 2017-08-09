@@ -16,7 +16,7 @@
     "prepublish": "npm run clean-build",
     "precommit": "lint-staged",
     "postcommit": "git reset",
-    "format": "prettier --single-quote --trailing-comma es5 --write \"{src,scripts,tests}/**/*.{js,ts}\""
+    "format": "prettier --single-quote --trailing-comma all --write \"{src,scripts,tests}/**/*.{js,ts}\" && prettier --single-quote --trailing-comma es5 --write \"{src,scripts,tests}/**/*.{js}\""
   },
   "repository": {
     "type": "git",
@@ -101,8 +101,12 @@
     "typescript": "^2.4.1"
   },
   "lint-staged": {
-    "*.{ts,js}": [
+    "*.js": [
       "prettier --write --single-quote --trailing-comma es5",
+      "git add"
+    ],
+    "*.ts" : [
+      "prettier --write --single-quote --trailing-comma all",
       "git add"
     ]
   }
