@@ -1,6 +1,6 @@
 interface FooInterface {
-    foo: string,
-    bar: number, //This interface should be stripped and the line numbers should still fit.
+  foo: string;
+  bar: number; //This interface should be stripped and the line numbers should still fit.
 }
 
 export class Hello {
@@ -13,12 +13,12 @@ export class Hello {
       greeting
     `;
 
-    this.unexcuted(() => { });
+    this.unexcuted(() => {});
 
     throw new Error('Hello error!');
   }
 
-  public unexcuted(action: () => void = () => { }): void {
+  public unexcuted(action: () => void = () => {}): void {
     if (action) {
       action();
     } else {

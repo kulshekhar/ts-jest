@@ -4,6 +4,7 @@ import { defaultRetrieveFileHandler } from './default-retrieve-file-handler';
 export { transpileIfTypescript } from './transpile-if-ts';
 export function install() {
   const options: sourceMapSupport.Options = {};
+
   options.retrieveFile = defaultRetrieveFileHandler;
 
   /* tslint:disable */

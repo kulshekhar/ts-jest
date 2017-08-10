@@ -3,7 +3,10 @@ import * as fs from 'fs';
 import * as path from 'path';
 import runJestInWatchMode from '../__helpers__/runJestInWatchMode';
 
-const helloFile = fs.readFileSync(path.resolve(__dirname, '../watch-test/Hello.ts'), 'utf8');
+const helloFile = fs.readFileSync(
+  path.resolve(__dirname, '../watch-test/Hello.ts'),
+  'utf8',
+);
 const helloFileUpdate = `export class Hello {
   constructor() {
     const greeting = \`
@@ -26,7 +29,10 @@ const helloFileUpdate = `export class Hello {
   }
 }
 `;
-const testFile = fs.readFileSync(path.resolve(__dirname, '../watch-test/__tests__/Hello.test.ts'), 'utf8');
+const testFile = fs.readFileSync(
+  path.resolve(__dirname, '../watch-test/__tests__/Hello.test.ts'),
+  'utf8',
+);
 const testFileUpdate = `declare var jest, describe, it, expect;
 
 import {Hello} from '../Hello';
@@ -45,7 +51,10 @@ describe('Hello Class', () => {
 `;
 
 describe('Typescript watch tests', () => {
-  let result: { childProcess: ChildProcess, getStderrAsync: () => Promise<string> };
+  let result: {
+    childProcess: ChildProcess;
+    getStderrAsync: () => Promise<string>;
+  };
   let DEFAULT_TIMEOUT_INTERVAL: number;
 
   beforeAll(() => {
@@ -55,27 +64,33 @@ describe('Typescript watch tests', () => {
   });
 
   it('should show the correct error locations in the typescript files without changes', () => {
-    return result.getStderrAsync().then((stderr) => {
+    return result.getStderrAsync().then(stderr => {
       expect(stderr).toContain('Hello.ts:13:11');
       expect(stderr).toContain('Hello.test.ts:9:19');
     });
   });
 
   it('should show the correct error locations in the typescript files with changes in source file', () => {
-    let promise = result.getStderrAsync().then((stderr) => {
+    let promise = result.getStderrAsync().then(stderr => {
       expect(stderr).toContain('Hello.ts:11:11');
       expect(stderr).toContain('Hello.test.ts:9:19');
     });
-    fs.writeFileSync(path.resolve(__dirname, '../watch-test/Hello.ts'), helloFileUpdate);
+    fs.writeFileSync(
+      path.resolve(__dirname, '../watch-test/Hello.ts'),
+      helloFileUpdate,
+    );
     return promise;
   });
 
   it('should show the correct error locations in the typescript files with changes in source file and test file', () => {
-    let promise = result.getStderrAsync().then((stderr) => {
+    let promise = result.getStderrAsync().then(stderr => {
       expect(stderr).toContain('Hello.ts:11:11');
       expect(stderr).toContain('Hello.test.ts:11:19');
     });
-    fs.writeFileSync(path.resolve(__dirname, '../watch-test/__tests__/Hello.test.ts'), testFileUpdate);
+    fs.writeFileSync(
+      path.resolve(__dirname, '../watch-test/__tests__/Hello.test.ts'),
+      testFileUpdate,
+    );
     return promise;
   });
 
@@ -83,7 +98,13 @@ describe('Typescript watch tests', () => {
     result.childProcess.kill();
     // revert changes back
     jasmine['DEFAULT_TIMEOUT_INTERVAL'] = DEFAULT_TIMEOUT_INTERVAL;
-    fs.writeFileSync(path.resolve(__dirname, '../watch-test/Hello.ts'), helloFile);
-    fs.writeFileSync(path.resolve(__dirname, '../watch-test/__tests__/Hello.test.ts'), testFile);
+    fs.writeFileSync(
+      path.resolve(__dirname, '../watch-test/Hello.ts'),
+      helloFile,
+    );
+    fs.writeFileSync(
+      path.resolve(__dirname, '../watch-test/__tests__/Hello.test.ts'),
+      testFile,
+    );
   });
 });

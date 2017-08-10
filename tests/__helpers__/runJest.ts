@@ -2,7 +2,7 @@
 
 import { fileExists } from './utils';
 import * as path from 'path';
-import {sync as spawnSync} from 'cross-spawn';
+import { sync as spawnSync } from 'cross-spawn';
 
 // assuming that jest is installed globally
 // using `npm i -g jest-cli`
@@ -27,7 +27,6 @@ export default function runJest(dir: string, args: string[]) {
       the global package.json, which will send Jest into infinite loop.
     `);
   }
-  
 
   const result = spawnSync(JEST_PATH, args || [], {
     cwd: dir,

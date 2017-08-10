@@ -1,5 +1,5 @@
 import { getCacheKey } from '../../src/preprocessor';
-import { TransformOptions } from '../../src/jest-types'
+import { TransformOptions } from '../../src/jest-types';
 
 describe('getCacheKey', () => {
   const src = 'console.log(123);';

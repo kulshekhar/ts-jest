@@ -3,9 +3,11 @@ import { getTSConfig, mockGlobalTSConfigSchema } from './utils';
 
 export function transpileIfTypescript(path, contents, config?) {
   if (path && (path.endsWith('.tsx') || path.endsWith('.ts'))) {
-
     let transpiled = tsc.transpileModule(contents, {
-      compilerOptions: getTSConfig(config || mockGlobalTSConfigSchema(global), true),
+      compilerOptions: getTSConfig(
+        config || mockGlobalTSConfigSchema(global),
+        true,
+      ),
       fileName: path,
     });
 

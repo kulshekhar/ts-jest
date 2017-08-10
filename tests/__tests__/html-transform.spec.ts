@@ -1,14 +1,13 @@
-import {process} from '../../src/preprocessor';
+import { process } from '../../src/preprocessor';
 
-const source =
-`<div class="html-test">
+const source = `<div class="html-test">
   <span class="html-test__element">This is element</span>
 </div>`;
 const path = '/path/to/file.html';
 const config = {
   globals: {
-    __TRANSFORM_HTML__: true
-  }
+    __TRANSFORM_HTML__: true,
+  },
 };
 
 describe('Html transforms', () => {
