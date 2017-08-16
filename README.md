@@ -27,6 +27,8 @@
 - [Configuration](#configuration)
   - [tsconfig](#tsconfig)
   - [Skipping Babel](#skipping-babel)
+  - [Using `.babelrc`](#using-babelrc)
+  - [Using a custom Babel config](#using-a-custom-babel-config)
 - [Use cases](#use-cases)
   - [React Native](#react-native)
 - [Angular 2](#angular-2)
@@ -163,6 +165,24 @@ When using Babel, ts-jest, by default, doesn't use the `.babelrc` file. If you w
     "globals": {
       "ts-jest": {
         "useBabelrc": true
+      }
+    }
+  }
+}
+```
+
+### Using a custom Babel config
+
+In some cases, projects may not want to have a `.babelrc` file, but still need to provide custom Babel configuration. In these cases, you can provide a Babel config directly to `ts-jest` using the `globals > ts-jest > babelConfig` option in your `jest` configuration.
+
+```json
+{
+  "jest": {
+    "globals": {
+      "ts-jest": {
+        "babelConfig": {
+          "presets": ["env"]
+        }
       }
     }
   }
