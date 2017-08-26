@@ -60,7 +60,7 @@ export function process(
       const outputFilePath = nodepath.join(
         config.cacheDirectory,
         '/ts-jest/',
-        new Buffer(path).toString('base64'),
+        crypto.createHash('md5').update(path).digest('hex'),
       );
 
       fs.outputFileSync(outputFilePath, outputText);
