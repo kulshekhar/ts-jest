@@ -6,8 +6,6 @@ describe('Long path', () => {
       '--no-cache',
       '--coverage',
     ]);
-    console.log(result.stdout);
-    console.log(result.stderr);
 
     expect(result.status).toBe(0);
   });
