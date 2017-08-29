@@ -21,8 +21,6 @@ export function process(
   );
   const tsJestConfig = getTSJestConfig(config.globals);
 
-  const root = pkgDir.sync();
-
   const isTsFile = path.endsWith('.ts') || path.endsWith('.tsx');
   const isJsFile = path.endsWith('.js') || path.endsWith('.jsx');
   const isHtmlFile = path.endsWith('.html');
@@ -49,18 +47,12 @@ export function process(
       transformOptions,
     );
 
-    // strip root part from path
-    // this results in a shorter filename which will also make the encoded base64 filename for the cache shorter
-    // long file names could be problematic in some OS
-    // see https://github.com/kulshekhar/ts-jest/issues/158
-    path = path.startsWith(root) ? path.substr(root.length) : path;
-
     // store transpiled code contains source map into cache, except test cases
     if (!config.testRegex || !path.match(config.testRegex)) {
       const outputFilePath = nodepath.join(
         config.cacheDirectory,
         '/ts-jest/',
-        new Buffer(path).toString('base64'),
+        crypto.createHash('md5').update(path).digest('hex'),
       );
 
       fs.outputFileSync(outputFilePath, outputText);
