@@ -16,7 +16,7 @@ describe('get ts config from string', () => {
         __TS_CONFIG__: 'my-tsconfig.json',
       });
 
-      expect(result).toEqual({
+      expect(result).toMatchObject({
         inlineSourceMap: true,
         target: ts.ScriptTarget.ES2015,
         module: ts.ModuleKind.CommonJS,
@@ -56,7 +56,7 @@ describe('get ts config from string', () => {
         __TS_CONFIG__: 'extends-tsconfig.json',
       });
 
-      expect(result).toEqual({
+      expect(result).toMatchObject({
         inlineSourceMap: true,
         target: ts.ScriptTarget.ES2015,
         module: ts.ModuleKind.CommonJS,
@@ -71,7 +71,7 @@ describe('get ts config from string', () => {
         __TS_CONFIG__: 'extends-with-overrides-tsconfig.json',
       });
 
-      expect(result).toEqual({
+      expect(result).toMatchObject({
         inlineSourceMap: true,
         target: ts.ScriptTarget.ES5,
         module: ts.ModuleKind.CommonJS,
@@ -91,7 +91,7 @@ describe('get ts config from string', () => {
         },
       });
 
-      expect(result).toEqual({
+      expect(result).toMatchObject({
         inlineSourceMap: true,
         target: ts.ScriptTarget.ES2015,
         module: ts.ModuleKind.CommonJS,
@@ -137,7 +137,7 @@ describe('get ts config from string', () => {
         },
       });
 
-      expect(result).toEqual({
+      expect(result).toMatchObject({
         inlineSourceMap: true,
         target: ts.ScriptTarget.ES2015,
         module: ts.ModuleKind.CommonJS,
@@ -154,7 +154,7 @@ describe('get ts config from string', () => {
         },
       });
 
-      expect(result).toEqual({
+      expect(result).toMatchObject({
         inlineSourceMap: true,
         target: ts.ScriptTarget.ES5,
         module: ts.ModuleKind.CommonJS,
