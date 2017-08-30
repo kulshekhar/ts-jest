@@ -20,7 +20,7 @@ describe('get inline ts config', () => {
         },
       });
 
-      expect(result).toEqual({
+      expect(result).toMatchObject({
         inlineSourceMap: true,
         module: ts.ModuleKind.CommonJS,
         jsx: ts.JsxEmit.React,

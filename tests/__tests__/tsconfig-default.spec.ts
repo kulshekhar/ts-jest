@@ -15,7 +15,7 @@ describe('get default ts config', () => {
   it('should correctly read tsconfig.json', () => {
     const result = getTSConfig(null);
 
-    expect(result).toEqual({
+    expect(result).toMatchObject({
       inlineSourceMap: true,
       target: ts.ScriptTarget.ES2015,
       module: ts.ModuleKind.CommonJS,

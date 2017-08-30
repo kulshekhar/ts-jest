@@ -177,17 +177,14 @@ export function getTSConfig(globals, collectCoverage: boolean = false) {
     }
   }
 
-  if (config.inlineSourceMap !== false) {
-    config.inlineSourceMap = true;
-  }
+  // ts-jest will map lines numbers properly if inlineSourceMap and
+  // inlineSources are set to true. For testing, we don't need the
+  // sourceMap configuration
+  delete config.sourceMap;
+  config.inlineSourceMap = true;
+  config.inlineSources = true;
 
-  // inline source with source map for remapping coverage
   if (collectCoverage) {
-    delete config.sourceMap;
-
-    config.inlineSourceMap = true;
-    config.inlineSources = true;
-
     // the coverage report is broken if `.outDir` is set
     // see https://github.com/kulshekhar/ts-jest/issues/201
     delete config.outDir;

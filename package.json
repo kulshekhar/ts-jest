@@ -1,6 +1,6 @@
 {
   "name": "ts-jest",
-  "version": "20.0.12",
+  "version": "20.0.13",
   "main": "index.js",
   "types": "./dist/index.d.ts",
   "description": "A preprocessor with sourcemap support to help use Typescript with Jest",
@@ -105,7 +105,7 @@
       "prettier --write --single-quote --trailing-comma es5",
       "git add"
     ],
-    "*.ts" : [
+    "*.ts": [
       "prettier --write --single-quote --trailing-comma all",
       "git add"
     ]
