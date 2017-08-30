@@ -71,6 +71,8 @@ This setup should allow you to write Jest tests in Typescript and be able to loc
 From version `"jest": "17.0.0"` we are using same MAJOR.MINOR as [`Jest`](https://github.com/facebook/jest).
 For `"jest": "< 17.0.0"` use `"ts-jest": "0.1.13"`. Docs for it see [here](https://github.com/kulshekhar/ts-jest/blob/e1f95e524ed62091736f70abf63530f1f107ec03/README.md).
 
+You can try using `ts-jest` with `jest@test`; use at your own risk! (And file an issue if you find problems.)
+
 ### Coverage
 
 Prior to version `20.0.0`, coverage reports could be obtained using the inbuilt coverage processor in `ts-jest`. Starting with version `20.0.0`, `ts-jest` delegates coverage processing to jest and no longer includes a coverage processor.
