@@ -1,0 +1,20 @@
+{
+  "jest": {
+    "transform": {
+      ".(ts|tsx)": "../../preprocessor.js"
+    },
+    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
+    "coverageReporters": [
+      "json"
+    ],
+    "collectCoverageFrom": [
+      "long-src-path/**/*.ts",
+      "long-src-path/**/*.js"
+    ],
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ]
+  }
+}
