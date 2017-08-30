@@ -27,6 +27,7 @@ ts-jest is a TypeScript preprocessor with source map support for Jest that lets 
 - [Configuration](#configuration)
   - [tsconfig](#tsconfig)
   - [Skipping Babel](#skipping-babel)
+  - [Using `.babelrc`](#using-babelrc)
 - [Use cases](#use-cases)
   - [React Native](#react-native)
 - [Angular 2](#angular-2)
@@ -34,8 +35,8 @@ ts-jest is a TypeScript preprocessor with source map support for Jest that lets 
   - [Importing packages written in TypeScript](#importing-packages-written-in-typescript)
 - [Known Limitations](#known-limitations)
   - [Known limitations for TS compiler options](#known-limitations-for-ts-compiler-options)
+  - [TS compiler && error reporting](#ts-compiler--error-reporting)
   - [Known Limitations for hoisting](#known-limitations-for-hoisting)
-  - [Current limitations for breakpoints](#current-limitations-for-breakpoints)
 - [How to Contribute](#how-to-contribute)
   - [Quickstart to run tests (only if you're working on this package)](#quickstart-to-run-tests-only-if-youre-working-on-this-package)
 - [License](#license)
@@ -283,10 +284,6 @@ By default Jest ignores everything in `node_modules`. This setting prevents Jest
 If the `jest.mock()` calls is placed after actual code, (e.g. after functions or classes) and `skipBabel` is not set,
 the line numbers in stacktraces will be off.
 We suggest placing the `jest.mock()` calls after the imports, but before any actual code.
-
-### Current limitations for breakpoints
-Breakpoints currently work in WebStorm, but not Visual Studio Code. `debugger`; statements work in both, and will
-map the TypeScript code correctly to the transpiled Javascript.
 
 ## How to Contribute
 If you have any suggestions/pull requests to turn this into a useful package, just open an issue and I'll be happy to work with you to improve this.
