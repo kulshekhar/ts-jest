@@ -1,7 +1,6 @@
 import * as crypto from 'crypto';
 import * as fs from 'fs-extra';
 import * as nodepath from 'path';
-import * as pkgDir from 'pkg-dir';
 import * as tsc from 'typescript';
 import { JestConfig, Path, TransformOptions } from './jest-types';
 import { getPostProcessHook } from './postprocess';
