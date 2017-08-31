@@ -1,9 +1,9 @@
 {
   "jest": {
     "transform": {
-      ".(ts|tsx)": "../../preprocessor.js"
+      "^.+\\.tsx?$": "../../preprocessor.js"
     },
-    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
     "coverageReporters": [
       "json"
     ],
@@ -15,7 +15,9 @@
     "moduleFileExtensions": [
       "ts",
       "tsx",
-      "js"
+      "js",
+      "jsx",
+      "json"
     ]
   }
 }

@@ -4,7 +4,7 @@
     "transform": {
       "^.+\\.tsx?$": "../../preprocessor.js"
     },
-    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(tsx?|jsx?)$",
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
     "coverageReporters": [
       "lcov"
     ],
@@ -16,7 +16,9 @@
     "moduleFileExtensions": [
       "ts",
       "tsx",
-      "js"
+      "js",
+      "jsx",
+      "json"
     ]
   }
 }

@@ -45,7 +45,7 @@
   "homepage": "https://github.com/kulshekhar/ts-jest#readme",
   "jest": {
     "transform": {
-      ".(ts|tsx)": "<rootDir>/dist/preprocessor.js"
+      "^.+\\.tsx?$": "<rootDir>/dist/preprocessor.js"
     },
     "testRegex": "/__tests__/.*\\.(spec)\\.(ts|js)$",
     "coverageReporters": [
@@ -58,7 +58,9 @@
     ],
     "moduleFileExtensions": [
       "ts",
+      "tsx",
       "js",
+      "jsx",
       "json"
     ]
   },
