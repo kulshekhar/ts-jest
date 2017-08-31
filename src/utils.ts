@@ -184,11 +184,11 @@ export function getTSConfig(globals, collectCoverage: boolean = false) {
   config.inlineSourceMap = true;
   config.inlineSources = true;
 
-  if (collectCoverage) {
-    // the coverage report is broken if `.outDir` is set
-    // see https://github.com/kulshekhar/ts-jest/issues/201
-    delete config.outDir;
-  }
+  // the coverage report is broken if `.outDir` is set
+  // see https://github.com/kulshekhar/ts-jest/issues/201
+  // `.outDir` is removed even for test files as it affects with breakpoints
+  // see https://github.com/kulshekhar/ts-jest/issues/309
+  delete config.outDir;
 
   // Note: If we had to read the inline configuration, it's required to set the fields
   // to their string properties, and convert the result accordingly afterwards.

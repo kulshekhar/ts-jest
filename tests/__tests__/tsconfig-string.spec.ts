@@ -16,8 +16,9 @@ describe('get ts config from string', () => {
         __TS_CONFIG__: 'my-tsconfig.json',
       });
 
-      expect(result).toMatchObject({
+      expect(result).toEqual({
         inlineSourceMap: true,
+        inlineSources: true,
         target: ts.ScriptTarget.ES2015,
         module: ts.ModuleKind.CommonJS,
         moduleResolution: ts.ModuleResolutionKind.NodeJs,
@@ -56,8 +57,9 @@ describe('get ts config from string', () => {
         __TS_CONFIG__: 'extends-tsconfig.json',
       });
 
-      expect(result).toMatchObject({
+      expect(result).toEqual({
         inlineSourceMap: true,
+        inlineSources: true,
         target: ts.ScriptTarget.ES2015,
         module: ts.ModuleKind.CommonJS,
         moduleResolution: ts.ModuleResolutionKind.NodeJs,
@@ -71,8 +73,9 @@ describe('get ts config from string', () => {
         __TS_CONFIG__: 'extends-with-overrides-tsconfig.json',
       });
 
-      expect(result).toMatchObject({
+      expect(result).toEqual({
         inlineSourceMap: true,
+        inlineSources: true,
         target: ts.ScriptTarget.ES5,
         module: ts.ModuleKind.CommonJS,
         moduleResolution: ts.ModuleResolutionKind.NodeJs,
@@ -93,6 +96,7 @@ describe('get ts config from string', () => {
 
       expect(result).toMatchObject({
         inlineSourceMap: true,
+        inlineSources: true,
         target: ts.ScriptTarget.ES2015,
         module: ts.ModuleKind.CommonJS,
         moduleResolution: ts.ModuleResolutionKind.NodeJs,
@@ -137,8 +141,9 @@ describe('get ts config from string', () => {
         },
       });
 
-      expect(result).toMatchObject({
+      expect(result).toEqual({
         inlineSourceMap: true,
+        inlineSources: true,
         target: ts.ScriptTarget.ES2015,
         module: ts.ModuleKind.CommonJS,
         moduleResolution: ts.ModuleResolutionKind.NodeJs,
@@ -154,8 +159,9 @@ describe('get ts config from string', () => {
         },
       });
 
-      expect(result).toMatchObject({
+      expect(result).toEqual({
         inlineSourceMap: true,
+        inlineSources: true,
         target: ts.ScriptTarget.ES5,
         module: ts.ModuleKind.CommonJS,
         moduleResolution: ts.ModuleResolutionKind.NodeJs,
