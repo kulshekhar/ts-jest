@@ -47,7 +47,7 @@
     "transform": {
       "^.+\\.tsx?$": "<rootDir>/dist/preprocessor.js"
     },
-    "testRegex": "/__tests__/.*\\.(spec)\\.(ts|js)$",
+    "testRegex": "tests/__tests__/.*\\.spec\\.ts$",
     "coverageReporters": [
       "text"
     ],
