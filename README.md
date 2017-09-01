@@ -37,6 +37,7 @@ ts-jest is a TypeScript preprocessor with source map support for Jest that lets 
   - [Known limitations for TS compiler options](#known-limitations-for-ts-compiler-options)
   - [TS compiler && error reporting](#ts-compiler--error-reporting)
   - [Known Limitations for hoisting](#known-limitations-for-hoisting)
+  - [Current limitations for debugger statements](#current-limitations-for-debugger-statements)
 - [How to Contribute](#how-to-contribute)
   - [Quickstart to run tests (only if you're working on this package)](#quickstart-to-run-tests-only-if-youre-working-on-this-package)
 - [License](#license)
