@@ -20,8 +20,27 @@ describe('get inline ts config', () => {
         },
       });
 
-      expect(result).toMatchObject({
+      expect(result).toEqual({
         inlineSourceMap: true,
+        inlineSources: true,
+        module: ts.ModuleKind.CommonJS,
+        jsx: ts.JsxEmit.React,
+      });
+    });
+
+    it('should not read sourceMap/outDir from tsconfig options', () => {
+      const result = getTSConfig({
+        __TS_CONFIG__: {
+          module: 'commonjs',
+          jsx: 'react',
+          outDir: 'build',
+          sourceMap: true,
+        },
+      });
+
+      expect(result).toEqual({
+        inlineSourceMap: true,
+        inlineSources: true,
         module: ts.ModuleKind.CommonJS,
         jsx: ts.JsxEmit.React,
       });
