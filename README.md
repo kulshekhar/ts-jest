@@ -37,6 +37,7 @@ ts-jest is a TypeScript preprocessor with source map support for Jest that lets 
   - [Known limitations for TS compiler options](#known-limitations-for-ts-compiler-options)
   - [TS compiler && error reporting](#ts-compiler--error-reporting)
   - [Known Limitations for hoisting](#known-limitations-for-hoisting)
+  - [Current limitations for debugger statements](#current-limitations-for-debugger-statements)
 - [How to Contribute](#how-to-contribute)
   - [Quickstart to run tests (only if you're working on this package)](#quickstart-to-run-tests-only-if-youre-working-on-this-package)
 - [License](#license)
@@ -286,6 +287,9 @@ If the `jest.mock()` calls is placed after actual code, (e.g. after functions or
 the line numbers in stacktraces will be off.
 We suggest placing the `jest.mock()` calls after the imports, but before any actual code.
 
+### Current limitations for debugger statements
+The `debugger`; statements do not work in VSCode, but breakpoints will map the transpiled Javasript code correctly to the Typescript code.
+ 
 ### `const enum` is not supported
 
 This is due to a limitation in the ts-jest preprocessor which compiles each test file individually, therefore ignoring implementations of ambient declarations. The TypeScript team currently have [no plan to support const enum inlining](https://github.com/Microsoft/TypeScript/issues/5243) for this particular compiler method. See #112 and #281 for more information.
