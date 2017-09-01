@@ -288,7 +288,7 @@ the line numbers in stacktraces will be off.
 We suggest placing the `jest.mock()` calls after the imports, but before any actual code.
 
 ### Current limitations for debugger statements
-The `debugger`; statements do not work in VSCode, but breakpoints will map the transpiled Javasript code correctly to the Typescript code.
+The `debugger`; statements do not work in [VSCode](https://code.visualstudio.com/), but breakpoints will map the transpiled Javascript code correctly to the TypeScript code.
  
 ### `const enum` is not supported
 
