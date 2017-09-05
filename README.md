@@ -192,6 +192,8 @@ In some cases, projects may not want to have a `.babelrc` file, but still need t
 }
 ```
 
+Note that if you also set the `useBabelrc` option to `true`, any configuration passed using this method will be overwritten by corresponding keys in `.babelrc` files.
+
 ## Use cases
 
 ### React Native
