@@ -1,13 +1,13 @@
 {
   "name": "ts-jest",
-  "version": "20.0.9",
+  "version": "21.0.0",
   "main": "index.js",
   "types": "./dist/index.d.ts",
   "description": "A preprocessor with sourcemap support to help use Typescript with Jest",
   "scripts": {
     "build": "tsc -p .",
     "build:watch": "tsc -p . -w",
-    "clean": "rimraf dist/**/* && rimraf tests/simple/coverage/**/* && rimraf tests/simple-async/coverage/**/*",
+    "clean": "rimraf dist/**/* && rimraf tests/simple/coverage && rimraf tests/simple-async/coverage",
     "clean-build": "npm run clean && npm run build",
     "pretest": "npm run tslint && npm run clean-build",
     "test": "node scripts/tests.js",
@@ -45,9 +45,9 @@
   "homepage": "https://github.com/kulshekhar/ts-jest#readme",
   "jest": {
     "transform": {
-      ".(ts|tsx)": "<rootDir>/dist/preprocessor.js"
+      "^.+\\.tsx?$": "<rootDir>/dist/preprocessor.js"
     },
-    "testRegex": "/__tests__/.*\\.(spec)\\.(ts|js)$",
+    "testRegex": "tests/__tests__/.*\\.spec\\.ts$",
     "coverageReporters": [
       "text"
     ],
@@ -58,7 +58,9 @@
     ],
     "moduleFileExtensions": [
       "ts",
+      "tsx",
       "js",
+      "jsx",
       "json"
     ]
   },
@@ -66,16 +68,16 @@
     "babel-core": "^6.24.1",
     "babel-plugin-istanbul": "^4.1.4",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.24.1",
-    "babel-preset-jest": "^20.0.3",
+    "babel-preset-jest": "^21.0.0",
     "fs-extra": "^4.0.0",
-    "jest-config": "^20.0.0",
-    "jest-util": "^20.0.0",
+    "jest-config": "^21.0.0",
+    "jest-util": "^21.0.0",
     "pkg-dir": "^2.0.0",
     "source-map-support": "^0.4.4",
     "yargs": "^8.0.1"
   },
   "peerDependencies": {
-    "jest": "^20.0.0",
+    "jest": "^21.0.0 || ^21.1.0-alpha.1 || ^22.0.0-alpha.1",
     "typescript": "2.x"
   },
   "devDependencies": {
@@ -90,7 +92,7 @@
     "cross-spawn-with-kill": "latest",
     "doctoc": "latest",
     "husky": "^0.14.3",
-    "jest": "^20.0.0",
+    "jest": "^21.0.0",
     "lint-staged": "^4.0.3",
     "prettier": "^1.5.3",
     "react": "latest",
@@ -105,7 +107,7 @@
       "prettier --write --single-quote --trailing-comma es5",
       "git add"
     ],
-    "*.ts" : [
+    "*.ts": [
       "prettier --write --single-quote --trailing-comma all",
       "git add"
     ]

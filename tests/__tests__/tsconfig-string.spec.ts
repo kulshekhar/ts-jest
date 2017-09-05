@@ -18,6 +18,7 @@ describe('get ts config from string', () => {
 
       expect(result).toEqual({
         inlineSourceMap: true,
+        inlineSources: true,
         target: ts.ScriptTarget.ES2015,
         module: ts.ModuleKind.CommonJS,
         moduleResolution: ts.ModuleResolutionKind.NodeJs,
@@ -58,6 +59,7 @@ describe('get ts config from string', () => {
 
       expect(result).toEqual({
         inlineSourceMap: true,
+        inlineSources: true,
         target: ts.ScriptTarget.ES2015,
         module: ts.ModuleKind.CommonJS,
         moduleResolution: ts.ModuleResolutionKind.NodeJs,
@@ -73,6 +75,7 @@ describe('get ts config from string', () => {
 
       expect(result).toEqual({
         inlineSourceMap: true,
+        inlineSources: true,
         target: ts.ScriptTarget.ES5,
         module: ts.ModuleKind.CommonJS,
         moduleResolution: ts.ModuleResolutionKind.NodeJs,
@@ -91,8 +94,9 @@ describe('get ts config from string', () => {
         },
       });
 
-      expect(result).toEqual({
+      expect(result).toMatchObject({
         inlineSourceMap: true,
+        inlineSources: true,
         target: ts.ScriptTarget.ES2015,
         module: ts.ModuleKind.CommonJS,
         moduleResolution: ts.ModuleResolutionKind.NodeJs,
@@ -139,6 +143,7 @@ describe('get ts config from string', () => {
 
       expect(result).toEqual({
         inlineSourceMap: true,
+        inlineSources: true,
         target: ts.ScriptTarget.ES2015,
         module: ts.ModuleKind.CommonJS,
         moduleResolution: ts.ModuleResolutionKind.NodeJs,
@@ -156,6 +161,7 @@ describe('get ts config from string', () => {
 
       expect(result).toEqual({
         inlineSourceMap: true,
+        inlineSources: true,
         target: ts.ScriptTarget.ES5,
         module: ts.ModuleKind.CommonJS,
         moduleResolution: ts.ModuleResolutionKind.NodeJs,

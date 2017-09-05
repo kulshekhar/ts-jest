@@ -9,7 +9,7 @@
 
 > Note: Looking for collaborators. [Want to help improve ts-jest?](https://github.com/kulshekhar/ts-jest/issues/223)
 
-`ts-jest` is a TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript.
+ts-jest is a TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript.
 
 ## Table of Contents
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
@@ -36,8 +36,8 @@
   - [Importing packages written in TypeScript](#importing-packages-written-in-typescript)
 - [Known Limitations](#known-limitations)
   - [Known limitations for TS compiler options](#known-limitations-for-ts-compiler-options)
+  - [TS compiler && error reporting](#ts-compiler--error-reporting)
   - [Known Limitations for hoisting](#known-limitations-for-hoisting)
-  - [Current limitations for breakpoints](#current-limitations-for-breakpoints)
 - [How to Contribute](#how-to-contribute)
   - [Quickstart to run tests (only if you're working on this package)](#quickstart-to-run-tests-only-if-youre-working-on-this-package)
 - [License](#license)
@@ -55,13 +55,14 @@ Modify your project's `package.json` so that the `jest` section looks something 
 {
   "jest": {
     "transform": {
-      ".(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+      "^.+\\.tsx?$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
     },
-    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
     "moduleFileExtensions": [
       "ts",
       "tsx",
       "js",
+      "jsx",
       "json"
     ]
   }
@@ -73,23 +74,25 @@ This setup should allow you to write Jest tests in Typescript and be able to loc
 From version `"jest": "17.0.0"` we are using same MAJOR.MINOR as [`Jest`](https://github.com/facebook/jest).
 For `"jest": "< 17.0.0"` use `"ts-jest": "0.1.13"`. Docs for it see [here](https://github.com/kulshekhar/ts-jest/blob/e1f95e524ed62091736f70abf63530f1f107ec03/README.md).
 
+You can try using ts-jest with `jest@test`; use at your own risk! (And file an issue if you find problems.)
+
 ### Coverage
 
-Prior to version `20.0.0`, coverage reports could be obtained using the inbuilt coverage processor in `ts-jest`. Starting with version `20.0.0`, `ts-jest` delegates coverage processing to jest and no longer includes a coverage processor.
+Prior to version `20.0.0`, coverage reports could be obtained using the inbuilt coverage processor in ts-jest. Starting with version `20.0.0`, ts-jest delegates coverage processing to jest and no longer includes a coverage processor.
 
 To generate coverage results, set the `mapCoverage` property in the `jest` configuration section to `true`.
 
 > Please note that the `outDir` property in the `jest` configuration section is removed in coverage mode, due to [#201](https://github.com/kulshekhar/ts-jest/issues/201).
 
 ## Default Setup
-`ts-jest` tries to ship with sensible defaults, to get you on your feet as quickly as possible.
+ts-jest tries to ship with sensible defaults, to get you on your feet as quickly as possible.
 
 ### Sourcemap support
 Sourcemaps should work out of the box. That means your stack traces should have the correct line numbers,
 and you should be able to step through the TypeScript code using a debugger.
 
 ### Automatically finds tsconfig.json
-`ts-jest` automatically located your `tsconfig` file.
+ts-jest automatically located your `tsconfig` file.
 If you want to compile typescript with a special configuration, you [can do that too](#tsconfig)
 
 ### Supports synthetic modules
@@ -101,12 +104,12 @@ import * as React from 'react';
 //Synthetic default imports:
 import React from 'react';
 ```
-`ts-jest` tries to support that. If `allowSyntheticDefaultImports` is set to true in your `tsconfig` file, it uses babel
+ts-jest tries to support that. If `allowSyntheticDefaultImports` is set to true in your `tsconfig` file, it uses babel
 to automatically create the synthetic default exports for you - nothing else needed.
 You can opt-out of this behaviour with the [skipBabel flag](#skipping-babel)
 
 ### Supports automatic of jest.mock() calls
-[Just like Jest](https://facebook.github.io/jest/docs/manual-mocks.html#using-with-es-module-imports) `ts-jest`
+[Just like Jest](https://facebook.github.io/jest/docs/manual-mocks.html#using-with-es-module-imports) ts-jest
 automatically uses babel to hoist your `jest.mock()` calls to the top of your file.
 You can opt-out of this behaviour with the [skipBabel flag](#skipping-babel)
 
@@ -118,7 +121,7 @@ By default this package will try to locate `tsconfig.json` and use its compiler 
 
 You can override this behaviour by pointing ts-jest to a custom TypeScript configuration file.
 You can do this by setting the `tsConfigFile` option in your global variables under the `ts-jest` key to path of the
-custom configuration file (relative to the project's root directory) 
+custom configuration file (relative to the project's root directory)
 
 ```json
 {
@@ -213,8 +216,8 @@ Ensure `.babelrc` contains:
 In `package.json`, inside `jest` section, the `transform` should be like this:
 ```json
 "transform": {
-  "^.+\\.js$": "<rootDir>/node_modules/babel-jest",
-  ".(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+  "^.+\\.jsx?$": "<rootDir>/node_modules/babel-jest",
+  "^.+\\.tsx?$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
 }
 ```
 
@@ -224,14 +227,16 @@ Fully completed jest section should look like this:
 "jest": {
     "preset": "react-native",
     "transform": {
-      "^.+\\.js$": "<rootDir>/node_modules/babel-jest",
-      ".(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+      "^.+\\.jsx?$": "<rootDir>/node_modules/babel-jest",
+      "^.+\\.tsx?$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
     },
-    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
     "moduleFileExtensions": [
       "ts",
       "tsx",
-      "js"
+      "js",
+      "jsx",
+      "json"
     ]
   }
 ```
@@ -255,7 +260,7 @@ You'll also need to extend your `transform` regex with `html` extension:
 {
   "jest": {
     "transform": {
-      "^.+\\.(ts|tsx|js|html)$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+      "^.+\\.(tsx?|html)$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
     }
   }
 }
@@ -294,7 +299,7 @@ By default Jest ignores everything in `node_modules`. This setting prevents Jest
 ```
 ### TS compiler && error reporting
 - ts-jest only returns syntax errors from [tsc](https://github.com/Microsoft/TypeScript/issues/4864#issuecomment-141567247)
-- Non syntactic errors do not show up in [jest](https://github.com/facebook/jest/issues/2168)  
+- Non syntactic errors do not show up in [jest](https://github.com/facebook/jest/issues/2168)
 - If you only want to run jest if tsc does not output any errors, a workaround is `tsc --noEmit -p . && jest`
 
 ### Known Limitations for hoisting
@@ -302,9 +307,11 @@ If the `jest.mock()` calls is placed after actual code, (e.g. after functions or
 the line numbers in stacktraces will be off.
 We suggest placing the `jest.mock()` calls after the imports, but before any actual code.
 
-### Current limitations for breakpoints
-Breakpoints currently work in WebStorm, but not Visual Studio Code. `debugger`; statements work in both, and will
-map the TypeScript code correctly to the transpiled Javascript.
+### `const enum` is not supported
+
+This is due to a limitation in the ts-jest preprocessor which compiles each test file individually, therefore ignoring implementations of ambient declarations. The TypeScript team currently have [no plan to support const enum inlining](https://github.com/Microsoft/TypeScript/issues/5243) for this particular compiler method. See #112 and #281 for more information.
+
+One possible workaround is to manually inline usage of const enum values - i.e. in your code, use `let x: Enum = 1 as Enum` as opposed to `let x: Enum = Enum.FirstValue`. This allows you to keep the type checking on enums without running into this issue.
 
 ## How to Contribute
 If you have any suggestions/pull requests to turn this into a useful package, just open an issue and I'll be happy to work with you to improve this.

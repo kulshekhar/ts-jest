@@ -1,13 +1,9 @@
 import * as fs from 'fs';
 import { normalize } from 'jest-config';
+import * as setFromArgv from 'jest-config/build/set_from_argv';
 import * as path from 'path';
 import * as tsc from 'typescript';
 import { TsJestConfig } from './jest-types';
-/* tslint:disable */
-
-const setFromArgv = require('jest-config/build/setFromArgv');
-// import * as setFromArgv from 'jest-config/build/setfromArgv';
-/* tslint:enable */
 
 function parseConfig(argv) {
   if (argv.config && typeof argv.config === 'string') {
@@ -177,21 +173,18 @@ export function getTSConfig(globals, collectCoverage: boolean = false) {
     }
   }
 
-  if (config.inlineSourceMap !== false) {
-    config.inlineSourceMap = true;
-  }
+  // ts-jest will map lines numbers properly if inlineSourceMap and
+  // inlineSources are set to true. For testing, we don't need the
+  // sourceMap configuration
+  delete config.sourceMap;
+  config.inlineSourceMap = true;
+  config.inlineSources = true;
 
-  // inline source with source map for remapping coverage
-  if (collectCoverage) {
-    delete config.sourceMap;
-
-    config.inlineSourceMap = true;
-    config.inlineSources = true;
-
-    // the coverage report is broken if `.outDir` is set
-    // see https://github.com/kulshekhar/ts-jest/issues/201
-    delete config.outDir;
-  }
+  // the coverage report is broken if `.outDir` is set
+  // see https://github.com/kulshekhar/ts-jest/issues/201
+  // `.outDir` is removed even for test files as it affects with breakpoints
+  // see https://github.com/kulshekhar/ts-jest/issues/309
+  delete config.outDir;
 
   // Note: If we had to read the inline configuration, it's required to set the fields
   // to their string properties, and convert the result accordingly afterwards.

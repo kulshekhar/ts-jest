@@ -3,8 +3,14 @@
     "transform": {
       "^.+\\.tsx?$": "../../preprocessor.js"
     },
-    "moduleDirectories": ["node_modules", "src"],
     "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+    "coverageReporters": [
+      "json"
+    ],
+    "collectCoverageFrom": [
+      "long-src-path/**/*.ts",
+      "long-src-path/**/*.js"
+    ],
     "moduleFileExtensions": [
       "ts",
       "tsx",
