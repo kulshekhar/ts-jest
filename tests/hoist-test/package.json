@@ -1,14 +1,16 @@
 {
   "jest": {
     "transform": {
-      ".(ts|tsx)": "../../preprocessor.js"
+      "^.+\\.tsx?$": "../../preprocessor.js"
     },
     "moduleDirectories": ["node_modules", "src"],
-    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
     "moduleFileExtensions": [
       "ts",
       "tsx",
-      "js"
+      "js",
+      "jsx",
+      "json"
     ]
   }
 }

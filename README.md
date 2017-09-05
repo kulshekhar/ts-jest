@@ -54,9 +54,9 @@ Modify your project's `package.json` so that the `jest` section looks something 
 {
   "jest": {
     "transform": {
-      ".(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+      "^.+\\.tsx?$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
     },
-    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
     "moduleFileExtensions": [
       "ts",
       "tsx",
@@ -197,8 +197,8 @@ Ensure `.babelrc` contains:
 In `package.json`, inside `jest` section, the `transform` should be like this:
 ```json
 "transform": {
-  "^.+\\.js$": "<rootDir>/node_modules/babel-jest",
-  ".(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+  "^.+\\.jsx?$": "<rootDir>/node_modules/babel-jest",
+  "^.+\\.tsx?$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
 }
 ```
 
@@ -208,14 +208,16 @@ Fully completed jest section should look like this:
 "jest": {
     "preset": "react-native",
     "transform": {
-      "^.+\\.js$": "<rootDir>/node_modules/babel-jest",
-      ".(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+      "^.+\\.jsx?$": "<rootDir>/node_modules/babel-jest",
+      "^.+\\.tsx?$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
     },
-    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
     "moduleFileExtensions": [
       "ts",
       "tsx",
-      "js"
+      "js",
+      "jsx",
+      "json"
     ]
   }
 ```
@@ -239,7 +241,7 @@ You'll also need to extend your `transform` regex with `html` extension:
 {
   "jest": {
     "transform": {
-      "^.+\\.(ts|tsx|js|html)$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+      "^.+\\.(tsx?|html)$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
     }
   }
 }

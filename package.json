@@ -7,7 +7,7 @@
   "scripts": {
     "build": "tsc -p .",
     "build:watch": "tsc -p . -w",
-    "clean": "rimraf dist/**/* && rimraf tests/simple/coverage/**/* && rimraf tests/simple-async/coverage/**/*",
+    "clean": "rimraf dist/**/* && rimraf tests/simple/coverage && rimraf tests/simple-async/coverage",
     "clean-build": "npm run clean && npm run build",
     "pretest": "npm run tslint && npm run clean-build",
     "test": "node scripts/tests.js",
@@ -45,9 +45,9 @@
   "homepage": "https://github.com/kulshekhar/ts-jest#readme",
   "jest": {
     "transform": {
-      ".(ts|tsx)": "<rootDir>/dist/preprocessor.js"
+      "^.+\\.tsx?$": "<rootDir>/dist/preprocessor.js"
     },
-    "testRegex": "/__tests__/.*\\.(spec)\\.(ts|js)$",
+    "testRegex": "tests/__tests__/.*\\.spec\\.ts$",
     "coverageReporters": [
       "text"
     ],
@@ -58,7 +58,9 @@
     ],
     "moduleFileExtensions": [
       "ts",
+      "tsx",
       "js",
+      "jsx",
       "json"
     ]
   },

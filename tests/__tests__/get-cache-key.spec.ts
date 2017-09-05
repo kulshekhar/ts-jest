@@ -14,9 +14,9 @@ describe('getCacheKey', () => {
       }
     },
     "transform": {
-      ".(ts|tsx)": "../../preprocessor.js"
+      "^.+\\\\.tsx?$": "../../preprocessor.js"
     },
-    "testRegex": "(/__tests__/.*|\\\\.(test|spec))\\\\.(ts|tsx|js)$"
+    "testRegex": "(/__tests__/.*|(\\\\.|/)(test|spec))\\\\.(jsx?|tsx?)$"
   }`;
   const options: TransformOptions = { instrument: false };
   const originalHash = getCacheKey(src, filepath, configStr, options);

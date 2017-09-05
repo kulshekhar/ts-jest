@@ -1,10 +1,10 @@
 {
   "rootDir": "./",
   "transform": {
-    ".(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+    "^.+\\.tsx?$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
   },
   "mapCoverage": true,
-  "testRegex": "/specs/.*\\.spec\\.(ts|tsx|js)$",
+  "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
   "testEnvironment": "jsdom",
   "coverageReporters": [
     "html",
@@ -16,6 +16,7 @@
     "ts",
     "tsx",
     "js",
+    "jsx",
     "json"
   ],
   "collectCoverageFrom": [
