@@ -1,6 +1,6 @@
 {
   "name": "ts-jest",
-  "version": "20.0.14",
+  "version": "21.0.0",
   "main": "index.js",
   "types": "./dist/index.d.ts",
   "description": "A preprocessor with sourcemap support to help use Typescript with Jest",
@@ -66,16 +66,16 @@
     "babel-core": "^6.24.1",
     "babel-plugin-istanbul": "^4.1.4",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.24.1",
-    "babel-preset-jest": "^20.0.3",
+    "babel-preset-jest": "^21.0.0",
     "fs-extra": "^4.0.0",
-    "jest-config": "^20.0.0",
-    "jest-util": "^20.0.0",
+    "jest-config": "^21.0.0",
+    "jest-util": "^21.0.0",
     "pkg-dir": "^2.0.0",
     "source-map-support": "^0.4.4",
     "yargs": "^8.0.1"
   },
   "peerDependencies": {
-    "jest": "^20.0.0 || ^20.1.0-alpha.1 || ^21.0.0-alpha.1",
+    "jest": "^21.0.0 || ^21.1.0-alpha.1 || ^22.0.0-alpha.1",
     "typescript": "2.x"
   },
   "devDependencies": {
@@ -90,7 +90,7 @@
     "cross-spawn-with-kill": "latest",
     "doctoc": "latest",
     "husky": "^0.14.3",
-    "jest": "^20.0.0",
+    "jest": "^21.0.0",
     "lint-staged": "^4.0.3",
     "prettier": "^1.5.3",
     "react": "latest",
