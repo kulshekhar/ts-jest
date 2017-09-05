@@ -21,7 +21,7 @@ install:
   - ps: Install-Product node $env:nodejs_version
   - set CI=true
   - set AppVeyor=true
-  - npm i -g npm@latest tslint
+  - npm i -g npm@5.3 tslint #TODO restore to npm@latest when npm stops breaking builds https://github.com/npm/npm/issues/18380
   - set PATH=%APPDATA%\npm;%PATH%
   - npm install
 
