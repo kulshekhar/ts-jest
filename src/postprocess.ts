@@ -18,8 +18,8 @@ import {
 function createBabelTransformer(options: BabelTransformOptions) {
   options = {
     ...options,
-    plugins: (options && options.plugins) || [],
-    presets: ((options && options.presets) || []).concat([jestPreset]),
+    plugins: options.plugins || [],
+    presets: (options.presets || []).concat([jestPreset]),
     // If retainLines isn't set to true, the line numbers
     // are off by 1
     retainLines: true,
@@ -65,15 +65,18 @@ export const getPostProcessHook = (
     return src => src; // Identity function
   }
 
-  const plugins = [];
+  const plugins = tsJestConfig.babelConfig
+    ? tsJestConfig.babelConfig.plugins
+    : [];
   // If we're not skipping babel
   if (tsCompilerOptions.allowSyntheticDefaultImports) {
     plugins.push('transform-es2015-modules-commonjs');
   }
 
   return createBabelTransformer({
+    ...tsJestConfig.babelConfig,
     babelrc: tsJestConfig.useBabelrc || false,
     plugins,
-    presets: [],
+    presets: tsJestConfig.babelConfig ? tsJestConfig.babelConfig.presets : [],
   });
 };
