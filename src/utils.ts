@@ -64,7 +64,7 @@ export function getJestConfig(root) {
   const yargs = require('yargs');
   const argv = yargs(process.argv.slice(2)).argv;
   const rawConfig = readRawConfig(argv, root);
-  return Object.freeze(setFromArgv(rawConfig, argv));
+  return Object.freeze(setFromArgv.default(rawConfig, argv));
 }
 
 export function getTSJestConfig(globals: any): TsJestConfig {

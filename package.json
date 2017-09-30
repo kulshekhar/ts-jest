@@ -68,10 +68,10 @@
     "babel-core": "^6.24.1",
     "babel-plugin-istanbul": "^4.1.4",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.24.1",
-    "babel-preset-jest": "^21.0.0",
+    "babel-preset-jest": "^21.2.0",
     "fs-extra": "^4.0.0",
-    "jest-config": "^21.0.0",
-    "jest-util": "^21.0.0",
+    "jest-config": "^21.2.1",
+    "jest-util": "^21.2.1",
     "pkg-dir": "^2.0.0",
     "source-map-support": "^0.4.4",
     "yargs": "^8.0.1"
