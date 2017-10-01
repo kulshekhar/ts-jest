@@ -1,6 +1,6 @@
 {
   "name": "ts-jest",
-  "version": "21.0.1",
+  "version": "21.1.0",
   "main": "index.js",
   "types": "./dist/index.d.ts",
   "description": "A preprocessor with sourcemap support to help use Typescript with Jest",
@@ -93,7 +93,7 @@
     "cross-spawn-with-kill": "latest",
     "doctoc": "latest",
     "husky": "^0.14.3",
-    "jest": "^21.0.0",
+    "jest": "^21.1.0",
     "lint-staged": "^4.0.3",
     "prettier": "^1.5.3",
     "react": "latest",
