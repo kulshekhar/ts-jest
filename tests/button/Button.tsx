@@ -1,8 +1,6 @@
 import * as React from 'react';
 
-interface ButtonProps { };
-
-export class Button extends React.Component<ButtonProps, void>{
+export class Button extends React.Component {
   render() {
     return (
       <div className="button">{this.props.children}</div>
@@ -10,7 +8,7 @@ export class Button extends React.Component<ButtonProps, void>{
   }
 }
 
-export class BadButton extends React.Component<ButtonProps, void>{
+export class BadButton extends React.Component {
   render() {
     `
     

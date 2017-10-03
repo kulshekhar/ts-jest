@@ -1,6 +1,6 @@
 import runJest from '../__helpers__/runJest';
 
-describe('TSX Errors', () => {
+xdescribe('TSX Errors', () => {
   it('should show the correct error locations in the typescript files', () => {
     const result = runJest('../button', ['--no-cache', '-u']);
 
