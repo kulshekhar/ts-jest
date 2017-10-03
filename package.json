@@ -73,7 +73,7 @@
     "jest-config": "^21.0.0",
     "jest-util": "^21.0.0",
     "pkg-dir": "^2.0.0",
-    "source-map-support": "^0.4.4",
+    "source-map-support": "^0.5.0",
     "yargs": "^9.0.1"
   },
   "peerDependencies": {
