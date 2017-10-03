@@ -1,7 +1,11 @@
 import runJest from '../__helpers__/runJest';
+import * as React from 'react';
+
+const nodeVersion = parseInt(process.version.substr(1, 2));
+const reactVersion = parseInt(React.version.substr(0, 2));
 
 const tmpDescribe =
-  parseInt(process.version.substr(1, 2)) >= 8 ? xdescribe : describe;
+  nodeVersion >= 8 && reactVersion >= 16 ? xdescribe : describe;
 
 tmpDescribe('TSX Errors', () => {
   it('should show the correct error locations in the typescript files', () => {
