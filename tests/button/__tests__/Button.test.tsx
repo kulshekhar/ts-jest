@@ -10,7 +10,7 @@ it('Button renders correctly', () => {
   expect(tree).toMatchSnapshot();
 });
 
-it('BadButton should throw an error on line 16', () => {
+it('BadButton should throw an error on line 22', () => {
 
   renderer.create(<BadButton>hi!</BadButton>).toJSON();
 

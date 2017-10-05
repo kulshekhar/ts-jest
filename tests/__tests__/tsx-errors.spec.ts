@@ -14,7 +14,7 @@ tmpDescribe('TSX Errors', () => {
     const stderr = result.stderr.toString();
 
     expect(result.status).toBe(1);
-    expect(stderr).toContain('Button.tsx:16:17');
+    expect(stderr).toContain('Button.tsx:22:17');
     expect(stderr).toContain('Button.test.tsx:15:12');
   });
 });
