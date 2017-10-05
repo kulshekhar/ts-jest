@@ -1,8 +1,12 @@
 import * as React from 'react';
 
-interface ButtonProps { };
+// This interface has been put here just so that the line
+// numbers in the transpiled javascript file are different
+interface ButtonProps {
+  someProp: any;
+};
 
-export class Button extends React.Component<ButtonProps, void>{
+export class Button extends React.Component {
   render() {
     return (
       <div className="button">{this.props.children}</div>
@@ -10,7 +14,7 @@ export class Button extends React.Component<ButtonProps, void>{
   }
 }
 
-export class BadButton extends React.Component<ButtonProps, void>{
+export class BadButton extends React.Component {
   render() {
     `
     
