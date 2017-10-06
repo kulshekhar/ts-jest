@@ -113,9 +113,34 @@ function readCompilerOptions(configPath: string) {
   return parsedConfig.options;
 }
 
+function getPathToClosestTSConfig(
+  startDir?: string,
+  previousDir?: string,
+): string {
+  // Starting with the startDir directory and moving on to the
+  // parent directory recursively (going no further than the root directory)
+  // find and return the path to the first encountered tsconfig.json file
+
+  if (!startDir) {
+    return getPathToClosestTSConfig('.');
+  }
+
+  const tsConfigPath = path.join(startDir, 'tsconfig.json');
+
+  const startDirPath = path.resolve(startDir);
+  const previousDirPath = path.resolve(previousDir || '/');
+
+  if (startDirPath === previousDirPath || fs.existsSync(tsConfigPath)) {
+    return tsConfigPath;
+  }
+
+  return getPathToClosestTSConfig(path.join(startDir, '..'), startDir);
+}
+
 export function getTSConfigOptionFromConfig(globals: any) {
+  const defaultTSConfigFile = getPathToClosestTSConfig();
   if (!globals) {
-    return 'tsconfig.json';
+    return defaultTSConfigFile;
   }
 
   const tsJestConfig = getTSJestConfig(globals);
@@ -129,7 +154,7 @@ More information at https://github.com/kulshekhar/ts-jest#tsconfig`);
     return tsJestConfig.tsConfigFile;
   }
 
-  return 'tsconfig.json';
+  return defaultTSConfigFile;
 }
 
 export function mockGlobalTSConfigSchema(globals: any) {
