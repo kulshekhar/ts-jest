@@ -113,6 +113,21 @@ function readCompilerOptions(configPath: string) {
   return parsedConfig.options;
 }
 
+function getStartDir(): string {
+  // This is needed because of the way our tests are structured.
+  // If this is being executed as a library (under node_modules)
+  // we want to start with the project directory that's three
+  // levels above.
+  // If t his is being executed from the test suite, we want to start
+  // in the directory of the test
+
+  const grandparent = path.resolve(__dirname, '..', '..');
+  if (grandparent.endsWith('/node_modules')) {
+    return path.resolve(grandparent, '..');
+  }
+  return '.';
+}
+
 function getPathToClosestTSConfig(
   startDir?: string,
   previousDir?: string,
@@ -122,7 +137,7 @@ function getPathToClosestTSConfig(
   // find and return the path to the first encountered tsconfig.json file
 
   if (!startDir) {
-    return getPathToClosestTSConfig('.');
+    return getPathToClosestTSConfig(getStartDir());
   }
 
   const tsConfigPath = path.join(startDir, 'tsconfig.json');
