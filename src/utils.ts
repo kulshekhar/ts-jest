@@ -204,7 +204,7 @@ export function getTSConfig(globals, collectCoverage: boolean = false) {
 
     config = readCompilerOptions(configPath);
 
-    if (configFileName === 'tsconfig.json') {
+    if (configFileName === getStartDir() + '/tsconfig.json') {
       // hardcode module to 'commonjs' in case the config is being loaded
       // from the default tsconfig file. This is to ensure that coverage
       // works well. If there's a need to override, it can be done using
