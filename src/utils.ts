@@ -113,9 +113,49 @@ function readCompilerOptions(configPath: string) {
   return parsedConfig.options;
 }
 
+function getStartDir(): string {
+  // This is needed because of the way our tests are structured.
+  // If this is being executed as a library (under node_modules)
+  // we want to start with the project directory that's three
+  // levels above.
+  // If t his is being executed from the test suite, we want to start
+  // in the directory of the test
+
+  const grandparent = path.resolve(__dirname, '..', '..');
+  if (grandparent.endsWith('/node_modules')) {
+    return path.resolve(grandparent, '..');
+  }
+  return '.';
+}
+
+function getPathToClosestTSConfig(
+  startDir?: string,
+  previousDir?: string,
+): string {
+  // Starting with the startDir directory and moving on to the
+  // parent directory recursively (going no further than the root directory)
+  // find and return the path to the first encountered tsconfig.json file
+
+  if (!startDir) {
+    return getPathToClosestTSConfig(getStartDir());
+  }
+
+  const tsConfigPath = path.join(startDir, 'tsconfig.json');
+
+  const startDirPath = path.resolve(startDir);
+  const previousDirPath = path.resolve(previousDir || '/');
+
+  if (startDirPath === previousDirPath || fs.existsSync(tsConfigPath)) {
+    return tsConfigPath;
+  }
+
+  return getPathToClosestTSConfig(path.join(startDir, '..'), startDir);
+}
+
 export function getTSConfigOptionFromConfig(globals: any) {
+  const defaultTSConfigFile = getPathToClosestTSConfig();
   if (!globals) {
-    return 'tsconfig.json';
+    return defaultTSConfigFile;
   }
 
   const tsJestConfig = getTSJestConfig(globals);
@@ -129,7 +169,7 @@ More information at https://github.com/kulshekhar/ts-jest#tsconfig`);
     return tsJestConfig.tsConfigFile;
   }
 
-  return 'tsconfig.json';
+  return defaultTSConfigFile;
 }
 
 export function mockGlobalTSConfigSchema(globals: any) {
