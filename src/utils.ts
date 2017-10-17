@@ -123,8 +123,9 @@ function getStartDir(): string {
 
   const grandparent = path.resolve(__dirname, '..', '..');
   if (grandparent.endsWith('/node_modules')) {
-    return path.resolve(grandparent, '..');
+    return process.cwd();
   }
+
   return '.';
 }
 
