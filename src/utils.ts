@@ -1,6 +1,7 @@
 import * as fs from 'fs';
 import { normalize } from 'jest-config';
 import * as setFromArgv from 'jest-config/build/set_from_argv';
+import * as os from 'os';
 import * as path from 'path';
 import * as tsc from 'typescript';
 import { TsJestConfig } from './jest-types';
@@ -118,12 +119,18 @@ function getStartDir(): string {
   // If this is being executed as a library (under node_modules)
   // we want to start with the project directory that's three
   // levels above.
-  // If t his is being executed from the test suite, we want to start
+  // If this is being executed from the test suite, we want to start
   // in the directory of the test
 
   const grandparent = path.resolve(__dirname, '..', '..');
   if (grandparent.endsWith('/node_modules')) {
-    return process.cwd();
+    const cwd = process.cwd();
+    if (cwd.startsWith(os.tmpdir())) {
+      // ignore the current working directory if the process
+      // is executing in a temporary directory
+      return path.resolve(grandparent, '..');
+    }
+    return cwd;
   }
 
   return '.';
