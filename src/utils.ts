@@ -153,7 +153,7 @@ function getPathToClosestTSConfig(
   return getPathToClosestTSConfig(path.join(startDir, '..'), startDir);
 }
 
-export function getTSConfigOptionFromConfig(globals: any) {
+export function getTSConfigPathFromConfig(globals: any): string {
   const defaultTSConfigFile = getPathToClosestTSConfig();
   if (!globals) {
     return defaultTSConfigFile;
@@ -161,12 +161,7 @@ export function getTSConfigOptionFromConfig(globals: any) {
 
   const tsJestConfig = getTSJestConfig(globals);
 
-  if (globals.__TS_CONFIG__) {
-    console.warn(`Using globals > __TS_CONFIG__ option for setting TS config is deprecated.
-Please set config using this option:\nglobals > ts-jest > tsConfigFile (string).
-More information at https://github.com/kulshekhar/ts-jest#tsconfig`);
-    return globals.__TS_CONFIG__;
-  } else if (tsJestConfig.tsConfigFile) {
+  if (tsJestConfig.tsConfigFile) {
     return tsJestConfig.tsConfigFile;
   }
 
@@ -174,44 +169,37 @@ More information at https://github.com/kulshekhar/ts-jest#tsconfig`);
 }
 
 export function mockGlobalTSConfigSchema(globals: any) {
-  const config = getTSConfigOptionFromConfig(globals);
-  return typeof config === 'string'
-    ? { 'ts-jest': { tsConfigFile: config } }
-    : { __TS_CONFIG__: config };
+  const configPath = getTSConfigPathFromConfig(globals);
+  return { 'ts-jest': { tsConfigFile: configPath } };
 }
 
 const tsConfigCache: { [key: string]: any } = {};
 export function getTSConfig(globals, collectCoverage: boolean = false) {
-  let config = getTSConfigOptionFromConfig(globals);
+  let configPath = getTSConfigPathFromConfig(globals);
   const skipBabel = getTSJestConfig(globals).skipBabel;
-  const isReferencedExternalFile = typeof config === 'string';
 
   // check cache before resolving configuration
-  // NB: config is a string unless taken from __TS_CONFIG__, which should be immutable (and is deprecated anyways)
   // NB: We use JSON.stringify() to create a consistent, unique signature. Although it lacks a uniform
   //     shape, this is simpler and faster than using the crypto package to generate a hash signature.
   const tsConfigCacheKey = JSON.stringify([
     skipBabel,
     collectCoverage,
-    isReferencedExternalFile ? config : undefined,
+    configPath,
   ]);
   if (tsConfigCacheKey in tsConfigCache) {
     return tsConfigCache[tsConfigCacheKey];
   }
 
-  if (isReferencedExternalFile) {
-    const configFileName = config;
-    const configPath = path.resolve(config);
+  configPath = path.resolve(configPath);
 
-    config = readCompilerOptions(configPath);
+  const config = readCompilerOptions(configPath);
 
-    if (configFileName === path.join(getStartDir(), 'tsconfig.json')) {
-      // hardcode module to 'commonjs' in case the config is being loaded
-      // from the default tsconfig file. This is to ensure that coverage
-      // works well. If there's a need to override, it can be done using
-      // the global __TS_CONFIG__ setting in Jest config
-      config.module = tsc.ModuleKind.CommonJS;
-    }
+  if (configPath === path.join(getStartDir(), 'tsconfig.json')) {
+    // hardcode module to 'commonjs' in case the config is being loaded
+    // from the default tsconfig file. This is to ensure that coverage
+    // works well. If there's a need to override, it can be done using
+    // a custom tsconfig for testing
+    config.module = tsc.ModuleKind.CommonJS;
   }
 
   // ts-jest will map lines numbers properly if inlineSourceMap and
@@ -232,32 +220,14 @@ export function getTSConfig(globals, collectCoverage: boolean = false) {
   // In case of an external file, reading the config file already converted it as well, and
   // an additional attempt would lead to errors.
   let result;
-  if (isReferencedExternalFile) {
-    config.jsx = config.jsx || tsc.JsxEmit.React;
-    config.module = config.module || tsc.ModuleKind.CommonJS;
-    if (config.allowSyntheticDefaultImports && !skipBabel) {
-      // compile ts to es2015 and transform with babel afterwards
-      config.module = tsc.ModuleKind.ES2015;
-    }
-    result = config;
-  } else {
-    config.jsx = config.jsx || 'react';
-    config.module = config.module || 'commonjs';
-    if (config.allowSyntheticDefaultImports && !skipBabel) {
-      // compile ts to es2015 and transform with babel afterwards
-      config.module = 'es2015';
-    }
-    const converted = tsc.convertCompilerOptionsFromJson(config, undefined);
-    if (converted.errors && converted.errors.length > 0) {
-      const formattedErrors = formatTscParserErrors(converted.errors);
-      throw new Error(
-        `Some errors occurred while attempting to convert ${JSON.stringify(
-          config,
-        )}: ${formattedErrors}`,
-      );
-    }
-    result = converted.options;
+
+  config.jsx = config.jsx || tsc.JsxEmit.React;
+  config.module = config.module || tsc.ModuleKind.CommonJS;
+  if (config.allowSyntheticDefaultImports && !skipBabel) {
+    // compile ts to es2015 and transform with babel afterwards
+    config.module = tsc.ModuleKind.ES2015;
   }
+  result = config;
 
   // cache result for future requests
   tsConfigCache[tsConfigCacheKey] = result;
