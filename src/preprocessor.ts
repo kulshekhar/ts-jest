@@ -50,6 +50,13 @@ export function process(
       transformOptions,
     );
 
+    const start = outputText.length > 12 ? outputText.substr(1, 10) : '';
+
+    const modified =
+      start === 'use strict'
+        ? `'use strict';require('ts-jest').install();${outputText}`
+        : `require('ts-jest').install();${outputText}`;
+
     // store transpiled code contains source map into cache, except test cases
     if (!jestConfig.testRegex || !path.match(jestConfig.testRegex)) {
       const outputFilePath = nodepath.join(
@@ -61,15 +68,8 @@ export function process(
           .digest('hex'),
       );
 
-      fs.outputFileSync(outputFilePath, outputText);
+      fs.outputFileSync(outputFilePath, modified);
     }
-
-    const start = outputText.length > 12 ? outputText.substr(1, 10) : '';
-
-    const modified =
-      start === 'use strict'
-        ? `'use strict';require('ts-jest').install();${outputText}`
-        : `require('ts-jest').install();${outputText}`;
 
     return modified;
   }
