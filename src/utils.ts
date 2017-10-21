@@ -14,6 +14,8 @@ function formatTscParserErrors(errors: tsc.Diagnostic[]) {
 }
 
 function readCompilerOptions(configPath: string) {
+  configPath = path.resolve(configPath);
+
   // First step: Let tsc pick up the config.
   const loaded = tsc.readConfigFile(configPath, file => {
     const read = tsc.sys.readFile(file);
@@ -128,17 +130,7 @@ export function getTSConfig(globals, collectCoverage: boolean = false) {
     return tsConfigCache[tsConfigCacheKey];
   }
 
-  configPath = path.resolve(configPath);
-
   const config = readCompilerOptions(configPath);
-
-  if (configPath === path.join(getStartDir(), 'tsconfig.json')) {
-    // hardcode module to 'commonjs' in case the config is being loaded
-    // from the default tsconfig file. This is to ensure that coverage
-    // works well. If there's a need to override, it can be done using
-    // a custom tsconfig for testing
-    config.module = tsc.ModuleKind.CommonJS;
-  }
 
   // ts-jest will map lines numbers properly if inlineSourceMap and
   // inlineSources are set to true. For testing, we don't need the
@@ -153,23 +145,25 @@ export function getTSConfig(globals, collectCoverage: boolean = false) {
   // see https://github.com/kulshekhar/ts-jest/issues/309
   delete config.outDir;
 
-  // Note: If we had to read the inline configuration, it's required to set the fields
-  // to their string properties, and convert the result accordingly afterwards.
-  // In case of an external file, reading the config file already converted it as well, and
-  // an additional attempt would lead to errors.
-  let result;
+  if (configPath === path.join(getStartDir(), 'tsconfig.json')) {
+    // hardcode module to 'commonjs' in case the config is being loaded
+    // from the default tsconfig file. This is to ensure that coverage
+    // works well. If there's a need to override, it can be done using
+    // a custom tsconfig for testing
+    config.module = tsc.ModuleKind.CommonJS;
+  }
 
-  config.jsx = config.jsx || tsc.JsxEmit.React;
   config.module = config.module || tsc.ModuleKind.CommonJS;
+  config.jsx = config.jsx || tsc.JsxEmit.React;
+
   if (config.allowSyntheticDefaultImports && !skipBabel) {
     // compile ts to es2015 and transform with babel afterwards
     config.module = tsc.ModuleKind.ES2015;
   }
-  result = config;
 
   // cache result for future requests
-  tsConfigCache[tsConfigCacheKey] = result;
-  return result;
+  tsConfigCache[tsConfigCacheKey] = config;
+  return config;
 }
 
 export function cacheFile(
