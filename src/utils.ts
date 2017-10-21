@@ -91,7 +91,7 @@ function getPathToClosestTSConfig(
   return getPathToClosestTSConfig(path.join(startDir, '..'), startDir);
 }
 
-export function getTSConfigPathFromConfig(globals: any): string {
+function getTSConfigPathFromConfig(globals: any): string {
   const defaultTSConfigFile = getPathToClosestTSConfig();
   if (!globals) {
     return defaultTSConfigFile;
