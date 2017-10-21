@@ -1,5 +1,6 @@
 import * as crypto from 'crypto';
 import * as fs from 'fs';
+import * as fsExtra from 'fs-extra';
 import * as path from 'path';
 import * as tsc from 'typescript';
 import { JestConfig, TsJestConfig } from './jest-types';
@@ -187,6 +188,6 @@ export function cacheFile(
         .digest('hex'),
     );
 
-    fs.writeFileSync(outputFilePath, src, 'utf8');
+    fsExtra.outputFileSync(outputFilePath, src);
   }
 }
