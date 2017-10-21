@@ -66,16 +66,17 @@ export function process(
 export function getCacheKey(
   fileData: string,
   filePath: Path,
-  configStr: string,
-  options: TransformOptions = { instrument: false },
+  jestConfigStr: string,
+  transformOptions: TransformOptions = { instrument: false },
 ): string {
-  const jestConfig: JestConfig = JSON.parse(configStr);
-  const tsConfig = getTSConfig(jestConfig.globals, options.instrument);
+  const jestConfig: JestConfig = JSON.parse(jestConfigStr);
+
+  const tsConfig = getTSConfig(jestConfig.globals, transformOptions.instrument);
 
   return crypto
     .createHash('md5')
     .update(JSON.stringify(tsConfig), 'utf8')
-    .update(JSON.stringify(options), 'utf8')
-    .update(fileData + filePath + configStr, 'utf8')
+    .update(JSON.stringify(transformOptions), 'utf8')
+    .update(fileData + filePath + jestConfigStr, 'utf8')
     .digest('hex');
 }
