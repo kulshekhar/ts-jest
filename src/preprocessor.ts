@@ -1,14 +1,12 @@
 import * as crypto from 'crypto';
-import * as fs from 'fs-extra';
-import * as nodepath from 'path';
 import * as tsc from 'typescript';
 import { JestConfig, Path, TransformOptions } from './jest-types';
 import { getPostProcessHook } from './postprocess';
-import { getTSConfig, getTSJestConfig } from './utils';
+import { cacheFile, getTSConfig, getTSJestConfig } from './utils';
 
 export function process(
   src: string,
-  path: Path,
+  filePath: Path,
   jestConfig: JestConfig,
   transformOptions: TransformOptions = { instrument: false },
 ) {
@@ -20,9 +18,9 @@ export function process(
   );
   const tsJestConfig = getTSJestConfig(jestConfig.globals);
 
-  const isTsFile = /\.tsx?$/.test(path);
-  const isJsFile = /\.jsx?$/.test(path);
-  const isHtmlFile = /\.html$/.test(path);
+  const isTsFile = /\.tsx?$/.test(filePath);
+  const isJsFile = /\.jsx?$/.test(filePath);
+  const isHtmlFile = /\.html$/.test(filePath);
 
   const postHook = getPostProcessHook(
     compilerOptions,
@@ -40,12 +38,12 @@ export function process(
   if (processFile) {
     const tsTranspiled = tsc.transpileModule(src, {
       compilerOptions,
-      fileName: path,
+      fileName: filePath,
     });
 
     const outputText = postHook(
       tsTranspiled.outputText,
-      path,
+      filePath,
       jestConfig,
       transformOptions,
     );
@@ -57,19 +55,7 @@ export function process(
         ? `'use strict';require('ts-jest').install();${outputText}`
         : `require('ts-jest').install();${outputText}`;
 
-    // store transpiled code contains source map into cache, except test cases
-    if (!jestConfig.testRegex || !path.match(jestConfig.testRegex)) {
-      const outputFilePath = nodepath.join(
-        jestConfig.cacheDirectory,
-        '/ts-jest/',
-        crypto
-          .createHash('md5')
-          .update(path)
-          .digest('hex'),
-      );
-
-      fs.outputFileSync(outputFilePath, modified);
-    }
+    cacheFile(jestConfig, filePath, modified);
 
     return modified;
   }

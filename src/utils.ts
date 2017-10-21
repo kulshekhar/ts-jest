@@ -1,9 +1,10 @@
+import * as crypto from 'crypto';
 import * as fs from 'fs';
 import { normalize } from 'jest-config';
 import * as setFromArgv from 'jest-config/build/set_from_argv';
 import * as path from 'path';
 import * as tsc from 'typescript';
-import { TsJestConfig } from './jest-types';
+import { JestConfig, TsJestConfig } from './jest-types';
 
 function parseConfig(argv) {
   if (argv.config && typeof argv.config === 'string') {
@@ -232,4 +233,24 @@ export function getTSConfig(globals, collectCoverage: boolean = false) {
   // cache result for future requests
   tsConfigCache[tsConfigCacheKey] = result;
   return result;
+}
+
+export function cacheFile(
+  jestConfig: JestConfig,
+  filePath: string,
+  src: string,
+) {
+  // store transpiled code contains source map into cache, except test cases
+  if (!jestConfig.testRegex || !filePath.match(jestConfig.testRegex)) {
+    const outputFilePath = path.join(
+      jestConfig.cacheDirectory,
+      '/ts-jest/',
+      crypto
+        .createHash('md5')
+        .update(filePath)
+        .digest('hex'),
+    );
+
+    fs.writeFileSync(outputFilePath, src, 'utf8');
+  }
 }
