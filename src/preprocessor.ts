@@ -20,9 +20,9 @@ export function process(
   );
   const tsJestConfig = getTSJestConfig(config.globals);
 
-  const isTsFile = path.endsWith('.ts') || path.endsWith('.tsx');
-  const isJsFile = path.endsWith('.js') || path.endsWith('.jsx');
-  const isHtmlFile = path.endsWith('.html');
+  const isTsFile = /\.tsx?$/.test(path);
+  const isJsFile = /\.jsx?$/.test(path);
+  const isHtmlFile = /\.html$/.test(path);
 
   const postHook = getPostProcessHook(compilerOptions, config, tsJestConfig);
 
@@ -51,7 +51,10 @@ export function process(
       const outputFilePath = nodepath.join(
         config.cacheDirectory,
         '/ts-jest/',
-        crypto.createHash('md5').update(path).digest('hex'),
+        crypto
+          .createHash('md5')
+          .update(path)
+          .digest('hex'),
       );
 
       fs.outputFileSync(outputFilePath, outputText);
