@@ -9,24 +9,28 @@ import { getTSConfig, getTSJestConfig } from './utils';
 export function process(
   src: string,
   path: Path,
-  config: JestConfig,
+  jestConfig: JestConfig,
   transformOptions: TransformOptions = { instrument: false },
 ) {
   // transformOptions.instrument is a proxy for collectCoverage
   // https://github.com/kulshekhar/ts-jest/issues/201#issuecomment-300572902
   const compilerOptions = getTSConfig(
-    config.globals,
+    jestConfig.globals,
     transformOptions.instrument,
   );
-  const tsJestConfig = getTSJestConfig(config.globals);
+  const tsJestConfig = getTSJestConfig(jestConfig.globals);
 
   const isTsFile = /\.tsx?$/.test(path);
   const isJsFile = /\.jsx?$/.test(path);
   const isHtmlFile = /\.html$/.test(path);
 
-  const postHook = getPostProcessHook(compilerOptions, config, tsJestConfig);
+  const postHook = getPostProcessHook(
+    compilerOptions,
+    jestConfig,
+    tsJestConfig,
+  );
 
-  if (isHtmlFile && config.globals.__TRANSFORM_HTML__) {
+  if (isHtmlFile && jestConfig.globals.__TRANSFORM_HTML__) {
     src = 'module.exports=`' + src + '`;';
   }
 
@@ -42,14 +46,14 @@ export function process(
     const outputText = postHook(
       tsTranspiled.outputText,
       path,
-      config,
+      jestConfig,
       transformOptions,
     );
 
     // store transpiled code contains source map into cache, except test cases
-    if (!config.testRegex || !path.match(config.testRegex)) {
+    if (!jestConfig.testRegex || !path.match(jestConfig.testRegex)) {
       const outputFilePath = nodepath.join(
-        config.cacheDirectory,
+        jestConfig.cacheDirectory,
         '/ts-jest/',
         crypto
           .createHash('md5')
