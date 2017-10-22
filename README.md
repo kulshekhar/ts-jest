@@ -145,30 +145,7 @@ Note that if you haven't explicitly set the `module` property through a separate
 
 ### Module path mapping
 
-If you use ["baseUrl"](https://www.typescriptlang.org/docs/handbook/module-resolution.html) and "paths" options for the compiler, you should add ["moduleNameMapper"](https://facebook.github.io/jest/docs/en/configuration.html#modulenamemapper-object-string-string) to jest options on `package.json` to imports work properly.
-
-By example, if you have `.tsconfig` like this:
-```json
-{
-  "compilerOptions": {
-    "baseUrl": ".",
-    "paths": {
-      "@components/*": ["src/components/*"],
-    }
-  },
-}
-```
-
-Simply add "moduleNameMapper" option to jest section on `package.json` to match "paths":
-```json
-{
-  "jest": {
-    "moduleNameMapper": {
-      "^@components/(.*)": "<rootDir>/src/components/$1",
-    }
-  }
-}
-```
+If you use ["baseUrl"](https://www.typescriptlang.org/docs/handbook/module-resolution.html) and "paths" options for the compiler, see ["moduleNameMapper"](https://facebook.github.io/jest/docs/en/configuration.html#modulenamemapper-object-string-string) option on Jest docs.
 
 ### Skipping Babel
 If you don't use mocks, or synthetic default imports you can skip the babel-transpilation step.
