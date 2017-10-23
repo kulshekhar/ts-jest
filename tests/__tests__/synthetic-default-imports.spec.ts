@@ -10,7 +10,7 @@ describe('synthetic default imports', () => {
     expect(stderr).toContain(
       `TypeError: Cannot read property 'someExport' of undefined`,
     );
-    expect(stderr).toContain('module.test.ts:6:15');
+    expect(stderr).toContain('module.test.ts:6');
   });
 
   it('should work when the compiler option is true', () => {

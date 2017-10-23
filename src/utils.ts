@@ -123,8 +123,9 @@ function getStartDir(): string {
 
   const grandparent = path.resolve(__dirname, '..', '..');
   if (grandparent.endsWith('/node_modules')) {
-    return path.resolve(grandparent, '..');
+    return process.cwd();
   }
+
   return '.';
 }
 
@@ -204,7 +205,7 @@ export function getTSConfig(globals, collectCoverage: boolean = false) {
 
     config = readCompilerOptions(configPath);
 
-    if (configFileName === 'tsconfig.json') {
+    if (configFileName === path.join(getStartDir(), 'tsconfig.json')) {
       // hardcode module to 'commonjs' in case the config is being loaded
       // from the default tsconfig file. This is to ensure that coverage
       // works well. If there's a need to override, it can be done using
