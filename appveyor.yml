@@ -21,6 +21,7 @@ install:
   - ps: Install-Product node $env:nodejs_version
   - set CI=true
   - set AppVeyor=true
+  - set PATH=%APPDATA%\npm;%APPDATA%\Local\Yarn\.bin;%CD%\node_modules\.binl%PATH%
   - yarn
 
 build: off
