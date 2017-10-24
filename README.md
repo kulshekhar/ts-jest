@@ -28,7 +28,8 @@ ts-jest is a TypeScript preprocessor with source map support for Jest that lets 
   - [Supports automatic of jest.mock() calls](#supports-automatic-of-jestmock-calls)
 - [Configuration](#configuration)
   - [tsconfig](#tsconfig)
-  - [Skipping Babel](#skipping-babel)
+  - [Module path mapping](#module-path-mapping)
+  - [Using `.babelrc`](#using-babelrc)
   - [Using `.babelrc`](#using-babelrc)
   - [Using a custom Babel config](#using-a-custom-babel-config)
 - [Use cases](#use-cases)
@@ -141,6 +142,10 @@ custom configuration file (relative to the project's root directory)
 For all available `tsc` options see [TypeScript docs](https://www.typescriptlang.org/docs/handbook/compiler-options.html).
 
 Note that if you haven't explicitly set the `module` property through a separate configuration file with `tsConfigFile`, it will be overwritten to `commonjs` (regardless of the value in `tsconfig.json`) since that is the format Jest expects. This only happens during testing.
+
+### Module path mapping
+
+If you use ["baseUrl"](https://www.typescriptlang.org/docs/handbook/module-resolution.html) and "paths" options for the compiler, see ["moduleNameMapper"](https://facebook.github.io/jest/docs/en/configuration.html#modulenamemapper-object-string-string) option on Jest docs.
 
 ### Skipping Babel
 If you don't use mocks, or synthetic default imports you can skip the babel-transpilation step.
@@ -295,7 +300,7 @@ By default Jest ignores everything in `node_modules`. This setting prevents Jest
 ### Known limitations for TS compiler options
 - You can't use `"target": "ES6"` while using `node v4` in your test environment;
 - You can't use `"jsx": "preserve"` for now (see [progress of this issue](https://github.com/kulshekhar/ts-jest/issues/63));
-- If you use `"baseUrl": "<path_to_your_sources>"`, you also have to change `jest config` a little bit:
+- If you use `"baseUrl": "<path_to_your_sources>"`, you also have to change `jest config` a little bit (also check [Module path mapping](#module-path-mapping) section):
 ```json
 "jest": {
   "moduleDirectories": ["node_modules", "<path_to_your_sources>"]
