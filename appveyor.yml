@@ -21,8 +21,7 @@ install:
   - ps: Install-Product node $env:nodejs_version
   - set CI=true
   - set AppVeyor=true
-  - set PATH=%APPDATA%\npm;%APPDATA%\Local\Yarn\.bin;%CD%\node_modules\.bin;%PATH%
-  - echo %PATH%
+  - set PATH=%APPDATA%\npm;%APPDATA%\..\Local\Yarn\.bin;%CD%\node_modules\.bin;%PATH%
   - yarn
 
 build: off
@@ -30,4 +29,5 @@ build: off
 test_script:
   - node --version
   - npm --version
-  - cmd: npm test --no-color
+  - yarn --version
+  - cmd: yarn test
