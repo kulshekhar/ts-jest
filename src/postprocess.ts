@@ -66,7 +66,7 @@ export const getPostProcessHook = (
   }
 
   const plugins = tsJestConfig.babelConfig
-    ? tsJestConfig.babelConfig.plugins
+    ? tsJestConfig.babelConfig.plugins || []
     : [];
   // If we're not skipping babel
   if (tsCompilerOptions.allowSyntheticDefaultImports) {
