@@ -21,13 +21,16 @@ export function process(
   const isTsFile = /\.tsx?$/.test(filePath);
   const isJsFile = /\.jsx?$/.test(filePath);
   const isHtmlFile = /\.html$/.test(filePath);
-
+  /* TODO: Consider inlining tsJestConfig here, so it's obvious it's only used here. Actually seeing as tsJestConfig
+  is contained withing jestConfig, perhaps we should just have the getPostProcessHook extract it itself?
+   */
   const postHook = getPostProcessHook(
     compilerOptions,
     jestConfig,
     tsJestConfig,
   );
 
+  // TODO: Comment what's going on here. I'm not quite sure why we're adding this if it's an html file
   if (isHtmlFile && jestConfig.globals.__TRANSFORM_HTML__) {
     src = 'module.exports=`' + src + '`;';
   }
@@ -35,6 +38,7 @@ export function process(
   const processFile =
     compilerOptions.allowJs === true ? isTsFile || isJsFile : isTsFile;
 
+  // TODO: Consider flipping this boolean to exit-early if we don't want to process the file.
   if (processFile) {
     const tsTranspiled = tsc.transpileModule(src, {
       compilerOptions,
@@ -50,6 +54,7 @@ export function process(
 
     const start = outputText.length > 12 ? outputText.substr(1, 10) : '';
 
+    // TODO: Consider creating a function for this part? e.g. prependSourcemapHook()
     const modified =
       start === 'use strict'
         ? `'use strict';require('ts-jest').install();${outputText}`

@@ -93,6 +93,7 @@ function getPathToClosestTSConfig(
   return getPathToClosestTSConfig(path.join(startDir, '..'), startDir);
 }
 
+// TODO: This can take something more specific than globals
 function getTSConfigPathFromConfig(globals: any): string {
   const defaultTSConfigFile = getPathToClosestTSConfig();
   if (!globals) {
@@ -114,6 +115,8 @@ export function mockGlobalTSConfigSchema(globals: any) {
 }
 
 const tsConfigCache: { [key: string]: any } = {};
+// TODO: Perhaps rename collectCoverage to here, as it seems to be the official jest name now:
+// https://github.com/facebook/jest/issues/3524
 export function getTSConfig(globals, collectCoverage: boolean = false) {
   let configPath = getTSConfigPathFromConfig(globals);
   const skipBabel = getTSJestConfig(globals).skipBabel;
