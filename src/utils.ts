@@ -188,3 +188,11 @@ export function cacheFile(
     fsExtra.outputFileSync(outputFilePath, src);
   }
 }
+
+export function injectSourcemapHook(src: string): string {
+  const start = src.length > 12 ? src.substr(1, 10) : '';
+
+  return start === 'use strict'
+    ? `'use strict';require('ts-jest').install();${src}`
+    : `require('ts-jest').install();${src}`;
+}
