@@ -17,6 +17,7 @@
         "interface-name": [
             true,
             "never-prefix"
-        ]
+        ],
+        "no-trailing-whitespace": [true, "ignore-blank-lines"]
     }
 }

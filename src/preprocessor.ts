@@ -26,6 +26,7 @@ export function process(
   const isJsFile = /\.jsx?$/.test(filePath);
   const isHtmlFile = /\.html$/.test(filePath);
 
+  // This is to support angular 2. See https://github.com/kulshekhar/ts-jest/pull/145
   if (isHtmlFile && jestConfig.globals.__TRANSFORM_HTML__) {
     src = 'module.exports=`' + src + '`;';
   }
