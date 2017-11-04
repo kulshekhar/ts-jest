@@ -30,7 +30,6 @@ ts-jest is a TypeScript preprocessor with source map support for Jest that lets 
   - [tsconfig](#tsconfig)
   - [Module path mapping](#module-path-mapping)
   - [Using `.babelrc`](#using-babelrc)
-  - [Using `.babelrc`](#using-babelrc)
   - [Using a custom Babel config](#using-a-custom-babel-config)
 - [Use cases](#use-cases)
   - [React Native](#react-native)
