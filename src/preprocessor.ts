@@ -1,10 +1,12 @@
 import * as crypto from 'crypto';
 import * as fs from 'fs-extra';
 import * as nodepath from 'path';
-import * as tsc from 'typescript';
 import { JestConfig, Path, TransformOptions } from './jest-types';
 import { getPostProcessHook } from './postprocess';
 import { getTSConfig, getTSJestConfig } from './utils';
+import { Compiler } from './compiler/compiler';
+
+const compiler = new Compiler();
 
 export function process(
   src: string,
@@ -34,13 +36,16 @@ export function process(
     compilerOptions.allowJs === true ? isTsFile || isJsFile : isTsFile;
 
   if (processFile) {
-    const tsTranspiled = tsc.transpileModule(src, {
-      compilerOptions,
-      fileName: path,
-    });
+    compiler.setOptions(compilerOptions);
+    // const tsTranspiled = tsc.transpileModule(src, {
+    //   compilerOptions,
+    //   fileName: path,
+    // });
+
+    const tsTranspiled = compiler.emitFile({ path, src });
 
     const outputText = postHook(
-      tsTranspiled.outputText,
+      tsTranspiled.text,
       path,
       config,
       transformOptions,
@@ -51,7 +56,10 @@ export function process(
       const outputFilePath = nodepath.join(
         config.cacheDirectory,
         '/ts-jest/',
-        crypto.createHash('md5').update(path).digest('hex'),
+        crypto
+          .createHash('md5')
+          .update(path)
+          .digest('hex'),
       );
 
       fs.outputFileSync(outputFilePath, outputText);
