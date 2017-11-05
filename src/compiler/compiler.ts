@@ -70,7 +70,7 @@ export class Compiler {
     this.options = options;
   }
   private createServiceHost() {
-    const { files, options } = this;
+    const that = this;
 
     let service: ts.LanguageService;
 
@@ -81,13 +81,13 @@ export class Compiler {
       //     }
       // }
       getScriptFileNames() {
-        return files.getFileNames();
+        return that.files.getFileNames();
       }
       getScriptVersion(fileName: string) {
-        return files.getScriptVersion(fileName);
+        return that.files.getScriptVersion(fileName);
       }
       getScriptSnapshot(fileName: string) {
-        const file = files.get(fileName);
+        const file = that.files.get(fileName);
         if (file !== undefined) {
           return file.snapshot;
         }
@@ -99,7 +99,7 @@ export class Compiler {
         ); //todo maybe put to files cache
       }
       getCurrentDirectory = () => process.cwd();
-      getCompilationSettings = () => options;
+      getCompilationSettings = () => that.options;
       getDefaultLibFileName = (options: ts.CompilerOptions) =>
         ts.getDefaultLibFilePath(options);
       fileExists = ts.sys.fileExists;
@@ -134,18 +134,20 @@ export class Compiler {
     let output = this.service.getEmitOutput(path);
 
     if (output.emitSkipped) {
-      this.logErrors(path);
+      const errors = this.formatErrors(path);
+      throw new Error(`Errors while compile ts: \n${errors}`);
     }
     const res = utils.findResultFor(path, output);
     return res;
   }
 
-  private logErrors(fileName: string) {
+  private formatErrors(fileName: string) {
     let allDiagnostics = this.service
       .getCompilerOptionsDiagnostics()
       .concat(this.service.getSyntacticDiagnostics(fileName))
       .concat(this.service.getSemanticDiagnostics(fileName));
 
+    let res = '';
     allDiagnostics.forEach(diagnostic => {
       let message = ts.flattenDiagnosticMessageText(
         diagnostic.messageText,
@@ -155,13 +157,12 @@ export class Compiler {
         let { line, character } = diagnostic.file.getLineAndCharacterOfPosition(
           diagnostic.start!,
         );
-        console.log(
-          `  Error ${diagnostic.file.fileName} (${line + 1},${character +
-            1}): ${message}`,
-        );
+        res += `  Error ${diagnostic.file.fileName} (${line + 1},${character +
+          1}): ${message}\n`;
       } else {
-        console.log(`  Error: ${message}`);
+        res += `  Error: ${message}\n`;
       }
     });
+    return res;
   }
 }
