@@ -1,8 +1,8 @@
 {
   "name": "ts-jest",
-  "version": "21.1.4",
-  "main": "index.js",
-  "types": "./dist/index.d.ts",
+  "version": "21.2.0",
+  "main": "preprocessor.js",
+  "types": "./dist/preprocessor.d.ts",
   "description": "A preprocessor with sourcemap support to help use Typescript with Jest",
   "scripts": {
     "build": "tsc -p .",
