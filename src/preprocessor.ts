@@ -6,8 +6,6 @@ import { JestConfig, Path, TransformOptions } from './jest-types';
 import { getPostProcessHook } from './postprocess';
 import { getTSConfig, getTSJestConfig } from './utils';
 
-export { install } from './install';
-
 export function process(
   src: string,
   path: Path,
