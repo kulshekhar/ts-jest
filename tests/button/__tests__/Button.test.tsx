@@ -12,6 +12,9 @@ it('Button renders correctly', () => {
 });
 
 it('BadButton should throw an error on line 22', () => {
+  // We're using shallow renderer here because the behaviour of 
+  // the test-renderer is causing a bug when used with React 16 & node 8
+  // https://github.com/kulshekhar/ts-jest/issues/334
   const renderer = new ShallowRenderer();
   renderer.render(<BadButton>hi!</BadButton>);
 });
