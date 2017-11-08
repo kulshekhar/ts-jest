@@ -9,8 +9,6 @@ import {
   injectSourcemapHook,
 } from './utils';
 
-export { install } from './install';
-
 export function process(
   src: string,
   filePath: Path,

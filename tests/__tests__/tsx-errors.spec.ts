@@ -1,13 +1,7 @@
 import runJest from '../__helpers__/runJest';
 import * as React from 'react';
 
-const nodeVersion = parseInt(process.version.substr(1, 2));
-const reactVersion = parseInt(React.version.substr(0, 2));
-
-const tmpDescribe =
-  nodeVersion >= 8 && reactVersion >= 16 ? xdescribe : describe;
-
-tmpDescribe('TSX Errors', () => {
+describe('TSX Errors', () => {
   it('should show the correct error locations in the typescript files', () => {
     const result = runJest('../button', ['--no-cache', '-u']);
 
@@ -15,6 +9,6 @@ tmpDescribe('TSX Errors', () => {
 
     expect(result.status).toBe(1);
     expect(stderr).toContain('Button.tsx:22:17');
-    expect(stderr).toContain('Button.test.tsx:15:12');
+    expect(stderr).toContain('Button.test.tsx:19:12');
   });
 });

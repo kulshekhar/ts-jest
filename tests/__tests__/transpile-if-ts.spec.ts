@@ -1,4 +1,4 @@
-import { transpileIfTypescript } from '../../src/transpile-if-ts';
+import { transpileIfTypescript } from '../../src';
 
 describe('transpileIfTypescript', () => {
   it('should ignore anything non-TS', () => {
