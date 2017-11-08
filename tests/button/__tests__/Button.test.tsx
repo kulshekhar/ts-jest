@@ -1,17 +1,17 @@
 declare var jest, describe, it, expect, require;
 
 import * as React from 'react';
-const renderer = require('react-test-renderer');
+import * as testRenderer from 'react-test-renderer';
+import * as ShallowRenderer from 'react-test-renderer/shallow';
 
 import { Button, BadButton } from '../Button';
 
 it('Button renders correctly', () => {
-  const tree = renderer.create(<Button>hi!</Button>).toJSON();
+  const tree = testRenderer.create(<Button>hi!</Button>).toJSON();
   expect(tree).toMatchSnapshot();
 });
 
 it('BadButton should throw an error on line 22', () => {
-
-  renderer.create(<BadButton>hi!</BadButton>).toJSON();
-
+  const renderer = new ShallowRenderer();
+  renderer.render(<BadButton>hi!</BadButton>);
 });
