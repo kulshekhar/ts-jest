@@ -78,7 +78,7 @@
     "yargs": "^10.0.3"
   },
   "peerDependencies": {
-    "jest": "^21.1.0 || ^21.1.0-alpha.1 || ^22.0.0-alpha.1",
+    "jest": "^21.1.0 || ^21.3.0-alpha.1 || ^22.0.0-alpha.1",
     "typescript": "2.x"
   },
   "devDependencies": {
