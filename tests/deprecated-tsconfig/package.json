@@ -4,7 +4,7 @@
       "__TS_CONFIG__": "tsconfig.json"
     },
     "transform": {
-      "^.+\\.tsx?$": "../../preprocessor.js"
+      "^.+\\.tsx?$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
     },
     "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
     "coverageReporters": [

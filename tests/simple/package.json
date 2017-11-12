@@ -1,7 +1,7 @@
 {
   "jest": {
     "transform": {
-      "^.+\\.tsx?$": "../../preprocessor.js"
+      "^.+\\.tsx?$": "ts-jest"
     },
     "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
     "coverageReporters": [

@@ -1,7 +1,7 @@
 {
   "name": "ts-jest",
   "version": "21.2.2",
-  "main": "preprocessor.js",
+  "main": "index.js",
   "types": "./dist/index.d.ts",
   "description": "A preprocessor with sourcemap support to help use Typescript with Jest",
   "scripts": {
@@ -70,7 +70,7 @@
     "babel-plugin-istanbul": "^4.1.4",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.24.1",
     "babel-preset-jest": "^21.2.0",
-    "fs-extra": "^4.0.0",
+    "fs-extra": "^4.0.2",
     "jest-config": "^21.2.1",
     "jest-util": "^21.2.1",
     "pkg-dir": "^2.0.0",

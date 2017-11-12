@@ -1,7 +1,7 @@
 {
   "jest": {
     "transform": {
-      "^.+\\.tsx?$": "../../preprocessor.js"
+      "^.+\\.tsx?$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
     },
     "mapCoverage": true,
     "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
