@@ -65,9 +65,7 @@ export const getPostProcessHook = (
     return src => src; // Identity function
   }
 
-  const plugins = tsJestConfig.babelConfig
-    ? tsJestConfig.babelConfig.plugins || []
-    : [];
+  const plugins = Array.from(tsJestConfig.babelConfig && tsJestConfig.babelConfig.plugins || []);
   // If we're not skipping babel
   if (tsCompilerOptions.allowSyntheticDefaultImports) {
     plugins.push('transform-es2015-modules-commonjs');
