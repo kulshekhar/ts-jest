@@ -6,6 +6,8 @@ import { JestConfig, Path, TransformOptions } from './jest-types';
 import { getPostProcessHook } from './postprocess';
 import { getTSConfig, getTSJestConfig } from './utils';
 
+export { install } from './install';
+
 export function process(
   src: string,
   path: Path,
@@ -51,7 +53,10 @@ export function process(
       const outputFilePath = nodepath.join(
         config.cacheDirectory,
         '/ts-jest/',
-        crypto.createHash('md5').update(path).digest('hex'),
+        crypto
+          .createHash('md5')
+          .update(path)
+          .digest('hex'),
       );
 
       fs.outputFileSync(outputFilePath, outputText);

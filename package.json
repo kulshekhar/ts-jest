@@ -1,7 +1,7 @@
 {
   "name": "ts-jest",
   "version": "21.2.2",
-  "main": "index.js",
+  "main": "preprocessor.js",
   "types": "./dist/index.d.ts",
   "description": "A preprocessor with sourcemap support to help use Typescript with Jest",
   "scripts": {
@@ -78,7 +78,7 @@
     "yargs": "^10.0.3"
   },
   "peerDependencies": {
-    "jest": "^21.1.0 || ^21.1.0-alpha.1 || ^22.0.0-alpha.1",
+    "jest": "^21.1.0 || ^21.3.0-alpha.1 || ^22.0.0-alpha.1",
     "typescript": "2.x"
   },
   "devDependencies": {
