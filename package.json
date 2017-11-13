@@ -5,7 +5,7 @@
   "types": "./dist/index.d.ts",
   "description": "A preprocessor with sourcemap support to help use Typescript with Jest",
   "scripts": {
-    "build": "tsc -p .",
+    "build": "cp index.d.ts dist/ && tsc -p .",
     "build:watch": "tsc -p . -w",
     "clean": "rimraf dist/**/* && rimraf tests/simple/coverage && rimraf tests/simple-async/coverage",
     "clean-build": "npm run clean && npm run build",
