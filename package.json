@@ -5,8 +5,8 @@
   "types": "./dist/index.d.ts",
   "description": "A preprocessor with sourcemap support to help use Typescript with Jest",
   "scripts": {
-    "build": "cp index.d.ts dist/ && tsc -p .",
-    "build:watch": "tsc -p . -w",
+    "build": "cpx index.d.ts dist/ && tsc -p .",
+    "build:watch": "cpx index.d.ts dist/ && tsc -p . -w",
     "clean": "rimraf dist/**/* && rimraf tests/simple/coverage && rimraf tests/simple-async/coverage",
     "clean-build": "npm run clean && npm run build",
     "pretest": "npm run tslint && npm run clean-build",
@@ -70,6 +70,7 @@
     "babel-plugin-istanbul": "^4.1.4",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.24.1",
     "babel-preset-jest": "^21.2.0",
+    "cpx": "^1.5.0",
     "fs-extra": "^4.0.2",
     "jest-config": "^21.2.1",
     "jest-util": "^21.2.1",
