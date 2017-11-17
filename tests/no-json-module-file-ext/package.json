@@ -1,15 +1,19 @@
 {
   "jest": {
     "transform": {
-      "^.+\\.tsx?$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+      "^.+\\.tsx?$": "ts-jest"
     },
+    "moduleDirectories": [
+      "node_modules",
+      "src"
+    ],
     "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
     "moduleFileExtensions": [
       "ts",
       "tsx",
       "js",
       "jsx",
-      "json"
+      "the.important.thing.is.that.json.is.missing.here"
     ]
   }
 }
