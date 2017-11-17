@@ -1,12 +1,12 @@
 {
   "name": "ts-jest",
-  "version": "21.2.2",
+  "version": "21.2.3",
   "main": "index.js",
   "types": "./dist/index.d.ts",
   "description": "A preprocessor with sourcemap support to help use Typescript with Jest",
   "scripts": {
-    "build": "tsc -p .",
-    "build:watch": "tsc -p . -w",
+    "build": "cpx index.d.ts dist/ && tsc -p .",
+    "build:watch": "cpx index.d.ts dist/ && tsc -p . -w",
     "clean": "rimraf dist/**/* && rimraf tests/simple/coverage && rimraf tests/simple-async/coverage",
     "clean-build": "npm run clean && npm run build",
     "pretest": "npm run tslint && npm run clean-build",
@@ -70,7 +70,8 @@
     "babel-plugin-istanbul": "^4.1.4",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.24.1",
     "babel-preset-jest": "^21.2.0",
-    "fs-extra": "^4.0.0",
+    "cpx": "^1.5.0",
+    "fs-extra": "^4.0.2",
     "jest-config": "^21.2.1",
     "jest-util": "^21.2.1",
     "pkg-dir": "^2.0.0",
@@ -78,7 +79,7 @@
     "yargs": "^10.0.3"
   },
   "peerDependencies": {
-    "jest": "^21.1.0 || ^21.1.0-alpha.1 || ^22.0.0-alpha.1",
+    "jest": "^21.1.0 || ^21.3.0-alpha.1 || ^22.0.0-alpha.1",
     "typescript": "2.x"
   },
   "devDependencies": {

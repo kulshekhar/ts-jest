@@ -5,6 +5,7 @@ process.env.PUBLIC_URL = '';
 
 const jest = require('jest');
 const fs = require('fs');
+const fsx = require('fs-extra');
 const path = require('path');
 
 function dirExists(dirPath) {
@@ -38,9 +39,6 @@ function createIntegrationMock() {
   const testCaseFolders = getDirectories(testsRoot).filter(function(testDir) {
     return !(testDir.startsWith('__') && testDir.endsWith('__'));
   });
-  const filesToMock = getFiles('dist').filter(function(fileName) {
-    return fileName.endsWith('.js');
-  });
   for (let i = 0; i < testCaseFolders.length; i++) {
     const testCaseNodeModules = path.join(
       testsRoot,
@@ -49,16 +47,19 @@ function createIntegrationMock() {
     );
     if (!dirExists(testCaseNodeModules)) {
       fs.mkdirSync(testCaseNodeModules);
-      const testCaseModuleFolder = path.join(testCaseNodeModules, 'ts-jest');
-      fs.mkdirSync(testCaseModuleFolder);
-      filesToMock.forEach(function(fileName) {
-        const integrationMockPath = path.join(testCaseModuleFolder, fileName);
-        fs.appendFileSync(
-          integrationMockPath,
-          getIntegrationMockContent(fileName)
-        );
-      });
     }
+    const testCaseModuleFolder = path.join(testCaseNodeModules, 'ts-jest');
+    fsx.copySync('.', testCaseModuleFolder, {
+      overwrite: true,
+      filter: function(src, dest) {
+        const shouldCopy =
+          src === '.' ||
+          src.startsWith('dist') ||
+          src === 'package.json' ||
+          src.endsWith('.js');
+        return shouldCopy;
+      },
+    });
   }
 }
 

@@ -51,7 +51,10 @@ export function process(
       const outputFilePath = nodepath.join(
         config.cacheDirectory,
         '/ts-jest/',
-        crypto.createHash('md5').update(path).digest('hex'),
+        crypto
+          .createHash('md5')
+          .update(path)
+          .digest('hex'),
       );
 
       fs.outputFileSync(outputFilePath, outputText);
