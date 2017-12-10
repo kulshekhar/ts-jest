@@ -65,7 +65,8 @@ Modify your project's `package.json` so that the `jest` section looks something 
       "tsx",
       "js",
       "jsx",
-      "json"
+      "json",
+      "node"
     ]
   }
 }
@@ -244,7 +245,8 @@ Fully completed jest section should look like this:
       "tsx",
       "js",
       "jsx",
-      "json"
+      "json",
+      "node"
     ]
   }
 ```
