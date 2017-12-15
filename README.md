@@ -276,6 +276,27 @@ You'll also need to extend your `transform` regex with `html` extension:
 }
 ```
 
+## Using ES2015+ features in Javascript files
+
+The default setup shown here picks up only `.ts` and `.tsx` files. However, if there are javascript files in your project that use ES2015+ features (spread operator, import, etc), you probably want them processed. There are two ways you can do this:
+
+- use ts-jest to process js files
+
+````
+    "transform": {
+      "^.+\\.(t|j)sx?$": "ts-jest"
+    }
+````
+
+- use another transformer to process js files
+
+```
+    "transform": {
+      "^.+\\.jsx?$": "<rootDir>/node_modules/babel-jest",
+      "^.+\\.tsx?$": "ts-jest"
+    }
+```
+
 ## Tips
 ### Importing packages written in TypeScript
 
