@@ -31,7 +31,7 @@ export function linkJestPackage(packageName, cwd) {
 }
 
 export function fileExists(filePath) {
-  const F_OK = (fs.constants && fs.constants.F_OK) || (<number>fs['F_OK']);
+  const F_OK = (fs.constants && fs.constants.F_OK) || <number>fs['F_OK'];
   try {
     fs.accessSync(filePath, F_OK);
     return true;

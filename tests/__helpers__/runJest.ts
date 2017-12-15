@@ -32,14 +32,24 @@ export default function runJest(dir: string, args: string[]): Result {
     cwd: dir,
   });
 
-  result.stdout = result.stdout && result.stdout.toString();
-  result.stderr = result.stderr && result.stderr.toString();
+  // Call to string on byte arrays and strip ansi color codes for more accurate string comparison.
+  result.stdout = result.stdout && stripAnsiColors(result.stdout.toString());
+  result.stderr = result.stderr && stripAnsiColors(result.stderr.toString());
+  result.output = result.output && stripAnsiColors(result.output.toString());
 
   return result;
+}
+
+function stripAnsiColors(stringToStrip: String): String {
+  return stringToStrip.replace(
+    /[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g,
+    '',
+  );
 }
 
 export interface Result {
   stdout: string;
   stderr: string;
   status: number;
+  output: string;
 }

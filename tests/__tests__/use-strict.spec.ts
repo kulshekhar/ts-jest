@@ -8,7 +8,7 @@ describe('use strict', () => {
       'Invalid Strict',
     ]);
 
-    const stderr = result.stderr.toString();
+    const stderr = result.stderr;
 
     expect(result.status).toBe(1);
     expect(stderr).toContain('Strict.ts:4:4');

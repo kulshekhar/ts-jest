@@ -8,6 +8,7 @@ import * as jestPreset from 'babel-preset-jest';
 import { CompilerOptions } from 'typescript/lib/typescript';
 import {
   BabelTransformOptions,
+  FullJestConfig,
   JestConfig,
   PostProcessHook,
   TransformOptions,

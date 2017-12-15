@@ -8,7 +8,7 @@ describe('babelConfig flag', () => {
 
   it('should fail for invalid babel configs', () => {
     const result = runJest('../babel-config-invalid', ['--no-cache', '-u']);
-    const stderr = result.stderr.toString();
+    const stderr = result.stderr;
     expect(result.status).toBe(1);
     expect(stderr).toContain('ReferenceError: [BABEL]');
     expect(stderr).toContain(
@@ -29,7 +29,7 @@ describe('babelConfig flag', () => {
       '--no-cache',
       '-u',
     ]);
-    const stderr = result.stderr.toString();
+    const stderr = result.stderr;
     expect(result.status).toBe(1);
     expect(stderr).toContain(`Couldn't find preset "nonexistent"`);
   });

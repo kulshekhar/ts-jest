@@ -3,7 +3,7 @@ import runJest from '../__helpers__/runJest';
 describe('babelrc flag', () => {
   it('should crash on invalid babelrc', () => {
     const result = runJest('../use-babelrc', ['--no-cache', '-u']);
-    const stderr = result.stderr.toString();
+    const stderr = result.stderr;
     expect(result.status).toBe(1);
     expect(stderr).toContain('ReferenceError: [BABEL]');
     expect(stderr).toContain(

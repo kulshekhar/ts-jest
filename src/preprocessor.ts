@@ -22,7 +22,7 @@ export function process(
     transformOptions.instrument,
   );
 
-  logOnce('compilerOptions', compilerOptions);
+  logOnce('final compilerOptions:', compilerOptions);
 
   const tsJestConfig = getTSJestConfig(config.globals);
 
@@ -35,6 +35,7 @@ export function process(
   const postHook = getPostProcessHook(compilerOptions, config, tsJestConfig);
 
   if (isHtmlFile && config.globals.__TRANSFORM_HTML__) {
+    logOnce('__TRANSFORM_HTML__ enabled');
     src = 'module.exports=`' + src + '`;';
   }
 

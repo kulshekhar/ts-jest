@@ -187,6 +187,8 @@ export function getTSConfig(globals, collectCoverage: boolean = false) {
   const skipBabel = getTSJestConfig(globals).skipBabel;
   const isReferencedExternalFile = typeof config === 'string';
 
+  logOnce('Original tsConfig before modifications: ', config);
+
   // check cache before resolving configuration
   // NB: config is a string unless taken from __TS_CONFIG__, which should be immutable (and is deprecated anyways)
   // NB: We use JSON.stringify() to create a consistent, unique signature. Although it lacks a uniform
@@ -242,7 +244,6 @@ export function getTSConfig(globals, collectCoverage: boolean = false) {
     if (config.allowSyntheticDefaultImports && !skipBabel) {
       // compile ts to es2015 and transform with babel afterwards
       config.module = tsc.ModuleKind.ES2015;
-      logOnce('Setting ModuleKing to ES2015 to transpile with babel');
     }
     result = config;
   } else {
