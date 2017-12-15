@@ -1,17 +1,14 @@
-import * as tsc from 'typescript';
 import { getTSConfig, mockGlobalTSConfigSchema } from './utils';
+import { Compiler } from './compiler/compiler';
 
 export function transpileIfTypescript(path, contents, config?) {
   if (path && (path.endsWith('.tsx') || path.endsWith('.ts'))) {
-    let transpiled = tsc.transpileModule(contents, {
-      compilerOptions: getTSConfig(
-        config || mockGlobalTSConfigSchema(global),
-        true,
-      ),
-      fileName: path,
-    });
-
-    return transpiled.outputText;
+    const options = getTSConfig(
+      config || mockGlobalTSConfigSchema(global),
+      true,
+    );
+    const compiler = new Compiler(options);
+    return compiler.emitFile({ path, src: contents }).text;
   }
   return contents;
 }
