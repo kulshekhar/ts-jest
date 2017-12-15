@@ -7,7 +7,7 @@
   "scripts": {
     "build": "cpx index.d.ts dist/ && tsc -p .",
     "build:watch": "cpx index.d.ts dist/ && tsc -p . -w",
-    "clean": "rimraf dist/**/* && rimraf tests/simple/coverage && rimraf tests/simple-async/coverage",
+    "clean": "rimraf dist/**/* && rimraf tests/simple/coverage && rimraf tests/simple-async/coverage && rimraf tests/**/*/debug.txt",
     "clean-build": "npm run clean && npm run build",
     "pretest": "npm run tslint && npm run clean-build",
     "test": "node scripts/tests.js",
