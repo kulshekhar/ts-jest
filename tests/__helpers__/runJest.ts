@@ -40,6 +40,7 @@ export default function runJest(dir: string, args: string[]): Result {
   return result;
 }
 
+// from https://stackoverflow.com/questions/25245716/remove-all-ansi-colors-styles-from-strings
 function stripAnsiColors(stringToStrip: String): String {
   return stringToStrip.replace(
     /[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g,
