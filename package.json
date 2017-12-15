@@ -71,7 +71,7 @@
     "babel-plugin-transform-es2015-modules-commonjs": "^6.24.1",
     "babel-preset-jest": "^21.2.0",
     "cpx": "^1.5.0",
-    "fs-extra": "^4.0.2",
+    "fs-extra": "4.0.3",
     "jest-config": "^21.2.1",
     "pkg-dir": "^2.0.0",
     "source-map-support": "^0.5.0",
@@ -84,7 +84,7 @@
   "devDependencies": {
     "@types/babel-core": "^6.7.14",
     "@types/es6-shim": "latest",
-    "@types/fs-extra": "^4.0.0",
+    "@types/fs-extra": "4.0.7",
     "@types/jest": "latest",
     "@types/node": "latest",
     "@types/react": "latest",
