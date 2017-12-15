@@ -11,7 +11,7 @@ const JEST_PATH = 'jest';
 // return the result of the spawned proccess:
 //  [ 'status', 'signal', 'output', 'pid', 'stdout', 'stderr',
 //    'envPairs', 'options', 'args', 'file' ]
-export default function runJest(dir: string, args: string[]) {
+export default function runJest(dir: string, args: string[]): Result {
   const isRelative = dir[0] !== '/';
 
   if (isRelative) {
@@ -36,4 +36,10 @@ export default function runJest(dir: string, args: string[]) {
   result.stderr = result.stderr && result.stderr.toString();
 
   return result;
+}
+
+export interface Result {
+  stdout: string;
+  stderr: string;
+  status: number;
 }

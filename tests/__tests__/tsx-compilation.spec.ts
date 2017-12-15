@@ -5,7 +5,7 @@ describe('TSX Compilation', () => {
     const result = runJest('../button', ['--no-cache', '-u']);
 
     const stderr = result.stderr.toString();
-    const output = result.output.toString();
+    const output = result.stdout.toString();
 
     expect(result.status).toBe(1);
     expect(output).toContain('1 failed, 1 passed, 2 total');

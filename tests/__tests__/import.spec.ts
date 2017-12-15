@@ -5,7 +5,7 @@ describe('import with relative and absolute paths', () => {
     const result = runJest('../imports-test', ['--no-cache']);
 
     const stderr = result.stderr.toString();
-    const output = result.output.toString();
+    const output = result.stdout.toString();
 
     expect(result.status).toBe(1);
     expect(output).toContain('4 failed, 4 total');

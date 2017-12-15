@@ -8,12 +8,12 @@ import * as jestPreset from 'babel-preset-jest';
 import { CompilerOptions } from 'typescript/lib/typescript';
 import {
   BabelTransformOptions,
-  FullJestConfig,
   JestConfig,
   PostProcessHook,
   TransformOptions,
   TsJestConfig,
 } from './jest-types';
+import { logOnce } from './logger';
 
 function createBabelTransformer(options: BabelTransformOptions) {
   options = {
@@ -62,19 +62,26 @@ export const getPostProcessHook = (
   tsJestConfig: TsJestConfig,
 ): PostProcessHook => {
   if (tsJestConfig.skipBabel) {
+    logOnce('Not using any postprocess hook.');
     return src => src; // Identity function
   }
 
-  const plugins = Array.from(tsJestConfig.babelConfig && tsJestConfig.babelConfig.plugins || []);
+  const plugins = Array.from(
+    (tsJestConfig.babelConfig && tsJestConfig.babelConfig.plugins) || [],
+  );
   // If we're not skipping babel
   if (tsCompilerOptions.allowSyntheticDefaultImports) {
     plugins.push('transform-es2015-modules-commonjs');
   }
 
-  return createBabelTransformer({
+  const babelOptions = {
     ...tsJestConfig.babelConfig,
     babelrc: tsJestConfig.useBabelrc || false,
     plugins,
     presets: tsJestConfig.babelConfig ? tsJestConfig.babelConfig.presets : [],
-  });
+  };
+
+  logOnce('Using babel with options:', babelOptions);
+
+  return createBabelTransformer(babelOptions);
 };

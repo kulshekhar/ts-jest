@@ -3,6 +3,7 @@ import * as fs from 'fs-extra';
 import * as nodepath from 'path';
 import * as tsc from 'typescript';
 import { JestConfig, Path, TransformOptions } from './jest-types';
+import { enableLoggingIfNeeded, flushLogs, logOnce } from './logger';
 import { getPostProcessHook } from './postprocess';
 import { getTSConfig, getTSJestConfig } from './utils';
 
@@ -12,13 +13,20 @@ export function process(
   config: JestConfig,
   transformOptions: TransformOptions = { instrument: false },
 ) {
+  enableLoggingIfNeeded(config);
   // transformOptions.instrument is a proxy for collectCoverage
   // https://github.com/kulshekhar/ts-jest/issues/201#issuecomment-300572902
+  logOnce('Getting TS compiler options..');
   const compilerOptions = getTSConfig(
     config.globals,
     transformOptions.instrument,
   );
+
+  logOnce('compilerOptions', compilerOptions);
+
   const tsJestConfig = getTSJestConfig(config.globals);
+
+  logOnce('tsJestConfig: ', tsJestConfig);
 
   const isTsFile = path.endsWith('.ts') || path.endsWith('.tsx');
   const isJsFile = path.endsWith('.js') || path.endsWith('.jsx');
@@ -67,9 +75,11 @@ export function process(
         ? `'use strict';require('ts-jest').install();${outputText}`
         : `require('ts-jest').install();${outputText}`;
 
+    flushLogs();
     return modified;
   }
 
+  flushLogs();
   return src;
 }
 

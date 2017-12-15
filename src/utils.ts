@@ -4,6 +4,7 @@ import * as setFromArgv from 'jest-config/build/set_from_argv';
 import * as path from 'path';
 import * as tsc from 'typescript';
 import { TsJestConfig } from './jest-types';
+import { logOnce } from './logger';
 
 function parseConfig(argv) {
   if (argv.config && typeof argv.config === 'string') {
@@ -211,6 +212,9 @@ export function getTSConfig(globals, collectCoverage: boolean = false) {
       // works well. If there's a need to override, it can be done using
       // the global __TS_CONFIG__ setting in Jest config
       config.module = tsc.ModuleKind.CommonJS;
+      logOnce(
+        'Setting ModuleKind to CommonJS due to the tsconfig being loaded from default file.',
+      );
     }
   }
 
@@ -238,6 +242,7 @@ export function getTSConfig(globals, collectCoverage: boolean = false) {
     if (config.allowSyntheticDefaultImports && !skipBabel) {
       // compile ts to es2015 and transform with babel afterwards
       config.module = tsc.ModuleKind.ES2015;
+      logOnce('Setting ModuleKing to ES2015 to transpile with babel');
     }
     result = config;
   } else {
