@@ -69,7 +69,7 @@
     "babel-core": "^6.24.1",
     "babel-plugin-istanbul": "^4.1.4",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.24.1",
-    "babel-preset-jest": "^21.2.0",
+    "babel-preset-jest": "^22.0.0",
     "cpx": "^1.5.0",
     "fs-extra": "4.0.3",
     "jest-config": "^21.2.1",
