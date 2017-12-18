@@ -18,6 +18,6 @@ describe('Typescript errors', () => {
 
     expect(result.status).toBe(1);
     expect(stderr).toContain('Hello.ts:13:11');
-    expect(stderr).toContain('Hello.test.ts:7:12');
+    expect(stderr).toContain('Hello.test.ts:7:5');
   });
 });
