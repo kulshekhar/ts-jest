@@ -1,6 +1,6 @@
 {
   "name": "ts-jest",
-  "version": "21.2.4",
+  "version": "22.0.0",
   "main": "index.js",
   "types": "./dist/index.d.ts",
   "description": "A preprocessor with sourcemap support to help use Typescript with Jest",
@@ -49,6 +49,10 @@
       "^.+\\.tsx?$": "<rootDir>/dist/preprocessor.js"
     },
     "testRegex": "tests/__tests__/.*\\.spec\\.ts$",
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "tests/__tests__/watch.spec.ts"
+    ],
     "coverageReporters": [
       "text"
     ],
@@ -69,16 +73,16 @@
     "babel-core": "^6.24.1",
     "babel-plugin-istanbul": "^4.1.4",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.24.1",
-    "babel-preset-jest": "^21.2.0",
+    "babel-preset-jest": "^22.0.1",
     "cpx": "^1.5.0",
     "fs-extra": "4.0.3",
-    "jest-config": "^21.2.1",
+    "jest-config": "^22.0.1",
     "pkg-dir": "^2.0.0",
     "source-map-support": "^0.5.0",
     "yargs": "^10.0.3"
   },
   "peerDependencies": {
-    "jest": "^21.1.0 || ^21.3.0-alpha.1 || ^22.0.0-alpha.1",
+    "jest": "^22.0.1 || ^22.1.0-alpha.1 || ^23.0.0-alpha.1",
     "typescript": "2.x"
   },
   "devDependencies": {
@@ -94,7 +98,7 @@
     "cross-spawn-with-kill": "latest",
     "doctoc": "latest",
     "husky": "^0.14.3",
-    "jest": "^21.1.0",
+    "jest": "^22.0.1",
     "lint-staged": "^6.0.0",
     "prettier": "^1.5.3",
     "react": "latest",

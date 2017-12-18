@@ -12,9 +12,9 @@ init:
 # what combinations to test
 environment:
   matrix:
-    - nodejs_version: 4
     - nodejs_version: 6
     - nodejs_version: 8
+    - nodejs_version: 9
 
 # get the latest stable version of Node 0.STABLE.latest
 install:

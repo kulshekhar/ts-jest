@@ -1,5 +1,5 @@
-const pkgDir = require('pkg-dir');
-import { getJestConfig } from '../../src/utils';
+import * as pkgDir from 'pkg-dir';
+import { getJestConfig } from '../../src/test-utils';
 
 describe('get package json config', () => {
   let yargsMock;

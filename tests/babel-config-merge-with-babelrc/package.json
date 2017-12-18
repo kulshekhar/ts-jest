@@ -11,7 +11,8 @@
 		"moduleFileExtensions": [
 			"ts",
 			"tsx",
-			"js"
+			"js",
+			"json"
 		],
 		"globals": {
 			"ts-jest": {
