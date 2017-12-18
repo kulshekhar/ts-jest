@@ -11,6 +11,7 @@ before_install:
 before_script:
   # - greenkeeper-lockfile-update
 script:
-  - yarn test
+  - yarn test:prepare
+  - ./node_modules/.bin/jest --no-cache
 after_script:
   # - greenkeeper-lockfile-upload

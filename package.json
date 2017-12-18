@@ -10,7 +10,7 @@
     "clean": "rimraf dist/**/* && rimraf tests/simple/coverage && rimraf tests/simple-async/coverage",
     "clean-build": "npm run clean && npm run build",
     "pretest": "npm run tslint && npm run clean-build",
-    "test": "node scripts/tests.js",
+    "test:prepare": "node scripts/tests.js",
     "tslint": "tslint src/*.ts",
     "doc": "doctoc .",
     "prepublish": "npm run clean-build",
@@ -49,6 +49,10 @@
       "^.+\\.tsx?$": "<rootDir>/dist/preprocessor.js"
     },
     "testRegex": "tests/__tests__/.*\\.spec\\.ts$",
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "tests/__tests__/watch.spec.ts"
+    ],
     "coverageReporters": [
       "text"
     ],
