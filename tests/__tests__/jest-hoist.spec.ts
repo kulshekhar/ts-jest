@@ -9,7 +9,7 @@ describe('Jest.mock() calls', () => {
     expect(result.status).toBe(0);
   });
 
-  xit('Should retain proper line endings while hoisting', () => {
+  it('Should retain proper line endings while hoisting', () => {
     const result = runJest('../hoist-errors', ['--no-cache']);
 
     const stderr = result.stderr.toString();
