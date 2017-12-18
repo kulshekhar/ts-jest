@@ -30,5 +30,4 @@ test_script:
   - node --version
   - npm --version
   - yarn --version
-  - cmd: yarn test:prepare
-  - cmd: ./node_modules/.bin/jest --no-cache
+  - cmd: yarn test
