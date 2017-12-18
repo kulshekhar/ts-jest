@@ -94,7 +94,7 @@
     "cross-spawn-with-kill": "latest",
     "doctoc": "latest",
     "husky": "^0.14.3",
-    "jest": "^21.1.0",
+    "jest": "^22.0.0",
     "lint-staged": "^6.0.0",
     "prettier": "^1.5.3",
     "react": "latest",
