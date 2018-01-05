@@ -19,8 +19,8 @@ function readCompilerOptions(configPath: string) {
   // First step: Let tsc pick up the config.
   const loaded = tsc.readConfigFile(configPath, file => {
     const read = tsc.sys.readFile(file);
-    // tslint:disable-next-line:max-line-length
-    // See https://github.com/Microsoft/TypeScript/blob/a757e8428410c2196886776785c16f8f0c2a62d9/src/compiler/sys.ts#L203 :
+    // See
+    // https://github.com/Microsoft/TypeScript/blob/a757e8428410c2196886776785c16f8f0c2a62d9/src/compiler/sys.ts#L203 :
     // `readFile` returns `undefined` in case the file does not exist!
     if (!read) {
       throw new Error(
@@ -196,9 +196,9 @@ export function injectSourcemapHook(
 ): string {
   const start = src.length > 12 ? src.substr(1, 10) : '';
 
-  const sourceMapHook = `require('ts-jest').install(${JSON.stringify(
-    filePath,
-  )}, ${JSON.stringify(typeScriptCode)})`;
+  const filePathParam = JSON.stringify(filePath);
+  const codeParam = JSON.stringify(typeScriptCode);
+  const sourceMapHook = `require('ts-jest').install(${filePathParam}, ${codeParam})`;
 
   return start === 'use strict'
     ? `'use strict';${sourceMapHook};${src}`
