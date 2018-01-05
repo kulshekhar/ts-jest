@@ -189,10 +189,16 @@ export function cacheFile(
   }
 }
 
-export function injectSourcemapHook(src: string): string {
+export function injectSourcemapHook(
+  filePath: string,
+  typeScriptCode: string,
+  src: string,
+): string {
   const start = src.length > 12 ? src.substr(1, 10) : '';
 
-  const sourceMapHook = `require('ts-jest').install()`;
+  const filePathParam = JSON.stringify(filePath);
+  const codeParam = JSON.stringify(typeScriptCode);
+  const sourceMapHook = `require('ts-jest').install(${filePathParam}, ${codeParam})`;
 
   return start === 'use strict'
     ? `'use strict';${sourceMapHook};${src}`
