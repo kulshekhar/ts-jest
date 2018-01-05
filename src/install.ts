@@ -2,17 +2,16 @@ import * as sourceMapSupport from 'source-map-support';
 import { defaultRetrieveFileHandler } from './default-retrieve-file-handler';
 
 export function install(filePath: string, fileContent: string) {
-    const options: sourceMapSupport.Options = {};
+  const options: sourceMapSupport.Options = {};
 
-    // options.retrieveFile = defaultRetrieveFileHandler;
-    options.retrieveFile = path =>
-        path === filePath ? fileContent : undefined;
+  // options.retrieveFile = defaultRetrieveFileHandler;
+  options.retrieveFile = path => (path === filePath ? fileContent : undefined);
 
-    /* tslint:disable */
-    // disabling tslint because the types for the source-map-support version
-    // in use here don't have the 'environment' property on options
-    options['environment'] = 'node';
-    /* tslint:disable */
+  /* tslint:disable */
+  // disabling tslint because the types for the source-map-support version
+  // in use here don't have the 'environment' property on options
+  options['environment'] = 'node';
+  /* tslint:disable */
 
-    return sourceMapSupport.install(options);
+  return sourceMapSupport.install(options);
 }
