@@ -43,10 +43,12 @@ export function process(
     fileName: filePath,
   });
 
+  const tsJestConfig = getTSJestConfig(jestConfig.globals);
+
   const postHook = getPostProcessHook(
     compilerOptions,
     jestConfig,
-    getTSJestConfig(jestConfig.globals),
+    tsJestConfig,
   );
 
   const outputText = postHook(
@@ -58,7 +60,15 @@ export function process(
 
   const modified = injectSourcemapHook(outputText);
 
-  cacheFile(jestConfig, filePath, modified);
+  if (tsJestConfig.enableInternalCache === true) {
+    // This config is undocumented.
+    // This has been made configurable for now to ensure that
+    // if this breaks something for existing users, there's a quick fix
+    // in place.
+    // If this doesn't cause a problem, this if block will be removed
+    // in a future version
+    cacheFile(jestConfig, filePath, modified);
+  }
 
   return modified;
 }
