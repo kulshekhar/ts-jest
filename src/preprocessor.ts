@@ -64,16 +64,6 @@ export function process(
     outputText,
   );
 
-  if (tsJestConfig.enableInternalCache === true) {
-    // This config is undocumented.
-    // This has been made configurable for now to ensure that
-    // if this breaks something for existing users, there's a quick fix
-    // in place.
-    // If this doesn't cause a problem, this if block will be removed
-    // in a future version
-    cacheFile(jestConfig, filePath, modified);
-  }
-
   return modified;
 }
 
