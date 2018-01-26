@@ -59,8 +59,8 @@ describe('Typescript watch tests', () => {
 
   beforeAll(() => {
     result = runJestInWatchMode('../watch-test');
-    DEFAULT_TIMEOUT_INTERVAL = jasmine['DEFAULT_TIMEOUT_INTERVAL'];
-    jasmine['DEFAULT_TIMEOUT_INTERVAL'] = 10000;
+    DEFAULT_TIMEOUT_INTERVAL = jasmine.DEFAULT_TIMEOUT_INTERVAL;
+    jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
   });
 
   it('should show the correct error locations in the typescript files without changes', () => {
@@ -82,6 +82,7 @@ describe('Typescript watch tests', () => {
     return promise;
   });
 
+  // tslint:disable-next-line:max-line-length
   it('should show the correct error locations in the typescript files with changes in source file and test file', () => {
     let promise = result.getStderrAsync().then(stderr => {
       expect(stderr).toContain('Hello.ts:11:11');
@@ -97,7 +98,7 @@ describe('Typescript watch tests', () => {
   afterAll(() => {
     result.childProcess.kill();
     // revert changes back
-    jasmine['DEFAULT_TIMEOUT_INTERVAL'] = DEFAULT_TIMEOUT_INTERVAL;
+    jasmine.DEFAULT_TIMEOUT_INTERVAL = DEFAULT_TIMEOUT_INTERVAL;
     fs.writeFileSync(
       path.resolve(__dirname, '../watch-test/Hello.ts'),
       helloFile,

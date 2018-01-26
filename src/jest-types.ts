@@ -72,5 +72,6 @@ export interface TsJestConfig {
   skipBabel?: boolean;
   useBabelrc?: boolean;
   babelConfig?: BabelTransformOpts;
-  tsConfigFile?: String;
+  tsConfigFile?: string;
+  enableInternalCache?: boolean;
 }

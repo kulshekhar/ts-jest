@@ -137,7 +137,7 @@ custom configuration file (relative to the project's root directory)
   }
 }
 ```
-**Warning: Using \_\_TS_CONFIG__ option in globals is deprecated and soon will be removed.**
+**Warning: In the past, a `__TS_CONFIG__` section could be used to provide an inline TypeScript configuration. Going forward, all custom configurations should be in a different file and the `tsConfigFile` key in the `ts-jest` section (under `globals`) should point to this file (as shown above). You can ignore this if the configuration you want is identical to the main `tsconfig.json`.**
 
 For all available `tsc` options see [TypeScript docs](https://www.typescriptlang.org/docs/handbook/compiler-options.html).
 

@@ -2,13 +2,15 @@ dist: trusty
 sudo: required
 language: node_js
 node_js:
+  - "9"
   - "8"
   - "6"
-  - "4"
 before_install:
   - sudo sysctl fs.inotify.max_user_watches=524288
   - yarn global add greenkeeper-lockfile@1 rimraf
 before_script:
-  - greenkeeper-lockfile-update
+  # - greenkeeper-lockfile-update
+script:
+  - yarn test
 after_script:
-  - greenkeeper-lockfile-upload
+  # - greenkeeper-lockfile-upload
