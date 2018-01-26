@@ -8,6 +8,9 @@
 
 [describe the expected behavior here]
 
+- Output from your debug log
+[ You can activate the debug logger by setting the environment variable TS_JEST_DEBUG="true" before running yarn test. The output of the logger
+will be in **<your_project_dir>/node_modules/ts-jest/debug.txt** ]
 
 
 - Link to a minimal repo that reproduces this issue
