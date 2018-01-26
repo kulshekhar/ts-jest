@@ -2,8 +2,8 @@ import runJest from '../__helpers__/runJest';
 import * as React from 'react';
 
 describe('TSX Errors', () => {
-  it('should show the correct error locations in the typescript files', () => {
-    const result = runJest('../button', ['--no-cache', '-u']);
+  it('should show the correct error locations in the typescript files', async () => {
+    const result = await runJest('../button', ['--no-cache', '-u']);
 
     const stderr = result.stderr.toString();
 

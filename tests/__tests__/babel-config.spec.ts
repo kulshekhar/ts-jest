@@ -1,13 +1,16 @@
 import runJest from '../__helpers__/runJest';
 
 describe('babelConfig flag', () => {
-  it('should use a custom Babel config', () => {
-    const result = runJest('../babel-config', ['--no-cache', '-u']);
+  it('should use a custom Babel config', async () => {
+    const result = await runJest('../babel-config', ['--no-cache', '-u']);
     expect(result.status).toBe(0);
   });
 
-  it('should fail for invalid babel configs', () => {
-    const result = runJest('../babel-config-invalid', ['--no-cache', '-u']);
+  it('should fail for invalid babel configs', async () => {
+    const result = await runJest('../babel-config-invalid', [
+      '--no-cache',
+      '-u',
+    ]);
     const stderr = result.stderr.toString();
     expect(result.status).toBe(1);
     expect(stderr).toContain('ReferenceError: [BABEL]');
@@ -16,16 +19,16 @@ describe('babelConfig flag', () => {
     );
   });
 
-  it('should not merge in .babelrc options when ommiting the useBabelrc option', () => {
-    const result = runJest('../babel-config-merge-ignore-babelrc', [
+  it('should not merge in .babelrc options when ommiting the useBabelrc option', async () => {
+    const result = await runJest('../babel-config-merge-ignore-babelrc', [
       '--no-cache',
       '-u',
     ]);
     expect(result.status).toBe(0);
   });
 
-  it('should merge in .babelrc options when using the useBabelrc option', () => {
-    const result = runJest('../babel-config-merge-with-babelrc', [
+  it('should merge in .babelrc options when using the useBabelrc option', async () => {
+    const result = await runJest('../babel-config-merge-with-babelrc', [
       '--no-cache',
       '-u',
     ]);

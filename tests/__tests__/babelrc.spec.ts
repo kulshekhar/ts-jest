@@ -1,8 +1,8 @@
 import runJest from '../__helpers__/runJest';
 
 describe('babelrc flag', () => {
-  it('should crash on invalid babelrc', () => {
-    const result = runJest('../use-babelrc', ['--no-cache', '-u']);
+  it('should crash on invalid babelrc', async () => {
+    const result = await runJest('../use-babelrc', ['--no-cache', '-u']);
     const stderr = result.stderr.toString();
     expect(result.status).toBe(1);
     expect(stderr).toContain('ReferenceError: [BABEL]');
@@ -11,8 +11,8 @@ describe('babelrc flag', () => {
     );
   });
 
-  it('Should not crash on invalid babelrc if useBabelrc is not set', () => {
-    const result = runJest('../skip-babelrc', ['--no-cache', '-u']);
+  it('Should not crash on invalid babelrc if useBabelrc is not set', async () => {
+    const result = await runJest('../skip-babelrc', ['--no-cache', '-u']);
 
     expect(result.status).toBe(0);
   });

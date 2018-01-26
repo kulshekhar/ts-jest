@@ -1,8 +1,8 @@
 import runJest from '../__helpers__/runJest';
 
 describe('Typescript coverage', () => {
-  it('Should generate the correct coverage numbers.', () => {
-    const result = runJest('../simple', ['--no-cache', '--coverage']);
+  it('Should generate the correct coverage numbers.', async () => {
+    const result = await runJest('../simple', ['--no-cache', '--coverage']);
 
     const output = result.stdout.toString();
 

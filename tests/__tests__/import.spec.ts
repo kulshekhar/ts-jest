@@ -1,8 +1,8 @@
 import runJest from '../__helpers__/runJest';
 
 describe('import with relative and absolute paths', () => {
-  it('should run successfully', () => {
-    const result = runJest('../imports-test', ['--no-cache']);
+  it('should run successfully', async () => {
+    const result = await runJest('../imports-test', ['--no-cache']);
 
     const stderr = result.stderr.toString();
     const output = result.output.toString();

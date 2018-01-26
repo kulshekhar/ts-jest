@@ -1,8 +1,8 @@
 import runJest from '../__helpers__/runJest';
 
 describe('TS Compilation', () => {
-  it('should compile typescript succesfully', () => {
-    const result = runJest('../simple', ['--no-cache']);
+  it('should compile typescript succesfully', async () => {
+    const result = await runJest('../simple', ['--no-cache']);
 
     const stderr = result.stderr.toString();
     const output = result.output.toString();
