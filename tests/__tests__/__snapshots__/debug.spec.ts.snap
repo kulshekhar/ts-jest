@@ -2,6 +2,9 @@
 
 exports[`Debug output should create a debug file with the correct output if the flag is set 1`] = `
 "[
+  \\"Reading tsconfig file from path tsconfig.json\\"
+]
+[
   \\"Original typescript config before modifications: \\",
   {
     \\"target\\": 1,
@@ -13,6 +16,9 @@ exports[`Debug output should create a debug file with the correct output if the 
     \\"inlineSourceMap\\": true,
     \\"inlineSources\\": true
   }
+]
+[
+  \\"Reading tsconfig file from path tsconfig.json\\"
 ]
 [
   \\"final compilerOptions:\\",

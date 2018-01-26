@@ -120,6 +120,7 @@ const tsConfigCache: { [key: string]: any } = {};
 // https://github.com/facebook/jest/issues/3524
 export function getTSConfig(globals, collectCoverage: boolean = false) {
   let configPath = getTSConfigPathFromConfig(globals);
+  logOnce(`Reading tsconfig file from path ${configPath}`);
   const skipBabel = getTSJestConfig(globals).skipBabel;
 
   // check cache before resolving configuration
