@@ -1,5 +1,4 @@
 import { spawn as crossSpawn } from 'cross-spawn';
-import * as eventToPromise from 'event-to-promise';
 import { JestResult } from './runJest';
 
 // Asynchronously spawn a process and return a promise

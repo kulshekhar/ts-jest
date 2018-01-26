@@ -15,6 +15,7 @@ export default async function runJest(
   dir: string,
   args: string[],
 ): Promise<JestResult> {
+  jest.setTimeout(10000); // Set a ten second timeout, as sometimes the jest process takes a little while to return.
   const isRelative = dir[0] !== '/';
 
   if (isRelative) {

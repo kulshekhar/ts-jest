@@ -1,8 +1,8 @@
 jest.mock('path');
 
-import { getTSConfig } from '../../dist/utils';
-import * as ts from 'typescript';
 import * as path from 'path';
+import * as ts from 'typescript';
+import { getTSConfig } from '../../dist/utils';
 
 describe('get ts config from string', () => {
   beforeEach(() => {

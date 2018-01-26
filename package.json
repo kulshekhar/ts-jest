@@ -89,7 +89,7 @@
     "@types/babel-core": "^6.7.14",
     "@types/es6-shim": "latest",
     "@types/fs-extra": "4.0.7",
-    "@types/jest": "latest",
+    "@types/jest": "^22.1.0",
     "@types/node": "latest",
     "@types/react": "latest",
     "@types/source-map-support": "latest",
