@@ -30,6 +30,7 @@ export default function runJest(dir: string, args: string[], env = {}): Result {
 
   const result = spawnSync(JEST_PATH, args || [], {
     cwd: dir,
+    env: { ...process.env, ...env }, // Add both process.env which is the standard and custom env variables
   });
 
   // Call to string on byte arrays and strip ansi color codes for more accurate string comparison.
