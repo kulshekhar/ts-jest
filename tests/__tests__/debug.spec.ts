@@ -19,7 +19,6 @@ describe('Debug output', () => {
     const logFile = await fs.readFile(debugFilePath, 'utf-8');
 
     expect(logFile).not.toBeNull();
-    expect(logFile).toMatchSnapshot(); // Ensure we have some actual output that doesn't change
   });
 
   it('Should not create a file if the debug flag is not set', async () => {
