@@ -4,12 +4,16 @@ import runJest from '../__helpers__/runJest';
 
 describe('Debug output', () => {
   it('should create a debug file with the correct output if the flag is set', async () => {
-    runJest('../debug', ['--no-cache', '-u']);
+    runJest('../debug', ['--no-cache', '-u'], {
+      TS_JEST_DEBUG: 'true',
+    });
     const logFile = fs.readFileSync(
       path.resolve(__dirname, '../debug/node_modules/ts-jest/debug.txt'),
       'utf-8',
     );
+
     expect(logFile).not.toBeNull();
+    expect(logFile).toMatchSnapshot(); // Ensure we have some actual output that doesn't change
   });
 
   it('Should not create a file if the debug flag is not set', () => {

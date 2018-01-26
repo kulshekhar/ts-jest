@@ -1,7 +1,7 @@
 import * as crypto from 'crypto';
 import * as tsc from 'typescript';
 import { JestConfig, Path, TransformOptions } from './jest-types';
-import { enableLoggingIfNeeded, flushLogs, logOnce } from './logger';
+import { flushLogs, logOnce } from './logger';
 import { getPostProcessHook } from './postprocess';
 import {
   cacheFile,
@@ -16,7 +16,6 @@ export function process(
   jestConfig: JestConfig,
   transformOptions: TransformOptions = { instrument: false },
 ) {
-  enableLoggingIfNeeded(jestConfig);
   // transformOptions.instrument is a proxy for collectCoverage
   // https://github.com/kulshekhar/ts-jest/issues/201#issuecomment-300572902
   const compilerOptions = getTSConfig(

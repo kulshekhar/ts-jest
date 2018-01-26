@@ -11,7 +11,7 @@ const JEST_PATH = 'jest';
 // return the result of the spawned proccess:
 //  [ 'status', 'signal', 'output', 'pid', 'stdout', 'stderr',
 //    'envPairs', 'options', 'args', 'file' ]
-export default function runJest(dir: string, args: string[]): Result {
+export default function runJest(dir: string, args: string[], env = {}): Result {
   const isRelative = dir[0] !== '/';
 
   if (isRelative) {
@@ -30,6 +30,7 @@ export default function runJest(dir: string, args: string[]): Result {
 
   const result = spawnSync(JEST_PATH, args || [], {
     cwd: dir,
+    env,
   });
 
   // Call to string on byte arrays and strip ansi color codes for more accurate string comparison.

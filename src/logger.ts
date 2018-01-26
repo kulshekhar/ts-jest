@@ -1,6 +1,5 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { JestConfig } from './jest-types';
 
 /**
  * Logger file that enables logging things just once. Does this by traversing the array of previously recorded
@@ -9,35 +8,24 @@ import { JestConfig } from './jest-types';
  */
 
 const logs: any[] = [];
-let loggingDisabled: boolean = true;
 let logsFlushed: boolean = false;
 
-export function enableLoggingIfNeeded(config: JestConfig) {
-  if (
-    config.globals &&
-    config.globals['ts-jest'] &&
-    config.globals['ts-jest'].debug
-  ) {
-    loggingDisabled = false;
-    logOnce('Logging enabled');
-  }
+function shouldLog(): boolean {
+  // If the env variable is set and the logs have not already been flushed, log the line
+  return process.env.TS_JEST_DEBUG && !logsFlushed;
 }
 
+// Log function. Only logs prior to calls to flushLogs.
 export function logOnce(...thingsToLog: any[]) {
-  if (loggingDisabled) {
+  if (!shouldLog()) {
     return;
   }
-  thingsToLog.forEach(msg => {
-    if (includes(logs, msg)) {
-      return; // Message has already been logged
-    }
-    logs.push(msg);
-  });
+  logs.push(thingsToLog);
 }
 
 // This function JSONifies logs and flushes them to disk.
 export function flushLogs() {
-  if (loggingDisabled || logsFlushed) {
+  if (!shouldLog()) {
     return; // only output stuff for the first invocation and if logging is enabled.
   }
   logsFlushed = true;
@@ -56,6 +44,6 @@ function convertToJSONIfPossible(object: any): string {
   try {
     return JSON.stringify(object, null, 2);
   } catch {
-    return object; // if unable to parse, simply return.
+    return object.toString(); // if unable to parse, simply return the string variant
   }
 }

@@ -20,9 +20,6 @@
       "json"
     ],
     "globals": {
-      "ts-jest": {
-        "debug": true
-      }
     }
   }
 }

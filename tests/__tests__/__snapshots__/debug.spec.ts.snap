@@ -1,0 +1,42 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Debug output should create a debug file with the correct output if the flag is set 1`] = `
+"[
+  \\"Original typescript config before modifications: \\",
+  {
+    \\"target\\": 1,
+    \\"module\\": 1,
+    \\"moduleResolution\\": 2,
+    \\"noEmitOnError\\": false,
+    \\"jsx\\": 2,
+    \\"allowJs\\": true,
+    \\"inlineSourceMap\\": true,
+    \\"inlineSources\\": true
+  }
+]
+[
+  \\"final compilerOptions:\\",
+  {
+    \\"target\\": 1,
+    \\"module\\": 1,
+    \\"moduleResolution\\": 2,
+    \\"noEmitOnError\\": false,
+    \\"jsx\\": 2,
+    \\"allowJs\\": true,
+    \\"inlineSourceMap\\": true,
+    \\"inlineSources\\": true
+  }
+]
+[
+  \\"tsJestConfig: \\",
+  {}
+]
+[
+  \\"Using babel with options:\\",
+  {
+    \\"babelrc\\": false,
+    \\"plugins\\": [],
+    \\"presets\\": []
+  }
+]"
+`;
