@@ -1,6 +1,6 @@
 // from: https://github.com/facebook/jest/blob/master/integration_tests/runJest.js
 
-import { sync as spawnSync } from 'cross-spawn';
+import { spawnProcess } from './promisify-spawn';
 import * as path from 'path';
 import { fileExists } from './utils';
 
@@ -9,9 +9,13 @@ import { fileExists } from './utils';
 const JEST_PATH = 'jest';
 
 // return the result of the spawned proccess:
-//  [ 'status', 'signal', 'output', 'pid', 'stdout', 'stderr',
+//  [ 'status', 'signal', 'output',  'pid', 'stdout', 'stderr',
 //    'envPairs', 'options', 'args', 'file' ]
-export default function runJest(dir: string, args: string[]) {
+export default async function runJest(
+  dir: string,
+  args: string[],
+): Promise<JestResult> {
+  jest.setTimeout(10000); // Set a ten second timeout, as sometimes the jest process takes a little while to return.
   const isRelative = dir[0] !== '/';
 
   if (isRelative) {
@@ -28,12 +32,14 @@ export default function runJest(dir: string, args: string[]) {
     `);
   }
 
-  const result = spawnSync(JEST_PATH, args || [], {
+  return spawnProcess(JEST_PATH, args || [], {
     cwd: dir,
   });
+}
 
-  result.stdout = result.stdout && result.stdout.toString();
-  result.stderr = result.stderr && result.stderr.toString();
-
-  return result;
+export interface JestResult {
+  stderr: string;
+  stdout: string;
+  output: string;
+  status: number;
 }

@@ -1,8 +1,8 @@
 import runJest from '../__helpers__/runJest';
 
 describe('use strict', () => {
-  it('should show the error locations for "use strict" violations', () => {
-    const result = runJest('../use-strict', [
+  it('should show the error locations for "use strict" violations', async () => {
+    const result = await runJest('../use-strict', [
       '--no-cache',
       '-t',
       'Invalid Strict',
@@ -15,8 +15,12 @@ describe('use strict', () => {
     expect(stderr).toContain('Strict.test.ts:7:5');
   });
 
-  it('should work with "use strict"', () => {
-    const result = runJest('../use-strict', ['--no-cache', '-t', 'Strict1']);
+  it('should work with "use strict"', async () => {
+    const result = await runJest('../use-strict', [
+      '--no-cache',
+      '-t',
+      'Strict1',
+    ]);
 
     expect(result.status).toBe(0);
   });

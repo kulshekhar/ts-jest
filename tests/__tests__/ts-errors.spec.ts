@@ -1,8 +1,8 @@
 import runJest from '../__helpers__/runJest';
 
 describe('Typescript errors', () => {
-  it('should show the correct error locations in the typescript files', () => {
-    const result = runJest('../simple', ['--no-cache']);
+  it('should show the correct error locations in the typescript files', async () => {
+    const result = await runJest('../simple', ['--no-cache']);
 
     const stderr = result.stderr.toString();
 
@@ -12,7 +12,7 @@ describe('Typescript errors', () => {
   });
 
   it('Should show the correct error locations in async typescript files', async () => {
-    const result = runJest('../simple-async', ['--no-cache']);
+    const result = await runJest('../simple-async', ['--no-cache']);
 
     const stderr = result.stderr.toString();
 

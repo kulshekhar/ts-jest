@@ -1,8 +1,11 @@
 import runJest from '../__helpers__/runJest';
 
 describe('Typescript async coverage', () => {
-  it('Should generate the correct async coverage numbers', () => {
-    const result = runJest('../simple-async', ['--no-cache', '--coverage']);
+  it('Should generate the correct async coverage numbers', async () => {
+    const result = await runJest('../simple-async', [
+      '--no-cache',
+      '--coverage',
+    ]);
 
     const output = result.stdout.toString();
 
