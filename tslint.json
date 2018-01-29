@@ -17,6 +17,9 @@
         "interface-name": [
             true,
             "never-prefix"
-        ]
+        ],
+        "ordered-imports": false,
+        "align": false,
+        "object-literal-sort-keys": false
     }
 }

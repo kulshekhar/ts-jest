@@ -4,6 +4,7 @@ import * as fsExtra from 'fs-extra';
 import * as path from 'path';
 import * as tsc from 'typescript';
 import { JestConfig, TsJestConfig } from './jest-types';
+import { logOnce } from './logger';
 
 export function getTSJestConfig(globals: any): TsJestConfig {
   return globals && globals['ts-jest'] ? globals['ts-jest'] : {};
@@ -119,6 +120,7 @@ const tsConfigCache: { [key: string]: any } = {};
 // https://github.com/facebook/jest/issues/3524
 export function getTSConfig(globals, collectCoverage: boolean = false) {
   let configPath = getTSConfigPathFromConfig(globals);
+  logOnce(`Reading tsconfig file from path ${configPath}`);
   const skipBabel = getTSJestConfig(globals).skipBabel;
 
   // check cache before resolving configuration
@@ -134,6 +136,7 @@ export function getTSConfig(globals, collectCoverage: boolean = false) {
   }
 
   const config = readCompilerOptions(configPath);
+  logOnce('Original typescript config before modifications: ', config);
 
   // ts-jest will map lines numbers properly if inlineSourceMap and
   // inlineSources are set to true. For testing, we don't need the

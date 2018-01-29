@@ -11,7 +11,7 @@ const JEST_PATH = 'jest';
 // return the result of the spawned proccess:
 //  [ 'status', 'signal', 'output', 'pid', 'stdout', 'stderr',
 //    'envPairs', 'options', 'args', 'file' ]
-export default function runJest(dir: string, args: string[]) {
+export default function runJest(dir: string, args: string[], env = {}): Result {
   const isRelative = dir[0] !== '/';
 
   if (isRelative) {
@@ -30,10 +30,28 @@ export default function runJest(dir: string, args: string[]) {
 
   const result = spawnSync(JEST_PATH, args || [], {
     cwd: dir,
+    env: { ...process.env, ...env }, // Add both process.env which is the standard and custom env variables
   });
 
-  result.stdout = result.stdout && result.stdout.toString();
-  result.stderr = result.stderr && result.stderr.toString();
+  // Call to string on byte arrays and strip ansi color codes for more accurate string comparison.
+  result.stdout = result.stdout && stripAnsiColors(result.stdout.toString());
+  result.stderr = result.stderr && stripAnsiColors(result.stderr.toString());
+  result.output = result.output && stripAnsiColors(result.output.toString());
 
   return result;
+}
+
+// from https://stackoverflow.com/questions/25245716/remove-all-ansi-colors-styles-from-strings
+function stripAnsiColors(stringToStrip: String): String {
+  return stringToStrip.replace(
+    /[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g,
+    '',
+  );
+}
+
+export interface Result {
+  stdout: string;
+  stderr: string;
+  status: number;
+  output: string;
 }

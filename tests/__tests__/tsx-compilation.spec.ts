@@ -4,8 +4,8 @@ describe('TSX Compilation', () => {
   it('Should compile a button succesfully', () => {
     const result = runJest('../button', ['--no-cache', '-u']);
 
-    const stderr = result.stderr.toString();
-    const output = result.output.toString();
+    const stderr = result.stderr;
+    const output = result.output;
 
     expect(result.status).toBe(1);
     expect(output).toContain('1 failed, 1 passed, 2 total');

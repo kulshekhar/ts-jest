@@ -1,6 +1,7 @@
 import * as crypto from 'crypto';
 import * as tsc from 'typescript';
 import { JestConfig, Path, TransformOptions } from './jest-types';
+import { flushLogs, logOnce } from './logger';
 import { getPostProcessHook } from './postprocess';
 import {
   cacheFile,
@@ -21,6 +22,8 @@ export function process(
     jestConfig.globals,
     transformOptions.instrument,
   );
+
+  logOnce('final compilerOptions:', compilerOptions);
 
   const isTsFile = /\.tsx?$/.test(filePath);
   const isJsFile = /\.jsx?$/.test(filePath);
@@ -44,6 +47,7 @@ export function process(
   });
 
   const tsJestConfig = getTSJestConfig(jestConfig.globals);
+  logOnce('tsJestConfig: ', tsJestConfig);
 
   const postHook = getPostProcessHook(
     compilerOptions,
@@ -63,7 +67,7 @@ export function process(
     tsTranspiled.outputText,
     outputText,
   );
-
+  flushLogs();
   return modified;
 }
 

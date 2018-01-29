@@ -4,11 +4,10 @@ describe('import with relative and absolute paths', () => {
   it('should run successfully', () => {
     const result = runJest('../imports-test', ['--no-cache']);
 
-    const stderr = result.stderr.toString();
-    const output = result.output.toString();
+    const stderr = result.stderr;
 
     expect(result.status).toBe(1);
-    expect(output).toContain('4 failed, 4 total');
+    expect(stderr).toContain('4 failed, 4 total');
 
     expect(stderr).toContain('Hello.ts:11:11)');
 
