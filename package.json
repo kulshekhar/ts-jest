@@ -30,16 +30,6 @@
     "testing"
   ],
   "author": "Kulshekhar Kabra <kulshekhar@users.noreply.github.com> (https://github.com/kulshekhar)",
-  "contributors": [
-    "Alan Agius <alan.agius4@gmail.com> (https://github.com/alan-agius4)",
-    "Bnaya Peretz <me@bnaya.net> (https://github.com/Bnaya)",
-    "Brian Ruddy <briancruddy@gmail.com> (https://github.com/bcruddy)",
-    "Emil Persson <emil.n.persson@gmail.com> (https://github.com/emilniklas)",
-    "Gustav Wengel <gustavwengel@gmail.com>(https://github.com/GeeWee)",
-    "Ihor Chulinda <ichulinda@gmail.com> (https://github.com/Igmat)",
-    "OJ Kwon <kwon.ohjoong@gmail.com> (https://github.com/kwonoj)",
-    "Tony Valderrama <tony.valderrama@outlook.com> (https://github.com/tvald)"
-  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/kulshekhar/ts-jest/issues"
