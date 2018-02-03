@@ -29,17 +29,20 @@ ts-jest is a TypeScript preprocessor with source map support for Jest that lets 
 - [Configuration](#configuration)
   - [tsconfig](#tsconfig)
   - [Module path mapping](#module-path-mapping)
+  - [Skipping Babel](#skipping-babel)
   - [Using `.babelrc`](#using-babelrc)
   - [Using a custom Babel config](#using-a-custom-babel-config)
+  - [TS compiler & error reporting](#ts-compiler--error-reporting)
 - [Use cases](#use-cases)
   - [React Native](#react-native)
 - [Angular 2](#angular-2)
+- [Using ES2015+ features in Javascript files](#using-es2015-features-in-javascript-files)
 - [Tips](#tips)
   - [Importing packages written in TypeScript](#importing-packages-written-in-typescript)
 - [Known Limitations](#known-limitations)
   - [Known limitations for TS compiler options](#known-limitations-for-ts-compiler-options)
-  - [TS compiler && error reporting](#ts-compiler--error-reporting)
   - [Known Limitations for hoisting](#known-limitations-for-hoisting)
+  - [`const enum` is not supported](#const-enum-is-not-supported)
 - [How to Contribute](#how-to-contribute)
   - [Quickstart to run tests (only if you're working on this package)](#quickstart-to-run-tests-only-if-youre-working-on-this-package)
 - [License](#license)
@@ -201,6 +204,21 @@ In some cases, projects may not want to have a `.babelrc` file, but still need t
 
 Note that if you also set the `useBabelrc` option to `true`, any configuration passed using this method will be overwritten by corresponding keys in `.babelrc` files.
 
+### TS compiler & error reporting
+If you want to enable Syntactic & Semantic TypeScript error reporting you can enable this through `enableTsDiagnostics` flag;
+
+```json
+{
+  "jest": {
+    "globals": {
+      "ts-jest": {
+        "enableTsDiagnostics": true
+      }
+    }
+  }
+}
+```
+
 ## Use cases
 
 ### React Native
@@ -326,20 +344,6 @@ By default Jest ignores everything in `node_modules`. This setting prevents Jest
 ```json
 "jest": {
   "moduleDirectories": ["node_modules", "<path_to_your_sources>"]
-}
-```
-### TS compiler && error reporting
-If you want to enable Syntactic & Semantic TypeScript error reporting you can enable this through `enableTsDiagnostics` flag;
-
-```json
-{
-  "jest": {
-    "globals": {
-      "ts-jest": {
-        "enableTsDiagnostics": true
-      }
-    }
-  }
 }
 ```
 
