@@ -74,4 +74,5 @@ export interface TsJestConfig {
   babelConfig?: BabelTransformOpts;
   tsConfigFile?: string;
   enableInternalCache?: boolean;
+  enableTsDiagnostics?: boolean;
 }

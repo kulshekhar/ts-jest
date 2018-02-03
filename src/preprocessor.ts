@@ -7,6 +7,7 @@ import {
   cacheFile,
   getTSConfig,
   getTSJestConfig,
+  runTsDiagnostics,
   injectSourcemapHook,
 } from './utils';
 
@@ -41,13 +42,17 @@ export function process(
     return src;
   }
 
+  const tsJestConfig = getTSJestConfig(jestConfig.globals);
+  logOnce('tsJestConfig: ', tsJestConfig);
+
+  if (tsJestConfig.enableTsDiagnostics) {
+    runTsDiagnostics(filePath, compilerOptions);
+  }
+
   const tsTranspiled = tsc.transpileModule(src, {
     compilerOptions,
     fileName: filePath,
   });
-
-  const tsJestConfig = getTSJestConfig(jestConfig.globals);
-  logOnce('tsJestConfig: ', tsJestConfig);
 
   const postHook = getPostProcessHook(
     compilerOptions,

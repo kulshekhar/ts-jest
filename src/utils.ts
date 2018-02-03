@@ -207,3 +207,32 @@ export function injectSourcemapHook(
     ? `'use strict';${sourceMapHook};${src}`
     : `${sourceMapHook};${src}`;
 }
+
+export function runTsDiagnostics(
+  filePath: string,
+  compilerOptions: tsc.CompilerOptions,
+) {
+  const program = tsc.createProgram([filePath], compilerOptions);
+  const allDiagnostics = tsc.getPreEmitDiagnostics(program);
+  const formattedDiagnostics = allDiagnostics.map(diagnostic => {
+    if (diagnostic.file) {
+      const { line, character } = diagnostic.file.getLineAndCharacterOfPosition(
+        diagnostic.start,
+      );
+      const message = tsc.flattenDiagnosticMessageText(
+        diagnostic.messageText,
+        '\n',
+      );
+      return `${path.relative(
+        process.cwd(),
+        diagnostic.file.fileName,
+      )} (${line + 1},${character + 1}): ${message}\n`;
+    }
+
+    return `${tsc.flattenDiagnosticMessageText(diagnostic.messageText, '\n')}`;
+  });
+
+  if (formattedDiagnostics.length) {
+    throw new Error(formattedDiagnostics.join(''));
+  }
+}
