@@ -329,9 +329,19 @@ By default Jest ignores everything in `node_modules`. This setting prevents Jest
 }
 ```
 ### TS compiler && error reporting
-- ts-jest only returns syntax errors from [tsc](https://github.com/Microsoft/TypeScript/issues/4864#issuecomment-141567247)
-- Non syntactic errors do not show up in [jest](https://github.com/facebook/jest/issues/2168)
-- If you only want to run jest if tsc does not output any errors, a workaround is `tsc --noEmit -p . && jest`
+If you want to enable Syntactic & Semantic TypeScript error reporting you can enable this through `enableTsDiagnostics` flag;
+
+```json
+{
+  "jest": {
+    "globals": {
+      "ts-jest": {
+        "enableTsDiagnostics": true
+      }
+    }
+  }
+}
+```
 
 ### Known Limitations for hoisting
 If the `jest.mock()` calls is placed after actual code, (e.g. after functions or classes) and `skipBabel` is not set,
