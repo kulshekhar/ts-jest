@@ -1,6 +1,6 @@
 {
   "name": "ts-jest",
-  "version": "22.0.2",
+  "version": "22.0.3",
   "main": "index.js",
   "types": "./dist/index.d.ts",
   "description": "A preprocessor with sourcemap support to help use Typescript with Jest",
@@ -31,6 +31,7 @@
   ],
   "author": "Kulshekhar Kabra <kulshekhar@users.noreply.github.com> (https://github.com/kulshekhar)",
   "contributors": [
+    "Alan Agius <alan.agius4@gmail.com> (https://github.com/alan-agius4)",
     "Bnaya Peretz <me@bnaya.net> (https://github.com/Bnaya)",
     "Brian Ruddy <briancruddy@gmail.com> (https://github.com/bcruddy)",
     "Emil Persson <emil.n.persson@gmail.com> (https://github.com/emilniklas)",
