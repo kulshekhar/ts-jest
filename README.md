@@ -201,6 +201,21 @@ In some cases, projects may not want to have a `.babelrc` file, but still need t
 
 Note that if you also set the `useBabelrc` option to `true`, any configuration passed using this method will be overwritten by corresponding keys in `.babelrc` files.
 
+### TS compiler & error reporting
+If you want to enable Syntactic & Semantic TypeScript error reporting you can enable this through `enableTsDiagnostics` flag;
+
+```json
+{
+  "jest": {
+    "globals": {
+      "ts-jest": {
+        "enableTsDiagnostics": true
+      }
+    }
+  }
+}
+```
+
 ## Use cases
 
 ### React Native
@@ -326,20 +341,6 @@ By default Jest ignores everything in `node_modules`. This setting prevents Jest
 ```json
 "jest": {
   "moduleDirectories": ["node_modules", "<path_to_your_sources>"]
-}
-```
-### TS compiler && error reporting
-If you want to enable Syntactic & Semantic TypeScript error reporting you can enable this through `enableTsDiagnostics` flag;
-
-```json
-{
-  "jest": {
-    "globals": {
-      "ts-jest": {
-        "enableTsDiagnostics": true
-      }
-    }
-  }
 }
 ```
 
