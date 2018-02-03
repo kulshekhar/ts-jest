@@ -38,7 +38,7 @@ ts-jest is a TypeScript preprocessor with source map support for Jest that lets 
   - [Importing packages written in TypeScript](#importing-packages-written-in-typescript)
 - [Known Limitations](#known-limitations)
   - [Known limitations for TS compiler options](#known-limitations-for-ts-compiler-options)
-  - [TS compiler && error reporting](#ts-compiler--error-reporting)
+  - [TS compiler & error reporting](#ts-compiler--error-reporting)
   - [Known Limitations for hoisting](#known-limitations-for-hoisting)
 - [How to Contribute](#how-to-contribute)
   - [Quickstart to run tests (only if you're working on this package)](#quickstart-to-run-tests-only-if-youre-working-on-this-package)
@@ -328,7 +328,7 @@ By default Jest ignores everything in `node_modules`. This setting prevents Jest
   "moduleDirectories": ["node_modules", "<path_to_your_sources>"]
 }
 ```
-### TS compiler && error reporting
+### TS compiler & error reporting
 If you want to enable Syntactic & Semantic TypeScript error reporting you can enable this through `enableTsDiagnostics` flag;
 
 ```json
