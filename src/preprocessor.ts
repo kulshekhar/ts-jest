@@ -21,6 +21,7 @@ export function process(
   // https://github.com/kulshekhar/ts-jest/issues/201#issuecomment-300572902
   const compilerOptions = getTSConfig(
     jestConfig.globals,
+    jestConfig.rootDir,
     transformOptions.instrument,
   );
 
@@ -84,7 +85,11 @@ export function getCacheKey(
 ): string {
   const jestConfig: JestConfig = JSON.parse(jestConfigStr);
 
-  const tsConfig = getTSConfig(jestConfig.globals, transformOptions.instrument);
+  const tsConfig = getTSConfig(
+    jestConfig.globals,
+    jestConfig.rootDir,
+    transformOptions.instrument,
+  );
 
   return crypto
     .createHash('md5')

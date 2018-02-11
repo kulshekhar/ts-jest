@@ -14,8 +14,8 @@ function formatTscParserErrors(errors: tsc.Diagnostic[]) {
   return errors.map(s => JSON.stringify(s, null, 4)).join('\n');
 }
 
-function readCompilerOptions(configPath: string) {
-  configPath = path.resolve(configPath);
+function readCompilerOptions(configPath: string, rootDir: string) {
+  configPath = path.resolve(rootDir, configPath);
 
   // First step: Let tsc pick up the config.
   const loaded = tsc.readConfigFile(configPath, file => {
@@ -118,7 +118,11 @@ export function mockGlobalTSConfigSchema(globals: any) {
 const tsConfigCache: { [key: string]: any } = {};
 // TODO: Perhaps rename collectCoverage to here, as it seems to be the official jest name now:
 // https://github.com/facebook/jest/issues/3524
-export function getTSConfig(globals, collectCoverage: boolean = false) {
+export function getTSConfig(
+  globals,
+  rootDir: string = '',
+  collectCoverage: boolean = false,
+) {
   let configPath = getTSConfigPathFromConfig(globals);
   logOnce(`Reading tsconfig file from path ${configPath}`);
   const skipBabel = getTSJestConfig(globals).skipBabel;
@@ -135,7 +139,7 @@ export function getTSConfig(globals, collectCoverage: boolean = false) {
     return tsConfigCache[tsConfigCacheKey];
   }
 
-  const config = readCompilerOptions(configPath);
+  const config = readCompilerOptions(configPath, rootDir);
   logOnce('Original typescript config before modifications: ', config);
 
   // ts-jest will map lines numbers properly if inlineSourceMap and
