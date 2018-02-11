@@ -1,0 +1,22 @@
+{
+  "jest": {
+    "transform": {
+      ".(ts|tsx)": "ts-jest"
+    },
+    "moduleDirectories": [
+      "node_modules"
+    ],
+    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "json"
+    ],
+    "globals": {
+      "ts-jest": {
+        "tsConfigFile": "custom-tsconfig.json"
+      }
+    }
+  }
+}
