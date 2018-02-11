@@ -265,7 +265,12 @@ Fully completed jest section should look like this:
       "jsx",
       "json",
       "node"
-    ]
+    ],
+    "globals": {
+      "ts-jest": {
+        "useBabelrc": true
+      }
+    }
   }
 ```
 If only testing typescript files then remove the `js` option in the testRegex.
