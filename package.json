@@ -94,6 +94,7 @@
     "prettier": "^1.5.3",
     "react": "latest",
     "react-test-renderer": "latest",
+    "reflect-metadata": "^0.1.12",
     "rimraf": "latest",
     "ts-jest": "latest",
     "tslint": "next",
