@@ -19,6 +19,7 @@ describe('get ts config from string', () => {
       });
 
       expect(result).toMatchObject({
+        sourceMap: true,
         inlineSourceMap: true,
         inlineSources: true,
         target: ts.ScriptTarget.ES2015,
@@ -66,6 +67,7 @@ describe('get ts config from string', () => {
       });
 
       expect(result).toEqual({
+        sourceMap: true,
         inlineSourceMap: true,
         inlineSources: true,
         target: ts.ScriptTarget.ES2015,
@@ -84,6 +86,7 @@ describe('get ts config from string', () => {
       });
 
       expect(result).toEqual({
+        sourceMap: true,
         inlineSourceMap: true,
         inlineSources: true,
         target: ts.ScriptTarget.ES5,

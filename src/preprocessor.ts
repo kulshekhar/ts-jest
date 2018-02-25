@@ -73,8 +73,10 @@ export function process(
     tsTranspiled.outputText,
     outputText,
   );
+
   flushLogs();
-  return modified;
+
+  return { code: modified, map: tsTranspiled.sourceMapText };
 }
 
 export function getCacheKey(
