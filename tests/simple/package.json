@@ -11,7 +11,6 @@
       "Hello.ts",
       "NullCoverage.js"
     ],
-    "mapCoverage": true,
     "moduleFileExtensions": [
       "ts",
       "tsx",

@@ -143,9 +143,9 @@ export function getTSConfig(
   logOnce('Original typescript config before modifications: ', { ...config });
 
   // ts-jest will map lines numbers properly if inlineSourceMap and
-  // inlineSources are set to true. For testing, we don't need the
-  // sourceMap configuration
-  delete config.sourceMap;
+  // inlineSources are set to true. The sourceMap configuration
+  // is used to send the sourcemap back to Jest
+  config.sourceMap = true;
   config.inlineSourceMap = true;
   config.inlineSources = true;
 

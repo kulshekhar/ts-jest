@@ -3,7 +3,6 @@
   "transform": {
     "^.+\\.tsx?$": "ts-jest"
   },
-  "mapCoverage": true,
   "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
   "testEnvironment": "jsdom",
   "coverageReporters": [
