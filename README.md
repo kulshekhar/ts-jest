@@ -144,7 +144,19 @@ custom configuration file (relative to the project's root directory)
 
 For all available `tsc` options see [TypeScript docs](https://www.typescriptlang.org/docs/handbook/compiler-options.html).
 
-Note that if you haven't explicitly set the `module` property through a separate configuration file with `tsConfigFile`, it will be overwritten to `commonjs` (regardless of the value in `tsconfig.json`) since that is the format Jest expects. This only happens during testing.
+Note that if you haven't explicitly set the `module` property through a separate configuration file with `tsConfigFile`, it will be overwritten to `commonjs` (regardless of the value in `tsconfig.json`) since that is the format Jest expects. This only happens during testing. 
+
+If you *have* explicitly set the `module` property but to a different value than `commonjs`, Jest may throw errors. In that case, a practical workaround is to make a `tsconfig.jest.json` file which [`extends`](http://www.typescriptlang.org/docs/handbook/tsconfig-json.html#configuration-inheritance-with-extends) your real `tsconfig.json` but sets `module` to `commonjs`:
+
+```js
+// tsconfig.jest.json
+{
+  "extends": "./tsconfig",
+  "compilerOptions": {
+    "module": "commonjs"
+  }
+}
+```
 
 ### Module path mapping
 
