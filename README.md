@@ -86,8 +86,6 @@ You can try using ts-jest with `jest@test`; use at your own risk! (And file an i
 
 Prior to version `20.0.0`, coverage reports could be obtained using the inbuilt coverage processor in ts-jest. Starting with version `20.0.0`, ts-jest delegates coverage processing to jest and no longer includes a coverage processor.
 
-To generate coverage results, set the `mapCoverage` property in the `jest` configuration section to `true`.
-
 > Please note that the `outDir` property in the `jest` configuration section is removed in coverage mode, due to [#201](https://github.com/kulshekhar/ts-jest/issues/201).
 
 ## Default Setup
