@@ -140,7 +140,7 @@ export function getTSConfig(
   }
 
   const config = readCompilerOptions(configPath, rootDir);
-  logOnce('Original typescript config before modifications: ', config);
+  logOnce('Original typescript config before modifications: ', { ...config });
 
   // ts-jest will map lines numbers properly if inlineSourceMap and
   // inlineSources are set to true. The sourceMap configuration
