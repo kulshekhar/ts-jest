@@ -3,12 +3,22 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Collaborator Guidelines](#collaborator-guidelines)
+  - [Installing and building the project](#installing-and-building-the-project)
   - [Merging PRs](#merging-prs)
   - [Versioning](#versioning)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 # Collaborator Guidelines
+
+## Installing and building the project
+
+To be able to install and build the project probably, `rimraf` is required. Install `rimraf` by running
+```
+yarn global add rimraf
+```
+
+After installing `rimraf`, `yarn` command can be run normally when installing dependencies for the project
 
 ## Merging PRs
 
