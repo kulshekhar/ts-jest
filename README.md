@@ -55,6 +55,10 @@ To use this in your project, run:
 ```sh
 npm install --save-dev ts-jest @types/jest
 ```
+If you don't already have jest installed,
+```sh
+npm install --save-dev jest ts-jest @types/jest
+```
 Modify your project's `package.json` so that the `jest` section looks something like:
 ```json
 {
