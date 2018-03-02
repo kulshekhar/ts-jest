@@ -123,7 +123,7 @@ export function getTSConfig(
   rootDir: string = '',
   collectCoverage: boolean = false,
 ) {
-  let configPath = getTSConfigPathFromConfig(globals);
+  const configPath = getTSConfigPathFromConfig(globals);
   logOnce(`Reading tsconfig file from path ${configPath}`);
   const skipBabel = getTSJestConfig(globals).skipBabel;
 
@@ -145,7 +145,7 @@ export function getTSConfig(
   // ts-jest will map lines numbers properly if inlineSourceMap and
   // inlineSources are set to true. The sourceMap configuration
   // is used to send the sourcemap back to Jest
-  config.sourceMap = true;
+  delete config.sourceMap;
   config.inlineSourceMap = true;
   config.inlineSources = true;
 
