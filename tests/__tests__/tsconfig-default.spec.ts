@@ -16,7 +16,6 @@ describe('get default ts config', () => {
     const result = getTSConfig(null);
 
     expect(result).toEqual({
-      sourceMap: true,
       inlineSourceMap: true,
       inlineSources: true,
       target: ts.ScriptTarget.ES2015,

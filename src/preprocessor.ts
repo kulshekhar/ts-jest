@@ -76,7 +76,7 @@ export function process(
 
   flushLogs();
 
-  return { code: modified, map: tsTranspiled.sourceMapText };
+  return modified;
 }
 
 export function getCacheKey(
