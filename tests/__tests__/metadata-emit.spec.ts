@@ -5,6 +5,6 @@ describe('Metadata emit', () => {
     const result = runJest('../metadata-emit', ['--no-cache']);
     const stderr = result.stderr;
     expect(result.status).toEqual(0);
-    expect(stderr).toContain('6 passed, 6 total');
+    expect(stderr).toContain('8 passed, 8 total');
   });
 });

@@ -15,6 +15,10 @@ export class TestClass {
 
   @CollectMetadata public dateProp: Date;
 
+  @CollectMetadata public arrayProp: any[];
+
+  @CollectMetadata public genericArrayProp: Array<string | number>;
+
   @CollectMetadata public functionProp: () => void;
 
   @CollectMetadata public classProp: OtherClass;
