@@ -4,11 +4,11 @@ import * as fs from 'fs-extra';
 describe('Long path', () => {
   const longPath =
     'long-src-path/long-src-path/long-src-path/long-src-path/long-src-path/long-src-path/long-src-path/long-src-path/long-src-path/long-src-path/long-src-path/long-src-path/long-src-path/long-src-path/';
-  const destinationPath = `./tests/simple-long-path/${longPath}`;
+  const destinationPath = `${__dirname}/../simple-long-path/${longPath}`;
   beforeEach(async () => {
     // root dir is project
     await fs.ensureDir(destinationPath);
-    await fs.copy('./tests/simple-long-path/src', destinationPath);
+    await fs.copy(`${__dirname}/../simple-long-path/src`, destinationPath);
   });
 
   it('should work as expected', () => {
