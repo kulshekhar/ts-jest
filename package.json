@@ -61,11 +61,13 @@
     ]
   },
   "dependencies": {
+    "babel-core": "^6.26.0",
     "babel-plugin-istanbul": "^4.1.4",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.26.0",
     "babel-preset-jest": "^22.4.0",
     "cpx": "^1.5.0",
     "fs-extra": "4.0.3",
+    "jest-config": "^22.4.2",
     "pkg-dir": "^2.0.0",
     "yargs": "^11.0.0"
   },
