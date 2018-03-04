@@ -39,6 +39,10 @@ export interface FullJestConfig {
   cacheDirectory: Path;
   clearMocks: boolean;
   coveragePathIgnorePatterns: string[];
+  cwd: Path;
+  detectLeaks: boolean;
+  displayName: string | null;
+  forceCoverageMatch: Glob[];
   globals: ConfigGlobals;
   haste: HasteConfig;
   moduleDirectories: string[];
@@ -51,12 +55,17 @@ export interface FullJestConfig {
   resetMocks: boolean;
   resetModules: boolean;
   resolver: Path | null;
+  restoreMocks: boolean;
   rootDir: Path;
   roots: Path[];
+  runner: string;
   setupFiles: Path[];
-  setupTestFrameworkScriptFile: Path;
+  setupTestFrameworkScriptFile: Path | null;
+  skipNodeResolution: boolean;
   snapshotSerializers: Path[];
   testEnvironment: string;
+  testEnvironmentOptions: object;
+  testLocationInResults: boolean;
   testMatch: Glob[];
   testPathIgnorePatterns: string[];
   testRegex: string;
@@ -65,6 +74,7 @@ export interface FullJestConfig {
   timers: 'real' | 'fake';
   transform: Array<[string, Path]>;
   transformIgnorePatterns: Glob[];
+  watchPathIgnorePatterns: string[];
   unmockedModulePathPatterns: string[] | null;
 }
 
