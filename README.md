@@ -389,8 +389,6 @@ npm install
 npm test
 ```
 
-**Note:** If you are cloning on Windows, you may have to run `git config --system core.longpaths true` for Windows to stop complaining about long filenames.
-
 ## License
 
 Copyright (c) [Authors](AUTHORS).

@@ -43,3 +43,7 @@ jspm_packages
 
 .vscode
 .idea
+
+
+# Long paths
+tests/simple-long-path/long-src-path
