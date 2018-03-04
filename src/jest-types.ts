@@ -41,7 +41,7 @@ export interface FullJestConfig {
   coveragePathIgnorePatterns: string[];
   cwd: Path;
   detectLeaks: boolean;
-  displayName: string;
+  displayName: string | null;
   forceCoverageMatch: Glob[];
   globals: ConfigGlobals;
   haste: HasteConfig;
@@ -60,7 +60,7 @@ export interface FullJestConfig {
   roots: Path[];
   runner: string;
   setupFiles: Path[];
-  setupTestFrameworkScriptFile: Path;
+  setupTestFrameworkScriptFile: Path | null;
   skipNodeResolution: boolean;
   snapshotSerializers: Path[];
   testEnvironment: string;
