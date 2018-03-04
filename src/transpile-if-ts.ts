@@ -8,7 +8,7 @@ export function transpileIfTypescript(
   rootDir: string = '',
 ) {
   if (path && (path.endsWith('.tsx') || path.endsWith('.ts'))) {
-    let transpiled = tsc.transpileModule(contents, {
+    const transpiled = tsc.transpileModule(contents, {
       compilerOptions: getTSConfig(
         config || mockGlobalTSConfigSchema(global),
         rootDir,
