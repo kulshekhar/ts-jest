@@ -68,11 +68,10 @@ export function process(
     transformOptions,
   );
 
-  const modified = injectSourcemapHook(
-    filePath,
-    tsTranspiled.outputText,
-    outputText,
-  );
+  const modified =
+    tsJestConfig.disableSourceMapSupport === true
+      ? outputText
+      : injectSourcemapHook(filePath, tsTranspiled.outputText, outputText);
 
   flushLogs();
 
