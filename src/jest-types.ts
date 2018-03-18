@@ -85,4 +85,5 @@ export interface TsJestConfig {
   tsConfigFile?: string;
   enableInternalCache?: boolean;
   enableTsDiagnostics?: boolean;
+  disableSourceMapSupport?: boolean;
 }
