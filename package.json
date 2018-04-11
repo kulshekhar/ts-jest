@@ -78,7 +78,7 @@
   "devDependencies": {
     "@types/babel-core": "latest",
     "@types/es6-shim": "latest",
-    "@types/fs-extra": "5.0.1",
+    "@types/fs-extra": "5.0.2",
     "@types/jest": "latest",
     "@types/node": "latest",
     "@types/react": "latest",
