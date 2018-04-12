@@ -233,6 +233,21 @@ If you want to enable Syntactic & Semantic TypeScript error reporting you can en
 }
 ```
 
+### Ignore coverage on decorators
+If you want to ignore coverage on decorators you can enable this through `ignoreCoverageForAllDecorators` flag;
+
+```json
+{
+  "jest": {
+    "globals": {
+      "ts-jest": {
+        "ignoreCoverageForAllDecorators": true
+      }
+    }
+  }
+}
+```
+
 ## Use cases
 
 ### React Native

@@ -55,10 +55,18 @@ export function process(
     fileName: filePath,
   });
 
-  var tsTranspiledText = tsTranspiled.outputText.replace(
-    /(__decorate\(\[\r?\n[^\n\r]*)\/\*\s*istanbul\s*ignore\s*decorate(.*)\*\//g,
-    '/* istanbul ignore next$2*/$1',
-  );
+  let tsTranspiledText = tsTranspiled.outputText;
+  if (tsJestConfig.ignoreCoverageForAllDecorators === true) {
+    tsTranspiledText = tsTranspiledText.replace(
+      /__decorate/g,
+      '/* istanbul ignore next */__decorate',
+    );
+  } else {
+    tsTranspiledText = tsTranspiledText.replace(
+      /(__decorate\(\[\r?\n[^\n\r]*)\/\*\s*istanbul\s*ignore\s*decorate(.*)\*\//g,
+      '/* istanbul ignore next$2*/$1',
+    );
+  }
 
   const postHook = getPostProcessHook(
     compilerOptions,

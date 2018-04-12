@@ -86,4 +86,5 @@ export interface TsJestConfig {
   enableInternalCache?: boolean;
   enableTsDiagnostics?: boolean;
   disableSourceMapSupport?: boolean;
+  ignoreCoverageForAllDecorators?: boolean;
 }
