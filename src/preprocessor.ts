@@ -55,6 +55,11 @@ export function process(
     fileName: filePath,
   });
 
+  var tsTranspiledText = tsTranspiled.outputText.replace(
+    /(__decorate\(\[\r?\n[^\n\r]*)\/\*\s*istanbul\s*ignore\s*decorate(.*)\*\//g,
+    '/* istanbul ignore next$2*/$1',
+  );
+
   const postHook = getPostProcessHook(
     compilerOptions,
     jestConfig,
@@ -62,7 +67,7 @@ export function process(
   );
 
   const outputText = postHook(
-    tsTranspiled.outputText,
+    tsTranspiledText,
     filePath,
     jestConfig,
     transformOptions,
@@ -71,7 +76,7 @@ export function process(
   const modified =
     tsJestConfig.disableSourceMapSupport === true
       ? outputText
-      : injectSourcemapHook(filePath, tsTranspiled.outputText, outputText);
+      : injectSourcemapHook(filePath, tsTranspiledText, outputText);
 
   flushLogs();
 
