@@ -63,7 +63,7 @@ function getStartDir(): string {
   // in the directory of the test
 
   const grandparent = path.resolve(__dirname, '..', '..');
-  if (grandparent.endsWith('/node_modules')) {
+  if (grandparent.endsWith(`${path.sep}node_modules`)) {
     return process.cwd();
   }
 
