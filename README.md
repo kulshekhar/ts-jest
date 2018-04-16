@@ -234,13 +234,14 @@ If you want to enable Syntactic & Semantic TypeScript error reporting you can en
 ```
 
 ### Ignore coverage on decorators
-If you want to ignore coverage on decorators you can enable this through `ignoreCoverageForAllDecorators` flag;
+If you want to ignore coverage on decorators you can enable this through `ignoreCoverageForDecorators` and `ignoreCoverageForAllDecorators` flags. If you enable the first option you have to add the `/* istanbul ignore decorator */` comment after the decorator. If you choose the second option all decorators will be ignored.
 
 ```json
 {
   "jest": {
     "globals": {
       "ts-jest": {
+        "ignoreCoverageForDecorators": true,
         "ignoreCoverageForAllDecorators": true
       }
     }

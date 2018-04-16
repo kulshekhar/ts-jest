@@ -61,9 +61,10 @@ export function process(
       /__decorate/g,
       '/* istanbul ignore next */__decorate',
     );
-  } else {
+  }
+  if (tsJestConfig.ignoreCoverageForDecorators === true) {
     tsTranspiledText = tsTranspiledText.replace(
-      /(__decorate\(\[\r?\n[^\n\r]*)\/\*\s*istanbul\s*ignore\s*decorate(.*)\*\//g,
+      /(__decorate\(\[\r?\n[^\n\r]*)\/\*\s*istanbul\s*ignore\s*decorator(.*)\*\//g,
       '/* istanbul ignore next$2*/$1',
     );
   }
