@@ -389,7 +389,7 @@ We suggest placing the `jest.mock()` calls after the imports, but before any act
 
 ### `const enum` is not supported
 
-This is due to a limitation in the ts-jest preprocessor which compiles each test file individually, therefore ignoring implementations of ambient declarations. The TypeScript team currently have [no plan to support const enum inlining](https://github.com/Microsoft/TypeScript/issues/5243) for this particular compiler method. See #112 and #281 for more information.
+This is due to a limitation in the ts-jest preprocessor which compiles each test file individually, therefore ignoring implementations of ambient declarations. The TypeScript team currently have [no plan to support const enum inlining](https://github.com/Microsoft/TypeScript/issues/5243) for this particular compiler method. See [#112](https://github.com/kulshekhar/ts-jest/issues/112) and [#281](https://github.com/kulshekhar/ts-jest/issues/281) for more information.
 
 One possible workaround is to manually inline usage of const enum values - i.e. in your code, use `let x: Enum = 1 as Enum` as opposed to `let x: Enum = Enum.FirstValue`. This allows you to keep the type checking on enums without running into this issue.
 
