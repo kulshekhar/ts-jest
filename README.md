@@ -33,6 +33,7 @@ ts-jest is a TypeScript preprocessor with source map support for Jest that lets 
   - [Using `.babelrc`](#using-babelrc)
   - [Using a custom Babel config](#using-a-custom-babel-config)
   - [TS compiler & error reporting](#ts-compiler--error-reporting)
+  - [Ignore coverage on decorators](#ignore-coverage-on-decorators)
 - [Use cases](#use-cases)
   - [React Native](#react-native)
 - [Angular 2](#angular-2)
@@ -227,6 +228,25 @@ If you want to enable Syntactic & Semantic TypeScript error reporting you can en
     "globals": {
       "ts-jest": {
         "enableTsDiagnostics": true
+      }
+    }
+  }
+}
+```
+
+### Ignore coverage on decorators
+
+**Note:** This is an experimental feature, comes with no guarantees and could be removed if it causes more problems than it solves
+
+If you want to ignore coverage on decorators you can enable this through `ignoreCoverageForDecorators` and `ignoreCoverageForAllDecorators` flags. If you enable the first option you have to add the `/* istanbul ignore decorator */` comment after the decorator. If you choose the second option all decorators will be ignored.
+
+```json
+{
+  "jest": {
+    "globals": {
+      "ts-jest": {
+        "ignoreCoverageForDecorators": true,
+        "ignoreCoverageForAllDecorators": true
       }
     }
   }
