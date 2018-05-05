@@ -43,9 +43,9 @@ function loadJestConfigFromPackage(filePath, argv) {
 }
 
 function parseConfig(argv): string | object | undefined {
-  // Either parse as JSON or return as-is
-  if (argv.startsWith('{') && argv.endsWith('}')) {
-    return JSON.parse(argv);
+  if (argv.config[0] === '{' && argv.config[argv.config.length - 1] === '}') {
+    // If the passed in value looks like JSON, treat it as an object.
+    return JSON.parse(argv.config);
   }
   return argv.config;
 }
