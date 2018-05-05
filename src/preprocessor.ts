@@ -89,11 +89,6 @@ export function process(
 
 /**
  * This is the function Jest uses to check if it has the file already in cache
- * @param {string} fileData
- * @param {Path} filePath
- * @param {string} jestConfigStr
- * @param {TransformOptions} transformOptions
- * @returns {string}
  */
 export function getCacheKey(
   fileData: string,
