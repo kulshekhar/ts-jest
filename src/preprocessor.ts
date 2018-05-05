@@ -1,8 +1,7 @@
 import * as crypto from 'crypto';
 import { JestConfig, Path, TransformOptions } from './jest-types';
 import { flushLogs, logOnce } from './logger';
-import { postProcessCode } from './postprocess';
-import * as ts from 'typescript';
+import { getPostProcessHook, postProcessCode } from './postprocess';
 import {
   cacheFile,
   getTSConfig,
@@ -14,6 +13,8 @@ import { cwd } from 'process';
 import * as fs from 'fs';
 import { outputFile } from 'fs-extra';
 import { transpileTypescript } from './transpiler';
+import * as ts from 'typescript';
+import { file } from 'babel-types';
 
 // tslint:disable
 
@@ -78,7 +79,7 @@ export function process(
     jestConfig,
     tsJestConfig,
     transformOptions,
-    src,
+    tsTranspiledText,
     filePath,
   );
 

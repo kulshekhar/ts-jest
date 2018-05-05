@@ -2,13 +2,17 @@ import * as fs from 'fs';
 import { cwd } from 'process';
 import * as ts from 'typescript';
 import { logOnce } from './logger';
+import { TsJestConfig } from './jest-types';
 
 export function transpileTypescript(
   filePath: string,
   fileSrc: string,
   compilerOptions: ts.CompilerOptions,
+  tsJestConfig: TsJestConfig,
 ): string {
-  // return transpileViaLanguageServer(filePath, fileSrc, compilerOptions);
+  if (tsJestConfig.useExperimentalLanguageServer) {
+    return transpileViaLanguageServer(filePath, fileSrc, compilerOptions);
+  }
   return transpileViaTranspileModile(filePath, fileSrc, compilerOptions);
 }
 

@@ -117,6 +117,9 @@ ts-jest tries to support that. If `allowSyntheticDefaultImports` is set to true 
 to automatically create the synthetic default exports for you - nothing else needed.
 You can opt-out of this behaviour with the [skipBabel flag](#skipping-babel)
 
+**Typescript 2.7 has built-in support for this feature via the `esModuleInterop` flag. We're looking to deprecate this feature.
+Please use `esModuleInterop` instead. More details [here](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-7.html)** 
+
 ### Supports automatic of jest.mock() calls
 [Just like Jest](https://facebook.github.io/jest/docs/manual-mocks.html#using-with-es-module-imports) ts-jest
 automatically uses babel to hoist your `jest.mock()` calls to the top of your file.

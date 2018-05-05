@@ -11,6 +11,11 @@
       "js",
       "jsx",
       "json"
-    ]
+    ],
+    "globals": {
+      "ts-jest": {
+        "useExperimentalLanguageServer": true,
+      }
+    }
   }
 }

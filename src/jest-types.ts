@@ -88,4 +88,5 @@ export interface TsJestConfig {
   disableSourceMapSupport?: boolean;
   ignoreCoverageForDecorators?: boolean;
   ignoreCoverageForAllDecorators?: boolean;
+  useExperimentalLanguageServer?: boolean;
 }
