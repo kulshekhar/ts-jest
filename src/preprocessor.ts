@@ -1,14 +1,14 @@
 import * as crypto from 'crypto';
-import * as tsc from 'typescript';
 import { JestConfig, Path, TransformOptions } from './jest-types';
 import { flushLogs, logOnce } from './logger';
-import { getPostProcessHook } from './postprocess';
+import { getPostProcessHook, postProcessCode } from './postprocess';
 import {
   getTSConfig,
   getTSJestConfig,
   runTsDiagnostics,
   injectSourcemapHook,
 } from './utils';
+import { transpileTypescript } from './transpiler';
 
 export function process(
   src: string,
@@ -41,16 +41,19 @@ export function process(
   const tsJestConfig = getTSJestConfig(jestConfig.globals);
   logOnce('tsJestConfig: ', tsJestConfig);
 
+  // We can potentially do this faster by using the language service.
+  // See https://github.com/TypeStrong/ts-node/blob/master/src/index.ts#L268
   if (tsJestConfig.enableTsDiagnostics) {
     runTsDiagnostics(filePath, compilerOptions);
   }
 
-  const tsTranspiled = tsc.transpileModule(src, {
+  let tsTranspiledText = transpileTypescript(
+    filePath,
+    src,
     compilerOptions,
-    fileName: filePath,
-  });
+    tsJestConfig,
+  );
 
-  let tsTranspiledText = tsTranspiled.outputText;
   if (tsJestConfig.ignoreCoverageForAllDecorators === true) {
     tsTranspiledText = tsTranspiledText.replace(
       /__decorate/g,
@@ -64,17 +67,13 @@ export function process(
     );
   }
 
-  const postHook = getPostProcessHook(
+  const outputText = postProcessCode(
     compilerOptions,
     jestConfig,
     tsJestConfig,
-  );
-
-  const outputText = postHook(
+    transformOptions,
     tsTranspiledText,
     filePath,
-    jestConfig,
-    transformOptions,
   );
 
   const modified =

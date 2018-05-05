@@ -16,6 +16,24 @@ import {
 } from './jest-types';
 import { logOnce } from './logger';
 
+// Function that takes the transpiled typescript and runs it through babel/whatever.
+export function postProcessCode(
+  compilerOptions: CompilerOptions,
+  jestConfig: JestConfig,
+  tsJestConfig: TsJestConfig,
+  transformOptions: TransformOptions,
+  transpiledText: string,
+  filePath: string,
+): string {
+  const postHook = getPostProcessHook(
+    compilerOptions,
+    jestConfig,
+    tsJestConfig,
+  );
+
+  return postHook(transpiledText, filePath, jestConfig, transformOptions);
+}
+
 function createBabelTransformer(options: BabelTransformOptions) {
   options = {
     ...options,

@@ -9,10 +9,12 @@ import * as path from 'path';
 
 const logs: any[] = [];
 let logsFlushed: boolean = false;
+// Set this to true to also log to the console. It's very nice for local debugging.
+const outputToConsole: boolean = false;
 
 function shouldLog(): boolean {
   // If the env variable is set and the logs have not already been flushed, log the line
-  return process.env.TS_JEST_DEBUG && !logsFlushed;
+  return (process.env.TS_JEST_DEBUG || outputToConsole) && !logsFlushed;
 }
 
 // Log function. Only logs prior to calls to flushLogs.
@@ -33,7 +35,12 @@ export function flushLogs() {
   const JSONifiedLogs = logs.map(convertToJSONIfPossible);
   const logString = JSONifiedLogs.join('\n');
   const filePath = path.resolve(rootPath, 'debug.txt');
-  fs.writeFileSync(filePath, logString);
+  if (outputToConsole) {
+    // tslint:disable-next-line
+    console.log(logString);
+  } else {
+    fs.writeFileSync(filePath, logString);
+  }
 }
 
 function convertToJSONIfPossible(object: any): string {

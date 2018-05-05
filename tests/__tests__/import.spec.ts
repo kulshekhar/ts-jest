@@ -1,4 +1,5 @@
 import runJest from '../__helpers__/runJest';
+import { printStdStreams } from '../../src/test-utils';
 
 describe('import with relative and absolute paths', () => {
   it('should run successfully', () => {
