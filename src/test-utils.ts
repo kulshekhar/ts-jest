@@ -42,10 +42,12 @@ function loadJestConfigFromPackage(filePath, argv) {
   return normalize(config, argv);
 }
 
-function parseConfig(argv): string | object | undefined {
-  if (argv.config[0] === '{' && argv.config[argv.config.length - 1] === '}') {
+function parseConfig(argv) {
+  if (argv.config && typeof argv.config === 'string') {
     // If the passed in value looks like JSON, treat it as an object.
-    return JSON.parse(argv.config);
+    if (argv.config[0] === '{' && argv.config[argv.config.length - 1] === '}') {
+      return JSON.parse(argv.config);
+    }
   }
   return argv.config;
 }
