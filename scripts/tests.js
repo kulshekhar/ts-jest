@@ -4,19 +4,8 @@ process.env.NODE_ENV = 'test';
 process.env.PUBLIC_URL = '';
 
 const jest = require('jest');
-const fs = require('fs');
-const fsx = require('fs-extra');
+const fs = require('fs-extra');
 const path = require('path');
-
-function dirExists(dirPath) {
-  const F_OK = (fs.constants && fs.constants.F_OK) || fs['F_OK'];
-  try {
-    fs.accessSync(dirPath, F_OK);
-    return fs.statSync(dirPath).isDirectory();
-  } catch (e) {
-    return false;
-  }
-}
 
 function getDirectories(rootDir) {
   return fs.readdirSync(rootDir).filter(function(file) {
@@ -24,43 +13,40 @@ function getDirectories(rootDir) {
   });
 }
 
-function getFiles(rootDir) {
-  return fs.readdirSync(rootDir).filter(function(file) {
-    return !fs.statSync(path.join(rootDir, file)).isDirectory();
-  });
-}
-
-function getIntegrationMockContent(file) {
-  return `module.exports = require('../../../../${file}');`;
-}
-
 function createIntegrationMock() {
   const testsRoot = 'tests';
   const testCaseFolders = getDirectories(testsRoot).filter(function(testDir) {
     return !(testDir.startsWith('__') && testDir.endsWith('__'));
   });
-  for (let i = 0; i < testCaseFolders.length; i++) {
-    const testCaseNodeModules = path.join(
-      testsRoot,
-      testCaseFolders[i],
-      'node_modules'
-    );
-    if (!dirExists(testCaseNodeModules)) {
-      fs.mkdirSync(testCaseNodeModules);
-    }
+
+  testCaseFolders.forEach(directory => {
+    const testCaseNodeModules = path.join(testsRoot, directory, 'node_modules');
+
+    const rootDir = path.resolve('.');
     const testCaseModuleFolder = path.join(testCaseNodeModules, 'ts-jest');
-    fsx.copySync('.', testCaseModuleFolder, {
-      overwrite: true,
-      filter: function(src, dest) {
-        const shouldCopy =
-          src === '.' ||
-          src.startsWith('dist') ||
-          src === 'package.json' ||
-          src.endsWith('.js');
-        return shouldCopy;
-      },
-    });
-  }
+
+    // Copy javascript files
+    fs.copySync(
+      path.resolve(rootDir, 'index.js'),
+      path.resolve(testCaseModuleFolder, 'index.js')
+    );
+    fs.copySync(
+      path.resolve(rootDir, 'preprocessor.js'),
+      path.resolve(testCaseModuleFolder, 'preprocessor.js')
+    );
+
+    // Copy package.json
+    fs.copySync(
+      path.resolve(rootDir, 'package.json'),
+      path.resolve(testCaseModuleFolder, 'package.json')
+    );
+
+    // Copy dist folder
+    fs.copySync(
+      path.resolve(rootDir, 'dist'),
+      path.resolve(testCaseModuleFolder, 'dist')
+    );
+  });
 }
 
 createIntegrationMock();
