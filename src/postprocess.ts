@@ -16,6 +16,7 @@ import {
 } from './jest-types';
 import { logOnce } from './logger';
 
+// Function that takes the transpiled typescript and runs it through babel/whatever.
 export function postProcessCode(
   compilerOptions: CompilerOptions,
   jestConfig: JestConfig,

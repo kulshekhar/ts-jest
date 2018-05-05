@@ -2,6 +2,7 @@ import * as fs from 'fs';
 // from: https://github.com/facebook/jest/blob/master/integration_tests/utils.js
 import { sync as spawnSync } from 'cross-spawn';
 import * as path from 'path';
+import { Result } from './runJest';
 
 export function run(cmd, cwd) {
   const args = cmd.split(/\s/).slice(1);
@@ -21,3 +22,14 @@ export function run(cmd, cwd) {
 
   return result;
 }
+
+// tslint:disable
+export function printStdStreams(result: Result) {
+  console.log('Process status code: ', result.status);
+  console.log('---STDOUT---');
+  console.log(result.stdout);
+  console.log('---STDERR---');
+  console.log(result.stderr);
+  console.log('---END---');
+}
+// tslint:enable

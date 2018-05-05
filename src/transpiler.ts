@@ -4,6 +4,7 @@ import * as ts from 'typescript';
 import { logOnce } from './logger';
 import { TsJestConfig } from './jest-types';
 
+// Takes the typescript code and by whatever method configured, makes it into javascript code.
 export function transpileTypescript(
   filePath: string,
   fileSrc: string,
@@ -60,8 +61,6 @@ function transpileViaLanguageServer(
     getDefaultLibFileName: () => {
       return ts.getDefaultLibFilePath(compilerOptions);
     },
-
-    // debug stuff
     fileExists: ts.sys.fileExists,
     readFile: ts.sys.readFile,
     readDirectory: ts.sys.readDirectory,
@@ -83,8 +82,11 @@ function transpileViaLanguageServer(
     .concat(service.getSemanticDiagnostics(filePath));
 
   if (diagnostics.length > 0) {
-    logOnce(
-      `Diagnostic errors from TSC: ${diagnostics.map(d => d.messageText)}\n`,
+    const errors = `${diagnostics.map(d => d.messageText)}\n`;
+    logOnce(`Diagnostic errors from TSC: ${errors}`);
+    // Maybe we should keep compiling even though there are errors. This can possibly be configured.
+    throw Error(
+      `TSC language server encountered errors while transpiling. Errors: ${errors}`,
     );
   }
 

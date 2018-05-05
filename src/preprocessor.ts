@@ -9,14 +9,7 @@ import {
   runTsDiagnostics,
   injectSourcemapHook,
 } from './utils';
-import { cwd } from 'process';
-import * as fs from 'fs';
-import { outputFile } from 'fs-extra';
 import { transpileTypescript } from './transpiler';
-import * as ts from 'typescript';
-import { file } from 'babel-types';
-
-// tslint:disable
 
 export function process(
   src: string,
