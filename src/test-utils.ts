@@ -2,6 +2,7 @@ import * as fs from 'fs';
 import { normalize } from 'jest-config';
 import * as setFromArgv from 'jest-config/build/set_from_argv';
 import * as path from 'path';
+import * as _ from 'lodash';
 
 function readRawConfig(argv: string, root: string) {
   const rawConfig = parseConfig(argv);
@@ -43,11 +44,10 @@ function loadJestConfigFromPackage(filePath, argv) {
 
 function parseConfig(argv): string | object | undefined {
   // Either parse as JSON or return as-is
-  try {
-    return JSON.parse(argv.config);
-  } catch {
-    return argv.config;
+  if (argv.startsWith('{') && argv.endsWith('}')) {
+    return JSON.parse(argv);
   }
+  return argv.config;
 }
 
 function loadJestConfigFromFile(filePath, argv) {
