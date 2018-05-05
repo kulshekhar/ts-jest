@@ -8,30 +8,10 @@ const fs = require('fs');
 const fsx = require('fs-extra');
 const path = require('path');
 
-function dirExists(dirPath) {
-  const F_OK = (fs.constants && fs.constants.F_OK) || fs['F_OK'];
-  try {
-    fs.accessSync(dirPath, F_OK);
-    return fs.statSync(dirPath).isDirectory();
-  } catch (e) {
-    return false;
-  }
-}
-
 function getDirectories(rootDir) {
   return fs.readdirSync(rootDir).filter(function(file) {
     return fs.statSync(path.join(rootDir, file)).isDirectory();
   });
-}
-
-function getFiles(rootDir) {
-  return fs.readdirSync(rootDir).filter(function(file) {
-    return !fs.statSync(path.join(rootDir, file)).isDirectory();
-  });
-}
-
-function getIntegrationMockContent(file) {
-  return `module.exports = require('../../../../${file}');`;
 }
 
 function createIntegrationMock() {
@@ -45,13 +25,13 @@ function createIntegrationMock() {
       testCaseFolders[i],
       'node_modules'
     );
-    if (!dirExists(testCaseNodeModules)) {
-      fs.mkdirSync(testCaseNodeModules);
-    }
+
+    fsx.ensureDirSync(testCaseNodeModules);
+
     const testCaseModuleFolder = path.join(testCaseNodeModules, 'ts-jest');
-    fsx.copySync('.', testCaseModuleFolder, {
+    fsx.copySync(path.resolve('.'), testCaseModuleFolder, {
       overwrite: true,
-      filter: function(src, dest) {
+      filter: function(src) {
         const shouldCopy =
           src === '.' ||
           src.startsWith('dist') ||
