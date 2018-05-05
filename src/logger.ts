@@ -9,7 +9,7 @@ import * as path from 'path';
 
 const logs: any[] = [];
 let logsFlushed: boolean = false;
-const outputToConsole: boolean = true;
+const outputToConsole: boolean = false;
 
 function shouldLog(): boolean {
   // If the env variable is set and the logs have not already been flushed, log the line

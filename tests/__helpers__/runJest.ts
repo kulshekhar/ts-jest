@@ -3,7 +3,6 @@
 import { sync as spawnSync } from 'cross-spawn';
 import * as path from 'path';
 import * as fs from 'fs-extra';
-import { fileExists } from './utils';
 
 // assuming that jest is installed globally
 // using `npm i -g jest-cli`

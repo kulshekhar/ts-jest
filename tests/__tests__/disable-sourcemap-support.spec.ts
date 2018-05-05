@@ -4,7 +4,7 @@ import * as utils from '../../src/utils';
 
 describe('sourcemap-support', () => {
   function runProcess(jestConfig = {}) {
-    return process('input_code', 'fake_file.ts', jestConfig, {
+    return process('const a = 3', 'fake_file.ts', jestConfig, {
       instrument: false,
     });
   }

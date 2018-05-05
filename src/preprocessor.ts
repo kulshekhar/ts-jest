@@ -13,6 +13,7 @@ import {
 } from './utils';
 import { cwd } from 'process';
 import * as fs from 'fs';
+import { outputFile } from 'fs-extra';
 // tslint:disable
 
 const shouldDebug = false;
@@ -82,12 +83,15 @@ export function process(
 
     getCurrentDirectory: () => {
       const dir = cwd();
-      console.log('working dir', dir);
+      // console.log('working dir', dir);
       return dir;
     },
 
     getScriptSnapshot: fileName => {
-      console.log(`getScriptSnapshot called with ${fileName}`);
+      // console.log(`getScriptSnapshot called with ${fileName}`);
+      if (fileName === filePath) {
+        return ts.ScriptSnapshot.fromString(src); // jest has already served this file for us.
+      }
       const result = fs.readFileSync(fileName, 'utf8');
       const snap = ts.ScriptSnapshot.fromString(result);
       // console.log('returning', snap);
@@ -95,13 +99,13 @@ export function process(
     },
 
     getCompilationSettings: () => {
-      console.log('returning compiler options: ', compilerOptions);
+      // console.log('returning compiler options: ', compilerOptions);
       return compilerOptions;
     },
 
     getDefaultLibFileName: () => {
       const libfilepath = ts.getDefaultLibFilePath(compilerOptions);
-      console.log('returning lib file name', libfilepath);
+      // console.log('returning lib file name', libfilepath);
       return libfilepath;
       // return 'lib.d.ts'
     },
@@ -115,34 +119,30 @@ export function process(
   };
 
   const service = ts.createLanguageService(serviceHost);
-  // const tsTranspiled = service.getEmitOutput(filePath);
+  const serviceOutput = service.getEmitOutput(filePath);
+  const files = serviceOutput.outputFiles.filter(file => {
+    return file.name.endsWith('js'); // ignore declaration files
+  });
+  logOnce('JS files parsed', files.map(f => f.name));
+
   const diagnostics = service
     .getCompilerOptionsDiagnostics()
     .concat(service.getSyntacticDiagnostics(filePath))
     .concat(service.getSemanticDiagnostics(filePath));
 
-  diagnostics.forEach(diagnostic => {
-    let message = ts.flattenDiagnosticMessageText(diagnostic.messageText, '\n');
-    if (diagnostic.file) {
-      let { line, character } = diagnostic.file.getLineAndCharacterOfPosition(
-        diagnostic.start!,
-      );
-      console.log(
-        `  Error ${diagnostic.file.fileName} (${line + 1},${character +
-          1}): ${message}`,
-      );
-    } else {
-      console.log(`  Error: ${message}`);
-    }
-  });
+  if (diagnostics.length > 0) {
+    logOnce(
+      `Diagnostic errors from TSC: ${diagnostics.map(d => d.messageText)}`,
+    );
+  }
 
-  const tsTranspiled = tsc.transpileModule(src, {
-    compilerOptions,
-    fileName: filePath,
-  });
-
-  console.log(tsTranspiled);
-  let tsTranspiledText = tsTranspiled.outputText;
+  let tsTranspiledText = '';
+  try {
+    tsTranspiledText = files[0].text;
+  } catch (e) {
+    console.warn('errororrrrororo');
+    console.warn('error ', e);
+  }
 
   if (tsJestConfig.ignoreCoverageForAllDecorators === true) {
     tsTranspiledText = tsTranspiledText.replace(
