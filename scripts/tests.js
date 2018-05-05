@@ -4,8 +4,7 @@ process.env.NODE_ENV = 'test';
 process.env.PUBLIC_URL = '';
 
 const jest = require('jest');
-const fs = require('fs');
-const fsx = require('fs-extra');
+const fs = require('fs-extra');
 const path = require('path');
 
 function getDirectories(rootDir) {
@@ -27,23 +26,23 @@ function createIntegrationMock() {
     const testCaseModuleFolder = path.join(testCaseNodeModules, 'ts-jest');
 
     // Copy javascript files
-    fsx.copySync(
+    fs.copySync(
       path.resolve(rootDir, 'index.js'),
       path.resolve(testCaseModuleFolder, 'index.js')
     );
-    fsx.copySync(
+    fs.copySync(
       path.resolve(rootDir, 'preprocessor.js'),
       path.resolve(testCaseModuleFolder, 'preprocessor.js')
     );
 
     // Copy package.json
-    fsx.copySync(
+    fs.copySync(
       path.resolve(rootDir, 'package.json'),
       path.resolve(testCaseModuleFolder, 'package.json')
     );
 
     // Copy dist folder
-    fsx.copySync(
+    fs.copySync(
       path.resolve(rootDir, 'dist'),
       path.resolve(testCaseModuleFolder, 'dist')
     );
