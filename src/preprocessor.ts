@@ -14,6 +14,7 @@ import {
 import { cwd } from 'process';
 import * as fs from 'fs';
 import { outputFile } from 'fs-extra';
+import { transpileTypescript } from './transpiler';
 // tslint:disable
 
 const shouldDebug = false;
@@ -125,24 +126,7 @@ export function process(
   });
   logOnce('JS files parsed', files.map(f => f.name));
 
-  const diagnostics = service
-    .getCompilerOptionsDiagnostics()
-    .concat(service.getSyntacticDiagnostics(filePath))
-    .concat(service.getSemanticDiagnostics(filePath));
-
-  if (diagnostics.length > 0) {
-    logOnce(
-      `Diagnostic errors from TSC: ${diagnostics.map(d => d.messageText)}`,
-    );
-  }
-
-  let tsTranspiledText = '';
-  try {
-    tsTranspiledText = files[0].text;
-  } catch (e) {
-    console.warn('errororrrrororo');
-    console.warn('error ', e);
-  }
+  let tsTranspiledText = transpileTypescript(filePath, src, compilerOptions);
 
   if (tsJestConfig.ignoreCoverageForAllDecorators === true) {
     tsTranspiledText = tsTranspiledText.replace(
