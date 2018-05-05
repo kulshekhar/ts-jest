@@ -68,6 +68,7 @@
     "cpx": "^1.5.0",
     "fs-extra": "4.0.3",
     "jest-config": "^22.4.2",
+    "lodash": "^4.17.10",
     "pkg-dir": "^2.0.0",
     "yargs": "^11.0.0"
   },
@@ -80,6 +81,7 @@
     "@types/es6-shim": "latest",
     "@types/fs-extra": "5.0.2",
     "@types/jest": "latest",
+    "@types/lodash": "^4.14.108",
     "@types/node": "latest",
     "@types/react": "latest",
     "babel-preset-env": "^1.6.0",

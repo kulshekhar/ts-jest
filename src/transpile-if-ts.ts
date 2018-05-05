@@ -12,7 +12,6 @@ export function transpileIfTypescript(
       compilerOptions: getTSConfig(
         config || mockGlobalTSConfigSchema(global),
         rootDir,
-        true,
       ),
       fileName: path,
     });
