@@ -4,8 +4,7 @@ process.env.NODE_ENV = 'test';
 process.env.PUBLIC_URL = '';
 
 const jest = require('jest');
-const fs = require('fs');
-const fsx = require('fs-extra');
+const fs = require('fs-extra');
 const path = require('path');
 
 function getDirectories(rootDir) {
@@ -19,28 +18,35 @@ function createIntegrationMock() {
   const testCaseFolders = getDirectories(testsRoot).filter(function(testDir) {
     return !(testDir.startsWith('__') && testDir.endsWith('__'));
   });
-  for (let i = 0; i < testCaseFolders.length; i++) {
-    const testCaseNodeModules = path.join(
-      testsRoot,
-      testCaseFolders[i],
-      'node_modules'
+
+  testCaseFolders.forEach(directory => {
+    const testCaseNodeModules = path.join(testsRoot, directory, 'node_modules');
+
+    const rootDir = path.resolve('.');
+    const testCaseModuleFolder = path.join(testCaseNodeModules, 'ts-jest');
+
+    // Copy javascript files
+    fs.copySync(
+      path.resolve(rootDir, 'index.js'),
+      path.resolve(testCaseModuleFolder, 'index.js')
+    );
+    fs.copySync(
+      path.resolve(rootDir, 'preprocessor.js'),
+      path.resolve(testCaseModuleFolder, 'preprocessor.js')
     );
 
-    fsx.ensureDirSync(testCaseNodeModules);
+    // Copy package.json
+    fs.copySync(
+      path.resolve(rootDir, 'package.json'),
+      path.resolve(testCaseModuleFolder, 'package.json')
+    );
 
-    const testCaseModuleFolder = path.join(testCaseNodeModules, 'ts-jest');
-    fsx.copySync(path.resolve('.'), testCaseModuleFolder, {
-      overwrite: true,
-      filter: function(src) {
-        const shouldCopy =
-          src === '.' ||
-          src.startsWith('dist') ||
-          src === 'package.json' ||
-          src.endsWith('.js');
-        return shouldCopy;
-      },
-    });
-  }
+    // Copy dist folder
+    fs.copySync(
+      path.resolve(rootDir, 'dist'),
+      path.resolve(testCaseModuleFolder, 'dist')
+    );
+  });
 }
 
 createIntegrationMock();
