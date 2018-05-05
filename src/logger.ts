@@ -36,10 +36,6 @@ export function flushLogs() {
   fs.writeFileSync(filePath, logString);
 }
 
-function includes<T>(array: T[], subject: T) {
-  return array.indexOf(subject) !== -1;
-}
-
 function convertToJSONIfPossible(object: any): string {
   try {
     return JSON.stringify(object, null, 2);
