@@ -3,10 +3,11 @@ import * as fs from 'fs';
 import * as fsExtra from 'fs-extra';
 import * as path from 'path';
 import * as tsc from 'typescript';
-import { JestConfig, TsJestConfig } from './jest-types';
+import { ConfigGlobals, JestConfig, TsJestConfig } from './jest-types';
 import { logOnce } from './logger';
+import * as _ from 'lodash';
 
-export function getTSJestConfig(globals: any): TsJestConfig {
+export function getTSJestConfig(globals: ConfigGlobals): TsJestConfig {
   return globals && globals['ts-jest'] ? globals['ts-jest'] : {};
 }
 
@@ -94,8 +95,7 @@ function getPathToClosestTSConfig(
   return getPathToClosestTSConfig(path.join(startDir, '..'), startDir);
 }
 
-// TODO: This can take something more specific than globals
-function getTSConfigPathFromConfig(globals: any): string {
+function getTSConfigPathFromConfig(globals: ConfigGlobals): string {
   const defaultTSConfigFile = getPathToClosestTSConfig();
   if (!globals) {
     return defaultTSConfigFile;
@@ -115,29 +115,18 @@ export function mockGlobalTSConfigSchema(globals: any) {
   return { 'ts-jest': { tsConfigFile: configPath } };
 }
 
-const tsConfigCache: { [key: string]: any } = {};
-// TODO: Perhaps rename collectCoverage to here, as it seems to be the official jest name now:
-// https://github.com/facebook/jest/issues/3524
-export function getTSConfig(
-  globals,
-  rootDir: string = '',
-  collectCoverage: boolean = false,
-) {
-  const configPath = getTSConfigPathFromConfig(globals);
-  logOnce(`Reading tsconfig file from path ${configPath}`);
-  const skipBabel = getTSJestConfig(globals).skipBabel;
-
+export const getTSConfig = _.memoize(getTSConfig_local, (globals, rootDir) => {
   // check cache before resolving configuration
   // NB: We use JSON.stringify() to create a consistent, unique signature. Although it lacks a uniform
   //     shape, this is simpler and faster than using the crypto package to generate a hash signature.
-  const tsConfigCacheKey = JSON.stringify([
-    skipBabel,
-    collectCoverage,
-    configPath,
-  ]);
-  if (tsConfigCacheKey in tsConfigCache) {
-    return tsConfigCache[tsConfigCacheKey];
-  }
+  return JSON.stringify(globals, rootDir);
+});
+
+// Non-memoized version of TSConfig
+function getTSConfig_local(globals, rootDir: string = '') {
+  const configPath = getTSConfigPathFromConfig(globals);
+  logOnce(`Reading tsconfig file from path ${configPath}`);
+  const skipBabel = getTSJestConfig(globals).skipBabel;
 
   const config = readCompilerOptions(configPath, rootDir);
   logOnce('Original typescript config before modifications: ', { ...config });
@@ -171,8 +160,6 @@ export function getTSConfig(
     config.module = tsc.ModuleKind.ES2015;
   }
 
-  // cache result for future requests
-  tsConfigCache[tsConfigCacheKey] = config;
   return config;
 }
 
