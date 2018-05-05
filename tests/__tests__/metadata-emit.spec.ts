@@ -5,7 +5,7 @@ describe('Metadata emit', () => {
   it('should run metadata emitting test successfuly', () => {
     const result = runJest('../metadata-emit', ['--no-cache']);
     const stderr = result.stderr;
-    printStdStreams(result);
+
     expect(result.status).toEqual(0);
     expect(stderr).toContain('8 passed, 8 total');
   });
