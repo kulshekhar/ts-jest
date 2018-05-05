@@ -16,6 +16,27 @@ import {
 } from './jest-types';
 import { logOnce } from './logger';
 
+export function postProcessCode(
+  tsCompilerOptions: CompilerOptions,
+  jestConfig: JestConfig,
+  tsJestConfig: TsJestConfig,
+  transformOptions: TransformOptions,
+  codeSource: string,
+  filePath: string,
+): string {
+  const postProcessFunction = getPostProcessHook(
+    tsCompilerOptions,
+    jestConfig,
+    tsJestConfig,
+  );
+  return postProcessFunction(
+    codeSource,
+    filePath,
+    jestConfig,
+    transformOptions,
+  );
+}
+
 function createBabelTransformer(options: BabelTransformOptions) {
   options = {
     ...options,
@@ -57,7 +78,7 @@ function createBabelTransformer(options: BabelTransformOptions) {
   };
 }
 
-export const getPostProcessHook = (
+const getPostProcessHook = (
   tsCompilerOptions: CompilerOptions,
   jestConfig: JestConfig,
   tsJestConfig: TsJestConfig,

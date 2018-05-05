@@ -25,7 +25,7 @@ export interface BabelTransformOptions extends BabelTransformOpts {
 
 export type PostProcessHook = (
   src: string,
-  filename: string,
+  filePath: string,
   config: JestConfig,
   transformOptions: TransformOptions,
 ) => string;

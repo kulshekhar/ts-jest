@@ -8,7 +8,8 @@ export function transpileTypescript(
   fileSrc: string,
   compilerOptions: ts.CompilerOptions,
 ): string {
-  return transpileViaLanguageServer(filePath, fileSrc, compilerOptions);
+  // return transpileViaLanguageServer(filePath, fileSrc, compilerOptions);
+  return transpileViaTranspileModile(filePath, fileSrc, compilerOptions);
 }
 
 /**
@@ -87,4 +88,13 @@ function transpileViaLanguageServer(
 /**
  * This is faster, and considers the modules in isolation
  */
-function createTranspileModuleTranspiler() {}
+function transpileViaTranspileModile(
+  filePath: string,
+  fileSource: string,
+  compilerOptions: ts.CompilerOptions,
+) {
+  return ts.transpileModule(fileSource, {
+    compilerOptions,
+    fileName: filePath,
+  }).outputText;
+}

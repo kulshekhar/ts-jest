@@ -1,8 +1,7 @@
 import * as crypto from 'crypto';
-import * as tsc from 'typescript';
 import { JestConfig, Path, TransformOptions } from './jest-types';
 import { flushLogs, logOnce } from './logger';
-import { getPostProcessHook } from './postprocess';
+import { postProcessCode } from './postprocess';
 import * as ts from 'typescript';
 import {
   cacheFile,
@@ -15,21 +14,8 @@ import { cwd } from 'process';
 import * as fs from 'fs';
 import { outputFile } from 'fs-extra';
 import { transpileTypescript } from './transpiler';
-// tslint:disable
 
-const shouldDebug = false;
-const debugFn = shouldDebug
-  ? <T, U>(key: string, fn: (arg: T) => U) => {
-      return (x: T) => {
-        // tslint:disable-next-line
-        console.log(key, x);
-        const res = fn(x);
-        // tslint:disable-next-line
-        // console.log(key, 'res', res);
-        return res;
-      };
-    }
-  : <T, U>(_: string, fn: (arg: T) => U) => fn;
+// tslint:disable
 
 export function process(
   src: string,
@@ -66,65 +52,11 @@ export function process(
   const tsJestConfig = getTSJestConfig(jestConfig.globals);
   logOnce('tsJestConfig: ', tsJestConfig);
 
+  // We can potentially do this faster by using the language service.
+  // See https://github.com/TypeStrong/ts-node/blob/master/src/index.ts#L268
   if (tsJestConfig.enableTsDiagnostics) {
     runTsDiagnostics(filePath, compilerOptions);
   }
-
-  const serviceHost: ts.LanguageServiceHost = {
-    getScriptFileNames: () => {
-      const returnarray = [filePath];
-      // console.log('getScriptFileNames returning:', returnarray);
-      return returnarray;
-    },
-
-    getScriptVersion: fileName => {
-      // console.log('getScriptVersion called with ', fileName);
-      return undefined as string;
-    },
-
-    getCurrentDirectory: () => {
-      const dir = cwd();
-      // console.log('working dir', dir);
-      return dir;
-    },
-
-    getScriptSnapshot: fileName => {
-      // console.log(`getScriptSnapshot called with ${fileName}`);
-      if (fileName === filePath) {
-        return ts.ScriptSnapshot.fromString(src); // jest has already served this file for us.
-      }
-      const result = fs.readFileSync(fileName, 'utf8');
-      const snap = ts.ScriptSnapshot.fromString(result);
-      // console.log('returning', snap);
-      return snap;
-    },
-
-    getCompilationSettings: () => {
-      // console.log('returning compiler options: ', compilerOptions);
-      return compilerOptions;
-    },
-
-    getDefaultLibFileName: () => {
-      const libfilepath = ts.getDefaultLibFilePath(compilerOptions);
-      // console.log('returning lib file name', libfilepath);
-      return libfilepath;
-      // return 'lib.d.ts'
-    },
-
-    // debug stuff
-    fileExists: debugFn('fileExists', ts.sys.fileExists),
-    readFile: debugFn('readFile', ts.sys.readFile),
-    readDirectory: debugFn('readDirectory', ts.sys.readDirectory),
-    getDirectories: debugFn('getDirectories', ts.sys.getDirectories),
-    directoryExists: debugFn('directoryExists', ts.sys.directoryExists),
-  };
-
-  const service = ts.createLanguageService(serviceHost);
-  const serviceOutput = service.getEmitOutput(filePath);
-  const files = serviceOutput.outputFiles.filter(file => {
-    return file.name.endsWith('js'); // ignore declaration files
-  });
-  logOnce('JS files parsed', files.map(f => f.name));
 
   let tsTranspiledText = transpileTypescript(filePath, src, compilerOptions);
 
@@ -141,17 +73,13 @@ export function process(
     );
   }
 
-  const postHook = getPostProcessHook(
+  const outputText = postProcessCode(
     compilerOptions,
     jestConfig,
     tsJestConfig,
-  );
-
-  const outputText = postHook(
-    tsTranspiledText,
-    filePath,
-    jestConfig,
     transformOptions,
+    src,
+    filePath,
   );
 
   const modified =
