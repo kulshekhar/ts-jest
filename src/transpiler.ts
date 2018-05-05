@@ -11,8 +11,10 @@ export function transpileTypescript(
   tsJestConfig: TsJestConfig,
 ): string {
   if (tsJestConfig.useExperimentalLanguageServer) {
+    logOnce('Using experimental language server.');
     return transpileViaLanguageServer(filePath, fileSrc, compilerOptions);
   }
+  logOnce('Compiling via normal transpileModule call');
   return transpileViaTranspileModile(filePath, fileSrc, compilerOptions);
 }
 
@@ -82,7 +84,7 @@ function transpileViaLanguageServer(
 
   if (diagnostics.length > 0) {
     logOnce(
-      `Diagnostic errors from TSC: ${diagnostics.map(d => d.messageText)}`,
+      `Diagnostic errors from TSC: ${diagnostics.map(d => d.messageText)}\n`,
     );
   }
 

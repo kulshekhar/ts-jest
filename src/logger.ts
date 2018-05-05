@@ -9,6 +9,7 @@ import * as path from 'path';
 
 const logs: any[] = [];
 let logsFlushed: boolean = false;
+// Set this to true to also log to the console. It's very nice for local debugging.
 const outputToConsole: boolean = false;
 
 function shouldLog(): boolean {

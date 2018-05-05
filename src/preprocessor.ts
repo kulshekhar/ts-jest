@@ -59,7 +59,12 @@ export function process(
     runTsDiagnostics(filePath, compilerOptions);
   }
 
-  let tsTranspiledText = transpileTypescript(filePath, src, compilerOptions);
+  let tsTranspiledText = transpileTypescript(
+    filePath,
+    src,
+    compilerOptions,
+    tsJestConfig,
+  );
 
   if (tsJestConfig.ignoreCoverageForAllDecorators === true) {
     tsTranspiledText = tsTranspiledText.replace(
