@@ -64,3 +64,14 @@ export function getJestConfig(root) {
   const rawConfig = readRawConfig(argv, root);
   return Object.freeze(setFromArgv.default(rawConfig, argv));
 }
+
+// tslint:disable
+// use 'any' type here to avoid having to import test types.
+export function printStdStreams(result: any) {
+  console.log('Process status code: ', result.status);
+  console.log('---STDOUT---');
+  console.log(result.stdout);
+  console.log('---STDERR---');
+  console.log(result.stderr);
+  console.log('---END---');
+}

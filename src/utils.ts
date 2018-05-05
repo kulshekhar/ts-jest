@@ -124,7 +124,7 @@ export function getTSConfig(
   collectCoverage: boolean = false,
 ) {
   const configPath = getTSConfigPathFromConfig(globals);
-  logOnce(`Reading tsconfig file from path ${configPath}`);
+  logOnce(`Reading tsconfig file from path ${path.resolve(configPath)}`);
   const skipBabel = getTSJestConfig(globals).skipBabel;
 
   // check cache before resolving configuration

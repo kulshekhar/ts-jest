@@ -17,14 +17,13 @@
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": false,
     "outDir": "dist",
-    "rootDir": "src",
-    "skipLibCheck": true
+    "rootDir": "src"
   },
   "include": [
     "src/**/*.ts",
     "src/**/*.tsx"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules", "tests/**/*"
   ]
 }

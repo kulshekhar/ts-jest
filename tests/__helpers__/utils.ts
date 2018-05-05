@@ -21,21 +21,3 @@ export function run(cmd, cwd) {
 
   return result;
 }
-
-export function linkJestPackage(packageName, cwd) {
-  const packagesDir = path.resolve(__dirname, '../packages');
-  const packagePath = path.resolve(packagesDir, packageName);
-  const destination = path.resolve(cwd, 'node_modules/');
-  run(`mkdir -p ${destination}`, undefined);
-  return run(`ln -sf ${packagePath} ${destination}`, undefined);
-}
-
-export function fileExists(filePath) {
-  const F_OK = (fs.constants && fs.constants.F_OK) || <number>fs['F_OK'];
-  try {
-    fs.accessSync(filePath, F_OK);
-    return true;
-  } catch (e) {
-    return false;
-  }
-}

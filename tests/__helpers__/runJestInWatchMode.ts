@@ -2,6 +2,7 @@
 import { ChildProcess, SpawnOptions } from 'child_process';
 import { fileExists } from './utils';
 import * as path from 'path';
+import * as fs from 'fs-extra';
 
 const spawn: (
   command: string,
@@ -27,7 +28,7 @@ export default function runJestInWatchMode(dir, args?: any[]) {
   }
 
   const localPackageJson = path.resolve(dir, 'package.json');
-  if (!fileExists(localPackageJson)) {
+  if (!fs.pathExistsSync(localPackageJson)) {
     throw new Error(`
       Make sure you have a local package.json file at
         "${localPackageJson}".
