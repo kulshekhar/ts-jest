@@ -25,7 +25,7 @@ describe('postprocess', () => {
     expect(transformMock).not.toBeCalled();
   });
 
-  it('skips commonjs module transform by default', () => {
+  it('Adds no babel plugins by default', () => {
     const transformMock = require.requireMock('babel-core').transform;
 
     runHook();
@@ -43,24 +43,12 @@ describe('postprocess', () => {
     );
   });
 
-  it('uses commonjs module transform when allowSyntheticDefaultImports=true', () => {
-    const transformMock = require.requireMock('babel-core').transform;
-
-    runHook({ allowSyntheticDefaultImports: true });
-    expect(transformMock).lastCalledWith(
-      expect.any(String),
-      expect.objectContaining({
-        plugins: ['transform-es2015-modules-commonjs'],
-      }),
-    );
-  });
-
-  it('doesn`t accumulate commonjs module transforms on consecutive calls', () => {
+  it('doesn`t accumulate module transforms on consecutive calls', () => {
     const transformMock = require.requireMock('babel-core').transform;
     const tsCompilerOptions = { allowSyntheticDefaultImports: true };
     const tsJestConfig = {
       babelConfig: {
-        plugins: [],
+        plugins: ['some-plugin'],
       },
       skipBabel: false,
     };
@@ -71,7 +59,7 @@ describe('postprocess', () => {
     expect(transformMock).lastCalledWith(
       expect.any(String),
       expect.objectContaining({
-        plugins: ['transform-es2015-modules-commonjs'],
+        plugins: ['some-plugin'],
       }),
     );
   });

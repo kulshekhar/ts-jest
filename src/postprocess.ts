@@ -15,6 +15,7 @@ import {
   TsJestConfig,
 } from './jest-types';
 import { logOnce } from './logger';
+import * as _ from 'lodash';
 
 function createBabelTransformer(options: BabelTransformOptions) {
   options = {
@@ -66,14 +67,7 @@ export const getPostProcessHook = (
     logOnce('Not using any postprocess hook.');
     return src => src; // Identity function
   }
-
-  const plugins = Array.from(
-    (tsJestConfig.babelConfig && tsJestConfig.babelConfig.plugins) || [],
-  );
-  // If we're not skipping babel
-  if (tsCompilerOptions.allowSyntheticDefaultImports) {
-    plugins.push('transform-es2015-modules-commonjs');
-  }
+  const plugins = _.get(tsJestConfig, 'babelConfig.plugins', []);
 
   const babelOptions = {
     ...tsJestConfig.babelConfig,

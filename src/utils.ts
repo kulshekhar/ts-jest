@@ -33,7 +33,8 @@ function readCompilerOptions(configPath: string, rootDir: string) {
   });
   // In case of an error, we cannot go further - the config is malformed.
   if (loaded.error) {
-    throw new Error(JSON.stringify(loaded.error, null, 4));
+    throw new Error(`Error parsing the tsc config file at ${configPath}.
+    Error message: '${loaded.error.messageText}'`);
   }
 
   // Second step: Parse the config, resolving all potential references.
@@ -154,11 +155,6 @@ function getTSConfig_local(globals, rootDir: string = '') {
 
   config.module = config.module || tsc.ModuleKind.CommonJS;
   config.jsx = config.jsx || tsc.JsxEmit.React;
-
-  if (config.allowSyntheticDefaultImports && !skipBabel) {
-    // compile ts to es2015 and transform with babel afterwards
-    config.module = tsc.ModuleKind.ES2015;
-  }
 
   return config;
 }
