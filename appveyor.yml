@@ -4,6 +4,8 @@
 # build version format
 version: "{build}"
 
+clone_depth: 5
+
 # fix lineendings in Windows
 init:
   - git config --global core.autocrlf input
