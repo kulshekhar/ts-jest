@@ -71,6 +71,7 @@
     "jest-config": "^22.4.3",
     "lodash": "^4.17.10",
     "pkg-dir": "^2.0.0",
+    "source-map-support": "^0.5.5",
     "yargs": "^11.0.0"
   },
   "peerDependencies": {
