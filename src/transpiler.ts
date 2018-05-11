@@ -64,6 +64,7 @@ function transpileViaLanguageServer(
     fileExists: ts.sys.fileExists,
     readFile: ts.sys.readFile,
     readDirectory: ts.sys.readDirectory,
+    realpath: ts.sys.realpath,
     getDirectories: ts.sys.getDirectories,
     directoryExists: ts.sys.directoryExists,
   };
