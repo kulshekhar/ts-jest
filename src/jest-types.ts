@@ -90,3 +90,8 @@ export interface TsJestConfig {
   ignoreCoverageForAllDecorators?: boolean;
   useExperimentalLanguageServer?: boolean;
 }
+
+export interface JestConfigNormalize {
+  hasDeprecationWarnings: boolean;
+  options: FullJestConfig;
+}

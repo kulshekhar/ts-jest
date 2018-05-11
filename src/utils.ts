@@ -11,7 +11,7 @@ export function getTSJestConfig(globals: ConfigGlobals): TsJestConfig {
   return globals && globals['ts-jest'] ? globals['ts-jest'] : {};
 }
 
-function formatTscParserErrors(errors: tsc.Diagnostic[]) {
+function formatTscParserErrors(errors: tsc.Diagnostic[]): string {
   return errors.map(s => JSON.stringify(s, null, 4)).join('\n');
 }
 
@@ -110,7 +110,9 @@ function getTSConfigPathFromConfig(globals: ConfigGlobals): string {
   return defaultTSConfigFile;
 }
 
-export function mockGlobalTSConfigSchema(globals: any) {
+export function mockGlobalTSConfigSchema(
+  globals: ConfigGlobals,
+): ConfigGlobals {
   const configPath = getTSConfigPathFromConfig(globals);
   return { 'ts-jest': { tsConfigFile: configPath } };
 }
@@ -167,7 +169,7 @@ export function cacheFile(
   jestConfig: JestConfig,
   filePath: string,
   src: string,
-) {
+): void {
   // store transpiled code contains source map into cache, except test cases
   if (!jestConfig.testRegex || !filePath.match(jestConfig.testRegex)) {
     const outputFilePath = path.join(
@@ -202,7 +204,7 @@ export function injectSourcemapHook(
 export function runTsDiagnostics(
   filePath: string,
   compilerOptions: tsc.CompilerOptions,
-) {
+): void {
   const program = tsc.createProgram([filePath], compilerOptions);
   const allDiagnostics = tsc.getPreEmitDiagnostics(program);
   const formattedDiagnostics = allDiagnostics.map(diagnostic => {
