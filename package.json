@@ -81,7 +81,7 @@
   "devDependencies": {
     "@types/lodash": "^4.14.108",
     "@types/babel-core": "latest",
-    "@types/es6-shim": "0.31.36",
+    "@types/es6-shim": "0.31.37",
     "@types/fs-extra": "5.0.2",
     "@types/jest": "22.2.3",
     "@types/node": "10.0.4",
