@@ -28,6 +28,9 @@ install:
 
 build: off
 
+cache:
+  - "%LOCALAPPDATA%\\Yarn"
+
 test_script:
   - node --version
   - npm --version
