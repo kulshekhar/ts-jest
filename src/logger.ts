@@ -18,7 +18,7 @@ function shouldLog(): boolean {
 }
 
 // Log function. Only logs prior to calls to flushLogs.
-export function logOnce(...thingsToLog: any[]) {
+export function logOnce(...thingsToLog: any[]): void {
   if (!shouldLog()) {
     return;
   }
@@ -26,7 +26,7 @@ export function logOnce(...thingsToLog: any[]) {
 }
 
 // This function JSONifies logs and flushes them to disk.
-export function flushLogs() {
+export function flushLogs(): void {
   if (!shouldLog()) {
     return; // only output stuff for the first invocation and if logging is enabled.
   }
