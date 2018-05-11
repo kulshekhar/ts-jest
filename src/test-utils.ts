@@ -2,9 +2,9 @@ import * as fs from 'fs';
 import { normalize } from 'jest-config';
 import * as setFromArgv from 'jest-config/build/set_from_argv';
 import * as path from 'path';
-import * as _ from 'lodash';
+import { JestConfigNormalize } from './jest-types';
 
-function readRawConfig(argv: string, root: string) {
+function readRawConfig(argv, root: string): JestConfigNormalize {
   const rawConfig = parseConfig(argv);
 
   if (typeof rawConfig === 'string') {
@@ -25,7 +25,10 @@ function readRawConfig(argv: string, root: string) {
   return packageConfig || normalize({ rootDir: root }, argv);
 }
 
-function loadJestConfigFromPackage(filePath, argv) {
+function loadJestConfigFromPackage(
+  filePath: string,
+  argv,
+): null | JestConfigNormalize {
   /* tslint:disable */
   const R_OK = (fs.constants && fs.constants.R_OK) || (fs['R_OK'] as number);
   /* tslint:enable */
@@ -52,7 +55,7 @@ function parseConfig(argv) {
   return argv.config;
 }
 
-function loadJestConfigFromFile(filePath, argv) {
+function loadJestConfigFromFile(filePath: string, argv): JestConfigNormalize {
   const config = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
   config.rootDir = config.rootDir
     ? path.resolve(path.dirname(filePath), config.rootDir)

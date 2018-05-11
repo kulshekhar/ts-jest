@@ -28,7 +28,7 @@ function transpileViaLanguageServer(
   filePath: string,
   fileSrc: string,
   compilerOptions: ts.CompilerOptions,
-) {
+): string {
   const serviceHost: ts.LanguageServiceHost = {
     // Returns an array of the files we need to consider
     getScriptFileNames: () => {
@@ -100,7 +100,7 @@ function transpileViaTranspileModile(
   filePath: string,
   fileSource: string,
   compilerOptions: ts.CompilerOptions,
-) {
+): string {
   return ts.transpileModule(fileSource, {
     compilerOptions,
     fileName: filePath,
