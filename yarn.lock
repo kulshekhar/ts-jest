@@ -49,9 +49,9 @@
   dependencies:
     "@types/babel-types" "*"
 
-"@types/es6-shim@0.31.36":
-  version "0.31.36"
-  resolved "https://registry.yarnpkg.com/@types/es6-shim/-/es6-shim-0.31.36.tgz#ad632af021b7f13846c2dddbba4db0a6f5b3eb6b"
+"@types/es6-shim@0.31.37":
+  version "0.31.37"
+  resolved "https://registry.yarnpkg.com/@types/es6-shim/-/es6-shim-0.31.37.tgz#d01fa9b61a6692e57387dde5483b0255659ba70f"
 
 "@types/fs-extra@5.0.2":
   version "5.0.2"
@@ -80,6 +80,10 @@
   resolved "https://registry.yarnpkg.com/@types/react/-/react-16.3.13.tgz#47d466462b774556c1174ea0eda22c0578643362"
   dependencies:
     csstype "^2.2.0"
+
+"@types/yargs@^11.0.0":
+  version "11.0.0"
+  resolved "https://registry.yarnpkg.com/@types/yargs/-/yargs-11.0.0.tgz#124b9ed9c65b7091cc36da59ae12cbd47d8745ea"
 
 abab@^1.0.3:
   version "1.0.4"

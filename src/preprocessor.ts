@@ -1,7 +1,7 @@
 import * as crypto from 'crypto';
 import { JestConfig, Path, TransformOptions } from './jest-types';
 import { flushLogs, logOnce } from './logger';
-import { getPostProcessHook, postProcessCode } from './postprocess';
+import { postProcessCode } from './postprocess';
 import {
   getTSConfig,
   getTSJestConfig,
@@ -15,7 +15,7 @@ export function process(
   filePath: Path,
   jestConfig: JestConfig,
   transformOptions: TransformOptions = { instrument: false },
-) {
+): string {
   // transformOptions.instrument is a proxy for collectCoverage
   // https://github.com/kulshekhar/ts-jest/issues/201#issuecomment-300572902
   const compilerOptions = getTSConfig(jestConfig.globals, jestConfig.rootDir);
