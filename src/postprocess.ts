@@ -34,7 +34,9 @@ export function postProcessCode(
   return postHook(transpiledText, filePath, jestConfig, transformOptions);
 }
 
-function createBabelTransformer(options: BabelTransformOptions) {
+function createBabelTransformer(
+  options: BabelTransformOptions,
+): PostProcessHook {
   options = {
     ...options,
     plugins: options.plugins || [],
