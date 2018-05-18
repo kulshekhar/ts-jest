@@ -5,7 +5,7 @@ cache: yarn
 git:
   depth: 5
 node_js:
-  - "9"
+  - "10"
   - "8"
   - "6"
 before_install:
