@@ -6,7 +6,6 @@ git:
   depth: 5
 node_js:
   - "10"
-  - "9"
   - "8"
   - "6"
 before_install:
