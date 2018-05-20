@@ -237,6 +237,8 @@ If you want to enable Syntactic & Semantic TypeScript error reporting you can en
 }
 ```
 
+**Note:** This is an experimental feature, comes with no guarantees and could be removed if it causes more problems than it solves. Testing is not the place to look for type errors. That should be done separately. Moreover, ts-jest only processes the files that are passed in by jest. It doesn't read files off the disk by default which is why `enableTsDiagnostics` will hurt performance compared to the normal use case.
+
 ### Ignore coverage on decorators
 
 **Note:** This is an experimental feature, comes with no guarantees and could be removed if it causes more problems than it solves
