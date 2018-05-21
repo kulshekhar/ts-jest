@@ -13,7 +13,7 @@ function importBabelDeps() {
       return;
     }
     babel = require('babel-core');
-    istanbulPlugin = require('babel-plugin-istanbul');
+    istanbulPlugin = require('babel-plugin-istanbul').default;
     jestPreset = require('babel-preset-jest');
 }
 import { CompilerOptions } from 'typescript/lib/typescript';
