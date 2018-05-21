@@ -16,7 +16,6 @@ describe('TS Compilation', () => {
     const result = runJest('../hoist-ts-test', ['--no-cache']);
 
     const output = result.output;
-    console.log(output);
 
     expect(output).toContain('4 passed, 4 total');
     expect(result.status).toBe(0);
