@@ -3,6 +3,7 @@ import { cwd } from 'process';
 import * as ts from 'typescript';
 import { logOnce } from './logger';
 import { TsJestConfig } from './jest-types';
+import { hoistTransformerFactory } from './ts-transformer-jest-hoist';
 
 // Takes the typescript code and by whatever method configured, makes it into javascript code.
 export function transpileTypescript(
@@ -13,10 +14,10 @@ export function transpileTypescript(
 ): string {
   if (tsJestConfig.useExperimentalLanguageServer) {
     logOnce('Using experimental language server.');
-    return transpileViaLanguageServer(filePath, fileSrc, compilerOptions);
+    return transpileViaLanguageServer(filePath, fileSrc, compilerOptions, tsJestConfig);
   }
   logOnce('Compiling via normal transpileModule call');
-  return transpileViaTranspileModile(filePath, fileSrc, compilerOptions);
+  return transpileViaTranspileModile(filePath, fileSrc, compilerOptions, tsJestConfig);
 }
 
 /**
@@ -28,6 +29,7 @@ function transpileViaLanguageServer(
   filePath: string,
   fileSrc: string,
   compilerOptions: ts.CompilerOptions,
+  tsJestConfig: TsJestConfig,
 ): string {
   const serviceHost: ts.LanguageServiceHost = {
     // Returns an array of the files we need to consider
@@ -67,6 +69,9 @@ function transpileViaLanguageServer(
     realpath: ts.sys.realpath,
     getDirectories: ts.sys.getDirectories,
     directoryExists: ts.sys.directoryExists,
+    getCustomTransformers() {
+      return getCustomTransformers(tsJestConfig);
+    },
   };
   const service = ts.createLanguageService(serviceHost);
   const serviceOutput = service.getEmitOutput(filePath);
@@ -101,9 +106,21 @@ function transpileViaTranspileModile(
   filePath: string,
   fileSource: string,
   compilerOptions: ts.CompilerOptions,
+  tsJestConfig: TsJestConfig,
 ): string {
   return ts.transpileModule(fileSource, {
     compilerOptions,
     fileName: filePath,
+    transformers: getCustomTransformers(tsJestConfig),
   }).outputText;
+}
+
+function getCustomTransformers(tsJestConfig: TsJestConfig): ts.CustomTransformers {
+  if (tsJestConfig.skipBabel) {
+    return {
+      before: [hoistTransformerFactory],
+    };
+  } else {
+    return {};
+  }
 }
