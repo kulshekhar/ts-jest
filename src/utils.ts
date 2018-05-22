@@ -60,7 +60,7 @@ function getStartDir(): string {
   // If this is being executed as a library (under node_modules)
   // we want to start with the project directory that's three
   // levels above.
-  // If t his is being executed from the test suite, we want to start
+  // If this is being executed from the test suite, we want to start
   // in the directory of the test
 
   const grandparent = path.resolve(__dirname, '..', '..');
