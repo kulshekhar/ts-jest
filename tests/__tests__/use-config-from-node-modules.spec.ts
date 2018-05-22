@@ -9,7 +9,7 @@ describe('Use config from node_modules', () => {
     const targetDir = path.resolve(testDir, 'node_modules', 'common-tsconfig');
     const targetConfigPath = path.resolve(targetDir, 'tsconfig.json');
     fs.ensureDirSync(targetDir);
-    fs.copyFileSync(configPath, targetConfigPath);
+    fs.copySync(configPath, targetConfigPath);
 
     const result = runJest('../use-config-from-node-modules', ['--no-cache']);
     const stderr = result.stderr;
