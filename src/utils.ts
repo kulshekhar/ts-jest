@@ -37,7 +37,7 @@ function readCompilerOptions(configPath: string, rootDir: string) {
   }
 
   // Second step: Parse the config, resolving all potential references.
-  const basePath = path.dirname(configPath); // equal to "getDirectoryPath" from ts, at least in our case.
+  const basePath = path.resolve(rootDir);
   const parsedConfig = tsc.parseJsonConfigFileContent(
     loaded.config,
     tsc.sys,
