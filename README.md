@@ -222,6 +222,22 @@ In some cases, projects may not want to have a `.babelrc` file, but still need t
 
 Note that if you also set the `useBabelrc` option to `true`, any configuration passed using this method will be overwritten by corresponding keys in `.babelrc` files.
 
+### Using a Custom Typescript Compiler
+
+If you want to use an alternative Typescript compiler such as `ntypescript` or `ttypescript`, you can specify this with the `globals > ts-jest > compiler` option in your jest config:
+
+```json
+{
+  "jest": {
+    "globals": {
+      "ts-jest": {
+        "compiler": "ttypescript"
+      }
+    }
+  }
+}
+```
+
 ### TS compiler & error reporting
 If you want to enable Syntactic & Semantic TypeScript error reporting you can enable this through `enableTsDiagnostics` flag;
 
