@@ -11,8 +11,14 @@ export function getTSJestConfig(globals: ConfigGlobals): TsJestConfig {
   return globals && globals['ts-jest'] ? globals['ts-jest'] : {};
 }
 
-function formatTscParserErrors(errors: tsc.Diagnostic[]): string {
-  return errors.map(s => JSON.stringify(s, null, 4)).join('\n');
+function formatTsDiagnostics(errors: tsc.Diagnostic[]): string {
+  const defaultFormatHost: tsc.FormatDiagnosticsHost = {
+    getCurrentDirectory: () => tsc.sys.getCurrentDirectory(),
+    getCanonicalFileName: fileName => fileName,
+    getNewLine: () => tsc.sys.newLine,
+  };
+
+  return tsc.formatDiagnostics(errors, defaultFormatHost);
 }
 
 function readCompilerOptions(
@@ -32,7 +38,7 @@ function readCompilerOptions(
   );
 
   if (errors.length > 0) {
-    const formattedErrors = formatTscParserErrors(errors);
+    const formattedErrors = formatTsDiagnostics(errors);
     throw new Error(
       `Some errors occurred while attempting to read from ${configPath}: ${formattedErrors}`,
     );
@@ -193,25 +199,8 @@ export function runTsDiagnostics(
 ): void {
   const program = tsc.createProgram([filePath], compilerOptions);
   const allDiagnostics = tsc.getPreEmitDiagnostics(program);
-  const formattedDiagnostics = allDiagnostics.map(diagnostic => {
-    if (diagnostic.file) {
-      const { line, character } = diagnostic.file.getLineAndCharacterOfPosition(
-        diagnostic.start,
-      );
-      const message = tsc.flattenDiagnosticMessageText(
-        diagnostic.messageText,
-        '\n',
-      );
-      return `${path.relative(
-        process.cwd(),
-        diagnostic.file.fileName,
-      )} (${line + 1},${character + 1}): ${message}\n`;
-    }
 
-    return `${tsc.flattenDiagnosticMessageText(diagnostic.messageText, '\n')}`;
-  });
-
-  if (formattedDiagnostics.length) {
-    throw new Error(formattedDiagnostics.join(''));
+  if (allDiagnostics.length) {
+    throw new Error(formatTsDiagnostics(allDiagnostics));
   }
 }
