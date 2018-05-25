@@ -15,44 +15,30 @@ function formatTscParserErrors(errors: tsc.Diagnostic[]): string {
   return errors.map(s => JSON.stringify(s, null, 4)).join('\n');
 }
 
-function readCompilerOptions(configPath: string, rootDir: string) {
+function readCompilerOptions(
+  configPath: string,
+  rootDir: string,
+): tsc.CompilerOptions {
   configPath = path.resolve(rootDir, configPath);
-
-  // First step: Let tsc pick up the config.
-  const loaded = tsc.readConfigFile(configPath, file => {
-    const read = tsc.sys.readFile(file);
-    // See
-    // https://github.com/Microsoft/TypeScript/blob/a757e8428410c2196886776785c16f8f0c2a62d9/src/compiler/sys.ts#L203 :
-    // `readFile` returns `undefined` in case the file does not exist!
-    if (!read) {
-      throw new Error(
-        `ENOENT: no such file or directory, open '${configPath}'`,
-      );
-    }
-    return read;
-  });
-  // In case of an error, we cannot go further - the config is malformed.
-  if (loaded.error) {
-    throw new Error(JSON.stringify(loaded.error, null, 4));
+  const { config, error } = tsc.readConfigFile(configPath, tsc.sys.readFile);
+  if (error) {
+    throw error;
   }
 
-  // Second step: Parse the config, resolving all potential references.
-  const basePath = path.resolve(rootDir);
-  const parsedConfig = tsc.parseJsonConfigFileContent(
-    loaded.config,
+  const { errors, options } = tsc.parseJsonConfigFileContent(
+    config,
     tsc.sys,
-    basePath,
+    path.resolve(rootDir),
   );
-  // In case the config is present, it already contains possibly merged entries from following the
-  // 'extends' entry, thus it is not required to follow it manually.
-  // This procedure does NOT throw, but generates a list of errors that can/should be evaluated.
-  if (parsedConfig.errors.length > 0) {
-    const formattedErrors = formatTscParserErrors(parsedConfig.errors);
+
+  if (errors.length > 0) {
+    const formattedErrors = formatTscParserErrors(errors);
     throw new Error(
       `Some errors occurred while attempting to read from ${configPath}: ${formattedErrors}`,
     );
   }
-  return parsedConfig.options;
+
+  return options;
 }
 
 function getStartDir(): string {

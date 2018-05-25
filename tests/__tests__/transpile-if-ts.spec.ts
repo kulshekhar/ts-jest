@@ -16,8 +16,8 @@ describe('transpileIfTypescript', () => {
   it('should be possible to pass a custom config', () => {
     const customTsConfigFile = 'not-existant.json';
     const customConfig = { 'ts-jest': { tsConfigFile: customTsConfigFile } };
-    expect(() => transpileIfTypescript('some.ts', '', customConfig)).toThrow(
-      new RegExp(customTsConfigFile),
-    );
+    expect(() =>
+      transpileIfTypescript('some.ts', '', customConfig),
+    ).toThrowError();
   });
 });
