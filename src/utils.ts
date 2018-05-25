@@ -95,8 +95,11 @@ function getPathToClosestTSConfig(
   return getPathToClosestTSConfig(path.join(startDir, '..'), startDir);
 }
 
-function getTSConfigPathFromConfig(globals: ConfigGlobals): string {
-  const defaultTSConfigFile = getPathToClosestTSConfig();
+function getTSConfigPathFromConfig(
+  globals: ConfigGlobals,
+  rootDir?: string,
+): string {
+  const defaultTSConfigFile = getPathToClosestTSConfig(rootDir);
   if (!globals) {
     return defaultTSConfigFile;
   }
@@ -126,7 +129,7 @@ export const getTSConfig = _.memoize(getTSConfig_local, (globals, rootDir) => {
 
 // Non-memoized version of TSConfig
 function getTSConfig_local(globals, rootDir: string = '') {
-  const configPath = getTSConfigPathFromConfig(globals);
+  const configPath = getTSConfigPathFromConfig(globals, rootDir);
   logOnce(`Reading tsconfig file from path ${configPath}`);
   const skipBabel = getTSJestConfig(globals).skipBabel;
 
