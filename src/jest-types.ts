@@ -93,6 +93,7 @@ export interface TsJestConfig {
   ignoreCoverageForDecorators?: boolean;
   ignoreCoverageForAllDecorators?: boolean;
   useExperimentalLanguageServer?: boolean;
+  compiler?: string;
 }
 
 export interface JestConfigNormalize {
