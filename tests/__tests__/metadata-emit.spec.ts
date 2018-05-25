@@ -1,5 +1,5 @@
 import runJest from '../__helpers__/runJest';
-import { printStdStreams } from '../../src/test-utils';
+import { printStdStreams } from '../utils/test-utils';
 
 describe('Metadata emit', () => {
   it('should run metadata emitting test successfuly', () => {
