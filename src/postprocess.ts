@@ -61,12 +61,7 @@ function createBabelTransformer(
     ...options,
     plugins: options.plugins || [],
     presets: (options.presets || []).concat([jestPreset]),
-    // If retainLines isn't set to true, the line numbers
-    // are off by 1
-    retainLines: true,
-    // force the sourceMaps property to be 'inline' during testing
-    // to help generate accurate sourcemaps.
-    sourceMaps: 'inline',
+    sourceMaps: true,
   };
   delete options.cacheDirectory;
   delete options.filename;

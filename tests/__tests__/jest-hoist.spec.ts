@@ -14,12 +14,13 @@ describe('Jest.mock() calls', () => {
 
     const stderr = result.stderr;
 
-    expect(result.status).toBe(1);
     expect(stderr).toContain('Hello.ts:22:11');
-
+    // TODO FIX COMMENT - sourcemap is accurate now
     // The actual error occurs at line 14. However, because the mock calls
     // are hoisted, this changes - in this case, to 22
     // The column numbers are accurate.
-    expect(stderr).toContain('Hello.test.ts:22:19');
+    expect(stderr).toContain('Hello.test.ts:14:19');
+
+    expect(result.status).toBe(1);
   });
 });
