@@ -1,6 +1,7 @@
 // Only for types; take care never to use ts_types in expressions, only in type annotations
 import * as ts_types from 'typescript';
 import { TsJestConfig } from './jest-types';
+import { wrapError } from './utils';
 
 /**
  * Return a typescript compiler.
@@ -8,9 +9,10 @@ import { TsJestConfig } from './jest-types';
  * For example, `ntypescript`.
  */
 export function getTypescriptCompiler(config: TsJestConfig): typeof ts_types {
-  if (typeof config.compiler === 'string') {
-    return require(config.compiler);
-  } else {
-    return require('typescript');
+  const compilerName = typeof config.compiler === 'string' ? config.compiler : 'typescript';
+  try {
+    return require(compilerName);
+  } catch (err) {
+    throw wrapError(err, new Error('Could not import typescript compiler "' + compilerName + '"'));
   }
 }
