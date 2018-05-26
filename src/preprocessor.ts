@@ -1,13 +1,14 @@
 import * as crypto from 'crypto';
-import { JestConfig, Path, TransformOptions } from './jest-types';
+import {
+  BabelTransformOptions,
+  CodeSourceMapPair,
+  JestConfig,
+  Path,
+  TransformOptions,
+} from './jest-types';
 import { flushLogs, logOnce } from './logger';
 import { postProcessCode } from './postprocess';
-import {
-  getTSConfig,
-  getTSJestConfig,
-  runTsDiagnostics,
-  injectSourcemapHook,
-} from './utils';
+import { getTSConfig, getTSJestConfig, runTsDiagnostics } from './utils';
 import { transpileTypescript } from './transpiler';
 
 export function process(
@@ -15,7 +16,7 @@ export function process(
   filePath: Path,
   jestConfig: JestConfig,
   transformOptions: TransformOptions = { instrument: false },
-): string {
+): CodeSourceMapPair | string {
   // transformOptions.instrument is a proxy for collectCoverage
   // https://github.com/kulshekhar/ts-jest/issues/201#issuecomment-300572902
   const compilerOptions = getTSConfig(jestConfig.globals, jestConfig.rootDir);
@@ -47,21 +48,16 @@ export function process(
     runTsDiagnostics(filePath, compilerOptions);
   }
 
-  let tsTranspiledText = transpileTypescript(
-    filePath,
-    src,
-    compilerOptions,
-    tsJestConfig,
-  );
+  const transpileOutput = transpileTypescript(filePath, src, compilerOptions);
 
   if (tsJestConfig.ignoreCoverageForAllDecorators === true) {
-    tsTranspiledText = tsTranspiledText.replace(
+    transpileOutput.code = transpileOutput.code.replace(
       /__decorate/g,
       '/* istanbul ignore next */__decorate',
     );
   }
   if (tsJestConfig.ignoreCoverageForDecorators === true) {
-    tsTranspiledText = tsTranspiledText.replace(
+    transpileOutput.code = transpileOutput.code.replace(
       /(__decorate\(\[\r?\n[^\n\r]*)\/\*\s*istanbul\s*ignore\s*decorator(.*)\*\//g,
       '/* istanbul ignore next$2*/$1',
     );
@@ -72,18 +68,18 @@ export function process(
     jestConfig,
     tsJestConfig,
     transformOptions,
-    tsTranspiledText,
+    transpileOutput,
     filePath,
   );
 
-  const modified =
+  /*const modified =
     tsJestConfig.disableSourceMapSupport === true
       ? outputText
-      : injectSourcemapHook(filePath, tsTranspiledText, outputText);
-
+      : injectSourcemapHook(filePath, transpileOutput, outputText);
+*/
   flushLogs();
 
-  return modified;
+  return { code: outputText.code, map: outputText.map };
 }
 
 /**

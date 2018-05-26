@@ -5,20 +5,22 @@
 import * as __types__babel from 'babel-core';
 import __types__istanbulPlugin from 'babel-plugin-istanbul';
 import * as __types__jestPreset from 'babel-preset-jest';
+import * as ts from 'typescript';
 let babel: typeof __types__babel;
 let istanbulPlugin: typeof __types__istanbulPlugin;
 let jestPreset: typeof __types__jestPreset;
 function importBabelDeps() {
-    if (babel) {
-      return;
-    }
-    babel = require('babel-core');
-    istanbulPlugin = require('babel-plugin-istanbul').default;
-    jestPreset = require('babel-preset-jest');
+  if (babel) {
+    return;
+  }
+  babel = require('babel-core');
+  istanbulPlugin = require('babel-plugin-istanbul').default;
+  jestPreset = require('babel-preset-jest');
 }
 import { CompilerOptions } from 'typescript/lib/typescript';
 import {
   BabelTransformOptions,
+  CodeSourceMapPair,
   FullJestConfig,
   JestConfig,
   PostProcessHook,
@@ -26,6 +28,7 @@ import {
   TsJestConfig,
 } from './jest-types';
 import { logOnce } from './logger';
+import { BabelFileResult } from 'babel-core';
 
 // Function that takes the transpiled typescript and runs it through babel/whatever.
 export function postProcessCode(
@@ -33,16 +36,16 @@ export function postProcessCode(
   jestConfig: JestConfig,
   tsJestConfig: TsJestConfig,
   transformOptions: TransformOptions,
-  transpiledText: string,
+  transpileOutput: CodeSourceMapPair,
   filePath: string,
-): string {
+): CodeSourceMapPair {
   const postHook = getPostProcessHook(
     compilerOptions,
     jestConfig,
     tsJestConfig,
   );
 
-  return postHook(transpiledText, filePath, jestConfig, transformOptions);
+  return postHook(transpileOutput, filePath, jestConfig, transformOptions);
 }
 
 function createBabelTransformer(
@@ -53,23 +56,20 @@ function createBabelTransformer(
     ...options,
     plugins: options.plugins || [],
     presets: (options.presets || []).concat([jestPreset]),
-    // If retainLines isn't set to true, the line numbers
-    // are off by 1
-    retainLines: true,
-    // force the sourceMaps property to be 'inline' during testing
-    // to help generate accurate sourcemaps.
-    sourceMaps: 'inline',
   };
   delete options.cacheDirectory;
   delete options.filename;
 
   return (
-    src: string,
+    codeSourcemapPair: CodeSourceMapPair,
     filename: string,
     config: JestConfig,
     transformOptions: TransformOptions,
-  ): string => {
-    const theseOptions = Object.assign({ filename }, options);
+  ): CodeSourceMapPair => {
+    const theseOptions = Object.assign(
+      { filename, inputSourceMap: codeSourcemapPair.map },
+      options,
+    );
     if (transformOptions && transformOptions.instrument) {
       theseOptions.auxiliaryCommentBefore = ' istanbul ignore next ';
       // Copied from jest-runtime transform.js
@@ -84,8 +84,11 @@ function createBabelTransformer(
         ],
       ]);
     }
-
-    return babel.transform(src, theseOptions).code;
+    // Babel has incorrect typings, where the map is an object instead of a string. So we have to typecast it here
+    return (babel.transform(
+      codeSourcemapPair.code,
+      theseOptions,
+    ) as any) as CodeSourceMapPair;
   };
 }
 
@@ -96,7 +99,8 @@ export const getPostProcessHook = (
 ): PostProcessHook => {
   if (tsJestConfig.skipBabel) {
     logOnce('Not using any postprocess hook.');
-    return src => src; // Identity function
+    // Identity function
+    return input => input;
   }
 
   const plugins = Array.from(
@@ -107,11 +111,12 @@ export const getPostProcessHook = (
     plugins.push('transform-es2015-modules-commonjs');
   }
 
-  const babelOptions = {
+  const babelOptions: BabelTransformOptions = {
     ...tsJestConfig.babelConfig,
     babelrc: tsJestConfig.useBabelrc || false,
     plugins,
     presets: tsJestConfig.babelConfig ? tsJestConfig.babelConfig.presets : [],
+    sourceMaps: tsJestConfig.disableSourceMapSupport !== true,
   };
 
   logOnce('Using babel with options:', babelOptions);

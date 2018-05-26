@@ -12,5 +12,4 @@ function lazyRequire(fnName) {
 module.exports = {
   process: lazyRequire('process'),
   getCacheKey: lazyRequire('getCacheKey'),
-  install: require('./dist/install').install,
 };
