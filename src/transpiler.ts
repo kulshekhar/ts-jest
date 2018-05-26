@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import { cwd } from 'process';
-// Only for types; take care never to use ts_ in expressions, only in type annotations
-import * as ts_ from 'typescript';
+// Only for types; take care never to use ts_types in expressions, only in type annotations
+import * as ts_types from 'typescript';
 import { logOnce } from './logger';
 import { CodeSourceMapPair, TsJestConfig } from './jest-types';
 import { getTypescriptCompiler } from './custom-compiler';
@@ -10,7 +10,7 @@ import { getTypescriptCompiler } from './custom-compiler';
 export function transpileTypescript(
   filePath: string,
   fileSrc: string,
-  compilerOptions: ts_.CompilerOptions,
+  compilerOptions: ts_types.CompilerOptions,
   tsJestConfig: TsJestConfig,
 ): CodeSourceMapPair {
   logOnce('Compiling via normal transpileModule call');
@@ -33,9 +33,9 @@ export function transpileTypescript(
 function transpileViaTranspileModule(
   filePath: string,
   fileSource: string,
-  compilerOptions: ts_.CompilerOptions,
-  ts: typeof ts_,
-): ts_.TranspileOutput {
+  compilerOptions: ts_types.CompilerOptions,
+  ts: typeof ts_types,
+): ts_types.TranspileOutput {
   return ts.transpileModule(fileSource, {
     compilerOptions,
     fileName: filePath,

@@ -1,4 +1,5 @@
-import * as __typeof__ts from 'typescript';
+// Only for types; take care never to use ts_types in expressions, only in type annotations
+import * as ts_types from 'typescript';
 import { TsJestConfig } from './jest-types';
 
 /**
@@ -6,7 +7,7 @@ import { TsJestConfig } from './jest-types';
  * Allows config to specify alternative compiler.
  * For example, `ntypescript`.
  */
-export function getTypescriptCompiler(config: TsJestConfig): typeof __typeof__ts {
+export function getTypescriptCompiler(config: TsJestConfig): typeof ts_types {
   if (typeof config.compiler === 'string') {
     return require(config.compiler);
   } else {
