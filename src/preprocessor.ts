@@ -8,12 +8,7 @@ import {
 } from './jest-types';
 import { flushLogs, logOnce } from './logger';
 import { postProcessCode } from './postprocess';
-import {
-  getTSConfig,
-  getTSJestConfig,
-  runTsDiagnostics,
-  injectSourcemapHook,
-} from './utils';
+import { getTSConfig, getTSJestConfig, runTsDiagnostics } from './utils';
 import { transpileTypescript } from './transpiler';
 
 export function process(

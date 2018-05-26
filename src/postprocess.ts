@@ -56,7 +56,6 @@ function createBabelTransformer(
     ...options,
     plugins: options.plugins || [],
     presets: (options.presets || []).concat([jestPreset]),
-    sourceMaps: true,
   };
   delete options.cacheDirectory;
   delete options.filename;
@@ -117,6 +116,7 @@ export const getPostProcessHook = (
     babelrc: tsJestConfig.useBabelrc || false,
     plugins,
     presets: tsJestConfig.babelConfig ? tsJestConfig.babelConfig.presets : [],
+    sourceMaps: tsJestConfig.disableSourceMapSupport !== true,
   };
 
   logOnce('Using babel with options:', babelOptions);
