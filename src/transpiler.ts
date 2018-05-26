@@ -2,17 +2,24 @@ import * as fs from 'fs';
 import { cwd } from 'process';
 import * as ts from 'typescript';
 import { logOnce } from './logger';
-import { TsJestConfig } from './jest-types';
+import { CodeSourceMapPair, TsJestConfig } from './jest-types';
 
 // Takes the typescript code and by whatever method configured, makes it into javascript code.
 export function transpileTypescript(
   filePath: string,
   fileSrc: string,
   compilerOptions: ts.CompilerOptions,
-  tsJestConfig: TsJestConfig,
-): ts.TranspileOutput {
+): CodeSourceMapPair {
   logOnce('Compiling via normal transpileModule call');
-  return transpileViaTranspileModile(filePath, fileSrc, compilerOptions);
+  const transpileOutput = transpileViaTranspileModile(
+    filePath,
+    fileSrc,
+    compilerOptions,
+  );
+  return {
+    code: transpileOutput.outputText,
+    map: transpileOutput.sourceMapText,
+  };
 }
 
 /**

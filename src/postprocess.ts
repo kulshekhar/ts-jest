@@ -20,6 +20,7 @@ function importBabelDeps() {
 import { CompilerOptions } from 'typescript/lib/typescript';
 import {
   BabelTransformOptions,
+  CodeSourceMapPair,
   FullJestConfig,
   JestConfig,
   PostProcessHook,
@@ -35,22 +36,23 @@ export function postProcessCode(
   jestConfig: JestConfig,
   tsJestConfig: TsJestConfig,
   transformOptions: TransformOptions,
-  transpileOutput: ts.TranspileOutput,
+  transpileOutput: CodeSourceMapPair,
   filePath: string,
-): BabelFileResult {
+): CodeSourceMapPair {
   const postHook = getPostProcessHook(
     compilerOptions,
     jestConfig,
     tsJestConfig,
   );
 
-  return postHook(
-    transpileOutput.outputText,
-    transpileOutput.sourceMapText,
+  return (postHook(
+    transpileOutput.code,
+    transpileOutput.map,
     filePath,
     jestConfig,
     transformOptions,
-  );
+  ) as any) as CodeSourceMapPair; // Babel has incorrect typings, where the map is an object instead of a string
+  // So we have to typecast it here
 }
 
 function createBabelTransformer(

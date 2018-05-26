@@ -99,3 +99,8 @@ export interface JestConfigNormalize {
   hasDeprecationWarnings: boolean;
   options: FullJestConfig;
 }
+
+export interface CodeSourceMapPair {
+  code: string;
+  map: string;
+}

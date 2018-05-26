@@ -1,6 +1,7 @@
 import * as crypto from 'crypto';
 import {
   BabelTransformOptions,
+  CodeSourceMapPair,
   JestConfig,
   Path,
   TransformOptions,
@@ -20,7 +21,7 @@ export function process(
   filePath: Path,
   jestConfig: JestConfig,
   transformOptions: TransformOptions = { instrument: false },
-): any {
+): CodeSourceMapPair | string {
   // transformOptions.instrument is a proxy for collectCoverage
   // https://github.com/kulshekhar/ts-jest/issues/201#issuecomment-300572902
   const compilerOptions = getTSConfig(jestConfig.globals, jestConfig.rootDir);
@@ -52,21 +53,16 @@ export function process(
     runTsDiagnostics(filePath, compilerOptions);
   }
 
-  const transpileOutput = transpileTypescript(
-    filePath,
-    src,
-    compilerOptions,
-    tsJestConfig,
-  );
+  const transpileOutput = transpileTypescript(filePath, src, compilerOptions);
 
   if (tsJestConfig.ignoreCoverageForAllDecorators === true) {
-    transpileOutput.outputText = transpileOutput.outputText.replace(
+    transpileOutput.code = transpileOutput.code.replace(
       /__decorate/g,
       '/* istanbul ignore next */__decorate',
     );
   }
   if (tsJestConfig.ignoreCoverageForDecorators === true) {
-    transpileOutput.outputText = transpileOutput.outputText.replace(
+    transpileOutput.code = transpileOutput.code.replace(
       /(__decorate\(\[\r?\n[^\n\r]*)\/\*\s*istanbul\s*ignore\s*decorator(.*)\*\//g,
       '/* istanbul ignore next$2*/$1',
     );
