@@ -83,12 +83,10 @@ function transpileViaLanguageServer(
     .concat(service.getSemanticDiagnostics(filePath));
 
   if (diagnostics.length > 0) {
-    const errors = `${diagnostics.map(d => d.messageText)}\n`;
-    logOnce(`Diagnostic errors from TSC: ${errors}`);
+    const errors = formatDiagnostics(diagnostics);
+    logOnce(logMessageForTranspilationErrors(errors));
     // Maybe we should keep compiling even though there are errors. This can possibly be configured.
-    throw Error(
-      `TSC language server encountered errors while transpiling. Errors: ${errors}`,
-    );
+    throw createTranspilationError(errors);
   }
 
   return files[0].text;
@@ -102,8 +100,33 @@ function transpileViaTranspileModile(
   fileSource: string,
   compilerOptions: ts.CompilerOptions,
 ): string {
-  return ts.transpileModule(fileSource, {
+  const {diagnostics, outputText} = ts.transpileModule(fileSource, {
     compilerOptions,
     fileName: filePath,
-  }).outputText;
+    reportDiagnostics: true,
+  });
+
+  if (diagnostics.length > 0) {
+    const errors = formatDiagnostics(diagnostics);
+    logOnce(logMessageForTranspilationErrors(errors));
+    // Maybe we should keep compiling even though there are errors. This can possibly be configured.
+    throw createTranspilationError(errors);
+  }
+
+  return outputText;
+}
+
+function formatDiagnostics(diagnostics: ts.Diagnostic[]): string {
+  // TODO consider using ts.formatDiagnosticsWithColorAndContext()
+  return `${diagnostics.map(d => d.messageText)}\n`;
+}
+
+function createTranspilationError(errors: string): Error {
+    return Error(
+      `TSC language server encountered errors while transpiling. Errors: ${errors}`,
+    );
+}
+
+function logMessageForTranspilationErrors(errors: string): string {
+  return `Diagnostic errors from TSC: ${errors}`;
 }
