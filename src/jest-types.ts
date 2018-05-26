@@ -27,12 +27,11 @@ export interface BabelTransformOptions extends BabelTransformOpts {
 }
 
 export type PostProcessHook = (
-  src: string,
-  sourcemap: string,
+  codeSourcemapPair: CodeSourceMapPair,
   filePath: string,
   config: JestConfig,
   transformOptions: TransformOptions,
-) => BabelFileResult;
+) => CodeSourceMapPair;
 
 export type JestConfig = Partial<FullJestConfig>;
 

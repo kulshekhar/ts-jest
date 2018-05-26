@@ -45,14 +45,7 @@ export function postProcessCode(
     tsJestConfig,
   );
 
-  return (postHook(
-    transpileOutput.code,
-    transpileOutput.map,
-    filePath,
-    jestConfig,
-    transformOptions,
-  ) as any) as CodeSourceMapPair; // Babel has incorrect typings, where the map is an object instead of a string
-  // So we have to typecast it here
+  return postHook(transpileOutput, filePath, jestConfig, transformOptions);
 }
 
 function createBabelTransformer(
@@ -69,14 +62,13 @@ function createBabelTransformer(
   delete options.filename;
 
   return (
-    src: string,
-    sourcemap: string,
+    codeSourcemapPair: CodeSourceMapPair,
     filename: string,
     config: JestConfig,
     transformOptions: TransformOptions,
-  ): BabelFileResult => {
+  ): CodeSourceMapPair => {
     const theseOptions = Object.assign(
-      { filename, inputSourceMap: sourcemap },
+      { filename, inputSourceMap: codeSourcemapPair.map },
       options,
     );
     if (transformOptions && transformOptions.instrument) {
@@ -93,8 +85,11 @@ function createBabelTransformer(
         ],
       ]);
     }
-
-    return babel.transform(src, theseOptions);
+    // Babel has incorrect typings, where the map is an object instead of a string. So we have to typecast it here
+    return (babel.transform(
+      codeSourcemapPair.code,
+      theseOptions,
+    ) as any) as CodeSourceMapPair;
   };
 }
 
@@ -105,11 +100,8 @@ export const getPostProcessHook = (
 ): PostProcessHook => {
   if (tsJestConfig.skipBabel) {
     logOnce('Not using any postprocess hook.');
-    return (src, sourcemap): BabelFileResult => ({
-      code: src,
-      map: sourcemap as any,
-      ast: null,
-    });
+    // Identity function
+    return input => input;
   }
 
   const plugins = Array.from(
