@@ -1,4 +1,7 @@
-import { TransformOptions as BabelTransformOpts } from 'babel-core';
+import {
+  BabelFileResult,
+  TransformOptions as BabelTransformOpts,
+} from 'babel-core';
 
 export interface TransformOptions {
   instrument: boolean;
@@ -25,10 +28,11 @@ export interface BabelTransformOptions extends BabelTransformOpts {
 
 export type PostProcessHook = (
   src: string,
+  sourcemap: string,
   filePath: string,
   config: JestConfig,
   transformOptions: TransformOptions,
-) => string;
+) => BabelFileResult;
 
 export type JestConfig = Partial<FullJestConfig>;
 

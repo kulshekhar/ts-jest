@@ -1,5 +1,10 @@
 import * as crypto from 'crypto';
-import { JestConfig, Path, TransformOptions } from './jest-types';
+import {
+  BabelTransformOptions,
+  JestConfig,
+  Path,
+  TransformOptions,
+} from './jest-types';
 import { flushLogs, logOnce } from './logger';
 import { postProcessCode } from './postprocess';
 import {
@@ -15,7 +20,7 @@ export function process(
   filePath: Path,
   jestConfig: JestConfig,
   transformOptions: TransformOptions = { instrument: false },
-): string {
+): any {
   // transformOptions.instrument is a proxy for collectCoverage
   // https://github.com/kulshekhar/ts-jest/issues/201#issuecomment-300572902
   const compilerOptions = getTSConfig(jestConfig.globals, jestConfig.rootDir);
@@ -47,7 +52,7 @@ export function process(
     runTsDiagnostics(filePath, compilerOptions);
   }
 
-  let tsTranspiledText = transpileTypescript(
+  const transpileOutput = transpileTypescript(
     filePath,
     src,
     compilerOptions,
@@ -55,13 +60,13 @@ export function process(
   );
 
   if (tsJestConfig.ignoreCoverageForAllDecorators === true) {
-    tsTranspiledText = tsTranspiledText.replace(
+    transpileOutput.outputText = transpileOutput.outputText.replace(
       /__decorate/g,
       '/* istanbul ignore next */__decorate',
     );
   }
   if (tsJestConfig.ignoreCoverageForDecorators === true) {
-    tsTranspiledText = tsTranspiledText.replace(
+    transpileOutput.outputText = transpileOutput.outputText.replace(
       /(__decorate\(\[\r?\n[^\n\r]*)\/\*\s*istanbul\s*ignore\s*decorator(.*)\*\//g,
       '/* istanbul ignore next$2*/$1',
     );
@@ -72,18 +77,18 @@ export function process(
     jestConfig,
     tsJestConfig,
     transformOptions,
-    tsTranspiledText,
+    transpileOutput,
     filePath,
   );
 
-  const modified =
+  /*const modified =
     tsJestConfig.disableSourceMapSupport === true
       ? outputText
-      : injectSourcemapHook(filePath, tsTranspiledText, outputText);
-
+      : injectSourcemapHook(filePath, transpileOutput, outputText);
+*/
   flushLogs();
 
-  return modified;
+  return { code: outputText.code, map: outputText.map };
 }
 
 /**

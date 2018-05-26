@@ -5,16 +5,17 @@
 import * as __types__babel from 'babel-core';
 import __types__istanbulPlugin from 'babel-plugin-istanbul';
 import * as __types__jestPreset from 'babel-preset-jest';
+import * as ts from 'typescript';
 let babel: typeof __types__babel;
 let istanbulPlugin: typeof __types__istanbulPlugin;
 let jestPreset: typeof __types__jestPreset;
 function importBabelDeps() {
-    if (babel) {
-      return;
-    }
-    babel = require('babel-core');
-    istanbulPlugin = require('babel-plugin-istanbul').default;
-    jestPreset = require('babel-preset-jest');
+  if (babel) {
+    return;
+  }
+  babel = require('babel-core');
+  istanbulPlugin = require('babel-plugin-istanbul').default;
+  jestPreset = require('babel-preset-jest');
 }
 import { CompilerOptions } from 'typescript/lib/typescript';
 import {
@@ -26,6 +27,7 @@ import {
   TsJestConfig,
 } from './jest-types';
 import { logOnce } from './logger';
+import { BabelFileResult } from 'babel-core';
 
 // Function that takes the transpiled typescript and runs it through babel/whatever.
 export function postProcessCode(
@@ -33,16 +35,22 @@ export function postProcessCode(
   jestConfig: JestConfig,
   tsJestConfig: TsJestConfig,
   transformOptions: TransformOptions,
-  transpiledText: string,
+  transpileOutput: ts.TranspileOutput,
   filePath: string,
-): string {
+): BabelFileResult {
   const postHook = getPostProcessHook(
     compilerOptions,
     jestConfig,
     tsJestConfig,
   );
 
-  return postHook(transpiledText, filePath, jestConfig, transformOptions);
+  return postHook(
+    transpileOutput.outputText,
+    transpileOutput.sourceMapText,
+    filePath,
+    jestConfig,
+    transformOptions,
+  );
 }
 
 function createBabelTransformer(
@@ -65,11 +73,15 @@ function createBabelTransformer(
 
   return (
     src: string,
+    sourcemap: string,
     filename: string,
     config: JestConfig,
     transformOptions: TransformOptions,
-  ): string => {
-    const theseOptions = Object.assign({ filename }, options);
+  ): BabelFileResult => {
+    const theseOptions = Object.assign(
+      { filename, inputSourceMap: sourcemap },
+      options,
+    );
     if (transformOptions && transformOptions.instrument) {
       theseOptions.auxiliaryCommentBefore = ' istanbul ignore next ';
       // Copied from jest-runtime transform.js
@@ -85,7 +97,7 @@ function createBabelTransformer(
       ]);
     }
 
-    return babel.transform(src, theseOptions).code;
+    return babel.transform(src, theseOptions);
   };
 }
 
@@ -96,7 +108,11 @@ export const getPostProcessHook = (
 ): PostProcessHook => {
   if (tsJestConfig.skipBabel) {
     logOnce('Not using any postprocess hook.');
-    return src => src; // Identity function
+    return (src, sourcemap): BabelFileResult => ({
+      code: src,
+      map: sourcemap as any,
+      ast: null,
+    });
   }
 
   const plugins = Array.from(
@@ -107,7 +123,7 @@ export const getPostProcessHook = (
     plugins.push('transform-es2015-modules-commonjs');
   }
 
-  const babelOptions = {
+  const babelOptions: BabelTransformOptions = {
     ...tsJestConfig.babelConfig,
     babelrc: tsJestConfig.useBabelrc || false,
     plugins,
