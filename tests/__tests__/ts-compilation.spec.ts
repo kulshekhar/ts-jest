@@ -11,4 +11,13 @@ describe('TS Compilation', () => {
     expect(stderr).toContain('Hello Class');
     expect(stderr).toContain('should throw an error on line 18');
   });
+
+  it('should hoist mock calls when skipBabel is true', () => {
+    const result = runJest('../hoist-ts-test', ['--no-cache']);
+
+    const output = result.output;
+
+    expect(output).toContain('4 passed, 4 total');
+    expect(result.status).toBe(0);
+  });
 });
