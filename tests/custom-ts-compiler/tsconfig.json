@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "target": "ES5",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "noEmitOnError": false,
+    "jsx": "react",
+    "allowJs": true,
+    // Configure ttypescript to run the `ts-nameof` transformer
+    "plugins": [
+      {"transform": "ts-nameof", "type": "raw"}
+    ]
+  }
+}
