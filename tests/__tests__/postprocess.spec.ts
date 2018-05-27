@@ -45,7 +45,6 @@ describe('postprocess', () => {
 
   it('doesn`t accumulate module transforms on consecutive calls', () => {
     const transformMock = require.requireMock('babel-core').transform;
-    const tsCompilerOptions = { allowSyntheticDefaultImports: true };
     const tsJestConfig = {
       babelConfig: {
         plugins: ['some-plugin'],
@@ -53,8 +52,8 @@ describe('postprocess', () => {
       skipBabel: false,
     };
 
-    runHook(tsCompilerOptions, {}, tsJestConfig);
-    runHook(tsCompilerOptions, {}, tsJestConfig);
+    runHook({}, {}, tsJestConfig);
+    runHook({}, {}, tsJestConfig);
 
     expect(transformMock).lastCalledWith(
       expect.any(String),
