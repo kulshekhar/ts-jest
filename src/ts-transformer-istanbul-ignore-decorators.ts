@@ -13,7 +13,7 @@
 
 import * as ts from 'typescript';
 
-function commentRangeText(sourceText: string, range: ts.CommentRange) {
+function commentRangeText(sourceText: string, range: ts.CommentRange): string {
   return sourceText.slice(range.pos, range.end);
 }
 
@@ -30,12 +30,12 @@ function findTrailingComment(
 
 const reIstanbulIgnoreDecorator = /^\/\*\s*istanbul\s*ignore\s*decorator.*\*\/$/;
 
-export function istanbulIgnoreTransformerFactory(context: ts.TransformationContext) {
+export function istanbulIgnoreTransformerFactory(context: ts.TransformationContext): ts.Transformer<ts.SourceFile> {
   const ignoreAllDecorators = false;
   const ignoreAnnotatedDecorators = true;
   return transformer;
 
-  function transformer(file: ts.SourceFile) {
+  function transformer(file: ts.SourceFile): ts.SourceFile {
     if (!ignoreAllDecorators && !ignoreAnnotatedDecorators) { return file; }
 
     const sourceText = file.text;
@@ -43,7 +43,7 @@ export function istanbulIgnoreTransformerFactory(context: ts.TransformationConte
     return ts.visitEachChild(file, (childNode) => visitNode(childNode, context), context);
 
     /** Visit each node to see if it's a decorator invocation */
-    function visitNode(node: ts.Node, ctx: ts.TransformationContext) {
+    function visitNode(node: ts.Node, ctx: ts.TransformationContext): ts.Node {
       if (node.kind === ts.SyntaxKind.Decorator) {
         if (
           ignoreAllDecorators ||
