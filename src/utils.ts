@@ -177,7 +177,6 @@ export function runTsDiagnostics(
   compilerOptions: tsc.CompilerOptions,
 ): void {
   const program = tsc.createProgram([filePath], compilerOptions);
-
   const allDiagnostics = tsc.getPreEmitDiagnostics(program);
 
   if (allDiagnostics.length) {
