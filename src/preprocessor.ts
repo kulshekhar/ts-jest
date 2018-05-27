@@ -48,7 +48,7 @@ export function process(
     runTsDiagnostics(filePath, compilerOptions);
   }
 
-  const transpileOutput = transpileTypescript(filePath, src, compilerOptions);
+  const transpileOutput = transpileTypescript(filePath, src, compilerOptions, tsJestConfig);
 
   if (tsJestConfig.ignoreCoverageForAllDecorators === true) {
     transpileOutput.code = transpileOutput.code.replace(
