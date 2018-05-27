@@ -2,8 +2,10 @@ import * as fs from 'fs';
 import { normalize } from 'jest-config';
 import * as setFromArgv from 'jest-config/build/set_from_argv';
 import * as path from 'path';
+import { JestConfigNormalize } from './jest-types';
+import { Arguments } from 'yargs';
 
-function readRawConfig(argv: string, root: string) {
+function readRawConfig(argv: Arguments, root: string): JestConfigNormalize {
   const rawConfig = parseConfig(argv);
 
   if (typeof rawConfig === 'string') {
@@ -24,7 +26,10 @@ function readRawConfig(argv: string, root: string) {
   return packageConfig || normalize({ rootDir: root }, argv);
 }
 
-function loadJestConfigFromPackage(filePath, argv) {
+function loadJestConfigFromPackage(
+  filePath: string,
+  argv: Arguments,
+): null | JestConfigNormalize {
   /* tslint:disable */
   const R_OK = (fs.constants && fs.constants.R_OK) || (fs['R_OK'] as number);
   /* tslint:enable */
@@ -41,16 +46,20 @@ function loadJestConfigFromPackage(filePath, argv) {
   return normalize(config, argv);
 }
 
-function parseConfig(argv): string | object | undefined {
-  // Either parse as JSON or return as-is
-  try {
-    return JSON.parse(argv.config);
-  } catch {
-    return argv.config;
+function parseConfig(argv: Arguments): string | Arguments {
+  if (argv.config && typeof argv.config === 'string') {
+    // If the passed in value looks like JSON, treat it as an object.
+    if (argv.config.startsWith('{') && argv.config.endsWith('}')) {
+      return JSON.parse(argv.config);
+    }
   }
+  return argv.config;
 }
 
-function loadJestConfigFromFile(filePath, argv) {
+function loadJestConfigFromFile(
+  filePath: string,
+  argv: Arguments,
+): JestConfigNormalize {
   const config = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
   config.rootDir = config.rootDir
     ? path.resolve(path.dirname(filePath), config.rootDir)

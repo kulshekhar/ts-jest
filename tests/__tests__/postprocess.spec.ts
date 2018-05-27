@@ -1,7 +1,7 @@
 jest.mock('babel-core', () => {
   return {
     transform: jest.fn(() => {
-      return { code: 'stubbed_code' };
+      return { code: 'stubbed_code', map: 'stubbed_map' };
     }),
   };
 });
@@ -11,7 +11,7 @@ import { getPostProcessHook } from '../../src/postprocess';
 describe('postprocess', () => {
   function runHook(tsCompilerOptions = {}, jestConfig = {}, tsJestConfig = {}) {
     return getPostProcessHook(tsCompilerOptions, jestConfig, tsJestConfig)(
-      'input_code',
+      { code: 'input_code', map: 'input_source_map' },
       'fake_file',
       {},
       { instrument: null },
@@ -30,7 +30,7 @@ describe('postprocess', () => {
 
     runHook();
     getPostProcessHook({}, {}, {})(
-      'input_code',
+      { code: 'input_code', map: 'input_source_map' },
       'fake_file',
       {},
       { instrument: null },

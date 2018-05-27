@@ -1,43 +1,14 @@
 import runJest from '../__helpers__/runJest';
-import { process } from '../../src/preprocessor';
-import * as utils from '../../src/utils';
+import { expectJestStatus } from '../__helpers__/utils';
 
-describe('sourcemap-support', () => {
-  function runProcess(jestConfig = {}) {
-    return process('input_code', 'fake_file.ts', jestConfig, {
-      instrument: false,
-    });
-  }
+describe('Typescript errors', () => {
+  it('should show the correct error locations in the typescript files', () => {
+    const result = runJest('../no-sourcemaps', ['--no-cache']);
 
-  it('should be used by default', () => {
-    const spy = jest.spyOn(utils, 'injectSourcemapHook');
+    const stderr = result.stderr;
 
-    runProcess();
-    expect(spy).toHaveBeenCalled();
-
-    spy.mockReset();
-    spy.mockRestore();
-  });
-
-  it(`should not be used when the disableSourceMapSupport flag is set to true`, async () => {
-    const spy = jest.spyOn(utils, 'injectSourcemapHook');
-
-    runProcess({ globals: { 'ts-jest': { disableSourceMapSupport: true } } });
-    expect(spy).not.toHaveBeenCalled();
-
-    spy.mockReset();
-    spy.mockRestore();
-  });
-
-  it(`should be used when the disableSourceMapSupport flag is set to anything other than true`, async () => {
-    const spy = jest.spyOn(utils, 'injectSourcemapHook');
-
-    runProcess({ globals: { 'ts-jest': { disableSourceMapSupport: 'true' } } });
-    expect(spy).toHaveBeenCalled();
-    runProcess({ globals: { 'ts-jest': { disableSourceMapSupport: 1 } } });
-    expect(spy).toHaveBeenCalled();
-
-    spy.mockReset();
-    spy.mockRestore();
+    // The actual error is on line 18 - the line# being wrong here means sourcemaps are disabled.
+    expect(stderr).toContain('Hello.ts:8');
+    expectJestStatus(result, 1);
   });
 });

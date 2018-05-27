@@ -117,6 +117,9 @@ ts-jest tries to support that. If `allowSyntheticDefaultImports` is set to true 
 to automatically create the synthetic default exports for you - nothing else needed.
 You can opt-out of this behaviour with the [skipBabel flag](#skipping-babel)
 
+**Typescript 2.7 has built-in support for this feature via the `esModuleInterop` flag. We're looking to deprecate this feature.
+Please use `esModuleInterop` instead. More details [here](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-7.html)** 
+
 ### Supports automatic of jest.mock() calls
 [Just like Jest](https://facebook.github.io/jest/docs/manual-mocks.html#using-with-es-module-imports) ts-jest
 automatically uses babel to hoist your `jest.mock()` calls to the top of your file.
@@ -233,6 +236,8 @@ If you want to enable Syntactic & Semantic TypeScript error reporting you can en
   }
 }
 ```
+
+**Note:** This is an experimental feature, comes with no guarantees and could be removed if it causes more problems than it solves. Testing is not the place to look for type errors. That should be done separately. Moreover, ts-jest only processes the files that are passed in by jest. It doesn't read files off the disk by default which is why `enableTsDiagnostics` will hurt performance compared to the normal use case.
 
 ### Ignore coverage on decorators
 

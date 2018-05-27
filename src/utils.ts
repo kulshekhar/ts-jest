@@ -11,49 +11,40 @@ export function getTSJestConfig(globals: ConfigGlobals): TsJestConfig {
   return globals && globals['ts-jest'] ? globals['ts-jest'] : {};
 }
 
-function formatTscParserErrors(errors: tsc.Diagnostic[]) {
-  return errors.map(s => JSON.stringify(s, null, 4)).join('\n');
+function formatTsDiagnostics(errors: tsc.Diagnostic[]): string {
+  const defaultFormatHost: tsc.FormatDiagnosticsHost = {
+    getCurrentDirectory: () => tsc.sys.getCurrentDirectory(),
+    getCanonicalFileName: fileName => fileName,
+    getNewLine: () => tsc.sys.newLine,
+  };
+
+  return tsc.formatDiagnostics(errors, defaultFormatHost);
 }
 
-function readCompilerOptions(configPath: string, rootDir: string) {
+function readCompilerOptions(
+  configPath: string,
+  rootDir: string,
+): tsc.CompilerOptions {
   configPath = path.resolve(rootDir, configPath);
-
-  // First step: Let tsc pick up the config.
-  const loaded = tsc.readConfigFile(configPath, file => {
-    const read = tsc.sys.readFile(file);
-    // See
-    // https://github.com/Microsoft/TypeScript/blob/a757e8428410c2196886776785c16f8f0c2a62d9/src/compiler/sys.ts#L203 :
-    // `readFile` returns `undefined` in case the file does not exist!
-    if (!read) {
-      throw new Error(
-        `ENOENT: no such file or directory, open '${configPath}'`,
-      );
-    }
-    return read;
-  });
-  // In case of an error, we cannot go further - the config is malformed.
-  if (loaded.error) {
-    throw new Error(`Error parsing the tsc config file at ${configPath}.
-    Error message: '${loaded.error.messageText}'`);
+  const { config, error } = tsc.readConfigFile(configPath, tsc.sys.readFile);
+  if (error) {
+    throw error;
   }
 
-  // Second step: Parse the config, resolving all potential references.
-  const basePath = path.dirname(configPath); // equal to "getDirectoryPath" from ts, at least in our case.
-  const parsedConfig = tsc.parseJsonConfigFileContent(
-    loaded.config,
+  const { errors, options } = tsc.parseJsonConfigFileContent(
+    config,
     tsc.sys,
-    basePath,
+    path.resolve(rootDir),
   );
-  // In case the config is present, it already contains possibly merged entries from following the
-  // 'extends' entry, thus it is not required to follow it manually.
-  // This procedure does NOT throw, but generates a list of errors that can/should be evaluated.
-  if (parsedConfig.errors.length > 0) {
-    const formattedErrors = formatTscParserErrors(parsedConfig.errors);
+
+  if (errors.length > 0) {
+    const formattedErrors = formatTsDiagnostics(errors);
     throw new Error(
       `Some errors occurred while attempting to read from ${configPath}: ${formattedErrors}`,
     );
   }
-  return parsedConfig.options;
+
+  return options;
 }
 
 function getStartDir(): string {
@@ -61,7 +52,7 @@ function getStartDir(): string {
   // If this is being executed as a library (under node_modules)
   // we want to start with the project directory that's three
   // levels above.
-  // If t his is being executed from the test suite, we want to start
+  // If this is being executed from the test suite, we want to start
   // in the directory of the test
 
   const grandparent = path.resolve(__dirname, '..', '..');
@@ -111,7 +102,9 @@ function getTSConfigPathFromConfig(globals: ConfigGlobals): string {
   return defaultTSConfigFile;
 }
 
-export function mockGlobalTSConfigSchema(globals: any) {
+export function mockGlobalTSConfigSchema(
+  globals: ConfigGlobals,
+): ConfigGlobals {
   const configPath = getTSConfigPathFromConfig(globals);
   return { 'ts-jest': { tsConfigFile: configPath } };
 }
@@ -163,7 +156,7 @@ export function cacheFile(
   jestConfig: JestConfig,
   filePath: string,
   src: string,
-) {
+): void {
   // store transpiled code contains source map into cache, except test cases
   if (!jestConfig.testRegex || !filePath.match(jestConfig.testRegex)) {
     const outputFilePath = path.join(
@@ -179,47 +172,14 @@ export function cacheFile(
   }
 }
 
-export function injectSourcemapHook(
-  filePath: string,
-  typeScriptCode: string,
-  src: string,
-): string {
-  const start = src.length > 12 ? src.substr(1, 10) : '';
-
-  const filePathParam = JSON.stringify(filePath);
-  const codeParam = JSON.stringify(typeScriptCode);
-  const sourceMapHook = `require('ts-jest').install(${filePathParam}, ${codeParam})`;
-
-  return start === 'use strict'
-    ? `'use strict';${sourceMapHook};${src}`
-    : `${sourceMapHook};${src}`;
-}
-
 export function runTsDiagnostics(
   filePath: string,
   compilerOptions: tsc.CompilerOptions,
-) {
+): void {
   const program = tsc.createProgram([filePath], compilerOptions);
   const allDiagnostics = tsc.getPreEmitDiagnostics(program);
-  const formattedDiagnostics = allDiagnostics.map(diagnostic => {
-    if (diagnostic.file) {
-      const { line, character } = diagnostic.file.getLineAndCharacterOfPosition(
-        diagnostic.start,
-      );
-      const message = tsc.flattenDiagnosticMessageText(
-        diagnostic.messageText,
-        '\n',
-      );
-      return `${path.relative(
-        process.cwd(),
-        diagnostic.file.fileName,
-      )} (${line + 1},${character + 1}): ${message}\n`;
-    }
 
-    return `${tsc.flattenDiagnosticMessageText(diagnostic.messageText, '\n')}`;
-  });
-
-  if (formattedDiagnostics.length) {
-    throw new Error(formattedDiagnostics.join(''));
+  if (allDiagnostics.length) {
+    throw new Error(formatTsDiagnostics(allDiagnostics));
   }
 }

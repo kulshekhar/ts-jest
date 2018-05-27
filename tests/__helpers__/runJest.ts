@@ -2,7 +2,7 @@
 
 import { sync as spawnSync } from 'cross-spawn';
 import * as path from 'path';
-import { fileExists } from './utils';
+import * as fs from 'fs-extra';
 
 // assuming that jest is installed globally
 // using `npm i -g jest-cli`
@@ -19,7 +19,7 @@ export default function runJest(dir: string, args: string[], env = {}): Result {
   }
 
   const localPackageJson = path.resolve(dir, 'package.json');
-  if (!fileExists(localPackageJson)) {
+  if (!fs.pathExistsSync(localPackageJson)) {
     throw new Error(`
       Make sure you have a local package.json file at
         "${localPackageJson}".
@@ -42,7 +42,7 @@ export default function runJest(dir: string, args: string[], env = {}): Result {
 }
 
 // from https://stackoverflow.com/questions/25245716/remove-all-ansi-colors-styles-from-strings
-function stripAnsiColors(stringToStrip: String): String {
+function stripAnsiColors(stringToStrip: string): string {
   return stringToStrip.replace(
     /[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g,
     '',

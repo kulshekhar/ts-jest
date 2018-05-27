@@ -1,5 +1,3 @@
-declare var jest, describe, it, expect;
-
 import { checkStrictValid } from '../Strict-valid';
 
 describe('Strict1', () => {
