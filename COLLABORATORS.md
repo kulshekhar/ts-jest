@@ -55,6 +55,3 @@ If you are simply refactoring code, it is not needed to add a test.
 
 ### How to run tests
 Tests are run through `yarn test`
-
-## Code Of Conduct
-Be excellent to each other.
