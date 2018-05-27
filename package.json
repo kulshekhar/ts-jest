@@ -64,7 +64,6 @@
   "dependencies": {
     "babel-core": "^6.26.3",
     "babel-plugin-istanbul": "^4.1.6",
-    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
     "babel-preset-jest": "^23.0.0",
     "cpx": "^1.5.0",
     "fs-extra": "6.0.1",
