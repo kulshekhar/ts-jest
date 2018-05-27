@@ -2,7 +2,7 @@ import * as fs from 'fs';
 import { normalize } from 'jest-config';
 import * as setFromArgv from 'jest-config/build/set_from_argv';
 import * as path from 'path';
-import { JestConfigNormalize } from './jest-types';
+import { JestConfigNormalize } from '../../src/jest-types';
 import { Arguments } from 'yargs';
 
 function readRawConfig(argv: Arguments, root: string): JestConfigNormalize {
