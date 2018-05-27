@@ -33,3 +33,11 @@ export function printStdStreams(result: Result) {
   console.log('---END---');
 }
 // tslint:enable
+
+// Asserts the status of jest - if it is incorrect it dumps all the streams
+export function expectJestStatus(result: Result, expectedStatus: number) {
+  if (result.status !== expectedStatus) {
+    printStdStreams(result);
+  }
+  expect(result.status).toBe(expectedStatus);
+}
