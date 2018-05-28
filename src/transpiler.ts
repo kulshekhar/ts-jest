@@ -11,7 +11,7 @@ export function transpileTypescript(
   compilerOptions: ts.CompilerOptions,
 ): CodeSourceMapPair {
   logOnce('Compiling via normal transpileModule call');
-  const transpileOutput = transpileViaTranspileModile(
+  const transpileOutput = transpileViaTranspileModule(
     filePath,
     fileSrc,
     compilerOptions,
@@ -25,7 +25,7 @@ export function transpileTypescript(
 /**
  * This is faster, and considers the modules in isolation
  */
-function transpileViaTranspileModile(
+function transpileViaTranspileModule(
   filePath: string,
   fileSource: string,
   compilerOptions: ts.CompilerOptions,
