@@ -72,11 +72,6 @@ export function process(
     filePath,
   );
 
-  /*const modified =
-    tsJestConfig.disableSourceMapSupport === true
-      ? outputText
-      : injectSourcemapHook(filePath, transpileOutput, outputText);
-*/
   flushLogs();
 
   return { code: outputText.code, map: outputText.map };
