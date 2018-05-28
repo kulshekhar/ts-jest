@@ -149,11 +149,6 @@ function getTSConfig_local(globals, rootDir: string = '') {
   config.module = config.module || tsc.ModuleKind.CommonJS;
   config.jsx = config.jsx || tsc.JsxEmit.React;
 
-  if (config.allowSyntheticDefaultImports && !skipBabel) {
-    // compile ts to es2015 and transform with babel afterwards
-    config.module = tsc.ModuleKind.ES2015;
-  }
-
   return config;
 }
 
@@ -175,22 +170,6 @@ export function cacheFile(
 
     fsExtra.outputFileSync(outputFilePath, src);
   }
-}
-
-export function injectSourcemapHook(
-  filePath: string,
-  typeScriptCode: string,
-  src: string,
-): string {
-  const start = src.length > 12 ? src.substr(1, 10) : '';
-
-  const filePathParam = JSON.stringify(filePath);
-  const codeParam = JSON.stringify(typeScriptCode);
-  const sourceMapHook = `require('ts-jest').install(${filePathParam}, ${codeParam})`;
-
-  return start === 'use strict'
-    ? `'use strict';${sourceMapHook};${src}`
-    : `${sourceMapHook};${src}`;
 }
 
 export function runTsDiagnostics(

@@ -1,7 +1,7 @@
 jest.mock('babel-core', () => {
   return {
     transform: jest.fn(() => {
-      return { code: 'stubbed_code' };
+      return { code: 'stubbed_code', map: 'stubbed_map' };
     }),
   };
 });
@@ -11,7 +11,7 @@ import { getPostProcessHook } from '../../src/postprocess';
 describe('postprocess', () => {
   function runHook(tsCompilerOptions = {}, jestConfig = {}, tsJestConfig = {}) {
     return getPostProcessHook(tsCompilerOptions, jestConfig, tsJestConfig)(
-      'input_code',
+      { code: 'input_code', map: 'input_source_map' },
       'fake_file',
       {},
       { instrument: null },
@@ -25,12 +25,12 @@ describe('postprocess', () => {
     expect(transformMock).not.toBeCalled();
   });
 
-  it('skips commonjs module transform by default', () => {
+  it('Adds no babel plugins by default', () => {
     const transformMock = require.requireMock('babel-core').transform;
 
     runHook();
     getPostProcessHook({}, {}, {})(
-      'input_code',
+      { code: 'input_code', map: 'input_source_map' },
       'fake_file',
       {},
       { instrument: null },
@@ -43,35 +43,22 @@ describe('postprocess', () => {
     );
   });
 
-  it('uses commonjs module transform when allowSyntheticDefaultImports=true', () => {
+  it('doesn`t accumulate module transforms on consecutive calls', () => {
     const transformMock = require.requireMock('babel-core').transform;
-
-    runHook({ allowSyntheticDefaultImports: true });
-    expect(transformMock).lastCalledWith(
-      expect.any(String),
-      expect.objectContaining({
-        plugins: ['transform-es2015-modules-commonjs'],
-      }),
-    );
-  });
-
-  it('doesn`t accumulate commonjs module transforms on consecutive calls', () => {
-    const transformMock = require.requireMock('babel-core').transform;
-    const tsCompilerOptions = { allowSyntheticDefaultImports: true };
     const tsJestConfig = {
       babelConfig: {
-        plugins: [],
+        plugins: ['some-plugin'],
       },
       skipBabel: false,
     };
 
-    runHook(tsCompilerOptions, {}, tsJestConfig);
-    runHook(tsCompilerOptions, {}, tsJestConfig);
+    runHook({}, {}, tsJestConfig);
+    runHook({}, {}, tsJestConfig);
 
     expect(transformMock).lastCalledWith(
       expect.any(String),
       expect.objectContaining({
-        plugins: ['transform-es2015-modules-commonjs'],
+        plugins: ['some-plugin'],
       }),
     );
   });
