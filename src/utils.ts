@@ -149,11 +149,6 @@ function getTSConfig_local(globals, rootDir: string = '') {
   config.module = config.module || tsc.ModuleKind.CommonJS;
   config.jsx = config.jsx || tsc.JsxEmit.React;
 
-  if (config.allowSyntheticDefaultImports && !skipBabel) {
-    // compile ts to es2015 and transform with babel afterwards
-    config.module = tsc.ModuleKind.ES2015;
-  }
-
   return config;
 }
 
