@@ -1,7 +1,4 @@
-import {
-  BabelFileResult,
-  TransformOptions as BabelTransformOpts,
-} from 'babel-core';
+import { TransformOptions as BabelTransformOpts } from 'babel-core';
 
 export interface TransformOptions {
   instrument: boolean;
@@ -33,9 +30,9 @@ export type PostProcessHook = (
   transformOptions: TransformOptions,
 ) => CodeSourceMapPair;
 
-export type JestConfig = Partial<FullJestConfig>;
+export type JestConfig = Partial<FullJestProjectConfig>;
 
-export interface FullJestConfig {
+export interface FullJestProjectConfig {
   automock: boolean;
   browser: boolean;
   cache: boolean;
@@ -44,7 +41,10 @@ export interface FullJestConfig {
   coveragePathIgnorePatterns: string[];
   cwd: Path;
   detectLeaks: boolean;
+  detectOpenHandles: boolean;
   displayName: string | null;
+  errorOnDeprecated: boolean;
+  filter: Path | null;
   forceCoverageMatch: Glob[];
   globals: ConfigGlobals;
   haste: HasteConfig;
@@ -64,6 +64,7 @@ export interface FullJestConfig {
   runner: string;
   setupFiles: Path[];
   setupTestFrameworkScriptFile: Path | null;
+  skipFilter: boolean;
   skipNodeResolution: boolean;
   snapshotSerializers: Path[];
   testEnvironment: string;
@@ -96,7 +97,7 @@ export interface TsJestConfig {
 
 export interface JestConfigNormalize {
   hasDeprecationWarnings: boolean;
-  options: FullJestConfig;
+  options: FullJestProjectConfig;
 }
 
 export interface CodeSourceMapPair {
