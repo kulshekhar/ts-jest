@@ -1,5 +1,5 @@
 'use strict';
 
 export function checkStrictValid() {
-  var v = 33;
+  const v = 33;
 }

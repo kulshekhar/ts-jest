@@ -20,7 +20,7 @@ const helloFileUpdate = `export class Hello {
     throw new Error('Hello error!');
   }
 
-  public unexcuted(action: () => void = () => {}): void {
+  unexcuted(action: () => void = () => {}): void {
     if (action) {
         action();
     } else {
@@ -71,7 +71,7 @@ describe('Typescript watch tests', () => {
   });
 
   it('should show the correct error locations in the typescript files with changes in source file', () => {
-    let promise = result.getStderrAsync().then(stderr => {
+    const promise = result.getStderrAsync().then(stderr => {
       expect(stderr).toContain('Hello.ts:11:11');
       expect(stderr).toContain('Hello.test.ts:9:19');
     });
@@ -84,7 +84,7 @@ describe('Typescript watch tests', () => {
 
   // tslint:disable-next-line:max-line-length
   it('should show the correct error locations in the typescript files with changes in source file and test file', () => {
-    let promise = result.getStderrAsync().then(stderr => {
+    const promise = result.getStderrAsync().then(stderr => {
       expect(stderr).toContain('Hello.ts:11:11');
       expect(stderr).toContain('Hello.test.ts:11:19');
     });
