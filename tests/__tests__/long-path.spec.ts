@@ -3,7 +3,8 @@ import * as fs from 'fs-extra';
 
 describe('Long path', () => {
   const longPath =
-    'long-src-path/long-src-path/long-src-path/long-src-path/long-src-path/long-src-path/long-src-path/long-src-path/long-src-path/long-src-path/long-src-path/long-src-path/long-src-path/long-src-path/';
+    'long-src-path/long-src-path/long-src-path/long-src-path/long-src-path/long-src-path/long-src-path/long-src-path' +
+    '/long-src-path/long-src-path/long-src-path/long-src-path/long-src-path/long-src-path/';
   const destinationPath = `${__dirname}/../simple-long-path/${longPath}`;
   beforeEach(async () => {
     // root dir is project

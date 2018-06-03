@@ -20,6 +20,16 @@
         ],
         "ordered-imports": false,
         "align": false,
-        "object-literal-sort-keys": false
+        "object-literal-sort-keys": false,
+        "no-console": [
+            true,
+            "debug",
+            "info",
+            "time",
+            "timeEnd",
+            "trace"
+        ],
+        "no-empty": false,
+        "member-access": false
     }
 }

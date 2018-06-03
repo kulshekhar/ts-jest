@@ -13,7 +13,7 @@ export class Hello {
     throw new Error('Hello error!');
   }
 
-  public unexcuted(action: () => void = () => {}): void {
+  unexcuted(action: () => void = () => {}): void {
     if (action) {
       action();
     } else {

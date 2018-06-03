@@ -11,7 +11,7 @@ export class Hello {
     this.unexcuted(() => {});
   }
 
-  public unexcuted(action: () => void = () => {}): void {
+  unexcuted(action: () => void = () => {}): void {
     if (action) {
       action();
     } else {

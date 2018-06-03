@@ -1,7 +1,5 @@
-import * as fs from 'fs';
 // from: https://github.com/facebook/jest/blob/master/integration_tests/utils.js
 import { sync as spawnSync } from 'cross-spawn';
-import * as path from 'path';
 import { Result } from './runJest';
 
 export function run(cmd, cwd) {

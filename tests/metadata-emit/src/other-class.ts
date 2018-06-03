@@ -1,3 +1,3 @@
 export class OtherClass {
-  public prop: any;
+  prop: any;
 }
