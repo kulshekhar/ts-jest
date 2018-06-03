@@ -21,7 +21,7 @@ import { CompilerOptions } from 'typescript/lib/typescript';
 import {
   BabelTransformOptions,
   CodeSourceMapPair,
-  FullJestConfig,
+  FullJestProjectConfig,
   JestConfig,
   PostProcessHook,
   TransformOptions,
