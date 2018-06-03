@@ -1,6 +1,6 @@
 interface FooInterface {
   foo: string;
-  bar: number; //This interface should be stripped and the line numbers should still fit.
+  bar: number; // This interface should be stripped and the line numbers should still fit.
 }
 
 export const foo = () => {
@@ -22,7 +22,7 @@ export class Hello {
     throw new Error('Hello error!');
   }
 
-  public unexcuted(action: () => void = () => {}): void {
+  unexcuted(action: () => void = () => {}): void {
     if (action) {
       action();
     } else {

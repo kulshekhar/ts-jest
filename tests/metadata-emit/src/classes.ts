@@ -7,19 +7,19 @@ export const CollectMetadata: PropertyDecorator = () => {
 };
 
 export class TestClass {
-  @CollectMetadata public stringProp: string;
+  @CollectMetadata stringProp: string;
 
-  @CollectMetadata public numberProp: number;
+  @CollectMetadata numberProp: number;
 
-  @CollectMetadata public booleanProp: boolean;
+  @CollectMetadata booleanProp: boolean;
 
-  @CollectMetadata public dateProp: Date;
+  @CollectMetadata dateProp: Date;
 
-  @CollectMetadata public arrayProp: any[];
+  @CollectMetadata arrayProp: any[];
 
-  @CollectMetadata public genericArrayProp: Array<string | number>;
+  @CollectMetadata genericArrayProp: Array<string | number>;
 
-  @CollectMetadata public functionProp: () => void;
+  @CollectMetadata functionProp: () => void;
 
-  @CollectMetadata public classProp: OtherClass;
+  @CollectMetadata classProp: OtherClass;
 }
