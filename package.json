@@ -95,7 +95,7 @@
     "lint-staged": "^7.1.2",
     "prettier": "^1.12.1",
     "react": "16.4.1",
-    "react-test-renderer": "16.4.0",
+    "react-test-renderer": "16.4.1",
     "reflect-metadata": "^0.1.12",
     "rimraf": "^2.6.2",
     "ts-jest": "22.4.6",
