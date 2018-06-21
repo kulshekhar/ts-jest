@@ -68,7 +68,7 @@
     "fs-extra": "6.0.1",
     "jest-config": "^23.0.0",
     "lodash": "^4.17.10",
-    "pkg-dir": "^2.0.0",
+    "pkg-dir": "^3.0.0",
     "yargs": "^11.0.0"
   },
   "peerDependencies": {
@@ -83,7 +83,7 @@
     "@types/jest": "23.1.0",
     "@types/lodash": "^4.14.109",
     "@types/node": "10.3.4",
-    "@types/react": "16.3.18",
+    "@types/react": "16.4.1",
     "@types/yargs": "^11.0.0",
     "babel-core": "^6.26.3",
     "babel-preset-env": "^1.7.0",
