@@ -54,7 +54,7 @@ function formatDiagnostics(diagnostics: ts.Diagnostic[]): string {
 
 function createTranspilationError(errors: string): Error {
     return Error(
-      `TSC language server encountered errors while transpiling. Errors: ${errors}`,
+      `TypeScript compiler encountered syntax errors while transpiling. Errors: ${errors}`,
     );
 }
 
