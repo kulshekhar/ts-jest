@@ -16,7 +16,7 @@
 		],
 		"globals": {
 			"ts-jest": {
-				"compiler": "ttypescript"
+				"compiler": "../../../custom-typescript"
 			}
 		}
 	}
