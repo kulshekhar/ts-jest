@@ -1,0 +1,20 @@
+{
+  "version": "0.0.0",
+  "private": true,
+  "workspaces": [
+    "packages/**"
+  ],
+  "jest": {
+    "projects": [
+      "<rootDir>/packages/*"
+    ],
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "**/*.{ts,tsx}"
+    ],
+    "coverageReporters": [
+      "html",
+      "text"
+    ]
+  }
+}
