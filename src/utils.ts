@@ -116,7 +116,7 @@ export const getTSConfig = _.memoize(getTSConfig_local, (globals, rootDir) => {
   // check cache before resolving configuration
   // NB: We use JSON.stringify() to create a consistent, unique signature. Although it lacks a uniform
   //     shape, this is simpler and faster than using the crypto package to generate a hash signature.
-  return JSON.stringify(globals, rootDir);
+  return `${rootDir}:${JSON.stringify(globals)}`;
 });
 
 // Non-memoized version of TSConfig
