@@ -123,10 +123,15 @@ export const getTSConfig = _.memoize(getTSConfig_local, (globals, rootDir) => {
 function getTSConfig_local(globals, rootDir: string = '') {
   const configPath = getTSConfigPathFromConfig(globals, rootDir);
   logOnce(`Reading tsconfig file from path ${configPath}`);
-  const skipBabel = getTSJestConfig(globals).skipBabel;
 
   const config = readCompilerOptions(configPath, rootDir);
   logOnce('Original typescript config before modifications: ', { ...config });
+
+  // tsc should not emit declaration map when used for tests
+  // disable some options that might break jest
+  config.declaration = false;
+  config.declarationMap = false;
+  config.emitDeclarationOnly = false;
 
   // ts-jest will map lines numbers properly if inlineSourceMap and
   // inlineSources are set to true. The sourceMap configuration
