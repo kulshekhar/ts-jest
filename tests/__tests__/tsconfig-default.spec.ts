@@ -3,19 +3,23 @@ jest.mock('path');
 
 import * as ts from 'typescript';
 import { getTSConfig } from '../../src/utils';
-import runJest from '../__helpers__/runJest';
 import * as path from 'path';
 
 describe('get default ts config', () => {
   beforeEach(() => {
     // Set up some mocked out file info before each test
     ((path as any) as MockedPath).__setBaseDir('./tests/tsconfig-test');
+    // empties the lodash memoized cache for this function
+    getTSConfig.cache.clear();
   });
 
   it('should correctly read tsconfig.json', () => {
     const result = getTSConfig(null);
 
     expect(result).toEqual({
+      declaration: false,
+      declarationMap: false,
+      emitDeclarationOnly: false,
       inlineSourceMap: true,
       inlineSources: true,
       target: ts.ScriptTarget.ES2015,
@@ -47,7 +51,7 @@ describe('get default ts config', () => {
     });
   });
 
-  describe('new behaviour (tsConfigFile & tsConfig)', () => {
+  describe('new behavior (tsConfigFile & tsConfig)', () => {
     it('should be same results for null/undefined/etc.', () => {
       const result = getTSConfig(null);
       const resultUndefinedParam = getTSConfig(undefined);
@@ -65,6 +69,12 @@ describe('get default ts config', () => {
       expect(result).toEqual(resultEmptyParam);
       expect(result).toEqual(resultUndefinedContentFile);
       expect(result).toEqual(resultNullContentFile);
+    });
+
+    it('should be different results for different rootDir with same jest config.', () => {
+      const rootConfig = getTSConfig({});
+      const subConfig = getTSConfig({}, 'tsconfig-module');
+      expect(rootConfig).not.toEqual(subConfig);
     });
 
     it('should not change the module if it is loaded from a non-default config file', () => {

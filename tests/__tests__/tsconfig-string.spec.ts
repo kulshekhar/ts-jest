@@ -66,6 +66,9 @@ describe('get ts config from string', () => {
       });
 
       expect(result).toEqual({
+        declaration: false,
+        declarationMap: false,
+        emitDeclarationOnly: false,
         inlineSourceMap: true,
         inlineSources: true,
         target: ts.ScriptTarget.ES2015,
@@ -84,6 +87,9 @@ describe('get ts config from string', () => {
       });
 
       expect(result).toEqual({
+        declaration: false,
+        declarationMap: false,
+        emitDeclarationOnly: false,
         inlineSourceMap: true,
         inlineSources: true,
         target: ts.ScriptTarget.ES5,

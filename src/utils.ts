@@ -116,17 +116,22 @@ export const getTSConfig = _.memoize(getTSConfig_local, (globals, rootDir) => {
   // check cache before resolving configuration
   // NB: We use JSON.stringify() to create a consistent, unique signature. Although it lacks a uniform
   //     shape, this is simpler and faster than using the crypto package to generate a hash signature.
-  return JSON.stringify(globals, rootDir);
+  return `${rootDir}:${JSON.stringify(globals)}`;
 });
 
 // Non-memoized version of TSConfig
 function getTSConfig_local(globals, rootDir: string = '') {
   const configPath = getTSConfigPathFromConfig(globals, rootDir);
   logOnce(`Reading tsconfig file from path ${configPath}`);
-  const skipBabel = getTSJestConfig(globals).skipBabel;
 
   const config = readCompilerOptions(configPath, rootDir);
   logOnce('Original typescript config before modifications: ', { ...config });
+
+  // tsc should not emit declaration map when used for tests
+  // disable some options that might break jest
+  config.declaration = false;
+  config.declarationMap = false;
+  config.emitDeclarationOnly = false;
 
   // ts-jest will map lines numbers properly if inlineSourceMap and
   // inlineSources are set to true. The sourceMap configuration
