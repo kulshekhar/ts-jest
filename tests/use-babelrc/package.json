@@ -1,7 +1,7 @@
 {
 	"jest": {
 		"transform": {
-			"^.+\\.tsx?$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+			"^.+\\.tsx?$": "<rootDir>/node_modules/ts-jest/dist/index.js"
 		},
 		"moduleDirectories": [
 			"node_modules",

@@ -31,7 +31,7 @@ export function flushLogs(): void {
     return; // only output stuff for the first invocation and if logging is enabled.
   }
   logsFlushed = true;
-  const rootPath = path.resolve(__dirname, '../');
+  const rootPath = path.resolve(__dirname, '..', '..');
   const JSONifiedLogs = logs.map(convertToJSONIfPossible);
   const logString = JSONifiedLogs.join('\n');
   const filePath = path.resolve(rootPath, 'debug.txt');

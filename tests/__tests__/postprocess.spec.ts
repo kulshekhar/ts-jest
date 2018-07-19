@@ -9,13 +9,18 @@ jest.mock('@babel/core', () => {
 import { getPostProcessHook } from '../../src/postprocess';
 
 describe('postprocess', () => {
-  function runHook(tsCompilerOptions = {}, jestConfig = {}, tsJestConfig = {}) {
-    return getPostProcessHook(tsCompilerOptions, jestConfig, tsJestConfig)(
-      { code: 'input_code', map: 'input_source_map' },
-      'fake_file',
-      {},
-      { instrument: null },
-    );
+  function runHook(
+    tsCompilerOptions = {},
+    jestConfig: Partial<jest.ProjectConfig> = {},
+    tsJestConfig = {},
+  ) {
+    return getPostProcessHook(
+      tsCompilerOptions,
+      jestConfig as any,
+      tsJestConfig,
+    )({ code: 'input_code', map: 'input_source_map' }, 'fake_file', {} as any, {
+      instrument: null,
+    });
   }
 
   it('skips postprocess when skipBabel=true', () => {
@@ -29,10 +34,10 @@ describe('postprocess', () => {
     const transformMock = require.requireMock('@babel/core').transform;
 
     runHook();
-    getPostProcessHook({}, {}, {})(
+    getPostProcessHook({}, {} as any, {})(
       { code: 'input_code', map: 'input_source_map' },
       'fake_file',
-      {},
+      {} as any,
       { instrument: null },
     );
     expect(transformMock).lastCalledWith(

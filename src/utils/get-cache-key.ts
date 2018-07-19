@@ -9,7 +9,12 @@ export default function getCacheKey(
   args: JestCacheKeyArguments,
   ctx: TsJestContext,
 ): string {
-  const [fileData, filePath, jestConfigString, { instrument, rootDir }] = args;
+  const [
+    fileData,
+    filePath,
+    jestConfigString,
+    { instrument = false, rootDir = process.cwd() } = {},
+  ] = args;
   const glob = JSON.parse(jestConfigString).globals || {};
   return createHash('md5')
     .update(MY_PACKAGE_CONTENT)

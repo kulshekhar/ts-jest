@@ -7,7 +7,7 @@
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "build:watch": "tsc -p tsconfig.build.json -w",
-    "test:nolint": "npm run clean-build && node scripts/tests.js",
+    "test:nolint": "npm run clean-build && jest --clearCache && node scripts/tests.js",
     "clean": "rimraf dist/**/* && rimraf tests/*/coverage && rimraf tests/*/debug.txt && rimraf tests/*/node_modules",
     "clean-build": "npm run clean && npm run build",
     "pretest": "npm run tslint && npm run clean-build",

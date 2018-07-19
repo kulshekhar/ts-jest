@@ -1,4 +1,4 @@
-import * as tsJest from 'ts-jest';
+import * as tsJest from '../../..';
 
 describe('ts-jest module interface', () => {
   it('is an object', () => {
@@ -9,5 +9,11 @@ describe('ts-jest module interface', () => {
   });
   it('has a getCacheKey function', () => {
     expect(typeof tsJest.getCacheKey).toBe('function');
+  });
+  it('has a canInstrument property', () => {
+    expect(tsJest).toHaveProperty('canInstrument', true);
+  });
+  it('has a createTransformer function', () => {
+    expect(typeof tsJest.createTransformer).toBe('function');
   });
 });

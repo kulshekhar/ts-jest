@@ -31,5 +31,6 @@ const createTransformer = (options?: any): jest.Transformer => {
   };
 };
 
-export default createTransformer();
-export { createTransformer };
+const mod = createTransformer();
+mod.createTransformer = createTransformer;
+export = mod;
