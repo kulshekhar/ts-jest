@@ -1,18 +1,18 @@
 {
   "name": "ts-jest",
   "version": "23.0.1",
-  "main": "index.js",
+  "main": "dist/index.js",
   "types": "./dist/index.d.ts",
   "description": "A preprocessor with sourcemap support to help use Typescript with Jest",
   "scripts": {
-    "build": "cpx index.d.ts dist/ && tsc -p .",
-    "build:watch": "cpx index.d.ts dist/ && tsc -p . -w",
+    "build": "tsc -p tsconfig.build.json",
+    "build:watch": "tsc -p tsconfig.build.json -w",
     "test:nolint": "npm run clean-build && node scripts/tests.js",
-    "clean": "rimraf dist/**/* && rimraf tests/simple/coverage && rimraf tests/simple-async/coverage && rimraf tests/**/*/debug.txt && rimraf tests/**/node_modules",
+    "clean": "rimraf dist/**/* && rimraf tests/*/coverage && rimraf tests/*/debug.txt && rimraf tests/*/node_modules",
     "clean-build": "npm run clean && npm run build",
     "pretest": "npm run tslint && npm run clean-build",
     "test": "node scripts/tests.js",
-    "tslint": "tslint src/*.ts",
+    "tslint": "tslint src/**/*.ts",
     "doc": "doctoc .",
     "prepublish": "npm run clean-build",
     "precommit": "lint-staged",
@@ -38,7 +38,7 @@
   "homepage": "https://github.com/kulshekhar/ts-jest#readme",
   "jest": {
     "transform": {
-      "^.+\\.tsx?$": "<rootDir>/dist/preprocessor.js"
+      "^.+\\.tsx?$": "<rootDir>/dist/index.js"
     },
     "testRegex": "tests/__tests__/.*\\.spec\\.ts$",
     "testPathIgnorePatterns": [

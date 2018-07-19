@@ -1,16 +1,21 @@
 import { TransformOptions as BabelTransformOpts } from 'babel-core';
 
-export interface TransformOptions {
+export interface JestCacheKeyOptions {
+  rootDir: string;
   instrument: boolean;
 }
 
-export type Path = string;
-
-export type Glob = string;
-
-export interface ConfigGlobals {
-  [key: string]: any;
+export interface TsJestContext {
+  cache: any;
+  options: any;
 }
+
+export type JestCacheKeyArguments = [
+  string,
+  string,
+  string,
+  JestCacheKeyOptions
+];
 
 export interface HasteConfig {
   defaultPlatform?: string | null;
@@ -24,17 +29,11 @@ export interface BabelTransformOptions extends BabelTransformOpts {
 }
 
 export type PostProcessHook = (
-  codeSourcemapPair: CodeSourceMapPair,
+  codeSourcemapPair: jest.TransformedSource,
   filePath: string,
-  config: JestConfig,
-  transformOptions: TransformOptions,
-) => CodeSourceMapPair;
-
-export type JestConfig = jest.InitialOptions & {
-  globals?: jest.ConfigGlobals & {
-    __TRANSFORM_HTML__?: boolean;
-  };
-};
+  config: jest.ProjectConfig,
+  transformOptions: jest.TransformOptions,
+) => jest.TransformedSource;
 
 export interface TsJestConfig {
   babelConfig?: BabelTransformOpts;
@@ -52,9 +51,4 @@ export interface TsJestConfig {
 export interface JestConfigNormalize {
   hasDeprecationWarnings: boolean;
   options: jest.DefaultOptions;
-}
-
-export interface CodeSourceMapPair {
-  code: string;
-  map: string;
 }

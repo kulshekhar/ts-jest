@@ -1,13 +1,12 @@
 import * as ts from 'typescript';
-import { logOnce } from './logger';
-import { CodeSourceMapPair } from './jest-types';
+import { logOnce } from './utils/logger';
 
 // Takes the typescript code and by whatever method configured, makes it into javascript code.
 export function transpileTypescript(
   filePath: string,
   fileSrc: string,
   compilerOptions: ts.CompilerOptions,
-): CodeSourceMapPair {
+): jest.TransformedSource {
   logOnce('Compiling via normal transpileModule call');
   const transpileOutput = transpileViaTranspileModule(
     filePath,

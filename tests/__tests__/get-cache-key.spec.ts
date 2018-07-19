@@ -1,6 +1,9 @@
-import { getCacheKey } from '../../src/preprocessor';
-import { TransformOptions } from '../../src/jest-types';
+import getCacheKeyForArgs from '../../dist/utils/get-cache-key';
+import { TsJestContext } from '../../dist/types';
 
+const tsJestContext: TsJestContext = { cache: {}, options: {} };
+const getCacheKey = (...args: any[]) =>
+  getCacheKeyForArgs(args as any, tsJestContext);
 describe('getCacheKey', () => {
   const src = 'console.log(123);';
   const filepath = '/tmp/filepath';
@@ -18,7 +21,7 @@ describe('getCacheKey', () => {
     },
     "testRegex": "(/__tests__/.*|(\\\\.|/)(test|spec))\\\\.(jsx?|tsx?)$"
   }`;
-  const options: TransformOptions = { instrument: false };
+  const options: jest.TransformOptions = { instrument: false };
   const originalHash = getCacheKey(src, filepath, configStr, options);
 
   it('should change hash when src changes', () => {
@@ -40,7 +43,7 @@ describe('getCacheKey', () => {
   });
 
   it('should change hash when transform options change', () => {
-    const newOptions: TransformOptions = { instrument: true };
+    const newOptions: jest.TransformOptions = { instrument: true };
     const newHash = getCacheKey(src, filepath, configStr, newOptions);
     expect(newHash).not.toBe(originalHash);
   });

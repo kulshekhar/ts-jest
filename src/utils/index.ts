@@ -3,12 +3,12 @@ import * as fs from 'fs';
 import * as fsExtra from 'fs-extra';
 import * as path from 'path';
 import * as tsc from 'typescript';
-import { ConfigGlobals, JestConfig, TsJestConfig } from './jest-types';
+import { TsJestConfig } from '../types';
 import { logOnce } from './logger';
 import * as _ from 'lodash';
 
-export function getTSJestConfig(globals: ConfigGlobals): TsJestConfig {
-  return globals && globals['ts-jest'] ? globals['ts-jest'] : {};
+export function getTSJestConfig(globals: jest.ConfigGlobals): TsJestConfig {
+  return (globals && globals['ts-jest']) || {};
 }
 
 function formatTsDiagnostics(errors: tsc.Diagnostic[]): string {
@@ -88,7 +88,7 @@ function getPathToClosestTSConfig(
 }
 
 function getTSConfigPathFromConfig(
-  globals: ConfigGlobals,
+  globals: jest.ConfigGlobals,
   rootDir?: string,
 ): string {
   const defaultTSConfigFile = getPathToClosestTSConfig(rootDir);
@@ -106,8 +106,8 @@ function getTSConfigPathFromConfig(
 }
 
 export function mockGlobalTSConfigSchema(
-  globals: ConfigGlobals,
-): ConfigGlobals {
+  globals: jest.ConfigGlobals,
+): jest.ConfigGlobals {
   const configPath = getTSConfigPathFromConfig(globals);
   return { 'ts-jest': { tsConfigFile: configPath } };
 }
@@ -161,7 +161,7 @@ function getTSConfig_local(globals, rootDir: string = '') {
 }
 
 export function cacheFile(
-  jestConfig: JestConfig,
+  jestConfig: jest.ProjectConfig,
   filePath: string,
   src: string,
 ): void {

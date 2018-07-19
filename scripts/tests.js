@@ -25,16 +25,6 @@ function createIntegrationMock() {
     const rootDir = path.resolve('.');
     const testCaseModuleFolder = path.join(testCaseNodeModules, 'ts-jest');
 
-    // Copy javascript files
-    fs.copySync(
-      path.resolve(rootDir, 'index.js'),
-      path.resolve(testCaseModuleFolder, 'index.js')
-    );
-    fs.copySync(
-      path.resolve(rootDir, 'preprocessor.js'),
-      path.resolve(testCaseModuleFolder, 'preprocessor.js')
-    );
-
     // Copy package.json
     fs.copySync(
       path.resolve(rootDir, 'package.json'),

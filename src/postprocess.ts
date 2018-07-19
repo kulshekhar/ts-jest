@@ -16,26 +16,24 @@ function importBabelDeps() {
   istanbulPlugin = require('babel-plugin-istanbul').default;
   jestPreset = require('babel-preset-jest');
 }
-import { CompilerOptions } from 'typescript/lib/typescript';
+import { CompilerOptions } from 'typescript';
 import {
   BabelTransformOptions,
-  CodeSourceMapPair,
-  JestConfig,
   PostProcessHook,
-  TransformOptions,
+  JestCacheKeyOptions,
   TsJestConfig,
-} from './jest-types';
-import { logOnce } from './logger';
+} from './types';
+import { logOnce } from './utils/logger';
 
 // Function that takes the transpiled typescript and runs it through babel/whatever.
 export function postProcessCode(
   compilerOptions: CompilerOptions,
-  jestConfig: JestConfig,
+  jestConfig: jest.ProjectConfig,
   tsJestConfig: TsJestConfig,
-  transformOptions: TransformOptions,
-  transpileOutput: CodeSourceMapPair,
+  transformOptions: jest.TransformOptions,
+  transpileOutput: jest.TransformedSource,
   filePath: string,
-): CodeSourceMapPair {
+): jest.TransformedSource {
   const postHook = getPostProcessHook(
     compilerOptions,
     jestConfig,
@@ -58,11 +56,11 @@ function createBabelTransformer(
   delete options.filename;
 
   return (
-    codeSourcemapPair: CodeSourceMapPair,
+    codeSourcemapPair: jest.TransformedSource,
     filename: string,
-    config: JestConfig,
-    transformOptions: TransformOptions,
-  ): CodeSourceMapPair => {
+    config: jest.ProjectConfig,
+    transformOptions: JestCacheKeyOptions,
+  ): jest.TransformedSource => {
     const theseOptions = Object.assign(
       { filename, inputSourceMap: codeSourcemapPair.map },
       options,
@@ -81,17 +79,18 @@ function createBabelTransformer(
         ],
       ]);
     }
-    // Babel has incorrect typings, where the map is an object instead of a string. So we have to typecast it here
-    return (babel.transform(
+
+    // we typecast here because babel returns a more complete object than the one expected by jest
+    return babel.transform(
       codeSourcemapPair.code,
       theseOptions,
-    ) as any) as CodeSourceMapPair;
+    ) as jest.TransformedSource;
   };
 }
 
 export const getPostProcessHook = (
   tsCompilerOptions: CompilerOptions,
-  jestConfig: JestConfig,
+  jestConfig: jest.ProjectConfig,
   tsJestConfig: TsJestConfig,
 ): PostProcessHook => {
   if (tsJestConfig.skipBabel) {
