@@ -5,7 +5,7 @@ describe('babelrc flag', () => {
     const result = runJest('../use-babelrc', ['--no-cache', '-u']);
     const stderr = result.stderr;
     expect(result.status).toBe(1);
-    expect(stderr).toContain('ReferenceError: [BABEL]');
+    expect(stderr).toContain('ReferenceError: Unknown option: .foo.');
     expect(stderr).toContain(
       'Check out http://babeljs.io/docs/usage/options/ for more information about options.',
     );

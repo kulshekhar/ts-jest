@@ -1,4 +1,4 @@
-jest.mock('babel-core', () => {
+jest.mock('@babel/core', () => {
   return {
     transform: jest.fn(() => {
       return { code: 'stubbed_code', map: 'stubbed_map' };
@@ -19,14 +19,14 @@ describe('postprocess', () => {
   }
 
   it('skips postprocess when skipBabel=true', () => {
-    const transformMock = require.requireMock('babel-core').transform;
+    const transformMock = require.requireMock('@babel/core').transform;
 
     runHook({}, {}, { skipBabel: true });
     expect(transformMock).not.toBeCalled();
   });
 
   it('Adds no babel plugins by default', () => {
-    const transformMock = require.requireMock('babel-core').transform;
+    const transformMock = require.requireMock('@babel/core').transform;
 
     runHook();
     getPostProcessHook({}, {}, {})(
@@ -44,7 +44,7 @@ describe('postprocess', () => {
   });
 
   it('doesn`t accumulate module transforms on consecutive calls', () => {
-    const transformMock = require.requireMock('babel-core').transform;
+    const transformMock = require.requireMock('@babel/core').transform;
     const tsJestConfig = {
       babelConfig: {
         plugins: ['some-plugin'],

@@ -30,74 +30,28 @@ export type PostProcessHook = (
   transformOptions: TransformOptions,
 ) => CodeSourceMapPair;
 
-export type JestConfig = Partial<FullJestProjectConfig>;
-
-export interface FullJestProjectConfig {
-  automock: boolean;
-  browser: boolean;
-  cache: boolean;
-  cacheDirectory: Path;
-  clearMocks: boolean;
-  coveragePathIgnorePatterns: string[];
-  cwd: Path;
-  detectLeaks: boolean;
-  detectOpenHandles: boolean;
-  displayName: string | null;
-  errorOnDeprecated: boolean;
-  filter: Path | null;
-  forceCoverageMatch: Glob[];
-  globals: ConfigGlobals;
-  haste: HasteConfig;
-  moduleDirectories: string[];
-  moduleFileExtensions: string[];
-  moduleLoader: Path;
-  moduleNameMapper: Array<[string, string]>;
-  modulePathIgnorePatterns: string[];
-  modulePaths: string[];
-  name: string;
-  resetMocks: boolean;
-  resetModules: boolean;
-  resolver: Path | null;
-  restoreMocks: boolean;
-  rootDir: Path;
-  roots: Path[];
-  runner: string;
-  setupFiles: Path[];
-  setupTestFrameworkScriptFile: Path | null;
-  skipFilter: boolean;
-  skipNodeResolution: boolean;
-  snapshotSerializers: Path[];
-  testEnvironment: string;
-  testEnvironmentOptions: object;
-  testLocationInResults: boolean;
-  testMatch: Glob[];
-  testPathIgnorePatterns: string[];
-  testRegex: string;
-  testRunner: string;
-  testURL: string;
-  timers: 'real' | 'fake';
-  transform: Array<[string, Path]>;
-  transformIgnorePatterns: Glob[];
-  watchPathIgnorePatterns: string[];
-  unmockedModulePathPatterns: string[] | null;
-}
+export type JestConfig = jest.InitialOptions & {
+  globals?: jest.ConfigGlobals & {
+    __TRANSFORM_HTML__?: boolean;
+  };
+};
 
 export interface TsJestConfig {
-  skipBabel?: boolean;
-  useBabelrc?: boolean;
   babelConfig?: BabelTransformOpts;
-  tsConfigFile?: string;
+  disableSourceMapSupport?: boolean;
   enableInternalCache?: boolean;
   enableTsDiagnostics?: boolean;
-  disableSourceMapSupport?: boolean;
-  ignoreCoverageForDecorators?: boolean;
   ignoreCoverageForAllDecorators?: boolean;
+  ignoreCoverageForDecorators?: boolean;
+  skipBabel?: boolean;
+  tsConfigFile?: string;
+  useBabelrc?: boolean;
   useExperimentalLanguageServer?: boolean;
 }
 
 export interface JestConfigNormalize {
   hasDeprecationWarnings: boolean;
-  options: FullJestProjectConfig;
+  options: jest.DefaultOptions;
 }
 
 export interface CodeSourceMapPair {

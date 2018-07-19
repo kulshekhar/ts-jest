@@ -212,7 +212,7 @@ In some cases, projects may not want to have a `.babelrc` file, but still need t
     "globals": {
       "ts-jest": {
         "babelConfig": {
-          "presets": ["env"]
+          "presets": ["@babel/env"]
         }
       }
     }

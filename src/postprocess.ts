@@ -5,7 +5,6 @@
 import * as __types__babel from 'babel-core';
 import __types__istanbulPlugin from 'babel-plugin-istanbul';
 import * as __types__jestPreset from 'babel-preset-jest';
-import * as ts from 'typescript';
 let babel: typeof __types__babel;
 let istanbulPlugin: typeof __types__istanbulPlugin;
 let jestPreset: typeof __types__jestPreset;
@@ -13,7 +12,7 @@ function importBabelDeps() {
   if (babel) {
     return;
   }
-  babel = require('babel-core');
+  babel = require('@babel/core');
   istanbulPlugin = require('babel-plugin-istanbul').default;
   jestPreset = require('babel-preset-jest');
 }
@@ -21,14 +20,12 @@ import { CompilerOptions } from 'typescript/lib/typescript';
 import {
   BabelTransformOptions,
   CodeSourceMapPair,
-  FullJestProjectConfig,
   JestConfig,
   PostProcessHook,
   TransformOptions,
   TsJestConfig,
 } from './jest-types';
 import { logOnce } from './logger';
-import { BabelFileResult } from 'babel-core';
 
 // Function that takes the transpiled typescript and runs it through babel/whatever.
 export function postProcessCode(

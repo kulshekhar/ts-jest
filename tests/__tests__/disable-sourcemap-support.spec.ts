@@ -8,7 +8,8 @@ describe('Typescript errors', () => {
     const stderr = result.stderr;
 
     // The actual error is on line 18 - the line# being wrong here means sourcemaps are disabled.
-    expect(stderr).toContain('Hello.ts:8');
+    expect(stderr).toMatch(/at .+Hello\.ts:\d+/);
+    expect(stderr).not.toContain('Hello.ts:18');
     expectJestStatus(result, 1);
   });
 });
