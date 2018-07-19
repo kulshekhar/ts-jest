@@ -29,7 +29,7 @@ export function process(
 
   // This is to support angular 2. See https://github.com/kulshekhar/ts-jest/pull/145
   if (isHtmlFile && jestConfig.globals.__TRANSFORM_HTML__) {
-    src = 'module.exports=`' + src + '`;';
+    src = 'module.exports=' + JSON.stringify(src) + ';';
   }
 
   const processFile =
