@@ -1,8 +1,6 @@
-import * as fs from 'fs';
-import { cwd } from 'process';
 import * as ts from 'typescript';
 import { logOnce } from './logger';
-import { CodeSourceMapPair, TsJestConfig } from './jest-types';
+import { CodeSourceMapPair } from './jest-types';
 
 // Takes the typescript code and by whatever method configured, makes it into javascript code.
 export function transpileTypescript(
@@ -35,7 +33,7 @@ function transpileViaTranspileModule(
     fileName: filePath,
     reportDiagnostics: true,
   });
-  const {diagnostics} = transpileOutput;
+  const { diagnostics } = transpileOutput;
 
   if (diagnostics.length > 0) {
     const errors = formatDiagnostics(diagnostics);
@@ -53,9 +51,9 @@ function formatDiagnostics(diagnostics: ts.Diagnostic[]): string {
 }
 
 function createTranspilationError(errors: string): Error {
-    return Error(
-      `TypeScript compiler encountered syntax errors while transpiling. Errors: ${errors}`,
-    );
+  return Error(
+    `TypeScript compiler encountered syntax errors while transpiling. Errors: ${errors}`,
+  );
 }
 
 function logMessageForTranspilationErrors(errors: string): string {
