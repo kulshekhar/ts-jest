@@ -1,18 +1,8 @@
 import getCacheKey from './utils/get-cache-key';
 import preprocess from './preprocess';
 
-//FIXME: options is always empty
 const createTransformer = (options?: any): jest.Transformer => {
-  // const cache = Object.create(null);
-  // options = Object.assign({}, options, {
-  //   compact: false,
-  //   plugins: (options && options.plugins) || [],
-  //   presets: ((options && options.presets) || []).concat([jestPreset]),
-  //   sourceMaps: 'both',
-  // });
-  // delete options.cacheDirectory;
-  // delete options.filename;
-
+  // options are always empty, must be the older jest API giving options here
   return {
     canInstrument: true,
     getCacheKey,

@@ -5,7 +5,6 @@ import { MY_PACKAGE_CONTENT } from './constants';
 import getBabelRC from './get-babel-rc';
 import getTSConfig from './get-ts-config';
 
-// FIXME: remove dependency on config, it's empty
 export default function getCacheKey(
   fileData: string,
   filePath: string,
