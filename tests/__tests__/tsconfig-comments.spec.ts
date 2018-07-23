@@ -1,8 +1,9 @@
 import { MockedPath } from '../__mocks__/path';
 jest.mock('path');
 import * as fs from 'fs';
-import { getTSConfig } from '../../src/utils';
+import getTSConfig from '../../dist/utils/get-ts-config';
 import * as path from 'path';
+import cfg from '../__helpers__/jest-config';
 
 describe('parse tsconfig with comments', () => {
   const configFile1 = './tests/tsconfig-test/allows-comments.json';
@@ -24,34 +25,28 @@ describe('parse tsconfig with comments', () => {
 
     expect(() => {
       JSON.parse(fs.readFileSync(configFile1, 'utf8'));
-    }).toThrowError();
+    }).toThrow();
 
     expect(() => {
       JSON.parse(fs.readFileSync(configFile2, 'utf8'));
-    }).toThrowError();
+    }).toThrow();
   });
 
   describe('new behaviour (tsConfigFile & tsConfig)', () => {
-    it('one config file should extend the other', () => {
-      const config = getTSConfig({
-        'ts-jest': {
-          tsConfigFile: 'allows-comments.json',
-        },
-      });
-
-      // allows-comments.json does not contain a "pretty" field,
-      // while allows-comments2.json does. Default value would be "false".
-      expect(config.pretty).toEqual(true);
-    });
-
+    // allows-comments.json does not contain a "pretty" field,
+    // while allows-comments2.json does.
+    // allow-comments.json extends allow-comments2.json
     it('should correctly read allow-comments.json', () => {
-      expect(() => {
-        getTSConfig({
-          'ts-jest': {
-            tsConfigFile: 'allows-comments.json',
-          },
-        });
-      }).not.toThrow();
+      const config = getTSConfig(
+        cfg.tsconfigTest({ tsConfigFile: 'allows-comments.json' }),
+      );
+      expect(config).toMatchSnapshot();
+    });
+    it('should correctly read allow-comments2.json', () => {
+      const config = getTSConfig(
+        cfg.tsconfigTest({ tsConfigFile: 'allows-comments2.json' }),
+      );
+      expect(config).toMatchSnapshot();
     });
   });
 });

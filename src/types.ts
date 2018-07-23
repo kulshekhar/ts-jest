@@ -10,13 +10,6 @@ export interface TsJestContext {
   options: any;
 }
 
-export type JestCacheKeyArguments = [
-  string,
-  string,
-  string,
-  JestCacheKeyOptions
-];
-
 export interface HasteConfig {
   defaultPlatform?: string | null;
   hasteImplModulePath?: string;

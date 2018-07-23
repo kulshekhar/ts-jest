@@ -2,7 +2,7 @@ import * as fs from 'fs';
 import { normalize } from 'jest-config';
 import * as setFromArgv from 'jest-config/build/set_from_argv';
 import * as path from 'path';
-import { JestConfigNormalize } from '../../src/jest-types';
+import { JestConfigNormalize } from '../../dist/types';
 import { Arguments } from 'yargs';
 
 function readRawConfig(argv: Arguments, root: string): JestConfigNormalize {
@@ -60,7 +60,7 @@ function loadJestConfigFromFile(
   filePath: string,
   argv: Arguments,
 ): JestConfigNormalize {
-  const config = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+  const config = JSON.parse(fs.readFileSync(filePath, 'utf8'));
   config.rootDir = config.rootDir
     ? path.resolve(path.dirname(filePath), config.rootDir)
     : process.cwd();

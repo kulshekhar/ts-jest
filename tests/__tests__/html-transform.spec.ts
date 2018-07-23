@@ -1,7 +1,9 @@
-import * as tsJest from '../..';
+import * as tsJest from '../../dist';
+import jestConfig from '../__helpers__/jest-config';
 
-const path = '/path/to/file.html';
-const config: jest.ProjectConfig = { globals: {} } as any;
+const config = jestConfig.simple({});
+const filePath = `${config.rootDir}/some-file.html`;
+
 // wrap a transformed source so that we can fake a `require()` on it by calling the returned wrapper
 const wrap = (src: string) =>
   new Function(`var module={}; ${src} return module.exports;`) as any;
@@ -14,10 +16,10 @@ const source = `<div class="html-test">
 describe('Html transforms', () => {
   it('transforms html if config.globals.__TRANSFORM_HTML__ is set', () => {
     // get the untransformed version
-    const untransformed = tsJest.process(source, path, config);
+    const untransformed = tsJest.process(source, filePath, { ...config });
     // ... then the one which should be transformed
     (config.globals as any).__TRANSFORM_HTML__ = true;
-    const transformed = tsJest.process(source, path, config) as string;
+    const transformed = tsJest.process(source, filePath, config) as string;
     // ... finally the result of a `require('module-with-transformed-version')`
     const exported = wrap(transformed)();
 

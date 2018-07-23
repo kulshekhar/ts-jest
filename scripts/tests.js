@@ -41,6 +41,9 @@ function createIntegrationMock() {
 
 createIntegrationMock();
 
+// HACK: allow us to change the `startDir()` during tests
+process.env.__RUNNING_TS_JEST_TESTS = Date.now();
+
 const argv = process.argv.slice(2);
 argv.push('--no-cache');
 argv.push('--testPathPattern', '^(?!(.*watch.spec.ts$)).*');

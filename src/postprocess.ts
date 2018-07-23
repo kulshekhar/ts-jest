@@ -9,36 +9,28 @@ let babel: typeof __types__babel;
 let istanbulPlugin: typeof __types__istanbulPlugin;
 let jestPreset: typeof __types__jestPreset;
 function importBabelDeps() {
-  if (babel) {
-    return;
-  }
-  babel = require('@babel/core');
-  istanbulPlugin = require('babel-plugin-istanbul').default;
-  jestPreset = require('babel-preset-jest');
+  if (babel) return; // tslint:ignore-line
+  // ensure we use the require from jest
+  babel = require.main.require('@babel/core');
+  istanbulPlugin = require.main.require('babel-plugin-istanbul').default;
+  jestPreset = require.main.require('babel-preset-jest');
 }
-import { CompilerOptions } from 'typescript';
 import {
   BabelTransformOptions,
   PostProcessHook,
   JestCacheKeyOptions,
-  TsJestConfig,
 } from './types';
 import { logOnce } from './utils/logger';
+import getTSJestConfig from './utils/get-ts-jest-config';
 
 // Function that takes the transpiled typescript and runs it through babel/whatever.
 export function postProcessCode(
-  compilerOptions: CompilerOptions,
   jestConfig: jest.ProjectConfig,
-  tsJestConfig: TsJestConfig,
   transformOptions: jest.TransformOptions,
   transpileOutput: jest.TransformedSource,
   filePath: string,
 ): jest.TransformedSource {
-  const postHook = getPostProcessHook(
-    compilerOptions,
-    jestConfig,
-    tsJestConfig,
-  );
+  const postHook = getPostProcessHook(jestConfig);
 
   return postHook(transpileOutput, filePath, jestConfig, transformOptions);
 }
@@ -89,29 +81,29 @@ function createBabelTransformer(
 }
 
 export const getPostProcessHook = (
-  tsCompilerOptions: CompilerOptions,
   jestConfig: jest.ProjectConfig,
-  tsJestConfig: TsJestConfig,
 ): PostProcessHook => {
+  const tsJestConfig = getTSJestConfig(jestConfig);
   if (tsJestConfig.skipBabel) {
     logOnce('Not using any postprocess hook.');
     // Identity function
     return input => input;
   }
 
-  const plugins = Array.from(
-    (tsJestConfig.babelConfig && tsJestConfig.babelConfig.plugins) || [],
-  );
-
+  const tsJestBabelConfig = tsJestConfig.babelConfig || {};
   const babelOptions: BabelTransformOptions = {
-    ...tsJestConfig.babelConfig,
+    ...tsJestBabelConfig,
     babelrc: tsJestConfig.useBabelrc || false,
-    plugins,
-    presets: tsJestConfig.babelConfig ? tsJestConfig.babelConfig.presets : [],
-    sourceMaps: tsJestConfig.disableSourceMapSupport !== true,
+    plugins: toArray(tsJestBabelConfig.plugins),
+    presets: toArray(tsJestBabelConfig.presets),
+    sourceMaps: !tsJestConfig.disableSourceMapSupport,
   };
 
   logOnce('Using babel with options:', babelOptions);
 
   return createBabelTransformer(babelOptions);
 };
+
+function toArray<T>(iter?: Iterable<T> | null): Array<T> {
+  return iter ? Array.from(iter) : [];
+}

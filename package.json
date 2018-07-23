@@ -12,6 +12,7 @@
     "clean-build": "npm run clean && npm run build",
     "pretest": "npm run tslint && npm run clean-build",
     "test": "node scripts/tests.js",
+    "test:unit": "jest --testRegex '' --testMatch '<rootDir>/src/**/*.spec.ts'",
     "tslint": "tslint src/**/*.ts",
     "doc": "doctoc .",
     "prepublish": "npm run clean-build",
@@ -62,6 +63,7 @@
     ]
   },
   "dependencies": {
+    "closest-file-data": "^0.1.4",
     "cpx": "^1.5.0",
     "fs-extra": "6.0.1",
     "jest-config": "^23.4.1",
@@ -79,6 +81,7 @@
     "@babel/preset-env": "^7.0.0-beta.54",
     "@types/babel-core": "^6.25.5",
     "@types/es6-shim": "0.31.37",
+    "@types/flat": "^0.0.28",
     "@types/fs-extra": "5.0.4",
     "@types/jest": "^23.3.0",
     "@types/lodash": "^4.14.109",
@@ -90,6 +93,7 @@
     "cross-spawn": "latest",
     "cross-spawn-with-kill": "latest",
     "doctoc": "latest",
+    "flat": "^4.1.0",
     "husky": "^0.14.3",
     "jest": "^23.4.1",
     "lint-staged": "^7.1.2",

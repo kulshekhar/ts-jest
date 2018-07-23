@@ -1,4 +1,4 @@
-import { transpileTypescript } from '../../src/transpiler';
+import { transpileTypescript } from '../../dist/transpiler';
 import * as ts from 'typescript';
 
 describe('transpileTypescript', () => {

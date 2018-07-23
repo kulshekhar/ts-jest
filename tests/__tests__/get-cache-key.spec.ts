@@ -1,50 +1,34 @@
-import getCacheKeyForArgs from '../../dist/utils/get-cache-key';
-import { TsJestContext } from '../../dist/types';
+import getCacheKey from '../../dist/utils/get-cache-key';
+import cfg from '../__helpers__/jest-config';
 
-const tsJestContext: TsJestContext = { cache: {}, options: {} };
-const getCacheKey = (...args: any[]) =>
-  getCacheKeyForArgs(args as any, tsJestContext);
 describe('getCacheKey', () => {
   const src = 'console.log(123);';
-  const filepath = '/tmp/filepath';
-  const configStr = `{
-    "globals": {
-      "__TS_CONFIG": {
-        "compilerOptions": {
-          "target": "ES5",
-          "module": "commonjs"
-        }
-      }
-    },
-    "transform": {
-      "^.+\\\\.tsx?$": "../../preprocessor.js"
-    },
-    "testRegex": "(/__tests__/.*|(\\\\.|/)(test|spec))\\\\.(jsx?|tsx?)$"
-  }`;
-  const options: jest.TransformOptions = { instrument: false };
+  const jestConfig = cfg.simple(null, {
+    transform: { '^.+\\\\.tsx?$': '../../preprocessor.js' },
+    testRegex: '(/__tests__/.*|(\\\\.|/)(test|spec))\\\\.(jsx?|tsx?)$',
+  });
+  const filepath = `${jestConfig.rootDir}/some-file.ts`;
+  const configStr = JSON.stringify(jestConfig);
+  const options = { instrument: false, rootDir: jestConfig.rootDir };
   const originalHash = getCacheKey(src, filepath, configStr, options);
 
   it('should change hash when src changes', () => {
     const newSrc = 'console.log(1234);';
-    const newHash = getCacheKey(newSrc, filepath, configStr);
+    const newHash = getCacheKey(newSrc, filepath, configStr, options);
     expect(newHash).not.toBe(originalHash);
   });
 
   it('should change hash when filepath changes', () => {
-    const newPath = '/tmp/newfilepath';
-    const newHash = getCacheKey(src, newPath, configStr);
-    expect(newHash).not.toBe(originalHash);
-  });
-
-  it('should change hash when tsconfig changes', () => {
-    const newConfigStr = configStr.replace(`"ES5"`, `"ES2015"`);
-    const newHash = getCacheKey(src, filepath, newConfigStr);
+    const newPath = `${jestConfig.rootDir}/some-other-file.ts`;
+    const newHash = getCacheKey(src, newPath, configStr, options);
     expect(newHash).not.toBe(originalHash);
   });
 
   it('should change hash when transform options change', () => {
-    const newOptions: jest.TransformOptions = { instrument: true };
+    const newOptions = { ...options, instrument: true };
     const newHash = getCacheKey(src, filepath, configStr, newOptions);
     expect(newHash).not.toBe(originalHash);
   });
+
+  // TODO: test when package dependencies change
 });

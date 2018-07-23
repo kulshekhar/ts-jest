@@ -6,27 +6,25 @@ jest.mock('@babel/core', () => {
   };
 });
 
-import { getPostProcessHook } from '../../src/postprocess';
+import { getPostProcessHook } from '../../dist/postprocess';
+import jestConfig from '../__helpers__/jest-config';
 
 describe('postprocess', () => {
-  function runHook(
-    tsCompilerOptions = {},
-    jestConfig: Partial<jest.ProjectConfig> = {},
-    tsJestConfig = {},
-  ) {
-    return getPostProcessHook(
-      tsCompilerOptions,
-      jestConfig as any,
-      tsJestConfig,
-    )({ code: 'input_code', map: 'input_source_map' }, 'fake_file', {} as any, {
-      instrument: null,
-    });
+  function runHook(jestConfig = {} as any) {
+    return getPostProcessHook({ rootDir: '/tmp/project', ...jestConfig })(
+      { code: 'input_code', map: 'input_source_map' },
+      'fake_file',
+      {} as any,
+      {
+        instrument: null,
+      },
+    );
   }
 
   it('skips postprocess when skipBabel=true', () => {
     const transformMock = require.requireMock('@babel/core').transform;
 
-    runHook({}, {}, { skipBabel: true });
+    runHook({ globals: { 'ts-jest': { skipBabel: true } } });
     expect(transformMock).not.toBeCalled();
   });
 
@@ -34,7 +32,7 @@ describe('postprocess', () => {
     const transformMock = require.requireMock('@babel/core').transform;
 
     runHook();
-    getPostProcessHook({}, {} as any, {})(
+    getPostProcessHook(jestConfig.simple())(
       { code: 'input_code', map: 'input_source_map' },
       'fake_file',
       {} as any,
@@ -57,8 +55,8 @@ describe('postprocess', () => {
       skipBabel: false,
     };
 
-    runHook({}, {}, tsJestConfig);
-    runHook({}, {}, tsJestConfig);
+    runHook({ globals: { 'ts-jest': tsJestConfig } });
+    runHook({ globals: { 'ts-jest': tsJestConfig } });
 
     expect(transformMock).lastCalledWith(
       expect.any(String),

@@ -1,4 +1,4 @@
-import * as tsJest from '../../..';
+import * as tsJest from '../../../dist';
 
 describe('ts-jest module interface', () => {
   it('is an object', () => {

@@ -1,27 +1,17 @@
-// structure of this file heavilly inspired on:
-// https://github.com/facebook/jest/blob/master/packages/babel-jest/src/index.js
-
-import jestPreset from 'babel-preset-jest';
-import getCacheKeyForArgs from './utils/get-cache-key';
-import { TsJestContext, JestCacheKeyArguments } from './types';
+import getCacheKey from './utils/get-cache-key';
 import preprocess from './preprocess';
 
+//FIXME: options is always empty
 const createTransformer = (options?: any): jest.Transformer => {
-  const cache = Object.create(null);
-
-  options = Object.assign({}, options, {
-    compact: false,
-    plugins: (options && options.plugins) || [],
-    presets: ((options && options.presets) || []).concat([jestPreset]),
-    sourceMaps: 'both',
-  });
-  delete options.cacheDirectory;
-  delete options.filename;
-
-  const context: TsJestContext = { cache, options };
-
-  const getCacheKey = (...args: any[]) =>
-    getCacheKeyForArgs(args as JestCacheKeyArguments, context);
+  // const cache = Object.create(null);
+  // options = Object.assign({}, options, {
+  //   compact: false,
+  //   plugins: (options && options.plugins) || [],
+  //   presets: ((options && options.presets) || []).concat([jestPreset]),
+  //   sourceMaps: 'both',
+  // });
+  // delete options.cacheDirectory;
+  // delete options.filename;
 
   return {
     canInstrument: true,

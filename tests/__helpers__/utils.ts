@@ -1,6 +1,7 @@
 // from: https://github.com/facebook/jest/blob/master/integration_tests/utils.js
 import { sync as spawnSync } from 'cross-spawn';
 import { Result } from './runJest';
+import { TsJestConfig } from '../../dist/types';
 
 export function run(cmd, cwd) {
   const args = cmd.split(/\s/).slice(1);

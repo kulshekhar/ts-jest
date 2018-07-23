@@ -1,17 +1,19 @@
 import { flushLogs, logOnce } from './utils/logger';
 import { postProcessCode } from './postprocess';
-import { getTSConfig, getTSJestConfig, runTsDiagnostics } from './utils';
 import { transpileTypescript } from './transpiler';
+import runTsDiagnostics from './utils/run-ts-diagnostics';
+import getTSConfig from './utils/get-ts-config';
+import getTSJestConfig from './utils/get-ts-jest-config';
 
 export default function preprocess(
   src: string,
   filePath: jest.Path,
   jestConfig: jest.ProjectConfig,
-  transformOptions: jest.TransformOptions,
+  transformOptions?: jest.TransformOptions,
 ): jest.TransformedSource | string {
   // transformOptions.instrument is a proxy for collectCoverage
   // https://github.com/kulshekhar/ts-jest/issues/201#issuecomment-300572902
-  const compilerOptions = getTSConfig(jestConfig.globals, jestConfig.rootDir);
+  const compilerOptions = getTSConfig(jestConfig);
 
   logOnce('final compilerOptions:', compilerOptions);
 
@@ -31,7 +33,7 @@ export default function preprocess(
     return src;
   }
 
-  const tsJestConfig = getTSJestConfig(jestConfig.globals);
+  const tsJestConfig = getTSJestConfig(jestConfig);
   logOnce('tsJestConfig: ', tsJestConfig);
 
   // We can potentially do this faster by using the language service.
@@ -44,21 +46,19 @@ export default function preprocess(
 
   if (tsJestConfig.ignoreCoverageForAllDecorators === true) {
     transpileOutput.code = transpileOutput.code.replace(
-      /__decorate/g,
+      /\b__decorate\b/g,
       '/* istanbul ignore next */__decorate',
     );
   }
   if (tsJestConfig.ignoreCoverageForDecorators === true) {
     transpileOutput.code = transpileOutput.code.replace(
-      /(__decorate\(\[\r?\n[^\n\r]*)\/\*\s*istanbul\s*ignore\s*decorator(.*)\*\//g,
+      /(\b__decorate\(\[\r?\n[^\n\r]*)\/\*\s*istanbul\s+ignore\s+decorator(.*)\*\//g,
       '/* istanbul ignore next$2*/$1',
     );
   }
 
   const outputText = postProcessCode(
-    compilerOptions,
     jestConfig,
-    tsJestConfig,
     transformOptions,
     transpileOutput,
     filePath,
