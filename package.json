@@ -13,7 +13,7 @@
     "pretest": "npm run tslint && npm run clean-build",
     "test": "node scripts/tests.js",
     "test:unit": "jest --testRegex '' --testMatch '<rootDir>/src/**/*.spec.ts'",
-    "tslint": "tslint src/**/*.ts",
+    "tslint": "tslint 'src/**/*.ts'",
     "doc": "doctoc .",
     "prepublish": "npm run clean-build",
     "precommit": "lint-staged",

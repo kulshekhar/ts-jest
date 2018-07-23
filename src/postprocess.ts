@@ -9,7 +9,7 @@ let babel: typeof __types__babel;
 let istanbulPlugin: typeof __types__istanbulPlugin;
 let jestPreset: typeof __types__jestPreset;
 function importBabelDeps() {
-  if (babel) return; // tslint:ignore-line
+  if (babel) return; // tslint:disable-line
   // ensure we use the require from jest
   babel = require.main.require('@babel/core');
   istanbulPlugin = require.main.require('babel-plugin-istanbul').default;
@@ -104,6 +104,6 @@ export const getPostProcessHook = (
   return createBabelTransformer(babelOptions);
 };
 
-function toArray<T>(iter?: Iterable<T> | null): Array<T> {
+function toArray<T>(iter?: Iterable<T> | null): T[] {
   return iter ? Array.from(iter) : [];
 }
