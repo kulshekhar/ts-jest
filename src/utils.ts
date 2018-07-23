@@ -35,6 +35,8 @@ function readCompilerOptions(
     config,
     tsc.sys,
     path.resolve(rootDir),
+    undefined,
+    configPath,
   );
 
   if (errors.length > 0) {

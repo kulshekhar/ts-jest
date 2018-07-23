@@ -19,6 +19,9 @@ describe('get ts config from string', () => {
       });
 
       expect(result).toMatchObject({
+        configFilePath: expect.stringContaining(
+          'tsconfig-test/my-tsconfig.json',
+        ),
         inlineSourceMap: true,
         inlineSources: true,
         target: ts.ScriptTarget.ES2015,
@@ -66,6 +69,9 @@ describe('get ts config from string', () => {
       });
 
       expect(result).toEqual({
+        configFilePath: expect.stringContaining(
+          'tsconfig-test/extends-tsconfig.json',
+        ),
         declaration: false,
         declarationMap: false,
         emitDeclarationOnly: false,
@@ -87,6 +93,9 @@ describe('get ts config from string', () => {
       });
 
       expect(result).toEqual({
+        configFilePath: expect.stringContaining(
+          'tsconfig-test/extends-with-overrides-tsconfig.json',
+        ),
         declaration: false,
         declarationMap: false,
         emitDeclarationOnly: false,
