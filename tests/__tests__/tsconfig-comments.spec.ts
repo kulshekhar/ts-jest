@@ -12,6 +12,7 @@ describe('parse tsconfig with comments', () => {
   beforeEach(() => {
     // Set up some mocked out file info before each test
     ((path as any) as MockedPath).__setBaseDir('./tests/tsconfig-test');
+    getTSConfig.cache.clear();
   });
 
   it('the two config files should exist', () => {

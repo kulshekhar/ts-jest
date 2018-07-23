@@ -16,7 +16,7 @@ function getDirectories(rootDir) {
 function createIntegrationMock() {
   const testsRoot = 'tests';
   const testCaseFolders = getDirectories(testsRoot).filter(function(testDir) {
-    return !(testDir.startsWith('__') && testDir.endsWith('__'));
+    return !/^(?:utils|__.+__)$/.test(testDir);
   });
 
   testCaseFolders.forEach(directory => {

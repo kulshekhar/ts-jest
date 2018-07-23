@@ -9,6 +9,7 @@ describe('get ts config from string', () => {
   beforeEach(() => {
     // Set up some mocked out file info before each test
     (path as any).__setBaseDir('./tests/tsconfig-test');
+    getTSConfig.cache.clear();
   });
 
   describe('new behaviour (tsConfigFile & tsConfig)', () => {

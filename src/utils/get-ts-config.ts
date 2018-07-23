@@ -110,7 +110,7 @@ function readCompilerOptions(
 // }
 
 // we don't need any data, just its full path
-const tsConfigReader = { basename: TSCONFIG_FILENAME, read: () => null };
+const tsConfigReader = { basename: TSCONFIG_FILENAME, read: () => 0 };
 
 function findTSConfigPath(
   jestConfig: jest.ProjectConfig,

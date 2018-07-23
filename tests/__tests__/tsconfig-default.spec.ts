@@ -15,6 +15,15 @@ describe('get default ts config', () => {
     getTSConfig.cache.clear();
   });
 
+  it('should bail when no default tsconfig.json found', () => {
+    // there is no tsconfig file in that test module
+    ((path as any) as MockedPath).__setBaseDir('./tests/jestconfig-test');
+
+    expect(() => getTSConfig(jestConfig.jestconfigTest(null))).toThrowError(
+      /unable to find ts configuration file/i,
+    );
+  });
+
   it('should correctly read tsconfig.json', () => {
     const result = getTSConfig(jestConfig.tsconfigTest(null));
 
@@ -97,6 +106,5 @@ describe('get default ts config', () => {
 
     expect(getTSJestConfig({ globals: { 'ts-jest': {} } })).toEqual({});
     expect(getTSJestConfig({})).toEqual({});
-    // expect(getTSJestConfig(null)).toEqual({});
   });
 });

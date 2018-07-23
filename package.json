@@ -60,7 +60,12 @@
       "js",
       "jsx",
       "json"
-    ]
+    ],
+    "globals": {
+      "ts-jest": {
+        "tsConfigFile": "tsconfig.base.json"
+      }
+    }
   },
   "dependencies": {
     "closest-file-data": "^0.1.4",
