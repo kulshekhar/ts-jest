@@ -6,11 +6,12 @@ Object {
   "declaration": false,
   "declarationMap": false,
   "emitDeclarationOnly": false,
-  "inlineSourceMap": true,
+  "inlineSourceMap": false,
   "inlineSources": true,
   "jsx": 2,
   "module": 1,
   "pretty": false,
+  "sourceMap": true,
 }
 `;
 
@@ -20,10 +21,11 @@ Object {
   "declaration": false,
   "declarationMap": false,
   "emitDeclarationOnly": false,
-  "inlineSourceMap": true,
+  "inlineSourceMap": false,
   "inlineSources": true,
   "jsx": 2,
   "module": 1,
   "pretty": false,
+  "sourceMap": true,
 }
 `;

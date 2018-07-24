@@ -3,10 +3,10 @@
 exports[`Typescript coverage Should generate the correct coverage numbers. 1`] = `
 "
 =============================== Coverage summary ===============================
-Statements   : 68.75% ( 11/16 )
+Statements   : 71.43% ( 10/14 )
 Branches     : 33.33% ( 2/6 )
 Functions    : 66.67% ( 4/6 )
-Lines        : 73.33% ( 11/15 )
+Lines        : 66.67% ( 8/12 )
 ================================================================================
 "
 `;

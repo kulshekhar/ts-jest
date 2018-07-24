@@ -12,7 +12,7 @@ import jestConfig from '../__helpers__/jest-config';
 describe('postprocess', () => {
   function runHook(jestConfig = {} as any) {
     return getPostProcessHook({ rootDir: '/tmp/project', ...jestConfig })(
-      { code: 'input_code', map: 'input_source_map' },
+      { code: 'input_code', map: '"input_source_map"' },
       'fake_file',
       {} as any,
       {
@@ -33,7 +33,7 @@ describe('postprocess', () => {
 
     runHook();
     getPostProcessHook(jestConfig.simple())(
-      { code: 'input_code', map: 'input_source_map' },
+      { code: 'input_code', map: '"input_source_map"' },
       'fake_file',
       {} as any,
       { instrument: null },

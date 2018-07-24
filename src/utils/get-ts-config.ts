@@ -45,8 +45,8 @@ function getTSConfig_local(jestConfig: jest.ProjectConfig): CompilerOptions {
   // ts-jest will map lines numbers properly if inlineSourceMap and
   // inlineSources are set to true. The sourceMap configuration
   // is used to send the sourcemap back to Jest
-  delete config.sourceMap;
-  config.inlineSourceMap = true;
+  config.inlineSourceMap = false;
+  config.sourceMap = true;
   config.inlineSources = true;
 
   // the coverage report is broken if `.outDir` is set

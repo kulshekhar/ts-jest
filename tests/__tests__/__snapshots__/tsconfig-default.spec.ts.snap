@@ -8,12 +8,13 @@ Object {
   "declaration": false,
   "declarationMap": false,
   "emitDeclarationOnly": false,
-  "inlineSourceMap": true,
+  "inlineSourceMap": false,
   "inlineSources": true,
   "jsx": 2,
   "module": 1,
   "moduleResolution": 2,
   "noEmitOnError": false,
+  "sourceMap": true,
   "target": 2,
 }
 `;

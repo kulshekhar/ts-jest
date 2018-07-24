@@ -44,6 +44,7 @@ export default function preprocess(
 
   const transpileOutput = transpileTypescript(filePath, src, compilerOptions);
 
+  // FIXME: this should be done in the typescript source, else it's invalidating source maps
   if (tsJestConfig.ignoreCoverageForAllDecorators === true) {
     transpileOutput.code = transpileOutput.code.replace(
       /\b__decorate\b/g,

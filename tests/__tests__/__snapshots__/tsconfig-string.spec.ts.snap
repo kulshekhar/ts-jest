@@ -6,13 +6,14 @@ Object {
   "declaration": false,
   "declarationMap": false,
   "emitDeclarationOnly": false,
-  "inlineSourceMap": true,
+  "inlineSourceMap": false,
   "inlineSources": true,
   "jsx": 2,
   "module": 1,
   "moduleResolution": 2,
   "noEmitOnError": true,
   "noImplicitAny": true,
+  "sourceMap": true,
   "target": 1,
 }
 `;
@@ -23,12 +24,13 @@ Object {
   "declaration": false,
   "declarationMap": false,
   "emitDeclarationOnly": false,
-  "inlineSourceMap": true,
+  "inlineSourceMap": false,
   "inlineSources": true,
   "jsx": 2,
   "module": 1,
   "moduleResolution": 2,
   "noEmitOnError": true,
+  "sourceMap": true,
   "target": 2,
 }
 `;
@@ -39,12 +41,13 @@ Object {
   "declaration": false,
   "declarationMap": false,
   "emitDeclarationOnly": false,
-  "inlineSourceMap": true,
+  "inlineSourceMap": false,
   "inlineSources": true,
   "jsx": 2,
   "module": 1,
   "moduleResolution": 2,
   "noEmitOnError": true,
+  "sourceMap": true,
   "target": 2,
 }
 `;

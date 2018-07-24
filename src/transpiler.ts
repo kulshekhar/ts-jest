@@ -8,15 +8,12 @@ export function transpileTypescript(
   compilerOptions: ts.CompilerOptions,
 ): jest.TransformedSource {
   logOnce('Compiling via normal transpileModule call');
-  const transpileOutput = transpileViaTranspileModule(
+  const { outputText: code, sourceMapText: map } = transpileViaTranspileModule(
     filePath,
     fileSrc,
     compilerOptions,
   );
-  return {
-    code: transpileOutput.outputText,
-    map: transpileOutput.sourceMapText,
-  };
+  return { code, map };
 }
 
 /**

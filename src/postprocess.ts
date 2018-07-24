@@ -5,16 +5,6 @@
 import * as __types__babel from 'babel-core';
 import __types__istanbulPlugin from 'babel-plugin-istanbul';
 import * as __types__jestPreset from 'babel-preset-jest';
-let babel: typeof __types__babel;
-let istanbulPlugin: typeof __types__istanbulPlugin;
-let jestPreset: typeof __types__jestPreset;
-function importBabelDeps() {
-  if (babel) return; // tslint:disable-line
-  // ensure we use the require from jest
-  babel = require.main.require('@babel/core');
-  istanbulPlugin = require.main.require('babel-plugin-istanbul').default;
-  jestPreset = require.main.require('babel-preset-jest');
-}
 import {
   BabelTransformOptions,
   PostProcessHook,
@@ -22,6 +12,18 @@ import {
 } from './types';
 import { logOnce } from './utils/logger';
 import getTSJestConfig from './utils/get-ts-jest-config';
+
+let babel: typeof __types__babel;
+let istanbulPlugin: typeof __types__istanbulPlugin;
+let jestPreset: typeof __types__jestPreset;
+
+function importBabelDeps() {
+  if (babel) return; // tslint:disable-line
+  // we must use babel until we handle hoisting of jest.mock() internally
+  babel = require('@babel/core');
+  istanbulPlugin = require('babel-plugin-istanbul').default;
+  jestPreset = require('babel-preset-jest');
+}
 
 // Function that takes the transpiled typescript and runs it through babel/whatever.
 export function postProcessCode(
@@ -39,37 +41,43 @@ function createBabelTransformer(
   options: BabelTransformOptions,
 ): PostProcessHook {
   importBabelDeps();
-  options = {
-    ...options,
-    plugins: options.plugins || [],
-    presets: (options.presets || []).concat([jestPreset]),
-  };
-  delete options.cacheDirectory;
-  delete options.filename;
+  const presets = options.presets.slice();
+  const plugins = options.plugins.slice();
 
-  return (
+  // adds babel-preset-jest if not present
+  if (!hasBabelAddon(presets, jestPreset)) {
+    presets.push(jestPreset);
+  }
+
+  // we need to know if there is istanbul plugin in the list so that we do not add it
+  // in the case the user already has it configured
+  const hasIstanbul = hasBabelAddon(plugins, istanbulPlugin);
+
+  // create a new object we'll use as options with the sliced presets and plugins
+  const optionsBase = { ...options, presets, plugins };
+
+  delete optionsBase.cacheDirectory;
+
+  const babelTransformer = (
     codeSourcemapPair: jest.TransformedSource,
     filename: string,
     config: jest.ProjectConfig,
     transformOptions: JestCacheKeyOptions,
   ): jest.TransformedSource => {
-    const theseOptions = Object.assign(
-      { filename, inputSourceMap: codeSourcemapPair.map },
-      options,
-    );
+    const inputSourceMap =
+      typeof codeSourcemapPair.map === 'string'
+        ? JSON.parse(codeSourcemapPair.map)
+        : codeSourcemapPair.map;
+    const theseOptions = { ...optionsBase, filename, inputSourceMap };
     if (transformOptions && transformOptions.instrument) {
       theseOptions.auxiliaryCommentBefore = ' istanbul ignore next ';
       // Copied from jest-runtime transform.js
-      theseOptions.plugins = theseOptions.plugins.concat([
-        [
-          istanbulPlugin,
-          {
-            // files outside `cwd` will not be instrumented
-            cwd: config.rootDir,
-            exclude: [],
-          },
-        ],
-      ]);
+      if (!hasIstanbul) {
+        theseOptions.plugins = [
+          ...theseOptions.plugins,
+          istanbulPluginConfig(config),
+        ];
+      }
     }
 
     // we typecast here because babel returns a more complete object than the one expected by jest
@@ -78,6 +86,8 @@ function createBabelTransformer(
       theseOptions,
     ) as jest.TransformedSource;
   };
+
+  return babelTransformer;
 }
 
 export const getPostProcessHook = (
@@ -96,7 +106,7 @@ export const getPostProcessHook = (
     babelrc: tsJestConfig.useBabelrc || false,
     plugins: toArray(tsJestBabelConfig.plugins),
     presets: toArray(tsJestBabelConfig.presets),
-    sourceMaps: !tsJestConfig.disableSourceMapSupport,
+    sourceMaps: tsJestConfig.disableSourceMapSupport ? false : 'both',
   };
 
   logOnce('Using babel with options:', babelOptions);
@@ -106,4 +116,21 @@ export const getPostProcessHook = (
 
 function toArray<T>(iter?: Iterable<T> | null): T[] {
   return iter ? Array.from(iter) : [];
+}
+
+function istanbulPluginConfig(jestConfig: jest.ProjectConfig) {
+  return [
+    istanbulPlugin,
+    {
+      // files outside `cwd` will not be instrumented
+      cwd: jestConfig.rootDir,
+      exclude: [],
+    },
+  ];
+}
+
+function hasBabelAddon(inputList: any[], ...addonMatches: any[]): boolean {
+  return inputList.some(item => {
+    return addonMatches.indexOf(Array.isArray(item) ? item[0] : item) !== -1;
+  });
 }
