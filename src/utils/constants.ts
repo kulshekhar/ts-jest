@@ -9,4 +9,5 @@ export const TSCONFIG_GLOBALS_KEY = 'ts-jest';
 export const PACKAGE_JSON = 'package.json';
 export const MY_PACKAGE_CONTENT = readFileSync(
   resolve(__dirname, '..', '..', PACKAGE_JSON),
+  'utf8',
 );

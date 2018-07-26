@@ -78,7 +78,8 @@
   },
   "peerDependencies": {
     "babel-core": "^7.0.0-0",
-    "jest": "^23.0.0 || ^24.0.0",
+    "babel-jest": "^23.0.0",
+    "jest": "^23.0.0",
     "typescript": "2.x"
   },
   "devDependencies": {

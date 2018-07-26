@@ -6,7 +6,6 @@ import {
   PACKAGE_JSON,
   BABEL_CONFIG_KEY,
 } from './constants';
-import { BabelTransformOptions } from '../types';
 
 const babelReaders = [
   {
