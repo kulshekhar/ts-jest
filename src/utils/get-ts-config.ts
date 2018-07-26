@@ -7,9 +7,10 @@ import {
   ModuleKind,
   JsxEmit,
 } from 'typescript';
-import { resolve, sep } from 'path';
+import { resolve, sep, dirname } from 'path';
+import { existsSync } from 'fs';
 import formatTsDiagnostics from './format-diagnostics';
-import closestFileData, { IClosestDataResult } from 'closest-file-data';
+import closestFileData from 'closest-file-data';
 import { memoize } from 'lodash';
 import { logOnce } from './logger';
 import getTSJestConfig from './get-ts-jest-config';
@@ -18,7 +19,7 @@ const getTSConfig = memoize(getTSConfig_local, jestConfig => {
   // check cache before resolving configuration
   // NB: We use JSON.stringify() to create a consistent, unique signature. Although it lacks a uniform
   //     shape, this is simpler and faster than using the crypto package to generate a hash signature.
-  return JSON.stringify(jestConfig);
+  return JSON.stringify({ ...jestConfig, name: null, cacheDirectory: null });
 });
 export default getTSConfig;
 
@@ -33,7 +34,7 @@ function getTSConfig_local(jestConfig: jest.ProjectConfig): CompilerOptions {
   const { path: configPath } = configMeta;
   logOnce(`Reading tsconfig file from path ${configPath}`);
 
-  const config = readCompilerOptions(configPath, jestConfig.rootDir);
+  const config = readCompilerOptions(configPath);
   logOnce('Original typescript config before modifications: ', { ...config });
 
   // tsc should not emit declaration map when used for tests
@@ -70,11 +71,8 @@ function getTSConfig_local(jestConfig: jest.ProjectConfig): CompilerOptions {
   return config;
 }
 
-function readCompilerOptions(
-  configPath: string,
-  rootDir: string,
-): CompilerOptions {
-  configPath = resolve(rootDir, configPath);
+function readCompilerOptions(configPath: string): CompilerOptions {
+  // at this point the configPath is resolved
   const { config, error } = readConfigFile(configPath, sys.readFile);
   if (error) {
     throw error;
@@ -83,7 +81,8 @@ function readCompilerOptions(
   const { errors, options } = parseJsonConfigFileContent(
     config,
     sys,
-    resolve(rootDir),
+    // paths in a tsconfig are relative to that file's path
+    dirname(configPath),
   );
 
   if (errors.length > 0) {
@@ -117,13 +116,29 @@ function findTSConfigPath(
 ): { isUserDefined?: boolean; path: string } | void {
   let tsConfigFile = getTSJestConfig(jestConfig).tsConfigFile;
   if (tsConfigFile) {
+    const givenConfigFile = tsConfigFile;
     tsConfigFile = tsConfigFile.replace(
       '<rootDir>',
       `${jestConfig.rootDir}${sep}`,
     );
-    tsConfigFile = resolve(jestConfig.rootDir, tsConfigFile);
+    // ensure the path is resolved
+    if (!tsConfigFile.startsWith('/')) {
+      tsConfigFile = resolve(jestConfig.rootDir, tsConfigFile);
+    } else {
+      tsConfigFile = resolve(tsConfigFile);
+    }
+    if (!existsSync(tsConfigFile)) {
+      throw new Error(
+        [
+          `Unable to find tsconfig file given "${givenConfigFile}". If you gave a relative path,`,
+          `it'll be relative to the resolved "rootDir".\nTo avoid issues, use <rootDir> followed`,
+          `by a relative path to it in "tsConfigFile" config key.`,
+        ].join(' '),
+      );
+    }
     return { path: tsConfigFile, isUserDefined: true };
   }
 
+  // try to find the config file starting from the root dir as defined in (or resolved by) jest config
   return closestFileData(jestConfig.rootDir, tsConfigReader);
 }

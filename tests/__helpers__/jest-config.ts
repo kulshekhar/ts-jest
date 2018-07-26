@@ -11,7 +11,7 @@ function createJestConfig(
   let options = { ...jestOptions };
   if (tsJestOptions)
     options.globals = { ...options.globals, 'ts-jest': tsJestOptions };
-  return { rootDir, ...options } as any;
+  return { rootDir, cwd: rootDir, ...options } as any;
 }
 require('fs').read;
 const jestConfig = Object.assign(createJestConfig, {
