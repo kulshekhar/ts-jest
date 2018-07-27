@@ -1,5 +1,15 @@
 import getCacheKey from '../../dist/utils/get-cache-key';
 import cfg from '../__helpers__/jest-config';
+import _getTSConfig from '../../dist/utils/get-ts-config';
+
+jest.mock('../../dist/utils/get-ts-config', () => {
+  return {
+    default: jest.fn(() => ({ foo: 'bar' })),
+  };
+});
+
+// type casting
+const getTSConfig: jest.Mock = _getTSConfig as any;
 
 describe('getCacheKey', () => {
   const src = 'console.log(123);';
@@ -21,6 +31,12 @@ describe('getCacheKey', () => {
   it('should change hash when filepath changes', () => {
     const newPath = `${jestConfig.rootDir}/some-other-file.ts`;
     const newHash = getCacheKey(src, newPath, configStr, options);
+    expect(newHash).not.toBe(originalHash);
+  });
+
+  it('should change hash when tsconfig changes', () => {
+    getTSConfig.mockImplementationOnce(() => ({ not_foo: 'not bar' }));
+    const newHash = getCacheKey(src, filepath, configStr, options);
     expect(newHash).not.toBe(originalHash);
   });
 
