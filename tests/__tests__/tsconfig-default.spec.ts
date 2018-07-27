@@ -4,8 +4,10 @@ jest.mock('path');
 import * as ts from 'typescript';
 import getTSConfig from '../../dist/utils/get-ts-config';
 import * as path from 'path';
-import jestConfig from '../__helpers__/jest-config';
+import mockJestConfig from '../__helpers__/mock-jest-config';
 import getTSJestConfig from '../../dist/utils/get-ts-jest-config';
+
+const TEST_CASE = 'tsconfig-test';
 
 describe('get default ts config', () => {
   beforeEach(() => {
@@ -19,44 +21,46 @@ describe('get default ts config', () => {
     // there is no tsconfig file in that test module
     ((path as any) as MockedPath).__setBaseDir('./tests/jestconfig-test');
 
-    expect(() => getTSConfig(jestConfig.jestconfigTest(null))).toThrowError(
+    expect(() => getTSConfig(mockJestConfig('jestconfig-test'))).toThrowError(
       /unable to find ts configuration file/i,
     );
   });
 
   it('should correctly read tsconfig.json', () => {
-    const result = getTSConfig(jestConfig.tsconfigTest(null));
+    const result = getTSConfig(mockJestConfig(TEST_CASE));
 
     expect(result).toMatchSnapshot();
   });
 
   describe('new behavior (tsConfigFile & tsConfig)', () => {
     it('should be same results for null/undefined/etc.', () => {
-      const result = getTSConfig(jestConfig.tsconfigTest(null));
-      const resultEmptyParam = getTSConfig(jestConfig.tsconfigTest({}));
+      const resultWithoutTsJestSection = getTSConfig(
+        mockJestConfig(TEST_CASE, null),
+      );
+      const resultEmptyParam = getTSConfig(mockJestConfig(TEST_CASE, {}));
       const resultUndefinedContentFile = getTSConfig(
-        jestConfig.tsconfigTest({ tsConfigFile: undefined }),
+        mockJestConfig(TEST_CASE, { tsConfigFile: undefined }),
       );
       const resultNullContentFile = getTSConfig(
-        jestConfig.tsconfigTest({ tsConfigFile: null }),
+        mockJestConfig(TEST_CASE, { tsConfigFile: null }),
       );
 
-      expect(result).toEqual(resultEmptyParam);
-      expect(result).toEqual(resultUndefinedContentFile);
-      expect(result).toEqual(resultNullContentFile);
+      expect(resultEmptyParam).toEqual(resultWithoutTsJestSection);
+      expect(resultUndefinedContentFile).toEqual(resultWithoutTsJestSection);
+      expect(resultNullContentFile).toEqual(resultWithoutTsJestSection);
     });
 
     it('should be different results for different rootDir with same jest config.', () => {
-      const rootConfig = getTSConfig(jestConfig.tsconfigTest());
+      const rootConfig = getTSConfig(mockJestConfig(TEST_CASE));
       const subConfig = getTSConfig(
-        jestConfig('tsconfig-test/tsconfig-module'),
+        mockJestConfig(`${TEST_CASE}/tsconfig-module`),
       );
       expect(rootConfig).not.toEqual(subConfig);
     });
 
     it('should not change the module if it is loaded from a non-default config file', () => {
       const config = getTSConfig(
-        jestConfig.tsconfigTest({
+        mockJestConfig(TEST_CASE, {
           tsConfigFile: 'tsconfig-module/custom-config.json',
         }),
       );
@@ -73,7 +77,9 @@ describe('get default ts config', () => {
         './tests/tsconfig-test/tsconfig-module',
       );
 
-      const config = getTSConfig(jestConfig('tsconfig-test/tsconfig-module'));
+      const config = getTSConfig(
+        mockJestConfig(`${TEST_CASE}/tsconfig-module`),
+      );
 
       expect(config.module).toBe(ts.ModuleKind.CommonJS);
     });

@@ -13,11 +13,19 @@ function getDirectories(rootDir) {
   });
 }
 
+function isJestFolder(basename) {
+  return basename.startsWith('__') && basename.endsWith('__');
+}
+
+// TODO: later we could add a `.test-case-keep` empty file in each folder?
+// ...or move all into a `test-cases` dedicated directory
+function isTestCaseFolder(basename) {
+  return !isJestFolder(basename);
+}
+
 function createIntegrationMock() {
   const testsRoot = 'tests';
-  const testCaseFolders = getDirectories(testsRoot).filter(function(testDir) {
-    return !/^(?:utils|__.+__)$/.test(testDir);
-  });
+  const testCaseFolders = getDirectories(testsRoot).filter(isTestCaseFolder);
 
   testCaseFolders.forEach(directory => {
     const testCaseNodeModules = path.join(testsRoot, directory, 'node_modules');
@@ -40,9 +48,6 @@ function createIntegrationMock() {
 }
 
 createIntegrationMock();
-
-// HACK: allow us to change the `startDir()` during tests
-process.env.__RUNNING_TS_JEST_TESTS = Date.now();
 
 const argv = process.argv.slice(2);
 argv.push('--no-cache');

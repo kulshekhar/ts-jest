@@ -95,19 +95,6 @@ function readCompilerOptions(configPath: string): CompilerOptions {
   return options;
 }
 
-// function getStartDir(jestConfig: jest.ProjectConfig): string {
-//   // This is needed because of the way our tests are structured.
-//   // If this is being executed as a library (under node_modules)
-//   // we want to start with the project directory that's three
-//   // levels above.
-//   // If this is being executed from the test suite, we want to start
-//   // in the directory of the test
-
-//   // TODO: shouldn't we use the path of jest config here instead of '.' ?
-//   // return process.env.__RUNNING_TS_JEST_TESTS ? process.cwd() : '.';
-//   return process.env.__RUNNING_TS_JEST_TESTS ? process.cwd() : (jestConfig.rootDir || process.cwd());
-// }
-
 // we don't need any data, just its full path
 const tsConfigReader = { basename: TSCONFIG_FILENAME, read: () => 0 };
 

@@ -22,7 +22,11 @@ export default function preprocess(
   const isHtmlFile = /\.html$/.test(filePath);
 
   // This is to support angular 2. See https://github.com/kulshekhar/ts-jest/pull/145
-  if (isHtmlFile && (jestConfig.globals as any).__TRANSFORM_HTML__) {
+  if (
+    isHtmlFile &&
+    jestConfig.globals &&
+    (jestConfig.globals as any).__TRANSFORM_HTML__
+  ) {
     src = 'module.exports=' + JSON.stringify(src) + ';';
   }
 

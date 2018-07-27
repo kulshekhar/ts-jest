@@ -7,7 +7,7 @@ jest.mock('@babel/core', () => {
 });
 
 import { getPostProcessHook } from '../../dist/postprocess';
-import jestConfig from '../__helpers__/jest-config';
+import mockJestConfig from '../__helpers__/mock-jest-config';
 
 describe('postprocess', () => {
   function runHook(jestConfig = {} as any) {
@@ -32,7 +32,7 @@ describe('postprocess', () => {
     const transformMock = require.requireMock('@babel/core').transform;
 
     runHook();
-    getPostProcessHook(jestConfig.simple())(
+    getPostProcessHook(mockJestConfig('simple'))(
       { code: 'input_code', map: '"input_source_map"' },
       'fake_file',
       {} as any,

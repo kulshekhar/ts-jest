@@ -1,5 +1,5 @@
 import getCacheKey from '../../dist/utils/get-cache-key';
-import cfg from '../__helpers__/jest-config';
+import mockJestConfig from '../__helpers__/mock-jest-config';
 import _getTSConfig from '../../dist/utils/get-ts-config';
 
 jest.mock('../../dist/utils/get-ts-config', () => {
@@ -13,10 +13,11 @@ const getTSConfig: jest.Mock = _getTSConfig as any;
 
 describe('getCacheKey', () => {
   const src = 'console.log(123);';
-  const jestConfig = cfg.simple(null, {
+  const jestConfig = {
+    ...mockJestConfig('simple'),
     transform: { '^.+\\\\.tsx?$': '../../preprocessor.js' },
     testRegex: '(/__tests__/.*|(\\\\.|/)(test|spec))\\\\.(jsx?|tsx?)$',
-  });
+  };
   const filepath = `${jestConfig.rootDir}/some-file.ts`;
   const configStr = JSON.stringify(jestConfig);
   const options = { instrument: false, rootDir: jestConfig.rootDir };

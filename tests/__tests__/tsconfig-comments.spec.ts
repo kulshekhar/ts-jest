@@ -3,7 +3,9 @@ jest.mock('path');
 import * as fs from 'fs';
 import getTSConfig from '../../dist/utils/get-ts-config';
 import * as path from 'path';
-import cfg from '../__helpers__/jest-config';
+import mockJestConfig from '../__helpers__/mock-jest-config';
+
+const TEST_CASE = 'tsconfig-test';
 
 describe('parse tsconfig with comments', () => {
   const configFile1 = './tests/tsconfig-test/allows-comments.json';
@@ -38,16 +40,16 @@ describe('parse tsconfig with comments', () => {
     // while allows-comments2.json does.
     // allow-comments.json extends allow-comments2.json
     it('should correctly read allow-comments.json', () => {
-      const config = getTSConfig(
-        cfg.tsconfigTest({ tsConfigFile: 'allows-comments.json' }),
+      const tsConfig = getTSConfig(
+        mockJestConfig(TEST_CASE, { tsConfigFile: 'allows-comments.json' }),
       );
-      expect(config).toMatchSnapshot();
+      expect(tsConfig).toMatchSnapshot();
     });
     it('should correctly read allow-comments2.json', () => {
-      const config = getTSConfig(
-        cfg.tsconfigTest({ tsConfigFile: 'allows-comments2.json' }),
+      const tsConfig = getTSConfig(
+        mockJestConfig(TEST_CASE, { tsConfigFile: 'allows-comments2.json' }),
       );
-      expect(config).toMatchSnapshot();
+      expect(tsConfig).toMatchSnapshot();
     });
   });
 });
