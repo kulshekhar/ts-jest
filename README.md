@@ -1,17 +1,11 @@
-# ts-jest
+# ts-jest  [![npm version](https://badge.fury.io/js/ts-jest.svg)](https://badge.fury.io/js/ts-jest) [![NPM downloads](https://img.shields.io/npm/dm/ts-jest.svg?style=flat)](https://npmjs.org/package/ts-jest) [![Greenkeeper badge](https://badges.greenkeeper.io/kulshekhar/ts-jest.svg)](https://greenkeeper.io/) [![Build Status for linux](https://travis-ci.org/kulshekhar/ts-jest.svg?branch=master)](https://travis-ci.org/kulshekhar/ts-jest) [![Build Status for Windows](https://ci.appveyor.com/api/projects/status/g8tt9qd7usv0tolb/branch/master?svg=true)](https://ci.appveyor.com/project/kulshekhar/ts-jest/branch/master)
 
-[![npm version](https://badge.fury.io/js/ts-jest.svg)](https://badge.fury.io/js/ts-jest)
-[![NPM downloads](https://img.shields.io/npm/dm/ts-jest.svg?style=flat)](https://npmjs.org/package/ts-jest)
-[![Greenkeeper badge](https://badges.greenkeeper.io/kulshekhar/ts-jest.svg)](https://greenkeeper.io/)
+**Important note**: Before reporting any issue, be sure to check the [troubleshooting page](https://github.com/kulshekhar/ts-jest/wiki/Troubleshooting).
 
-[![Build Status for linux](https://travis-ci.org/kulshekhar/ts-jest.svg?branch=master)](https://travis-ci.org/kulshekhar/ts-jest)
-[![Build Status for Windows](https://ci.appveyor.com/api/projects/status/g8tt9qd7usv0tolb/branch/master?svg=true)](https://ci.appveyor.com/project/kulshekhar/ts-jest/branch/master)
-
-**Important note: When using React 16 with Node version 8, you might see wrong line numbers for errors originating from tsx files. There's [an issue with more details on this](https://github.com/kulshekhar/ts-jest/issues/334)**
 
 > Note: Looking for collaborators. [Want to help improve ts-jest?](https://github.com/kulshekhar/ts-jest/issues/223)
 
-ts-jest is a TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript.
+**ts-jest** is a TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript.
 
 ## Table of Contents
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
@@ -383,7 +377,6 @@ By default Jest ignores everything in `node_modules`. This setting prevents Jest
 ## Known Limitations
 ### Known limitations for TS compiler options
 - You can't use `"target": "ES6"` while using `node v4` in your test environment;
-- You can't use `"jsx": "preserve"` for now (see [progress of this issue](https://github.com/kulshekhar/ts-jest/issues/63));
 - If you use `"baseUrl": "<path_to_your_sources>"`, you also have to change `jest config` a little bit (also check [Module path mapping](#module-path-mapping) section):
 ```json
 "jest": {
