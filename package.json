@@ -64,12 +64,8 @@
   "dependencies": {
     "babel-plugin-istanbul": "^4.1.6",
     "babel-preset-jest": "^23.0.0",
-    "cpx": "^1.5.0",
     "fs-extra": "6.0.1",
-    "jest-config": "^23.0.0",
-    "lodash": "^4.17.10",
-    "pkg-dir": "^3.0.0",
-    "yargs": "^12.0.1"
+    "lodash": "^4.17.10"
   },
   "peerDependencies": {
     "babel-core": "^6.26.3 || ^7.0.0-0",
@@ -87,12 +83,15 @@
     "@types/yargs": "^11.0.0",
     "babel-core": "^6.26.3",
     "babel-preset-env": "^1.7.0",
+    "cpx": "^1.5.0",
     "cross-spawn": "latest",
     "cross-spawn-with-kill": "latest",
     "doctoc": "latest",
     "husky": "^0.14.3",
     "jest": "^23.0.0",
+    "jest-config": "^23.0.0",
     "lint-staged": "^7.1.2",
+    "pkg-dir": "^3.0.0",
     "prettier": "^1.12.1",
     "react": "16.4.1",
     "react-test-renderer": "16.4.1",
@@ -100,7 +99,8 @@
     "rimraf": "^2.6.2",
     "ts-jest": "23.0.0",
     "tslint": "^5.10.0",
-    "typescript": "^2.8.3"
+    "typescript": "^2.8.3",
+    "yargs": "^12.0.1"
   },
   "lint-staged": {
     "*.js": [
