@@ -1,0 +1,7 @@
+  mutation deleteDog($name: String!) {
+    deleteDog(name: $name) {
+      id
+      name
+      breed
+    }
+  }
