@@ -70,7 +70,7 @@
   "peerDependencies": {
     "babel-core": "^6.26.3 || ^7.0.0-0",
     "jest": "^23.0.0 || ^24.0.0",
-    "typescript": "2.x"
+    "typescript": "^2.0.0 || ^3.0.0"
   },
   "devDependencies": {
     "@types/babel-core": "latest",
