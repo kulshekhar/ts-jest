@@ -17,6 +17,7 @@ describe('get default ts config', () => {
     const result = getTSConfig(null);
 
     expect(result).toEqual({
+      configFilePath: expect.stringContaining('tsconfig-test/tsconfig.json'),
       declaration: false,
       declarationMap: false,
       emitDeclarationOnly: false,
