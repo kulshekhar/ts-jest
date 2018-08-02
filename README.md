@@ -162,6 +162,27 @@ If you *have* explicitly set the `module` property but to a different value than
 
 If you use ["baseUrl"](https://www.typescriptlang.org/docs/handbook/module-resolution.html) and "paths" options for the compiler, see ["moduleNameMapper"](https://facebook.github.io/jest/docs/en/configuration.html#modulenamemapper-object-string-string) option on Jest docs.
 
+For example, with the below config in your tsconfig:
+```
+   "paths": {
+      "@App/*": [
+        "src/*"
+      ],
+      "@Shared/*": [
+        "src/Shared/*"
+      ]
+    },
+```
+
+Here's what your jest config should look like:
+
+```
+"moduleNameMapper": {
+  "@App/(.*)": "<rootDir>/src/$1",
+  "@Shared/(.*)": "<rootDir>/src/Shared/$1"
+}
+```
+
 ### Skipping Babel
 If you don't use mocks, or synthetic default imports you can skip the babel-transpilation step.
 This means `jest.mock()` calls will not be hoisted to the top,

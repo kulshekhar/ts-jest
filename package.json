@@ -68,19 +68,14 @@
   },
   "dependencies": {
     "closest-file-data": "^0.1.4",
-    "cpx": "^1.5.0",
     "fs-extra": "6.0.1",
-    "jest-config": "^23.4.1",
-    "lodash": "^4.17.10",
-    "pkg-dir": "^3.0.0",
-    "yargs": "^12.0.1"
+    "lodash": "^4.17.10"
   },
   "peerDependencies": {
-    "babel-core": "^7.0.0-0",
-    "babel-jest": "^23.0.0",
-    "@babel/preset-env": "^7.0.0",
-    "jest": "^23.0.0",
-    "typescript": "2.x"
+    "babel-core": "^6.0.0 || ^7.0.0-0",
+    "babel-jest": "^23.0.0 || ^24.0.0",
+    "jest": "^23.0.0 || ^24.0.0",
+    "typescript": "^2.0.0 || ^3.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0-beta.54",
@@ -90,24 +85,29 @@
     "@types/fs-extra": "5.0.4",
     "@types/jest": "^23.3.0",
     "@types/lodash": "^4.14.109",
-    "@types/node": "10.5.2",
+    "@types/node": "10.5.5",
     "@types/react": "16.4.7",
     "@types/yargs": "^11.0.0",
     "babel-jest": "^23.4.0",
     "babel-preset-jest": "^23.2.0",
+    "babel-core": "^7.0.0-0",
+    "cpx": "^1.5.0",
     "cross-spawn": "latest",
     "cross-spawn-with-kill": "latest",
     "doctoc": "latest",
     "husky": "^0.14.3",
     "jest": "^23.4.1",
+    "jest-config": "^23.4.1",
     "lint-staged": "^7.1.2",
+    "pkg-dir": "^3.0.0",
     "prettier": "^1.12.1",
     "react": "16.4.1",
     "react-test-renderer": "16.4.1",
     "reflect-metadata": "^0.1.12",
     "rimraf": "^2.6.2",
     "tslint": "^5.11.0",
-    "typescript": "^2.9.2"
+    "typescript": "^2.9.2",
+    "yargs": "^12.0.1"
   },
   "lint-staged": {
     "*.js": [
