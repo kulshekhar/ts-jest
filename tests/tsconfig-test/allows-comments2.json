@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
     //some comments
-    "pretty": true
+    "pretty": false
   }
 }

@@ -1,25 +1,19 @@
-import * as fs from 'fs';
-import { cwd } from 'process';
 import * as ts from 'typescript';
-import { logOnce } from './logger';
-import { CodeSourceMapPair, TsJestConfig } from './jest-types';
+import { logOnce } from './utils/logger';
 
 // Takes the typescript code and by whatever method configured, makes it into javascript code.
 export function transpileTypescript(
   filePath: string,
   fileSrc: string,
   compilerOptions: ts.CompilerOptions,
-): CodeSourceMapPair {
+): jest.TransformedSource {
   logOnce('Compiling via normal transpileModule call');
-  const transpileOutput = transpileViaTranspileModule(
+  const { outputText: code, sourceMapText: map } = transpileViaTranspileModule(
     filePath,
     fileSrc,
     compilerOptions,
   );
-  return {
-    code: transpileOutput.outputText,
-    map: transpileOutput.sourceMapText,
-  };
+  return { code, map };
 }
 
 /**
@@ -35,7 +29,7 @@ function transpileViaTranspileModule(
     fileName: filePath,
     reportDiagnostics: true,
   });
-  const {diagnostics} = transpileOutput;
+  const { diagnostics } = transpileOutput;
 
   if (diagnostics.length > 0) {
     const errors = formatDiagnostics(diagnostics);
@@ -53,9 +47,9 @@ function formatDiagnostics(diagnostics: ts.Diagnostic[]): string {
 }
 
 function createTranspilationError(errors: string): Error {
-    return Error(
-      `TypeScript compiler encountered syntax errors while transpiling. Errors: ${errors}`,
-    );
+  return Error(
+    `TypeScript compiler encountered syntax errors while transpiling. Errors: ${errors}`,
+  );
 }
 
 function logMessageForTranspilationErrors(errors: string): string {

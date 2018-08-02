@@ -31,5 +31,11 @@
         ],
         "no-empty": false,
         "member-access": false
+    },
+    "linterOptions": {
+        "exclude": [
+            "dist/**/*",
+            "**/node_modules/**/*"
+        ]
     }
 }

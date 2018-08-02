@@ -1,4 +1,4 @@
-jest.mock('babel-core', () => {
+jest.mock('@babel/core', () => {
   return {
     transform: jest.fn(() => {
       return { code: 'stubbed_code', map: 'stubbed_map' };
@@ -6,33 +6,36 @@ jest.mock('babel-core', () => {
   };
 });
 
-import { getPostProcessHook } from '../../src/postprocess';
+import { getPostProcessHook } from '../../dist/postprocess';
+import mockJestConfig from '../__helpers__/mock-jest-config';
 
 describe('postprocess', () => {
-  function runHook(tsCompilerOptions = {}, jestConfig = {}, tsJestConfig = {}) {
-    return getPostProcessHook(tsCompilerOptions, jestConfig, tsJestConfig)(
-      { code: 'input_code', map: 'input_source_map' },
+  function runHook(jestConfig = {} as any) {
+    return getPostProcessHook({ rootDir: '/tmp/project', ...jestConfig })(
+      { code: 'input_code', map: '"input_source_map"' },
       'fake_file',
-      {},
-      { instrument: null },
+      {} as any,
+      {
+        instrument: null,
+      },
     );
   }
 
   it('skips postprocess when skipBabel=true', () => {
-    const transformMock = require.requireMock('babel-core').transform;
+    const transformMock = require.requireMock('@babel/core').transform;
 
-    runHook({}, {}, { skipBabel: true });
+    runHook({ globals: { 'ts-jest': { skipBabel: true } } });
     expect(transformMock).not.toBeCalled();
   });
 
   it('Adds no babel plugins by default', () => {
-    const transformMock = require.requireMock('babel-core').transform;
+    const transformMock = require.requireMock('@babel/core').transform;
 
     runHook();
-    getPostProcessHook({}, {}, {})(
-      { code: 'input_code', map: 'input_source_map' },
+    getPostProcessHook(mockJestConfig('simple'))(
+      { code: 'input_code', map: '"input_source_map"' },
       'fake_file',
-      {},
+      {} as any,
       { instrument: null },
     );
     expect(transformMock).lastCalledWith(
@@ -44,7 +47,7 @@ describe('postprocess', () => {
   });
 
   it('doesn`t accumulate module transforms on consecutive calls', () => {
-    const transformMock = require.requireMock('babel-core').transform;
+    const transformMock = require.requireMock('@babel/core').transform;
     const tsJestConfig = {
       babelConfig: {
         plugins: ['some-plugin'],
@@ -52,8 +55,8 @@ describe('postprocess', () => {
       skipBabel: false,
     };
 
-    runHook({}, {}, tsJestConfig);
-    runHook({}, {}, tsJestConfig);
+    runHook({ globals: { 'ts-jest': tsJestConfig } });
+    runHook({ globals: { 'ts-jest': tsJestConfig } });
 
     expect(transformMock).lastCalledWith(
       expect.any(String),

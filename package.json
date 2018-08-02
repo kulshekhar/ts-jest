@@ -1,18 +1,18 @@
 {
   "name": "ts-jest",
   "version": "23.0.1",
-  "main": "index.js",
+  "main": "dist/index.js",
   "types": "./dist/index.d.ts",
   "description": "A preprocessor with sourcemap support to help use Typescript with Jest",
   "scripts": {
-    "build": "cpx index.d.ts dist/ && tsc -p .",
-    "build:watch": "cpx index.d.ts dist/ && tsc -p . -w",
-    "test:nolint": "npm run clean-build && node scripts/tests.js",
-    "clean": "rimraf dist/**/* && rimraf tests/simple/coverage && rimraf tests/simple-async/coverage && rimraf tests/**/*/debug.txt && rimraf tests/**/node_modules",
+    "build": "tsc -p tsconfig.build.json",
+    "build:watch": "tsc -p tsconfig.build.json -w",
+    "test:nolint": "npm run clean-build && jest --clearCache && node scripts/tests.js",
+    "clean": "rimraf dist/**/* && rimraf tests/*/coverage && rimraf tests/*/debug.txt && rimraf tests/*/node_modules",
     "clean-build": "npm run clean && npm run build",
     "pretest": "npm run tslint && npm run clean-build",
     "test": "node scripts/tests.js",
-    "tslint": "tslint src/*.ts",
+    "tslint": "tslint 'src/**/*.ts'",
     "doc": "doctoc .",
     "prepublish": "npm run clean-build",
     "precommit": "lint-staged",
@@ -38,7 +38,7 @@
   "homepage": "https://github.com/kulshekhar/ts-jest#readme",
   "jest": {
     "transform": {
-      "^.+\\.tsx?$": "<rootDir>/dist/preprocessor.js"
+      "^.+\\.tsx?$": "<rootDir>/dist/index.js"
     },
     "testRegex": "tests/__tests__/.*\\.spec\\.ts$",
     "testPathIgnorePatterns": [
@@ -59,37 +59,45 @@
       "js",
       "jsx",
       "json"
-    ]
+    ],
+    "globals": {
+      "ts-jest": {
+        "tsConfigFile": "tsconfig.base.json"
+      }
+    }
   },
   "dependencies": {
-    "babel-plugin-istanbul": "^4.1.6",
-    "babel-preset-jest": "^23.0.0",
+    "closest-file-data": "^0.1.4",
     "fs-extra": "6.0.1",
     "lodash": "^4.17.10"
   },
   "peerDependencies": {
-    "babel-core": "^6.26.3 || ^7.0.0-0",
+    "babel-core": "^6.0.0 || ^7.0.0-0",
+    "babel-jest": "^23.0.0 || ^24.0.0",
     "jest": "^23.0.0 || ^24.0.0",
     "typescript": "^2.0.0 || ^3.0.0"
   },
   "devDependencies": {
-    "@types/babel-core": "latest",
+    "@babel/core": "^7.0.0-beta.54",
+    "@babel/preset-env": "^7.0.0-beta.54",
+    "@types/babel-core": "^6.25.5",
     "@types/es6-shim": "0.31.37",
     "@types/fs-extra": "5.0.4",
-    "@types/jest": "^23.1.0",
+    "@types/jest": "^23.3.0",
     "@types/lodash": "^4.14.109",
     "@types/node": "10.5.5",
     "@types/react": "16.4.7",
     "@types/yargs": "^11.0.0",
-    "babel-core": "^6.26.3",
-    "babel-preset-env": "^1.7.0",
+    "babel-jest": "^23.4.0",
+    "babel-preset-jest": "^23.2.0",
+    "babel-core": "^7.0.0-0",
     "cpx": "^1.5.0",
     "cross-spawn": "latest",
     "cross-spawn-with-kill": "latest",
     "doctoc": "latest",
     "husky": "^0.14.3",
-    "jest": "^23.0.0",
-    "jest-config": "^23.0.0",
+    "jest": "^23.4.1",
+    "jest-config": "^23.4.1",
     "lint-staged": "^7.1.2",
     "pkg-dir": "^3.0.0",
     "prettier": "^1.12.1",
@@ -97,9 +105,8 @@
     "react-test-renderer": "16.4.2",
     "reflect-metadata": "^0.1.12",
     "rimraf": "^2.6.2",
-    "ts-jest": "23.0.0",
-    "tslint": "^5.10.0",
-    "typescript": "^2.8.3",
+    "tslint": "^5.11.0",
+    "typescript": "^2.9.2",
     "yargs": "^12.0.1"
   },
   "lint-staged": {

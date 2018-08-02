@@ -6,9 +6,6 @@ describe('Typescript coverage', () => {
 
     const output = result.stdout;
 
-    expect(output).toContain('Statements   : 71.43% ( 10/14 )');
-    expect(output).toContain('Branches     : 33.33% ( 2/6 )');
-    expect(output).toContain('Functions    : 66.67% ( 4/6 )');
-    expect(output).toContain('Lines        : 66.67% ( 8/12 )');
+    expect(output).toMatchSnapshot();
   });
 });

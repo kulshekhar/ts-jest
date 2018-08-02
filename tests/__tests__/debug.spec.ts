@@ -16,7 +16,7 @@ describe('Debug output', () => {
     runJest('../simple', ['--no-cache', '-u'], {
       TS_JEST_DEBUG: 'true',
     });
-    const logFile = await fs.readFile(debugFilePath, 'utf-8');
+    const logFile = await fs.readFile(debugFilePath, 'utf8');
 
     expect(logFile).not.toBeNull();
   });
@@ -24,6 +24,6 @@ describe('Debug output', () => {
   it('Should not create a file if the debug flag is not set', async () => {
     runJest('../simple', ['--no-cache', '-u']);
     expect.assertions(1); // To make sure we actually do assert the promise on the line below
-    await expect(fs.readFile(debugFilePath, 'utf-8')).rejects.toThrow();
+    await expect(fs.readFile(debugFilePath, 'utf8')).rejects.toThrow();
   });
 });

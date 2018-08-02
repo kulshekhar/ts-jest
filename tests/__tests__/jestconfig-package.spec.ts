@@ -1,5 +1,5 @@
 import * as pkgDir from 'pkg-dir';
-import { getJestConfig } from '../utils/test-utils';
+import { getJestConfig } from '../__helpers__/test-utils';
 
 describe('get package json config', () => {
   let yargsMock;

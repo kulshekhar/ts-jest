@@ -1,0 +1,20 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`get default ts config new behavior (tsConfigFile & tsConfig) should not change the module if it is loaded from a non-default config file 1`] = `5`;
+
+exports[`get default ts config should correctly read tsconfig.json 1`] = `
+Object {
+  "configFilePath": undefined,
+  "declaration": false,
+  "declarationMap": false,
+  "emitDeclarationOnly": false,
+  "inlineSourceMap": false,
+  "inlineSources": true,
+  "jsx": 2,
+  "module": 1,
+  "moduleResolution": 2,
+  "noEmitOnError": false,
+  "sourceMap": true,
+  "target": 2,
+}
+`;

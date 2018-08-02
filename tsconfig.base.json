@@ -1,8 +1,9 @@
 {
   "compilerOptions": {
     "sourceMap": false,
+    "inlineSourceMap": true,
     "declaration": true,
-    "target": "ES5",
+    "target": "es5",
     "module": "commonjs",
     "moduleResolution": "node",
     "noEmitOnError": true,
@@ -11,20 +12,13 @@
     "noImplicitReturns": true,
     "removeComments": true,
     "strictNullChecks": false,
-    "inlineSourceMap": true,
     "jsx": "react",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": false,
-    "outDir": "dist",
-    "rootDir": "src",
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "lib": ["es2015"],
+    "types": ["jest"]
   },
-  "include": [
-    "src/**/*.ts",
-    "src/**/*.tsx"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+  "exclude": ["**/node_modules/**/*"]
 }
