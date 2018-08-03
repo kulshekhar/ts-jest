@@ -18,7 +18,11 @@
     "allowSyntheticDefaultImports": false,
     "skipLibCheck": true,
     "lib": ["es2015"],
-    "types": ["jest"]
+    "types": ["jest"],
+    "typeRoots": [
+      "node_modules/@types",
+      "tests/@types"
+    ]
   },
   "exclude": ["**/node_modules/**/*"]
 }

@@ -45,5 +45,10 @@ jspm_packages
 .idea
 
 
-# Long paths
+# tests specific
 tests/simple-long-path/long-src-path
+# is linked to the temp dir of the os
+e2e/__e2e_workdir_link__
+
+# binaries
+*.tgz

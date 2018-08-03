@@ -1,4 +1,4 @@
-import { TsJestConfig } from '../../dist/types';
+import { TsJestConfig } from '../../src/types';
 
 const { resolve } = require.requireActual('path');
 
@@ -17,7 +17,7 @@ export default function mockJestConfig(
   // resolves the path since jest would give a resolved path
   const rootDir = resolve(__dirname, '..', testCaseFolder);
   // create base jest config object
-  let options: any = { rootDir, cwd: rootDir };
+  const options: any = { rootDir, cwd: rootDir };
   // adds TS Jest options if any given
   if (tsJest != null) {
     options.globals = { 'ts-jest': tsJest };
