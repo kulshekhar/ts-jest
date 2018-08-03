@@ -39,6 +39,13 @@ function createIntegrationMock() {
       path.resolve(testCaseModuleFolder, 'package.json')
     );
 
+    // TODO: remove this in next major version as well as the test, and the preprocessor.js file in root
+    // Copy preprocessor.js
+    fs.copySync(
+      path.resolve(rootDir, 'preprocessor.js'),
+      path.resolve(testCaseModuleFolder, 'preprocessor.js')
+    );
+
     // Copy dist folder
     fs.copySync(
       path.resolve(rootDir, 'dist'),

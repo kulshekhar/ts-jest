@@ -1,5 +1,15 @@
 import { TransformOptions as BabelTransformOpts } from 'babel-core';
 
+import * as _babel from '@babel/core';
+import * as _babelEnv from '@babel/preset-env';
+import * as _babelJest from 'babel-preset-jest';
+import _babelIstanbul from 'babel-plugin-istanbul';
+
+export type TBabel = typeof _babel;
+export type TBabelPluginIstanbul = typeof _babelIstanbul;
+export type TBabelPresetEnv = typeof _babelEnv;
+export type TBabelPresetJest = typeof _babelJest;
+
 export interface JestCacheKeyOptions {
   rootDir: string;
   instrument: boolean;

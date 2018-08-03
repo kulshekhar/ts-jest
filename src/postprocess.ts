@@ -2,27 +2,32 @@
  * Postprocess step. Based on babel-jest: https://github.com/facebook/jest/blob/master/packages/babel-jest/src/index.js
  * https://github.com/facebook/jest/blob/9b157c3a7c325c3971b2aabbe4c8ab4ce0b0c56d/packages/babel-jest/src/index.js
  */
-import * as __types__babel from 'babel-core';
-import __types__istanbulPlugin from 'babel-plugin-istanbul';
-import * as __types__jestPreset from 'babel-preset-jest';
 import {
   BabelTransformOptions,
   PostProcessHook,
-  JestCacheKeyOptions,
+  TBabel,
+  TBabelPluginIstanbul,
+  TBabelPresetJest,
 } from './types';
 import { logOnce } from './utils/logger';
 import getTSJestConfig from './utils/get-ts-jest-config';
+import {
+  importBabelCore,
+  importBabelPluginIstanbul,
+  importBabelPresetJest,
+} from './utils/imports';
+import { TransformOptions } from '@babel/core';
 
-let babel: typeof __types__babel;
-let istanbulPlugin: typeof __types__istanbulPlugin;
-let jestPreset: typeof __types__jestPreset;
+let babel: TBabel;
+let istanbulPlugin: TBabelPluginIstanbul;
+let jestPreset: TBabelPresetJest;
 
 function importBabelDeps() {
   if (babel) return; // tslint:disable-line
   // we must use babel until we handle hoisting of jest.mock() internally
-  babel = require('@babel/core');
-  istanbulPlugin = require('babel-plugin-istanbul').default;
-  jestPreset = require('babel-preset-jest');
+  babel = importBabelCore();
+  istanbulPlugin = importBabelPluginIstanbul();
+  jestPreset = importBabelPresetJest();
 }
 
 // Function that takes the transpiled typescript and runs it through babel/whatever.
@@ -62,13 +67,17 @@ function createBabelTransformer(
     codeSourcemapPair: jest.TransformedSource,
     filename: string,
     config: jest.ProjectConfig,
-    transformOptions: JestCacheKeyOptions,
+    transformOptions: jest.TransformOptions,
   ): jest.TransformedSource => {
     const inputSourceMap =
       typeof codeSourcemapPair.map === 'string'
         ? JSON.parse(codeSourcemapPair.map)
         : codeSourcemapPair.map;
-    const theseOptions = { ...optionsBase, filename, inputSourceMap };
+    const theseOptions = {
+      ...optionsBase,
+      filename,
+      inputSourceMap,
+    } as TransformOptions;
     if (transformOptions && transformOptions.instrument) {
       theseOptions.auxiliaryCommentBefore = ' istanbul ignore next ';
       // Copied from jest-runtime transform.js

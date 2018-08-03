@@ -109,7 +109,7 @@ function findTSConfigPath(
       `${jestConfig.rootDir}${sep}`,
     );
     // ensure the path is resolved
-    if (!tsConfigFile.startsWith('/')) {
+    if (!tsConfigFile.startsWith('/') && jestConfig.rootDir) {
       tsConfigFile = resolve(jestConfig.rootDir, tsConfigFile);
     } else {
       tsConfigFile = resolve(tsConfigFile);
