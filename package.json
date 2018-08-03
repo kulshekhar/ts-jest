@@ -118,5 +118,8 @@
       "prettier --write --single-quote --trailing-comma all",
       "git add"
     ]
+  },
+  "engines": {
+    "node": ">= 6"
   }
 }
