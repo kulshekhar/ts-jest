@@ -24,7 +24,7 @@ function setupE2e() {
   fs.mkdirpSync(Paths.e2eWorkTemplateDir);
 
   // create the tempalte package from which node_modules will be originally copied from
-  fs.copyFileSync(
+  fs.copySync(
     path.join(Paths.e2eSourceDir, 'package-template.json'),
     path.join(Paths.e2eWorkTemplateDir, 'package.json')
   );
