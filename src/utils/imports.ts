@@ -51,7 +51,7 @@ function tryRequire<T = any>(packageName: string): T | void {
   try {
     mod = require(packageName);
   } catch (err) {
-    if (err.code !== 'ENOENT') throw err; // tslint:disable-line
+    if (err.code !== 'MODULE_NOT_FOUND') throw err; // tslint:disable-line
   }
   return mod;
 }
