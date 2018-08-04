@@ -23,7 +23,7 @@ function setupE2e() {
   // ensure directory exists before copying over
   fs.mkdirpSync(Paths.e2eWorkTemplatesDir);
 
-  // create the tempalte packages from which node_modules will be originally copied from
+  // create the template packages from which node_modules will be originally copied from
   fs.copySync(
     path.join(Paths.e2eTemplatesDir),
     path.join(Paths.e2eWorkTemplatesDir)
@@ -46,7 +46,7 @@ function setupE2e() {
     // copy source and test files
     fs.copySync(path.join(Paths.e2eSourceDir, directory), caseDir);
 
-    // grab the tempalte name to be used
+    // grab the template name to be used
     const template =
       require(path.join(caseDir, 'package.json')).e2eTempalte || 'default';
 
