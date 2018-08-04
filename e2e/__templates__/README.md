@@ -14,8 +14,9 @@ Let's say you want to create a template with the `lodash` package and call the t
 2. `mkdir with-lodash`
 3. `cp default/*.json with-lodash/`
 4. `cd with-lodash`
-5. `npm install && npm install --save lodash`
-6. `rm -rf node_modules` this is not mandatory but it'll make the test run faster, `npm ci` is faster than copying over tons of files
+5. edit `package.json` to give it another `name`
+6. `npm install && npm install --save lodash` (or `--save-dev`, but **use npm and NOT yarn**)
+7. `rm -rf node_modules` this is not mandatory but it'll make the test run faster, `npm ci` is faster than copying over tons of files
 
 That's it, the template is ready to be used
 
