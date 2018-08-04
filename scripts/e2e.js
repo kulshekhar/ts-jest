@@ -8,6 +8,16 @@ const fs = require('fs-extra');
 const path = require('path');
 const Paths = require('./paths');
 
+const NodeVersion = (versions => {
+  return { major: versions[0], minor: versions[1], patch: versions[2] };
+})(
+  process.versions.node
+    .split('-')
+    .shift()
+    .split('.')
+    .map(s => parseInt(s, 10))
+);
+
 function getDirectories(rootDir) {
   return fs.readdirSync(rootDir).filter(function(file) {
     return fs.statSync(path.join(rootDir, file)).isDirectory();
@@ -36,7 +46,12 @@ function setupE2e() {
   // that is why we end with the npm install of our bundle
   getDirectories(Paths.e2eWorkTemplatesDir).forEach(tmplDir => {
     const dir = path.join(Paths.e2eWorkTemplatesDir, tmplDir);
-    spawnSync('npm', ['ci'], { cwd: dir, stdio: 'inherit' });
+    if (NodeVersion.major >= 8) {
+      spawnSync('npm', ['ci'], { cwd: dir, stdio: 'inherit' });
+    } else {
+      // npm coming with node < 8 does not have the `ci` command
+      spawnSync('npm', ['i'], { cwd: dir, stdio: 'inherit' });
+    }
     spawnSync('npm', ['i', '-D', bundle], { cwd: dir, stdio: 'inherit' });
   });
 
