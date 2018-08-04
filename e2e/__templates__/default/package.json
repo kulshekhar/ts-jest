@@ -1,0 +1,9 @@
+{
+  "name": "ts-jest-e2e-tmpl",
+  "version": "0.0.0-test.0",
+  "private": true,
+  "devDependencies": {
+    "jest": "^23.4.2",
+    "typescript": "^2.9.2"
+  }
+}

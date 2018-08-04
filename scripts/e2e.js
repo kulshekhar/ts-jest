@@ -21,48 +21,43 @@ function setupE2e() {
   const bundle = path.join(Paths.rootDir, res.stdout.toString().trim());
 
   // ensure directory exists before copying over
-  fs.mkdirpSync(Paths.e2eWorkTemplateDir);
+  fs.mkdirpSync(Paths.e2eWorkTemplatesDir);
 
-  // create the tempalte package from which node_modules will be originally copied from
+  // create the tempalte packages from which node_modules will be originally copied from
   fs.copySync(
-    path.join(Paths.e2eSourceDir, 'package-template.json'),
-    path.join(Paths.e2eWorkTemplateDir, 'package.json')
+    path.join(Paths.e2eTemplatesDir),
+    path.join(Paths.e2eWorkTemplatesDir)
   );
+
   // link locally so we could find it easily
   fs.symlinkSync(Paths.e2eWorkDir, Paths.e2eWotkDirLink);
-  // TODO: run with specific versions?
-  spawnSync('npm', ['i', '-D', 'jest', 'typescript', bundle], {
-    cwd: Paths.e2eWorkTemplateDir,
-    stdio: 'inherit',
+
+  // install with `npm ci` in each template, this is the fastest but needs a package lock file,
+  // that is why we end with the npm install of our bundle
+  getDirectories(Paths.e2eWorkTemplatesDir).forEach(tmplDir => {
+    const dir = path.join(Paths.e2eWorkTemplatesDir, tmplDir);
+    spawnSync('npm', ['ci'], { cwd: dir, stdio: 'inherit' });
+    spawnSync('npm', ['i', '-D', bundle], { cwd: dir, stdio: 'inherit' });
   });
 
-  // copy into our temp sub-folder
+  // copy into our temp sub-folder each case folder
   getDirectories(Paths.e2eSourceDir).forEach(directory => {
+    const caseDir = path.join(Paths.e2eWorkDir, directory);
     // copy source and test files
-    fs.copySync(
-      path.join(Paths.e2eSourceDir, directory),
-      path.join(Paths.e2eWorkDir, directory)
-    );
-    // create the node_modules dir
-    const caseNodeModulesDir = path.join(
-      Paths.e2eWorkDir,
-      directory,
-      'node_modules'
-    );
-    fs.mkdirpSync(caseNodeModulesDir);
-    // link each node_modules from tempalte dir (so that we can install some more specific in each package later)
+    fs.copySync(path.join(Paths.e2eSourceDir, directory), caseDir);
+
+    // grab the tempalte name to be used
+    const template =
+      require(path.join(caseDir, 'package.json')).e2eTempalte || 'default';
+
+    // link the node_modules dir
+    const caseNodeModulesDir = path.join(caseDir, 'node_modules');
     const tmplNodeModulesDir = path.join(
-      Paths.e2eWorkTemplateDir,
+      Paths.e2eWorkTemplatesDir,
+      template,
       'node_modules'
     );
-    getDirectories(tmplNodeModulesDir).forEach(moduleDir => {
-      // avoid linking '.bin'
-      if (moduleDir === '.bin') return;
-      fs.symlinkSync(
-        path.join(tmplNodeModulesDir, moduleDir),
-        path.join(caseNodeModulesDir, moduleDir)
-      );
-    });
+    fs.symlinkSync(tmplNodeModulesDir, caseNodeModulesDir);
   });
 }
 
