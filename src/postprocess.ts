@@ -26,6 +26,25 @@ function importBabelDeps() {
   if (babel) return; // tslint:disable-line
   // we must use babel until we handle hoisting of jest.mock() internally
   babel = importBabelCore();
+
+  // HACK: there is an issue still open in babel 6, this is a hack to bypass it
+  // and fix our issue #627
+  // Issue in babel: https://github.com/babel/babel/issues/6577
+  if (babel.version && parseInt(babel.version.split('.')[0], 10) === 6) {
+    const File = require('babel-core/lib/transformation/file/index.js').File;
+    File.prototype.initOptions = (original => {
+      return function(opt) {
+        const before = opt.sourceMaps;
+        const result = original.apply(this, arguments);
+        if (opt.sourceMaps != null && opt.sourceMaps !== result.sourceMaps) {
+          result.sourceMaps = opt.sourceMaps;
+        }
+        return result;
+      };
+    })(File.prototype.initOptions);
+  }
+  // end of HACK
+
   istanbulPlugin = importBabelPluginIstanbul();
   jestPreset = importBabelPresetJest();
 }
