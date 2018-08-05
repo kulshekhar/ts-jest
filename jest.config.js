@@ -13,6 +13,4 @@ module.exports = {
       tsConfigFile: 'tsconfig.base.json',
     },
   },
-  setupTestFrameworkScriptFile:
-    '<rootDir>/tests/__helpers__/setup-test-framework.ts',
 };

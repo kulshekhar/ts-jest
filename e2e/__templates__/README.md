@@ -23,9 +23,39 @@ That's it, the template is ready to be used
 
 ## Using a specific template
 
-Let's say you want to use your lately created `with-lodash` template in a `using-lodash` test case:
+Let's say you want to use your lately created `with-lodash` template with a `my-case` test case:
 
-1. `cd e2e/__cases__/using-lodash`
-2. edit `package.json` and set/update the `e2eTempalte` to `"with-lodash"`
+1. the test case should be run only with this template:
 
-That's it!
+    - in `e2e/__cases__/my-case/package.json` set the `e2eTempalte` to `"with-lodash"`
+    - in `e2e/__tests__/my-case.spec.ts`:
+
+    ```ts
+    import testCase from '../__helpers__/test-case';
+
+    describe('Some test', () => {
+      it('should pass', () => {
+        expect(testCase('my-case')).toRunWithExitCode(0)
+      })
+    })
+    ```
+
+2. the test case is already been used with another template (its `package.json` has another value in `e2eTemplate`):
+
+    - update the test `e2e/__tests__/my-case.spec.ts` (or create a new one):
+
+    ```ts
+    import testCase from '../__helpers__/test-case';
+
+    describe('Some test', () => {
+      // original test  
+      it('should pass', () => {
+        expect(testCase('my-case')).toRunWithExitCode(0)
+      })
+
+      // added test, using our new template
+      it('should pass with loadash', () => {
+        expect(testCase('my-case', {template: 'with-lodash'})).toRunWithExitCode(0)
+      })
+    })
+    ```

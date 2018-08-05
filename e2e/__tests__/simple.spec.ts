@@ -1,8 +1,12 @@
+import testCase from '../__helpers__/test-case';
+
 describe('Simple e2e test', () => {
   it('should pass with babel 6', () => {
-    expect('simple').toBeE2eTestWithExitCode(0);
+    expect(testCase('simple')).toRunWithExitCode(0);
   });
   it('should pass with babel 7', () => {
-    expect('simple-babel-7').toBeE2eTestWithExitCode(0);
+    expect(testCase('simple', { template: 'with-babel-7' })).toRunWithExitCode(
+      0,
+    );
   });
 });

@@ -54,26 +54,6 @@ function setupE2e() {
     }
     spawnSync('npm', ['i', '-D', bundle], { cwd: dir, stdio: 'inherit' });
   });
-
-  // copy into our temp sub-folder each case folder
-  getDirectories(Paths.e2eSourceDir).forEach(directory => {
-    const caseDir = path.join(Paths.e2eWorkDir, directory);
-    // copy source and test files
-    fs.copySync(path.join(Paths.e2eSourceDir, directory), caseDir);
-
-    // grab the template name to be used
-    const template =
-      require(path.join(caseDir, 'package.json')).e2eTempalte || 'default';
-
-    // link the node_modules dir
-    const caseNodeModulesDir = path.join(caseDir, 'node_modules');
-    const tmplNodeModulesDir = path.join(
-      Paths.e2eWorkTemplatesDir,
-      template,
-      'node_modules'
-    );
-    fs.symlinkSync(tmplNodeModulesDir, caseNodeModulesDir);
-  });
 }
 
 setupE2e();
