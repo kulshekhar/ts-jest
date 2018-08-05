@@ -3,21 +3,54 @@ import { join } from 'path';
 import * as Paths from '../../scripts/paths';
 import * as fs from 'fs-extra';
 
-// jest augmentation
-import 'jest';
-declare global {
-  namespace jest {
-    interface Matchers<R> {
-      toRunWithExitCode(expectedExitCode: number): R;
-    }
-  }
-}
+class TestCaseRunDescriptor {
+  // tslint:disable-next-line:variable-name
+  protected _options: RunTestOptions;
+  // tslint:disable-next-line:variable-name
+  protected _sourcePackageJson: any;
 
-export interface TestCaseDesc {
-  isTestCaseDesc: true;
-  name: string;
-  options: RunTestOptions;
-  run(options?: RunTestOptions): TestRunResult;
+  constructor(readonly name: string, options: RunTestOptions = {}) {
+    this._options = { ...options };
+  }
+
+  get sourceDir() {
+    return join(Paths.e2eSourceDir, this.name);
+  }
+  get templateWorkdir() {
+    return join(Paths.e2eWorkTemplatesDir, this.name);
+  }
+  get workdir() {
+    return join(Paths.e2eWorkDir, this.templateName, this.name);
+  }
+
+  get sourcePackageJson() {
+    return (
+      this._sourcePackageJson ||
+      (this._sourcePackageJson = require(join(this.sourceDir, 'package.json')))
+    );
+  }
+
+  get templateName() {
+    if (!this._options.template) {
+      // read the template from the package field if it is not given
+      this._options.template = this.sourcePackageJson.e2eTemplate || 'default';
+    }
+    return this._options.template;
+  }
+
+  run(logOutputUnlessStatusIs?: number): TestRunResult {
+    const result = run(this.name, {
+      ...this._options,
+      template: this.templateName,
+    });
+    if (logOutputUnlessStatusIs != null) {
+      console.log(
+        `Output of "${this.name}" using template "${this.templateName}":\n\n`,
+        result.output.trim(),
+      );
+    }
+    return result;
+  }
 }
 
 export interface RunTestOptions {
@@ -33,18 +66,11 @@ export interface TestRunResult {
   output: string;
 }
 
-export default function testCase(
+export default function configureTestCase(
   name: string,
   options: RunTestOptions = {},
-): TestCaseDesc {
-  return {
-    isTestCaseDesc: true,
-    name,
-    options,
-    run(opt?: RunTestOptions): TestRunResult {
-      return run(this.name, { ...this.options, ...opt });
-    },
-  };
+): TestCaseRunDescriptor {
+  return new TestCaseRunDescriptor(name, options);
 }
 
 export function run(
@@ -53,7 +79,7 @@ export function run(
 ): TestRunResult {
   const dir = prepareTest(name, template);
 
-  const JEST_BIN = join(dir, 'node_modules', 'jest', 'bin', 'jest.js');
+  const JEST_BIN = join(dir, 'node_modules', '.bin', 'jest');
 
   const result = spawnSync(JEST_BIN, args, {
     cwd: dir,
@@ -104,45 +130,4 @@ function prepareTest(name: string, template?: string): string {
   );
 
   return caseDir;
-}
-
-export function extendJest() {
-  expect.extend({
-    toRunWithExitCode(received: TestCaseDesc, expectedStatus: number) {
-      if (!(received && received.isTestCaseDesc)) {
-        throw new TypeError(
-          `The received argument must be of type TestCaseDesc. use testCase() from test helpers to create one.`,
-        );
-      }
-      // run the test
-      const { status, output } = received.run();
-
-      // return jest expected data
-      const pass: boolean = expectedStatus === status;
-      const coloredStatus = expectedStatus
-        ? this.utils.RECEIVED_COLOR(expectedStatus.toString())
-        : this.utils.EXPECTED_COLOR(expectedStatus.toString());
-      if (pass) {
-        return {
-          message: () =>
-            `expected test case "${
-              received.name
-            }" to not exit with status ${coloredStatus}` +
-            ` when using template "${received.options.template}"` +
-            `\n\nOutput:\n  ${this.utils.printReceived(output)}`,
-          pass: true,
-        };
-      } else {
-        return {
-          message: () =>
-            `expected test case "${
-              received.name
-            }" to exit with status ${coloredStatus}` +
-            ` when using template "${received.options.template}"` +
-            `\n\nOutput:\n  ${this.utils.printReceived(output)}`,
-          pass: false,
-        };
-      }
-    },
-  });
 }

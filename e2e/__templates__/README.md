@@ -31,11 +31,12 @@ Let's say you want to use your lately created `with-lodash` template with a `my-
     - in `e2e/__tests__/my-case.spec.ts`:
 
     ```ts
-    import testCase from '../__helpers__/test-case';
+    import configureTestCase from '../__helpers__/test-case';
 
     describe('Some test', () => {
       it('should pass', () => {
-        expect(testCase('my-case')).toRunWithExitCode(0)
+        const testCase = configureTestCase('my-case');
+        expect(testCase.run().status).toBe(0);
       })
     })
     ```
@@ -45,17 +46,19 @@ Let's say you want to use your lately created `with-lodash` template with a `my-
     - update the test `e2e/__tests__/my-case.spec.ts` (or create a new one):
 
     ```ts
-    import testCase from '../__helpers__/test-case';
+    import configureTestCase from '../__helpers__/test-case';
 
     describe('Some test', () => {
       // original test  
       it('should pass', () => {
-        expect(testCase('my-case')).toRunWithExitCode(0)
+        const testCase = configureTestCase('my-case');
+        expect(testCase.run().status).toBe(0);
       })
 
       // added test, using our new template
       it('should pass with loadash', () => {
-        expect(testCase('my-case', {template: 'with-lodash'})).toRunWithExitCode(0)
+        const testCase = configureTestCase('my-case', {template: 'with-lodash'});
+        expect(testCase.run().status).toBe(0);
       })
     })
     ```

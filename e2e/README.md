@@ -10,6 +10,48 @@
 - `__e2e_workdir_link__`: is created during a test run and is a symbolic link to a subfolder in the temp folder of the OS where all test cases are installed
 
 
+## Test helpers
+
+To run a test case (one of `__cases__`) in your e2e tests, you must use the `configureTestCase(...)` helper imported from `e2e/__helpers__/test-case.ts`:
+
+```ts
+const testCase = configureTestCase(
+    name: string,
+    options?: {
+        template?: string
+        env?: {}
+        args?: string[]
+    }
+)
+```
+
+- `name`, **required**: The name of the test case (directory of your case within `e2e/__cases__/`)
+- `template`, _optional_: The name of the template to be used (directory of the template within `e2e/__template__/`)
+- `env`, _optional_: Extra environment variables to set when running (ie.: `{MY_VAR: '1'}`)
+- `args`, _optional_: Extra arguments to give to jest when running  (ie.: `['--coverage']`)
+
+The returned value is an object with those properties and methods:
+
+- `testCase.name`: name of the case
+- `testCase.templateName`: name of the template (it will resolve it if not given in `configureTestCase()`)
+- `testCase.workdir`: full path to the directory where the tests will be run for that test case (it won't exists until the `run()` method has been called)
+- `testCase.run()`: will prepare the test case workdir folder and run `jest` in it, returning an object with these properties:
+    - `status`, _number_: the status code it exited with
+    - `stdout`, _string_: the data written to stdout during the run
+    - `stderr`, _string_: the data written to stderr during the run
+    - `output`, _string_: the data written to stdout and stderr during the run
+
+    **Note**: _You can optionally pass the expected status code as the first argument of `run()`. In the case it's not the correct one, it'll write in the console the actual `output` so that you can debug the test case._
+
+Bare simple example of using it in your tests:
+```ts
+const testCase = configureTestCase('some-case');
+expect(testCase.run().status).toBe(0);
+```
+
+You can find more information on how to create and use templates [there](./__templates__/README.md).
+
+
 ## Running
 
 You run the E2E tests with `yarn test:e2e` (or `npm run test:e2e`). What will happen in order is as follow (directories are related to `[ts-jest]/e2e` path):
@@ -25,15 +67,15 @@ You run the E2E tests with `yarn test:e2e` (or `npm run test:e2e`). What will ha
     We use `npm ci` as it's the fastest install way, but it requires a `package-lock.json`, that is why we need another step to install our bundle from step **1**.
     Doing so in template directories will allow us to link the node modules in real test cases, instead of running `npm install` for each of them.
 
-3.  each test suite under `__tests__/**/*.spec.ts` are run.
+5.  each test suite under `__tests__/**/*.spec.ts` are run.
 
-Then within tests, when an expectation is done using the `testCase()` helper amd `.toRunWithExitCode(...)` (see [how to use testCase()](./__templates__/README.md#using-a-specific-template)), this is what happen:
+Then within tests, when the `configureTestCase(...).run()` is called (see [how to use `configureTestCase`](./__templates__/README.md#using-a-specific-template)), this is what happen:
 
 1. the test case folder is recusivly copied from `__cases__/[case-name]` to `[e2e-temp]/[template-name]/[case-name]`
 2. a `node_modules` symbolic link is created, targeting its appropriate template's `node_modules` path (`[e2e-temp]/__templatses__/[template-name]/node_modules`)
 
     Using templates allow us to install only once the node modules for each template, a template being a kind of "package-set".
-    If the template name is not given in `testCase()`, the one in `e2eTemplate` field of `__cases__/[case-name]/package.json` is used. If this field is not in there, the `default` template is used.
+    If the template name is not given in `configureTestCase()`, the one in `e2eTemplate` field of `__cases__/[case-name]/package.json` is used. If this field is not set, the `default` template is used.
 
 
 ## Why
@@ -45,8 +87,3 @@ For a concrete example, requiring `@babel/core` in a test case under `[ts-jest]/
 Having the test cases outside of `[ts-jest]` project's root ensures it won't fallback the resolution of node modules within dev dependencies of `ts-jest` itself.
 
 Not to mention that using `npm pack` ensure those tests cases have the same version of `ts-jest` as the one we would publish on NPM.
-
-
-## More info
-
-You can find more information on how to create and use templates [there](./__templates__/README.md).
