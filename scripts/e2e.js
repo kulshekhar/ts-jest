@@ -2,6 +2,7 @@
 'use strict';
 
 process.env.NODE_ENV = 'test';
+process.env.PUBLIC_URL = '';
 const jest = require('jest');
 const { sync: spawnSync } = require('cross-spawn');
 const fs = require('fs-extra');

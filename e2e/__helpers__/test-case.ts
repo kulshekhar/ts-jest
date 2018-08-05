@@ -3,6 +3,12 @@ import { join } from 'path';
 import * as Paths from '../../scripts/paths';
 import * as fs from 'fs-extra';
 
+const TEMPLATE_EXCLUDED_ITEMS = [
+  'node_modules',
+  'package.json',
+  'package-lock.json',
+];
+
 class TestCaseRunDescriptor {
   // tslint:disable-next-line:variable-name
   protected _options: RunTestOptions;
@@ -45,7 +51,9 @@ class TestCaseRunDescriptor {
     });
     if (logOutputUnlessStatusIs != null) {
       console.log(
-        `Output of "${this.name}" using template "${this.templateName}":\n\n`,
+        `Output of test run in "${this.name}" using template "${
+          this.templateName
+        }":\n\n`,
         result.output.trim(),
       );
     }
@@ -86,7 +94,7 @@ export function run(
 
   const prefix =
     pkg.scripts && pkg.scripts.test
-      ? ['npm', 'run', 'test']
+      ? ['npm', '-s', 'run', 'test']
       : [join(dir, 'node_modules', '.bin', 'jest')];
   args = [...prefix, ...args];
   const cmd = args.shift();
@@ -132,6 +140,14 @@ function prepareTest(name: string, template: string): string {
     join(templateDir, 'node_modules'),
     join(caseDir, 'node_modules'),
   );
+
+  // copy all other files from the template to the case dir
+  fs.readdirSync(templateDir).forEach(item => {
+    if (TEMPLATE_EXCLUDED_ITEMS.includes(item)) {
+      return;
+    }
+    fs.copySync(join(templateDir, item), join(caseDir, item));
+  });
 
   return caseDir;
 }
