@@ -49,11 +49,14 @@ class TestCaseRunDescriptor {
       ...this._options,
       template: this.templateName,
     });
-    if (logOutputUnlessStatusIs != null) {
+    if (
+      logOutputUnlessStatusIs != null &&
+      logOutputUnlessStatusIs !== result.status
+    ) {
       console.log(
         `Output of test run in "${this.name}" using template "${
           this.templateName
-        }":\n\n`,
+        } (exit code: ${result.status})":\n\n`,
         result.output.trim(),
       );
     }
@@ -72,6 +75,7 @@ export interface TestRunResult {
   stdout: string;
   stderr: string;
   output: string;
+  outputForSnapshot: string;
 }
 
 export default function configureTestCase(
@@ -111,8 +115,24 @@ export function run(
   const output = result.output
     ? stripAnsiColors(result.output.join('\n\n'))
     : '';
+  const outputForSnapshot = output
+    .trim()
+    // removes total and estimated time(s)
+    .replace(
+      /^(\s*Time\s*:\s*)[\d.]+m?s(?:(,\s*estimated\s+)[\d.]+m?s)?(\s*)$/gm,
+      (_, start, estimatedPrefix, end) => {
+        return `${start}XXs${
+          estimatedPrefix ? `${estimatedPrefix}YYs` : ''
+        }${end}`;
+      },
+    )
+    // removes each test time(s)
+    .replace(
+      /^(\s*(?:✕|✓)\s+.+\s+\()[\d.]+m?s(\)\s*)$/gm,
+      (_, start, end) => `${start}XXms${end}`,
+    );
 
-  return { status: result.status, stderr, stdout, output };
+  return { status: result.status, stderr, stdout, output, outputForSnapshot };
 }
 
 // from https://stackoverflow.com/questions/25245716/remove-all-ansi-colors-styles-from-strings
@@ -136,10 +156,12 @@ function prepareTest(name: string, template: string): string {
   fs.copySync(sourceDir, caseDir);
 
   // link the node_modules dir
-  fs.symlinkSync(
-    join(templateDir, 'node_modules'),
-    join(caseDir, 'node_modules'),
-  );
+  if (!fs.existsSync(join(caseDir, 'node_modules'))) {
+    fs.symlinkSync(
+      join(templateDir, 'node_modules'),
+      join(caseDir, 'node_modules'),
+    );
+  }
 
   // copy all other files from the template to the case dir
   fs.readdirSync(templateDir).forEach(item => {

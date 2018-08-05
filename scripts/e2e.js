@@ -41,12 +41,18 @@ function setupE2e() {
   );
 
   // link locally so we could find it easily
-  fs.symlinkSync(Paths.e2eWorkDir, Paths.e2eWotkDirLink);
+  if (!fs.existsSync(Paths.e2eWotkDirLink)) {
+    fs.symlinkSync(Paths.e2eWorkDir, Paths.e2eWotkDirLink, 'dir');
+  }
 
   // install with `npm ci` in each template, this is the fastest but needs a package lock file,
   // that is why we end with the npm install of our bundle
   getDirectories(Paths.e2eWorkTemplatesDir).forEach(tmplDir => {
     const dir = path.join(Paths.e2eWorkTemplatesDir, tmplDir);
+    // TODO: create a hash of package-lock.json as well as the bundle, and test it over one copied in each
+    // template dir, to know if we should re-install or not
+    if (fs.existsSync(path.join(dir, 'node_modules'))) return;
+
     if (NodeVersion.major >= 8) {
       spawnSync('npm', ['ci'], { cwd: dir, stdio: 'inherit' });
     } else {

@@ -40,6 +40,7 @@ The returned value is an object with those properties and methods:
     - `stdout`, _string_: the data written to stdout during the run
     - `stderr`, _string_: the data written to stderr during the run
     - `output`, _string_: the data written to stdout and stderr during the run
+    - `outputForSnapshot`, _string_: same as `output`, expect it's sanitized for jest snapshot (time values are replaced with static values, ...)
 
     **Note**: _You can optionally pass the expected status code as the first argument of `run()`. In the case it's not the correct one, it'll write in the console the actual `output` so that you can debug the test case._
 

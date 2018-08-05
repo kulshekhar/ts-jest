@@ -16,7 +16,8 @@
     "test": "npm run test:e2e && npm run test:unit",
     "tslint": "tslint 'src/**/*.ts'",
     "doc": "doctoc .",
-    "prepublish": "npm run clean-build",
+    "prepare": "npm run build",
+    "prepublishOnly": "npm run clean-build",
     "precommit": "lint-staged",
     "postcommit": "git reset",
     "format": "prettier --single-quote --trailing-comma all --write \"{src,scripts,tests}/**/*.ts\" && prettier --single-quote --trailing-comma es5 --write \"{src,scripts,tests}/**/*.js\""
