@@ -1,6 +1,4 @@
 {
-  "e2eTemplate": "default",
-
   "jest": {
     "transform": {
       "^.+\\.tsx?$": "ts-jest"

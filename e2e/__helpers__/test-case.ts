@@ -77,11 +77,21 @@ export function run(
   name: string,
   { args = [], env = {}, template }: RunTestOptions = {},
 ): TestRunResult {
+  // we need to know if there is a test script, and if so use it instead of starting jest
+  const pkg = require(join(Paths.e2eSourceDir, name, 'package.json'));
+  if (!template) {
+    template = pkg.e2eTempalte || 'default';
+  }
   const dir = prepareTest(name, template);
 
-  const JEST_BIN = join(dir, 'node_modules', '.bin', 'jest');
+  const prefix =
+    pkg.scripts && pkg.scripts.test
+      ? ['npm', 'run', 'test']
+      : [join(dir, 'node_modules', '.bin', 'jest')];
+  args = [...prefix, ...args];
+  const cmd = args.shift();
 
-  const result = spawnSync(JEST_BIN, args, {
+  const result = spawnSync(cmd, args, {
     cwd: dir,
     // Add both process.env which is the standard and custom env variables
     env: { ...process.env, ...env },
@@ -105,14 +115,8 @@ function stripAnsiColors(stringToStrip: string): string {
   );
 }
 
-function prepareTest(name: string, template?: string): string {
+function prepareTest(name: string, template: string): string {
   const sourceDir = join(Paths.e2eSourceDir, name);
-
-  // read the template from the package field if it is not given
-  if (!template) {
-    template =
-      require(join(sourceDir, 'package.json')).e2eTemplate || 'default';
-  }
   // working directory is in the temp directory, different for each tempalte name
   const caseDir = join(Paths.e2eWorkDir, template, name);
   const templateDir = join(Paths.e2eWorkTemplatesDir, template);
