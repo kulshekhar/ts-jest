@@ -69,6 +69,7 @@
   "dependencies": {
     "closest-file-data": "^0.1.4",
     "fs-extra": "6.0.1",
+    "json5": "^1.0.1",
     "lodash": "^4.17.10"
   },
   "peerDependencies": {
