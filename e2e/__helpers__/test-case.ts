@@ -130,24 +130,25 @@ export default function configureTestCase(
 }
 
 export function sanitizeOutput(output: string): string {
-  return (
-    output
-      .trim()
-      // removes total and estimated times
-      .replace(
-        /^(\s*Time\s*:\s*)[\d.]+m?s(?:(,\s*estimated\s+)[\d.]+m?s)?(\s*)$/gm,
-        (_, start, estimatedPrefix, end) => {
-          return `${start}XXs${
-            estimatedPrefix ? `${estimatedPrefix}YYs` : ''
-          }${end}`;
-        },
-      )
-      // removes each test time values
-      .replace(
-        /^(\s*(?:✕|✓)\s+.+\s+\()[\d.]+m?s(\)\s*)$/gm,
-        (_, start, end) => `${start}XXms${end}`,
-      )
-  );
+  let out: string = output
+    .trim()
+    // removes total and estimated times
+    .replace(
+      /^(\s*Time\s*:\s*)[\d.]+m?s(?:(,\s*estimated\s+)[\d.]+m?s)?(\s*)$/gm,
+      (_, start, estimatedPrefix, end) => {
+        return `${start}XXs${end}`;
+      },
+    )
+    // removes each test time values
+    .replace(
+      /^(\s*(?:✕|×|✓|√)\s+.+\s+\()[\d.]+m?s(\)\s*)$/gm,
+      (_, start, end) => `${start}XXms${end}`,
+    );
+  // TODO: improves this...
+  if (process.platform === 'win32') {
+    out = out.replace(/\\/g, '/');
+  }
+  return out;
 }
 
 export function run(

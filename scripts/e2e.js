@@ -8,16 +8,13 @@ const { sync: spawnSync } = require('cross-spawn');
 const fs = require('fs-extra');
 const path = require('path');
 const Paths = require('./paths');
+const { satisfies } = require('semver');
 
-const NodeVersion = (versions => {
-  return { major: versions[0], minor: versions[1], patch: versions[2] };
-})(
-  process.versions.node
-    .split('-')
-    .shift()
-    .split('.')
-    .map(s => parseInt(s, 10))
-);
+const npmVersion = spawnSync('npm', ['-s', '--version'])
+  .stdout.toString()
+  .trim();
+const npmHasCiCommand = satisfies(npmVersion, '>=5.7.0');
+const npmHasPrepare = satisfies(npmVersion, '>=4.0.0');
 
 function getDirectories(rootDir) {
   return fs.readdirSync(rootDir).filter(function(file) {
@@ -28,6 +25,13 @@ function getDirectories(rootDir) {
 function setupE2e() {
   // this will trigger the build as well (not using yarn since yarn pack is bugy)
   // keep on to so that the build is triggered beforehand (pack => prepublish => clean-build => build)
+  // Except that on npm < 4.0.0 the prepare doesn't exists
+  if (!npmHasPrepare) {
+    spawnSync('npm', ['-s', 'run', 'build'], {
+      cwd: Paths.rootDir,
+      stdio: 'inherit',
+    });
+  }
   const res = spawnSync('npm', ['-s', 'pack'], { cwd: Paths.rootDir });
   const bundle = path.join(Paths.rootDir, res.stdout.toString().trim());
 
@@ -53,10 +57,9 @@ function setupE2e() {
     // template dir, to know if we should re-install or not
     if (fs.existsSync(path.join(dir, 'node_modules'))) return;
 
-    if (NodeVersion.major >= 8) {
+    if (npmHasCiCommand) {
       spawnSync('npm', ['ci'], { cwd: dir, stdio: 'inherit' });
     } else {
-      // npm coming with node < 8 does not have the `ci` command
       spawnSync('npm', ['i'], { cwd: dir, stdio: 'inherit' });
     }
     spawnSync('npm', ['i', '-D', bundle], { cwd: dir, stdio: 'inherit' });

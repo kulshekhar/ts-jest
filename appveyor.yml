@@ -23,7 +23,6 @@ install:
   - ps: Install-Product node $env:nodejs_version
   - set CI=true
   - set AppVeyor=true
-  - npm i -g rimraf
   - npm ci || npm install
 
 build: off

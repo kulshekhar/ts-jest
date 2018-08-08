@@ -32,7 +32,7 @@ Object {
     Test Suites: 1 failed, 1 total
     Tests:       1 failed, 1 total
     Snapshots:   0 total
-    Time:        XXs, estimated YYs
+    Time:        XXs
     Ran all test suites.
     ================================================================================,
   "with-babel-7": jest exit code: 1
@@ -65,7 +65,7 @@ Object {
     Test Suites: 1 failed, 1 total
     Tests:       1 failed, 1 total
     Snapshots:   0 total
-    Time:        XXs, estimated YYs
+    Time:        XXs
     Ran all test suites.
     ================================================================================,
   "with-jest-22": jest exit code: 1
@@ -97,7 +97,7 @@ Object {
     Test Suites: 1 failed, 1 total
     Tests:       1 failed, 1 total
     Snapshots:   0 total
-    Time:        XXs, estimated YYs
+    Time:        XXs
     Ran all test suites.
     ================================================================================,
 }
