@@ -8,6 +8,7 @@ module.exports = {
   coverageDirectory: 'test_coverage_dir',
   collectCoverageFrom: ['src/**/*.tsx', 'src/**/*.ts'],
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json'],
+  testEnvironment: 'node',
   globals: {
     'ts-jest': {
       tsConfig: 'tsconfig.base.json',

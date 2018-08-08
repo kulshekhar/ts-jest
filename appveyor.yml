@@ -23,16 +23,15 @@ install:
   - ps: Install-Product node $env:nodejs_version
   - set CI=true
   - set AppVeyor=true
-  - yarn global add rimraf
-  - yarn
+  - npm i -g rimraf
+  - npm ci || npm install
 
 build: off
 
 cache:
-  - "%LOCALAPPDATA%\\Yarn"
+  - "%LOCALAPPDATA%\\npm-cache"
 
 test_script:
   - node --version
   - npm --version
-  - yarn --version
-  - cmd: yarn test
+  - cmd: npm test
