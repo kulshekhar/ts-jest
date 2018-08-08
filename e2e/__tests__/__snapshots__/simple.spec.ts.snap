@@ -8,7 +8,7 @@ Object {
     ===[ STDERR ]===================================================================
     PASS __tests__/Hello.test.ts
       Hello Class
-        ✓ should create a new Hello (XXms)
+        P should create a new Hello
     
     Test Suites: 1 passed, 1 total
     Tests:       1 passed, 1 total
@@ -22,7 +22,7 @@ Object {
     ===[ STDERR ]===================================================================
     PASS __tests__/Hello.test.ts
       Hello Class
-        ✓ should create a new Hello (XXms)
+        P should create a new Hello
     
     Test Suites: 1 passed, 1 total
     Tests:       1 passed, 1 total
@@ -36,7 +36,7 @@ Object {
     ===[ STDERR ]===================================================================
     PASS __tests__/Hello.test.ts
       Hello Class
-        ✓ should create a new Hello (XXms)
+        P should create a new Hello
     
     Test Suites: 1 passed, 1 total
     Tests:       1 passed, 1 total

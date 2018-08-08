@@ -12,7 +12,7 @@ Object {
     ===[ STDERR ]===================================================================
     FAIL test/echo.spec.ts
       echo
-        ✕ echoes (XXms)
+        F echoes
     
       ● echo › echoes
     
@@ -45,7 +45,7 @@ Object {
     ===[ STDERR ]===================================================================
     FAIL test/echo.spec.ts
       echo
-        ✕ echoes (XXms)
+        F echoes
     
       ● echo › echoes
     
@@ -78,7 +78,7 @@ Object {
     ===[ STDERR ]===================================================================
     FAIL test/echo.spec.ts
       echo
-        ✕ echoes (XXms)
+        F echoes
     
       ● echo › echoes
     
@@ -115,7 +115,7 @@ Object {
     ===[ STDERR ]===================================================================
     PASS test/echo.spec.ts
       echo
-        ✓ echoes (XXms)
+        P echoes
     
     Test Suites: 1 passed, 1 total
     Tests:       1 passed, 1 total
@@ -133,7 +133,7 @@ Object {
     ===[ STDERR ]===================================================================
     PASS test/echo.spec.ts
       echo
-        ✓ echoes (XXms)
+        P echoes
     
     Test Suites: 1 passed, 1 total
     Tests:       1 passed, 1 total
@@ -151,7 +151,7 @@ Object {
     ===[ STDERR ]===================================================================
     PASS test/echo.spec.ts
       echo
-        ✓ echoes (XXms)
+        P echoes
     
     Test Suites: 1 passed, 1 total
     Tests:       1 passed, 1 total

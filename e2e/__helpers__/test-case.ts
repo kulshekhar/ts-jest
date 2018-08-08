@@ -129,6 +129,13 @@ export default function configureTestCase(
   return new TestCaseRunDescriptor(name, options);
 }
 
+const PASS_MARKS = ['✓', '√'];
+const FAIL_MARKS = ['✕', '×'];
+const normalizeTestMark = (mark: string): string => {
+  if (PASS_MARKS.includes(mark)) return 'P'; // tslint:disable-line
+  if (FAIL_MARKS.includes(mark)) return 'F'; // tslint:disable-line
+  return '?';
+};
 export function sanitizeOutput(output: string): string {
   let out: string = output
     .trim()
@@ -141,8 +148,8 @@ export function sanitizeOutput(output: string): string {
     )
     // removes each test time values
     .replace(
-      /^(\s*(?:✕|×|✓|√)\s+.+\s+\()[\d.]+m?s(\)\s*)$/gm,
-      (_, start, end) => `${start}XXms${end}`,
+      /^(\s*)(✕|×|✓|√)(\s+[^\(]+)(\s+\([\d.]+m?s\))?$/gm,
+      (_, start, mark, mid, time) => `${start}${normalizeTestMark(mark)}${mid}`,
     );
   // TODO: improves this...
   if (process.platform === 'win32') {
