@@ -1,3 +1,4 @@
+// tslint:disable-file:no-shadowed-variable
 import { sync as spawnSync } from 'cross-spawn';
 import { join } from 'path';
 import * as Paths from '../../scripts/paths';
@@ -44,15 +45,12 @@ class TestCaseRunDescriptor {
     return this._options.template;
   }
 
-  run(logOutputUnlessStatusIs?: number): TestRunResult {
+  run(logUnlessStatus?: number): TestRunResult {
     const result = run(this.name, {
       ...this._options,
       template: this.templateName,
     });
-    if (
-      logOutputUnlessStatusIs != null &&
-      logOutputUnlessStatusIs !== result.status
-    ) {
+    if (logUnlessStatus != null && logUnlessStatus !== result.status) {
       console.log(
         `Output of test run in "${this.name}" using template "${
           this.templateName
@@ -62,7 +60,45 @@ class TestCaseRunDescriptor {
     }
     return result;
   }
+
+  runWithTemplates<T extends string>(
+    logUnlessStatus: number,
+    ...templates: T[]
+  ): TestRunResultsMap<T>;
+  runWithTemplates<T extends string>(...templates: T[]): TestRunResultsMap<T>;
+  runWithTemplates<T extends string>(
+    logUnlessStatus: number | T,
+    ...templates: T[]
+  ): TestRunResultsMap<T> {
+    if (typeof logUnlessStatus !== 'number') {
+      templates.unshift(logUnlessStatus);
+      logUnlessStatus = undefined;
+    }
+    if (templates.length < 1) {
+      throw new RangeError(
+        `There must be at least one template to run the test case with.`,
+      );
+    }
+    if (!templates.every((t, i) => templates.indexOf(t, i + 1) === -1)) {
+      throw new Error(
+        `Each template must be unique. Given ${templates.join(', ')}`,
+      );
+    }
+    return templates.reduce(
+      (map, template) => {
+        const desc = new TestCaseRunDescriptor(this.name, {
+          ...this._options,
+          template,
+        });
+        map[template as string] = desc.run(logUnlessStatus as number);
+        return map;
+      },
+      {} as TestRunResultsMap<T>,
+    );
+  }
 }
+
+export const TestRunResultFlag = Symbol.for('[ts-jest-test-run-result]');
 
 export interface RunTestOptions {
   template?: string;
@@ -71,18 +107,44 @@ export interface RunTestOptions {
 }
 
 export interface TestRunResult {
+  [TestRunResultFlag]: true;
   status: number;
   stdout: string;
   stderr: string;
   output: string;
-  outputForSnapshot: string;
 }
+
+// tslint:disable-next-line:interface-over-type-literal
+export type TestRunResultsMap<T extends string = string> = {
+  [key in T]: TestRunResult
+};
 
 export default function configureTestCase(
   name: string,
   options: RunTestOptions = {},
 ): TestCaseRunDescriptor {
   return new TestCaseRunDescriptor(name, options);
+}
+
+export function sanitizeOutput(output: string): string {
+  return (
+    output
+      .trim()
+      // removes total and estimated times
+      .replace(
+        /^(\s*Time\s*:\s*)[\d.]+m?s(?:(,\s*estimated\s+)[\d.]+m?s)?(\s*)$/gm,
+        (_, start, estimatedPrefix, end) => {
+          return `${start}XXs${
+            estimatedPrefix ? `${estimatedPrefix}YYs` : ''
+          }${end}`;
+        },
+      )
+      // removes each test time values
+      .replace(
+        /^(\s*(?:✕|✓)\s+.+\s+\()[\d.]+m?s(\)\s*)$/gm,
+        (_, start, end) => `${start}XXms${end}`,
+      )
+  );
 }
 
 export function run(
@@ -115,24 +177,14 @@ export function run(
   const output = result.output
     ? stripAnsiColors(result.output.join('\n\n'))
     : '';
-  const outputForSnapshot = output
-    .trim()
-    // removes total and estimated time(s)
-    .replace(
-      /^(\s*Time\s*:\s*)[\d.]+m?s(?:(,\s*estimated\s+)[\d.]+m?s)?(\s*)$/gm,
-      (_, start, estimatedPrefix, end) => {
-        return `${start}XXs${
-          estimatedPrefix ? `${estimatedPrefix}YYs` : ''
-        }${end}`;
-      },
-    )
-    // removes each test time(s)
-    .replace(
-      /^(\s*(?:✕|✓)\s+.+\s+\()[\d.]+m?s(\)\s*)$/gm,
-      (_, start, end) => `${start}XXms${end}`,
-    );
 
-  return { status: result.status, stderr, stdout, output, outputForSnapshot };
+  return {
+    [TestRunResultFlag]: true,
+    status: result.status,
+    stderr,
+    stdout,
+    output,
+  };
 }
 
 // from https://stackoverflow.com/questions/25245716/remove-all-ansi-colors-styles-from-strings

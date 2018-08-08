@@ -1,0 +1,9 @@
+{
+  "name": "ts-jest-debug",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "test": "jest --config ./test/jest.config.json"
+  }
+}

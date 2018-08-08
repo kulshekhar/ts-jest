@@ -1,0 +1,163 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Source maps should report correct line numbers when failing 1`] = `
+Object {
+  "default": jest exit code: 1
+    ===[ STDOUT ]===================================================================
+    console.log test/echo.spec.ts:5
+        WITHIN TEST
+    
+      console.log src/echo.ts:2
+        WITHIN SOURCE
+    ===[ STDERR ]===================================================================
+    FAIL test/echo.spec.ts
+      echo
+        ✕ echoes (XXms)
+    
+      ● echo › echoes
+    
+        WITHIN SOURCE
+    
+          2 |   console.log('WITHIN SOURCE');
+          3 |   if (process.env.__FORCE_FAIL) {
+        > 4 |     throw new Error('WITHIN SOURCE');
+            |           ^
+          5 |   }
+          6 |   return shout;
+          7 | }
+    
+          at Object.echo (../src/echo.ts:4:11)
+          at Object.it (echo.spec.ts:6:12)
+    
+    Test Suites: 1 failed, 1 total
+    Tests:       1 failed, 1 total
+    Snapshots:   0 total
+    Time:        XXs, estimated YYs
+    Ran all test suites.
+    ================================================================================,
+  "with-babel-7": jest exit code: 1
+    ===[ STDOUT ]===================================================================
+    console.log test/echo.spec.ts:5
+        WITHIN TEST
+    
+      console.log src/echo.ts:2
+        WITHIN SOURCE
+    ===[ STDERR ]===================================================================
+    FAIL test/echo.spec.ts
+      echo
+        ✕ echoes (XXms)
+    
+      ● echo › echoes
+    
+        WITHIN SOURCE
+    
+          2 |   console.log('WITHIN SOURCE');
+          3 |   if (process.env.__FORCE_FAIL) {
+        > 4 |     throw new Error('WITHIN SOURCE');
+            |           ^
+          5 |   }
+          6 |   return shout;
+          7 | }
+    
+          at Object.echo (../src/echo.ts:4:11)
+          at Object.it (echo.spec.ts:6:12)
+    
+    Test Suites: 1 failed, 1 total
+    Tests:       1 failed, 1 total
+    Snapshots:   0 total
+    Time:        XXs, estimated YYs
+    Ran all test suites.
+    ================================================================================,
+  "with-jest-22": jest exit code: 1
+    ===[ STDOUT ]===================================================================
+    console.log test/echo.spec.ts:5
+        WITHIN TEST
+    
+      console.log src/echo.ts:2
+        WITHIN SOURCE
+    ===[ STDERR ]===================================================================
+    FAIL test/echo.spec.ts
+      echo
+        ✕ echoes (XXms)
+    
+      ● echo › echoes
+    
+        WITHIN SOURCE
+    
+          2 |   console.log('WITHIN SOURCE');
+          3 |   if (process.env.__FORCE_FAIL) {
+        > 4 |     throw new Error('WITHIN SOURCE');
+          5 |   }
+          6 |   return shout;
+          7 | }
+          
+          at Object.echo (../src/echo.ts:4:11)
+          at Object.it (echo.spec.ts:6:12)
+    
+    Test Suites: 1 failed, 1 total
+    Tests:       1 failed, 1 total
+    Snapshots:   0 total
+    Time:        XXs, estimated YYs
+    Ran all test suites.
+    ================================================================================,
+}
+`;
+
+exports[`Source maps should report correct line numbers with console.log 1`] = `
+Object {
+  "default": jest exit code: 0
+    ===[ STDOUT ]===================================================================
+    console.log test/echo.spec.ts:5
+        WITHIN TEST
+    
+      console.log src/echo.ts:2
+        WITHIN SOURCE
+    ===[ STDERR ]===================================================================
+    PASS test/echo.spec.ts
+      echo
+        ✓ echoes (XXms)
+    
+    Test Suites: 1 passed, 1 total
+    Tests:       1 passed, 1 total
+    Snapshots:   0 total
+    Time:        XXs
+    Ran all test suites.
+    ================================================================================,
+  "with-babel-7": jest exit code: 0
+    ===[ STDOUT ]===================================================================
+    console.log test/echo.spec.ts:5
+        WITHIN TEST
+    
+      console.log src/echo.ts:2
+        WITHIN SOURCE
+    ===[ STDERR ]===================================================================
+    PASS test/echo.spec.ts
+      echo
+        ✓ echoes (XXms)
+    
+    Test Suites: 1 passed, 1 total
+    Tests:       1 passed, 1 total
+    Snapshots:   0 total
+    Time:        XXs
+    Ran all test suites.
+    ================================================================================,
+  "with-jest-22": jest exit code: 0
+    ===[ STDOUT ]===================================================================
+    console.log test/echo.spec.ts:5
+        WITHIN TEST
+    
+      console.log src/echo.ts:2
+        WITHIN SOURCE
+    ===[ STDERR ]===================================================================
+    PASS test/echo.spec.ts
+      echo
+        ✓ echoes (XXms)
+    
+    Test Suites: 1 passed, 1 total
+    Tests:       1 passed, 1 total
+    Snapshots:   0 total
+    Time:        XXs
+    Ran all test suites.
+    ================================================================================,
+}
+`;
