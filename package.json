@@ -7,20 +7,16 @@
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "build:watch": "tsc -p tsconfig.build.json -w",
-    "test:nolint": "npm run clean-build && jest --clearCache && node scripts/tests.js",
     "clean": "node scripts/clean.js",
-    "clean-build": "npm run clean && npm run build",
     "pretest": "npm run tslint",
-    "test:unit": "node scripts/tests.js",
-    "test:e2e": "node scripts/e2e.js",
-    "test": "npm run test:e2e && npm run test:unit",
+    "test": "node scripts/e2e.js",
     "tslint": "tslint 'src/**/*.ts'",
     "doc": "doctoc .",
-    "prepare": "npm run build",
-    "prepublishOnly": "npm run clean-build",
+    "prepare": "rimraf dist && npm run build",
+    "prepublishOnly": "npm run test",
     "precommit": "lint-staged",
     "postcommit": "git reset",
-    "format": "prettier --single-quote --trailing-comma all --write \"{src,scripts,tests}/**/*.ts\" && prettier --single-quote --trailing-comma es5 --write \"{src,scripts,tests}/**/*.js\""
+    "format": "prettier --single-quote --trailing-comma all --write \"{src,scripts}/**/*.ts\" && prettier --single-quote --trailing-comma es5 --write \"{src,scripts}/**/*.js\""
   },
   "repository": {
     "type": "git",
@@ -39,75 +35,28 @@
     "url": "https://github.com/kulshekhar/ts-jest/issues"
   },
   "homepage": "https://github.com/kulshekhar/ts-jest#readme",
-  "jest": {
-    "transform": {
-      "^.+\\.tsx?$": "<rootDir>/dist/index.js"
-    },
-    "testRegex": "tests/__tests__/.*\\.spec\\.ts$",
-    "testPathIgnorePatterns": [
-      "/node_modules/",
-      "tests/__tests__/watch.spec.ts"
-    ],
-    "coverageReporters": [
-      "text"
-    ],
-    "coverageDirectory": "test_coverage_dir",
-    "collectCoverageFrom": [
-      "src/**/*.tsx",
-      "src/**/*.ts"
-    ],
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "jsx",
-      "json"
-    ],
-    "globals": {
-      "ts-jest": {
-        "tsConfig": "tsconfig.base.json"
-      }
-    }
-  },
   "dependencies": {},
-  "optionalDependencies": {
-    "babel-jest": ">=22 <24",
-    "jest": ">=22 <24",
-    "typescript": ">=2.7 <3"
+  "peerDependencies": {
+    "babel-jest": ">=22.0.0 <24.0.0",
+    "jest": ">=22.0.0 <24.0.0",
+    "typescript": ">=2.7.0 <4.0.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.0.0-beta.54",
-    "@babel/preset-env": "^7.0.0-beta.54",
-    "@types/babel-core": "^6.25.5",
-    "@types/babel__core": "^7.0.1",
-    "@types/es6-shim": "0.31.37",
     "@types/fs-extra": "5.0.4",
     "@types/jest": "^23.3.0",
-    "@types/lodash": "^4.14.109",
     "@types/node": "10.5.6",
-    "@types/react": "16.4.7",
-    "@types/yargs": "^11.0.0",
-    "babel-core": "^7.0.0-0",
     "babel-jest": "^23.4.2",
-    "babel-preset-jest": "^23.2.0",
-    "cpx": "^1.5.0",
     "cross-spawn": "latest",
-    "cross-spawn-with-kill": "latest",
     "doctoc": "latest",
     "fs-extra": "6.0.1",
     "husky": "^0.14.3",
     "jest": "^23.4.1",
-    "jest-config": "^23.4.1",
     "lint-staged": "^7.1.2",
-    "pkg-dir": "^3.0.0",
     "prettier": "^1.12.1",
-    "react": "16.4.2",
-    "react-test-renderer": "16.4.2",
     "reflect-metadata": "^0.1.12",
     "rimraf": "^2.6.2",
     "tslint": "^5.11.0",
-    "typescript": "^2.9.2",
-    "yargs": "^12.0.1"
+    "typescript": "^2.9.2"
   },
   "lint-staged": {
     "*.js": [

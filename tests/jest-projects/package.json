@@ -1,5 +1,0 @@
-{
-  "jest": {
-    "projects": ["<rootDir>", "<rootDir>/packages/*"]
-  }
-}

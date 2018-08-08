@@ -9,10 +9,10 @@ import {
   flattenDiagnosticMessageText,
   readConfigFile,
   parseJsonConfigFileContent,
-  createWatchCompilerHost,
-  createSemanticDiagnosticsBuilderProgram,
-  WatchCompilerHost,
-  SemanticDiagnosticsBuilderProgram,
+  // createWatchCompilerHost,
+  // createSemanticDiagnosticsBuilderProgram,
+  // WatchCompilerHost,
+  // SemanticDiagnosticsBuilderProgram,
   TranspileOptions,
   ModuleKind,
   transpileModule,
@@ -62,7 +62,11 @@ export default class TsProgram {
     }
     // could we find one?
     if (!resolved) {
-      throw new Error(`Could not find a TS config file.`);
+      throw new Error(
+        `Could not find a TS config file (given: "${given}", root: "${
+          this.rootDir
+        }")`,
+      );
     }
     return (this._configFile = resolved);
   }
@@ -120,25 +124,25 @@ export default class TsProgram {
     return outputText;
   }
 
-  private _watchCompilerHost!: WatchCompilerHost<
-    SemanticDiagnosticsBuilderProgram
-  >;
-  get watchCompilerHost(): WatchCompilerHost<
-    SemanticDiagnosticsBuilderProgram
-  > {
-    if (this._watchCompilerHost !== undefined) {
-      return this._watchCompilerHost;
-    }
+  // private _watchCompilerHost!: WatchCompilerHost<
+  //   SemanticDiagnosticsBuilderProgram
+  // >;
+  // get watchCompilerHost(): WatchCompilerHost<
+  //   SemanticDiagnosticsBuilderProgram
+  // > {
+  //   if (this._watchCompilerHost !== undefined) {
+  //     return this._watchCompilerHost;
+  //   }
 
-    const compiler = createWatchCompilerHost(
-      [],
-      this.compilerOptions,
-      sys,
-      createSemanticDiagnosticsBuilderProgram,
-      this.reportDiagnostic.bind(this),
-    );
-    return (this._watchCompilerHost = compiler);
-  }
+  //   const compiler = createWatchCompilerHost(
+  //     [],
+  //     this.compilerOptions,
+  //     sys,
+  //     createSemanticDiagnosticsBuilderProgram,
+  //     this.reportDiagnostic.bind(this),
+  //   );
+  //   return (this._watchCompilerHost = compiler);
+  // }
 
   reportDiagnostic(...diagnostics: Diagnostic[]) {
     const diagnostic = diagnostics[0];

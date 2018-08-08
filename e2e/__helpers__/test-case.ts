@@ -63,11 +63,13 @@ class TestCaseRunDescriptor {
 
   runWithTemplates<T extends string>(
     logUnlessStatus: number,
+    // tslint:disable-next-line:trailing-comma
     ...templates: T[]
   ): TestRunResultsMap<T>;
   runWithTemplates<T extends string>(...templates: T[]): TestRunResultsMap<T>;
   runWithTemplates<T extends string>(
     logUnlessStatus: number | T,
+    // tslint:disable-next-line:trailing-comma
     ...templates: T[]
   ): TestRunResultsMap<T> {
     if (typeof logUnlessStatus !== 'number') {
@@ -98,6 +100,7 @@ class TestCaseRunDescriptor {
   }
 }
 
+// tslint:disable-next-line:variable-name
 export const TestRunResultFlag = Symbol.for('[ts-jest-test-run-result]');
 
 export interface RunTestOptions {
