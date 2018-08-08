@@ -65,20 +65,15 @@
     ],
     "globals": {
       "ts-jest": {
-        "tsConfigFile": "tsconfig.base.json"
+        "tsConfig": "tsconfig.base.json"
       }
     }
   },
-  "dependencies": {
-    "closest-file-data": "^0.1.4",
-    "fs-extra": "6.0.1",
-    "lodash": "^4.17.10"
-  },
-  "peerDependencies": {
-    "babel-core": "^6.0.0 || ^7.0.0-0",
-    "babel-jest": "^23.0.0 || ^24.0.0",
-    "jest": "^23.0.0 || ^24.0.0",
-    "typescript": "^2.0.0 || ^3.0.0"
+  "dependencies": {},
+  "optionalDependencies": {
+    "babel-jest": ">=22 <24",
+    "jest": ">=22 <24",
+    "typescript": ">=2.7 <3"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0-beta.54",
@@ -93,12 +88,13 @@
     "@types/react": "16.4.7",
     "@types/yargs": "^11.0.0",
     "babel-core": "^7.0.0-0",
-    "babel-jest": "^23.4.0",
+    "babel-jest": "^23.4.2",
     "babel-preset-jest": "^23.2.0",
     "cpx": "^1.5.0",
     "cross-spawn": "latest",
     "cross-spawn-with-kill": "latest",
     "doctoc": "latest",
+    "fs-extra": "6.0.1",
     "husky": "^0.14.3",
     "jest": "^23.4.1",
     "jest-config": "^23.4.1",

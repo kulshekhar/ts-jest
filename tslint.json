@@ -4,6 +4,7 @@
         "tslint:recommended"
     ],
     "rules": {
+        "variable-name": [true, "ban-keywords", "check-format", "allow-leading-underscore"],
         "arrow-parens": false,
         "quotemark": [
             true,
