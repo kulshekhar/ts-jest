@@ -1,34 +1,37 @@
 // tslint:disable:member-ordering
-import { TsJestInstance, TsJestGlobalOptions } from './types';
-import TsProgram from './ts-program';
+import { TsJestGlobalOptions, TsJestConfig } from './types';
+import TsProgram from './ts-program.simple';
 import Memoize from './memoize';
+import { normalizeDiagnosticTypes } from './utils/diagnostics';
+
+const rootDirFor = (jestConfig: jest.ProjectConfig): string => {
+  return jestConfig.rootDir || process.cwd();
+};
+
+// TODO: could be used if we need to handle the cache key ourself
+// const normalizeJestConfig = (jestConfig: jest.ProjectConfig): jest.ProjectConfig => {
+//   const config = { ...jestConfig, rootDir: rootDirFor(jestConfig) };
+//   delete config.cacheDirectory;
+//   delete config.name;
+//   return config;
+// };
 
 class TsJestTransformer implements jest.Transformer {
-  private _instances = new Map<jest.Path, TsJestInstance>();
-  @Memoize((_, rootDir) => rootDir)
-  instanceFor(
-    jestConfig: jest.ProjectConfig,
-    rootDir: jest.Path = jestConfig.rootDir || process.cwd(),
-  ): TsJestInstance {
+  @Memoize()
+  configFor(jestConfig: jest.ProjectConfig): TsJestConfig {
     const { globals = {} } = jestConfig as any;
     const options: TsJestGlobalOptions = { ...globals['ts-jest'] };
-
-    const shouldWrapHtml = !!globals.__TRANSFORM_HTML__;
-
-    let tsProgram: TsProgram;
-    const instance: TsJestInstance = {
-      shouldWrapHtml,
-      get tsProgram(): TsProgram {
-        return tsProgram || (tsProgram = new TsProgram(rootDir, options));
-      },
-      get tsConfig() {
-        return this.tsProgram.compilerOptions;
-      },
-      // TODO: get using babel-jest
+    return {
+      inputOptions: options,
       useBabelJest: !!options.useBabelJest,
+      diagnostics: normalizeDiagnosticTypes(options.diagnostics),
     };
-    this._instances.set(rootDir, instance);
-    return instance;
+  }
+
+  @Memoize()
+  programFor(jestConfig: jest.ProjectConfig): TsProgram {
+    const myConfig = this.configFor(jestConfig);
+    return new TsProgram(rootDirFor(jestConfig), myConfig);
   }
 
   process(
@@ -40,17 +43,16 @@ class TsJestTransformer implements jest.Transformer {
     let result: string | jest.TransformedSource;
 
     // get the tranformer instance
-    const instance = this.instanceFor(jestConfig);
+    const program = this.programFor(jestConfig);
+    const config = this.configFor(jestConfig);
+    const instrument: boolean =
+      !!transformOptions && transformOptions.instrument;
 
     // transpile TS code (source maps are included)
-    result = instance.tsProgram.transpileModule(
-      path,
-      source,
-      transformOptions && transformOptions.instrument,
-    );
+    result = program.transpileModule(path, source, instrument);
 
     // calling babel-jest transformer
-    if (instance.useBabelJest) {
+    if (config.useBabelJest) {
       result = this.babelJest.process(
         result,
         path,
