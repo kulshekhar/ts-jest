@@ -4,11 +4,13 @@ import * as _babel from '@babel/core';
 import * as _babelEnv from '@babel/preset-env';
 import * as _babelJest from 'babel-preset-jest';
 import _babelIstanbul from 'babel-plugin-istanbul';
+import _json5 from 'json5';
 
 export type TBabel = typeof _babel;
 export type TBabelPluginIstanbul = typeof _babelIstanbul;
 export type TBabelPresetEnv = typeof _babelEnv;
 export type TBabelPresetJest = typeof _babelJest;
+export type TJson5 = typeof _json5;
 
 export interface JestCacheKeyOptions {
   rootDir: string;

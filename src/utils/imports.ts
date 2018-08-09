@@ -3,6 +3,7 @@ import {
   TBabelPresetEnv,
   TBabelPluginIstanbul,
   TBabelPresetJest,
+  TJson5,
 } from '../types';
 
 export function importBabelCore(): TBabel {
@@ -44,6 +45,16 @@ export function importBabelPluginIstanbul(): TBabelPluginIstanbul {
     );
   }
   return mod.default;
+}
+
+export function importJson5(): TJson5 {
+  const mod = tryRequire('json5');
+  if (!mod) {
+    throw new Error(
+      `[ts-jest] You must install the 'json5' package if you're using babel.`,
+    );
+  }
+  return mod;
 }
 
 function tryRequire<T = any>(packageName: string): T | void {
