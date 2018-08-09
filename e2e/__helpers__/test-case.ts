@@ -4,16 +4,47 @@ import { join } from 'path';
 import * as Paths from '../../scripts/paths';
 import * as fs from 'fs-extra';
 
-const TEMPLATE_EXCLUDED_ITEMS = [
-  'node_modules',
-  'package.json',
-  'package-lock.json',
-];
+const jestDescribe = describe;
+const jestIt = it;
+const jestExpect = expect;
+
+const TEMPLATE_EXCLUDED_ITEMS = ['node_modules', 'package-lock.json'];
+
+type RunWithTemplatesIterator = (
+  runtTest: () => TestRunResult,
+  templateName: string,
+) => void;
+interface RunWithTemplatesOptions {
+  iterator?: RunWithTemplatesIterator;
+  logUnlessStatus?: number;
+}
+interface WithTemplatesIteratorOptions {
+  describe?: string | false;
+  it?: string;
+  expect?: RunWithTemplatesIterator;
+}
+
+export function withTemplatesIterator({
+  describe = 'with template "__TEMPLATE_NAME__"',
+  it = 'should run as expected',
+  expect = runTest => {
+    jestExpect(runTest()).toMatchSnapshot();
+  },
+}: WithTemplatesIteratorOptions = {}): RunWithTemplatesIterator {
+  return (runTest, name) => {
+    const interpolate = (msg: string) => msg.replace('__TEMPLATE_NAME__', name);
+    if (describe) {
+      jestDescribe(interpolate(describe), () => {
+        jestIt(interpolate(it), () => expect(runTest, name));
+      });
+    } else {
+      jestIt(interpolate(it), () => expect(runTest, name));
+    }
+  };
+}
 
 class TestCaseRunDescriptor {
-  // tslint:disable-next-line:variable-name
   protected _options: RunTestOptions;
-  // tslint:disable-next-line:variable-name
   protected _sourcePackageJson: any;
 
   constructor(readonly name: string, options: RunTestOptions = {}) {
@@ -37,12 +68,12 @@ class TestCaseRunDescriptor {
     );
   }
 
-  get templateName() {
+  get templateName(): string {
     if (!this._options.template) {
       // read the template from the package field if it is not given
       this._options.template = this.sourcePackageJson.e2eTemplate || 'default';
     }
-    return this._options.template;
+    return this._options.template as string;
   }
 
   run(logUnlessStatus?: number): TestRunResult {
@@ -62,20 +93,9 @@ class TestCaseRunDescriptor {
   }
 
   runWithTemplates<T extends string>(
-    logUnlessStatus: number,
-    // tslint:disable-next-line:trailing-comma
-    ...templates: T[]
-  ): TestRunResultsMap<T>;
-  runWithTemplates<T extends string>(...templates: T[]): TestRunResultsMap<T>;
-  runWithTemplates<T extends string>(
-    logUnlessStatus: number | T,
-    // tslint:disable-next-line:trailing-comma
-    ...templates: T[]
+    templates: T[],
+    { iterator, logUnlessStatus }: RunWithTemplatesOptions = {},
   ): TestRunResultsMap<T> {
-    if (typeof logUnlessStatus !== 'number') {
-      templates.unshift(logUnlessStatus);
-      logUnlessStatus = undefined;
-    }
     if (templates.length < 1) {
       throw new RangeError(
         `There must be at least one template to run the test case with.`,
@@ -92,7 +112,16 @@ class TestCaseRunDescriptor {
           ...this._options,
           template,
         });
-        map[template as string] = desc.run(logUnlessStatus as number);
+        const runTest = () => {
+          const out = desc.run(logUnlessStatus);
+          map[template] = { ...out };
+          return out;
+        };
+        if (iterator) {
+          iterator(runTest, template);
+        } else {
+          runTest();
+        }
         return map;
       },
       {} as TestRunResultsMap<T>,
@@ -129,13 +158,15 @@ export default function configureTestCase(
   return new TestCaseRunDescriptor(name, options);
 }
 
-const PASS_MARKS = ['✓', '√'];
-const FAIL_MARKS = ['✕', '×'];
+// first one of each must be the most compatible one
+const PASS_MARKS = ['√', '✓'];
+const FAIL_MARKS = ['×', '✕'];
 const normalizeTestMark = (mark: string): string => {
-  if (PASS_MARKS.includes(mark)) return 'P'; // tslint:disable-line
-  if (FAIL_MARKS.includes(mark)) return 'F'; // tslint:disable-line
+  if (PASS_MARKS.includes(mark)) return PASS_MARKS[0]; // tslint:disable-line
+  if (FAIL_MARKS.includes(mark)) return FAIL_MARKS[0]; // tslint:disable-line
   return '?';
 };
+
 export function sanitizeOutput(output: string): string {
   let out: string = output
     .trim()
@@ -158,16 +189,23 @@ export function sanitizeOutput(output: string): string {
   return out;
 }
 
+export function templateNameForPath(path: string): string {
+  const e2eFile = join(path, '.ts-jest-e2e.json');
+  if (fs.existsSync(e2eFile)) {
+    return require(e2eFile).template || 'default';
+  }
+  return 'default';
+}
+
 export function run(
   name: string,
   { args = [], env = {}, template }: RunTestOptions = {},
 ): TestRunResult {
-  // we need to know if there is a test script, and if so use it instead of starting jest
-  const pkg = require(join(Paths.e2eSourceDir, name, 'package.json'));
-  if (!template) {
-    template = pkg.e2eTempalte || 'default';
-  }
-  const dir = prepareTest(name, template);
+  const dir = prepareTest(
+    name,
+    template || templateNameForPath(join(Paths.e2eSourceDir, name)),
+  );
+  const pkg = require(join(dir, 'package.json'));
 
   const prefix =
     pkg.scripts && pkg.scripts.test
@@ -215,24 +253,31 @@ function prepareTest(name: string, template: string): string {
   // ensure directory exists
   fs.mkdirpSync(caseDir);
 
-  // copy source and test files
-  fs.copySync(sourceDir, caseDir);
-
-  // link the node_modules dir
-  if (!fs.existsSync(join(caseDir, 'node_modules'))) {
-    fs.symlinkSync(
-      join(templateDir, 'node_modules'),
-      join(caseDir, 'node_modules'),
-    );
+  // link the node_modules dir if the template has
+  const tmplModulesDir = join(templateDir, 'node_modules');
+  const caseModulesDir = join(caseDir, 'node_modules');
+  if (!fs.existsSync(caseModulesDir) && fs.existsSync(tmplModulesDir)) {
+    fs.symlinkSync(tmplModulesDir, caseModulesDir);
   }
 
-  // copy all other files from the template to the case dir
+  // copy files from the template to the case dir
   fs.readdirSync(templateDir).forEach(item => {
     if (TEMPLATE_EXCLUDED_ITEMS.includes(item)) {
       return;
     }
     fs.copySync(join(templateDir, item), join(caseDir, item));
   });
+
+  // copy source and test files
+  fs.copySync(sourceDir, caseDir);
+
+  // create a package.json if it does not exists, and/or enforce the package name
+  const pkgFile = join(caseDir, 'package.json');
+  const pkg: any = fs.existsSync(pkgFile) ? fs.readJsonSync(pkgFile) : {};
+  pkg.name = name;
+  pkg.private = true;
+  pkg.version = `0.0.0-mock0`;
+  fs.outputJsonSync(pkgFile, pkg, { spaces: 2 });
 
   return caseDir;
 }

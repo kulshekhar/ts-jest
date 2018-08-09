@@ -1,18 +1,10 @@
 module.exports = {
   transform: {
-    '^.+\\.tsx?$': '<rootDir>/dist/index.js',
+    '\\.ts$': '<rootDir>/dist/index.js',
   },
-  testRegex: '(tests|e2e)/__tests__/.+\\.spec\\.ts$',
-  testPathIgnorePatterns: ['/node_modules/', '/watch.spec.ts$'],
-  coverageReporters: ['text'],
-  coverageDirectory: 'test_coverage_dir',
-  collectCoverageFrom: ['src/**/*.tsx', 'src/**/*.ts'],
+  testRegex: '/e2e/__tests__/.+\\.spec\\.ts$',
+  collectCoverageFrom: ['src/**/*.ts'],
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json'],
   testEnvironment: 'node',
-  globals: {
-    'ts-jest': {
-      tsConfig: 'tsconfig.base.json',
-      useBabelJest: false,
-    },
-  },
+  snapshotSerializers: ['<rootDir>/e2e/__serializers__/test-run-result.ts'],
 };

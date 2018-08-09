@@ -3,6 +3,7 @@
     "sourceMap": false,
     "inlineSourceMap": true,
     "declaration": true,
+    "downlevelIteration": true,
     "target": "es5",
     "module": "commonjs",
     "moduleResolution": "node",
@@ -11,14 +12,17 @@
     "noImplicitAny": false,
     "noImplicitReturns": true,
     "removeComments": true,
-    "strictNullChecks": false,
-    "jsx": "react",
-    "emitDecoratorMetadata": true,
+    "strict": true,
     "experimentalDecorators": true,
-    "allowSyntheticDefaultImports": false,
+    "esModuleInterop": true,
     "skipLibCheck": true,
-    "lib": ["es2015"],
+    "lib": ["es2015", "es2016.array.include"],
     "types": ["jest", "node"],
   },
-  "exclude": ["**/node_modules/**/*"]
+  "include": [
+    "src",
+    "e2e/__tests__",
+    "e2e/__serializer__",
+    "e2e/__helpers__"
+  ]
 }

@@ -53,6 +53,10 @@ function setupE2e() {
   // that is why we end with the npm install of our bundle
   getDirectories(Paths.e2eWorkTemplatesDir).forEach(tmplDir => {
     const dir = path.join(Paths.e2eWorkTemplatesDir, tmplDir);
+
+    // no package-lock.json => this template doesn't provide any package-set
+    if (!fs.existsSync(path.join(dir, 'package-lock.json'))) return;
+
     // TODO: create a hash of package-lock.json as well as the bundle, and test it over one copied in each
     // template dir, to know if we should re-install or not
     if (fs.existsSync(path.join(dir, 'node_modules'))) return;
@@ -69,6 +73,4 @@ function setupE2e() {
 setupE2e();
 
 const argv = process.argv.slice(2);
-argv.push('--no-cache');
-argv.push('--config', path.join(Paths.rootDir, 'jest.config.e2e.js'));
 jest.run(argv);

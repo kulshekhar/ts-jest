@@ -1,4 +1,4 @@
-import { echo } from '../src/echo';
+import { echo } from './echo';
 
 describe('echo', () => {
   it('echoes', () => {

@@ -27,7 +27,7 @@ Let's say you want to use your lately created `with-lodash` template with a `my-
 
 1. the test case should be run only with this template:
 
-    - in `e2e/__cases__/my-case/package.json` set the `e2eTempalte` to `"with-lodash"`
+    - in `e2e/__cases__/my-case/.ts-jest-e2e.json` set the `template` key to `"with-lodash"`
     - in `e2e/__tests__/my-case.spec.ts`:
 
     ```ts
@@ -41,7 +41,7 @@ Let's say you want to use your lately created `with-lodash` template with a `my-
     })
     ```
 
-2. the test case is already been used with another template (its `package.json` has another value in `e2eTemplate`):
+2. the test case is already been used with another template or you want to force it in the test:
 
     - update the test `e2e/__tests__/my-case.spec.ts` (or create a new one):
 
@@ -57,7 +57,7 @@ Let's say you want to use your lately created `with-lodash` template with a `my-
 
       // added test, using our new template
       it('should pass with loadash', () => {
-        const testCase = configureTestCase('my-case', {template: 'with-lodash'});
+        const testCase = configureTestCase('my-case', { template: 'with-lodash'});
         expect(testCase.run().status).toBe(0);
       })
     })

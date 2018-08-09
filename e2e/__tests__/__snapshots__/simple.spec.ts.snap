@@ -1,48 +1,69 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Simple test should pass with each template 1`] = `
-Object {
-  "default": jest exit code: 0
-    ===[ STDOUT ]===================================================================
-    
-    ===[ STDERR ]===================================================================
-    PASS __tests__/Hello.test.ts
-      Hello Class
-        P should create a new Hello
-    
-    Test Suites: 1 passed, 1 total
-    Tests:       1 passed, 1 total
-    Snapshots:   0 total
-    Time:        XXs
-    Ran all test suites.
-    ================================================================================,
-  "with-babel-7": jest exit code: 0
-    ===[ STDOUT ]===================================================================
-    
-    ===[ STDERR ]===================================================================
-    PASS __tests__/Hello.test.ts
-      Hello Class
-        P should create a new Hello
-    
-    Test Suites: 1 passed, 1 total
-    Tests:       1 passed, 1 total
-    Snapshots:   0 total
-    Time:        XXs
-    Ran all test suites.
-    ================================================================================,
-  "with-jest-22": jest exit code: 0
-    ===[ STDOUT ]===================================================================
-    
-    ===[ STDERR ]===================================================================
-    PASS __tests__/Hello.test.ts
-      Hello Class
-        P should create a new Hello
-    
-    Test Suites: 1 passed, 1 total
-    Tests:       1 passed, 1 total
-    Snapshots:   0 total
-    Time:        XXs
-    Ran all test suites.
-    ================================================================================,
-}
+exports[`Simple test with template "default" should pass 1`] = `
+jest exit code: 0
+  ===[ STDOUT ]===================================================================
+  
+  ===[ STDERR ]===================================================================
+  PASS ./Hello.spec.ts
+    Hello Class
+      √ should create a new Hello
+  
+  Test Suites: 1 passed, 1 total
+  Tests:       1 passed, 1 total
+  Snapshots:   0 total
+  Time:        XXs
+  Ran all test suites.
+  ================================================================================
+`;
+
+exports[`Simple test with template "with-babel-6" should pass 1`] = `
+jest exit code: 0
+  ===[ STDOUT ]===================================================================
+  
+  ===[ STDERR ]===================================================================
+  PASS ./Hello.spec.ts
+    Hello Class
+      √ should create a new Hello
+  
+  Test Suites: 1 passed, 1 total
+  Tests:       1 passed, 1 total
+  Snapshots:   0 total
+  Time:        XXs
+  Ran all test suites.
+  ================================================================================
+`;
+
+exports[`Simple test with template "with-babel-7" should pass 1`] = `
+jest exit code: 0
+  ===[ STDOUT ]===================================================================
+  
+  ===[ STDERR ]===================================================================
+  PASS ./Hello.spec.ts
+    Hello Class
+      √ should create a new Hello
+  
+  Test Suites: 1 passed, 1 total
+  Tests:       1 passed, 1 total
+  Snapshots:   0 total
+  Time:        XXs
+  Ran all test suites.
+  ================================================================================
+`;
+
+exports[`Simple test with template "with-jest-22" should pass 1`] = `
+jest exit code: 0
+  ===[ STDOUT ]===================================================================
+  
+  ===[ STDERR ]===================================================================
+  PASS ./Hello.spec.ts
+    Hello Class
+      √ should create a new Hello
+  
+  Test Suites: 1 passed, 1 total
+  Tests:       1 passed, 1 total
+  Snapshots:   0 total
+  Time:        XXs
+  Ran all test suites.
+  ================================================================================
 `;

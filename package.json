@@ -11,7 +11,7 @@
     "clean": "node scripts/clean.js",
     "pretest": "npm run lint",
     "test": "node scripts/e2e.js",
-    "lint": "tslint 'src/**/*.ts'",
+    "lint": "tslint --project .",
     "doc": "doctoc .",
     "prepare": "npm run build",
     "prepublishOnly": "npm run test",

@@ -1,14 +1,13 @@
-import configureTestCase from '../__helpers__/test-case';
+import configureTestCase, {
+  withTemplatesIterator,
+} from '../__helpers__/test-case';
+import { allPackageSets } from '../__helpers__/templates';
 
 describe('Simple test', () => {
-  it('should pass with each template', () => {
-    const testCase = configureTestCase('simple', { args: ['--no-cache'] });
-    const result = testCase.runWithTemplates(
-      0,
-      'default',
-      'with-babel-7',
-      'with-jest-22',
-    );
-    expect(result).toMatchSnapshot();
+  const testCase = configureTestCase('simple', { args: ['--no-cache'] });
+
+  testCase.runWithTemplates(allPackageSets, {
+    logUnlessStatus: 0,
+    iterator: withTemplatesIterator({ it: 'should pass' }),
   });
 });

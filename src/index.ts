@@ -1,16 +1,15 @@
 // tslint:disable:member-ordering
 import { TsJestInstance, TsJestGlobalOptions } from './types';
 import TsProgram from './ts-program';
+import Memoize from './memoize';
 
 class TsJestTransformer implements jest.Transformer {
   private _instances = new Map<jest.Path, TsJestInstance>();
+  @Memoize((_, rootDir) => rootDir)
   instanceFor(
     jestConfig: jest.ProjectConfig,
     rootDir: jest.Path = jestConfig.rootDir || process.cwd(),
   ): TsJestInstance {
-    if (this._instances.has(rootDir)) {
-      return this._instances.get(rootDir) as TsJestInstance;
-    }
     const { globals = {} } = jestConfig as any;
     const options: TsJestGlobalOptions = { ...globals['ts-jest'] };
 
@@ -26,7 +25,7 @@ class TsJestTransformer implements jest.Transformer {
         return this.tsProgram.compilerOptions;
       },
       // TODO: get using babel-jest
-      useBabelJest: options.useBabelJest !== false,
+      useBabelJest: !!options.useBabelJest,
     };
     this._instances.set(rootDir, instance);
     return instance;
@@ -63,14 +62,13 @@ class TsJestTransformer implements jest.Transformer {
     return result;
   }
 
-  private _babelJest!: jest.Transformer;
+  @Memoize()
   get babelJest(): jest.Transformer {
-    if (this._babelJest) return this._babelJest; // tslint:disable-line
     let babelJest = require('babel-jest');
     if (typeof babelJest.createTransformer === 'function') {
       babelJest = babelJest.createTransformer();
     }
-    return (this._babelJest = babelJest);
+    return babelJest;
   }
 
   // TODO: use jest-config package to try to get current config and see if we are going to use babel jest or not

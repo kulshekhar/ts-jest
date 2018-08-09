@@ -7,7 +7,7 @@
 - `__templates__`: contains the package dependency templates for test cases
 - `__templates__/default`: is the default template
 - `__tests__`: contains the actual tests
-- `__e2e_workdir_link__`: is created during a test run and is a symbolic link to a subfolder in the temp folder of the OS where all test cases are installed
+- `__workdir_synlink__`: is created during a test run and is a symbolic link to a subfolder in the temp folder of the OS where all test cases are installed
 
 
 ## Test helpers

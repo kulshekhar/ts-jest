@@ -9,16 +9,13 @@ import {
   flattenDiagnosticMessageText,
   readConfigFile,
   parseJsonConfigFileContent,
-  // createWatchCompilerHost,
-  // createSemanticDiagnosticsBuilderProgram,
-  // WatchCompilerHost,
-  // SemanticDiagnosticsBuilderProgram,
   TranspileOptions,
   ModuleKind,
   transpileModule,
 } from 'typescript';
 import { relative, sep, resolve, dirname } from 'path';
 import { existsSync } from 'fs';
+import Memoize from './memoize';
 
 export default class TsProgram {
   constructor(
@@ -26,24 +23,17 @@ export default class TsProgram {
     readonly tsJestConfig: TsJestGlobalOptions = {},
   ) {}
 
-  private _formatHost!: FormatDiagnosticsHost;
+  @Memoize()
   get formatHost(): FormatDiagnosticsHost {
-    if (!this._formatHost !== undefined) return this._formatHost; // tslint:disable-line:curly
-
-    if (this._formatHost === undefined) {
-      this._formatHost = {
-        getCanonicalFileName: path => relative(this.rootDir, path),
-        getCurrentDirectory: () => this.rootDir,
-        getNewLine: () => sys.newLine,
-      };
-    }
-    return this._formatHost;
+    return {
+      getCanonicalFileName: path => relative(this.rootDir, path),
+      getCurrentDirectory: () => this.rootDir,
+      getNewLine: () => sys.newLine,
+    };
   }
 
-  private _configFile!: string;
+  @Memoize()
   get configFile(): string | null {
-    if (this._configFile !== undefined) return this._configFile; // tslint:disable-line:curly
-
     const given = this.tsJestConfig.tsConfig;
     let resolved: string | undefined;
     if (typeof given === 'string') {
@@ -58,7 +48,7 @@ export default class TsProgram {
       resolved = findConfigFile(this.rootDir, sys.fileExists, 'tsconfig.json');
     } else {
       // what we got was compiler options
-      return (this._configFile = null);
+      return null;
     }
     // could we find one?
     if (!resolved) {
@@ -68,18 +58,15 @@ export default class TsProgram {
         }")`,
       );
     }
-    return (this._configFile = resolved);
+    return resolved;
   }
 
-  private _compilerOptions!: CompilerOptions;
+  @Memoize()
   get compilerOptions() {
-    if (this._compilerOptions !== undefined) return this._compilerOptions; // tslint:disable-line:curly
-
     const { configFile } = this;
     if (configFile == null) {
       // if it's null it means it's not a file but directly some compiler options
-      return (this._compilerOptions = this.tsJestConfig
-        .tsConfig as CompilerOptions);
+      return this.tsJestConfig.tsConfig as CompilerOptions;
     }
     const { config, error } = readConfigFile(configFile, sys.readFile);
     if (error) throw error; // tslint:disable-line:curly
@@ -94,7 +81,7 @@ export default class TsProgram {
     // will throw if at least one error
     this.reportDiagnostic(...errors);
 
-    return (this._compilerOptions = options);
+    return options;
   }
 
   transpileModule(
@@ -123,26 +110,6 @@ export default class TsProgram {
     // outputText will contain inline sourmaps
     return outputText;
   }
-
-  // private _watchCompilerHost!: WatchCompilerHost<
-  //   SemanticDiagnosticsBuilderProgram
-  // >;
-  // get watchCompilerHost(): WatchCompilerHost<
-  //   SemanticDiagnosticsBuilderProgram
-  // > {
-  //   if (this._watchCompilerHost !== undefined) {
-  //     return this._watchCompilerHost;
-  //   }
-
-  //   const compiler = createWatchCompilerHost(
-  //     [],
-  //     this.compilerOptions,
-  //     sys,
-  //     createSemanticDiagnosticsBuilderProgram,
-  //     this.reportDiagnostic.bind(this),
-  //   );
-  //   return (this._watchCompilerHost = compiler);
-  // }
 
   reportDiagnostic(...diagnostics: Diagnostic[]) {
     const diagnostic = diagnostics[0];

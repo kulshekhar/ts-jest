@@ -1,27 +1,31 @@
-import configureTestCase from '../__helpers__/test-case';
+import configureTestCase, {
+  withTemplatesIterator,
+} from '../__helpers__/test-case';
+import { allPackageSets } from '../__helpers__/templates';
 
 describe('Source maps', () => {
-  it('should report correct line numbers with console.log', () => {
+  describe('console.log()', () => {
     const testCase = configureTestCase('source-maps', { args: ['--no-cache'] });
-    const result = testCase.runWithTemplates(
-      0,
-      'default',
-      'with-babel-7',
-      'with-jest-22',
-    );
-    expect(result).toMatchSnapshot();
+
+    testCase.runWithTemplates(allPackageSets, {
+      iterator: withTemplatesIterator({
+        it: 'should pass reporting correct line number',
+      }),
+      logUnlessStatus: 0,
+    });
   });
 
-  it('should report correct line numbers when failing', () => {
+  describe('throw new Error()', () => {
     const testCase = configureTestCase('source-maps', {
+      args: ['--no-cache'],
       env: { __FORCE_FAIL: '1' },
     });
-    const result = testCase.runWithTemplates(
-      1,
-      'default',
-      'with-babel-7',
-      'with-jest-22',
-    );
-    expect(result).toMatchSnapshot();
+
+    testCase.runWithTemplates(allPackageSets, {
+      iterator: withTemplatesIterator({
+        it: 'should fail reporting correct line number',
+      }),
+      logUnlessStatus: 1,
+    });
   });
 });

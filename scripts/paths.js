@@ -10,7 +10,7 @@ const e2eTestsDir = path.join(e2eRootDir, '__tests__');
 const e2eTemplatesDir = path.join(e2eRootDir, '__templates__');
 const e2eWorkDir = path.join(os.tmpdir(), '--ts-jest-temp-e2e--');
 const e2eWorkTemplatesDir = path.join(e2eWorkDir, '__templates__');
-const e2eWotkDirLink = path.join(e2eRootDir, '__e2e_workdir_link__');
+const e2eWotkDirLink = path.join(e2eRootDir, '__workdir_synlink__');
 
 module.exports = {
   rootDir,

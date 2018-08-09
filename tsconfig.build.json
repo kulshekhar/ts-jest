@@ -1,11 +1,10 @@
 {
-  "extends": "./tsconfig.base.json",
+  "extends": "./tsconfig.json",
   "compilerOptions": {
     "sourceMap": false,
     "removeComments": true,
     "outDir": "dist",
     "rootDir": "src",
   },
-  "include": ["src/**/*.ts"],
-  "exclude": ["node_modules"]
+  "include": ["src"]
 }

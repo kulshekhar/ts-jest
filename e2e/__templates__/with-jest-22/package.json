@@ -1,6 +1,6 @@
 {
   "name": "ts-jest-e2e-tmpl-with-jest-22",
-  "version": "0.0.0-test.0",
+  "version": "0.0.0-tmpl.0",
   "private": true,
   "devDependencies": {
     "jest": "^22.4.4",
