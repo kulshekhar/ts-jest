@@ -8,7 +8,7 @@ env:
 cache:
   npm: true
   directories:
-    - /tmp/ts-jest-e2e-workdir
+    - /tmp/ts-jest-e2e-workdir/__templates__
 
 node_js:
   - "10"

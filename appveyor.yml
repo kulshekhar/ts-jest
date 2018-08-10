@@ -20,7 +20,7 @@ install:
 
 cache:
   - '%APPDATA%\npm-cache -> package.json'
-  - '%APPDATA%\ts-jest-e2e'
+  - '%APPDATA%\ts-jest-e2e\__templates__'
 
 # Post-install test scripts.
 test_script:
