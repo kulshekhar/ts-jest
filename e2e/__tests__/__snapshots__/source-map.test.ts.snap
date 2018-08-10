@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Source maps console.log() with template "default" should pass reporting correct line number 1`] = `
+exports[`Source maps console.log() should pass reporting correct line number using template "default" 1`] = `
 jest exit code: 0
   ===[ STDOUT ]===================================================================
   console.log echo.spec.ts:5
@@ -21,7 +21,7 @@ jest exit code: 0
   ================================================================================
 `;
 
-exports[`Source maps console.log() with template "with-babel-6" should pass reporting correct line number 1`] = `
+exports[`Source maps console.log() should pass reporting correct line number using template "with-babel-6" 1`] = `
 jest exit code: 0
   ===[ STDOUT ]===================================================================
   console.log echo.spec.ts:5
@@ -42,7 +42,7 @@ jest exit code: 0
   ================================================================================
 `;
 
-exports[`Source maps console.log() with template "with-babel-7" should pass reporting correct line number 1`] = `
+exports[`Source maps console.log() should pass reporting correct line number using template "with-babel-7" 1`] = `
 jest exit code: 0
   ===[ STDOUT ]===================================================================
   console.log echo.spec.ts:5
@@ -63,7 +63,7 @@ jest exit code: 0
   ================================================================================
 `;
 
-exports[`Source maps console.log() with template "with-jest-22" should pass reporting correct line number 1`] = `
+exports[`Source maps console.log() should pass reporting correct line number using template "with-jest-22" 1`] = `
 jest exit code: 0
   ===[ STDOUT ]===================================================================
   console.log echo.spec.ts:5
@@ -84,7 +84,7 @@ jest exit code: 0
   ================================================================================
 `;
 
-exports[`Source maps throw new Error() with template "default" should fail reporting correct line number 1`] = `
+exports[`Source maps throw new Error() should fail reporting correct line number using template "default" 1`] = `
 jest exit code: 1
   ===[ STDOUT ]===================================================================
   console.log echo.spec.ts:5
@@ -120,7 +120,7 @@ jest exit code: 1
   ================================================================================
 `;
 
-exports[`Source maps throw new Error() with template "with-babel-6" should fail reporting correct line number 1`] = `
+exports[`Source maps throw new Error() should fail reporting correct line number using template "with-babel-6" 1`] = `
 jest exit code: 1
   ===[ STDOUT ]===================================================================
   console.log echo.spec.ts:5
@@ -156,7 +156,7 @@ jest exit code: 1
   ================================================================================
 `;
 
-exports[`Source maps throw new Error() with template "with-babel-7" should fail reporting correct line number 1`] = `
+exports[`Source maps throw new Error() should fail reporting correct line number using template "with-babel-7" 1`] = `
 jest exit code: 1
   ===[ STDOUT ]===================================================================
   console.log echo.spec.ts:5
@@ -192,7 +192,7 @@ jest exit code: 1
   ================================================================================
 `;
 
-exports[`Source maps throw new Error() with template "with-jest-22" should fail reporting correct line number 1`] = `
+exports[`Source maps throw new Error() should fail reporting correct line number using template "with-jest-22" 1`] = `
 jest exit code: 1
   ===[ STDOUT ]===================================================================
   console.log echo.spec.ts:5

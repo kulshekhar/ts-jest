@@ -1,6 +1,5 @@
 import * as _babelJest from 'babel-jest';
-import { CompilerOptions, Node } from 'typescript';
-import TransformationManager from './transformers/manager';
+import { CompilerOptions } from 'typescript';
 
 export type TBabelJest = typeof _babelJest;
 

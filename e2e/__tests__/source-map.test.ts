@@ -8,13 +8,11 @@ describe('Source maps', () => {
     testCase.runWithTemplates(
       allPackageSets,
       0,
-      (runTest, { describeLabel }) => {
-        describe(describeLabel, () => {
-          it('should pass reporting correct line number', () => {
-            const result = runTest();
-            expect(result.status).toBe(0);
-            expect(result).toMatchSnapshot();
-          });
+      (runTest, { templateName }) => {
+        it(`should pass reporting correct line number using template "${templateName}"`, () => {
+          const result = runTest();
+          expect(result.status).toBe(0);
+          expect(result).toMatchSnapshot();
         });
       },
     );
@@ -29,13 +27,11 @@ describe('Source maps', () => {
     testCase.runWithTemplates(
       allPackageSets,
       1,
-      (runTest, { describeLabel }) => {
-        describe(describeLabel, () => {
-          it('should fail reporting correct line number', () => {
-            const result = runTest();
-            expect(result.status).toBe(1);
-            expect(result).toMatchSnapshot();
-          });
+      (runTest, { templateName }) => {
+        it(`should fail reporting correct line number using template "${templateName}"`, () => {
+          const result = runTest();
+          expect(result.status).toBe(1);
+          expect(result).toMatchSnapshot();
         });
       },
     );

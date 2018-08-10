@@ -1,4 +1,4 @@
-import { DiagnosticTypes, DiagnosticSets, diagnosticSets } from '../types';
+import { DiagnosticTypes, DiagnosticSets, diagnosticSets } from './types';
 
 export const isDiagnosticType = (val: any): val is DiagnosticTypes => {
   return val && DiagnosticTypes[val] === val;

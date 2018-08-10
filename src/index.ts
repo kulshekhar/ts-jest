@@ -2,7 +2,7 @@
 import { TsJestGlobalOptions, TsJestConfig } from './types';
 import TsProgram from './ts-program';
 import Memoize from './memoize';
-import { normalizeDiagnosticTypes } from './utils/diagnostics';
+import { normalizeDiagnosticTypes } from './diagnostics';
 
 const rootDirFor = (jestConfig: jest.ProjectConfig): string => {
   return jestConfig.rootDir || process.cwd();
