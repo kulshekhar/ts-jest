@@ -42,7 +42,7 @@ function setupE2e() {
   log('creating bundle');
   const res = spawnSync('npm', ['-s', 'pack'], { cwd: Paths.rootDir });
   const bundle = path.join(Paths.rootDir, res.stdout.toString().trim());
-  log('bundle create at ', bundle);
+  log('bundle created at ', bundle);
 
   // get the hash of the bundle (to know if we should install it again or not)
   const bundleHash = sha1(fs.readFileSync(bundle));
@@ -52,7 +52,7 @@ function setupE2e() {
   fs.mkdirpSync(Paths.e2eWorkTemplatesDir);
 
   // link locally so we could find it easily
-  if (!fs.existsSync(Paths.e2eWotkDirLink)) {
+  if (!process.env.CI && !fs.existsSync(Paths.e2eWotkDirLink)) {
     fs.symlinkSync(Paths.e2eWorkDir, Paths.e2eWotkDirLink, 'dir');
     log(
       'symbolic link to the work directory created at: ',
