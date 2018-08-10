@@ -1,6 +1,6 @@
 // tslint:disable:member-ordering
 import { TsJestGlobalOptions, TsJestConfig } from './types';
-import TsProgram from './ts-program.simple';
+import TsProgram from './ts-program';
 import Memoize from './memoize';
 import { normalizeDiagnosticTypes } from './utils/diagnostics';
 
@@ -36,7 +36,7 @@ class TsJestTransformer implements jest.Transformer {
 
   process(
     source: string,
-    path: jest.Path,
+    filePath: jest.Path,
     jestConfig: jest.ProjectConfig,
     transformOptions?: jest.TransformOptions,
   ): jest.TransformedSource | string {
@@ -49,13 +49,13 @@ class TsJestTransformer implements jest.Transformer {
       !!transformOptions && transformOptions.instrument;
 
     // transpile TS code (source maps are included)
-    result = program.transpileModule(path, source, instrument);
+    result = program.transpileModule(filePath, source, instrument);
 
     // calling babel-jest transformer
     if (config.useBabelJest) {
       result = this.babelJest.process(
         result,
-        path,
+        filePath,
         jestConfig,
         transformOptions,
       );

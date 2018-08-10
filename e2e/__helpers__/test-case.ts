@@ -4,42 +4,37 @@ import { join } from 'path';
 import * as Paths from '../../scripts/paths';
 import * as fs from 'fs-extra';
 
-const jestDescribe = describe;
-const jestIt = it;
-const jestExpect = expect;
-
 const TEMPLATE_EXCLUDED_ITEMS = ['node_modules', 'package-lock.json'];
 
 type RunWithTemplatesIterator = (
   runtTest: () => TestRunResult,
-  templateName: string,
+  context: RunWithTemplateIteratorContext,
 ) => void;
-interface RunWithTemplatesOptions {
-  iterator?: RunWithTemplatesIterator;
-  logUnlessStatus?: number;
-}
-interface WithTemplatesIteratorOptions {
-  describe?: string | false;
-  it?: string;
-  expect?: RunWithTemplatesIterator;
+
+interface RunWithTemplateIteratorContext {
+  templateName: string;
+  describeLabel: string;
+  itLabel: string;
+  testLabel: string;
 }
 
-export function withTemplatesIterator({
-  describe = 'with template "__TEMPLATE_NAME__"',
-  it = 'should run as expected',
-  expect = runTest => {
-    jestExpect(runTest()).toMatchSnapshot();
-  },
-}: WithTemplatesIteratorOptions = {}): RunWithTemplatesIterator {
-  return (runTest, name) => {
-    const interpolate = (msg: string) => msg.replace('__TEMPLATE_NAME__', name);
-    if (describe) {
-      jestDescribe(interpolate(describe), () => {
-        jestIt(interpolate(it), () => expect(runTest, name));
-      });
-    } else {
-      jestIt(interpolate(it), () => expect(runTest, name));
+function createIteratorContext(
+  templateName: string,
+  expectedStatus?: number,
+): RunWithTemplateIteratorContext {
+  const actionForExpectedStatus = (status?: number): string => {
+    if (status == null) {
+      return 'run';
     }
+    return status === 0 ? 'pass' : 'fail';
+  };
+  return {
+    templateName,
+    describeLabel: `with template "${templateName}"`,
+    itLabel: `should ${actionForExpectedStatus(expectedStatus)}`,
+    testLabel: `should ${actionForExpectedStatus(
+      expectedStatus,
+    )} using template "${templateName}"`,
   };
 }
 
@@ -94,13 +89,15 @@ class TestCaseRunDescriptor {
 
   runWithTemplates<T extends string>(
     templates: T[],
-    { iterator, logUnlessStatus }: RunWithTemplatesOptions = {},
+    expectedStatus?: number,
+    iterator?: RunWithTemplatesIterator,
   ): TestRunResultsMap<T> {
     if (templates.length < 1) {
       throw new RangeError(
         `There must be at least one template to run the test case with.`,
       );
     }
+
     if (!templates.every((t, i) => templates.indexOf(t, i + 1) === -1)) {
       throw new Error(
         `Each template must be unique. Given ${templates.join(', ')}`,
@@ -113,12 +110,12 @@ class TestCaseRunDescriptor {
           template,
         });
         const runTest = () => {
-          const out = desc.run(logUnlessStatus);
+          const out = desc.run(expectedStatus);
           map[template] = { ...out };
           return out;
         };
         if (iterator) {
-          iterator(runTest, template);
+          iterator(runTest, createIteratorContext(template, expectedStatus));
         } else {
           runTest();
         }
@@ -151,7 +148,7 @@ export type TestRunResultsMap<T extends string = string> = {
   [key in T]: TestRunResult
 };
 
-export default function configureTestCase(
+export function configureTestCase(
   name: string,
   options: RunTestOptions = {},
 ): TestCaseRunDescriptor {
@@ -246,17 +243,19 @@ function stripAnsiColors(stringToStrip: string): string {
 
 function prepareTest(name: string, template: string): string {
   const sourceDir = join(Paths.e2eSourceDir, name);
-  // working directory is in the temp directory, different for each tempalte name
+  // working directory is in the temp directory, different for each template name
   const caseDir = join(Paths.e2eWorkDir, template, name);
   const templateDir = join(Paths.e2eWorkTemplatesDir, template);
 
-  // ensure directory exists
+  // recreate the directory
+  fs.removeSync(caseDir);
   fs.mkdirpSync(caseDir);
 
-  // link the node_modules dir if the template has
   const tmplModulesDir = join(templateDir, 'node_modules');
   const caseModulesDir = join(caseDir, 'node_modules');
-  if (!fs.existsSync(caseModulesDir) && fs.existsSync(tmplModulesDir)) {
+
+  // link the node_modules dir if the template has one
+  if (fs.existsSync(tmplModulesDir)) {
     fs.symlinkSync(tmplModulesDir, caseModulesDir);
   }
 

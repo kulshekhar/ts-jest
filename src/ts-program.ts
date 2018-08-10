@@ -1,5 +1,5 @@
 // tslint:disable:member-ordering
-import { TsJestConfig, DiagnosticTypes } from './types';
+import { TsJestConfig } from './types';
 import {
   FormatDiagnosticsHost,
   sys,
@@ -10,21 +10,18 @@ import {
   readConfigFile,
   parseJsonConfigFileContent,
   ModuleKind,
-  CustomTransformers,
-  Program,
   ParsedCommandLine,
   ParseConfigHost,
-  createCompilerHost,
-  createProgram,
-  CompilerHost,
   TranspileOptions,
   transpileModule,
+  CustomTransformers,
+  TransformerFactory,
+  SourceFile,
 } from 'typescript';
 import { sep, resolve, dirname, basename } from 'path';
 import { existsSync, readFileSync } from 'fs';
 import Memoize from './memoize';
-import fileExtension from './utils/file-extension';
-import { fixupCompilerOptions } from './utils/ts-internals';
+import hoisting from './transformers/hoisting';
 
 export const compilerOptionsOverrides: Readonly<CompilerOptions> = {
   // ts-jest
@@ -128,16 +125,38 @@ export default class TsProgram {
     return result;
   }
 
+  @Memoize()
+  get transformers(): CustomTransformers {
+    // https://dev.doctorevidence.com/how-to-write-a-typescript-transform-plugin-fc5308fdd943
+    const before: Array<TransformerFactory<SourceFile>> = [];
+    const after: Array<TransformerFactory<SourceFile>> = [];
+
+    // FIXME: somehow babel doesn't do the hoisting
+    // no babel-jest, we need to handle the hoisting
+    // if (!this.tsJestConfig.useBabelJest) {
+    before.push(hoisting(this));
+    // }
+
+    return {
+      before,
+      after,
+    };
+  }
+
   transpileModule(
     path: string,
     content: string,
     instrument: boolean = false,
+    extraCompilerOptions?: CompilerOptions,
   ): string {
     const options: TranspileOptions = {
       fileName: path,
       reportDiagnostics: false,
       transformers: this.transformers,
-      compilerOptions: { ...this.overriddenCompilerOptions },
+      compilerOptions: {
+        ...this.overriddenCompilerOptions,
+        ...extraCompilerOptions,
+      },
     };
     const { diagnostics, outputText } = transpileModule(content, options);
 
@@ -146,23 +165,6 @@ export default class TsProgram {
     // outputText will contain inline sourmaps
     return outputText;
   }
-
-  get transformers(): CustomTransformers {
-    return {
-      // before: [() => this.beforeTransformer],
-    };
-  }
-
-  // @Memoize()
-  // get beforeTransformer(): Transformer<SourceFile> {
-  //   return (fileNode: SourceFile): SourceFile => {
-  //     if (fileNode.isDeclarationFile) return fileNode;
-  //     const nodeTransformer = (node: Node): Node => {
-  //       return node;
-  //     };
-  //     fileNode.getChildAt(0).
-  //   };
-  // }
 
   reportDiagnostic(...diagnostics: Diagnostic[]) {
     const diagnostic = diagnostics[0];

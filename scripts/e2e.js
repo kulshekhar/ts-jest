@@ -1,8 +1,6 @@
 #!/usr/bin/env node
 'use strict';
 
-process.env.NODE_ENV = 'test';
-process.env.PUBLIC_URL = '';
 const jest = require('jest');
 const { sync: spawnSync } = require('cross-spawn');
 const fs = require('fs-extra');
@@ -53,13 +51,6 @@ function setupE2e() {
   // ensure directory exists before copying over
   fs.mkdirpSync(Paths.e2eWorkTemplatesDir);
 
-  // create the template packages from which node_modules will be originally copied from
-  log('copying templates to the work directory');
-  fs.copySync(
-    path.join(Paths.e2eTemplatesDir),
-    path.join(Paths.e2eWorkTemplatesDir)
-  );
-
   // link locally so we could find it easily
   if (!fs.existsSync(Paths.e2eWotkDirLink)) {
     fs.symlinkSync(Paths.e2eWorkDir, Paths.e2eWotkDirLink, 'dir');
@@ -71,16 +62,29 @@ function setupE2e() {
 
   // install with `npm ci` in each template, this is the fastest but needs a package lock file,
   // that is why we end with the npm install of our bundle
-  getDirectories(Paths.e2eWorkTemplatesDir).forEach(name => {
-    log('checking temlate ', name);
+  getDirectories(Paths.e2eTemplatesDir).forEach(name => {
+    log('checking template ', name);
+    const sourceDir = path.join(Paths.e2eTemplatesDir, name);
     const dir = path.join(Paths.e2eWorkTemplatesDir, name);
     const nodeModulesDir = path.join(dir, 'node_modules');
-    const pkgLockFile = path.join(
-      Paths.e2eTemplatesDir,
-      name,
-      'package-lock.json'
-    );
+    const pkgLockFile = path.join(sourceDir, 'package-lock.json');
     const e2eFile = path.join(nodeModulesDir, '.ts-jest-e2e.json');
+
+    // remove all files expect node_modules
+    if (fs.existsSync(dir)) {
+      log(`  [template: ${name}]`, 'removing old files');
+      fs.readdirSync(dir).forEach(file => {
+        if (file !== 'node_modules') {
+          fs.unlinkSync(path.join(dir, file));
+        }
+      });
+    } else {
+      fs.mkdirpSync(dir);
+    }
+
+    // copy files from template
+    log(`  [template: ${name}]`, 'copying files from template source');
+    fs.copySync(sourceDir, dir);
 
     // no package-lock.json => this template doesn't provide any package-set
     if (!fs.existsSync(pkgLockFile)) {
@@ -135,5 +139,9 @@ function setupE2e() {
 setupE2e();
 
 log('templates are ready, running tests', '\n\n');
-const argv = process.argv.slice(2);
-jest.run(argv);
+
+jest.run([
+  '--config',
+  path.resolve(__dirname, '..', 'e2e', 'jest.config.js'),
+  ...process.argv.slice(2),
+]);

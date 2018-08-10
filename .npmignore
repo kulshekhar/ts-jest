@@ -1,8 +1,6 @@
-# TypeScript source code
-src
-
 # Tests
-tests
+e2e
+test
 
 # Developement scripts
 scripts 
