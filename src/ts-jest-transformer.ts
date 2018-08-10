@@ -33,15 +33,10 @@ export default class TsJestTransformer implements jest.Transformer {
       return;
     }
 
-    // default config
-    const baseConfig: BabelConfig = {
-      presets: ['jest'],
-    };
-
     let babelConfig!: BabelConfig;
     if (config.babelJest === true) {
       // lookup babelrc file
-      babelConfig = babelCfg.extend(baseConfig, babelCfg.loadDefault(rootDir));
+      babelConfig = babelCfg.extend({}, babelCfg.loadDefault(rootDir));
     } else if (typeof config.babelJest === 'string') {
       // path to a babelrc file
       let filePath = config.babelJest.replace('<rootDir>', `${rootDir}${sep}`);
