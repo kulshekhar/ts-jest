@@ -1,14 +1,19 @@
 dist: trusty
 sudo: required
 language: node_js
-cache: npm
-git:
-  depth: 5
+
+env:
+  - TS_JEST_E2E_WORKDIR=/tmp/ts-jest-e2e-workdir
+
+cache:
+  npm: true
+  directories:
+    - /tmp/ts-jest-e2e-workdir
+
 node_js:
   - "10"
   - "8"
   - "6"
-before_install:
-  - sudo sysctl fs.inotify.max_user_watches=524288
+
 script:
-  - npm test
+  - npm run test

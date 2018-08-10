@@ -1,36 +1,33 @@
-# appveyor file
 # http://www.appveyor.com/docs/appveyor-yml
 
-# build version format
-version: "{build}"
-
-clone_depth: 5
-
-# fix lineendings in Windows
-init:
-  - git config --global core.autocrlf input
-  - git config --system core.longpaths true
-
-# what combinations to test
+# Test against these versions of Node.js.
 environment:
   matrix:
-    - nodejs_version: 6
-    - nodejs_version: 8
-    - nodejs_version: 10
+    - nodejs_version: "10"
+    - nodejs_version: "8"
+    - nodejs_version: "6"
 
-# get the latest stable version of Node 0.STABLE.latest
+# Install scripts. (runs after repo cloning)
 install:
+  - git rev-parse HEAD
+  # Get the latest stable version of Node 0.STABLE.latest
   - ps: Install-Product node $env:nodejs_version
+  # Typical npm stuff.
   - set CI=true
-  - set AppVeyor=true
+  - set TS_JEST_E2E_WORKDIR=%APPDATA%\ts-jest-e2e
+  - npm version
   - npm ci || npm install
 
+cache:
+  - '%APPDATA%\npm-cache -> package.json'
+  - '%APPDATA%\ts-jest-e2e'
+
+# Post-install test scripts.
+test_script:
+  - cmd: npm run test
+
+# Don't actually build.
 build: off
 
-cache:
-  - "%LOCALAPPDATA%\\npm-cache"
-
-test_script:
-  - node --version
-  - npm --version
-  - cmd: npm test
+# Set build version format here instead of in the admin panel.
+version: "{build}"

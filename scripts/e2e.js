@@ -101,9 +101,8 @@ function setupE2e() {
     let packagesOk = e2eData.packageLockHash === pkgLockHash;
 
     if (fs.existsSync(nodeModulesDir)) {
-      log(`  [template: ${name}]`, 'manifest: ', JSON.stringify(e2eData));
-      log(`  [template: ${name}]`, 'bundle: ', bundleOk ? 'HIT' : 'MISS');
-      log(`  [template: ${name}]`, 'packages: ', packagesOk ? 'HIT' : 'MISS');
+      log(`  [template: ${name}]`, 'bundle: ', bundleOk ? 'OK' : 'CHANGED');
+      log(`  [template: ${name}]`, 'packages: ', packagesOk ? 'OK' : 'CHANGED');
       if (bundleOk && packagesOk) {
         log(
           `  [template: ${name}]`,
@@ -131,7 +130,7 @@ function setupE2e() {
     // write our data
     e2eData.bundleHash = bundleHash;
     e2eData.packageLockHash = pkgLockHash;
-    log(`  [template: ${name}]`, 'writing manifest: ', JSON.stringify(e2eData));
+    log(`  [template: ${name}]`, 'writing manifest');
     fs.outputJsonSync(e2eFile, e2eData, { space: 2 });
   });
 }
