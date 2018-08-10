@@ -5,5 +5,5 @@ module.exports = {
   testRegex: '(/__tests__/.*|(\\.|/)(test|spec))\\.[jt]sx?$',
   moduleFileExtensions: ['ts', 'js'],
   testEnvironment: 'node',
-  globals: { 'ts-jest': { tsConfig: {}, useBabelJest: true } },
+  globals: { 'ts-jest': { tsConfig: {}, babelJest: true } },
 };

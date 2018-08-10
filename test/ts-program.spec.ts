@@ -1,33 +1,38 @@
 import TsProgram from '../src/ts-program';
 import { resolve } from 'path';
+import { tsSourceMock, filePathMock } from './__helpers__/sources-mock';
 
-const path = '/dummy/path/to/file.ts';
-const content = `
-import upper from './upper';
-import lower from './lower';
-
-jest.mock('./upper', () => (s) => s.toUpperCase());
-
-describe('hello', () => {
-  test('my test', () => {
-    expect(upper('hello')).toBe('HELLO');
-    expect(lower('HELLO')).toBe('hello');
-    jest.mock('./lower', () => (s) => s.toLowerCase());
-  });
-});
-`;
+const path = filePathMock('path/to/file.ts');
+const content = tsSourceMock();
 
 describe('hoisting', () => {
-  const prog = new TsProgram(resolve(__dirname, '..'), {
-    useBabelJest: false,
-    inputOptions: {},
-    diagnostics: [],
+  describe('without babel', () => {
+    const prog = new TsProgram(resolve(__dirname, '..'), {
+      babelJest: false,
+      inputOptions: {},
+      diagnostics: [],
+    });
+
+    it('should hoist jest.mock() calls', () => {
+      const result = prog.transpileModule(path, content, undefined, {
+        inlineSourceMap: false,
+      });
+      expect(result).toMatchSnapshot();
+    });
   });
 
-  it('should hoist jest.mock()', () => {
-    const result = prog.transpileModule(path, content, undefined, {
-      inlineSourceMap: false,
+  describe('with babel', () => {
+    const prog = new TsProgram(resolve(__dirname, '..'), {
+      babelJest: true,
+      inputOptions: {},
+      diagnostics: [],
     });
-    expect(result).toMatchSnapshot();
+
+    it('should not hoist jest.mock() calls', () => {
+      const result = prog.transpileModule(path, content, undefined, {
+        inlineSourceMap: false,
+      });
+      expect(result).toMatchSnapshot();
+    });
   });
 });

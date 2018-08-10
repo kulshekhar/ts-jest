@@ -20,7 +20,7 @@ import {
 } from 'typescript';
 import { sep, resolve, dirname, basename } from 'path';
 import { existsSync, readFileSync } from 'fs';
-import Memoize from './memoize';
+import Memoize from './utils/memoize';
 import hoisting from './transformers/hoisting';
 
 export const compilerOptionsOverrides: Readonly<CompilerOptions> = {
@@ -133,9 +133,9 @@ export default class TsProgram {
 
     // FIXME: somehow babel doesn't do the hoisting
     // no babel-jest, we need to handle the hoisting
-    // if (!this.tsJestConfig.useBabelJest) {
-    before.push(hoisting(this));
-    // }
+    if (!this.tsJestConfig.babelJest) {
+      before.push(hoisting(this));
+    }
 
     return {
       before,

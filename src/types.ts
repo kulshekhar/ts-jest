@@ -1,7 +1,10 @@
 import * as _babelJest from 'babel-jest';
 import { CompilerOptions } from 'typescript';
+import _closestFileData from 'closest-file-data';
+import * as _babel from 'babel__core';
 
 export type TBabelJest = typeof _babelJest;
+export type TClosestFileData = typeof _closestFileData;
 
 // CAUTION: use same key-value pair allow us to not store a list of values somewhere
 export enum DiagnosticTypes {
@@ -26,17 +29,31 @@ export const diagnosticSets = {
   none: [],
 };
 
+// FIXME: find the right typing for this
+export type BabelConfig = _babel.TransformOptions;
+
 export interface TsJestGlobalOptions {
   // either a file to the ts config or compiler options
   tsConfig?: string | CompilerOptions;
   // what kind of diagnostics to report
   diagnostics?: DiagnosticTypes[] | DiagnosticTypes | DiagnosticSets | boolean;
   // whether to use babel jest under the hood or not
-  useBabelJest?: boolean;
+  // it can be:
+  //    - a path to a babelrc (<rootDir> can be used)
+  //    - a babel config object
+  //    - a boolean to enable/disable the use of babel-jest
+  babelJest?: boolean | BabelConfig | string;
+
+  // should this be kept in here? it has nothing to do with TS after all...
+  // kept for backward compatibility to handle __TRANSFORM_HTML__
+  stringifyContentRegex?: string | RegExp;
 }
 
 export interface TsJestConfig {
   inputOptions: TsJestGlobalOptions;
-  useBabelJest: boolean;
+  babelJest: BabelConfig | string | boolean;
   diagnostics: DiagnosticTypes[];
+
+  // to deprecate / deprecated === === ===
+  stringifyContentRegex?: RegExp;
 }

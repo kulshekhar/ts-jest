@@ -12,10 +12,9 @@ import {
   visitEachChild,
   Transformer,
   visitNode,
-  isSourceFile,
-  NodeArray,
   Statement,
   createNodeArray,
+  Block,
 } from 'typescript';
 import TsProgram from '../ts-program';
 
@@ -33,17 +32,37 @@ function isJestMockCallExpression(node: Node): node is ExpressionStatement {
 
 export default function(prog: TsProgram) {
   function createVisitor(ctx: TransformationContext, sf: SourceFile) {
-    const hoisted: Statement[] = [];
+    let level = 0;
+    const hoisted: Statement[][] = [];
+    const enter = () => {
+      level++;
+      // reuse arrays
+      if (hoisted[level]) {
+        hoisted[level].splice(0, hoisted[level].length);
+      }
+    };
+    const exit = () => level--;
+    const hoist = (node: Statement) => {
+      if (hoisted[level]) {
+        hoisted[level].push(node);
+      } else {
+        hoisted[level] = [node];
+      }
+    };
 
     const visitor: Visitor = node => {
+      enter();
       const resultNode = visitEachChild(node, visitor, ctx);
-      if (isSourceFile(resultNode)) {
-        resultNode.statements = createNodeArray([
-          ...hoisted,
-          ...resultNode.statements,
+      if (hoisted[level] && hoisted[level].length) {
+        (resultNode as Block).statements = createNodeArray([
+          ...hoisted[level],
+          ...(resultNode as Block).statements,
         ]);
-      } else if (isJestMockCallExpression(resultNode)) {
-        hoisted.push(resultNode);
+      }
+      exit();
+
+      if (isJestMockCallExpression(resultNode)) {
+        hoist(resultNode as Statement);
         return;
       }
       return resultNode;
