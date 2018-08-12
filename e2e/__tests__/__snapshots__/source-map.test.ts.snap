@@ -1,288 +1,271 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`console.log() should pass reporting correct line number using template "default" 1`] = `
-jest exit code: 0
-  ===[ STDOUT ]===================================================================
-  console.log echo.spec.ts:5
-      WITHIN TEST
-  
-    console.log echo.ts:2
-      WITHIN SOURCE
-  ===[ STDERR ]===================================================================
-  PASS ./echo.spec.ts
-    echo
-      √ echoes
-  
-  Test Suites: 1 passed, 1 total
-  Tests:       1 passed, 1 total
-  Snapshots:   0 total
-  Time:        XXs
-  Ran all test suites.
-  ================================================================================
-`;
-
-exports[`console.log() should pass reporting correct line number using template "with-babel-6" 1`] = `
-jest exit code: 0
-  ===[ STDOUT ]===================================================================
-  console.log echo.spec.ts:5
-      WITHIN TEST
-  
-    console.log echo.ts:2
-      WITHIN SOURCE
-  ===[ STDERR ]===================================================================
-  PASS ./echo.spec.ts
-    echo
-      √ echoes
-  
-  Test Suites: 1 passed, 1 total
-  Tests:       1 passed, 1 total
-  Snapshots:   0 total
-  Time:        XXs
-  Ran all test suites.
-  ================================================================================
-`;
-
-exports[`console.log() should pass reporting correct line number using template "with-babel-7" 1`] = `
-jest exit code: 0
-  ===[ STDOUT ]===================================================================
-  console.log echo.spec.ts:5
-      WITHIN TEST
-  
-    console.log echo.ts:2
-      WITHIN SOURCE
-  ===[ STDERR ]===================================================================
-  PASS ./echo.spec.ts
-    echo
-      √ echoes
-  
-  Test Suites: 1 passed, 1 total
-  Tests:       1 passed, 1 total
-  Snapshots:   0 total
-  Time:        XXs
-  Ran all test suites.
-  ================================================================================
-`;
-
-exports[`console.log() should pass reporting correct line number using template "with-jest-22" 1`] = `
-jest exit code: 0
-  ===[ STDOUT ]===================================================================
-  console.log echo.spec.ts:5
-      WITHIN TEST
-  
-    console.log echo.ts:2
-      WITHIN SOURCE
-  ===[ STDERR ]===================================================================
-  PASS ./echo.spec.ts
-    echo
-      √ echoes
-  
-  Test Suites: 1 passed, 1 total
-  Tests:       1 passed, 1 total
-  Snapshots:   0 total
-  Time:        XXs
-  Ran all test suites.
-  ================================================================================
-`;
-
-exports[`debugging should include special comment when using template "default" 1`] = `
+exports[`using template "default" should have the soure mpas comment 1`] = `
 "\\"use strict\\";
 exports.__esModule = true;
-function echo(shout) {
+function consoleLog() {
     console.log('WITHIN SOURCE');
-    if (process.env.__FORCE_FAIL) {
-        throw new Error('WITHIN SOURCE');
-    }
-    return shout;
 }
-exports.echo = echo;
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZWNoby5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbImVjaG8udHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7QUFBQSxjQUFxQixLQUFhO0lBQ2hDLE9BQU8sQ0FBQyxHQUFHLENBQUMsZUFBZSxDQUFDLENBQUM7SUFDN0IsSUFBSSxPQUFPLENBQUMsR0FBRyxDQUFDLFlBQVksRUFBRTtRQUM1QixNQUFNLElBQUksS0FBSyxDQUFDLGVBQWUsQ0FBQyxDQUFDO0tBQ2xDO0lBQ0QsT0FBTyxLQUFLLENBQUM7QUFDZixDQUFDO0FBTkQsb0JBTUMifQ=="
-`;
-
-exports[`debugging should include special comment when using template "with-babel-6" 1`] = `
-"\\"use strict\\";
-
-exports.__esModule = true;
-function echo(shout) {
-    console.log('WITHIN SOURCE');
-    if (process.env.__FORCE_FAIL) {
-        throw new Error('WITHIN SOURCE');
-    }
-    return shout;
-}
-exports.echo = echo;
-//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImVjaG8udHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7O0FBQUEsU0FBQSxJQUFBLENBQXFCLEtBQXJCLEVBQWtDO0FBQ2hDLFlBQVEsR0FBUixDQUFZLGVBQVo7QUFDQSxRQUFJLFFBQVEsR0FBUixDQUFZLFlBQWhCLEVBQThCO0FBQzVCLGNBQU0sSUFBSSxLQUFKLENBQVUsZUFBVixDQUFOO0FBQ0Q7QUFDRCxXQUFPLEtBQVA7QUFDRDtBQU5ELFFBQUEsSUFBQSxHQUFBLElBQUEiLCJzb3VyY2VSb290IjoiIn0="
-`;
-
-exports[`debugging should include special comment when using template "with-babel-7" 1`] = `
-"\\"use strict\\";
-
-exports.__esModule = true;
-
-function echo(shout) {
-  console.log('WITHIN SOURCE');
-
-  if (process.env.__FORCE_FAIL) {
+exports.consoleLog = consoleLog;
+function throwError() {
     throw new Error('WITHIN SOURCE');
-  }
-
-  return shout;
 }
-
-exports.echo = echo;
-//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImVjaG8udHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7OztBQUFBLFNBQUEsSUFBQSxDQUFxQixLQUFyQixFQUFrQztBQUNoQyxFQUFBLE9BQU8sQ0FBQyxHQUFSLENBQVksZUFBWjs7QUFDQSxNQUFJLE9BQU8sQ0FBQyxHQUFSLENBQVksWUFBaEIsRUFBOEI7QUFDNUIsVUFBTSxJQUFJLEtBQUosQ0FBVSxlQUFWLENBQU47QUFDRDs7QUFDRCxTQUFPLEtBQVA7QUFDRDs7QUFORCxPQUFBLENBQUEsSUFBQSxHQUFBLElBQUEiLCJzb3VyY2VSb290IjoiIn0="
+exports.throwError = throwError;
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoibWFpbi5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIm1haW4udHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7QUFBQTtJQUNFLE9BQU8sQ0FBQyxHQUFHLENBQUMsZUFBZSxDQUFDLENBQUM7QUFDL0IsQ0FBQztBQUZELGdDQUVDO0FBRUQ7SUFDRSxNQUFNLElBQUksS0FBSyxDQUFDLGVBQWUsQ0FBQyxDQUFDO0FBQ25DLENBQUM7QUFGRCxnQ0FFQyJ9"
 `;
 
-exports[`debugging should include special comment when using template "with-jest-22" 1`] = `
+exports[`using template "default" should report correct line numbers 1`] = `
+jest exit code: 1
+  ===[ STDOUT ]===================================================================
+  console.log main.ts:2
+      WITHIN SOURCE
+  
+    console.log main.spec.ts:9
+      WITHIN TEST
+  ===[ STDERR ]===================================================================
+  FAIL ./main.spec.ts
+    console.log()
+      √ from sources
+      √ from tests
+    throw new Error()
+      × throws from sources
+      × throws from tests
+  
+    ● throw new Error() › throws from sources
+  
+      WITHIN SOURCE
+  
+        4 | 
+        5 | export function throwError() {
+      > 6 |   throw new Error('WITHIN SOURCE');
+          |         ^
+        7 | }
+        8 | 
+  
+        at Object.throwError (main.ts:6:9)
+        at Object.<anonymous> (main.spec.ts:16:5)
+  
+    ● throw new Error() › throws from tests
+  
+      WITHIN TEST
+  
+        18 |   });
+        19 |   test('throws from tests', () => {
+      > 20 |     throw new Error('WITHIN TEST');
+           |           ^
+        21 |     expect(true).toBe(true);
+        22 |   });
+        23 | });
+  
+        at Object.<anonymous> (main.spec.ts:20:11)
+  
+  Test Suites: 1 failed, 1 total
+  Tests:       2 failed, 2 passed, 4 total
+  Snapshots:   0 total
+  Time:        XXs
+  Ran all test suites.
+  ================================================================================
+`;
+
+exports[`using template "with-babel-6" should have the soure mpas comment 1`] = `
+"\\"use strict\\";
+
+exports.__esModule = true;
+function consoleLog() {
+    console.log('WITHIN SOURCE');
+}
+exports.consoleLog = consoleLog;
+function throwError() {
+    throw new Error('WITHIN SOURCE');
+}
+exports.throwError = throwError;
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIm1haW4udHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7O0FBQUEsU0FBQSxVQUFBLEdBQUE7QUFDRSxZQUFRLEdBQVIsQ0FBWSxlQUFaO0FBQ0Q7QUFGRCxRQUFBLFVBQUEsR0FBQSxVQUFBO0FBSUEsU0FBQSxVQUFBLEdBQUE7QUFDRSxVQUFNLElBQUksS0FBSixDQUFVLGVBQVYsQ0FBTjtBQUNEO0FBRkQsUUFBQSxVQUFBLEdBQUEsVUFBQSIsInNvdXJjZVJvb3QiOiIifQ=="
+`;
+
+exports[`using template "with-babel-6" should report correct line numbers 1`] = `
+jest exit code: 1
+  ===[ STDOUT ]===================================================================
+  console.log main.ts:2
+      WITHIN SOURCE
+  
+    console.log main.spec.ts:9
+      WITHIN TEST
+  ===[ STDERR ]===================================================================
+  FAIL ./main.spec.ts
+    console.log()
+      √ from sources
+      √ from tests
+    throw new Error()
+      × throws from sources
+      × throws from tests
+  
+    ● throw new Error() › throws from sources
+  
+      WITHIN SOURCE
+  
+        4 | 
+        5 | export function throwError() {
+      > 6 |   throw new Error('WITHIN SOURCE');
+          |         ^
+        7 | }
+        8 | 
+  
+        at Object.throwError (main.ts:6:9)
+        at Object.<anonymous> (main.spec.ts:16:5)
+  
+    ● throw new Error() › throws from tests
+  
+      WITHIN TEST
+  
+        18 |   });
+        19 |   test('throws from tests', () => {
+      > 20 |     throw new Error('WITHIN TEST');
+           |           ^
+        21 |     expect(true).toBe(true);
+        22 |   });
+        23 | });
+  
+        at Object.<anonymous> (main.spec.ts:20:11)
+  
+  Test Suites: 1 failed, 1 total
+  Tests:       2 failed, 2 passed, 4 total
+  Snapshots:   0 total
+  Time:        XXs
+  Ran all test suites.
+  ================================================================================
+`;
+
+exports[`using template "with-babel-7" should have the soure mpas comment 1`] = `
+"\\"use strict\\";
+
+exports.__esModule = true;
+
+function consoleLog() {
+  console.log('WITHIN SOURCE');
+}
+
+exports.consoleLog = consoleLog;
+
+function throwError() {
+  throw new Error('WITHIN SOURCE');
+}
+
+exports.throwError = throwError;
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIm1haW4udHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7OztBQUFBLFNBQUEsVUFBQSxHQUFBO0FBQ0UsRUFBQSxPQUFPLENBQUMsR0FBUixDQUFZLGVBQVo7QUFDRDs7QUFGRCxPQUFBLENBQUEsVUFBQSxHQUFBLFVBQUE7O0FBSUEsU0FBQSxVQUFBLEdBQUE7QUFDRSxRQUFNLElBQUksS0FBSixDQUFVLGVBQVYsQ0FBTjtBQUNEOztBQUZELE9BQUEsQ0FBQSxVQUFBLEdBQUEsVUFBQSIsInNvdXJjZVJvb3QiOiIifQ=="
+`;
+
+exports[`using template "with-babel-7" should report correct line numbers 1`] = `
+jest exit code: 1
+  ===[ STDOUT ]===================================================================
+  console.log main.ts:2
+      WITHIN SOURCE
+  
+    console.log main.spec.ts:9
+      WITHIN TEST
+  ===[ STDERR ]===================================================================
+  FAIL ./main.spec.ts
+    console.log()
+      √ from sources
+      √ from tests
+    throw new Error()
+      × throws from sources
+      × throws from tests
+  
+    ● throw new Error() › throws from sources
+  
+      WITHIN SOURCE
+  
+        4 | 
+        5 | export function throwError() {
+      > 6 |   throw new Error('WITHIN SOURCE');
+          |         ^
+        7 | }
+        8 | 
+  
+        at Object.throwError (main.ts:6:9)
+        at Object.<anonymous> (main.spec.ts:16:5)
+  
+    ● throw new Error() › throws from tests
+  
+      WITHIN TEST
+  
+        18 |   });
+        19 |   test('throws from tests', () => {
+      > 20 |     throw new Error('WITHIN TEST');
+           |           ^
+        21 |     expect(true).toBe(true);
+        22 |   });
+        23 | });
+  
+        at Object.<anonymous> (main.spec.ts:20:11)
+  
+  Test Suites: 1 failed, 1 total
+  Tests:       2 failed, 2 passed, 4 total
+  Snapshots:   0 total
+  Time:        XXs
+  Ran all test suites.
+  ================================================================================
+`;
+
+exports[`using template "with-jest-22" should have the soure mpas comment 1`] = `
 "\\"use strict\\";
 exports.__esModule = true;
-function echo(shout) {
+function consoleLog() {
     console.log('WITHIN SOURCE');
-    if (process.env.__FORCE_FAIL) {
-        throw new Error('WITHIN SOURCE');
-    }
-    return shout;
 }
-exports.echo = echo;
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZWNoby5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbImVjaG8udHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7QUFBQSxjQUFxQixLQUFhO0lBQ2hDLE9BQU8sQ0FBQyxHQUFHLENBQUMsZUFBZSxDQUFDLENBQUM7SUFDN0IsSUFBSSxPQUFPLENBQUMsR0FBRyxDQUFDLFlBQVksRUFBRTtRQUM1QixNQUFNLElBQUksS0FBSyxDQUFDLGVBQWUsQ0FBQyxDQUFDO0tBQ2xDO0lBQ0QsT0FBTyxLQUFLLENBQUM7QUFDZixDQUFDO0FBTkQsb0JBTUMifQ=="
+exports.consoleLog = consoleLog;
+function throwError() {
+    throw new Error('WITHIN SOURCE');
+}
+exports.throwError = throwError;
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoibWFpbi5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIm1haW4udHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7QUFBQTtJQUNFLE9BQU8sQ0FBQyxHQUFHLENBQUMsZUFBZSxDQUFDLENBQUM7QUFDL0IsQ0FBQztBQUZELGdDQUVDO0FBRUQ7SUFDRSxNQUFNLElBQUksS0FBSyxDQUFDLGVBQWUsQ0FBQyxDQUFDO0FBQ25DLENBQUM7QUFGRCxnQ0FFQyJ9"
 `;
 
-exports[`throw new Error() should fail reporting correct line number using template "default" 1`] = `
+exports[`using template "with-jest-22" should report correct line numbers 1`] = `
 jest exit code: 1
   ===[ STDOUT ]===================================================================
-  console.log echo.spec.ts:5
+  console.log main.ts:2
+      WITHIN SOURCE
+  
+    console.log main.spec.ts:9
       WITHIN TEST
-  
-    console.log echo.ts:2
-      WITHIN SOURCE
   ===[ STDERR ]===================================================================
-  FAIL ./echo.spec.ts
-    echo
-      × echoes
+  FAIL ./main.spec.ts
+    console.log()
+      √ from sources
+      √ from tests
+    throw new Error()
+      × throws from sources
+      × throws from tests
   
-    ● echo › echoes
+    ● throw new Error() › throws from sources
   
       WITHIN SOURCE
   
-        2 |   console.log('WITHIN SOURCE');
-        3 |   if (process.env.__FORCE_FAIL) {
-      > 4 |     throw new Error('WITHIN SOURCE');
-          |           ^
-        5 |   }
-        6 |   return shout;
+        4 | 
+        5 | export function throwError() {
+      > 6 |   throw new Error('WITHIN SOURCE');
         7 | }
-  
-        at Object.echo (echo.ts:4:11)
-        at Object.<anonymous> (echo.spec.ts:6:12)
-  
-  Test Suites: 1 failed, 1 total
-  Tests:       1 failed, 1 total
-  Snapshots:   0 total
-  Time:        XXs
-  Ran all test suites.
-  ================================================================================
-`;
-
-exports[`throw new Error() should fail reporting correct line number using template "with-babel-6" 1`] = `
-jest exit code: 1
-  ===[ STDOUT ]===================================================================
-  console.log echo.spec.ts:5
-      WITHIN TEST
-  
-    console.log echo.ts:2
-      WITHIN SOURCE
-  ===[ STDERR ]===================================================================
-  FAIL ./echo.spec.ts
-    echo
-      × echoes
-  
-    ● echo › echoes
-  
-      WITHIN SOURCE
-  
-        2 |   console.log('WITHIN SOURCE');
-        3 |   if (process.env.__FORCE_FAIL) {
-      > 4 |     throw new Error('WITHIN SOURCE');
-          |           ^
-        5 |   }
-        6 |   return shout;
-        7 | }
-  
-        at Object.echo (echo.ts:4:11)
-        at Object.<anonymous> (echo.spec.ts:6:12)
-  
-  Test Suites: 1 failed, 1 total
-  Tests:       1 failed, 1 total
-  Snapshots:   0 total
-  Time:        XXs
-  Ran all test suites.
-  ================================================================================
-`;
-
-exports[`throw new Error() should fail reporting correct line number using template "with-babel-7" 1`] = `
-jest exit code: 1
-  ===[ STDOUT ]===================================================================
-  console.log echo.spec.ts:5
-      WITHIN TEST
-  
-    console.log echo.ts:2
-      WITHIN SOURCE
-  ===[ STDERR ]===================================================================
-  FAIL ./echo.spec.ts
-    echo
-      × echoes
-  
-    ● echo › echoes
-  
-      WITHIN SOURCE
-  
-        2 |   console.log('WITHIN SOURCE');
-        3 |   if (process.env.__FORCE_FAIL) {
-      > 4 |     throw new Error('WITHIN SOURCE');
-          |           ^
-        5 |   }
-        6 |   return shout;
-        7 | }
-  
-        at Object.echo (echo.ts:4:11)
-        at Object.<anonymous> (echo.spec.ts:6:12)
-  
-  Test Suites: 1 failed, 1 total
-  Tests:       1 failed, 1 total
-  Snapshots:   0 total
-  Time:        XXs
-  Ran all test suites.
-  ================================================================================
-`;
-
-exports[`throw new Error() should fail reporting correct line number using template "with-jest-22" 1`] = `
-jest exit code: 1
-  ===[ STDOUT ]===================================================================
-  console.log echo.spec.ts:5
-      WITHIN TEST
-  
-    console.log echo.ts:2
-      WITHIN SOURCE
-  ===[ STDERR ]===================================================================
-  FAIL ./echo.spec.ts
-    echo
-      × echoes
-  
-    ● echo › echoes
-  
-      WITHIN SOURCE
-  
-        2 |   console.log('WITHIN SOURCE');
-        3 |   if (process.env.__FORCE_FAIL) {
-      > 4 |     throw new Error('WITHIN SOURCE');
-        5 |   }
-        6 |   return shout;
-        7 | }
+        8 | 
         
-        at Object.echo (echo.ts:4:11)
-        at Object.<anonymous> (echo.spec.ts:6:12)
+        at Object.throwError (main.ts:6:9)
+        at Object.<anonymous> (main.spec.ts:16:5)
+  
+    ● throw new Error() › throws from tests
+  
+      WITHIN TEST
+  
+        18 |   });
+        19 |   test('throws from tests', () => {
+      > 20 |     throw new Error('WITHIN TEST');
+        21 |     expect(true).toBe(true);
+        22 |   });
+        23 | });
+        
+        at Object.<anonymous> (main.spec.ts:20:11)
   
   Test Suites: 1 failed, 1 total
-  Tests:       1 failed, 1 total
+  Tests:       2 failed, 2 passed, 4 total
   Snapshots:   0 total
   Time:        XXs
   Ran all test suites.
