@@ -177,10 +177,15 @@ export function sanitizeOutput(output: string): string {
     .trim()
     // removes total and estimated times
     .replace(
-      /^(\s*Time\s*:\s*)[\d.]+m?s(?:(,\s*estimated\s+)[\d.]+m?s)?(\s*)$/gm,
-      (_, start, estimatedPrefix, end) => {
-        return `${start}XXs${end}`;
+      /^(\s*Time\s*:\s*)[\d.]+m?s(?:(,\s*estimated\s+)[\d.]+m?s)?$/gm,
+      (_, start) => {
+        return `${start}XXs`;
       },
+    )
+    // remove times after PASS/FAIL path/to/file (xxxs)
+    .replace(
+      /^\s*((?:PASS|FAIL) .+) \([\d.]+m?s\)$/gm,
+      (_, start) => `${start}`,
     )
     // removes each test time values
     .replace(
