@@ -27,10 +27,10 @@ export function backportJestConfig<
   if ('__TRANSFORM_HTML__' in globals) {
     warnConfig(
       'globals.__TRANSFORM_HTML__',
-      'globals.ts-jest.stringifyContentRegex',
+      'globals.ts-jest.stringifyContentPathRegex',
     );
     if (globals.__TRANSFORM_HTML__) {
-      mergeTsJest.stringifyContentRegex = /\.html?$/;
+      mergeTsJest.stringifyContentPathRegex = '\\.html?$';
     }
     delete globals.__TRANSFORM_HTML__;
   }
@@ -60,7 +60,7 @@ export function backportJestConfig<
     if (tsJest.babelConfig != null) {
       mergeTsJest.babelJest = tsJest.babelConfig;
     }
-    delete tsJest.useBabelrc;
+    delete tsJest.babelConfig;
   }
 
   if ('skipBabel' in tsJest) {

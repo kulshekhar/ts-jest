@@ -48,7 +48,7 @@ export interface TsJestGlobalOptions {
 
   // should this be kept in here? it has nothing to do with TS after all...
   // kept for backward compatibility to handle __TRANSFORM_HTML__
-  stringifyContentRegex?: string | RegExp;
+  stringifyContentPathRegex?: string | RegExp;
 }
 
 export interface TsJestConfig {
@@ -57,7 +57,7 @@ export interface TsJestConfig {
   diagnostics: DiagnosticTypes[];
 
   // to deprecate / deprecated === === ===
-  stringifyContentRegex?: RegExp;
+  stringifyContentPathRegex?: RegExp;
 }
 
 export interface TsJestProgram {
