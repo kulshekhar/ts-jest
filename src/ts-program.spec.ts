@@ -1,9 +1,9 @@
-import TsProgram from '../src/ts-program';
+import TsProgram from './ts-program';
 import { resolve } from 'path';
-import { tsSourceMock, filePathMock } from './__helpers__/sources-mock';
+import * as fakers from './__helpers__/fakers';
 
-const path = filePathMock('path/to/file.ts');
-const content = tsSourceMock();
+const path = fakers.filePath('path/to/file.ts');
+const content = fakers.typescriptSource();
 
 describe('hoisting', () => {
   describe('without babel', () => {

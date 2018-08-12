@@ -1,10 +1,9 @@
+const base = require('../jest.config');
+
 module.exports = {
-  transform: {
-    '\\.ts$': '<rootDir>/../dist/index.js',
-  },
-  testRegex: '/__tests__/.+\\.test\\.ts$',
-  collectCoverageFrom: ['<rootDir>/../src/**/*.ts'],
-  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json'],
-  testEnvironment: 'node',
+  ...base,
+  rootDir: '.',
+  testRegex: '/__tests__/.+\\.(test|spec)\\.ts$',
+  coverageDirectory: '<rootDir>/../coverage/e2e',
   snapshotSerializers: ['<rootDir>/__serializers__/test-run-result.ts'],
 };

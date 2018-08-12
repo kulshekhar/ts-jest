@@ -1,7 +1,6 @@
 // tslint:disable:member-ordering
-import { TsJestConfig } from './types';
+import { TsJestConfig, TsJestProgram } from './types';
 import {
-  FormatDiagnosticsHost,
   sys,
   findConfigFile,
   CompilerOptions,
@@ -32,24 +31,8 @@ export const compilerOptionsOverrides: Readonly<CompilerOptions> = {
   inlineSourceMap: true,
 };
 
-export default class TsProgram {
+export default class TsProgram implements TsJestProgram {
   constructor(readonly rootDir: string, readonly tsJestConfig: TsJestConfig) {}
-
-  @Memoize()
-  get formatHost(): FormatDiagnosticsHost {
-    return {
-      getCanonicalFileName: path => path,
-      getCurrentDirectory: () => this.rootDir,
-      getNewLine: () => sys.newLine,
-    };
-  }
-
-  @Memoize()
-  get fileNameNormalizer() {
-    // const { rootDir } = this;
-    // return (path: string): string => resolve(rootDir, path);
-    return (path: string): string => path;
-  }
 
   @Memoize()
   get configFile(): string | null {
@@ -172,7 +155,7 @@ export default class TsProgram {
 
     const message = flattenDiagnosticMessageText(
       diagnostic.messageText,
-      this.formatHost.getNewLine(),
+      sys.newLine,
     );
     throw new Error(`${diagnostic.code}: ${message}`);
   }

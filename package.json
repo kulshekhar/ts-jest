@@ -47,6 +47,7 @@
   "devDependencies": {
     "@types/babel__core": "^7.0.1",
     "@types/fs-extra": "5.0.4",
+    "@types/gist-package-json": "git+https://gist.github.com/5c1cc527fe6b5b7dba41fec7fe54bf6e.git",
     "@types/jest": "^23.3.1",
     "@types/node": "^10.5.7",
     "closest-file-data": "^0.1.4",

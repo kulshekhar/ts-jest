@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`hoisting should hoist jest.mock calls using babel 1`] = `
+exports[`process hoisting should hoist jest.mock calls using babel 1`] = `
 "
 \\"use strict\\";
 

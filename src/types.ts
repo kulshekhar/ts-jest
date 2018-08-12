@@ -1,8 +1,10 @@
 import * as _babelJest from 'babel-jest';
-import { CompilerOptions } from 'typescript';
+import { CompilerOptions, ParsedCommandLine } from 'typescript';
 import _closestFileData from 'closest-file-data';
 import * as _babel from 'babel__core';
+import { IPackageJSON } from 'gist-package-json';
 
+export type TPackageJson = IPackageJSON;
 export type TBabelJest = typeof _babelJest;
 export type TClosestFileData = typeof _closestFileData;
 
@@ -56,4 +58,14 @@ export interface TsJestConfig {
 
   // to deprecate / deprecated === === ===
   stringifyContentRegex?: RegExp;
+}
+
+export interface TsJestProgram {
+  readonly parsedConfig: ParsedCommandLine;
+  transpileModule(
+    path: string,
+    content: string,
+    instrument?: boolean,
+    extraCompilerOptions?: CompilerOptions,
+  ): string;
 }

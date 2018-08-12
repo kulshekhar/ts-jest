@@ -1,10 +1,15 @@
-import { resolve } from 'path';
+import { TsJestGlobalOptions } from '../types';
+import { resolve, relative } from 'path';
+import spyThese from './spy-these';
+import realFs from 'fs';
 
-export function filePathMock(relPath: string): string {
+export function filePath(relPath: string): string {
   return resolve(__dirname, '..', '..', relPath);
 }
 
-export function transpiledTsSourceMock() {
+export const rootDir = filePath('');
+
+export function transpiledTsSource() {
   return `
 "use strict";
 var __importDefault = (this && this.__importDefault) || function (mod) {
@@ -23,7 +28,7 @@ describe('hello', function () {
 `;
 }
 
-export function tsSourceMock() {
+export function typescriptSource() {
   return `
 import upper from './upper';
 import lower from './lower';
@@ -38,4 +43,25 @@ describe('hello', () => {
   });
 });
 `;
+}
+
+export function tsJestConfig<T extends TsJestGlobalOptions>(
+  options?: TsJestGlobalOptions,
+): T {
+  return { ...options } as any;
+}
+
+export function jestConfig<T extends jest.ProjectConfig>(
+  options?: jest.InitialOptions,
+  tsJestOptions?: TsJestGlobalOptions,
+): T {
+  const res = {
+    globals: {},
+    moduleFileExtensions: ['ts', 'js'],
+    ...options,
+  } as any;
+  if (tsJestOptions) {
+    res.globals['ts-jest'] = tsJestConfig(tsJestOptions);
+  }
+  return res;
 }
