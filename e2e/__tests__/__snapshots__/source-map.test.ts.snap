@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Source maps console.log() should pass reporting correct line number using template "default" 1`] = `
+exports[`console.log() should pass reporting correct line number using template "default" 1`] = `
 jest exit code: 0
   ===[ STDOUT ]===================================================================
   console.log echo.spec.ts:5
@@ -21,7 +21,7 @@ jest exit code: 0
   ================================================================================
 `;
 
-exports[`Source maps console.log() should pass reporting correct line number using template "with-babel-6" 1`] = `
+exports[`console.log() should pass reporting correct line number using template "with-babel-6" 1`] = `
 jest exit code: 0
   ===[ STDOUT ]===================================================================
   console.log echo.spec.ts:5
@@ -42,7 +42,7 @@ jest exit code: 0
   ================================================================================
 `;
 
-exports[`Source maps console.log() should pass reporting correct line number using template "with-babel-7" 1`] = `
+exports[`console.log() should pass reporting correct line number using template "with-babel-7" 1`] = `
 jest exit code: 0
   ===[ STDOUT ]===================================================================
   console.log echo.spec.ts:5
@@ -63,7 +63,7 @@ jest exit code: 0
   ================================================================================
 `;
 
-exports[`Source maps console.log() should pass reporting correct line number using template "with-jest-22" 1`] = `
+exports[`console.log() should pass reporting correct line number using template "with-jest-22" 1`] = `
 jest exit code: 0
   ===[ STDOUT ]===================================================================
   console.log echo.spec.ts:5
@@ -84,7 +84,69 @@ jest exit code: 0
   ================================================================================
 `;
 
-exports[`Source maps throw new Error() should fail reporting correct line number using template "default" 1`] = `
+exports[`debugging should include special comment when using template "default" 1`] = `
+"\\"use strict\\";
+exports.__esModule = true;
+function echo(shout) {
+    console.log('WITHIN SOURCE');
+    if (process.env.__FORCE_FAIL) {
+        throw new Error('WITHIN SOURCE');
+    }
+    return shout;
+}
+exports.echo = echo;
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZWNoby5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbImVjaG8udHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7QUFBQSxjQUFxQixLQUFhO0lBQ2hDLE9BQU8sQ0FBQyxHQUFHLENBQUMsZUFBZSxDQUFDLENBQUM7SUFDN0IsSUFBSSxPQUFPLENBQUMsR0FBRyxDQUFDLFlBQVksRUFBRTtRQUM1QixNQUFNLElBQUksS0FBSyxDQUFDLGVBQWUsQ0FBQyxDQUFDO0tBQ2xDO0lBQ0QsT0FBTyxLQUFLLENBQUM7QUFDZixDQUFDO0FBTkQsb0JBTUMifQ=="
+`;
+
+exports[`debugging should include special comment when using template "with-babel-6" 1`] = `
+"\\"use strict\\";
+
+exports.__esModule = true;
+function echo(shout) {
+    console.log('WITHIN SOURCE');
+    if (process.env.__FORCE_FAIL) {
+        throw new Error('WITHIN SOURCE');
+    }
+    return shout;
+}
+exports.echo = echo;
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImVjaG8udHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7O0FBQUEsU0FBQSxJQUFBLENBQXFCLEtBQXJCLEVBQWtDO0FBQ2hDLFlBQVEsR0FBUixDQUFZLGVBQVo7QUFDQSxRQUFJLFFBQVEsR0FBUixDQUFZLFlBQWhCLEVBQThCO0FBQzVCLGNBQU0sSUFBSSxLQUFKLENBQVUsZUFBVixDQUFOO0FBQ0Q7QUFDRCxXQUFPLEtBQVA7QUFDRDtBQU5ELFFBQUEsSUFBQSxHQUFBLElBQUEiLCJzb3VyY2VSb290IjoiIn0="
+`;
+
+exports[`debugging should include special comment when using template "with-babel-7" 1`] = `
+"\\"use strict\\";
+
+exports.__esModule = true;
+
+function echo(shout) {
+  console.log('WITHIN SOURCE');
+
+  if (process.env.__FORCE_FAIL) {
+    throw new Error('WITHIN SOURCE');
+  }
+
+  return shout;
+}
+
+exports.echo = echo;
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImVjaG8udHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7OztBQUFBLFNBQUEsSUFBQSxDQUFxQixLQUFyQixFQUFrQztBQUNoQyxFQUFBLE9BQU8sQ0FBQyxHQUFSLENBQVksZUFBWjs7QUFDQSxNQUFJLE9BQU8sQ0FBQyxHQUFSLENBQVksWUFBaEIsRUFBOEI7QUFDNUIsVUFBTSxJQUFJLEtBQUosQ0FBVSxlQUFWLENBQU47QUFDRDs7QUFDRCxTQUFPLEtBQVA7QUFDRDs7QUFORCxPQUFBLENBQUEsSUFBQSxHQUFBLElBQUEiLCJzb3VyY2VSb290IjoiIn0="
+`;
+
+exports[`debugging should include special comment when using template "with-jest-22" 1`] = `
+"\\"use strict\\";
+exports.__esModule = true;
+function echo(shout) {
+    console.log('WITHIN SOURCE');
+    if (process.env.__FORCE_FAIL) {
+        throw new Error('WITHIN SOURCE');
+    }
+    return shout;
+}
+exports.echo = echo;
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZWNoby5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbImVjaG8udHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7QUFBQSxjQUFxQixLQUFhO0lBQ2hDLE9BQU8sQ0FBQyxHQUFHLENBQUMsZUFBZSxDQUFDLENBQUM7SUFDN0IsSUFBSSxPQUFPLENBQUMsR0FBRyxDQUFDLFlBQVksRUFBRTtRQUM1QixNQUFNLElBQUksS0FBSyxDQUFDLGVBQWUsQ0FBQyxDQUFDO0tBQ2xDO0lBQ0QsT0FBTyxLQUFLLENBQUM7QUFDZixDQUFDO0FBTkQsb0JBTUMifQ=="
+`;
+
+exports[`throw new Error() should fail reporting correct line number using template "default" 1`] = `
 jest exit code: 1
   ===[ STDOUT ]===================================================================
   console.log echo.spec.ts:5
@@ -120,7 +182,7 @@ jest exit code: 1
   ================================================================================
 `;
 
-exports[`Source maps throw new Error() should fail reporting correct line number using template "with-babel-6" 1`] = `
+exports[`throw new Error() should fail reporting correct line number using template "with-babel-6" 1`] = `
 jest exit code: 1
   ===[ STDOUT ]===================================================================
   console.log echo.spec.ts:5
@@ -156,7 +218,7 @@ jest exit code: 1
   ================================================================================
 `;
 
-exports[`Source maps throw new Error() should fail reporting correct line number using template "with-babel-7" 1`] = `
+exports[`throw new Error() should fail reporting correct line number using template "with-babel-7" 1`] = `
 jest exit code: 1
   ===[ STDOUT ]===================================================================
   console.log echo.spec.ts:5
@@ -192,7 +254,7 @@ jest exit code: 1
   ================================================================================
 `;
 
-exports[`Source maps throw new Error() should fail reporting correct line number using template "with-jest-22" 1`] = `
+exports[`throw new Error() should fail reporting correct line number using template "with-jest-22" 1`] = `
 jest exit code: 1
   ===[ STDOUT ]===================================================================
   console.log echo.spec.ts:5

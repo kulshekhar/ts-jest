@@ -1,12 +1,12 @@
-import * as _babelJest from 'babel-jest';
 import { CompilerOptions, ParsedCommandLine } from 'typescript';
 import _closestFileData from 'closest-file-data';
 import * as _babel from 'babel__core';
 import { IPackageJSON } from 'gist-package-json';
 
+export type TBabelCore = typeof _babel;
 export type TPackageJson = IPackageJSON;
-export type TBabelJest = typeof _babelJest;
 export type TClosestFileData = typeof _closestFileData;
+export type TBabelJest = Required<jest.Transformer>;
 
 // CAUTION: use same key-value pair allow us to not store a list of values somewhere
 export enum DiagnosticTypes {
@@ -68,4 +68,11 @@ export interface TsJestProgram {
     instrument?: boolean,
     extraCompilerOptions?: CompilerOptions,
   ): string;
+}
+
+export interface TsJestHooksMap {
+  afterProcess?(
+    args: any[],
+    result: string | jest.TransformedSource,
+  ): string | jest.TransformedSource | void;
 }

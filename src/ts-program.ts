@@ -114,7 +114,6 @@ export default class TsProgram implements TsJestProgram {
     const before: Array<TransformerFactory<SourceFile>> = [];
     const after: Array<TransformerFactory<SourceFile>> = [];
 
-    // FIXME: somehow babel doesn't do the hoisting
     // no babel-jest, we need to handle the hoisting
     if (!this.tsJestConfig.babelJest) {
       before.push(hoisting(this));

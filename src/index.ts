@@ -9,5 +9,8 @@ function createTransformer() {
 function tsProcess(...args: any[]): any {
   return (createTransformer() as any).process(...args);
 }
+function getCacheKey(...args: any[]): any {
+  return (createTransformer() as any).getCacheKey(...args);
+}
 
-export { createTransformer, tsProcess as process };
+export { createTransformer, tsProcess as process, getCacheKey };

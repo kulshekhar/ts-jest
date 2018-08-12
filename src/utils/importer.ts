@@ -1,5 +1,6 @@
 import Memoize from './memoize';
-import { TClosestFileData } from '../types';
+import { TClosestFileData, TBabelJest } from '../types';
+import { patchBabelCore } from './hacks';
 
 const importDefault = (mod: any) =>
   mod && mod.__esModule ? mod : { default: mod };
@@ -16,10 +17,18 @@ export enum ImportReasons {
 
 class Importer {
   closestFileData(why: ImportReasons): TClosestFileData {
-    return this.import(why, 'closest-file-data').default;
+    return importDefault(this._import(why, 'closest-file-data')).default;
   }
 
-  protected import(
+  babelJest(why: ImportReasons): TBabelJest {
+    const babel = importDefault(this._tryThese('babel-core')).default;
+    if (babel) {
+      patchBabelCore(babel);
+    }
+    return this._import(why, 'babel-jest');
+  }
+
+  protected _import(
     why: string,
     moduleName: string,
     // tslint:disable-next-line:trailing-comma
@@ -47,7 +56,7 @@ class Importer {
     // tslint:disable-next-line:no-conditional-assignment
     while ((name = tries.shift() as string) !== undefined) {
       try {
-        return importDefault(require(name));
+        return require(name);
       } catch (err) {}
     }
   }

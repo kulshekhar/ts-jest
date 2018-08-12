@@ -1,4 +1,9 @@
-import { TsJestGlobalOptions, TsJestConfig, BabelConfig } from './types';
+import {
+  TsJestGlobalOptions,
+  TsJestConfig,
+  BabelConfig,
+  TsJestHooksMap,
+} from './types';
 import TsProgram from './ts-program';
 import Memoize from './utils/memoize';
 import { normalizeDiagnosticTypes } from './utils/diagnostics';
@@ -9,8 +14,19 @@ import parseJsonUnsafe from './utils/parse-json-unsafe';
 import * as babelCfg from './utils/babel-config';
 import closestPatckageJson from './utils/closest-package-json';
 import sha1 from './utils/sha1';
+import importer, { ImportReasons } from './utils/importer';
 
 export default class TsJestTransformer implements jest.Transformer {
+  @Memoize()
+  get hooks(): TsJestHooksMap {
+    let hooksFile = process.env.__TS_JEST_HOOKS;
+    if (hooksFile) {
+      hooksFile = resolve(process.cwd(), hooksFile);
+      return (importer as any)._tryThese(hooksFile) || {};
+    }
+    return {};
+  }
+
   @Memoize(jestRootDir)
   sanitizedJestConfigFor<T extends jest.ProjectConfig | jest.InitialOptions>(
     jestConfig: T,
@@ -26,10 +42,9 @@ export default class TsJestTransformer implements jest.Transformer {
 
   @Memoize(jestRootDir)
   babelJestFor(jestConfig: jest.ProjectConfig): jest.Transformer {
-    // babel-jest is shipped with jest, no need to use the importer
-    return require('babel-jest').createTransformer(
-      this.babelConfigFor(jestConfig),
-    );
+    return importer
+      .babelJest(ImportReasons.babelJest)
+      .createTransformer(this.babelConfigFor(jestConfig));
   }
 
   @Memoize(jestRootDir)
@@ -101,6 +116,14 @@ export default class TsJestTransformer implements jest.Transformer {
         jestConfig,
         transformOptions,
       );
+    }
+
+    // allows hooks (usefull for testing)
+    if (this.hooks.afterProcess) {
+      const newResult = this.hooks.afterProcess([...arguments], result);
+      if (newResult !== undefined) {
+        return newResult;
+      }
     }
 
     return result;
