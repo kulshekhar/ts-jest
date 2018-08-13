@@ -1,4 +1,5 @@
 import { DiagnosticTypes, DiagnosticSets, diagnosticSets } from '../types';
+import { interpolate, Errors } from './messages';
 
 export const isDiagnosticType = (val: any): val is DiagnosticTypes => {
   return val && DiagnosticTypes[val] === val;
@@ -32,7 +33,9 @@ export const normalizeDiagnosticTypes = (
     res = diagnosticSets.default;
   }
   if (!res) {
-    throw new TypeError(`Invalid value for diagnostics: ${val}.`);
+    throw new TypeError(
+      interpolate(Errors.InvalidDiagnosticsOption, { value: val }),
+    );
   }
   // ensure we have another instance of array with unique items
   return res.filter((item, index) => res.indexOf(item) === index);

@@ -21,6 +21,7 @@ import { sep, resolve, dirname, basename } from 'path';
 import { existsSync, readFileSync } from 'fs';
 import Memoize from './utils/memoize';
 import hoisting from './transformers/hoisting';
+import { interpolate, Errors } from './utils/messages';
 
 export const compilerOptionsOverrides: Readonly<CompilerOptions> = {
   // ts-jest
@@ -55,9 +56,7 @@ export default class TsProgram implements TsJestProgram {
     // could we find one?
     if (!resolved) {
       throw new Error(
-        `Could not find a TS config file (given: "${given}", root: "${
-          this.rootDir
-        }")`,
+        interpolate(Errors.UnableToFindTsConfig, { given, root: this.rootDir }),
       );
     }
     return resolved;

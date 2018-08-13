@@ -1,7 +1,8 @@
 import { readFileSync } from 'fs';
 import parseJsonUnsafe from './parse-json-unsafe';
 import { BabelConfig } from '../types';
-import importer, { ImportReasons } from './importer';
+import importer from './importer';
+import { ImportReasons } from './messages';
 
 const BABELRC_FILENAME = '.babelrc';
 const BABELRC_JS_FILENAME = '.babelrc.js';

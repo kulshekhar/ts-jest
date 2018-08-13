@@ -1,4 +1,3 @@
-import * as fakers from '../__helpers__/fakers';
 import { backportJestConfig } from './backports';
 import spyThese from '../__helpers__/spy-these';
 import set from 'lodash.set';
@@ -24,7 +23,7 @@ describe('backportJestConfig', () => {
           backportJestConfig(original);
           expect(consoleSpies.warn).toHaveBeenCalledTimes(1);
           expect(consoleSpies.warn.mock.calls[0].join(' ')).toMatch(
-            `"{jest-config}.${oldPath}" is deprecated, use "{jest-config}.${newPath}" instead`,
+            `"[jest-config].${oldPath}" is deprecated, use "[jest-config].${newPath}" instead`,
           );
         }); // should warn the user
         it(`should have changed the config correctly`, () => {

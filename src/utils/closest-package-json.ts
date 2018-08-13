@@ -4,6 +4,7 @@
 import { resolve, join } from 'path';
 import { TPackageJson } from '../types';
 import { existsSync, readFileSync } from 'fs';
+import { Errors, interpolate } from './messages';
 
 interface CacheItem {
   data: Readonly<TPackageJson>;
@@ -49,7 +50,7 @@ export default function ownerPackageData(
 
   // fail if not found
   if (!packagePath) {
-    throw new Error(`[ts-jest] Unable to find package.json from "${fromPath}"`);
+    throw new Error(interpolate(Errors.UnableToFindPackageJson, { fromPath }));
   }
 
   const str = readFileSync(packagePath, 'utf8');

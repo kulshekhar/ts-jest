@@ -1,11 +1,19 @@
+import { interpolate, Deprecateds } from './messages';
+
 function warn(...data: any[]) {
   console.warn(...data);
 }
 
-function warnConfig(fromPath: string, toPath: string, note?: string) {
+function warnConfig(oldPath: string, newPath: string, note?: string) {
   warn(
-    `"{jest-config}.${fromPath}" is deprecated, use "{jest-config}.${toPath}" instead.\n` +
-      `    ↳ ${note}`,
+    interpolate(
+      note ? Deprecateds.ConfigOptionWithNote : Deprecateds.ConfigOption,
+      {
+        oldPath,
+        newPath,
+        note,
+      },
+    ),
   );
 }
 
@@ -47,7 +55,7 @@ export function backportJestConfig<
     warnConfig(
       'globals.ts-jest.useBabelrc',
       'globals.ts-jest.babelJest',
-      'See `babel-jest` related issue: https://github.com/facebook/jest/issues/3845',
+      Deprecateds.ConfigOptionUseBabelRcNote,
     );
     if (tsJest.useBabelrc != null) {
       mergeTsJest.babelJest = tsJest.useBabelrc ? true : {};

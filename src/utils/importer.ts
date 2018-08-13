@@ -1,19 +1,15 @@
 import Memoize from './memoize';
 import { TClosestFileData, TBabelJest } from '../types';
 import { patchBabelCore } from './hacks';
+import { ImportReasons, Errors, interpolate } from './messages';
 
 const importDefault = (mod: any) =>
   mod && mod.__esModule ? mod : { default: mod };
 
-// When ading an optional dependency which has another reason, add the reason here, and
+// When ading an optional dependency which has another reason, add the reason in ImportReasons, and
 // create a new method in Importer. Thus uses the importer.yourMethod(ImportReasons.TheReason)
 // in the relevant code, so that the user knows why it needs it and how to install it in the
 // case it can't import.
-
-export enum ImportReasons {
-  babelJest = 'Using "babel-jest" requires this package to be installed',
-  babelConfigLookup = 'Using "babel-jest" with config lookup relies on this package to be installed',
-}
 
 class Importer {
   closestFileData(why: ImportReasons): TClosestFileData {
@@ -36,14 +32,19 @@ class Importer {
   ): any {
     const res = this._tryThese(moduleName, ...orModuleNames);
     if (!res) {
-      const what = orModuleNames.length
-        ? 'any of these modules'
-        : 'this module';
-      const list = [moduleName, ...orModuleNames].join(', ');
+      const msg = orModuleNames.length
+        ? Errors.UnableToLoadAnyModule
+        : Errors.UnableToLoadOneModule;
+      const loadModule = [moduleName, ...orModuleNames]
+        .map(m => `"${m}"`)
+        .join(', ');
+
       throw new Error(
-        `[ts-jest] Unable to load ${what}: ${list}\n` +
-          `  ${why}\n` +
-          `    ↳ you can fix this by running: npm i -D ${moduleName}`,
+        interpolate(msg, {
+          loadModule,
+          installModule: moduleName,
+          loadReason: why,
+        }),
       );
     }
     return res;

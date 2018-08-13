@@ -14,7 +14,8 @@ import parseJsonUnsafe from './utils/parse-json-unsafe';
 import * as babelCfg from './utils/babel-config';
 import closestPatckageJson from './utils/closest-package-json';
 import sha1 from './utils/sha1';
-import importer, { ImportReasons } from './utils/importer';
+import importer from './utils/importer';
+import { Errors, ImportReasons } from './utils/messages';
 
 export default class TsJestTransformer implements jest.Transformer {
   @Memoize()
@@ -78,10 +79,32 @@ export default class TsJestTransformer implements jest.Transformer {
     const parsedConfig = backportJestConfig(jestConfig);
     const { globals = {} } = parsedConfig as any;
     const options: TsJestGlobalOptions = { ...globals['ts-jest'] };
+    let { stringifyContentPathRegex: stringifyRegEx } = options;
+
+    // stringifyContentPathRegex option
+    if (typeof stringifyRegEx === 'string') {
+      try {
+        stringifyRegEx = RegExp(stringifyRegEx);
+      } catch (err) {
+        err.message = `${Errors.InvalidStringifyContentPathRegex}\n${
+          err.message
+        }`;
+      }
+    }
+    if (stringifyRegEx) {
+      if (!(stringifyRegEx instanceof RegExp)) {
+        throw new TypeError(Errors.InvalidStringifyContentPathRegex);
+      }
+    } else {
+      stringifyRegEx = undefined;
+    }
+
+    // parsed options
     return {
       inputOptions: options,
       babelJest: options.babelJest || false,
       diagnostics: normalizeDiagnosticTypes(options.diagnostics),
+      stringifyContentPathRegex: stringifyRegEx as RegExp | undefined,
     };
   }
 
@@ -98,10 +121,17 @@ export default class TsJestTransformer implements jest.Transformer {
     transformOptions?: jest.TransformOptions,
   ): jest.TransformedSource | string {
     let result: string | jest.TransformedSource;
+    const config = this.configFor(jestConfig);
+
+    // handles here what we should simply stringify
+    if (
+      config.stringifyContentPathRegex &&
+      config.stringifyContentPathRegex.test(filePath)
+    ) {
+    }
 
     // get the tranformer instance
     const program = this.programFor(jestConfig);
-    const config = this.configFor(jestConfig);
     const instrument: boolean =
       !!transformOptions && transformOptions.instrument;
 
@@ -176,7 +206,6 @@ export default class TsJestTransformer implements jest.Transformer {
     return sha1(...hashData);
   }
 
-  // TODO: use jest-config package to try to get current config and see if we are going to use babel jest or not
-  // in which case we'd return `true` there:
+  // we let jest doing the instrumentation, it does it well
   // get canInstrument() {}
 }

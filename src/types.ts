@@ -35,7 +35,7 @@ export const diagnosticSets = {
 export type BabelConfig = _babel.TransformOptions;
 
 export interface TsJestGlobalOptions {
-  // either a file to the ts config or compiler options
+  // either a path to a tsconfig json file, or inline compiler options
   tsConfig?: string | CompilerOptions;
   // what kind of diagnostics to report
   diagnostics?: DiagnosticTypes[] | DiagnosticTypes | DiagnosticSets | boolean;
@@ -57,7 +57,7 @@ export interface TsJestConfig {
   diagnostics: DiagnosticTypes[];
 
   // to deprecate / deprecated === === ===
-  stringifyContentPathRegex?: RegExp;
+  stringifyContentPathRegex?: RegExp | undefined;
 }
 
 export interface TsJestProgram {
