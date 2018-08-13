@@ -370,7 +370,7 @@ function prepareTest(
   fs.outputFileSync(join(caseWorkdir, '__eval.ts'), EVAL_SOURCE, 'utf8');
   let ioDir!: string;
   if (options.writeIo) {
-    ioDir = join(caseWorkdir, '__io');
+    ioDir = join(caseWorkdir, '__io__');
     fs.mkdirpSync(ioDir);
   }
   const hooksFile = join(caseWorkdir, '__hooks.js');

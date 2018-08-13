@@ -15,6 +15,15 @@ const npmVersion = spawnSync('npm', ['-s', '--version'])
 const npmHasCiCommand = satisfies(npmVersion, '>=5.7.0');
 const npmHasPrepare = satisfies(npmVersion, '>=4.0.0');
 
+const configFile = path.resolve(__dirname, '..', 'e2e', 'jest.config.js');
+let parentArgs = process.argv.slice(2);
+if (parentArgs.includes('--coverage')) {
+  console.warn(
+    'Coverages cannot be activated for e2e tests (but can in each e2e test).'
+  );
+  parentArgs = parentArgs.filter(a => a !== '--coverage');
+}
+
 function getDirectories(rootDir) {
   return fs.readdirSync(rootDir).filter(function(file) {
     return fs.statSync(path.join(rootDir, file)).isDirectory();
@@ -135,12 +144,14 @@ function setupE2e() {
   });
 }
 
+// ============================================================================
+
 setupE2e();
 
-log('templates are ready, running tests', '\n\n');
+log('templates are ready, clearing Jest cache');
 
-jest.run([
-  '--config',
-  path.resolve(__dirname, '..', 'e2e', 'jest.config.js'),
-  ...process.argv.slice(2),
-]);
+spawnSync('jest', ['--clearCache']);
+
+log('running tests');
+
+jest.run(['--config', configFile, ...parentArgs]);

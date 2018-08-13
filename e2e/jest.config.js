@@ -1,8 +1,10 @@
-const base = require('../jest.config');
-
-module.exports = Object.assign({}, base, {
-  rootDir: '.',
-  testRegex: '/__tests__/.+\\.(test|spec)\\.ts$',
-  coverageDirectory: '<rootDir>/../coverage/e2e',
-  snapshotSerializers: ['<rootDir>/__serializers__/test-run-result.ts'],
-});
+module.exports = {
+  rootDir: '..',
+  transform: {
+    '\\.ts$': '<rootDir>/dist/index.js',
+  },
+  testMatch: ['<rootDir>/e2e/__tests__/**/?(*.)+(spec|test).ts?(x)'],
+  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json'],
+  testEnvironment: 'node',
+  snapshotSerializers: ['<rootDir>/e2e/__serializers__/test-run-result.ts'],
+};

@@ -19,7 +19,6 @@
     "resolveJsonModule": true,
     "lib": ["es2015", "es2016.array.include"],
     "types": ["jest", "node"],
-    "sourceRoot": "src"
   },
   "include": [
     "src",
