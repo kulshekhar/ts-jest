@@ -31,10 +31,13 @@ export function extend(
   // tslint:disable-next-line:trailing-comma
   ...others: BabelConfig[]
 ): BabelConfig {
-  const res = Object.assign(base, extend, ...others, {
+  const res = {
+    ...base,
+    ...extend,
+    ...others,
     presets: base.presets ? base.presets.slice() : [],
-    plugins: extend.plugins ? extend.plugins.slice() : [],
-  });
+    plugins: base.plugins ? base.plugins.slice() : [],
+  };
   others.unshift(extend);
   others.forEach(other => {
     if (other.presets) {

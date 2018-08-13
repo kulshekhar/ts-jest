@@ -1,4 +1,4 @@
-import { TsJestGlobalOptions } from '../types';
+import { TsJestGlobalOptions, BabelConfig } from '../types';
 import { resolve } from 'path';
 
 export function filePath(relPath: string): string {
@@ -29,7 +29,7 @@ describe('hello', function () {
 export function htmlSource() {
   return `
 <div>
-  <span>some text with \`backtilt\`</span>
+  <span>some text with \`backtick\`</span>
 </div>
 `;
 }
@@ -70,4 +70,12 @@ export function jestConfig<T extends jest.ProjectConfig>(
     res.globals['ts-jest'] = tsJestConfig(tsJestOptions);
   }
   return res;
+}
+
+export function babelConfig<T extends BabelConfig>(options?: BabelConfig): T {
+  return {
+    ...options,
+    presets: [...(options && options.presets)],
+    plugins: [...(options && options.plugins)],
+  } as any;
 }
