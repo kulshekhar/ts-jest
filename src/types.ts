@@ -76,3 +76,7 @@ export interface TsJestHooksMap {
     result: string | jest.TransformedSource,
   ): string | jest.TransformedSource | void;
 }
+
+export interface CreateJestPresetOptions {
+  allowJs?: boolean;
+}
