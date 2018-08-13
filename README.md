@@ -102,7 +102,7 @@ import * as React from 'react';
 //Synthetic default imports:
 import React from 'react';
 ```
-ts-jest tries to support that by using TypeScript 2.7+ built-in support for this feature via the `esModuleInterop` option. More details [here](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-7.html)** 
+ts-jest does that by using TypeScript 2.7+ `esModuleInterop` option. More details [here](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-7.html). 
 
 ### Supports automatic of jest.mock() calls
 [Just like Jest](https://facebook.github.io/jest/docs/manual-mocks.html#using-with-es-module-imports) ts-jest
