@@ -1,5 +1,7 @@
+const { jestPreset } = require('ts-jest');
+
 module.exports = {
-  preset: 'ts-jest',
+  ...jestPreset,
   testEnvironment: 'node',
   globals: { 'ts-jest': { tsConfig: {} } },
 };
