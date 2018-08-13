@@ -44,6 +44,28 @@ describe('process', () => {
       expect(result.code).toMatchSnapshot();
     });
   }); // hoisting
+
+  describe('stringifyContentPathRegex', () => {
+    const transformer = new TsJestTransformer();
+    it('should create a module with stringified content as export', () => {
+      const config = fakers.jestConfig(
+        {},
+        { stringifyContentPathRegex: '\\.html$' },
+      );
+      const source = fakers.htmlSource();
+      const result = transformer.process(
+        source,
+        fakers.filePath('path/to/file.html'),
+        config,
+      ) as string;
+      expect(result).toMatchSnapshot();
+      const importer = Function(
+        `const exports = {}, module = {exports:exports};${result};return module.exports;`,
+      );
+      expect(importer).not.toThrow();
+      expect(importer()).toEqual(source);
+    });
+  }); // stringifyContentPathRegex
 }); // process
 
 describe('getCacheKey', () => {

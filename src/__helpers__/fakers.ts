@@ -1,7 +1,5 @@
 import { TsJestGlobalOptions } from '../types';
-import { resolve, relative } from 'path';
-import spyThese from './spy-these';
-import realFs from 'fs';
+import { resolve } from 'path';
 
 export function filePath(relPath: string): string {
   return resolve(__dirname, '..', '..', relPath);
@@ -25,6 +23,14 @@ describe('hello', function () {
         jest.mock('./lower', function () { return function (s) { return s.toLowerCase(); }; });
     });
 });
+`;
+}
+
+export function htmlSource() {
+  return `
+<div>
+  <span>some text with \`backtilt\`</span>
+</div>
 `;
 }
 

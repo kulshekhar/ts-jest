@@ -123,23 +123,26 @@ export default class TsJestTransformer implements jest.Transformer {
     let result: string | jest.TransformedSource;
     const config = this.configFor(jestConfig);
 
-    // handles here what we should simply stringify
-    if (
+    const stringify =
       config.stringifyContentPathRegex &&
-      config.stringifyContentPathRegex.test(filePath)
-    ) {
-    }
+      config.stringifyContentPathRegex.test(filePath);
+    const useBabelJest = !stringify && config.babelJest;
 
     // get the tranformer instance
     const program = this.programFor(jestConfig);
     const instrument: boolean =
       !!transformOptions && transformOptions.instrument;
 
+    // handles here what we should simply stringify
+    if (stringify) {
+      source = `module.exports=${JSON.stringify(source)}`;
+    }
+
     // transpile TS code (source maps are included)
     result = program.transpileModule(filePath, source, instrument);
 
     // calling babel-jest transformer
-    if (config.babelJest) {
+    if (useBabelJest) {
       result = this.babelJestFor(jestConfig).process(
         result,
         filePath,

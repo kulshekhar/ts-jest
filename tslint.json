@@ -1,42 +1,47 @@
 {
-    "defaultSeverity": "error",
-    "extends": [
-        "tslint:recommended"
+  "defaultSeverity": "error",
+  "extends": [
+    "tslint:recommended"
+  ],
+  "rules": {
+    "variable-name": [
+      true,
+      "ban-keywords",
+      "check-format",
+      "allow-leading-underscore"
     ],
-    "rules": {
-        "variable-name": [true, "ban-keywords", "check-format", "allow-leading-underscore"],
-        "arrow-parens": false,
-        "quotemark": [
-            true,
-            "single",
-            "jsx-double"
-        ],
-        "semicolon": [
-            true,
-            "always"
-        ],
-        "interface-name": [
-            true,
-            "never-prefix"
-        ],
-        "ordered-imports": false,
-        "align": false,
-        "object-literal-sort-keys": false,
-        "no-console": [
-            true,
-            "debug",
-            "info",
-            "time",
-            "timeEnd",
-            "trace"
-        ],
-        "no-empty": false,
-        "member-access": false
-    },
-    "linterOptions": {
-        "exclude": [
-            "dist/**/*",
-            "**/node_modules/**/*"
-        ]
-    }
+    "arrow-parens": false,
+    "quotemark": [
+      true,
+      "single",
+      "jsx-double"
+    ],
+    "semicolon": [
+      true,
+      "always"
+    ],
+    "interface-name": [
+      true,
+      "never-prefix"
+    ],
+    "ordered-imports": false,
+    "align": false,
+    "object-literal-sort-keys": false,
+    "no-console": [
+      true,
+      "debug",
+      "info",
+      "time",
+      "timeEnd",
+      "trace"
+    ],
+    "no-empty": false,
+    "member-access": false
+  },
+  "linterOptions": {
+    "exclude": [
+      "dist/**/*",
+      "**/node_modules/**/*"
+    ]
+  }
 }

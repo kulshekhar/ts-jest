@@ -2,7 +2,6 @@ import { configureTestCase } from '../__helpers__/test-case';
 import { allPackageSets } from '../__helpers__/templates';
 
 const testCase = configureTestCase('source-maps', {
-  args: ['--no-cache'],
   writeIo: true,
 });
 

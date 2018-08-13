@@ -2,7 +2,7 @@ import { configureTestCase } from '../__helpers__/test-case';
 import { allPackageSets } from '../__helpers__/templates';
 
 describe('Simple test', () => {
-  const testCase = configureTestCase('simple', { args: ['--no-cache'] });
+  const testCase = configureTestCase('simple');
 
   testCase.runWithTemplates(allPackageSets, 0, (runTest, { testLabel }) => {
     it(testLabel, () => {
