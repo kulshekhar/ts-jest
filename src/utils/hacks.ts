@@ -1,7 +1,9 @@
-import { TBabelCore } from '../types';
+import { TBabelCore, ModulePatcher } from '../types';
 
 // tslint:disable-next-line:variable-name
-const patchBabelCore_githubIssue6577 = (babel: TBabelCore): TBabelCore => {
+export const patchBabelCore_githubIssue6577: ModulePatcher<
+  TBabelCore
+> = babel => {
   // There is an issue still open in Babel 6: https://github.com/babel/babel/issues/6577
   // This is a hack to bypass it and fix our issue #627
   // The bug disallow debugging when using Babel Jest with babel-core@6.x because of
@@ -26,6 +28,3 @@ const patchBabelCore_githubIssue6577 = (babel: TBabelCore): TBabelCore => {
   }
   return babel;
 };
-
-export const patchBabelCore = (babel: TBabelCore): TBabelCore =>
-  patchBabelCore_githubIssue6577(babel);

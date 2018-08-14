@@ -1,6 +1,13 @@
 import Memoize from './memoize';
-import { TClosestFileData, TBabelJest, TBabelCore } from '../types';
-import { patchBabelCore } from './hacks';
+import {
+  TClosestFileData,
+  TBabelJest,
+  TBabelCore,
+  ModulePatcher,
+  TTypeScript,
+  TsJestImporter,
+} from '../types';
+import * as hacks from './hacks';
 import { ImportReasons, Errors, interpolate, Helps } from './messages';
 
 const importDefault = (mod: any) =>
@@ -16,16 +23,25 @@ interface ImportOptions {
   installTip?: string | Array<{ module: string; label: string }>;
 }
 
-class Importer {
+class Importer implements TsJestImporter {
+  // here we can define patches to apply to modules.
+  // it could be fixes that are not deployed, or
+  // abstractions so that multiple versions work the same
+  protected _patches: { [moduleName: string]: ModulePatcher[] } = {
+    'babel-core': [hacks.patchBabelCore_githubIssue6577],
+  };
+
   closestFileData(why: ImportReasons): TClosestFileData {
     return importDefault(this._import(why, 'closest-file-data')).default;
   }
 
+  typeScript(why: ImportReasons): TTypeScript {
+    return this._import(why, 'typescript');
+  }
+
   babelJest(why: ImportReasons): TBabelJest {
-    const babel = importDefault(this._tryThese('babel-core')).default;
-    if (babel) {
-      patchBabelCore(babel);
-    }
+    // this is to ensure babel-core is patched
+    this.tryThese('babel-core');
     return this._import(why, 'babel-jest');
   }
 
@@ -33,10 +49,41 @@ class Importer {
     return this._import(why, '@babel/core', {
       alternatives: ['babel-core'],
       installTip: [
-        { label: 'for Babel 7', module: `'babel-core@^7.0.0-0' @babel/core` },
-        { label: 'for Babel 6', module: 'babel-core' },
+        // as in https://github.com/facebook/jest/tree/master/packages/babel-jest
+        {
+          label: 'for Babel 7',
+          module: `babel-jest 'babel-core@^7.0.0-0' @babel/core`,
+        },
+        { label: 'for Babel 6', module: 'babel-jest babel-core' },
       ],
     });
+  }
+
+  @Memoize((...args: string[]) => args.join(':'))
+  tryThese(moduleName: string, ...fallbacks: string[]): any {
+    let name: string;
+    let loaded: any;
+    const tries = [moduleName, ...fallbacks];
+    // tslint:disable-next-line:no-conditional-assignment
+    while ((name = tries.shift() as string) !== undefined) {
+      try {
+        loaded = require(name);
+        break;
+      } catch (err) {}
+    }
+
+    return loaded && this._patch(name, loaded);
+  }
+
+  @Memoize(name => name)
+  protected _patch<T>(name: string, unpatched: T): T {
+    if (name in this._patches) {
+      return this._patches[name].reduce(
+        (mod, patcher) => patcher(mod),
+        unpatched,
+      );
+    }
+    return unpatched;
   }
 
   protected _import(
@@ -44,47 +91,39 @@ class Importer {
     moduleName: string,
     { alternatives = [], installTip = moduleName }: ImportOptions = {},
   ): any {
-    const res = this._tryThese(moduleName, ...alternatives);
-    if (!res) {
-      const msg = alternatives.length
-        ? Errors.UnableToLoadAnyModule
-        : Errors.UnableToLoadOneModule;
-      const loadModule = [moduleName, ...alternatives]
-        .map(m => `"${m}"`)
-        .join(', ');
-      if (typeof installTip === 'string') {
-        installTip = [{ module: installTip, label: `install "${installTip}"` }];
-      }
-      const fix = installTip
-        .map(tip => {
-          return `    ${installTip.length === 1 ? '↳' : '•'} ${interpolate(
-            Helps.FixMissingModule,
-            tip,
-          )}`;
-        })
-        .join('\n');
-
-      throw new Error(
-        interpolate(msg, {
-          module: loadModule,
-          reason: why,
-          fix,
-        }),
-      );
+    // try to load any of the alternative after trying main one
+    const res = this.tryThese(moduleName, ...alternatives);
+    // if we could load one, return it
+    if (res) {
+      return res;
     }
-    return res;
-  }
 
-  @Memoize((...args: string[]) => args.join(':'))
-  protected _tryThese(moduleName: string, ...fallbacks: string[]): any {
-    let name: string;
-    const tries = [moduleName, ...fallbacks];
-    // tslint:disable-next-line:no-conditional-assignment
-    while ((name = tries.shift() as string) !== undefined) {
-      try {
-        return require(name);
-      } catch (err) {}
+    // if it couldn't load, build a nice error message so the user can fix it by himself
+    const msg = alternatives.length
+      ? Errors.UnableToLoadAnyModule
+      : Errors.UnableToLoadOneModule;
+    const loadModule = [moduleName, ...alternatives]
+      .map(m => `"${m}"`)
+      .join(', ');
+    if (typeof installTip === 'string') {
+      installTip = [{ module: installTip, label: `install "${installTip}"` }];
     }
+    const fix = installTip
+      .map(tip => {
+        return `    ${installTip.length === 1 ? '↳' : '•'} ${interpolate(
+          Helps.FixMissingModule,
+          tip,
+        )}`;
+      })
+      .join('\n');
+
+    throw new Error(
+      interpolate(msg, {
+        module: loadModule,
+        reason: why,
+        fix,
+      }),
+    );
   }
 }
 

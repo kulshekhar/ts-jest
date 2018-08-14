@@ -22,9 +22,7 @@ describe('backportJestConfig', () => {
         it(`should wran the user`, () => {
           backportJestConfig(original);
           expect(consoleSpies.warn).toHaveBeenCalledTimes(1);
-          expect(consoleSpies.warn.mock.calls[0].join(' ')).toMatch(
-            `"[jest-config].${oldPath}" is deprecated, use "[jest-config].${newPath}" instead`,
-          );
+          expect(consoleSpies.warn.mock.calls[0].join(' ')).toMatchSnapshot();
         }); // should warn the user
         it(`should have changed the config correctly`, () => {
           expect(original).toMatchSnapshot('before');

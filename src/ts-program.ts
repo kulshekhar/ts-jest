@@ -1,31 +1,29 @@
 // tslint:disable:member-ordering
 import { TsJestConfig, TsJestProgram } from './types';
-import {
-  sys,
-  findConfigFile,
-  CompilerOptions,
-  Diagnostic,
-  flattenDiagnosticMessageText,
-  readConfigFile,
-  parseJsonConfigFileContent,
-  ModuleKind,
-  ParsedCommandLine,
-  ParseConfigHost,
-  TranspileOptions,
-  transpileModule,
-  CustomTransformers,
-  TransformerFactory,
-  SourceFile,
-} from 'typescript';
 import { sep, resolve, dirname, basename } from 'path';
 import { existsSync, readFileSync } from 'fs';
 import Memoize from './utils/memoize';
 import hoisting from './transformers/hoisting';
-import { interpolate, Errors } from './utils/messages';
+import { interpolate, Errors, ImportReasons } from './utils/messages';
+import importer from './utils/importer';
+// take care of including ONLY TYPES here, for the rest use ts
+import {
+  CompilerOptions,
+  ParsedCommandLine,
+  ParseConfigHost,
+  CustomTransformers,
+  TransformerFactory,
+  SourceFile,
+  TranspileOptions,
+  Diagnostic,
+} from 'typescript';
+
+const ts = importer.typeScript(ImportReasons.tsJest);
+const { sys } = ts;
 
 export const compilerOptionsOverrides: Readonly<CompilerOptions> = {
   // ts-jest
-  module: ModuleKind.CommonJS,
+  module: ts.ModuleKind.CommonJS,
   esModuleInterop: true,
   inlineSources: false,
   sourceMap: false,
@@ -48,7 +46,11 @@ export default class TsProgram implements TsJestProgram {
       }
     } else if (typeof given === 'undefined') {
       // we got undefined, go look for the default file
-      resolved = findConfigFile(this.rootDir, sys.fileExists, 'tsconfig.json');
+      resolved = ts.findConfigFile(
+        this.rootDir,
+        sys.fileExists,
+        'tsconfig.json',
+      );
     } else {
       // what we got was compiler options
       return null;
@@ -79,7 +81,7 @@ export default class TsProgram implements TsJestProgram {
   get parsedConfig(): ParsedCommandLine {
     const { configFile } = this;
     const { config, error } = configFile
-      ? readConfigFile(configFile, sys.readFile)
+      ? ts.readConfigFile(configFile, sys.readFile)
       : {
           config: { compilerOptions: this.tsJestConfig.inputOptions.tsConfig },
           error: undefined,
@@ -93,7 +95,7 @@ export default class TsProgram implements TsJestProgram {
       useCaseSensitiveFileNames: true,
     };
 
-    const result = parseJsonConfigFileContent(
+    const result = ts.parseJsonConfigFileContent(
       config,
       parseConfigHost,
       configFile ? dirname(configFile) : this.rootDir,
@@ -139,7 +141,7 @@ export default class TsProgram implements TsJestProgram {
         ...extraCompilerOptions,
       },
     };
-    const { diagnostics, outputText } = transpileModule(content, options);
+    const { diagnostics, outputText } = ts.transpileModule(content, options);
 
     this.reportDiagnostic(...diagnostics);
 
@@ -151,7 +153,7 @@ export default class TsProgram implements TsJestProgram {
     const diagnostic = diagnostics[0];
     if (!diagnostic) return; // tslint:disable-line:curly
 
-    const message = flattenDiagnosticMessageText(
+    const message = ts.flattenDiagnosticMessageText(
       diagnostic.messageText,
       sys.newLine,
     );

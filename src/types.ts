@@ -1,9 +1,11 @@
-import { CompilerOptions, ParsedCommandLine } from 'typescript';
+import * as _ts from 'typescript';
 import _closestFileData from 'closest-file-data';
 import * as _babel from 'babel__core';
 import { IPackageJSON } from 'gist-package-json';
+import { ImportReasons } from './utils/messages';
 
 export type TBabelCore = typeof _babel;
+export type TTypeScript = typeof _ts;
 export type TPackageJson = IPackageJSON;
 export type TClosestFileData = typeof _closestFileData;
 export type TBabelJest = Required<jest.Transformer>;
@@ -42,7 +44,7 @@ export type BabelConfig = _babel.TransformOptions;
 
 export interface TsJestGlobalOptions {
   // either a path to a tsconfig json file, or inline compiler options
-  tsConfig?: string | CompilerOptions;
+  tsConfig?: string | _ts.CompilerOptions;
   // what kind of diagnostics to report
   diagnostics?: DiagnosticTypes[] | DiagnosticTypes | DiagnosticSets | boolean;
   // whether to use babel jest under the hood or not
@@ -67,12 +69,12 @@ export interface TsJestConfig {
 }
 
 export interface TsJestProgram {
-  readonly parsedConfig: ParsedCommandLine;
+  readonly parsedConfig: _ts.ParsedCommandLine;
   transpileModule(
     path: string,
     content: string,
     instrument?: boolean,
-    extraCompilerOptions?: CompilerOptions,
+    extraCompilerOptions?: _ts.CompilerOptions,
   ): string;
 }
 
@@ -85,4 +87,10 @@ export interface TsJestHooksMap {
 
 export interface CreateJestPresetOptions {
   allowJs?: boolean;
+}
+
+export type ModulePatcher<T = any> = (module: T) => T;
+
+export interface TsJestImporter {
+  tryThese(moduleName: string, ...fallbacks: string[]): any;
 }

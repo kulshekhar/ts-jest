@@ -1,36 +1,34 @@
 // tslint:disable:curly
+import TsProgram from '../ts-program';
+import importer from '../utils/importer';
+import { ImportReasons } from '../utils/messages';
+// take care of including ONLY TYPES here, for the rest use ts
 import {
   Node,
   ExpressionStatement,
-  isExpressionStatement,
-  isCallExpression,
-  isPropertyAccessExpression,
-  isIdentifier,
   TransformationContext,
   SourceFile,
-  Visitor,
-  visitEachChild,
-  Transformer,
-  visitNode,
   Statement,
-  createNodeArray,
+  Visitor,
   Block,
+  Transformer,
 } from 'typescript';
-import TsProgram from '../ts-program';
+
+const ts = importer.typeScript(ImportReasons.tsJest);
 
 function isJestMockCallExpression(node: Node): node is ExpressionStatement {
   return (
-    isExpressionStatement(node) &&
-    isCallExpression(node.expression) &&
-    isPropertyAccessExpression(node.expression.expression) &&
-    isIdentifier(node.expression.expression.expression) &&
+    ts.isExpressionStatement(node) &&
+    ts.isCallExpression(node.expression) &&
+    ts.isPropertyAccessExpression(node.expression.expression) &&
+    ts.isIdentifier(node.expression.expression.expression) &&
     node.expression.expression.expression.text === 'jest' &&
-    isIdentifier(node.expression.expression.name) &&
+    ts.isIdentifier(node.expression.expression.name) &&
     node.expression.expression.name.text === 'mock'
   );
 }
 
-export default function(prog: TsProgram) {
+export default function hoisting(prog: TsProgram) {
   function createVisitor(ctx: TransformationContext, sf: SourceFile) {
     let level = 0;
     const hoisted: Statement[][] = [];
@@ -52,9 +50,9 @@ export default function(prog: TsProgram) {
 
     const visitor: Visitor = node => {
       enter();
-      const resultNode = visitEachChild(node, visitor, ctx);
+      const resultNode = ts.visitEachChild(node, visitor, ctx);
       if (hoisted[level] && hoisted[level].length) {
-        (resultNode as Block).statements = createNodeArray([
+        (resultNode as Block).statements = ts.createNodeArray([
           ...hoisted[level],
           ...(resultNode as Block).statements,
         ]);
@@ -71,6 +69,6 @@ export default function(prog: TsProgram) {
   }
 
   return (ctx: TransformationContext): Transformer<SourceFile> => {
-    return (sf: SourceFile) => visitNode(sf, createVisitor(ctx, sf));
+    return (sf: SourceFile) => ts.visitNode(sf, createVisitor(ctx, sf));
   };
 }

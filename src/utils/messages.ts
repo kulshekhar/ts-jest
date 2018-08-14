@@ -19,6 +19,7 @@ export enum Deprecateds {
 }
 
 export enum ImportReasons {
+  tsJest = 'Using "ts-jest" requires this package to be installed.',
   babelJest = 'Using "babel-jest" requires this package to be installed.',
   babelConfigLookup = 'Using "babel-jest" with config lookup relies on this package to be installed.',
 }

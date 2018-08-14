@@ -1,5 +1,6 @@
 import { TsJestGlobalOptions, BabelConfig } from '../types';
 import { resolve } from 'path';
+import { ImportReasons } from '../utils/messages';
 
 export function filePath(relPath: string): string {
   return resolve(__dirname, '..', '..', relPath);
@@ -78,4 +79,8 @@ export function babelConfig<T extends BabelConfig>(options?: BabelConfig): T {
     presets: [...(options && options.presets)],
     plugins: [...(options && options.plugins)],
   } as any;
+}
+
+export function importReason(text: string = 'because'): ImportReasons {
+  return text as any;
 }

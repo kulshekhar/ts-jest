@@ -14,13 +14,13 @@ jest.mock('babel-core/lib/transformation/file', () => ({
   },
 }));
 
-describe('patchBabelCore', () => {
+describe('patchBabelCore_githubIssue6577', () => {
   const INPUT = 'foo:bar';
   const initOptions = ({
     version = '6.0.0',
     sourceMaps,
   }: { version?: any; sourceMaps?: any } = {}) => {
-    hacks.patchBabelCore({ version } as any);
+    hacks.patchBabelCore_githubIssue6577({ version } as any);
     return new File().initOptions({ sourceMaps, inputSourceMap: true });
   };
 

@@ -11,7 +11,7 @@ import { normalizeDiagnosticTypes } from './utils/diagnostics';
 import { backportJestConfig } from './utils/backports';
 import jestRootDir from './utils/jest-root-dir';
 import { sep, resolve } from 'path';
-import parseJsonUnsafe from './utils/parse-json-unsafe';
+import requireJsOrJson from './utils/require-js-or-json';
 import closestPatckageJson from './utils/closest-package-json';
 import sha1 from './utils/sha1';
 import importer from './utils/importer';
@@ -23,7 +23,7 @@ export default class TsJestTransformer implements jest.Transformer {
     let hooksFile = process.env.__TS_JEST_HOOKS;
     if (hooksFile) {
       hooksFile = resolve(process.cwd(), hooksFile);
-      return (importer as any)._tryThese(hooksFile) || {};
+      return importer.tryThese(hooksFile) || {};
     }
     return {};
   }
@@ -67,7 +67,7 @@ export default class TsJestTransformer implements jest.Transformer {
       // path to a babelrc file
       let filePath = config.babelJest.replace('<rootDir>', `${rootDir}${sep}`);
       filePath = resolve(rootDir, filePath);
-      babelConfig = parseJsonUnsafe(filePath);
+      babelConfig = requireJsOrJson(filePath);
     } else {
       // it's already an object with the config
       babelConfig = config.babelJest;

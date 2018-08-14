@@ -2,11 +2,18 @@ import TsJestTransformerOriginal from './ts-jest-transformer';
 import * as fakers from './__helpers__/fakers';
 import * as closesPkgJson from './utils/closest-package-json';
 import * as TsJestProgram from './ts-program';
+import _requrieJsOrJson from './utils/require-js-or-json';
+import { join } from 'path';
 
 jest.mock('./ts-program');
 jest.mock('./utils/closest-package-json');
 jest.mock('./utils/backports');
+jest.mock('./utils/require-js-or-json.ts');
 
+// typecasting
+const requrieJsOrJson = _requrieJsOrJson as jest.Mock<typeof _requrieJsOrJson>;
+
+// mocks
 const mocks = {
   babelJestCacheKey: undefined as any,
   set packageJson(val: any) {
@@ -23,6 +30,7 @@ const mocks = {
 };
 afterEach(() => {
   mocks.reset();
+  requrieJsOrJson.mockReset();
 });
 
 class TsJestTransformer extends TsJestTransformerOriginal {
@@ -50,6 +58,43 @@ describe('process', () => {
       expect(result.code).toMatchSnapshot();
     });
   }); // hoisting
+
+  describe('babelJestConfigFor', () => {
+    const DUMMY_BABELRC = 'dummy-babelrc';
+    const DUMMY_BABEL_CONF = { foo: 'bar' };
+    const babelJestConfigFor = (jestConfig: any) => {
+      return new TsJestTransformer().babelJestConfigFor(jestConfig);
+    };
+
+    it('should return undefined when disabled or not set', () => {
+      expect(babelJestConfigFor(fakers.jestConfig())).toBeUndefined();
+      expect(
+        babelJestConfigFor(fakers.jestConfig({}, { babelJest: false })),
+      ).toBeUndefined();
+    });
+
+    it('should return the content of given file', () => {
+      requrieJsOrJson.mockImplementation(
+        p => p === join(__dirname, DUMMY_BABELRC) && DUMMY_BABELRC,
+      );
+      expect(
+        babelJestConfigFor(
+          fakers.jestConfig(
+            { rootDir: __dirname },
+            { babelJest: DUMMY_BABELRC },
+          ),
+        ),
+      ).toBe(DUMMY_BABELRC);
+    });
+
+    it('should return given inline config', () => {
+      expect(
+        babelJestConfigFor(
+          fakers.jestConfig({}, { babelJest: DUMMY_BABEL_CONF as any }),
+        ),
+      ).toEqual(DUMMY_BABEL_CONF);
+    });
+  });
 
   describe('stringifyContentPathRegex', () => {
     const transformer = new TsJestTransformer();
