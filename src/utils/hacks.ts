@@ -10,17 +10,19 @@ const patchBabelCore_githubIssue6577 = (babel: TBabelCore): TBabelCore => {
     typeof babel.version === 'string' &&
     parseInt(babel.version.split('.')[0], 10) === 6
   ) {
-    const File = require('babel-core/lib/transformation/file/index.js').File;
-    File.prototype.initOptions = (original => {
-      return function(this: any, opt) {
-        const before = opt.sourceMaps;
-        const result = original.apply(this, arguments);
-        if (before != null && before !== result.sourceMaps) {
-          result.sourceMaps = before;
-        }
-        return result;
-      };
-    })(File.prototype.initOptions);
+    try {
+      const File = require('babel-core/lib/transformation/file').File;
+      File.prototype.initOptions = (original => {
+        return function(this: any, opt) {
+          const before = opt.sourceMaps;
+          const result = original.apply(this, arguments);
+          if (before && before !== result.sourceMaps) {
+            result.sourceMaps = before;
+          }
+          return result;
+        };
+      })(File.prototype.initOptions);
+    } catch (err) {}
   }
   return babel;
 };

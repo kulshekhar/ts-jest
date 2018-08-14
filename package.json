@@ -50,6 +50,7 @@
     "@types/jest": "^23.3.1",
     "@types/lodash.set": "^4.3.4",
     "@types/node": "^10.5.8",
+    "@types/semver": "^5.5.0",
     "closest-file-data": "^0.1.4",
     "cross-spawn": "^6.0.5",
     "doctoc": "^1.3.1",
