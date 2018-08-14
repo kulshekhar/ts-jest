@@ -34,11 +34,11 @@ export default function runJest(dir: string, args: string[], env = {}): Result {
   });
 
   // Call to string on byte arrays and strip ansi color codes for more accurate string comparison.
-  result.stdout = result.stdout && stripAnsiColors(result.stdout.toString());
-  result.stderr = result.stderr && stripAnsiColors(result.stderr.toString());
-  result.output = result.output && stripAnsiColors(result.output.toString());
+  const stdout = result.stdout && stripAnsiColors(result.stdout.toString());
+  const stderr = result.stderr && stripAnsiColors(result.stderr.toString());
+  const output = result.output && stripAnsiColors(result.output.toString());
 
-  return result;
+  return { status: result.status, stdout, stderr, output };
 }
 
 // from https://stackoverflow.com/questions/25245716/remove-all-ansi-colors-styles-from-strings

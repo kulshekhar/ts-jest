@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 'use strict';
 
 process.env.NODE_ENV = 'test';
@@ -6,6 +7,7 @@ process.env.PUBLIC_URL = '';
 const jest = require('jest');
 const fs = require('fs-extra');
 const path = require('path');
+const Paths = require('./paths');
 
 function getDirectories(rootDir) {
   return fs.readdirSync(rootDir).filter(function(file) {
@@ -24,6 +26,7 @@ function isTestCaseFolder(basename) {
 }
 
 function createIntegrationMock() {
+  // copy files for simple integration tests
   const testsRoot = 'tests';
   const testCaseFolders = getDirectories(testsRoot).filter(isTestCaseFolder);
 
@@ -58,6 +61,5 @@ createIntegrationMock();
 
 const argv = process.argv.slice(2);
 argv.push('--no-cache');
-argv.push('--testPathPattern', '^(?!(.*watch.spec.ts$)).*');
-
+argv.push('--config', path.join(Paths.rootDir, 'jest.config.tests.js'));
 jest.run(argv);
