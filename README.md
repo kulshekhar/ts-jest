@@ -206,13 +206,13 @@ module.exports = {
 ### Using `babel-jest`
 By default ts-jest does not rely on babel-jest. But you may want to use some babel plugins and stll be able to write TypeScript. This can be achieved using the `babelJest` config key. It can be:
 
-- `true`, in which case it'll try to find a babel configuration file:
+- `true`, in which case it'll use defaults from babelrc or any other found config file:
   ```js
   // jest.config.js
   module.exports = {
     globals: {
       'ts-jest': {
-        babelConfig: true
+        babelJest: true
       }
     }
   };
@@ -224,7 +224,7 @@ By default ts-jest does not rely on babel-jest. But you may want to use some bab
   module.exports = {
     globals: {
       'ts-jest': {
-        babelConfig: 'babelrc.test.js'
+        babelJest: 'babelrc.test.js'
       }
     }
   };
@@ -236,11 +236,23 @@ By default ts-jest does not rely on babel-jest. But you may want to use some bab
   module.exports = {
     globals: {
       'ts-jest': {
-        babelConfig: {
+        babelJest: {
           plugins: [
             // ...
           ]
         }
+      }
+    }
+  };
+  ```
+
+- `false`, in which case it'll disable the use of babel-jest (which is the default):
+  ```js
+  // jest.config.js
+  module.exports = {
+    globals: {
+      'ts-jest': {
+        babelJest: false
       }
     }
   };

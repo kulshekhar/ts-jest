@@ -3,6 +3,7 @@ import {
   TsJestConfig,
   BabelConfig,
   TsJestHooksMap,
+  BabelJestTransformer,
 } from './types';
 import TsProgram from './ts-program';
 import Memoize from './utils/memoize';
@@ -11,7 +12,6 @@ import { backportJestConfig } from './utils/backports';
 import jestRootDir from './utils/jest-root-dir';
 import { sep, resolve } from 'path';
 import parseJsonUnsafe from './utils/parse-json-unsafe';
-import * as babelCfg from './utils/babel-config';
 import closestPatckageJson from './utils/closest-package-json';
 import sha1 from './utils/sha1';
 import importer from './utils/importer';
@@ -42,14 +42,20 @@ export default class TsJestTransformer implements jest.Transformer {
   }
 
   @Memoize(jestRootDir)
-  babelJestFor(jestConfig: jest.ProjectConfig): jest.Transformer {
+  babelJestFor(
+    jestConfig: jest.ProjectConfig,
+  ): BabelJestTransformer | undefined {
+    const babelJestConfig = this.babelJestConfigFor(jestConfig);
+    if (!babelJestConfig) {
+      return;
+    }
     return importer
       .babelJest(ImportReasons.babelJest)
-      .createTransformer(this.babelConfigFor(jestConfig));
+      .createTransformer(babelJestConfig) as BabelJestTransformer;
   }
 
   @Memoize(jestRootDir)
-  babelConfigFor(jestConfig: jest.ProjectConfig): BabelConfig | undefined {
+  babelJestConfigFor(jestConfig: jest.ProjectConfig): BabelConfig | undefined {
     const config = this.configFor(jestConfig);
     const rootDir = jestRootDir(jestConfig);
     if (config.babelJest === false) {
@@ -57,10 +63,7 @@ export default class TsJestTransformer implements jest.Transformer {
     }
 
     let babelConfig!: BabelConfig;
-    if (config.babelJest === true) {
-      // lookup babelrc file
-      babelConfig = babelCfg.extend({}, babelCfg.loadDefault(rootDir));
-    } else if (typeof config.babelJest === 'string') {
+    if (typeof config.babelJest === 'string') {
       // path to a babelrc file
       let filePath = config.babelJest.replace('<rootDir>', `${rootDir}${sep}`);
       filePath = resolve(rootDir, filePath);
@@ -70,8 +73,7 @@ export default class TsJestTransformer implements jest.Transformer {
       babelConfig = config.babelJest;
     }
 
-    // ensure to return a freezed copy object
-    return babelCfg.freeze(babelCfg.extend({}, babelConfig));
+    return babelConfig;
   }
 
   @Memoize(jestRootDir)
@@ -97,6 +99,11 @@ export default class TsJestTransformer implements jest.Transformer {
       }
     } else {
       stringifyRegEx = undefined;
+    }
+
+    // babelJest true => {}
+    if (options.babelJest === true) {
+      options.babelJest = {};
     }
 
     // parsed options
@@ -126,7 +133,7 @@ export default class TsJestTransformer implements jest.Transformer {
     const stringify =
       config.stringifyContentPathRegex &&
       config.stringifyContentPathRegex.test(filePath);
-    const useBabelJest = !stringify && config.babelJest;
+    const babelJest = !stringify && this.babelJestFor(jestConfig);
 
     // get the tranformer instance
     const program = this.programFor(jestConfig);
@@ -142,8 +149,8 @@ export default class TsJestTransformer implements jest.Transformer {
     result = program.transpileModule(filePath, source, instrument);
 
     // calling babel-jest transformer
-    if (useBabelJest) {
-      result = this.babelJestFor(jestConfig).process(
+    if (babelJest) {
+      result = babelJest.process(
         result,
         filePath,
         jestConfig,
@@ -170,11 +177,10 @@ export default class TsJestTransformer implements jest.Transformer {
     fileContent: string,
     filePath: string,
     jestConfigStr: string,
-    {
-      instrument = false,
-      rootDir,
-    }: { instrument?: boolean; rootDir?: string } = {},
+    transformOptions: { instrument?: boolean; rootDir?: string } = {},
   ): string {
+    // tslint:disable-next-line:prefer-const
+    let { instrument = false, rootDir } = transformOptions;
     const CHAR0 = '\0';
     // will be used as the hashing data source
     const hashData: string[] = [];
@@ -192,14 +198,24 @@ export default class TsJestTransformer implements jest.Transformer {
     const sanitizedJestConfig: jest.ProjectConfig = this.sanitizedJestConfigFor(
       jestConfig,
     );
+
     // add jest config
     hashUpdate(JSON.stringify(sanitizedJestConfig));
     // add project's package.json
     const projectPkg = closestPatckageJson(rootDir, true);
     hashUpdate(projectPkg);
-    // add babel config if using babel jest
-    const babelConfig = this.babelConfigFor(jestConfig) || {};
-    hashUpdate(JSON.stringify(babelConfig));
+    // if using babel jest, adds its cacheKey as well
+    const babelJest = this.babelJestFor(jestConfig);
+    if (babelJest) {
+      hashUpdate(
+        babelJest.getCacheKey(
+          fileContent,
+          filePath,
+          jestConfigStr,
+          transformOptions as any,
+        ),
+      );
+    }
     // add tsconfig
     const tsConfig = this.programFor(sanitizedJestConfig).parsedConfig;
     hashUpdate(JSON.stringify(tsConfig));

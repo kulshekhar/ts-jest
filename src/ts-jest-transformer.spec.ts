@@ -1,6 +1,5 @@
-import TsJestTransformer from './ts-jest-transformer';
+import TsJestTransformerOriginal from './ts-jest-transformer';
 import * as fakers from './__helpers__/fakers';
-import * as babelCfg from './utils/babel-config';
 import * as closesPkgJson from './utils/closest-package-json';
 import * as TsJestProgram from './ts-program';
 
@@ -9,7 +8,7 @@ jest.mock('./utils/closest-package-json');
 jest.mock('./utils/backports');
 
 const mocks = {
-  babelConfig: undefined as any,
+  babelJestCacheKey: undefined as any,
   set packageJson(val: any) {
     (closesPkgJson as any).__default = val;
   },
@@ -17,19 +16,26 @@ const mocks = {
     (TsJestProgram as any).__tsConfig = val;
   },
   reset() {
-    this.babelConfig = undefined;
+    this.babelJestCacheKey = 'babel-jest-cache-key';
     this.packageJson = { name: 'mock' };
     this.tsConfig = {};
   },
 };
-beforeAll(() => {
-  jest
-    .spyOn(babelCfg, 'loadDefault')
-    .mockImplementation(() => mocks.babelConfig);
-});
 afterEach(() => {
   mocks.reset();
 });
+
+class TsJestTransformer extends TsJestTransformerOriginal {
+  babelJestFor(jestCfg: jest.ProjectConfig) {
+    const bj = super.babelJestFor(jestCfg);
+    if (bj && !(bj.getCacheKey as any).mock) {
+      jest
+        .spyOn(bj, 'getCacheKey')
+        .mockImplementation(() => mocks.babelJestCacheKey);
+    }
+    return bj;
+  }
+}
 
 describe('process', () => {
   describe('hoisting', () => {
@@ -78,7 +84,10 @@ describe('getCacheKey', () => {
   const call: typeof TsJestTransformer['prototype']['getCacheKey'] = (
     // tslint:disable-next-line:trailing-comma
     ...args
-  ) => new TsJestTransformer().getCacheKey(...args);
+  ) => {
+    const tr = new TsJestTransformer();
+    return tr.getCacheKey(...args);
+  };
   const defaultCall = () => call(fakeSource, fakeFilePath, fakeJestConfig);
 
   it('should be a 28 chars string, different for each case', () => {
@@ -91,7 +100,7 @@ describe('getCacheKey', () => {
       call(fakeSource, fakeFilePath, fakeJestConfig, { rootDir: '/child' }),
     ];
 
-    mocks.babelConfig = '{sourceMaps: true}';
+    mocks.babelJestCacheKey = 'another-babel-jest-cache-key';
     allCacheKeys.push(defaultCall());
     mocks.reset();
 

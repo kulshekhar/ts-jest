@@ -1,7 +1,7 @@
 import Memoize from './memoize';
-import { TClosestFileData, TBabelJest } from '../types';
+import { TClosestFileData, TBabelJest, TBabelCore } from '../types';
 import { patchBabelCore } from './hacks';
-import { ImportReasons, Errors, interpolate } from './messages';
+import { ImportReasons, Errors, interpolate, Helps } from './messages';
 
 const importDefault = (mod: any) =>
   mod && mod.__esModule ? mod : { default: mod };
@@ -10,6 +10,11 @@ const importDefault = (mod: any) =>
 // create a new method in Importer. Thus uses the importer.yourMethod(ImportReasons.TheReason)
 // in the relevant code, so that the user knows why it needs it and how to install it in the
 // case it can't import.
+
+interface ImportOptions {
+  alternatives?: string[];
+  installTip?: string | Array<{ module: string; label: string }>;
+}
 
 class Importer {
   closestFileData(why: ImportReasons): TClosestFileData {
@@ -24,26 +29,46 @@ class Importer {
     return this._import(why, 'babel-jest');
   }
 
+  babelCore(why: ImportReasons): TBabelCore {
+    return this._import(why, '@babel/core', {
+      alternatives: ['babel-core'],
+      installTip: [
+        { label: 'for Babel 7', module: `'babel-core@^7.0.0-0' @babel/core` },
+        { label: 'for Babel 6', module: 'babel-core' },
+      ],
+    });
+  }
+
   protected _import(
     why: string,
     moduleName: string,
-    // tslint:disable-next-line:trailing-comma
-    ...orModuleNames: string[]
+    { alternatives = [], installTip = moduleName }: ImportOptions = {},
   ): any {
-    const res = this._tryThese(moduleName, ...orModuleNames);
+    const res = this._tryThese(moduleName, ...alternatives);
     if (!res) {
-      const msg = orModuleNames.length
+      const msg = alternatives.length
         ? Errors.UnableToLoadAnyModule
         : Errors.UnableToLoadOneModule;
-      const loadModule = [moduleName, ...orModuleNames]
+      const loadModule = [moduleName, ...alternatives]
         .map(m => `"${m}"`)
         .join(', ');
+      if (typeof installTip === 'string') {
+        installTip = [{ module: installTip, label: `install "${installTip}"` }];
+      }
+      const fix = installTip
+        .map(tip => {
+          return `    ${installTip.length === 1 ? '↳' : '•'} ${interpolate(
+            Helps.FixMissingModule,
+            tip,
+          )}`;
+        })
+        .join('\n');
 
       throw new Error(
         interpolate(msg, {
-          loadModule,
-          installModule: moduleName,
-          loadReason: why,
+          module: loadModule,
+          reason: why,
+          fix,
         }),
       );
     }

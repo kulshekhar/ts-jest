@@ -1,5 +1,5 @@
 // we could have used `closest-file-data` but since it's more simple than finding babel
-// config, if the user dosn't need babel processing he won't need to add closest-file-data
+// config, if the user doesn't need babel processing he won't need to add closest-file-data
 // to its dependencies
 import { resolve, join } from 'path';
 import { TPackageJson } from '../types';

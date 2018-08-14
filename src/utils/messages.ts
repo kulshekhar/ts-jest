@@ -3,9 +3,13 @@ export enum Errors {
   InvalidStringifyContentPathRegex = '[ts-jest] Option "stringifyContentPathRegex" should be a valid regex pattern.',
   UnableToFindPackageJson = '[ts-jest] Unable to find package.json from "{{fromPath}}".',
   InvalidDiagnosticsOption = '[ts-jest] Invalid value for diagnostics: {{value}}.',
-  UnableToLoadOneModule = '[ts-jest] Unable to load the module {{loadModule}}.\n  {{loadReason}}\n    ↳ you can fix this by running: npm i -D {{insallModule}}',
-  UnableToLoadAnyModule = '[ts-jest] Unable to load any of these modules: {{loadModule}}\n  {{loadReason}}\n    ↳ you can fix this by running: npm i -D {{insallModule}}',
+  UnableToLoadOneModule = '[ts-jest] Unable to load the module {{module}}. {{reason}} To fix it:\n{{fix}}',
+  UnableToLoadAnyModule = '[ts-jest] Unable to load any of these modules: {{module}}. {{reason}}. To fix it:\n{{fix}}',
   UnableToFindTsConfig = '[ts-jest] Could not find a TS config file (given: "{{given}}", root: "{{root}}").',
+}
+
+export enum Helps {
+  FixMissingModule = '{{label}}: `npm i -D {{module}}` (or `yarn add --dev {{module}}`)',
 }
 
 export enum Deprecateds {

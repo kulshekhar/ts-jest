@@ -7,6 +7,12 @@ export type TBabelCore = typeof _babel;
 export type TPackageJson = IPackageJSON;
 export type TClosestFileData = typeof _closestFileData;
 export type TBabelJest = Required<jest.Transformer>;
+export type BabelJestTransformer = {
+  [K in Exclude<keyof jest.Transformer, 'createTransformer'>]: Exclude<
+    jest.Transformer[K],
+    undefined
+  >
+};
 
 // CAUTION: use same key-value pair allow us to not store a list of values somewhere
 export enum DiagnosticTypes {
@@ -53,7 +59,7 @@ export interface TsJestGlobalOptions {
 
 export interface TsJestConfig {
   inputOptions: TsJestGlobalOptions;
-  babelJest: BabelConfig | string | boolean;
+  babelJest: BabelConfig | string | false;
   diagnostics: DiagnosticTypes[];
 
   // to deprecate / deprecated === === ===
