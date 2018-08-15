@@ -1,24 +1,19 @@
-import { DiagnosticTypes, DiagnosticSets, diagnosticSets } from '../types';
+import { DiagnosticTypes, TsJestGlobalOptions, TsJestConfig } from '../types';
 import { interpolate, Errors } from './messages';
+import { inspect } from 'util';
 
 export const isDiagnosticType = (val: any): val is DiagnosticTypes => {
   return val && DiagnosticTypes[val] === val;
 };
 
-export const isDiagnosticSet = (val: any): val is DiagnosticSets => {
-  return val && DiagnosticSets[val] === val;
-};
-
 export const normalizeDiagnosticTypes = (
-  val?: DiagnosticTypes[] | DiagnosticTypes | DiagnosticSets | boolean,
+  val?: DiagnosticTypes[] | DiagnosticTypes | boolean,
 ): DiagnosticTypes[] => {
   let res!: DiagnosticTypes[];
   if (typeof val === 'string') {
     // string
     if (isDiagnosticType(val)) {
       res = [val];
-    } else if (isDiagnosticSet(val)) {
-      res = diagnosticSets[val];
     }
   } else if (Array.isArray(val)) {
     // array
@@ -30,11 +25,16 @@ export const normalizeDiagnosticTypes = (
     res = [];
   } else if (val) {
     // true
-    res = diagnosticSets.default;
+    res = [
+      DiagnosticTypes.global,
+      DiagnosticTypes.options,
+      DiagnosticTypes.semantic,
+      DiagnosticTypes.syntactic,
+    ];
   }
   if (!res) {
     throw new TypeError(
-      interpolate(Errors.InvalidDiagnosticsOption, { value: val }),
+      interpolate(Errors.InvalidDiagnosticsOption, { value: inspect(val) }),
     );
   }
   // ensure we have another instance of array with unique items

@@ -18,6 +18,8 @@ import importer from './utils/importer';
 import { Errors, ImportReasons } from './utils/messages';
 
 export default class TsJestTransformer implements jest.Transformer {
+  constructor(protected _baseOptions: TsJestGlobalOptions = {}) {}
+
   @Memoize()
   get hooks(): TsJestHooksMap {
     let hooksFile = process.env.__TS_JEST_HOOKS;
@@ -58,7 +60,7 @@ export default class TsJestTransformer implements jest.Transformer {
   babelJestConfigFor(jestConfig: jest.ProjectConfig): BabelConfig | undefined {
     const config = this.configFor(jestConfig);
     const rootDir = jestRootDir(jestConfig);
-    if (config.babelJest === false) {
+    if (!config.babelJest) {
       return;
     }
 
@@ -81,9 +83,9 @@ export default class TsJestTransformer implements jest.Transformer {
     const parsedConfig = backportJestConfig(jestConfig);
     const { globals = {} } = parsedConfig as any;
     const options: TsJestGlobalOptions = { ...globals['ts-jest'] };
-    let { stringifyContentPathRegex: stringifyRegEx } = options;
 
     // stringifyContentPathRegex option
+    let { stringifyContentPathRegex: stringifyRegEx } = options;
     if (typeof stringifyRegEx === 'string') {
       try {
         stringifyRegEx = RegExp(stringifyRegEx);
@@ -108,8 +110,8 @@ export default class TsJestTransformer implements jest.Transformer {
 
     // parsed options
     return {
-      inputOptions: options,
-      babelJest: options.babelJest || false,
+      tsConfig: options.tsConfig || undefined,
+      babelJest: options.babelJest || undefined,
       diagnostics: normalizeDiagnosticTypes(options.diagnostics),
       stringifyContentPathRegex: stringifyRegEx as RegExp | undefined,
     };

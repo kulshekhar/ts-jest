@@ -35,7 +35,7 @@ export default class TsProgram implements TsJestProgram {
 
   @Memoize()
   get configFile(): string | null {
-    const given = this.tsJestConfig.inputOptions.tsConfig;
+    const given = this.tsJestConfig.tsConfig;
     let resolved: string | undefined;
     if (typeof given === 'string') {
       // we got a path to a custom (or not) tsconfig
@@ -83,7 +83,7 @@ export default class TsProgram implements TsJestProgram {
     const { config, error } = configFile
       ? ts.readConfigFile(configFile, sys.readFile)
       : {
-          config: { compilerOptions: this.tsJestConfig.inputOptions.tsConfig },
+          config: { compilerOptions: this.tsJestConfig.tsConfig },
           error: undefined,
         };
     if (error) throw error; // tslint:disable-line:curly

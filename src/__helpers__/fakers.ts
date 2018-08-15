@@ -1,4 +1,4 @@
-import { TsJestGlobalOptions, BabelConfig } from '../types';
+import { TsJestGlobalOptions, BabelConfig, TsJestConfig } from '../types';
 import { resolve } from 'path';
 import { ImportReasons } from '../utils/messages';
 
@@ -52,10 +52,14 @@ describe('hello', () => {
 `;
 }
 
-export function tsJestConfig<T extends TsJestGlobalOptions>(
-  options?: TsJestGlobalOptions,
-): T {
-  return { ...options } as any;
+export function tsJestConfig(options?: Partial<TsJestConfig>): TsJestConfig {
+  return {
+    babelJest: undefined,
+    tsConfig: undefined,
+    diagnostics: [],
+    stringifyContentPathRegex: undefined,
+    ...options,
+  };
 }
 
 export function jestConfig<T extends jest.ProjectConfig>(
@@ -68,7 +72,7 @@ export function jestConfig<T extends jest.ProjectConfig>(
     ...options,
   } as any;
   if (tsJestOptions) {
-    res.globals['ts-jest'] = tsJestConfig(tsJestOptions);
+    res.globals['ts-jest'] = tsJestOptions;
   }
   return res;
 }

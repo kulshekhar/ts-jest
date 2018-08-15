@@ -53,7 +53,7 @@ describe('patcher', () => {
 });
 
 describe('babelCore', () => {
-  it('should prefers babel 7', () => {
+  it('should prefer babel 7', () => {
     mockThese(['@babel/core', 'babel-core']);
     expect(importer().babelCore(fakers.importReason())).toBe('@babel/core');
   });

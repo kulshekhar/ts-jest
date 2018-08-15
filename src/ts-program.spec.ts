@@ -7,11 +7,7 @@ const content = fakers.typescriptSource();
 
 describe('hoisting', () => {
   describe('without babel', () => {
-    const prog = new TsProgram(resolve(__dirname, '..'), {
-      babelJest: false,
-      inputOptions: {},
-      diagnostics: [],
-    });
+    const prog = new TsProgram(resolve(__dirname, '..'), fakers.tsJestConfig());
 
     it('should hoist jest.mock() calls', () => {
       const result = prog.transpileModule(path, content, undefined, {
@@ -22,11 +18,10 @@ describe('hoisting', () => {
   });
 
   describe('with babel', () => {
-    const prog = new TsProgram(resolve(__dirname, '..'), {
-      babelJest: true,
-      inputOptions: {},
-      diagnostics: [],
-    });
+    const prog = new TsProgram(
+      resolve(__dirname, '..'),
+      fakers.tsJestConfig({ babelJest: {} }),
+    );
 
     it('should not hoist jest.mock() calls', () => {
       const result = prog.transpileModule(path, content, undefined, {

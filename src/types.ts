@@ -23,21 +23,10 @@ export enum DiagnosticTypes {
   global = 'global',
   semantic = 'sementic',
 }
-export enum DiagnosticSets {
-  none = 'none',
-  full = 'full',
-  default = 'default',
-}
-export const diagnosticSets = {
-  full: [
-    DiagnosticTypes.global,
-    DiagnosticTypes.syntactic,
-    DiagnosticTypes.semantic,
-    DiagnosticTypes.options,
-  ],
-  default: [DiagnosticTypes.syntactic, DiagnosticTypes.options],
-  none: [],
-};
+export type DiagnosticFilter = DiagnosticTypes[] | DiagnosticTypes;
+export type TsTransformerFactory =
+  | _ts.TransformerFactory<_ts.SourceFile>
+  | string;
 
 // FIXME: find the right typing for this
 export type BabelConfig = _babel.TransformOptions;
@@ -45,8 +34,10 @@ export type BabelConfig = _babel.TransformOptions;
 export interface TsJestGlobalOptions {
   // either a path to a tsconfig json file, or inline compiler options
   tsConfig?: string | _ts.CompilerOptions;
+
   // what kind of diagnostics to report
-  diagnostics?: DiagnosticTypes[] | DiagnosticTypes | DiagnosticSets | boolean;
+  diagnostics?: DiagnosticFilter | boolean | undefined;
+
   // whether to use babel jest under the hood or not
   // it can be:
   //    - a path to a babelrc (<rootDir> can be used)
@@ -60,12 +51,12 @@ export interface TsJestGlobalOptions {
 }
 
 export interface TsJestConfig {
-  inputOptions: TsJestGlobalOptions;
-  babelJest: BabelConfig | string | false;
+  tsConfig: _ts.CompilerOptions | string | undefined;
+  babelJest: BabelConfig | string | undefined;
   diagnostics: DiagnosticTypes[];
 
   // to deprecate / deprecated === === ===
-  stringifyContentPathRegex?: RegExp | undefined;
+  stringifyContentPathRegex: RegExp | undefined;
 }
 
 export interface TsJestProgram {
