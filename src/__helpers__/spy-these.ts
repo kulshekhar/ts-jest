@@ -2,34 +2,34 @@ export default function spyThese<T extends object, K extends keyof T>(
   object: T,
   implementations: { [key in K]: T[K] | any | undefined },
 ): { [key in K]: jest.SpyInstance<T[K]> } & {
-  mockRestore: () => void;
-  mockReset: () => void;
+  mockRestore: () => void
+  mockReset: () => void
 } {
-  const keys = Object.keys(implementations) as K[];
+  const keys = Object.keys(implementations) as K[]
   const res = keys.reduce(
     (map, key) => {
-      const actual = object[key] as any;
-      const spy = (map[key] = jest.spyOn(object, key as K));
+      const actual = object[key] as any
+      const spy = (map[key] = jest.spyOn(object, key as K))
       if (implementations[key]) {
-        const impl = implementations[key] as (...args: any[]) => any;
+        const impl = implementations[key] as (...args: any[]) => any
         if (impl.length && /\W\$super\W/.test(impl.toString())) {
           spy.mockImplementation(function(this: T, ...args: any[]) {
-            return impl.call(this, () => actual.apply(this, args), ...args);
-          });
+            return impl.call(this, () => actual.apply(this, args), ...args)
+          })
         } else {
-          spy.mockImplementation(impl);
+          spy.mockImplementation(impl)
         }
       }
-      return map;
+      return map
     },
     {} as any,
-  );
+  )
   // utility to restore all
   res.mockRestore = () => {
-    keys.forEach(key => res[key].mockRestore());
-  };
+    keys.forEach(key => res[key].mockRestore())
+  }
   res.mockReset = () => {
-    keys.forEach(key => res[key].mockReset());
-  };
-  return res;
+    keys.forEach(key => res[key].mockReset())
+  }
+  return res
 }

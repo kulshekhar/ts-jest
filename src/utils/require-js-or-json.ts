@@ -1,12 +1,12 @@
-import parseJsonUnsafe from './parse-json-unsafe';
-import { readFileSync } from 'fs';
+import parseJsonUnsafe from './parse-json-unsafe'
+import { readFileSync } from 'fs'
 
 export default function requireJsOrJson(filePath: string): any {
-  let res: any;
+  let res: any
   try {
-    res = require(filePath);
+    res = require(filePath)
   } catch (err) {
-    res = parseJsonUnsafe(readFileSync(filePath, 'utf8'));
+    res = parseJsonUnsafe(readFileSync(filePath, 'utf8'))
   }
-  return res;
+  return res
 }

@@ -1,12 +1,12 @@
-import { TsJestGlobalOptions, BabelConfig, TsJestConfig } from '../types';
-import { resolve } from 'path';
-import { ImportReasons } from '../utils/messages';
+import { TsJestGlobalOptions, BabelConfig, TsJestConfig } from '../types'
+import { resolve } from 'path'
+import { ImportReasons } from '../utils/messages'
 
 export function filePath(relPath: string): string {
-  return resolve(__dirname, '..', '..', relPath);
+  return resolve(__dirname, '..', '..', relPath)
 }
 
-export const rootDir = filePath('');
+export const rootDir = filePath('')
 
 export function transpiledTsSource() {
   return `
@@ -24,7 +24,7 @@ describe('hello', function () {
         jest.mock('./lower', function () { return function (s) { return s.toLowerCase(); }; });
     });
 });
-`;
+`
 }
 
 export function htmlSource() {
@@ -32,7 +32,7 @@ export function htmlSource() {
 <div>
   <span>some text with \`backtick\`</span>
 </div>
-`;
+`
 }
 
 export function typescriptSource() {
@@ -49,7 +49,7 @@ describe('hello', () => {
     jest.mock('./lower', () => (s) => s.toLowerCase());
   });
 });
-`;
+`
 }
 
 export function tsJestConfig(options?: Partial<TsJestConfig>): TsJestConfig {
@@ -59,7 +59,7 @@ export function tsJestConfig(options?: Partial<TsJestConfig>): TsJestConfig {
     diagnostics: [],
     stringifyContentPathRegex: undefined,
     ...options,
-  };
+  }
 }
 
 export function jestConfig<T extends jest.ProjectConfig>(
@@ -70,11 +70,11 @@ export function jestConfig<T extends jest.ProjectConfig>(
     globals: {},
     moduleFileExtensions: ['ts', 'js'],
     ...options,
-  } as any;
+  } as any
   if (tsJestOptions) {
-    res.globals['ts-jest'] = tsJestOptions;
+    res.globals['ts-jest'] = tsJestOptions
   }
-  return res;
+  return res
 }
 
 export function babelConfig<T extends BabelConfig>(options?: BabelConfig): T {
@@ -82,9 +82,9 @@ export function babelConfig<T extends BabelConfig>(options?: BabelConfig): T {
     ...options,
     presets: [...(options && options.presets)],
     plugins: [...(options && options.plugins)],
-  } as any;
+  } as any
 }
 
 export function importReason(text: string = 'because'): ImportReasons {
-  return text as any;
+  return text as any
 }

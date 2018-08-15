@@ -1,7 +1,7 @@
-import { interpolate, Deprecateds } from './messages';
+import { interpolate, Deprecateds } from './messages'
 
 function warn(...data: any[]) {
-  console.warn(...data);
+  console.warn(...data)
 }
 
 function warnConfig(oldPath: string, newPath: string, note?: string) {
@@ -14,41 +14,41 @@ function warnConfig(oldPath: string, newPath: string, note?: string) {
         note,
       },
     ),
-  );
+  )
 }
 
 export function backportJestConfig<
   T extends jest.InitialOptions | jest.ProjectConfig
 >(config: T = {} as any): T {
-  const { globals = {} } = config as any;
-  const { 'ts-jest': tsJest = {} } = globals as any;
-  const mergeTsJest: any = {};
+  const { globals = {} } = config as any
+  const { 'ts-jest': tsJest = {} } = globals as any
+  const mergeTsJest: any = {}
 
   if ('__TS_CONFIG__' in globals) {
-    warnConfig('globals.__TS_CONFIG__', 'globals.ts-jest.tsConfig');
+    warnConfig('globals.__TS_CONFIG__', 'globals.ts-jest.tsConfig')
     if (typeof globals.__TS_CONFIG__ === 'object') {
-      mergeTsJest.tsConfig = globals.__TS_CONFIG__;
+      mergeTsJest.tsConfig = globals.__TS_CONFIG__
     }
-    delete globals.__TS_CONFIG__;
+    delete globals.__TS_CONFIG__
   }
 
   if ('__TRANSFORM_HTML__' in globals) {
     warnConfig(
       'globals.__TRANSFORM_HTML__',
       'globals.ts-jest.stringifyContentPathRegex',
-    );
+    )
     if (globals.__TRANSFORM_HTML__) {
-      mergeTsJest.stringifyContentPathRegex = '\\.html?$';
+      mergeTsJest.stringifyContentPathRegex = '\\.html?$'
     }
-    delete globals.__TRANSFORM_HTML__;
+    delete globals.__TRANSFORM_HTML__
   }
 
   if ('tsConfigFile' in tsJest) {
-    warnConfig('globals.ts-jest.tsConfigFile', 'globals.ts-jest.tsConfig');
+    warnConfig('globals.ts-jest.tsConfigFile', 'globals.ts-jest.tsConfig')
     if (tsJest.tsConfigFile) {
-      mergeTsJest.tsConfig = tsJest.tsConfigFile;
+      mergeTsJest.tsConfig = tsJest.tsConfigFile
     }
-    delete tsJest.tsConfigFile;
+    delete tsJest.tsConfigFile
   }
 
   if ('useBabelrc' in tsJest) {
@@ -56,27 +56,27 @@ export function backportJestConfig<
       'globals.ts-jest.useBabelrc',
       'globals.ts-jest.babelJest',
       Deprecateds.ConfigOptionUseBabelRcNote,
-    );
+    )
     if (tsJest.useBabelrc != null) {
-      mergeTsJest.babelJest = tsJest.useBabelrc ? true : {};
+      mergeTsJest.babelJest = tsJest.useBabelrc ? true : {}
     }
-    delete tsJest.useBabelrc;
+    delete tsJest.useBabelrc
   }
 
   if ('babelConfig' in tsJest) {
-    warnConfig('globals.ts-jest.babelConfig', 'globals.ts-jest.babelJest');
+    warnConfig('globals.ts-jest.babelConfig', 'globals.ts-jest.babelJest')
     if (tsJest.babelConfig != null) {
-      mergeTsJest.babelJest = tsJest.babelConfig;
+      mergeTsJest.babelJest = tsJest.babelConfig
     }
-    delete tsJest.babelConfig;
+    delete tsJest.babelConfig
   }
 
   if ('skipBabel' in tsJest) {
-    warnConfig('globals.ts-jest.skipBabel', 'globals.ts-jest.babelJest');
+    warnConfig('globals.ts-jest.skipBabel', 'globals.ts-jest.babelJest')
     if (tsJest.skipBabel === false && !mergeTsJest.babelJest) {
-      mergeTsJest.babelJest = true;
+      mergeTsJest.babelJest = true
     }
-    delete tsJest.skipBabel;
+    delete tsJest.skipBabel
   }
 
   return {
@@ -88,5 +88,5 @@ export function backportJestConfig<
         ...tsJest,
       },
     },
-  };
+  }
 }

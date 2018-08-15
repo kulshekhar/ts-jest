@@ -1,7 +1,7 @@
 // tslint:disable:curly
-import TsProgram from '../ts-program';
-import importer from '../utils/importer';
-import { ImportReasons } from '../utils/messages';
+import TsProgram from '../ts-program'
+import importer from '../utils/importer'
+import { ImportReasons } from '../utils/messages'
 // take care of including ONLY TYPES here, for the rest use ts
 import {
   Node,
@@ -12,9 +12,9 @@ import {
   Visitor,
   Block,
   Transformer,
-} from 'typescript';
+} from 'typescript'
 
-const ts = importer.typeScript(ImportReasons.tsJest);
+const ts = importer.typeScript(ImportReasons.tsJest)
 
 function isJestMockCallExpression(node: Node): node is ExpressionStatement {
   return (
@@ -25,50 +25,50 @@ function isJestMockCallExpression(node: Node): node is ExpressionStatement {
     node.expression.expression.expression.text === 'jest' &&
     ts.isIdentifier(node.expression.expression.name) &&
     node.expression.expression.name.text === 'mock'
-  );
+  )
 }
 
 export default function hoisting(prog: TsProgram) {
   function createVisitor(ctx: TransformationContext, sf: SourceFile) {
-    let level = 0;
-    const hoisted: Statement[][] = [];
+    let level = 0
+    const hoisted: Statement[][] = []
     const enter = () => {
-      level++;
+      level++
       // reuse arrays
       if (hoisted[level]) {
-        hoisted[level].splice(0, hoisted[level].length);
+        hoisted[level].splice(0, hoisted[level].length)
       }
-    };
-    const exit = () => level--;
+    }
+    const exit = () => level--
     const hoist = (node: Statement) => {
       if (hoisted[level]) {
-        hoisted[level].push(node);
+        hoisted[level].push(node)
       } else {
-        hoisted[level] = [node];
+        hoisted[level] = [node]
       }
-    };
+    }
 
     const visitor: Visitor = node => {
-      enter();
-      const resultNode = ts.visitEachChild(node, visitor, ctx);
+      enter()
+      const resultNode = ts.visitEachChild(node, visitor, ctx)
       if (hoisted[level] && hoisted[level].length) {
-        (resultNode as Block).statements = ts.createNodeArray([
+        ;(resultNode as Block).statements = ts.createNodeArray([
           ...hoisted[level],
           ...(resultNode as Block).statements,
-        ]);
+        ])
       }
-      exit();
+      exit()
 
       if (isJestMockCallExpression(resultNode)) {
-        hoist(resultNode as Statement);
-        return;
+        hoist(resultNode as Statement)
+        return
       }
-      return resultNode;
-    };
-    return visitor;
+      return resultNode
+    }
+    return visitor
   }
 
   return (ctx: TransformationContext): Transformer<SourceFile> => {
-    return (sf: SourceFile) => ts.visitNode(sf, createVisitor(ctx, sf));
-  };
+    return (sf: SourceFile) => ts.visitNode(sf, createVisitor(ctx, sf))
+  }
 }

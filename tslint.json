@@ -18,7 +18,7 @@
     ],
     "semicolon": [
       true,
-      "always"
+      "never"
     ],
     "interface-name": [
       true,

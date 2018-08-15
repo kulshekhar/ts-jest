@@ -1,4 +1,4 @@
-import { TBabelCore, ModulePatcher } from '../types';
+import { TBabelCore, ModulePatcher } from '../types'
 
 // tslint:disable-next-line:variable-name
 export const patchBabelCore_githubIssue6577: ModulePatcher<
@@ -13,18 +13,18 @@ export const patchBabelCore_githubIssue6577: ModulePatcher<
     parseInt(babel.version.split('.')[0], 10) === 6
   ) {
     try {
-      const File = require('babel-core/lib/transformation/file').File;
+      const File = require('babel-core/lib/transformation/file').File
       File.prototype.initOptions = (original => {
         return function(this: any, opt) {
-          const before = opt.sourceMaps;
-          const result = original.apply(this, arguments);
+          const before = opt.sourceMaps
+          const result = original.apply(this, arguments)
           if (before && before !== result.sourceMaps) {
-            result.sourceMaps = before;
+            result.sourceMaps = before
           }
-          return result;
-        };
-      })(File.prototype.initOptions);
+          return result
+        }
+      })(File.prototype.initOptions)
     } catch (err) {}
   }
-  return babel;
-};
+  return babel
+}

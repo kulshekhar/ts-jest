@@ -1,4 +1,4 @@
-const cacheProp = Symbol.for('[memoize]');
+const cacheProp = Symbol.for('[memoize]')
 
 export default function Memoize(keyBuilder?: (...args: any[]) => any) {
   return (
@@ -11,15 +11,15 @@ export default function Memoize(keyBuilder?: (...args: any[]) => any) {
         propertyKey,
         descriptor.value,
         keyBuilder || ((v: any) => v),
-      );
+      )
     } else if (descriptor.get != null) {
       descriptor.get = memoize(
         propertyKey,
         descriptor.get,
         keyBuilder || (() => propertyKey),
-      );
+      )
     }
-  };
+  }
 }
 
 function memoize(
@@ -32,13 +32,13 @@ function memoize(
       this[cacheProp] ||
       Object.defineProperty(this, cacheProp, { value: Object.create(null) })[
         cacheProp
-      ];
+      ]
     const cache: Map<any, any> =
-      dict[namespace] || (dict[namespace] = new Map<any, any>());
-    const key = keyBuilder.apply(this, args);
-    if (cache.has(key)) return cache.get(key) as any; // tslint:disable-line
-    const res: any = func.apply(this, args);
-    cache.set(key, res);
-    return res;
-  };
+      dict[namespace] || (dict[namespace] = new Map<any, any>())
+    const key = keyBuilder.apply(this, args)
+    if (cache.has(key)) return cache.get(key) as any // tslint:disable-line
+    const res: any = func.apply(this, args)
+    cache.set(key, res)
+    return res
+  }
 }

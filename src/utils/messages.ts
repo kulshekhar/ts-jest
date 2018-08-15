@@ -28,5 +28,5 @@ export function interpolate(
   msg: string,
   vars: Record<string, any> = {},
 ): string {
-  return msg.replace(/\{\{([^\}]+)\}\}/g, (_, key) => vars[key]);
+  return msg.replace(/\{\{([^\}]+)\}\}/g, (_, key) => vars[key])
 }

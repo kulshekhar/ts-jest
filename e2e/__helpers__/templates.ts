@@ -9,4 +9,4 @@ export const allPackageSets = [
   PackageSets.babel6,
   PackageSets.babel7,
   PackageSets.jest22,
-];
+]
