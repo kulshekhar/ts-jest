@@ -26,14 +26,17 @@ interface ImportOptions {
 export class Importer implements TsJestImporter {
   @Memoize()
   static get instance() {
-    return new Importer()
+    // here we can define patches to apply to modules.
+    // it could be fixes that are not deployed, or
+    // abstractions so that multiple versions work the same
+    return new Importer({
+      'babel-core': [hacks.patchBabelCore_githubIssue6577],
+    })
   }
-  // here we can define patches to apply to modules.
-  // it could be fixes that are not deployed, or
-  // abstractions so that multiple versions work the same
-  protected _patches: { [moduleName: string]: ModulePatcher[] } = {
-    'babel-core': [hacks.patchBabelCore_githubIssue6577],
-  }
+
+  constructor(
+    protected _patches: { [moduleName: string]: ModulePatcher[] } = {},
+  ) {}
 
   closestFileData(why: ImportReasons): TClosestFileData {
     return importDefault(this._import(why, 'closest-file-data')).default
@@ -71,7 +74,7 @@ export class Importer implements TsJestImporter {
     // tslint:disable-next-line:no-conditional-assignment
     while ((name = tries.shift() as string) !== undefined) {
       try {
-        loaded = require(name)
+        loaded = requireModule(name)
         break
       } catch (err) {}
     }
@@ -132,3 +135,9 @@ export class Importer implements TsJestImporter {
 }
 
 export const importer = Importer.instance
+
+let requireModule = require
+// so that we can test easier
+export function __requireModule(req: typeof require) {
+  requireModule = req
+}

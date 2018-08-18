@@ -1,5 +1,5 @@
 import { backportJestConfig } from './backports'
-import spyThese from '../__helpers__/spy-these'
+import { spyThese } from '../__helpers__/mocks'
 import set from 'lodash.set'
 import { inspect } from 'util'
 

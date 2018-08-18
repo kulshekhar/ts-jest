@@ -4,6 +4,7 @@
     "tslint:recommended"
   ],
   "rules": {
+    "no-default-export": true,
     "trailing-comma": [
       true,
       {
