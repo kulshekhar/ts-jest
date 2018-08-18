@@ -4,7 +4,6 @@ import { transpileTypescript } from './transpiler';
 import runTsDiagnostics from './utils/run-ts-diagnostics';
 import getTSConfig from './utils/get-ts-config';
 import getTSJestConfig from './utils/get-ts-jest-config';
-import micromatch from 'micromatch';
 
 export default function preprocess(
   src: string,

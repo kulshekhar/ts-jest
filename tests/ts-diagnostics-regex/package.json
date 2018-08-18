@@ -17,7 +17,7 @@
 		],
 		"globals": {
 			"ts-jest": {
-				"enableTsDiagnostics": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$"
+				"enableTsDiagnostics": "(/__tests__/.*|(\\.|/)(test|spec|hello))\\.(jsx?|tsx?)$"
 			}
 		}
 	}

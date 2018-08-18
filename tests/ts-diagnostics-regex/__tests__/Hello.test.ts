@@ -1,5 +1,5 @@
 import { Hello } from '../Hello-should-NOT-diagnose';
-import { Hello as Hello2 } from './Hello-should-diagnose';
+import { Hello as Hello2 } from '../Hello-should-diagnose.hello';
 
 describe('Hello Class', () => {
   it('should throw an error', () => {
