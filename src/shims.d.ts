@@ -20,3 +20,5 @@ declare module 'jest-config' {
   import 'jest'
   export const defaults: jest.InitialOptions
 }
+
+declare module 'babel-core/lib/transformation/file'

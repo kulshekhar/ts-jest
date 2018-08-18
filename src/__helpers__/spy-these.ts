@@ -1,6 +1,6 @@
 export default function spyThese<T extends object, K extends keyof T>(
   object: T,
-  implementations: { [key in K]: T[K] | any | undefined },
+  implementations: { [key in K]: T[K] | any | undefined }
 ): { [key in K]: jest.SpyInstance<T[K]> } & {
   mockRestore: () => void
   mockReset: () => void
@@ -22,7 +22,7 @@ export default function spyThese<T extends object, K extends keyof T>(
       }
       return map
     },
-    {} as any,
+    {} as any
   )
   // utility to restore all
   res.mockRestore = () => {

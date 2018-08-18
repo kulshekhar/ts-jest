@@ -40,27 +40,28 @@ import { ConfigSet } from './config-set'
 import { sha1 } from './sha1'
 import { TsCompiler, MemoryCache, TypeInfo } from './types'
 import { Errors, interpolate } from './messages'
+import { factory as customTransformersFactory } from './transformers'
 
 /**
  * Register TypeScript compiler.
  */
-export function createCompiler(config: ConfigSet): TsCompiler {
-  const cachedir = config.tsCacheDir
+export function createCompiler(configs: ConfigSet): TsCompiler {
+  const cachedir = configs.tsCacheDir
 
   const memoryCache: MemoryCache = {
     contents: Object.create(null),
     versions: Object.create(null),
-    outputs: Object.create(null),
+    outputs: Object.create(null)
   }
 
   // Require the TypeScript compiler and configuration.
-  const ts = config.compilerModule
-  const cwd = config.cwd
+  const ts = configs.compilerModule
+  const cwd = configs.cwd
 
   const extensions = ['.ts', '.tsx']
   const {
-    typescript: { options: compilerOptions, fileNames },
-  } = config
+    typescript: { options: compilerOptions, fileNames }
+  } = configs
 
   // Enable `allowJs` when flag is set.
   if (compilerOptions.allowJs) {
@@ -80,7 +81,7 @@ export function createCompiler(config: ConfigSet): TsCompiler {
       : (_: string) => '.js'
 
   // TODO: grab internal transformers
-  const transformers: CustomTransformers | undefined = undefined
+  const transformers: CustomTransformers = customTransformersFactory(configs)
 
   /**
    * Create the basic required function using transpile mode.
@@ -88,20 +89,20 @@ export function createCompiler(config: ConfigSet): TsCompiler {
   let getOutput = (
     code: string,
     fileName: string,
-    lineOffset = 0,
+    lineOffset = 0
   ): SourceOutput => {
     const result = ts.transpileModule(code, {
       fileName,
       transformers,
       compilerOptions,
-      reportDiagnostics: config.shouldReportDiagnostic(fileName),
+      reportDiagnostics: configs.shouldReportDiagnostic(fileName)
     })
 
     const diagnosticList = result.diagnostics
-      ? config.filterDiagnostics(result.diagnostics)
+      ? configs.filterDiagnostics(result.diagnostics)
       : []
 
-    if (diagnosticList.length) throw config.createTsError(diagnosticList)
+    if (diagnosticList.length) throw configs.createTsError(diagnosticList)
 
     return [result.outputText, result.sourceMapText as string]
   }
@@ -109,13 +110,13 @@ export function createCompiler(config: ConfigSet): TsCompiler {
   let getTypeInfo = (
     _code: string,
     _fileName: string,
-    _position: number,
+    _position: number
   ): TypeInfo => {
     throw new TypeError(Errors.TypesUnavailableWithoutTypeCheck)
   }
 
   // Use full language services when the fast option is disabled.
-  if (config.tsJest.typeCheck) {
+  if (configs.tsJest.typeCheck) {
     // Set the file contents into cache.
     const updateMemoryCache = (code: string, fileName: string) => {
       if (memoryCache.contents[fileName] !== code) {
@@ -163,7 +164,7 @@ export function createCompiler(config: ConfigSet): TsCompiler {
       getCurrentDirectory: () => cwd,
       getCompilationSettings: () => compilerOptions,
       getDefaultLibFileName: () => ts.getDefaultLibFilePath(compilerOptions),
-      getCustomTransformers: () => transformers,
+      getCustomTransformers: () => transformers
     }
 
     const service = ts.createLanguageService(serviceHost)
@@ -180,10 +181,10 @@ export function createCompiler(config: ConfigSet): TsCompiler {
         .concat(service.getSyntacticDiagnostics(fileName))
         .concat(service.getSemanticDiagnostics(fileName))
 
-      const diagnosticList = config.filterDiagnostics(diagnostics)
+      const diagnosticList = configs.filterDiagnostics(diagnostics)
 
       if (diagnosticList.length) {
-        throw config.createTsError(diagnosticList)
+        throw configs.createTsError(diagnosticList)
       }
 
       if (output.emitSkipped) {
@@ -194,8 +195,8 @@ export function createCompiler(config: ConfigSet): TsCompiler {
       if (output.outputFiles.length === 0) {
         throw new TypeError(
           interpolate(Errors.UnableToRequireDefinitionFile, {
-            file: basename(fileName),
-          }),
+            file: basename(fileName)
+          })
         )
       }
 
@@ -231,9 +232,9 @@ function readThrough(
   compile: (
     code: string,
     fileName: string,
-    lineOffset?: number,
+    lineOffset?: number
   ) => SourceOutput,
-  getExtension: (fileName: string) => string,
+  getExtension: (fileName: string) => string
 ) {
   if (!cachedir) {
     return (code: string, fileName: string, lineOffset?: number) => {
@@ -285,11 +286,11 @@ function updateOutput(
   outputText: string,
   fileName: string,
   sourceMap: string,
-  getExtension: (fileName: string) => string,
+  getExtension: (fileName: string) => string
 ) {
   const base64Map = bufferFrom(
     updateSourceMap(sourceMap, fileName),
-    'utf8',
+    'utf8'
   ).toString('base64')
   const sourceMapContent = `data:application/json;charset=utf-8;base64,${base64Map}`
   const sourceMapLength =

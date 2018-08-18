@@ -3,10 +3,4 @@ printWidth: 80
 singleQuote: true
 tabWidth: 2
 useTabs: false
-overrides:
-  - files: "**/*.js"
-    options:
-      trailing-comma: es5
-  - files: "**/*.ts"
-    options:
-      trailingComma: all
+trailing-comma: es5

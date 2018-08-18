@@ -8,7 +8,7 @@ const TEMPLATE_EXCLUDED_ITEMS = ['node_modules', 'package-lock.json']
 
 type RunWithTemplatesIterator = (
   runtTest: () => TestRunResult,
-  context: RunWithTemplateIteratorContext,
+  context: RunWithTemplateIteratorContext
 ) => void
 
 interface RunWithTemplateIteratorContext {
@@ -20,7 +20,7 @@ interface RunWithTemplateIteratorContext {
 
 function createIteratorContext(
   templateName: string,
-  expectedStatus?: number,
+  expectedStatus?: number
 ): RunWithTemplateIteratorContext {
   const actionForExpectedStatus = (status?: number): string => {
     if (status == null) {
@@ -33,7 +33,7 @@ function createIteratorContext(
     describeLabel: `with template "${templateName}"`,
     itLabel: `should ${actionForExpectedStatus(expectedStatus)}`,
     testLabel: `should ${actionForExpectedStatus(
-      expectedStatus,
+      expectedStatus
     )} using template "${templateName}"`,
   }
 }
@@ -81,7 +81,7 @@ class TestCaseRunDescriptor {
         `Output of test run in "${this.name}" using template "${
           this.templateName
         } (exit code: ${result.status})":\n\n`,
-        result.output.trim(),
+        result.output.trim()
       )
     }
     return result
@@ -90,17 +90,17 @@ class TestCaseRunDescriptor {
   runWithTemplates<T extends string>(
     templates: T[],
     expectedStatus?: number,
-    iterator?: RunWithTemplatesIterator,
+    iterator?: RunWithTemplatesIterator
   ): TestRunResultsMap<T> {
     if (templates.length < 1) {
       throw new RangeError(
-        `There must be at least one template to run the test case with.`,
+        `There must be at least one template to run the test case with.`
       )
     }
 
     if (!templates.every((t, i) => templates.indexOf(t, i + 1) === -1)) {
       throw new Error(
-        `Each template must be unique. Given ${templates.join(', ')}`,
+        `Each template must be unique. Given ${templates.join(', ')}`
       )
     }
     return templates.reduce(
@@ -121,7 +121,7 @@ class TestCaseRunDescriptor {
         }
         return map
       },
-      {} as TestRunResultsMap<T>,
+      {} as TestRunResultsMap<T>
     )
   }
 }
@@ -158,7 +158,7 @@ export type TestRunResultsMap<T extends string = string> = {
 
 export function configureTestCase(
   name: string,
-  options: RunTestOptions = {},
+  options: RunTestOptions = {}
 ): TestCaseRunDescriptor {
   return new TestCaseRunDescriptor(name, options)
 }
@@ -180,17 +180,17 @@ export function sanitizeOutput(output: string): string {
       /^(\s*Time\s*:\s*)[\d.]+m?s(?:(,\s*estimated\s+)[\d.]+m?s)?$/gm,
       (_, start) => {
         return `${start}XXs`
-      },
+      }
     )
     // remove times after PASS/FAIL path/to/file (xxxs)
     .replace(
       /^\s*((?:PASS|FAIL) .+) \([\d.]+m?s\)$/gm,
-      (_, start) => `${start}`,
+      (_, start) => `${start}`
     )
     // removes each test time values
     .replace(
       /^(\s*)(✕|×|✓|√)(\s+[^\(]+)(\s+\([\d.]+m?s\))?$/gm,
-      (_, start, mark, mid, time) => `${start}${normalizeTestMark(mark)}${mid}`,
+      (_, start, mark, mid, time) => `${start}${normalizeTestMark(mark)}${mid}`
     )
   // TODO: improves this...
   if (process.platform === 'win32') {
@@ -212,7 +212,7 @@ export function run(name: string, options: RunTestOptions = {}): TestRunResult {
   const { workdir: dir, sourceDir, hooksFile, ioDir } = prepareTest(
     name,
     template || templateNameForPath(join(Paths.e2eSourceDir, name)),
-    options,
+    options
   )
   const pkg = require(join(dir, 'package.json'))
 
@@ -302,7 +302,7 @@ export function run(name: string, options: RunTestOptions = {}): TestRunResult {
 function stripAnsiColors(stringToStrip: string): string {
   return stringToStrip.replace(
     /[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g,
-    '',
+    ''
   )
 }
 
@@ -316,7 +316,7 @@ interface PreparedTest {
 function prepareTest(
   name: string,
   template: string,
-  options: RunTestOptions = {},
+  options: RunTestOptions = {}
 ): PreparedTest {
   const sourceDir = join(Paths.e2eSourceDir, name)
   // working directory is in the temp directory, different for each template name
@@ -379,7 +379,7 @@ function prepareTest(
     hooksSourceWith({
       writeProcessIoTo: ioDir || false,
     }),
-    'utf8',
+    'utf8'
   )
 
   // create a package.json if it does not exists, and/or enforce the package name
@@ -412,10 +412,10 @@ function hooksSourceWith(vars: Record<string, any>): string {
   if (!__hooksSource) {
     __hooksSource = fs.readFileSync(
       join(__dirname, '__hooks-source__.js.hbs'),
-      'utf8',
+      'utf8'
     )
   }
   return __hooksSource.replace(/\{\{([^\}]+)\}\}/g, (_, key) =>
-    JSON.stringify(vars[key]),
+    JSON.stringify(vars[key])
   )
 }

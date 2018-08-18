@@ -14,9 +14,9 @@ const moduleNotFound = () => {
 
 type ImportFunc = <T>(r: ImportReasons) => T
 const importer = (
-  patches?: any,
+  patches?: any
 ): TsJestImporter & { [K: string]: ImportFunc } => {
-  const imp = require('./importer').default
+  const imp = require('./importer').importer
   if (patches) {
     imp._patches = patches
   }
@@ -28,7 +28,7 @@ describe('tryTheese', () => {
     mockThese({
       fail1: moduleNotFound,
       fail2: moduleNotFound,
-      success: () => 'success',
+      success: () => 'success'
     })
     expect(importer().tryThese('fail1', 'fail2', 'success')).toBe('success')
   })
@@ -60,14 +60,14 @@ describe('babelCore', () => {
   it('should fallback to logacy', () => {
     mockThese({
       'babel-core': () => 'babel-core',
-      '@babel/core': moduleNotFound,
+      '@babel/core': moduleNotFound
     })
     expect(importer().babelCore(fakers.importReason())).toBe('babel-core')
   })
   it('should fail with correct error message', () => {
     mockThese({
       'babel-core': moduleNotFound,
-      '@babel/core': moduleNotFound,
+      '@babel/core': moduleNotFound
     })
     expect(() => importer().babelCore(fakers.importReason()))
       .toThrowErrorMatchingInlineSnapshot(`

@@ -1,11 +1,11 @@
-import Memoize from './memoize'
+import { Memoize } from './memoize'
 import {
   TClosestFileData,
   TBabelJest,
   TBabelCore,
   ModulePatcher,
   TTypeScript,
-  TsJestImporter,
+  TsJestImporter
 } from './types'
 import * as hacks from './hacks'
 import { ImportReasons, Errors, interpolate, Helps } from './messages'
@@ -23,12 +23,16 @@ interface ImportOptions {
   installTip?: string | Array<{ module: string; label: string }>
 }
 
-class Importer implements TsJestImporter {
+export class Importer implements TsJestImporter {
+  @Memoize()
+  static get instance() {
+    return new Importer()
+  }
   // here we can define patches to apply to modules.
   // it could be fixes that are not deployed, or
   // abstractions so that multiple versions work the same
   protected _patches: { [moduleName: string]: ModulePatcher[] } = {
-    'babel-core': [hacks.patchBabelCore_githubIssue6577],
+    'babel-core': [hacks.patchBabelCore_githubIssue6577]
   }
 
   closestFileData(why: ImportReasons): TClosestFileData {
@@ -48,10 +52,10 @@ class Importer implements TsJestImporter {
         // as in https://github.com/facebook/jest/tree/master/packages/babel-jest
         {
           label: 'for Babel 7',
-          module: `babel-jest 'babel-core@^7.0.0-0' @babel/core`,
+          module: `babel-jest 'babel-core@^7.0.0-0' @babel/core`
         },
-        { label: 'for Babel 6', module: 'babel-jest babel-core' },
-      ],
+        { label: 'for Babel 6', module: 'babel-jest babel-core' }
+      ]
     })
   }
 
@@ -80,7 +84,7 @@ class Importer implements TsJestImporter {
     if (name in this._patches) {
       return this._patches[name].reduce(
         (mod, patcher) => patcher(mod),
-        unpatched,
+        unpatched
       )
     }
     return unpatched
@@ -89,7 +93,7 @@ class Importer implements TsJestImporter {
   protected _import(
     why: string,
     moduleName: string,
-    { alternatives = [], installTip = moduleName }: ImportOptions = {},
+    { alternatives = [], installTip = moduleName }: ImportOptions = {}
   ): any {
     // try to load any of the alternative after trying main one
     const res = this.tryThese(moduleName, ...alternatives)
@@ -112,7 +116,7 @@ class Importer implements TsJestImporter {
       .map(tip => {
         return `    ${installTip.length === 1 ? '↳' : '•'} ${interpolate(
           Helps.FixMissingModule,
-          tip,
+          tip
         )}`
       })
       .join('\n')
@@ -121,10 +125,10 @@ class Importer implements TsJestImporter {
       interpolate(msg, {
         module: loadModule,
         reason: why,
-        fix,
-      }),
+        fix
+      })
     )
   }
 }
 
-export default new Importer()
+export const importer = Importer.instance

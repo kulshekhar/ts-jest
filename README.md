@@ -127,8 +127,8 @@ If the default setup doesn't address your requirements, you can create a custom 
 ```js
 // jest.config.js
 module.exports = {
-  "globals": {
-    "ts-jest": {
+  globals: {
+    'ts-jest': {
       // ts-jest specific configuration
     }
   }
@@ -204,7 +204,7 @@ module.exports = {
 ```
 
 ### Using `babel-jest`
-By default ts-jest does not rely on babel-jest. But you may want to use some babel plugins and stll be able to write TypeScript. This can be achieved using the `babelJest` config key. It can be:
+By default ts-jest does not rely on babel-jest. But you may want to use some babel plugins and stll be able to write TypeScript. This can be achieved using the `babelConfig` config key. It can be:
 
 - `true`, in which case it'll use defaults from babelrc or any other found config file:
   ```js
@@ -212,19 +212,19 @@ By default ts-jest does not rely on babel-jest. But you may want to use some bab
   module.exports = {
     globals: {
       'ts-jest': {
-        babelJest: true
+        babelConfig: true
       }
     }
   };
   ```
 
-- the path to a babel config file (relatetive to `rootDir`):
+- the path to a babel config file:
   ```js
   // jest.config.js
   module.exports = {
     globals: {
       'ts-jest': {
-        babelJest: 'babelrc.test.js'
+        babelConfig: 'babelrc.test.js'
       }
     }
   };
@@ -236,7 +236,7 @@ By default ts-jest does not rely on babel-jest. But you may want to use some bab
   module.exports = {
     globals: {
       'ts-jest': {
-        babelJest: {
+        babelConfig: {
           plugins: [
             // ...
           ]
@@ -252,7 +252,7 @@ By default ts-jest does not rely on babel-jest. But you may want to use some bab
   module.exports = {
     globals: {
       'ts-jest': {
-        babelJest: false
+        babelConfig: false
       }
     }
   };
@@ -260,11 +260,11 @@ By default ts-jest does not rely on babel-jest. But you may want to use some bab
 
 ### TS compiler & error reporting
 
-<center>=== TBD ===</center>
+<center>=== To be documented ===</center>
 
 ### Ignore coverage on decorators
 
-<center>=== TBD ===</center>
+<center>=== To be documented ===</center>
 
 ### extending
 You can extend the defaults shipped with ts-jest in its preset (this is only possible in an external `jest.config.js` file):
@@ -316,7 +316,7 @@ module.exports = {
   preset: 'react-native',
   globals: {
     'ts-jest': {
-      babelJest: true
+      babelConfig: true
     }
   }
 };
@@ -356,7 +356,7 @@ your Jest configuration:
 {
   // ...
   "transformIgnorePatterns": [
-    "<rootDir>/node_modules/(?!@foo)"
+    "<rootDir>/node_modules/(?!@foo/bar)"
   ]
   // ...
 }
@@ -374,11 +374,9 @@ By default Jest ignores everything in `node_modules`. This setting prevents Jest
 }
 ```
 
-### `const enum` is not supported
+### `const enum` is not supported if `typeCheck` is not enabled
 
-This is due to a limitation in the ts-jest processor which compiles each test file individually, therefore ignoring implementations of ambient declarations. The TypeScript team currently have [no plan to support const enum inlining](https://github.com/Microsoft/TypeScript/issues/5243) for this particular compiler method. See [#112](https://github.com/kulshekhar/ts-jest/issues/112) and [#281](https://github.com/kulshekhar/ts-jest/issues/281) for more information.
-
-One possible workaround is to manually inline usage of const enum values - i.e. in your code, use `let x: Enum = 1 as Enum` as opposed to `let x: Enum = Enum.FirstValue`. This allows you to keep the type checking on enums without running into this issue.
+This is due to a limitation in the ts-jest basic processor which compiles each test file individually, therefore ignoring implementations of ambient declarations. The TypeScript team currently have [no plan to support const enum inlining](https://github.com/Microsoft/TypeScript/issues/5243) for this particular compiler method. See [#112](https://github.com/kulshekhar/ts-jest/issues/112) and [#281](https://github.com/kulshekhar/ts-jest/issues/281) for more information.
 
 ## How to Contribute
 If you have any suggestions/pull requests to turn this into a useful package, just open an issue and I'll be happy to work with you to improve this.
