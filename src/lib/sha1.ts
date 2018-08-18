@@ -5,7 +5,7 @@ export const cache: { [key: string]: string } = Object.create(null)
 
 type DataItem = string | Buffer
 
-export default function sha1(...data: DataItem[]): string {
+export function sha1(...data: DataItem[]): string {
   const canCache = data.length === 1 && typeof data[0] === 'string'
   // caching
   let cacheKey!: string
@@ -16,10 +16,14 @@ export default function sha1(...data: DataItem[]): string {
     }
   }
 
-  // we use SHA1 because it's the fastest provided by node and we are not concerned about security
+  // we use SHA1 because it's the fastest provided by node
+  // and we are not concerned about security here
   const hash = createHash('sha1')
-  data.forEach(item => hash.update(item))
-  const res = hash.digest('base64').toString()
+  data.forEach(item => {
+    if (typeof item === 'string') hash.update(item, 'utf8')
+    else hash.update(item)
+  })
+  const res = hash.digest('hex').toString()
 
   if (canCache) {
     cache[cacheKey] = res

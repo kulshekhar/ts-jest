@@ -1,11 +1,14 @@
 // tslint:disable:max-line-length
 export enum Errors {
-  InvalidStringifyContentPathRegex = '[ts-jest] Option "stringifyContentPathRegex" should be a valid regex pattern.',
-  UnableToFindPackageJson = '[ts-jest] Unable to find package.json from "{{fromPath}}".',
-  InvalidDiagnosticsOption = '[ts-jest] Invalid value for diagnostics: {{value}}.',
-  UnableToLoadOneModule = '[ts-jest] Unable to load the module {{module}}. {{reason}} To fix it:\n{{fix}}',
-  UnableToLoadAnyModule = '[ts-jest] Unable to load any of these modules: {{module}}. {{reason}}. To fix it:\n{{fix}}',
-  UnableToFindTsConfig = '[ts-jest] Could not find a TS config file (given: "{{given}}", root: "{{root}}").',
+  InvalidStringifyContentPathRegex = 'Option "stringifyContentPathRegex" should be a valid regex pattern.',
+  UnableToFindPackageJson = 'Unable to find package.json from "{{fromPath}}".',
+  InvalidDiagnosticsOption = 'Invalid value for diagnostics: {{value}}.',
+  UnableToLoadOneModule = 'Unable to load the module {{module}}. {{reason}} To fix it:\n{{fix}}',
+  UnableToLoadAnyModule = 'Unable to load any of these modules: {{module}}. {{reason}}. To fix it:\n{{fix}}',
+  UnableToFindTsConfig = 'Could not find a TS config file (given: "{{given}}", root: "{{root}}").',
+  TypesUnavailableWithoutTypeCheck = 'Type information is unavailable without "typeCheck"',
+  UnableToRequireDefinitionFile = 'Unable to require `.d.ts` file.\nThis is usually the result of a faulty configuration or import. Make sure there is a `.js`, `.json` or another executable extension available alongside `{{file}}`.',
+  FileNotFound = 'File not found: {{inputPath}} (resolved as: {{resolvedPath}})',
 }
 
 export enum Helps {

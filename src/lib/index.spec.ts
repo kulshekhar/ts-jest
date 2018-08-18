@@ -1,4 +1,4 @@
-import * as tsJest from './index'
+import * as tsJest from '..'
 
 describe('ts-jest', () => {
   it('should export a `createTransformer` function', () => {

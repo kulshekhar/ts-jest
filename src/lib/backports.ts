@@ -1,28 +1,26 @@
 import { interpolate, Deprecateds } from './messages'
-
-function warn(...data: any[]) {
-  console.warn(...data)
-}
-
-function warnConfig(oldPath: string, newPath: string, note?: string) {
-  warn(
-    interpolate(
-      note ? Deprecateds.ConfigOptionWithNote : Deprecateds.ConfigOption,
-      {
-        oldPath,
-        newPath,
-        note,
-      },
-    ),
-  )
-}
+import { warn } from './debug'
 
 export function backportJestConfig<
   T extends jest.InitialOptions | jest.ProjectConfig
->(config: T = {} as any): T {
+>(config: T = {} as any, silent = false): T {
   const { globals = {} } = config as any
   const { 'ts-jest': tsJest = {} } = globals as any
   const mergeTsJest: any = {}
+  const warnConfig = silent
+    ? () => undefined
+    : (oldPath: string, newPath: string, note?: string) => {
+        warn(
+          interpolate(
+            note ? Deprecateds.ConfigOptionWithNote : Deprecateds.ConfigOption,
+            {
+              oldPath,
+              newPath,
+              note,
+            },
+          ),
+        )
+      }
 
   if ('__TS_CONFIG__' in globals) {
     warnConfig('globals.__TS_CONFIG__', 'globals.ts-jest.tsConfig')
@@ -51,30 +49,46 @@ export function backportJestConfig<
     delete tsJest.tsConfigFile
   }
 
+  if ('enableTsDiagnostics' in tsJest) {
+    warnConfig(
+      'globals.ts-jest.enableTsDiagnostics',
+      'globals.ts-jest.diagnostics',
+    )
+    if (tsJest.enableTsDiagnostics) {
+      mergeTsJest.diagnostics =
+        typeof tsJest.enableTsDiagnostics === 'string'
+          ? { pathRegex: tsJest.enableTsDiagnostics }
+          : true
+    } else {
+      mergeTsJest.diagnostics = false
+    }
+    delete tsJest.tsConfigFile
+  }
+
   if ('useBabelrc' in tsJest) {
     warnConfig(
       'globals.ts-jest.useBabelrc',
-      'globals.ts-jest.babelJest',
+      'globals.ts-jest.babelConfig',
       Deprecateds.ConfigOptionUseBabelRcNote,
     )
     if (tsJest.useBabelrc != null) {
-      mergeTsJest.babelJest = tsJest.useBabelrc ? true : {}
+      mergeTsJest.babelConfig = tsJest.useBabelrc ? true : {}
     }
     delete tsJest.useBabelrc
   }
 
   if ('babelConfig' in tsJest) {
-    warnConfig('globals.ts-jest.babelConfig', 'globals.ts-jest.babelJest')
+    warnConfig('globals.ts-jest.babelConfig', 'globals.ts-jest.babelConfig')
     if (tsJest.babelConfig != null) {
-      mergeTsJest.babelJest = tsJest.babelConfig
+      mergeTsJest.babelConfig = tsJest.babelConfig
     }
     delete tsJest.babelConfig
   }
 
   if ('skipBabel' in tsJest) {
-    warnConfig('globals.ts-jest.skipBabel', 'globals.ts-jest.babelJest')
-    if (tsJest.skipBabel === false && !mergeTsJest.babelJest) {
-      mergeTsJest.babelJest = true
+    warnConfig('globals.ts-jest.skipBabel', 'globals.ts-jest.babelConfig')
+    if (tsJest.skipBabel === false && !mergeTsJest.babelConfig) {
+      mergeTsJest.babelConfig = true
     }
     delete tsJest.skipBabel
   }

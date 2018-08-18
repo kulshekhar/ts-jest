@@ -6,7 +6,7 @@ import {
   ModulePatcher,
   TTypeScript,
   TsJestImporter,
-} from '../types'
+} from './types'
 import * as hacks from './hacks'
 import { ImportReasons, Errors, interpolate, Helps } from './messages'
 
@@ -35,10 +35,6 @@ class Importer implements TsJestImporter {
     return importDefault(this._import(why, 'closest-file-data')).default
   }
 
-  typeScript(why: ImportReasons): TTypeScript {
-    return this._import(why, 'typescript')
-  }
-
   babelJest(why: ImportReasons): TBabelJest {
     // this is to ensure babel-core is patched
     this.tryThese('babel-core')
@@ -57,6 +53,10 @@ class Importer implements TsJestImporter {
         { label: 'for Babel 6', module: 'babel-jest babel-core' },
       ],
     })
+  }
+
+  typescript(why: ImportReasons, which: string): TTypeScript {
+    return this._import(why, which)
   }
 
   @Memoize((...args: string[]) => args.join(':'))

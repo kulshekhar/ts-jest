@@ -1,4 +1,4 @@
-import { TBabelCore, ModulePatcher } from '../types'
+import { TBabelCore, ModulePatcher, BabelConfig } from './types'
 
 // tslint:disable-next-line:variable-name
 export const patchBabelCore_githubIssue6577: ModulePatcher<
@@ -15,7 +15,7 @@ export const patchBabelCore_githubIssue6577: ModulePatcher<
     try {
       const File = require('babel-core/lib/transformation/file').File
       File.prototype.initOptions = (original => {
-        return function(this: any, opt) {
+        return function(this: any, opt: BabelConfig) {
           const before = opt.sourceMaps
           const result = original.apply(this, arguments)
           if (before && before !== result.sourceMaps) {

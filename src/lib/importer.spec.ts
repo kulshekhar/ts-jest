@@ -1,7 +1,7 @@
 // tslint:disable:max-line-length
 import * as fakers from '../__helpers__/fakers'
 import mockThese from '../__helpers__/mock-there'
-import { TsJestImporter } from '../types'
+import { TsJestImporter } from './types'
 import { ImportReasons } from './messages'
 
 beforeEach(() => {
@@ -71,7 +71,7 @@ describe('babelCore', () => {
     })
     expect(() => importer().babelCore(fakers.importReason()))
       .toThrowErrorMatchingInlineSnapshot(`
-"[ts-jest] Unable to load any of these modules: \\"@babel/core\\", \\"babel-core\\". because. To fix it:
+"Unable to load any of these modules: \\"@babel/core\\", \\"babel-core\\". [[BECAUSE]]. To fix it:
     • for Babel 7: \`npm i -D babel-jest 'babel-core@^7.0.0-0' @babel/core\` (or \`yarn add --dev babel-jest 'babel-core@^7.0.0-0' @babel/core\`)
     • for Babel 6: \`npm i -D babel-jest babel-core\` (or \`yarn add --dev babel-jest babel-core\`)"
 `)

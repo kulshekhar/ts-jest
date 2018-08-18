@@ -1,5 +1,5 @@
-import TsJestTransformer from './ts-jest-transformer'
-import createJestPreset from './utils/create-jest-preset'
+import { TsJestTransformer } from './lib/ts-jest-transformer'
+import { createJestPreset } from './lib/create-jest-preset'
 
 // TODO: allow a `TsJestGlobalOptions` object to be give to createTransformer()
 // so that presets could totally customize and extend the transfomer;

@@ -49,6 +49,8 @@ jspm_packages
 tests/simple-long-path/long-src-path
 # is linked to the temp dir of the os
 e2e/__workdir_synlink__
+# while refactoring...
+old/
 
 # binaries
 *.tgz

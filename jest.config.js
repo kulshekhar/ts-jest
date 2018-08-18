@@ -1,15 +1,16 @@
 module.exports = {
   rootDir: '.',
   transform: {
-    '\\.ts$': '<rootDir>/dist/index.js',
+    '\\.ts$': '<rootDir>/dist/index.js'
   },
   testMatch: ['<rootDir>/src/**/?(*.)+(spec|test).ts?(x)'],
   collectCoverageFrom: [
     '<rootDir>/src/**/*.ts',
+    '!<rootDir>/src/**/*.d.ts',
     '!<rootDir>/src/**/*.spec.ts',
     '!<rootDir>/src/**/*.test.ts',
-    '!<rootDir>/src/**/__*__/*',
+    '!<rootDir>/src/**/__*__/*'
   ],
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json'],
-  testEnvironment: 'node',
-};
+  testEnvironment: 'node'
+}

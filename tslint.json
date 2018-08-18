@@ -4,6 +4,8 @@
     "tslint:recommended"
   ],
   "rules": {
+    "no-shadowed-variable": false,
+    "curly": [true, "ignore-same-line"],
     "variable-name": [
       true,
       "ban-keywords",

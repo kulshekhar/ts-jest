@@ -1,6 +1,6 @@
-import { TsJestGlobalOptions, BabelConfig, TsJestConfig } from '../types'
+import { TsJestGlobalOptions, BabelConfig, TsJestConfig } from '../lib/types'
 import { resolve } from 'path'
-import { ImportReasons } from '../utils/messages'
+import { ImportReasons } from '../lib/messages'
 
 export function filePath(relPath: string): string {
   return resolve(__dirname, '..', '..', relPath)
@@ -54,10 +54,13 @@ describe('hello', () => {
 
 export function tsJestConfig(options?: Partial<TsJestConfig>): TsJestConfig {
   return {
-    babelJest: undefined,
+    version: '0.0.0-mock0',
+    typeCheck: false,
+    compiler: 'typescript',
+    babelConfig: undefined,
     tsConfig: undefined,
-    diagnostics: [],
     stringifyContentPathRegex: undefined,
+    diagnostics: { ignoreCodes: [], pretty: false },
     ...options,
   }
 }
@@ -85,6 +88,6 @@ export function babelConfig<T extends BabelConfig>(options?: BabelConfig): T {
   } as any
 }
 
-export function importReason(text: string = 'because'): ImportReasons {
+export function importReason(text: string = '[[BECAUSE]]'): ImportReasons {
   return text as any
 }
