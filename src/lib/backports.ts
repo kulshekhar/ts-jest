@@ -16,9 +16,9 @@ export function backportJestConfig<
             {
               oldPath,
               newPath,
-              note
-            }
-          )
+              note,
+            },
+          ),
         )
       }
 
@@ -33,7 +33,7 @@ export function backportJestConfig<
   if ('__TRANSFORM_HTML__' in globals) {
     warnConfig(
       'globals.__TRANSFORM_HTML__',
-      'globals.ts-jest.stringifyContentPathRegex'
+      'globals.ts-jest.stringifyContentPathRegex',
     )
     if (globals.__TRANSFORM_HTML__) {
       mergeTsJest.stringifyContentPathRegex = '\\.html?$'
@@ -52,7 +52,7 @@ export function backportJestConfig<
   if ('enableTsDiagnostics' in tsJest) {
     warnConfig(
       'globals.ts-jest.enableTsDiagnostics',
-      'globals.ts-jest.diagnostics'
+      'globals.ts-jest.diagnostics',
     )
     if (tsJest.enableTsDiagnostics) {
       mergeTsJest.diagnostics =
@@ -69,7 +69,7 @@ export function backportJestConfig<
     warnConfig(
       'globals.ts-jest.useBabelrc',
       'globals.ts-jest.babelConfig',
-      Deprecateds.ConfigOptionUseBabelRcNote
+      Deprecateds.ConfigOptionUseBabelRcNote,
     )
     if (tsJest.useBabelrc != null) {
       mergeTsJest.babelConfig = tsJest.useBabelrc ? true : {}
@@ -99,8 +99,8 @@ export function backportJestConfig<
       ...globals,
       'ts-jest': {
         ...mergeTsJest,
-        ...tsJest
-      }
-    }
+        ...tsJest,
+      },
+    },
   }
 }

@@ -33,7 +33,7 @@ export class TsJestTransformer implements jest.Transformer {
     let jestConfigObj: jest.ProjectConfig
     if (typeof jestConfig === 'string') {
       csi = this._configSetsIndex.find(
-        cs => cs.jestConfig.serialized === jestConfig
+        cs => cs.jestConfig.serialized === jestConfig,
       )
       if (csi) return csi.configSet
       jestConfigObj = parse(jestConfig)
@@ -43,7 +43,7 @@ export class TsJestTransformer implements jest.Transformer {
       // try to look-it up by stringified version
       const serialized = stringify(jestConfig)
       csi = this._configSetsIndex.find(
-        cs => cs.jestConfig.serialized === serialized
+        cs => cs.jestConfig.serialized === serialized,
       )
       if (csi) {
         // update the object so that we can find it later
@@ -59,7 +59,7 @@ export class TsJestTransformer implements jest.Transformer {
     const configSet = new ConfigSet(jestConfigObj, this.options)
     this._configSetsIndex.push({
       jestConfig: new JsonableValue(jestConfigObj),
-      configSet
+      configSet,
     })
     return configSet
   }
@@ -68,7 +68,7 @@ export class TsJestTransformer implements jest.Transformer {
     source: string,
     filePath: jest.Path,
     jestConfig: jest.ProjectConfig,
-    transformOptions?: jest.TransformOptions
+    transformOptions?: jest.TransformOptions,
   ): jest.TransformedSource | string {
     let result: string | jest.TransformedSource
 
@@ -123,7 +123,7 @@ export class TsJestTransformer implements jest.Transformer {
     fileContent: string,
     filePath: string,
     jestConfigStr: string,
-    transformOptions: { instrument?: boolean; rootDir?: string } = {}
+    transformOptions: { instrument?: boolean; rootDir?: string } = {},
   ): string {
     const configs = this.configsFor(jestConfigStr)
     const { instrument = false } = transformOptions
@@ -134,7 +134,7 @@ export class TsJestTransformer implements jest.Transformer {
       '\x00',
       fileContent,
       '\x00',
-      filePath
+      filePath,
     )
   }
 

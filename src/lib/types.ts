@@ -117,14 +117,14 @@ export interface TsJestProgram {
     path: string,
     content: string,
     instrument?: boolean,
-    extraCompilerOptions?: _ts.CompilerOptions
+    extraCompilerOptions?: _ts.CompilerOptions,
   ): string
 }
 
 export interface TsJestHooksMap {
   afterProcess?(
     args: any[],
-    result: string | jest.TransformedSource
+    result: string | jest.TransformedSource,
   ): string | jest.TransformedSource | void
 }
 

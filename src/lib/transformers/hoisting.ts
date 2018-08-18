@@ -8,7 +8,7 @@ import {
   Statement,
   Visitor,
   Block,
-  Transformer
+  Transformer,
 } from 'typescript'
 import { ConfigSet } from '../config-set'
 
@@ -53,7 +53,7 @@ export function factory(cs: ConfigSet) {
         const block = resultNode as Block
         block.statements = ts.createNodeArray([
           ...hoisted[level],
-          ...block.statements
+          ...block.statements,
         ])
       }
       exit()

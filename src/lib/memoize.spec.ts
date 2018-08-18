@@ -47,13 +47,13 @@ describe('memoize', () => {
       getter: 'getter A',
       method0: 'method0 A',
       method1: 'method1 A',
-      method2: 'method2 A'
+      method2: 'method2 A',
     })
     subjectB = new Dummy({
       getter: 'getter B',
       method0: 'method0 B',
       method1: 'method1 B',
-      method2: 'method2 B'
+      method2: 'method2 B',
     })
   })
 

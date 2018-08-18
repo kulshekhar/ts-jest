@@ -80,7 +80,7 @@
   },
   "lint-staged": {
     "linters": {
-      "*.{js,ts}": [
+      "*.{js,ts,tsx,jsx}": [
         "prettier --write",
         "git add"
       ]

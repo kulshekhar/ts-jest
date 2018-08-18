@@ -6,7 +6,7 @@ import {
   TTypeScript,
   TsJestHooksMap,
   BabelJestTransformer,
-  TsCompiler
+  TsCompiler,
 } from './types'
 import { resolve, isAbsolute, join, dirname } from 'path'
 import { Memoize } from './memoize'
@@ -20,7 +20,7 @@ import { importer } from './importer'
 import {
   Diagnostic,
   FormatDiagnosticsHost,
-  ParsedCommandLine
+  ParsedCommandLine,
 } from 'typescript'
 import { EOL } from 'os'
 import { TSError } from './ts-error'
@@ -31,7 +31,7 @@ import { createCompiler } from './compiler'
 
 const DEFAULT_COMPILER_OPTIONS = {
   inlineSourceMap: true,
-  inlineSources: true
+  inlineSources: true,
 }
 const FORCE_COMPILER_OPTIONS = {
   sourceMap: true,
@@ -48,13 +48,13 @@ const FORCE_COMPILER_OPTIONS = {
   emitDeclarationOnly: undefined,
   module: 'commonjs',
   esModuleInterop: true,
-  removeComments: false
+  removeComments: false,
 }
 
 export class ConfigSet {
   constructor(
     private _jestConfig: jest.ProjectConfig,
-    readonly parentOptions?: TsJestGlobalOptions
+    readonly parentOptions?: TsJestGlobalOptions,
   ) {}
 
   @Memoize()
@@ -65,7 +65,7 @@ export class ConfigSet {
       // TODO: implement correct deep merging instead
       globals['ts-jest'] = {
         ...this.parentOptions,
-        ...globals['ts-jest']
+        ...globals['ts-jest'],
       }
     }
     return config
@@ -90,12 +90,12 @@ export class ConfigSet {
         value:
           typeof tsConfigOpt === 'string'
             ? this.resolvePath(tsConfigOpt)
-            : undefined
+            : undefined,
       }
     } else if (typeof tsConfigOpt === 'object') {
       tsConfig = {
         kind: 'inline',
-        value: tsConfigOpt
+        value: tsConfigOpt,
       }
     }
 
@@ -108,12 +108,12 @@ export class ConfigSet {
         value:
           babelConfigOpt === true
             ? undefined
-            : this.resolvePath(babelConfigOpt as string)
+            : this.resolvePath(babelConfigOpt as string),
       }
     } else if (babelConfigOpt) {
       babelConfig = {
         kind: 'inline',
-        value: babelConfigOpt
+        value: babelConfigOpt,
       }
     }
 
@@ -126,24 +126,24 @@ export class ConfigSet {
       diagnostics = {
         pretty: true,
         ignoreCodes: [],
-        pathRegex: /a^/ // matches nothing
+        pathRegex: /a^/, // matches nothing
       }
     } else {
       diagnostics = {
         pretty: yn(diagnosticsOpt, { default: true }),
         ignoreCodes: arrify(diagnosticsOpt.ignoreCodes).map(n =>
-          parseInt(n as string, 10)
+          parseInt(n as string, 10),
         ),
         pathRegex: diagnosticsOpt.pathRegex
           ? new RegExp(diagnosticsOpt.pathRegex)
-          : undefined
+          : undefined,
       }
     }
     diagnostics.ignoreCodes = diagnostics.ignoreCodes
       .concat([
         6059, // "'rootDir' is expected to contain all source files."
         18002, // "The 'files' list in config file is empty."
-        18003 // "No inputs were found in config file."
+        18003, // "No inputs were found in config file."
       ])
       .filter((code, index, list) => list.indexOf(code) === index)
 
@@ -174,18 +174,18 @@ export class ConfigSet {
       diagnostics,
       typeCheck: yn(options),
       compiler: options.compiler || 'typescript',
-      stringifyContentPathRegex: stringifyRegEx
+      stringifyContentPathRegex: stringifyRegEx,
     }
   }
 
   get typescript(): ParsedCommandLine {
     const {
-      tsJest: { tsConfig }
+      tsJest: { tsConfig },
     } = this
     const config = this.readTsConfig(
       tsConfig && tsConfig.kind === 'inline' ? tsConfig.value : undefined,
       tsConfig && tsConfig.kind === 'file' ? tsConfig.value : undefined,
-      tsConfig == null
+      tsConfig == null,
     )
     const configDiagnosticList = this.filterDiagnostics(config.errors)
     if (configDiagnosticList.length) {
@@ -196,7 +196,7 @@ export class ConfigSet {
 
   get babel(): BabelConfig | undefined {
     const {
-      tsJest: { babelConfig }
+      tsJest: { babelConfig },
     } = this
     if (babelConfig == null) return
     let base: BabelConfig = { cwd: this.cwd }
@@ -204,7 +204,7 @@ export class ConfigSet {
       if (babelConfig.value) {
         base = {
           ...base,
-          ...json5.parse(readFileSync(babelConfig.value, 'utf8'))
+          ...json5.parse(readFileSync(babelConfig.value, 'utf8')),
         }
       }
     } else if (babelConfig.kind === 'inline') {
@@ -212,7 +212,7 @@ export class ConfigSet {
     }
     // loadOptions is from babel 7+, and OptionManager is backward compatible but deprecated 6 API
     const { OptionManager, loadOptions } = importer.babelCore(
-      ImportReasons.babelJest
+      ImportReasons.babelJest,
     )
     let config: BabelConfig
     if (typeof loadOptions === 'function') {
@@ -256,9 +256,9 @@ export class ConfigSet {
   get filterDiagnostics() {
     const {
       tsJest: {
-        diagnostics: { ignoreCodes }
+        diagnostics: { ignoreCodes },
       },
-      shouldReportDiagnostic
+      shouldReportDiagnostic,
     } = this
     return (diagnostics: Diagnostic[], filePath?: string): Diagnostic[] => {
       if (filePath && !shouldReportDiagnostic(filePath)) return []
@@ -278,7 +278,7 @@ export class ConfigSet {
   @Memoize()
   get shouldReportDiagnostic() {
     const {
-      diagnostics: { pathRegex }
+      diagnostics: { pathRegex },
     } = this.tsJest
     return (fileName: string) => !pathRegex || pathRegex.test(fileName)
   }
@@ -286,7 +286,7 @@ export class ConfigSet {
   @Memoize()
   get createTsError() {
     const {
-      diagnostics: { pretty }
+      diagnostics: { pretty },
     } = this.tsJest
 
     const formatDiagnostics = pretty
@@ -296,7 +296,7 @@ export class ConfigSet {
     const diagnosticHost: FormatDiagnosticsHost = {
       getNewLine: () => EOL,
       getCurrentDirectory: () => this.cwd,
-      getCanonicalFileName: path => path
+      getCanonicalFileName: path => path,
     }
 
     return (diagnostics: ReadonlyArray<Diagnostic>) => {
@@ -315,8 +315,8 @@ export class ConfigSet {
         compiler: this.tsJest.compiler,
         compilerOptions: this.typescript.options,
         typeCheck: this.tsJest.typeCheck,
-        ignoreDiagnostics: this.tsJest.diagnostics.ignoreCodes
-      })
+        ignoreDiagnostics: this.tsJest.diagnostics.ignoreCodes,
+      }),
     )
     return join(this.jest.cacheDirectory, `ts-jest-${cacheSufix}`)
   }
@@ -332,7 +332,7 @@ export class ConfigSet {
   readTsConfig(
     compilerOptions?: object,
     project?: string | null,
-    noProject?: boolean | null
+    noProject?: boolean | null,
   ): ParsedCommandLine {
     let config = { compilerOptions: {} }
     let basePath = normalizeSlashes(this.cwd)
@@ -363,7 +363,7 @@ export class ConfigSet {
       ...DEFAULT_COMPILER_OPTIONS,
       ...config.compilerOptions,
       ...compilerOptions,
-      ...FORCE_COMPILER_OPTIONS
+      ...FORCE_COMPILER_OPTIONS,
     }
 
     const result = ts.parseJsonConfigFileContent(
@@ -371,7 +371,7 @@ export class ConfigSet {
       ts.sys,
       basePath,
       undefined,
-      configFileName
+      configFileName,
     )
 
     // Target ES5 output by default (instead of ES3).
@@ -391,7 +391,7 @@ export class ConfigSet {
     }
     if (!noFailIfMissing && !existsSync(path)) {
       throw new Error(
-        interpolate(Errors.FileNotFound, { inputPath, resolvedPath: path })
+        interpolate(Errors.FileNotFound, { inputPath, resolvedPath: path }),
       )
     }
     return path
@@ -403,7 +403,7 @@ export class ConfigSet {
       jest: this.jest,
       tsJest: this.tsJest,
       babel: this.babel,
-      typescript: this.typescript
+      typescript: this.typescript,
     })
   }
 

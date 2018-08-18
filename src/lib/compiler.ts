@@ -51,7 +51,7 @@ export function createCompiler(configs: ConfigSet): TsCompiler {
   const memoryCache: MemoryCache = {
     contents: Object.create(null),
     versions: Object.create(null),
-    outputs: Object.create(null)
+    outputs: Object.create(null),
   }
 
   // Require the TypeScript compiler and configuration.
@@ -60,7 +60,7 @@ export function createCompiler(configs: ConfigSet): TsCompiler {
 
   const extensions = ['.ts', '.tsx']
   const {
-    typescript: { options: compilerOptions, fileNames }
+    typescript: { options: compilerOptions, fileNames },
   } = configs
 
   // Enable `allowJs` when flag is set.
@@ -89,13 +89,13 @@ export function createCompiler(configs: ConfigSet): TsCompiler {
   let getOutput = (
     code: string,
     fileName: string,
-    lineOffset = 0
+    lineOffset = 0,
   ): SourceOutput => {
     const result = ts.transpileModule(code, {
       fileName,
       transformers,
       compilerOptions,
-      reportDiagnostics: configs.shouldReportDiagnostic(fileName)
+      reportDiagnostics: configs.shouldReportDiagnostic(fileName),
     })
 
     const diagnosticList = result.diagnostics
@@ -110,7 +110,7 @@ export function createCompiler(configs: ConfigSet): TsCompiler {
   let getTypeInfo = (
     _code: string,
     _fileName: string,
-    _position: number
+    _position: number,
   ): TypeInfo => {
     throw new TypeError(Errors.TypesUnavailableWithoutTypeCheck)
   }
@@ -164,7 +164,7 @@ export function createCompiler(configs: ConfigSet): TsCompiler {
       getCurrentDirectory: () => cwd,
       getCompilationSettings: () => compilerOptions,
       getDefaultLibFileName: () => ts.getDefaultLibFilePath(compilerOptions),
-      getCustomTransformers: () => transformers
+      getCustomTransformers: () => transformers,
     }
 
     const service = ts.createLanguageService(serviceHost)
@@ -195,8 +195,8 @@ export function createCompiler(configs: ConfigSet): TsCompiler {
       if (output.outputFiles.length === 0) {
         throw new TypeError(
           interpolate(Errors.UnableToRequireDefinitionFile, {
-            file: basename(fileName)
-          })
+            file: basename(fileName),
+          }),
         )
       }
 
@@ -232,9 +232,9 @@ function readThrough(
   compile: (
     code: string,
     fileName: string,
-    lineOffset?: number
+    lineOffset?: number,
   ) => SourceOutput,
-  getExtension: (fileName: string) => string
+  getExtension: (fileName: string) => string,
 ) {
   if (!cachedir) {
     return (code: string, fileName: string, lineOffset?: number) => {
@@ -286,11 +286,11 @@ function updateOutput(
   outputText: string,
   fileName: string,
   sourceMap: string,
-  getExtension: (fileName: string) => string
+  getExtension: (fileName: string) => string,
 ) {
   const base64Map = bufferFrom(
     updateSourceMap(sourceMap, fileName),
-    'utf8'
+    'utf8',
   ).toString('base64')
   const sourceMapContent = `data:application/json;charset=utf-8;base64,${base64Map}`
   const sourceMapLength =

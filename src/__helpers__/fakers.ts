@@ -61,18 +61,18 @@ export function tsJestConfig(options?: Partial<TsJestConfig>): TsJestConfig {
     tsConfig: undefined,
     stringifyContentPathRegex: undefined,
     diagnostics: { ignoreCodes: [], pretty: false },
-    ...options
+    ...options,
   }
 }
 
 export function jestConfig<T extends jest.ProjectConfig>(
   options?: jest.InitialOptions,
-  tsJestOptions?: TsJestGlobalOptions
+  tsJestOptions?: TsJestGlobalOptions,
 ): T {
   const res = {
     globals: {},
     moduleFileExtensions: ['ts', 'js'],
-    ...options
+    ...options,
   } as any
   if (tsJestOptions) {
     res.globals['ts-jest'] = tsJestOptions
@@ -84,7 +84,7 @@ export function babelConfig<T extends BabelConfig>(options?: BabelConfig): T {
   return {
     ...options,
     presets: [...(options && options.presets)],
-    plugins: [...(options && options.plugins)]
+    plugins: [...(options && options.plugins)],
   } as any
 }
 

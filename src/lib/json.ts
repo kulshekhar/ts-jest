@@ -15,7 +15,7 @@ interface NormalizeOptions {
 }
 export function normalize(
   input: string,
-  { parse: parser = parse }: NormalizeOptions = {}
+  { parse: parser = parse }: NormalizeOptions = {},
 ): string {
   let result: string | undefined
   if (normalize.cache.has(input)) {

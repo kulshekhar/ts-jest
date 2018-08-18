@@ -15,13 +15,13 @@ it('should encrypt one or more buffers', () => {
   expect(sha1(bufferFrom('one'))).toBe(ONE)
   expect(sha1(bufferFrom('one'), bufferFrom('two'))).toBe(ONE_TWO)
   expect(sha1(bufferFrom('one'), bufferFrom('two'), bufferFrom('three'))).toBe(
-    ONE_TWO_THREE
+    ONE_TWO_THREE,
   )
 })
 
 it('should encrypt mixed items', () => {
   expect(sha1('one', bufferFrom('two'), 'three')).toBe(ONE_TWO_THREE)
   expect(sha1(bufferFrom('one'), 'two', bufferFrom('three'))).toBe(
-    ONE_TWO_THREE
+    ONE_TWO_THREE,
   )
 })

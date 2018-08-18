@@ -4,7 +4,7 @@ import set from 'lodash.set'
 import { inspect } from 'util'
 
 const consoleSpies = spyThese(console, {
-  warn: () => undefined
+  warn: () => undefined,
 })
 afterEach(() => {
   consoleSpies.mockReset()
@@ -33,32 +33,32 @@ describe('backportJestConfig', () => {
   } // makeTestsFor
 
   makeTestsFor('globals.__TS_CONFIG__', 'globals.ts-jest.tsConfig', [
-    { foo: 'bar' }
+    { foo: 'bar' },
   ])
 
   makeTestsFor(
     'globals.__TRANSFORM_HTML__',
     'globals.ts-jest.stringifyContentPathRegex',
-    [true, false]
+    [true, false],
   )
 
   makeTestsFor('globals.ts-jest.tsConfigFile', 'globals.ts-jest.tsConfig', [
-    'tsconfig.build.json'
+    'tsconfig.build.json',
   ])
 
   makeTestsFor(
     'globals.ts-jest.enableTsDiagnostics',
     'globals.ts-jest.diagnostics',
-    [true, false, '\\.spec\\.ts$']
+    [true, false, '\\.spec\\.ts$'],
   )
 
   makeTestsFor('globals.ts-jest.useBabelrc', 'globals.ts-jest.babelConfig', [
     true,
-    false
+    false,
   ])
 
   makeTestsFor('globals.ts-jest.skipBabel', 'globals.ts-jest.babelConfig', [
     true,
-    false
+    false,
   ])
 })

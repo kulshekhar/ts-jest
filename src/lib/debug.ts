@@ -8,7 +8,7 @@ export const debug: typeof console.log = DEBUG_MODE
 
 export const wrapWithDebug: <T extends (...args: any[]) => any>(
   msg: string,
-  func: T
+  func: T,
 ) => T = DEBUG_MODE
   ? (msg, func) =>
       function wrapper(this: any) {

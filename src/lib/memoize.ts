@@ -4,19 +4,19 @@ export function Memoize(keyBuilder?: (...args: any[]) => any) {
   return (
     target: object,
     propertyKey: string,
-    descriptor: TypedPropertyDescriptor<any>
+    descriptor: TypedPropertyDescriptor<any>,
   ) => {
     if (descriptor.value != null) {
       descriptor.value = memoize(
         propertyKey,
         descriptor.value,
-        keyBuilder || ((v: any) => v)
+        keyBuilder || ((v: any) => v),
       )
     } else if (descriptor.get != null) {
       descriptor.get = memoize(
         propertyKey,
         descriptor.get,
-        keyBuilder || (() => propertyKey)
+        keyBuilder || (() => propertyKey),
       )
     }
   }
@@ -25,7 +25,7 @@ export function Memoize(keyBuilder?: (...args: any[]) => any) {
 function memoize(
   namespace: string,
   func: (...args: any[]) => any,
-  keyBuilder: (...args: any[]) => any
+  keyBuilder: (...args: any[]) => any,
 ): (...args: any[]) => any {
   return function(this: any, ...args: any[]): any {
     const dict: { [key: string]: Map<any, any> } =
