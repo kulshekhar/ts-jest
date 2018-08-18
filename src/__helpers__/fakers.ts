@@ -66,12 +66,11 @@ export function tsJestConfig(options?: Partial<TsJestConfig>): TsJestConfig {
 }
 
 export function jestConfig<T extends jest.ProjectConfig>(
-  options?: jest.InitialOptions,
+  options?: jest.InitialOptions | jest.ProjectConfig,
   tsJestOptions?: TsJestGlobalOptions,
 ): T {
   const res = {
     globals: {},
-    moduleFileExtensions: ['ts', 'js'],
     ...options,
   } as any
   if (tsJestOptions) {

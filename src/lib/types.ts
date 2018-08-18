@@ -83,7 +83,7 @@ type TsJestConfig$tsConfig =
 interface TsJestConfig$diagnostics {
   pretty: boolean
   ignoreCodes: number[]
-  pathRegex?: RegExp | undefined
+  pathRegex?: string | undefined
 }
 interface TsJestConfig$babelConfig$file {
   kind: 'file'
@@ -97,7 +97,7 @@ type TsJestConfig$babelConfig =
   | TsJestConfig$babelConfig$file
   | TsJestConfig$babelConfig$inline
   | undefined
-type TsJestConfig$stringifyContentPathRegex = RegExp | undefined
+type TsJestConfig$stringifyContentPathRegex = string | undefined
 
 export interface TsJestConfig {
   version: string

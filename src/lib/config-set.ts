@@ -126,7 +126,7 @@ export class ConfigSet {
       diagnostics = {
         pretty: true,
         ignoreCodes: [],
-        pathRegex: /a^/, // matches nothing
+        pathRegex: 'a^', // matches nothing
       }
     } else {
       diagnostics = {
@@ -135,7 +135,7 @@ export class ConfigSet {
           parseInt(n as string, 10),
         ),
         pathRegex: diagnosticsOpt.pathRegex
-          ? new RegExp(diagnosticsOpt.pathRegex)
+          ? diagnosticsOpt.pathRegex.toString()
           : undefined,
       }
     }
@@ -148,23 +148,9 @@ export class ConfigSet {
       .filter((code, index, list) => list.indexOf(code) === index)
 
     // stringifyContentPathRegex option
-    let { stringifyContentPathRegex: stringifyRegEx } = options
-    if (typeof stringifyRegEx === 'string') {
-      try {
-        stringifyRegEx = RegExp(stringifyRegEx)
-      } catch (err) {
-        err.message = `${Errors.InvalidStringifyContentPathRegex}\n${
-          err.message
-        }`
-      }
-    }
-    if (stringifyRegEx) {
-      if (!(stringifyRegEx instanceof RegExp)) {
-        throw new TypeError(Errors.InvalidStringifyContentPathRegex)
-      }
-    } else {
-      stringifyRegEx = undefined
-    }
+    const stringifyContentPathRegex = options.stringifyContentPathRegex
+      ? options.stringifyContentPathRegex.toString()
+      : undefined
 
     // parsed options
     return {
@@ -174,7 +160,7 @@ export class ConfigSet {
       diagnostics,
       typeCheck: yn(options),
       compiler: options.compiler || 'typescript',
-      stringifyContentPathRegex: stringifyRegEx,
+      stringifyContentPathRegex,
     }
   }
 
@@ -276,11 +262,27 @@ export class ConfigSet {
   }
 
   @Memoize()
-  get shouldReportDiagnostic() {
+  get shouldReportDiagnostic(): (filePath: string) => boolean {
     const {
       diagnostics: { pathRegex },
     } = this.tsJest
-    return (fileName: string) => !pathRegex || pathRegex.test(fileName)
+    if (pathRegex) {
+      const regex = new RegExp(pathRegex)
+      return file => regex.test(file)
+    } else {
+      return () => true
+    }
+  }
+
+  @Memoize()
+  get shouldStringifyContent(): (filePath: string) => boolean {
+    const { stringifyContentPathRegex } = this.tsJest
+    if (stringifyContentPathRegex) {
+      const regex = new RegExp(stringifyContentPathRegex)
+      return file => regex.test(file)
+    } else {
+      return () => false
+    }
   }
 
   @Memoize()

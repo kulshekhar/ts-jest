@@ -73,11 +73,9 @@ export class TsJestTransformer implements jest.Transformer {
     let result: string | jest.TransformedSource
 
     const configs = this.configsFor(jestConfig)
-    const { tsJest: tsJestConfig, hooks } = configs
+    const { hooks } = configs
 
-    const stringify =
-      tsJestConfig.stringifyContentPathRegex &&
-      tsJestConfig.stringifyContentPathRegex.test(filePath)
+    const stringify = configs.shouldStringifyContent(filePath)
     const babelJest = stringify ? undefined : configs.babelJestTransformer
 
     // get the compiler instance
