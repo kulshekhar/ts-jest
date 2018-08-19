@@ -1,4 +1,7 @@
 # http://www.appveyor.com/docs/appveyor-yml
+init:
+- ps: IF ($env:APPVEYOR_REPO_COMMIT_MESSAGE -Match "\[clear ci-cache\]" ) {$env:APPVEYOR_CACHE_SKIP_RESTORE = "true"}
+- ps: IF ($env:APPVEYOR_REPO_COMMIT_MESSAGE_EXTENDED -Match "\[clear ci-cache\]") {$env:APPVEYOR_CACHE_SKIP_RESTORE = "true"}
 
 # Test against these versions of Node.js.
 environment:
