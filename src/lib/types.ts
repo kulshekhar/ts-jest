@@ -1,12 +1,8 @@
 import _ts, { CompilerOptions } from 'typescript'
-import _closestFileData from 'closest-file-data'
 import * as _babel from 'babel__core'
-import { IPackageJSON } from 'gist-package-json'
 
 export type TBabelCore = typeof _babel
 export type TTypeScript = typeof _ts
-export type TPackageJson = IPackageJSON
-export type TClosestFileData = typeof _closestFileData
 export type TBabelJest = Required<jest.Transformer>
 export type BabelJestTransformer = {
   [K in Exclude<keyof jest.Transformer, 'createTransformer'>]: Exclude<
@@ -109,16 +105,6 @@ export interface TsJestConfig {
 
   // to deprecate / deprecated === === ===
   stringifyContentPathRegex: TsJestConfig$stringifyContentPathRegex
-}
-
-export interface TsJestProgram {
-  readonly parsedConfig: _ts.ParsedCommandLine
-  transpileModule(
-    path: string,
-    content: string,
-    instrument?: boolean,
-    extraCompilerOptions?: _ts.CompilerOptions,
-  ): string
 }
 
 export interface TsJestHooksMap {

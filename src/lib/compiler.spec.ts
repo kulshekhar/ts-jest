@@ -80,8 +80,8 @@ describe('cache', () => {
 
   it('should use the cache', () => {
     const compiled1 = compiler.compile(source, __filename)
-    expect(logger).toHaveBeenNthCalledWith(
-      1,
+    expect(logger).toHaveBeenCalledTimes(1)
+    expect(logger).toHaveBeenCalledWith(
       'log',
       'ts-jest',
       'readThrough:cache-miss',
@@ -90,8 +90,8 @@ describe('cache', () => {
 
     logger.mockClear()
     const compiled2 = compiler.compile(source, __filename)
-    expect(logger).toHaveBeenNthCalledWith(
-      1,
+    expect(logger).toHaveBeenCalledTimes(1)
+    expect(logger).toHaveBeenCalledWith(
       'log',
       'ts-jest',
       'readThrough:cache-hit',

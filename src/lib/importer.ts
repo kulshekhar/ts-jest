@@ -1,6 +1,5 @@
 import { Memoize } from './memoize'
 import {
-  TClosestFileData,
   TBabelJest,
   TBabelCore,
   ModulePatcher,
@@ -37,10 +36,6 @@ export class Importer implements TsJestImporter {
   constructor(
     protected _patches: { [moduleName: string]: ModulePatcher[] } = {},
   ) {}
-
-  closestFileData(why: ImportReasons): TClosestFileData {
-    return importDefault(this._import(why, 'closest-file-data')).default
-  }
 
   babelJest(why: ImportReasons): TBabelJest {
     // this is to ensure babel-core is patched

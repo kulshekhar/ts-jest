@@ -3,6 +3,12 @@ import { sha1 } from './sha1'
 import { JsonableValue } from './jsonable-value'
 import { ConfigSet } from './config-set'
 import { stringify, parse } from './json'
+import { inspect } from 'util'
+
+/**
+ * @internal
+ */
+export const INSPECT_CUSTOM = inspect.custom || 'inspect'
 
 interface ConfigSetIndexItem {
   configSet: ConfigSet
@@ -26,6 +32,10 @@ export class TsJestTransformer implements jest.Transformer {
   constructor(baseOptions: TsJestGlobalOptions = {}) {
     this.options = { ...baseOptions }
     this.id = TsJestTransformer._nextTransformerId
+  }
+
+  [INSPECT_CUSTOM]() {
+    return `[object TsJestTransformer<#${this.id}>]`
   }
 
   configsFor(jestConfig: jest.ProjectConfig | string) {
