@@ -5,6 +5,7 @@ import * as _backports from './backports'
 import { mocked } from '../__helpers__/mocks'
 import { ScriptTarget, ModuleKind } from 'typescript'
 import { resolve } from 'path'
+import { normalizeSlashes } from './normalize-slashes'
 
 jest.mock('./backports')
 jest.mock('../../package.json', () => ({ version: 'X.Y.Z' }))
@@ -223,12 +224,12 @@ describe('typescript', () => {
   it('should read file list from default tsconfig', () => {
     // since the default is to lookup for tsconfig,
     // we should have this file in the list
-    expect(get().fileNames).toContain(__filename)
+    expect(get().fileNames).toContain(normalizeSlashes(__filename))
   })
 
   it('should include compiler config from `tsConfig` option key', () => {
     expect(get({ tsConfig: { baseUrl: 'src/lib' } }).options.baseUrl).toBe(
-      __dirname,
+      normalizeSlashes(__dirname),
     )
   })
 
@@ -252,7 +253,7 @@ describe('typescript', () => {
     })
     expect(cs.typescript.options).toMatchObject({
       module: ModuleKind.CommonJS,
-      rootDir: resolve(__dirname, '..'),
+      rootDir: normalizeSlashes(resolve(__dirname, '..')),
       skipLibCheck: true,
     })
   })
