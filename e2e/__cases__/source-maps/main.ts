@@ -1,7 +1,7 @@
 export function consoleLog() {
-  console.log('WITHIN SOURCE');
+  console.log('WITHIN SOURCE')
 }
 
 export function throwError() {
-  throw new Error('WITHIN SOURCE');
+  throw new Error('WITHIN SOURCE')
 }

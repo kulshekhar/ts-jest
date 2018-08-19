@@ -5,6 +5,7 @@ import * as Paths from '../../scripts/paths'
 import * as fs from 'fs-extra'
 import { RawSourceMap } from 'source-map'
 import { relativiseSourceRoot, extractSourceMaps } from './source-maps'
+import { SpawnSyncReturns } from 'child_process'
 
 const TEMPLATE_EXCLUDED_ITEMS = ['node_modules', 'package-lock.json']
 
@@ -112,9 +113,7 @@ class TestCaseRunDescriptor {
           template,
         })
         const runTest = () => {
-          const out = desc.run(expectedStatus)
-          map[template] = { ...out }
-          return out
+          return (map[template] = desc.run(expectedStatus))
         }
         if (iterator) {
           iterator(runTest, createIteratorContext(template, expectedStatus))
@@ -128,9 +127,6 @@ class TestCaseRunDescriptor {
   }
 }
 
-// tslint:disable-next-line:variable-name
-export const TestRunResultFlag = Symbol.for('[ts-jest-test-run-result]')
-
 export interface RunTestOptions {
   template?: string
   env?: {}
@@ -139,19 +135,40 @@ export interface RunTestOptions {
   writeIo?: boolean
 }
 
-export interface TestRunResult {
-  [TestRunResultFlag]: true
-  status: number
-  stdout: string
-  stderr: string
-  output: string
-  ioDataFor(relPath: string): TestFileIoData
+// tslint:disable-next-line:max-classes-per-file
+export class TestRunResult {
+  constructor(
+    readonly cwd: string,
+    readonly result: SpawnSyncReturns<Buffer>,
+    readonly ioDir?: string,
+  ) { }
+  get isPass() { return this.status === 0 }
+  get isFail() { return !this.isPass }
+  get status() { return this.result.status }
+  get output() { return stripAnsiColors((this.result.output ? this.result.output.join('\n\n') : '')) }
+  get stderr() { return stripAnsiColors((this.result.stderr || '').toString()) }
+  get stdout() { return stripAnsiColors((this.result.stdout || '').toString()) }
+  ioFor(relFilePath: string): TestFileIo {
+    if (!this.ioDir) {
+      throw new Error('IO not written for test, you must configure the test with `writeIo: true`.')
+    }
+    const io = require(`${this.ioDir}/${relFilePath}.json`)
+    return new TestFileIo(this.cwd, io.in, io.out)
+  }
 }
-interface TestFileIoData {
-  in: [string, jest.Path, jest.ProjectConfig, jest.TransformOptions?]
-  out: string
-  outNormalized: string
-  outSourceMaps: RawSourceMap
+
+// tslint:disable-next-line:max-classes-per-file
+class TestFileIo {
+  constructor(
+    private _cwd: string,
+    readonly input: [string, jest.Path, jest.ProjectConfig, jest.TransformOptions?],
+    readonly output: string | jest.TransformedSource,
+  ) { }
+  get inputCode(): string { return this.input[0] }
+  get inputPath(): string { return this.input[1] }
+  get outputCode(): string { return typeof this.output === 'object' ? this.output.code : this.output }
+  get outputSourceMaps(): RawSourceMap | undefined { return extractSourceMaps(this.outputCode) }
+  get normalizedOutputCode(): string { return relativiseSourceRoot(this._cwd, this.outputCode, '<cwd>/') }
 }
 
 // tslint:disable-next-line:interface-over-type-literal
@@ -279,34 +296,7 @@ export function run(name: string, options: RunTestOptions = {}): TestRunResult {
     })
   })
 
-  // Call to string on byte arrays and strip ansi color codes for more accurate string comparison.
-  const stdout = result.stdout ? stripAnsiColors(result.stdout.toString()) : ''
-  const stderr = result.stderr ? stripAnsiColors(result.stderr.toString()) : ''
-  const output = result.output
-    ? stripAnsiColors(result.output.join('\n\n'))
-    : ''
-
-  const res = {
-    [TestRunResultFlag]: true,
-    status: result.status,
-    stderr,
-    stdout,
-    output,
-  }
-  if (writeIo) {
-    Object.defineProperty(res, 'ioDataFor', {
-      value: (relPath: string) => wrapIoData(require(`${ioDir}/${relPath}.json`), dir),
-    })
-  }
-  return res as any
-}
-
-function wrapIoData(ioData: TestFileIoData, rootDir: string): TestFileIoData {
-  const res: TestFileIoData = { ...ioData }
-  return Object.defineProperties(res, {
-    outNormalized: { get: () => relativiseSourceRoot(rootDir, ioData.out, '<cwd>/') },
-    outSourceMaps: { get: () => extractSourceMaps(ioData.out) },
-  })
+  return new TestRunResult(fs.realpathSync(dir), result, writeIo ? ioDir : undefined)
 }
 
 // from https://stackoverflow.com/questions/25245716/remove-all-ansi-colors-styles-from-strings

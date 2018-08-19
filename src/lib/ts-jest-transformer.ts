@@ -65,12 +65,13 @@ export class TsJestTransformer implements jest.Transformer {
   }
 
   process(
-    source: string,
+    input: string,
     filePath: jest.Path,
     jestConfig: jest.ProjectConfig,
     transformOptions?: jest.TransformOptions,
   ): jest.TransformedSource | string {
     let result: string | jest.TransformedSource
+    let source: string = input
 
     const configs = this.configsFor(jestConfig)
     const { hooks } = configs
@@ -98,7 +99,10 @@ export class TsJestTransformer implements jest.Transformer {
 
     // allows hooks (usefull for testing)
     if (hooks.afterProcess) {
-      const newResult = hooks.afterProcess([...arguments], result)
+      const newResult = hooks.afterProcess(
+        [input, filePath, jestConfig, transformOptions],
+        result,
+      )
       if (newResult !== undefined) {
         return newResult
       }

@@ -21,7 +21,7 @@ exports.afterProcess = function (args, result) {
     });
     fs.writeFileSync(dest, JSON.stringify({
       in: args,
-      out: typeof result === 'object' ? result.code : result,
+      out: result,
     }), 'utf8');
   }
 }

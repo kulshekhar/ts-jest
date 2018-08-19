@@ -1,7 +1,7 @@
 // WARNING: this file is shared between e2e and unit tests
 import { RawSourceMap } from 'source-map'
 import bufferFrom from 'buffer-from'
-import { relative, isAbsolute, resolve } from 'path'
+import { relative, isAbsolute } from 'path'
 import stableStringify = require('fast-json-stable-stringify')
 import { realpathSync } from 'fs'
 

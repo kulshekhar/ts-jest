@@ -11,7 +11,7 @@ function throwError() {
     throw new Error('WITHIN SOURCE');
 }
 exports.throwError = throwError;
-//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoibWFpbi50cyIsIm1hcHBpbmdzIjoiOztBQUFBO0lBQ0UsT0FBTyxDQUFDLEdBQUcsQ0FBQyxlQUFlLENBQUMsQ0FBQztBQUMvQixDQUFDO0FBRkQsZ0NBRUM7QUFFRDtJQUNFLE1BQU0sSUFBSSxLQUFLLENBQUMsZUFBZSxDQUFDLENBQUM7QUFDbkMsQ0FBQztBQUZELGdDQUVDIiwibmFtZXMiOltdLCJzb3VyY2VSb290IjoiPGN3ZD4vIiwic291cmNlcyI6WyJtYWluLnRzIl0sInNvdXJjZXNDb250ZW50IjpbImV4cG9ydCBmdW5jdGlvbiBjb25zb2xlTG9nKCkge1xuICBjb25zb2xlLmxvZygnV0lUSElOIFNPVVJDRScpO1xufVxuXG5leHBvcnQgZnVuY3Rpb24gdGhyb3dFcnJvcigpIHtcbiAgdGhyb3cgbmV3IEVycm9yKCdXSVRISU4gU09VUkNFJyk7XG59XG4iXSwidmVyc2lvbiI6M30="
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoibWFpbi50cyIsIm1hcHBpbmdzIjoiOztBQUFBO0lBQ0UsT0FBTyxDQUFDLEdBQUcsQ0FBQyxlQUFlLENBQUMsQ0FBQTtBQUM5QixDQUFDO0FBRkQsZ0NBRUM7QUFFRDtJQUNFLE1BQU0sSUFBSSxLQUFLLENBQUMsZUFBZSxDQUFDLENBQUE7QUFDbEMsQ0FBQztBQUZELGdDQUVDIiwibmFtZXMiOltdLCJzb3VyY2VSb290IjoiPGN3ZD4vIiwic291cmNlcyI6WyJtYWluLnRzIl0sInNvdXJjZXNDb250ZW50IjpbImV4cG9ydCBmdW5jdGlvbiBjb25zb2xlTG9nKCkge1xuICBjb25zb2xlLmxvZygnV0lUSElOIFNPVVJDRScpXG59XG5cbmV4cG9ydCBmdW5jdGlvbiB0aHJvd0Vycm9yKCkge1xuICB0aHJvdyBuZXcgRXJyb3IoJ1dJVEhJTiBTT1VSQ0UnKVxufVxuIl0sInZlcnNpb24iOjN9"
 `;
 
 exports[`using template "default" should report correct line numbers 1`] = `
@@ -37,7 +37,7 @@ jest exit code: 1
   
         4 | 
         5 | export function throwError() {
-      > 6 |   throw new Error('WITHIN SOURCE');
+      > 6 |   throw new Error('WITHIN SOURCE')
           |         ^
         7 | }
         8 | 
@@ -79,7 +79,7 @@ function throwError() {
     throw new Error('WITHIN SOURCE');
 }
 exports.throwError = throwError;
-//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJtYXBwaW5ncyI6Ijs7O0FBQUEsU0FBQSxVQUFBLEdBQUE7QUFDRSxZQUFRLEdBQVIsQ0FBWSxlQUFaO0FBQ0Q7QUFGRCxRQUFBLFVBQUEsR0FBQSxVQUFBO0FBSUEsU0FBQSxVQUFBLEdBQUE7QUFDRSxVQUFNLElBQUksS0FBSixDQUFVLGVBQVYsQ0FBTjtBQUNEO0FBRkQsUUFBQSxVQUFBLEdBQUEsVUFBQSIsIm5hbWVzIjpbXSwic291cmNlUm9vdCI6Ijxjd2Q+LyIsInNvdXJjZXMiOlsibWFpbi50cyJdLCJzb3VyY2VzQ29udGVudCI6WyJleHBvcnQgZnVuY3Rpb24gY29uc29sZUxvZygpIHtcbiAgY29uc29sZS5sb2coJ1dJVEhJTiBTT1VSQ0UnKTtcbn1cblxuZXhwb3J0IGZ1bmN0aW9uIHRocm93RXJyb3IoKSB7XG4gIHRocm93IG5ldyBFcnJvcignV0lUSElOIFNPVVJDRScpO1xufVxuIl0sInZlcnNpb24iOjN9"
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJtYXBwaW5ncyI6Ijs7O0FBQUEsU0FBQSxVQUFBLEdBQUE7QUFDRSxZQUFRLEdBQVIsQ0FBWSxlQUFaO0FBQ0Q7QUFGRCxRQUFBLFVBQUEsR0FBQSxVQUFBO0FBSUEsU0FBQSxVQUFBLEdBQUE7QUFDRSxVQUFNLElBQUksS0FBSixDQUFVLGVBQVYsQ0FBTjtBQUNEO0FBRkQsUUFBQSxVQUFBLEdBQUEsVUFBQSIsIm5hbWVzIjpbXSwic291cmNlUm9vdCI6Ijxjd2Q+LyIsInNvdXJjZXMiOlsibWFpbi50cyJdLCJzb3VyY2VzQ29udGVudCI6WyJleHBvcnQgZnVuY3Rpb24gY29uc29sZUxvZygpIHtcbiAgY29uc29sZS5sb2coJ1dJVEhJTiBTT1VSQ0UnKVxufVxuXG5leHBvcnQgZnVuY3Rpb24gdGhyb3dFcnJvcigpIHtcbiAgdGhyb3cgbmV3IEVycm9yKCdXSVRISU4gU09VUkNFJylcbn1cbiJdLCJ2ZXJzaW9uIjozfQ=="
 `;
 
 exports[`using template "with-babel-6" should report correct line numbers 1`] = `
@@ -105,7 +105,7 @@ jest exit code: 1
   
         4 | 
         5 | export function throwError() {
-      > 6 |   throw new Error('WITHIN SOURCE');
+      > 6 |   throw new Error('WITHIN SOURCE')
           |         ^
         7 | }
         8 | 
@@ -153,7 +153,7 @@ function throwError() {
 }
 
 exports.throwError = throwError;
-//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJtYXBwaW5ncyI6Ijs7Ozs7O0FBQUEsU0FBQSxVQUFBLEdBQUE7QUFDRSxFQUFBLE9BQU8sQ0FBQyxHQUFSLENBQVksZUFBWjtBQUNEOztBQUZELE9BQUEsQ0FBQSxVQUFBLEdBQUEsVUFBQTs7QUFJQSxTQUFBLFVBQUEsR0FBQTtBQUNFLFFBQU0sSUFBSSxLQUFKLENBQVUsZUFBVixDQUFOO0FBQ0Q7O0FBRkQsT0FBQSxDQUFBLFVBQUEsR0FBQSxVQUFBIiwibmFtZXMiOltdLCJzb3VyY2VSb290IjoiPGN3ZD4vIiwic291cmNlcyI6WyJtYWluLnRzIl0sInNvdXJjZXNDb250ZW50IjpbImV4cG9ydCBmdW5jdGlvbiBjb25zb2xlTG9nKCkge1xuICBjb25zb2xlLmxvZygnV0lUSElOIFNPVVJDRScpO1xufVxuXG5leHBvcnQgZnVuY3Rpb24gdGhyb3dFcnJvcigpIHtcbiAgdGhyb3cgbmV3IEVycm9yKCdXSVRISU4gU09VUkNFJyk7XG59XG4iXSwidmVyc2lvbiI6M30="
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJtYXBwaW5ncyI6Ijs7Ozs7O0FBQUEsU0FBQSxVQUFBLEdBQUE7QUFDRSxFQUFBLE9BQU8sQ0FBQyxHQUFSLENBQVksZUFBWjtBQUNEOztBQUZELE9BQUEsQ0FBQSxVQUFBLEdBQUEsVUFBQTs7QUFJQSxTQUFBLFVBQUEsR0FBQTtBQUNFLFFBQU0sSUFBSSxLQUFKLENBQVUsZUFBVixDQUFOO0FBQ0Q7O0FBRkQsT0FBQSxDQUFBLFVBQUEsR0FBQSxVQUFBIiwibmFtZXMiOltdLCJzb3VyY2VSb290IjoiPGN3ZD4vIiwic291cmNlcyI6WyJtYWluLnRzIl0sInNvdXJjZXNDb250ZW50IjpbImV4cG9ydCBmdW5jdGlvbiBjb25zb2xlTG9nKCkge1xuICBjb25zb2xlLmxvZygnV0lUSElOIFNPVVJDRScpXG59XG5cbmV4cG9ydCBmdW5jdGlvbiB0aHJvd0Vycm9yKCkge1xuICB0aHJvdyBuZXcgRXJyb3IoJ1dJVEhJTiBTT1VSQ0UnKVxufVxuIl0sInZlcnNpb24iOjN9"
 `;
 
 exports[`using template "with-babel-7" should report correct line numbers 1`] = `
@@ -179,7 +179,7 @@ jest exit code: 1
   
         4 | 
         5 | export function throwError() {
-      > 6 |   throw new Error('WITHIN SOURCE');
+      > 6 |   throw new Error('WITHIN SOURCE')
           |         ^
         7 | }
         8 | 
@@ -220,7 +220,7 @@ function throwError() {
     throw new Error('WITHIN SOURCE');
 }
 exports.throwError = throwError;
-//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoibWFpbi50cyIsIm1hcHBpbmdzIjoiOztBQUFBO0lBQ0UsT0FBTyxDQUFDLEdBQUcsQ0FBQyxlQUFlLENBQUMsQ0FBQztBQUMvQixDQUFDO0FBRkQsZ0NBRUM7QUFFRDtJQUNFLE1BQU0sSUFBSSxLQUFLLENBQUMsZUFBZSxDQUFDLENBQUM7QUFDbkMsQ0FBQztBQUZELGdDQUVDIiwibmFtZXMiOltdLCJzb3VyY2VSb290IjoiPGN3ZD4vIiwic291cmNlcyI6WyJtYWluLnRzIl0sInNvdXJjZXNDb250ZW50IjpbImV4cG9ydCBmdW5jdGlvbiBjb25zb2xlTG9nKCkge1xuICBjb25zb2xlLmxvZygnV0lUSElOIFNPVVJDRScpO1xufVxuXG5leHBvcnQgZnVuY3Rpb24gdGhyb3dFcnJvcigpIHtcbiAgdGhyb3cgbmV3IEVycm9yKCdXSVRISU4gU09VUkNFJyk7XG59XG4iXSwidmVyc2lvbiI6M30="
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoibWFpbi50cyIsIm1hcHBpbmdzIjoiOztBQUFBO0lBQ0UsT0FBTyxDQUFDLEdBQUcsQ0FBQyxlQUFlLENBQUMsQ0FBQTtBQUM5QixDQUFDO0FBRkQsZ0NBRUM7QUFFRDtJQUNFLE1BQU0sSUFBSSxLQUFLLENBQUMsZUFBZSxDQUFDLENBQUE7QUFDbEMsQ0FBQztBQUZELGdDQUVDIiwibmFtZXMiOltdLCJzb3VyY2VSb290IjoiPGN3ZD4vIiwic291cmNlcyI6WyJtYWluLnRzIl0sInNvdXJjZXNDb250ZW50IjpbImV4cG9ydCBmdW5jdGlvbiBjb25zb2xlTG9nKCkge1xuICBjb25zb2xlLmxvZygnV0lUSElOIFNPVVJDRScpXG59XG5cbmV4cG9ydCBmdW5jdGlvbiB0aHJvd0Vycm9yKCkge1xuICB0aHJvdyBuZXcgRXJyb3IoJ1dJVEhJTiBTT1VSQ0UnKVxufVxuIl0sInZlcnNpb24iOjN9"
 `;
 
 exports[`using template "with-jest-22" should report correct line numbers 1`] = `
@@ -246,7 +246,7 @@ jest exit code: 1
   
         4 | 
         5 | export function throwError() {
-      > 6 |   throw new Error('WITHIN SOURCE');
+      > 6 |   throw new Error('WITHIN SOURCE')
         7 | }
         8 | 
         
