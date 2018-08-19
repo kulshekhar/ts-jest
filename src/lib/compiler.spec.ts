@@ -3,8 +3,11 @@ import { TsJestGlobalOptions } from './types'
 import { ConfigSet } from './config-set'
 import * as fakers from '../__helpers__/fakers'
 import { createCompiler } from './compiler'
-import { extractSourceMaps } from '../__helpers__/source-maps'
-import { relativeToRoot, tempDir } from '../__helpers__/path'
+import {
+  extractSourceMaps,
+  relativiseSourceRoot,
+} from '../__helpers__/source-maps'
+import { relativeToRoot, tempDir, ROOT } from '../__helpers__/path'
 import { __setup } from './debug'
 
 // not really unit-testing here, but it's hard to mock all those values :-D
@@ -98,10 +101,10 @@ describe('cache', () => {
       __filename,
     )
 
-    expect(compiled1).toMatchInlineSnapshot(`
+    expect(relativiseSourceRoot(ROOT, compiled1)).toMatchInlineSnapshot(`
 "\\"use strict\\";
 console.log(\\"hello\\");
-//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoic3JjL2xpYi9jb21waWxlci5zcGVjLnRzIiwibWFwcGluZ3MiOiI7QUFBQSxPQUFPLENBQUMsR0FBRyxDQUFDLE9BQU8sQ0FBQyxDQUFBIiwibmFtZXMiOltdLCJzb3VyY2VSb290IjoiL1VzZXJzL2h1YWZ1L3Rvb2xzL3RzLWplc3QiLCJzb3VyY2VzIjpbInNyYy9saWIvY29tcGlsZXIuc3BlYy50cyJdLCJzb3VyY2VzQ29udGVudCI6WyJjb25zb2xlLmxvZyhcImhlbGxvXCIpIl0sInZlcnNpb24iOjN9"
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoic3JjL2xpYi9jb21waWxlci5zcGVjLnRzIiwibWFwcGluZ3MiOiI7QUFBQSxPQUFPLENBQUMsR0FBRyxDQUFDLE9BQU8sQ0FBQyxDQUFBIiwibmFtZXMiOltdLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyJzcmMvbGliL2NvbXBpbGVyLnNwZWMudHMiXSwic291cmNlc0NvbnRlbnQiOlsiY29uc29sZS5sb2coXCJoZWxsb1wiKSJdLCJ2ZXJzaW9uIjozfQ=="
 `)
     expect(compiled2).toBe(compiled1)
   })
