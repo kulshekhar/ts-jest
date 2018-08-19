@@ -11,11 +11,25 @@ export const warn = (...msg: any[]) => {
   console.warn('ts-jest', ...msg)
 }
 
-export function __setup() {
-  DEBUG_MODE = !!process.env.TS_JEST_DEBUG
+type LogKind = 'log' | 'warn' | 'debug' | 'info'
+type Logger = (kind: LogKind, ...args: any[]) => void
+
+export const defaultLogger: Logger = (kind: LogKind, ...args: any[]) => {
+  console[kind](...args)
+}
+
+interface SetupOptions {
+  enabled?: boolean
+  logger?: Logger
+}
+export function __setup({
+  logger = defaultLogger,
+  enabled = !!process.env.TS_JEST_DEBUG || logger !== defaultLogger,
+}: SetupOptions = {}) {
+  DEBUG_MODE = enabled
 
   debug = DEBUG_MODE
-    ? (...args: any[]) => console.log('ts-jest', ...args)
+    ? (...args: any[]) => logger('log', 'ts-jest', ...args)
     : () => undefined
 
   wrapWithDebug = DEBUG_MODE

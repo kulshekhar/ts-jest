@@ -244,7 +244,7 @@ function readThrough(
 ) {
   if (!cachedir) {
     return (code: string, fileName: string, lineOffset?: number) => {
-      debug('readThrough', fileName)
+      debug('readThrough:no-cache', fileName)
 
       const [value, sourceMap] = compile(code, fileName, lineOffset)
       const output = updateOutput(value, fileName, sourceMap, getExtension, cwd)
@@ -259,8 +259,6 @@ function readThrough(
   mkdirp.sync(cachedir)
 
   return (code: string, fileName: string, lineOffset?: number) => {
-    debug('readThrough', fileName)
-
     const cachePath = join(cachedir, getCacheName(code, fileName))
     const extension = getExtension(fileName)
     const outputPath = `${cachePath}${extension}`
@@ -268,13 +266,13 @@ function readThrough(
     try {
       const output = readFileSync(outputPath, 'utf8')
       if (isValidCacheContent(output)) {
+        debug('readThrough:cache-hit', fileName)
         memoryCache.outputs[fileName] = output
         return output
       }
-    } catch (err) {
-      /* Ignore. */
-    }
+    } catch (err) {}
 
+    debug('readThrough:cache-miss', fileName)
     const [value, sourceMap] = compile(code, fileName, lineOffset)
     const output = updateOutput(value, fileName, sourceMap, getExtension, cwd)
 

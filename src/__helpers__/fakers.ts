@@ -66,7 +66,7 @@ export function tsJestConfig(options?: Partial<TsJestConfig>): TsJestConfig {
 }
 
 export function jestConfig<T extends jest.ProjectConfig>(
-  options?: jest.InitialOptions | jest.ProjectConfig,
+  options?: Partial<jest.InitialOptions | jest.ProjectConfig>,
   tsJestOptions?: TsJestGlobalOptions,
 ): T {
   const res = {

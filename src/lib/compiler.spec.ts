@@ -1,9 +1,11 @@
+// tslint:disable:max-line-length
 import { TsJestGlobalOptions } from './types'
 import { ConfigSet } from './config-set'
 import * as fakers from '../__helpers__/fakers'
 import { createCompiler } from './compiler'
 import { extractSourceMaps } from '../__helpers__/source-maps'
-import { relativeToRoot } from '../__helpers__/path'
+import { relativeToRoot, tempDir } from '../__helpers__/path'
+import { __setup } from './debug'
 
 // not really unit-testing here, but it's hard to mock all those values :-D
 
@@ -12,7 +14,7 @@ function makeCompiler({
   tsJestConfig,
   parentConfig,
 }: {
-  jestConfig?: jest.ProjectConfig
+  jestConfig?: Partial<jest.ProjectConfig>
   tsJestConfig?: TsJestGlobalOptions
   parentConfig?: TsJestGlobalOptions
 } = {}) {
@@ -27,6 +29,13 @@ function makeCompiler({
   )
   return createCompiler(cs)
 }
+
+const logger = jest.fn()
+__setup({ logger })
+
+beforeEach(() => {
+  logger.mockClear()
+})
 
 describe('typeCheck', () => {
   const compiler = makeCompiler({ tsJestConfig: { typeCheck: true } })
@@ -58,6 +67,66 @@ describe('source-maps', () => {
       file: expectedFileName,
       sources: [expectedFileName],
       sourcesContent: [source],
+    })
+  })
+})
+
+describe('cache', () => {
+  const tmp = tempDir('compiler')
+  const compiler = makeCompiler({
+    jestConfig: { cache: true, cacheDirectory: tmp },
+  })
+  const source = 'console.log("hello")'
+
+  it('should use the cache', () => {
+    const compiled1 = compiler.compile(source, __filename)
+    expect(logger).toHaveBeenNthCalledWith(
+      1,
+      'log',
+      'ts-jest',
+      'readThrough:cache-miss',
+      __filename,
+    )
+
+    logger.mockClear()
+    const compiled2 = compiler.compile(source, __filename)
+    expect(logger).toHaveBeenNthCalledWith(
+      1,
+      'log',
+      'ts-jest',
+      'readThrough:cache-hit',
+      __filename,
+    )
+
+    expect(compiled1).toMatchInlineSnapshot(`
+"\\"use strict\\";
+console.log(\\"hello\\");
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoic3JjL2xpYi9jb21waWxlci5zcGVjLnRzIiwibWFwcGluZ3MiOiI7QUFBQSxPQUFPLENBQUMsR0FBRyxDQUFDLE9BQU8sQ0FBQyxDQUFBIiwibmFtZXMiOltdLCJzb3VyY2VSb290IjoiL1VzZXJzL2h1YWZ1L3Rvb2xzL3RzLWplc3QiLCJzb3VyY2VzIjpbInNyYy9saWIvY29tcGlsZXIuc3BlYy50cyJdLCJzb3VyY2VzQ29udGVudCI6WyJjb25zb2xlLmxvZyhcImhlbGxvXCIpIl0sInZlcnNpb24iOjN9"
+`)
+    expect(compiled2).toBe(compiled1)
+  })
+})
+
+describe('getTypeInfo', () => {
+  const compiler = makeCompiler({ tsJestConfig: { typeCheck: true } })
+  const source = `
+type MyType {
+  /** the prop 1! */
+  p1: boolean
+}
+const val: MyType = {} as any
+console.log(val.p1/* <== that */)
+`
+  it('should get correct type info', () => {
+    expect(
+      compiler.getTypeInfo(
+        source,
+        __filename,
+        source.indexOf('/* <== that */') - 1,
+      ),
+    ).toEqual({
+      comment: 'the prop 1! ',
+      name: '(property) p1: boolean',
     })
   })
 })
