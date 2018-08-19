@@ -21,7 +21,6 @@ import { resolve, isAbsolute, join, dirname } from 'path'
 import { Memoize } from './memoize'
 import { backportJestConfig } from './backports'
 import { Errors, ImportReasons, interpolate } from './messages'
-import yn = require('yn')
 import json5 from 'json5'
 import { existsSync, readFileSync } from 'fs'
 import { importer } from './importer'
@@ -163,7 +162,7 @@ export class ConfigSet {
       }
 
       diagnostics = {
-        pretty: yn(diagnosticsOpt.pretty, { default: true }),
+        pretty: diagnosticsOpt.pretty == null ? true : !!diagnosticsOpt.pretty,
         ignoreCodes: ignoreCodes.map(Number),
         pathRegex: normalizeRegex(diagnosticsOpt.pathRegex),
       }
@@ -186,7 +185,7 @@ export class ConfigSet {
       tsConfig,
       babelConfig,
       diagnostics,
-      typeCheck: yn(options.typeCheck, { default: false }),
+      typeCheck: !!options.typeCheck,
       compiler: options.compiler || 'typescript',
       stringifyContentPathRegex,
     }

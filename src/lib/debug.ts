@@ -1,5 +1,3 @@
-import yn = require('yn')
-
 export let DEBUG_MODE!: boolean
 
 export let debug!: typeof console.log
@@ -14,7 +12,7 @@ export const warn = (...msg: any[]) => {
 }
 
 export function __setup() {
-  DEBUG_MODE = yn(process.env.TS_JEST_DEBUG)
+  DEBUG_MODE = !!process.env.TS_JEST_DEBUG
 
   debug = DEBUG_MODE
     ? (...args: any[]) => console.log('ts-jest', ...args)

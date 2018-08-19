@@ -3,11 +3,6 @@ declare module 'fast-json-stable-stringify' {
   export = fastJsonStableStringify
 }
 
-declare module 'yn' {
-  const yn: (val: any, opt?: { default?: boolean }) => boolean
-  export = yn
-}
-
 declare module 'babel__core' {
   import { TransformOptions } from 'babel__core/index'
   export * from 'babel__core/index'

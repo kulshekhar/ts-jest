@@ -19,7 +19,7 @@ describe('debug', () => {
     expect(consoleSpies.log).toHaveBeenNthCalledWith(1, 'ts-jest', 'foo')
   })
   it('should NOT log when TS_JEST_DEBUG is falsy', () => {
-    process.env.TS_JEST_DEBUG = '0'
+    process.env.TS_JEST_DEBUG = ''
     __setup()
     debug('foo')
     expect(consoleSpies.log).not.toHaveBeenCalled()
@@ -43,7 +43,7 @@ describe('wrapWithDebug', () => {
     expect(consoleSpies.log).toHaveBeenNthCalledWith(1, 'ts-jest', 'foo')
   })
   it('should NOT log when TS_JEST_DEBUG is falsy', () => {
-    process.env.TS_JEST_DEBUG = '0'
+    process.env.TS_JEST_DEBUG = ''
     __setup()
     expect(wrapAndCall('bar')).toBe('hello bar')
     expect(consoleSpies.log).not.toHaveBeenCalled()

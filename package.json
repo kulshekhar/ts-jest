@@ -38,13 +38,11 @@
   },
   "homepage": "https://github.com/kulshekhar/ts-jest#readme",
   "dependencies": {
-    "arrify": "^1.0.1",
     "buffer-from": "^1.1.1",
     "fast-json-stable-stringify": "^2.0.0",
     "json5": "^1.0.1",
     "make-error": "^1.3.4",
-    "mkdirp": "^0.5.1",
-    "yn": "^2.0.0"
+    "mkdirp": "^0.5.1"
   },
   "peerDependencies": {
     "babel-jest": "23.x",
@@ -52,7 +50,6 @@
     "typescript": ">=2.7.0 <4.0.0"
   },
   "devDependencies": {
-    "@types/arrify": "^1.0.4",
     "@types/babel__core": "^7.0.1",
     "@types/buffer-from": "^1.1.0",
     "@types/cross-spawn": "^6.0.0",
