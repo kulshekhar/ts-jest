@@ -33,13 +33,17 @@ describe('typeCheck', () => {
   it('should report diagnostics related to typings', () => {
     expect(() =>
       compiler.compile(
-        'const f = (v: number) => v\nconst t: string = f(5)',
+        `
+const f = (v: number) => v
+const t: string = f(5)
+const v: boolean = t
+`,
         '[eval].ts',
       ),
     ).toThrowErrorMatchingInlineSnapshot(`
 "⨯ Unable to compile TypeScript:
-[eval].ts(2,7): error TS2322: Type 'number' is not assignable to type 'string'.
-"
+[eval].ts(3,7): error TS2322: Type 'number' is not assignable to type 'string'.
+[eval].ts(4,7): error TS2322: Type 'string' is not assignable to type 'boolean'."
 `)
   })
 })

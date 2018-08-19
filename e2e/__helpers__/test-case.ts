@@ -6,6 +6,8 @@ import * as fs from 'fs-extra'
 import { RawSourceMap } from 'source-map'
 import { relativiseSourceRoot, extractSourceMaps } from './source-maps'
 import { SpawnSyncReturns } from 'child_process'
+import merge from 'lodash.merge'
+import { TsJestConfig } from '../../src/lib/types'
 
 const TEMPLATE_EXCLUDED_ITEMS = ['node_modules', 'package-lock.json']
 
@@ -133,6 +135,8 @@ export interface RunTestOptions {
   args?: string[]
   inject?: (() => any) | string
   writeIo?: boolean
+  jestConfig?: jest.ProjectConfig | any
+  tsJestConfig?: TsJestConfig | any
 }
 
 // tslint:disable-next-line:max-classes-per-file
@@ -253,6 +257,22 @@ export function run(name: string, options: RunTestOptions = {}): TestRunResult {
     cmdArgs.unshift(join(dir, 'node_modules', '.bin', 'jest'))
   }
 
+  // merge given config extend
+  if (options.jestConfig || options.tsJestConfig) {
+    let originalConfig: any = join(dir, 'jest.config.js')
+    if (fs.existsSync(originalConfig)) {
+      originalConfig = require(originalConfig)
+    } else {
+      originalConfig = require(join(dir, 'package.json')).jest || {}
+    }
+    cmdArgs.push('--config', JSON.stringify(merge(
+      {},
+      originalConfig,
+      options.jestConfig,
+      { globals: { 'ts-jest': options.tsJestConfig || {} } },
+    )))
+  }
+
   const cmd = cmdArgs.shift() as string
 
   // Add both process.env which is the standard and custom env variables
@@ -323,6 +343,10 @@ function prepareTest(
   // working directory is in the temp directory, different for each template name
   const caseWorkdir = join(Paths.e2eWorkDir, template, name)
   const templateDir = join(Paths.e2eWorkTemplatesDir, template)
+  // config utils
+  const configUtils = {
+    merge: (...objects: any[]) => merge({}, ...objects),
+  }
 
   // recreate the directory
   fs.removeSync(caseWorkdir)
@@ -347,7 +371,7 @@ function prepareTest(
   // copy source and test files
   const snapshotDirs: Record<string, 0> = Object.create(null)
   fs.copySync(sourceDir, caseWorkdir, {
-    filter: src => {
+    filter: (src, dest) => {
       const relPath = relative(sourceDir, src)
       const segments = relPath.split(sep)
       if (segments.includes('__snapshots__')) {
@@ -357,6 +381,18 @@ function prepareTest(
         }
         snapshotDirs[segments.join(sep)] = 0
         return false
+      } else if (relPath === 'jest.config.js') {
+        // extend base if it's a function
+        let baseConfig = {}
+        if (fs.existsSync(dest)) {
+          baseConfig = require(dest)
+        }
+        const mod = require(src)
+        if (typeof mod === 'function') {
+          fs.writeFileSync(dest, `module.exports = ${JSON.stringify(mod(baseConfig, configUtils))}`)
+          return false
+        }
+        return true
       } else {
         return true
       }
