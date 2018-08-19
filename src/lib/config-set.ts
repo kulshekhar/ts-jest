@@ -36,6 +36,13 @@ import { stringify } from './json'
 import { normalizeSlashes } from './normalize-slashes'
 import { createCompiler } from './compiler'
 
+interface ReadTsConfigResult {
+  // what we get from reading the config file if any, or inline options
+  input?: any
+  // parsed config with all resolved options
+  resolved: ParsedCommandLine
+}
+
 // this regex MUST match nothing, it's the goal ;-)
 export const MATCH_NOTHING = /a^/
 export const IGNORE_DIAGNOSTIC_CODES = [
@@ -49,21 +56,27 @@ const DEFAULT_COMPILER_OPTIONS = {
   inlineSources: true,
 }
 const FORCE_COMPILER_OPTIONS = {
+  // we handle sourcemaps this way and not another
   sourceMap: true,
   inlineSourceMap: false,
   inlineSources: true,
+  // we don't want to create declaration files
   declaration: false,
   noEmit: false,
   outDir: '$$ts-jest$$',
+  // commonjs + module interop should be compatible with every other setup
+  module: 'commonjs',
+  esModuleInterop: true,
+  // else istanbul related will be dropped
+  removeComments: false,
+  // to clear out else it's buggy
   out: undefined,
   outFile: undefined,
   composite: undefined,
   declarationDir: undefined,
   declarationMap: undefined,
   emitDeclarationOnly: undefined,
-  module: 'commonjs',
-  esModuleInterop: true,
-  removeComments: false,
+  sourceRoot: undefined,
 }
 
 const normalizeRegex = (
@@ -192,21 +205,32 @@ export class ConfigSet {
   }
 
   get typescript(): ParsedCommandLine {
+    return this._typescript.resolved
+  }
+
+  get tsconfig(): any {
+    return this._typescript.input
+  }
+
+  @Memoize()
+  private get _typescript(): ReadTsConfigResult {
     const {
       tsJest: { tsConfig },
     } = this
-    const config = this.readTsConfig(
+    const result = this.readTsConfig(
       tsConfig && tsConfig.kind === 'inline' ? tsConfig.value : undefined,
       tsConfig && tsConfig.kind === 'file' ? tsConfig.value : undefined,
       tsConfig == null,
     )
-    const configDiagnosticList = this.filterDiagnostics(config.errors)
+    // throw errors if any matching wanted diagnostics
+    const configDiagnosticList = this.filterDiagnostics(result.resolved.errors)
     if (configDiagnosticList.length) {
       throw this.createTsError(configDiagnosticList)
     }
-    return config
+    return result
   }
 
+  @Memoize()
   get babel(): BabelConfig | undefined {
     const {
       tsJest: { babelConfig },
@@ -369,14 +393,17 @@ export class ConfigSet {
     compilerOptions?: object,
     project?: string | null,
     noProject?: boolean | null,
-  ): ParsedCommandLine {
+  ): ReadTsConfigResult {
     let config = { compilerOptions: {} }
     let basePath = normalizeSlashes(this.cwd)
     let configFileName: string | undefined
     const ts = this.compilerModule
+    let input: any
 
-    // Read project configuration when available.
-    if (!noProject) {
+    if (noProject) {
+      input = { compilerOptions: { ...compilerOptions } }
+    } else {
+      // Read project configuration when available.
       configFileName = project
         ? normalizeSlashes(resolve(this.cwd, project))
         : ts.findConfigFile(normalizeSlashes(this.cwd), ts.sys.fileExists)
@@ -386,10 +413,19 @@ export class ConfigSet {
 
         // Return diagnostics.
         if (result.error) {
-          return { errors: [result.error], fileNames: [], options: {} }
+          return {
+            resolved: { errors: [result.error], fileNames: [], options: {} },
+          }
         }
 
         config = result.config
+        input = {
+          ...result.config,
+          compilerOptions: {
+            ...(result.config && result.config.compilerOptions),
+            ...compilerOptions,
+          },
+        }
         basePath = normalizeSlashes(dirname(configFileName))
       }
     }
@@ -415,7 +451,14 @@ export class ConfigSet {
       result.options.target = ts.ScriptTarget.ES5
     }
 
-    return result
+    // ensure undefined in FORCE_COMPILER_OPTIONS are removed
+    for (const key in FORCE_COMPILER_OPTIONS) {
+      if ((FORCE_COMPILER_OPTIONS as any)[key] === undefined) {
+        delete result.options[key]
+      }
+    }
+
+    return { input, resolved: result }
   }
 
   resolvePath(inputPath: string, noFailIfMissing: boolean = false): string {
@@ -439,7 +482,7 @@ export class ConfigSet {
       jest: this.jest,
       tsJest: this.tsJest,
       babel: this.babel,
-      typescript: this.typescript,
+      tsconfig: this.tsconfig,
     })
   }
 

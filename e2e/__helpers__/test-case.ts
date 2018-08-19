@@ -3,6 +3,8 @@ import { sync as spawnSync } from 'cross-spawn'
 import { join, relative, sep } from 'path'
 import * as Paths from '../../scripts/paths'
 import * as fs from 'fs-extra'
+import { RawSourceMap } from 'source-map'
+import { relativiseSourceRoot, extractSourceMaps } from './source-maps'
 
 const TEMPLATE_EXCLUDED_ITEMS = ['node_modules', 'package-lock.json']
 
@@ -79,7 +81,7 @@ class TestCaseRunDescriptor {
     if (logUnlessStatus != null && logUnlessStatus !== result.status) {
       console.log(
         `Output of test run in "${this.name}" using template "${
-          this.templateName
+        this.templateName
         }" (exit code: ${result.status}):\n\n`,
         result.output.trim(),
       )
@@ -147,8 +149,9 @@ export interface TestRunResult {
 }
 interface TestFileIoData {
   in: [string, jest.Path, jest.ProjectConfig, jest.TransformOptions?]
-  // out: string | jest.TransformedSource;
   out: string
+  outNormalized: string
+  outSourceMaps: RawSourceMap
 }
 
 // tslint:disable-next-line:interface-over-type-literal
@@ -292,10 +295,18 @@ export function run(name: string, options: RunTestOptions = {}): TestRunResult {
   }
   if (writeIo) {
     Object.defineProperty(res, 'ioDataFor', {
-      value: (relPath: string) => require(`${ioDir}/${relPath}.json`),
+      value: (relPath: string) => wrapIoData(require(`${ioDir}/${relPath}.json`), dir),
     })
   }
   return res as any
+}
+
+function wrapIoData(ioData: TestFileIoData, rootDir: string): TestFileIoData {
+  const res: TestFileIoData = { ...ioData }
+  return Object.defineProperties(res, {
+    outNormalized: { get: () => relativiseSourceRoot(rootDir, ioData.out, '<cwd>/') },
+    outSourceMaps: { get: () => extractSourceMaps(ioData.out) },
+  })
 }
 
 // from https://stackoverflow.com/questions/25245716/remove-all-ansi-colors-styles-from-strings

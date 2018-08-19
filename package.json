@@ -75,6 +75,7 @@
     "prettier-tslint": "^0.4.0",
     "reflect-metadata": "^0.1.12",
     "semver": "^5.5.1",
+    "source-map": "^0.7.3",
     "tslint": "^5.11.0",
     "typescript": "^3.0.1"
   },

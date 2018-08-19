@@ -2,7 +2,8 @@ import { TsJestGlobalOptions } from './types'
 import { ConfigSet } from './config-set'
 import * as fakers from '../__helpers__/fakers'
 import { createCompiler } from './compiler'
-import outdent from 'outdent'
+import { extractSourceMaps } from '../__helpers__/source-maps'
+import { relativeToRoot } from '../__helpers__/path'
 
 // not really unit-testing here, but it's hard to mock all those values :-D
 
@@ -37,11 +38,22 @@ describe('typeCheck', () => {
       ),
     ).toThrowErrorMatchingInlineSnapshot(`
 "⨯ Unable to compile TypeScript:
-error TS5052: Option 'declarationDir' cannot be specified without specifying option 'declaration'.
-error TS5053: Option 'declarationDir' cannot be specified with option 'outFile'.
-error TS6082: Only 'amd' and 'system' modules are supported alongside --outFile.
 [eval].ts(2,7): error TS2322: Type 'number' is not assignable to type 'string'.
 "
 `)
+  })
+})
+
+describe('source-maps', () => {
+  const compiler = makeCompiler()
+  it('should report diagnostics related to typings', () => {
+    const source = 'const f = (v: number) => v\nconst t: number = f(5)'
+    const compiled = compiler.compile(source, __filename)
+    const expectedFileName = relativeToRoot(__filename)
+    expect(extractSourceMaps(compiled)).toMatchObject({
+      file: expectedFileName,
+      sources: [expectedFileName],
+      sourcesContent: [source],
+    })
   })
 })

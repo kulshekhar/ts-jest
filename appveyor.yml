@@ -1,7 +1,7 @@
 # http://www.appveyor.com/docs/appveyor-yml
 init:
-- ps: IF ($env:APPVEYOR_REPO_COMMIT_MESSAGE -Match "\[clear ci-cache\]" ) {$env:APPVEYOR_CACHE_SKIP_RESTORE = "true"}
-- ps: IF ($env:APPVEYOR_REPO_COMMIT_MESSAGE_EXTENDED -Match "\[clear ci-cache\]") {$env:APPVEYOR_CACHE_SKIP_RESTORE = "true"}
+- ps: IF ($env:APPVEYOR_REPO_COMMIT_MESSAGE -Match "\[clean ci-cache\]" ) {$env:APPVEYOR_CACHE_SKIP_RESTORE = "true"}
+- ps: IF ($env:APPVEYOR_REPO_COMMIT_MESSAGE_EXTENDED -Match "\[clean ci-cache\]") {$env:APPVEYOR_CACHE_SKIP_RESTORE = "true"}
 
 # Test against these versions of Node.js.
 environment:
@@ -20,6 +20,7 @@ install:
   - set TS_JEST_E2E_WORKDIR=%APPDATA%\ts-jest-e2e
   - npm version
   - npm ci || npm install
+  - npm run clean -- --when-ci-commit-message
 
 cache:
   - '%APPDATA%\npm-cache -> package.json'

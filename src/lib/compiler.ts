@@ -214,7 +214,13 @@ export function createCompiler(configs: ConfigSet): TsCompiler {
     }
   }
 
-  const compile = readThrough(cachedir, memoryCache, getOutput, getExtension)
+  const compile = readThrough(
+    cachedir,
+    memoryCache,
+    getOutput,
+    getExtension,
+    cwd,
+  )
   return { cwd, compile, getTypeInfo, extensions, cachedir, ts }
 }
 
@@ -235,13 +241,14 @@ function readThrough(
     lineOffset?: number,
   ) => SourceOutput,
   getExtension: (fileName: string) => string,
+  cwd: string,
 ) {
   if (!cachedir) {
     return (code: string, fileName: string, lineOffset?: number) => {
       debug('readThrough', fileName)
 
       const [value, sourceMap] = compile(code, fileName, lineOffset)
-      const output = updateOutput(value, fileName, sourceMap, getExtension)
+      const output = updateOutput(value, fileName, sourceMap, getExtension, cwd)
 
       memoryCache.outputs[fileName] = output
 
@@ -270,7 +277,7 @@ function readThrough(
     }
 
     const [value, sourceMap] = compile(code, fileName, lineOffset)
-    const output = updateOutput(value, fileName, sourceMap, getExtension)
+    const output = updateOutput(value, fileName, sourceMap, getExtension, cwd)
 
     memoryCache.outputs[fileName] = output
     writeFileSync(outputPath, output)
@@ -287,14 +294,16 @@ function updateOutput(
   fileName: string,
   sourceMap: string,
   getExtension: (fileName: string) => string,
+  sourceRoot: string,
 ) {
+  const base = basename(fileName)
   const base64Map = bufferFrom(
-    updateSourceMap(sourceMap, fileName),
+    updateSourceMap(sourceMap, fileName, sourceRoot),
     'utf8',
   ).toString('base64')
   const sourceMapContent = `data:application/json;charset=utf-8;base64,${base64Map}`
   const sourceMapLength =
-    `${basename(fileName)}.map`.length +
+    `${base}.map`.length +
     (getExtension(fileName).length - extname(fileName).length)
 
   return outputText.slice(0, -sourceMapLength) + sourceMapContent
@@ -303,11 +312,16 @@ function updateOutput(
 /**
  * Update the source map contents for improved output.
  */
-function updateSourceMap(sourceMapText: string, fileName: string) {
+function updateSourceMap(
+  sourceMapText: string,
+  fileName: string,
+  sourceRoot: string,
+) {
   const sourceMap = JSON.parse(sourceMapText)
-  sourceMap.file = fileName
-  sourceMap.sources = [fileName]
-  delete sourceMap.sourceRoot
+  const relativeFilePath = relative(sourceRoot, fileName)
+  sourceMap.file = relativeFilePath
+  sourceMap.sources = [relativeFilePath]
+  sourceMap.sourceRoot = sourceRoot
   return stableStringify(sourceMap)
 }
 
