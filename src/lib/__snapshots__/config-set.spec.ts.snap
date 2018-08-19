@@ -35,7 +35,7 @@ Object {
     "kind": "file",
     "value": undefined,
   },
-  "typeCheck": null,
-  "version": "23.2.0",
+  "typeCheck": false,
+  "version": "X.Y.Z",
 }
 `;

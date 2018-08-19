@@ -1,8 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`using template "default" should have the soure mpas comment 1`] = `
+exports[`using template "default" should have the source mpas comment 1`] = `
 "\\"use strict\\";
-exports.__esModule = true;
+Object.defineProperty(exports, \\"__esModule\\", { value: true });
 function consoleLog() {
     console.log('WITHIN SOURCE');
 }
@@ -11,7 +11,7 @@ function throwError() {
     throw new Error('WITHIN SOURCE');
 }
 exports.throwError = throwError;
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoibWFpbi5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIm1haW4udHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7QUFBQTtJQUNFLE9BQU8sQ0FBQyxHQUFHLENBQUMsZUFBZSxDQUFDLENBQUM7QUFDL0IsQ0FBQztBQUZELGdDQUVDO0FBRUQ7SUFDRSxNQUFNLElBQUksS0FBSyxDQUFDLGVBQWUsQ0FBQyxDQUFDO0FBQ25DLENBQUM7QUFGRCxnQ0FFQyJ9"
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoiL3ByaXZhdGUvdmFyL2ZvbGRlcnMvZHIvZHlnM192MzEzempmcHE4MndkXzRiMGxyMDAwMGduL1QvLS10cy1qZXN0LXRlbXAtZTJlLS0vZGVmYXVsdC9zb3VyY2UtbWFwcy9tYWluLnRzIiwibWFwcGluZ3MiOiI7O0FBQUE7SUFDRSxPQUFPLENBQUMsR0FBRyxDQUFDLGVBQWUsQ0FBQyxDQUFDO0FBQy9CLENBQUM7QUFGRCxnQ0FFQztBQUVEO0lBQ0UsTUFBTSxJQUFJLEtBQUssQ0FBQyxlQUFlLENBQUMsQ0FBQztBQUNuQyxDQUFDO0FBRkQsZ0NBRUMiLCJuYW1lcyI6W10sInNvdXJjZXMiOlsiL3ByaXZhdGUvdmFyL2ZvbGRlcnMvZHIvZHlnM192MzEzempmcHE4MndkXzRiMGxyMDAwMGduL1QvLS10cy1qZXN0LXRlbXAtZTJlLS0vZGVmYXVsdC9zb3VyY2UtbWFwcy9tYWluLnRzIl0sInNvdXJjZXNDb250ZW50IjpbImV4cG9ydCBmdW5jdGlvbiBjb25zb2xlTG9nKCkge1xuICBjb25zb2xlLmxvZygnV0lUSElOIFNPVVJDRScpO1xufVxuXG5leHBvcnQgZnVuY3Rpb24gdGhyb3dFcnJvcigpIHtcbiAgdGhyb3cgbmV3IEVycm9yKCdXSVRISU4gU09VUkNFJyk7XG59XG4iXSwidmVyc2lvbiI6M30="
 `;
 
 exports[`using template "default" should report correct line numbers 1`] = `
@@ -67,10 +67,10 @@ jest exit code: 1
   ================================================================================
 `;
 
-exports[`using template "with-babel-6" should have the soure mpas comment 1`] = `
+exports[`using template "with-babel-6" should have the source mpas comment 1`] = `
 "\\"use strict\\";
 
-exports.__esModule = true;
+Object.defineProperty(exports, \\"__esModule\\", { value: true });
 function consoleLog() {
     console.log('WITHIN SOURCE');
 }
@@ -79,7 +79,7 @@ function throwError() {
     throw new Error('WITHIN SOURCE');
 }
 exports.throwError = throwError;
-//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIm1haW4udHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7O0FBQUEsU0FBQSxVQUFBLEdBQUE7QUFDRSxZQUFRLEdBQVIsQ0FBWSxlQUFaO0FBQ0Q7QUFGRCxRQUFBLFVBQUEsR0FBQSxVQUFBO0FBSUEsU0FBQSxVQUFBLEdBQUE7QUFDRSxVQUFNLElBQUksS0FBSixDQUFVLGVBQVYsQ0FBTjtBQUNEO0FBRkQsUUFBQSxVQUFBLEdBQUEsVUFBQSIsInNvdXJjZVJvb3QiOiIifQ=="
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi9wcml2YXRlL3Zhci9mb2xkZXJzL2RyL2R5ZzNfdjMxM3pqZnBxODJ3ZF80YjBscjAwMDBnbi9ULy0tdHMtamVzdC10ZW1wLWUyZS0tL3dpdGgtYmFiZWwtNi9zb3VyY2UtbWFwcy9tYWluLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7OztBQUFBLFNBQUEsVUFBQSxHQUFBO0FBQ0UsWUFBUSxHQUFSLENBQVksZUFBWjtBQUNEO0FBRkQsUUFBQSxVQUFBLEdBQUEsVUFBQTtBQUlBLFNBQUEsVUFBQSxHQUFBO0FBQ0UsVUFBTSxJQUFJLEtBQUosQ0FBVSxlQUFWLENBQU47QUFDRDtBQUZELFFBQUEsVUFBQSxHQUFBLFVBQUEiLCJzb3VyY2VzQ29udGVudCI6WyJleHBvcnQgZnVuY3Rpb24gY29uc29sZUxvZygpIHtcbiAgY29uc29sZS5sb2coJ1dJVEhJTiBTT1VSQ0UnKTtcbn1cblxuZXhwb3J0IGZ1bmN0aW9uIHRocm93RXJyb3IoKSB7XG4gIHRocm93IG5ldyBFcnJvcignV0lUSElOIFNPVVJDRScpO1xufVxuIl19"
 `;
 
 exports[`using template "with-babel-6" should report correct line numbers 1`] = `
@@ -135,10 +135,12 @@ jest exit code: 1
   ================================================================================
 `;
 
-exports[`using template "with-babel-7" should have the soure mpas comment 1`] = `
+exports[`using template "with-babel-7" should have the source mpas comment 1`] = `
 "\\"use strict\\";
 
-exports.__esModule = true;
+Object.defineProperty(exports, \\"__esModule\\", {
+  value: true
+});
 
 function consoleLog() {
   console.log('WITHIN SOURCE');
@@ -151,7 +153,7 @@ function throwError() {
 }
 
 exports.throwError = throwError;
-//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIm1haW4udHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7OztBQUFBLFNBQUEsVUFBQSxHQUFBO0FBQ0UsRUFBQSxPQUFPLENBQUMsR0FBUixDQUFZLGVBQVo7QUFDRDs7QUFGRCxPQUFBLENBQUEsVUFBQSxHQUFBLFVBQUE7O0FBSUEsU0FBQSxVQUFBLEdBQUE7QUFDRSxRQUFNLElBQUksS0FBSixDQUFVLGVBQVYsQ0FBTjtBQUNEOztBQUZELE9BQUEsQ0FBQSxVQUFBLEdBQUEsVUFBQSIsInNvdXJjZVJvb3QiOiIifQ=="
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi9wcml2YXRlL3Zhci9mb2xkZXJzL2RyL2R5ZzNfdjMxM3pqZnBxODJ3ZF80YjBscjAwMDBnbi9ULy0tdHMtamVzdC10ZW1wLWUyZS0tL3dpdGgtYmFiZWwtNy9zb3VyY2UtbWFwcy9tYWluLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7Ozs7OztBQUFBLFNBQUEsVUFBQSxHQUFBO0FBQ0UsRUFBQSxPQUFPLENBQUMsR0FBUixDQUFZLGVBQVo7QUFDRDs7QUFGRCxPQUFBLENBQUEsVUFBQSxHQUFBLFVBQUE7O0FBSUEsU0FBQSxVQUFBLEdBQUE7QUFDRSxRQUFNLElBQUksS0FBSixDQUFVLGVBQVYsQ0FBTjtBQUNEOztBQUZELE9BQUEsQ0FBQSxVQUFBLEdBQUEsVUFBQSIsInNvdXJjZXNDb250ZW50IjpbImV4cG9ydCBmdW5jdGlvbiBjb25zb2xlTG9nKCkge1xuICBjb25zb2xlLmxvZygnV0lUSElOIFNPVVJDRScpO1xufVxuXG5leHBvcnQgZnVuY3Rpb24gdGhyb3dFcnJvcigpIHtcbiAgdGhyb3cgbmV3IEVycm9yKCdXSVRISU4gU09VUkNFJyk7XG59XG4iXX0="
 `;
 
 exports[`using template "with-babel-7" should report correct line numbers 1`] = `
@@ -207,9 +209,9 @@ jest exit code: 1
   ================================================================================
 `;
 
-exports[`using template "with-jest-22" should have the soure mpas comment 1`] = `
+exports[`using template "with-jest-22" should have the source mpas comment 1`] = `
 "\\"use strict\\";
-exports.__esModule = true;
+Object.defineProperty(exports, \\"__esModule\\", { value: true });
 function consoleLog() {
     console.log('WITHIN SOURCE');
 }
@@ -218,7 +220,7 @@ function throwError() {
     throw new Error('WITHIN SOURCE');
 }
 exports.throwError = throwError;
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoibWFpbi5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIm1haW4udHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7QUFBQTtJQUNFLE9BQU8sQ0FBQyxHQUFHLENBQUMsZUFBZSxDQUFDLENBQUM7QUFDL0IsQ0FBQztBQUZELGdDQUVDO0FBRUQ7SUFDRSxNQUFNLElBQUksS0FBSyxDQUFDLGVBQWUsQ0FBQyxDQUFDO0FBQ25DLENBQUM7QUFGRCxnQ0FFQyJ9"
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoiL3ByaXZhdGUvdmFyL2ZvbGRlcnMvZHIvZHlnM192MzEzempmcHE4MndkXzRiMGxyMDAwMGduL1QvLS10cy1qZXN0LXRlbXAtZTJlLS0vd2l0aC1qZXN0LTIyL3NvdXJjZS1tYXBzL21haW4udHMiLCJtYXBwaW5ncyI6Ijs7QUFBQTtJQUNFLE9BQU8sQ0FBQyxHQUFHLENBQUMsZUFBZSxDQUFDLENBQUM7QUFDL0IsQ0FBQztBQUZELGdDQUVDO0FBRUQ7SUFDRSxNQUFNLElBQUksS0FBSyxDQUFDLGVBQWUsQ0FBQyxDQUFDO0FBQ25DLENBQUM7QUFGRCxnQ0FFQyIsIm5hbWVzIjpbXSwic291cmNlcyI6WyIvcHJpdmF0ZS92YXIvZm9sZGVycy9kci9keWczX3YzMTN6amZwcTgyd2RfNGIwbHIwMDAwZ24vVC8tLXRzLWplc3QtdGVtcC1lMmUtLS93aXRoLWplc3QtMjIvc291cmNlLW1hcHMvbWFpbi50cyJdLCJzb3VyY2VzQ29udGVudCI6WyJleHBvcnQgZnVuY3Rpb24gY29uc29sZUxvZygpIHtcbiAgY29uc29sZS5sb2coJ1dJVEhJTiBTT1VSQ0UnKTtcbn1cblxuZXhwb3J0IGZ1bmN0aW9uIHRocm93RXJyb3IoKSB7XG4gIHRocm93IG5ldyBFcnJvcignV0lUSElOIFNPVVJDRScpO1xufVxuIl0sInZlcnNpb24iOjN9"
 `;
 
 exports[`using template "with-jest-22" should report correct line numbers 1`] = `

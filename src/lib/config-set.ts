@@ -1,3 +1,12 @@
+/**
+ * This is the core of settings and ts-jest.
+ * Since configuration are used to create a good cache key so that jest can be fast,
+ * everything depending on it is here.
+ *
+ * The big issue with jest is that it calls first `getCacheKey()` with stringified version
+ * of the `jest.ProjectConfig`, and then later it calls `process()` with the complete,
+ * object version of it.
+ */
 import { JsonableValue } from './jsonable-value'
 import {
   BabelConfig,
@@ -12,7 +21,6 @@ import { resolve, isAbsolute, join, dirname } from 'path'
 import { Memoize } from './memoize'
 import { backportJestConfig } from './backports'
 import { Errors, ImportReasons, interpolate } from './messages'
-import arrify from 'arrify'
 import yn = require('yn')
 import json5 from 'json5'
 import { existsSync, readFileSync } from 'fs'
@@ -28,6 +36,14 @@ import { sha1 } from './sha1'
 import { stringify } from './json'
 import { normalizeSlashes } from './normalize-slashes'
 import { createCompiler } from './compiler'
+
+// this regex MUST match nothing, it's the goal ;-)
+export const MATCH_NOTHING = /a^/
+export const IGNORE_DIAGNOSTIC_CODES = [
+  6059, // "'rootDir' is expected to contain all source files."
+  18002, // "The 'files' list in config file is empty."
+  18003, // "No inputs were found in config file."
+]
 
 const DEFAULT_COMPILER_OPTIONS = {
   inlineSourceMap: true,
@@ -49,6 +65,16 @@ const FORCE_COMPILER_OPTIONS = {
   module: 'commonjs',
   esModuleInterop: true,
   removeComments: false,
+}
+
+const normalizeRegex = (
+  pattern: string | RegExp | undefined,
+): string | undefined => {
+  return pattern
+    ? typeof pattern === 'string'
+      ? pattern
+      : pattern.source
+    : undefined
 }
 
 export class ConfigSet {
@@ -126,31 +152,33 @@ export class ConfigSet {
       diagnostics = {
         pretty: true,
         ignoreCodes: [],
-        pathRegex: 'a^', // matches nothing
+        pathRegex: MATCH_NOTHING.source, // matches nothing
       }
     } else {
+      let ignoreCodes: any[] = []
+      if (diagnosticsOpt.ignoreCodes) {
+        ignoreCodes = Array.isArray(diagnosticsOpt.ignoreCodes)
+          ? diagnosticsOpt.ignoreCodes
+          : `${diagnosticsOpt.ignoreCodes}`.trim().split(/\s*,\s*/g)
+      }
+
       diagnostics = {
-        pretty: yn(diagnosticsOpt, { default: true }),
-        ignoreCodes: arrify(diagnosticsOpt.ignoreCodes).map(n =>
-          parseInt(n as string, 10),
-        ),
-        pathRegex: diagnosticsOpt.pathRegex
-          ? diagnosticsOpt.pathRegex.toString()
-          : undefined,
+        pretty: yn(diagnosticsOpt.pretty, { default: true }),
+        ignoreCodes: ignoreCodes.map(Number),
+        pathRegex: normalizeRegex(diagnosticsOpt.pathRegex),
       }
     }
-    diagnostics.ignoreCodes = diagnostics.ignoreCodes
-      .concat([
-        6059, // "'rootDir' is expected to contain all source files."
-        18002, // "The 'files' list in config file is empty."
-        18003, // "No inputs were found in config file."
-      ])
-      .filter((code, index, list) => list.indexOf(code) === index)
+    diagnostics.ignoreCodes = IGNORE_DIAGNOSTIC_CODES.concat(
+      diagnostics.ignoreCodes,
+    ).filter(
+      (code, index, list) =>
+        code && !isNaN(code) && list.indexOf(code) === index,
+    )
 
     // stringifyContentPathRegex option
-    const stringifyContentPathRegex = options.stringifyContentPathRegex
-      ? options.stringifyContentPathRegex.toString()
-      : undefined
+    const stringifyContentPathRegex = normalizeRegex(
+      options.stringifyContentPathRegex,
+    )
 
     // parsed options
     return {
@@ -158,7 +186,7 @@ export class ConfigSet {
       tsConfig,
       babelConfig,
       diagnostics,
-      typeCheck: yn(options),
+      typeCheck: yn(options.typeCheck, { default: false }),
       compiler: options.compiler || 'typescript',
       stringifyContentPathRegex,
     }
@@ -196,16 +224,23 @@ export class ConfigSet {
     } else if (babelConfig.kind === 'inline') {
       base = { ...base, ...babelConfig.value }
     }
+
     // loadOptions is from babel 7+, and OptionManager is backward compatible but deprecated 6 API
-    const { OptionManager, loadOptions } = importer.babelCore(
+    const { OptionManager, loadOptions, version } = importer.babelCore(
       ImportReasons.babelJest,
     )
+    // cwd is only supported from babel >= 7
+    if (parseInt(version.split('.').shift() as string, 10) < 7) {
+      delete base.cwd
+    }
+    // call babel to load options
     let config: BabelConfig
     if (typeof loadOptions === 'function') {
       config = loadOptions(base) as BabelConfig
     } else {
       config = new OptionManager().init(base) as BabelConfig
     }
+
     return config
   }
 
@@ -409,7 +444,6 @@ export class ConfigSet {
     })
   }
 
-  @Memoize()
   get cacheKey(): string {
     return this.jsonValue.serialized
   }

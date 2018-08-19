@@ -15,7 +15,7 @@ testCase.runWithTemplates(allPackageSets, 1, (runTest, { templateName }) => {
 
     // when there are some issues with debugging, it's usually becasue source mpas are not inlined
     // and the debugger cannot find the line where to go
-    it(`should have the soure mpas comment`, () => {
+    it(`should have the source mpas comment`, () => {
       expect(result.ioDataFor('main.ts').out).toMatchSnapshot()
     })
   })

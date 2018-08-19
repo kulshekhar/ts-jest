@@ -61,7 +61,7 @@ function memoize(
     return res
   }
 }
-
+/* tslint:disable:unified-signatures */
 export function clearCache<T extends { [cacheProp]: any }>(target: T): void
 export function clearCache<T extends { [cacheProp]: any }>(
   target: T,

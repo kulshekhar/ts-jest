@@ -1,3 +1,4 @@
-const createJestPreset = require('./dist/utils/create-jest-preset').default;
+const createJestPreset = require('./dist/lib/create-jest-preset')
+  .createJestPreset
 
-module.exports = createJestPreset();
+module.exports = createJestPreset()
