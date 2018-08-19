@@ -29,7 +29,6 @@ import {
   FormatDiagnosticsHost,
   ParsedCommandLine,
 } from 'typescript'
-import { EOL } from 'os'
 import { TSError } from './ts-error'
 import { sha1 } from './sha1'
 import { stringify } from './json'
@@ -354,7 +353,7 @@ export class ConfigSet {
       : this.compilerModule.formatDiagnostics
 
     const diagnosticHost: FormatDiagnosticsHost = {
-      getNewLine: () => EOL,
+      getNewLine: () => '\n',
       getCurrentDirectory: () => this.cwd,
       getCanonicalFileName: path => path,
     }

@@ -30,7 +30,6 @@
 
 import { relative, basename, extname, join } from 'path'
 import { readFileSync, writeFileSync } from 'fs'
-import { EOL } from 'os'
 import mkdirp = require('mkdirp')
 import bufferFrom from 'buffer-from'
 import stableStringify = require('fast-json-stable-stringify')
@@ -160,7 +159,7 @@ export function createCompiler(configs: ConfigSet): TsCompiler {
       readDirectory: wrapWithDebug('readDirectory', ts.sys.readDirectory),
       getDirectories: wrapWithDebug('getDirectories', ts.sys.getDirectories),
       directoryExists: wrapWithDebug('directoryExists', ts.sys.directoryExists),
-      getNewLine: () => EOL,
+      getNewLine: () => '\n',
       getCurrentDirectory: () => cwd,
       getCompilationSettings: () => compilerOptions,
       getDefaultLibFileName: () => ts.getDefaultLibFilePath(compilerOptions),
