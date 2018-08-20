@@ -6,11 +6,12 @@ import {
   PACKAGE_JSON,
   BABEL_CONFIG_KEY,
 } from './constants';
+import { parse } from 'json5';
 
 const babelReaders = [
   {
     basename: BABELRC_FILENAME,
-    read: f => JSON.parse(readFileSync(f, 'utf8')),
+    read: f => parse(readFileSync(f, 'utf8')),
   },
   { basename: BABELRC_JS_FILENAME, read: f => require(f) },
   { basename: PACKAGE_JSON, read: f => require(f)[BABEL_CONFIG_KEY] },
