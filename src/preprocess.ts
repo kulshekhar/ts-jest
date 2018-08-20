@@ -42,7 +42,11 @@ export default function preprocess(
 
   // We can potentially do this faster by using the language service.
   // See https://github.com/TypeStrong/ts-node/blob/master/src/index.ts#L268
-  if (tsJestConfig.enableTsDiagnostics) {
+  if (
+    tsJestConfig.enableTsDiagnostics === true ||
+    (typeof tsJestConfig.enableTsDiagnostics === 'string' &&
+      new RegExp(tsJestConfig.enableTsDiagnostics).test(filePath))
+  ) {
     runTsDiagnostics(filePath, compilerOptions);
   }
 

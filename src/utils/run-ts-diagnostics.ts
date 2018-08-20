@@ -10,7 +10,10 @@ export default function runTsDiagnostics(
   compilerOptions: CompilerOptions,
 ): void {
   const program = createProgram([filePath], compilerOptions);
-  const allDiagnostics = getPreEmitDiagnostics(program);
+  const allDiagnostics = getPreEmitDiagnostics(
+    program,
+    program.getSourceFile(filePath),
+  );
 
   if (allDiagnostics.length) {
     throw new Error(formatTsDiagnostics(allDiagnostics));
