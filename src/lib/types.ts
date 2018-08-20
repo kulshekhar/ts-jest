@@ -96,7 +96,6 @@ type TsJestConfig$babelConfig =
 type TsJestConfig$stringifyContentPathRegex = string | undefined
 
 export interface TsJestConfig {
-  version: string
   tsConfig: TsJestConfig$tsConfig
   typeCheck: boolean
   compiler: string

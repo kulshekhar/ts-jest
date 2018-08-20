@@ -1,13 +1,18 @@
 import { TsJestTransformer } from './lib/ts-jest-transformer'
 import { createJestPreset } from './lib/create-jest-preset'
 import { TsJestGlobalOptions } from './lib/types'
+import { VersionCheckers } from './lib/version-checkers'
+
+// tslint:disable-next-line:no-var-requires
+const version: string = require('../package.json').version
 
 let transformer!: TsJestTransformer
 function defaultTransformer(): TsJestTransformer {
-  return transformer || (transformer = new TsJestTransformer())
+  return transformer || (transformer = createTransformer())
 }
 
 function createTransformer(baseConfig?: TsJestGlobalOptions) {
+  VersionCheckers.jest.warn()
   return new TsJestTransformer(baseConfig)
 }
 function tsProcess(...args: any[]): any {
@@ -26,14 +31,15 @@ const __singleton = () => transformer
 const __resetModule = () => (transformer = undefined as any)
 
 export {
-  // jest API
+  version,
+  // jest API ===============
   createTransformer,
   tsProcess as process,
   getCacheKey,
-  // extra
+  // extra ==================
   createJestPreset,
   jestPreset,
-  // tests
+  // tests ==================
   __singleton,
   __resetModule,
 }

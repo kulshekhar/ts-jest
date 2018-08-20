@@ -32,7 +32,8 @@
     "quotemark": [
       true,
       "single",
-      "jsx-double"
+      "jsx-double",
+      "avoid-escape"
     ],
     "semicolon": [
       true,
@@ -44,6 +45,10 @@
     ],
     "ordered-imports": false,
     "align": false,
+    "object-literal-key-quotes": [
+      true,
+      "as-needed"
+    ],
     "object-literal-sort-keys": false,
     "no-console": [
       true,

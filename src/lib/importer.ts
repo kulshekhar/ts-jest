@@ -8,9 +8,7 @@ import {
 } from './types'
 import * as hacks from './hacks'
 import { ImportReasons, Errors, interpolate, Helps } from './messages'
-
-const importDefault = (mod: any) =>
-  mod && mod.__esModule ? mod : { default: mod }
+import { VersionCheckers } from './version-checkers'
 
 // When ading an optional dependency which has another reason, add the reason in ImportReasons, and
 // create a new method in Importer. Thus uses the importer.yourMethod(ImportReasons.TheReason)
@@ -22,6 +20,11 @@ interface ImportOptions {
   installTip?: string | Array<{ module: string; label: string }>
 }
 
+const passThru = (action: () => void) => (input: any) => {
+  action()
+  return input
+}
+
 export class Importer implements TsJestImporter {
   @Memoize()
   static get instance() {
@@ -29,7 +32,14 @@ export class Importer implements TsJestImporter {
     // it could be fixes that are not deployed, or
     // abstractions so that multiple versions work the same
     return new Importer({
-      'babel-core': [hacks.patchBabelCore_githubIssue6577],
+      'babel-core': [
+        passThru(VersionCheckers.babelCoreLegacy.warn),
+        hacks.patchBabelCore_githubIssue6577,
+      ],
+      '@babel/core': [passThru(VersionCheckers.babelCore.warn)],
+      'babel-jest': [passThru(VersionCheckers.babelJest.warn)],
+      typescript: [passThru(VersionCheckers.typescript.warn)],
+      jest: [passThru(VersionCheckers.jest.warn)],
     })
   }
 

@@ -1,4 +1,5 @@
 import { TBabelCore, ModulePatcher, BabelConfig } from './types'
+import semver from 'semver'
 
 // tslint:disable-next-line:variable-name
 export const patchBabelCore_githubIssue6577: ModulePatcher<
@@ -10,7 +11,7 @@ export const patchBabelCore_githubIssue6577: ModulePatcher<
   // source-maps not being inlined
   if (
     typeof babel.version === 'string' &&
-    parseInt(babel.version.split('.')[0], 10) === 6
+    semver.satisfies(babel.version, '>=6 <7')
   ) {
     try {
       const File = require('babel-core/lib/transformation/file').File

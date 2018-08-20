@@ -8,7 +8,6 @@ import { resolve } from 'path'
 import { normalizeSlashes } from './normalize-slashes'
 
 jest.mock('./backports')
-jest.mock('../../package.json', () => ({ version: 'X.Y.Z' }))
 
 const backports = mocked(_backports)
 

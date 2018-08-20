@@ -36,6 +36,5 @@ Object {
     "value": undefined,
   },
   "typeCheck": false,
-  "version": "X.Y.Z",
 }
 `;

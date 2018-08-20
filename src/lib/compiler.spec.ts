@@ -86,7 +86,7 @@ describe('cache', () => {
     expect(logger).toHaveBeenCalledTimes(1)
     expect(logger).toHaveBeenCalledWith(
       'log',
-      'ts-jest',
+      'ts-jest:',
       'readThrough:cache-miss',
       __filename,
     )
@@ -96,7 +96,7 @@ describe('cache', () => {
     expect(logger).toHaveBeenCalledTimes(1)
     expect(logger).toHaveBeenCalledWith(
       'log',
-      'ts-jest',
+      'ts-jest:',
       'readThrough:cache-hit',
       __filename,
     )

@@ -1,11 +1,12 @@
 /**
- * This is the core of settings and ts-jest.
- * Since configuration are used to create a good cache key so that jest can be fast,
- * everything depending on it is here.
+ * This is the core of settings and so ts-jest.
+ * Since configuration are used to create a good cache key, everything
+ * depending on it is here. Fast jest relies on correct cache keys
+ * depending on all settings that could affect the generated output.
  *
- * The big issue with jest is that it calls first `getCacheKey()` with stringified version
- * of the `jest.ProjectConfig`, and then later it calls `process()` with the complete,
- * object version of it.
+ * The big issue is that jest calls first `getCacheKey()` with stringified
+ * version of the `jest.ProjectConfig`, and then later it calls `process()`
+ * with the complete, object version of it.
  */
 import { JsonableValue } from './jsonable-value'
 import {
@@ -34,6 +35,8 @@ import { sha1 } from './sha1'
 import { stringify } from './json'
 import { normalizeSlashes } from './normalize-slashes'
 import { createCompiler } from './compiler'
+import { version as myVersion } from '..'
+import semver from 'semver'
 
 interface ReadTsConfigResult {
   // what we get from reading the config file if any, or inline options
@@ -193,7 +196,6 @@ export class ConfigSet {
 
     // parsed options
     return {
-      version: require('../../package.json').version,
       tsConfig,
       babelConfig,
       diagnostics,
@@ -249,10 +251,10 @@ export class ConfigSet {
 
     // loadOptions is from babel 7+, and OptionManager is backward compatible but deprecated 6 API
     const { OptionManager, loadOptions, version } = importer.babelCore(
-      ImportReasons.babelJest,
+      ImportReasons.BabelJest,
     )
     // cwd is only supported from babel >= 7
-    if (parseInt(version.split('.').shift() as string, 10) < 7) {
+    if (version && semver.satisfies(version, '>=6 <7')) {
       delete base.cwd
     }
     // call babel to load options
@@ -268,7 +270,7 @@ export class ConfigSet {
 
   @Memoize()
   get compilerModule(): TTypeScript {
-    return importer.typescript(ImportReasons.tsJest, this.tsJest.compiler)
+    return importer.typescript(ImportReasons.TsJest, this.tsJest.compiler)
   }
 
   @Memoize()
@@ -276,7 +278,7 @@ export class ConfigSet {
     const { babel } = this
     if (!babel) return
     return importer
-      .babelJest(ImportReasons.babelJest)
+      .babelJest(ImportReasons.BabelJest)
       .createTransformer(babel) as BabelJestTransformer
   }
 
@@ -478,6 +480,7 @@ export class ConfigSet {
   @Memoize()
   get jsonValue() {
     return new JsonableValue({
+      version: myVersion,
       jest: this.jest,
       tsJest: this.tsJest,
       babel: this.babel,
