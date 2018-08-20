@@ -91,6 +91,34 @@ const normalizeRegex = (
     : undefined
 }
 
+const toDiagnosticCode = (code: any): number | undefined => {
+  return code
+    ? parseInt(('' + code).trim().replace(/^TS/, ''), 10) || undefined
+    : undefined
+}
+
+const toDiagnosticCodeList = (items: any, into: number[] = []): number[] => {
+  if (!Array.isArray(items)) items = [items]
+  for (let item of items) {
+    if (!item) continue
+    if (Array.isArray(item)) {
+      toDiagnosticCodeList(item, into)
+      continue
+    } else if (typeof item === 'string') {
+      const children = item.trim().split(/\s*,\s*/g)
+      if (children.length > 1) {
+        toDiagnosticCodeList(children, into)
+        continue
+      }
+      item = children[0]
+    }
+    if (!item) continue
+    const code = toDiagnosticCode(item)
+    if (code && !into.includes(code)) into.push(code)
+  }
+  return into
+}
+
 export class ConfigSet {
   constructor(
     private _jestConfig: jest.ProjectConfig,
@@ -160,6 +188,12 @@ export class ConfigSet {
     // diagnostics
     let diagnostics: TsJestConfig['diagnostics']
     const { diagnostics: diagnosticsOpt = true } = options
+    // messy list of stuff to ignore (will be casted later)
+    const ignoreList: any[] = [
+      IGNORE_DIAGNOSTIC_CODES,
+      process.env.TS_JEST_IGNORE_DIAGNOSTICS,
+    ]
+
     if (diagnosticsOpt === true || diagnosticsOpt == null) {
       diagnostics = { ignoreCodes: [], pretty: true }
     } else if (diagnosticsOpt === false) {
@@ -169,25 +203,15 @@ export class ConfigSet {
         pathRegex: MATCH_NOTHING.source, // matches nothing
       }
     } else {
-      let ignoreCodes: any[] = []
-      if (diagnosticsOpt.ignoreCodes) {
-        ignoreCodes = Array.isArray(diagnosticsOpt.ignoreCodes)
-          ? diagnosticsOpt.ignoreCodes
-          : `${diagnosticsOpt.ignoreCodes}`.trim().split(/\s*,\s*/g)
-      }
-
+      ignoreList.push(diagnosticsOpt.ignoreCodes)
       diagnostics = {
         pretty: diagnosticsOpt.pretty == null ? true : !!diagnosticsOpt.pretty,
-        ignoreCodes: ignoreCodes.map(Number),
+        ignoreCodes: [],
         pathRegex: normalizeRegex(diagnosticsOpt.pathRegex),
       }
     }
-    diagnostics.ignoreCodes = IGNORE_DIAGNOSTIC_CODES.concat(
-      diagnostics.ignoreCodes,
-    ).filter(
-      (code, index, list) =>
-        code && !isNaN(code) && list.indexOf(code) === index,
-    )
+    // now we clean and flaten the list
+    diagnostics.ignoreCodes = toDiagnosticCodeList(ignoreList)
 
     // stringifyContentPathRegex option
     const stringifyContentPathRegex = normalizeRegex(

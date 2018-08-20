@@ -7,11 +7,12 @@ export enum Errors {
   FileNotFound = 'File not found: {{inputPath}} (resolved as: {{resolvedPath}})',
   UntestedDependencyVersion = "Version {{actualVersion}} of {{module}} installed has not been tested with ts-jest. If you're experiencing issues, consider using a supported version ({{expectedVersion}}). Please do not report issues in ts-jest if you are using unsupported versions.",
   MissingDependency = "Module {{module}} is not installed. If you're experiencing issues, consider installing a supported version ({{expectedVersion}}).",
+  UnableToCompileTypeScript = 'Unable to compile TypeScript ({{help}}):\n{{diagnostics}}',
 }
 
 export enum Helps {
   FixMissingModule = '{{label}}: `npm i -D {{module}}` (or `yarn add --dev {{module}}`)',
-  IgnoreDiagnosticCode = 'add any of the code(s) to `globals.ts-jest.diagnostics.ignoreCodes` array in Jest configuration will silent this',
+  IgnoreDiagnosticCode = 'add code(s) in `[jest-config].globals.ts-jest.diagnostics.ignoreCodes` to ignore',
 }
 
 export enum Deprecateds {

@@ -50,12 +50,12 @@ const f = (v: number) => v
 const t: string = f(5)
 const v: boolean = t
 `,
-        '[eval].ts',
+        'foo.ts',
       ),
     ).toThrowErrorMatchingInlineSnapshot(`
-"⨯ Unable to compile TypeScript:
-[eval].ts(3,7): error TS2322: Type 'number' is not assignable to type 'string'.
-[eval].ts(4,7): error TS2322: Type 'string' is not assignable to type 'boolean'."
+"Unable to compile TypeScript (add code(s) in \`[jest-config].globals.ts-jest.diagnostics.ignoreCodes\` to ignore):
+foo.ts(3,7): error TS2322: Type 'number' is not assignable to type 'string'.
+foo.ts(4,7): error TS2322: Type 'string' is not assignable to type 'boolean'."
 `)
   })
 })

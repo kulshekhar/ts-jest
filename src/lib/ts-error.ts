@@ -1,6 +1,6 @@
 import { inspect } from 'util'
 import { BaseError } from 'make-error'
-import { Helps } from './messages'
+import { Helps, Errors, interpolate } from './messages'
 
 /**
  * @internal
@@ -15,9 +15,10 @@ export class TSError extends BaseError {
 
   constructor(public diagnosticText: string, public diagnosticCodes: number[]) {
     super(
-      `⨯ Unable to compile TypeScript:\n${diagnosticText.trim()}\n    ↳ ${
-        Helps.IgnoreDiagnosticCode
-      }`,
+      interpolate(Errors.UnableToCompileTypeScript, {
+        diagnostics: diagnosticText.trim(),
+        help: Helps.IgnoreDiagnosticCode,
+      }),
     )
     // ensure we blacklist any of our code
     Object.defineProperty(this, 'stack', { value: '' })

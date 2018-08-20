@@ -88,4 +88,10 @@ cmdLine.push(...jestArgs)
 logger.log('starting the tests using:', ...cmdLine)
 logger.log()
 
-spawnSync(cmdLine.shift(), cmdLine, { cwd: projectPath, stdio: 'inherit' })
+spawnSync(cmdLine.shift(), cmdLine, {
+  cwd: projectPath,
+  stdio: 'inherit',
+  env: Object.assign({}, process.env, {
+    TS_JEST_IGNORE_DIAGNOSTICS: '5023,5024',
+  }),
+})

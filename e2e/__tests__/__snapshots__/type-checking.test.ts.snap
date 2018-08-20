@@ -8,7 +8,7 @@ jest exit code: 1
   FAIL ./main.spec.ts
     ● Test suite failed to run
   
-      ⨯ Unable to compile TypeScript:
+      Unable to compile TypeScript (add code(s) in \`[jest-config].globals.ts-jest.diagnostics.ignoreCodes\` to ignore):
       main.ts:2:3 - error TS2322: Type 'string' is not assignable to type 'number'.
   
       2   return input
@@ -30,7 +30,7 @@ jest exit code: 1
   FAIL ./main.spec.ts
     ● Test suite failed to run
   
-      ⨯ Unable to compile TypeScript:
+      Unable to compile TypeScript (add code(s) in \`[jest-config].globals.ts-jest.diagnostics.ignoreCodes\` to ignore):
       main.ts:2:3 - error TS2322: Type 'string' is not assignable to type 'number'.
   
       2   return input
@@ -52,7 +52,7 @@ jest exit code: 1
   FAIL ./main.spec.ts
     ● Test suite failed to run
   
-      ⨯ Unable to compile TypeScript:
+      Unable to compile TypeScript (add code(s) in \`[jest-config].globals.ts-jest.diagnostics.ignoreCodes\` to ignore):
       main.ts:2:3 - error TS2322: Type 'string' is not assignable to type 'number'.
   
       2   return input
@@ -74,7 +74,7 @@ jest exit code: 1
   FAIL ./main.spec.ts
     ● Test suite failed to run
   
-      ⨯ Unable to compile TypeScript:
+      Unable to compile TypeScript (add code(s) in \`[jest-config].globals.ts-jest.diagnostics.ignoreCodes\` to ignore):
       main.ts:2:3 - error TS2322: Type 'string' is not assignable to type 'number'.
       
       2   return input
@@ -96,7 +96,7 @@ jest exit code: 1
   FAIL ./main.spec.ts
     ● Test suite failed to run
   
-      ⨯ Unable to compile TypeScript:
+      Unable to compile TypeScript (add code(s) in \`[jest-config].globals.ts-jest.diagnostics.ignoreCodes\` to ignore):
       main.ts:2:3 - error TS2322: Type 'string' is not assignable to type 'number'.
   
       2   return input
