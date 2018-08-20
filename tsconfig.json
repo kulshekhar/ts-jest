@@ -22,10 +22,11 @@
   },
   "include": [
     "src",
+    "scripts/",
     "test/**/*.spec.ts",
     "test/__helpers__",
     "e2e/__tests__",
     "e2e/__serializer__",
-    "e2e/__helpers__"
+    "e2e/__helpers__", "scripts/lib/paths.d.ts"
   ]
 }

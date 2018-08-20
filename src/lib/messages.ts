@@ -11,6 +11,7 @@ export enum Errors {
 
 export enum Helps {
   FixMissingModule = '{{label}}: `npm i -D {{module}}` (or `yarn add --dev {{module}}`)',
+  IgnoreDiagnosticCode = 'add any of the code(s) to `globals.ts-jest.diagnostics.ignoreCodes` array in Jest configuration will silent this',
 }
 
 export enum Deprecateds {

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 const { removeSync } = require('fs-extra')
-const Paths = require('./paths')
+const Paths = require('./lib/paths')
 const { join } = require('path')
 
 if (process.argv.indexOf('--when-ci-commit-message') !== -1) {
@@ -9,11 +9,11 @@ if (process.argv.indexOf('--when-ci-commit-message') !== -1) {
     process.env.TRAVIS_COMMIT_MESSAGE ||
     process.env.APPVEYOR_REPO_COMMIT_MESSAGE
   if (!msg)
-    throw new Error(`Unable to guess the commit message from CI env variables`)
+    throw new Error('Unable to guess the commit message from CI env variables')
   if (process.env.APPVEYOR_REPO_COMMIT_MESSAGE_EXTENDED) {
     msg = `${msg}\n${process.env.APPVEYOR_REPO_COMMIT_MESSAGE_EXTENDED}`
   }
-  if (!/\[ci npm-clean\]/.test(msg)) return
+  if (!/\[ci npm-clean\]/.test(msg)) process.exit(0)
 }
 
 removeSync(Paths.distDir)

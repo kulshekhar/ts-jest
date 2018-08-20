@@ -4,3 +4,7 @@ singleQuote: true
 tabWidth: 2
 useTabs: false
 trailingComma: all
+overrides:
+  - files: "**/*.js"
+    options:
+      trailingComma: es5

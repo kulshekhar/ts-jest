@@ -1,7 +1,7 @@
 // tslint:disable-file:no-shadowed-variable
 import { sync as spawnSync } from 'cross-spawn'
 import { join, relative, sep } from 'path'
-import * as Paths from '../../scripts/paths'
+import * as Paths from '../../scripts/lib/paths'
 import * as fs from 'fs-extra'
 import { RawSourceMap } from 'source-map'
 import { relativiseSourceRoot, extractSourceMaps } from './source-maps'
