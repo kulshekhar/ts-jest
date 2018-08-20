@@ -362,12 +362,15 @@ your Jest configuration:
 }
 ```
 
-By default Jest ignores everything in `node_modules`. This setting prevents Jest from ignoring the package you're interested in, in this case `@foo`, while continuing to ignore everything else in `node_modules`.
+By default Jest ignores everything in `node_modules`. This setting prevents Jest from ignoring the package you're interested in, in this case `@foo/bar`, while continuing to ignore everything else in `node_modules`.
 
 
 ## Known Limitations
+
 ### Known limitations for TS compiler options
-- If you use `"baseUrl": "<path_to_your_sources>"`, you also have to change `jest config` a little bit (also check [Module path mapping](#module-path-mapping) section):
+
+If you use `"baseUrl": "<path_to_your_sources>"`, you also have to change `jest config` a little bit (also check [Module path mapping](#module-path-mapping) section):
+
 ```json
 "jest": {
   "moduleDirectories": ["node_modules", "<path_to_your_sources>"]

@@ -1,11 +1,11 @@
 import { configureTestCase } from '../__helpers__/test-case'
-import { allPackageSets } from '../__helpers__/templates'
+import { allValidPackageSets } from '../__helpers__/templates'
 
 const testCase = configureTestCase('source-maps', {
   writeIo: true,
 })
 
-testCase.runWithTemplates(allPackageSets, 1, (runTest, { templateName }) => {
+testCase.runWithTemplates(allValidPackageSets, 1, (runTest, { templateName }) => {
   describe(`using template "${templateName}"`, () => {
     const result = runTest()
     it(`should report correct line numbers`, () => {

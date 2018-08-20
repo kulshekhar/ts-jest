@@ -32,6 +32,9 @@
     "testing"
   ],
   "author": "Kulshekhar Kabra <kulshekhar@users.noreply.github.com> (https://github.com/kulshekhar)",
+  "contributors": [
+    "Huafu Gandon <huafu.gandon@gmail.com> (https://github.com/huafu)"
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/kulshekhar/ts-jest/issues"
