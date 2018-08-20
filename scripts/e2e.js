@@ -110,7 +110,7 @@ function setupE2e() {
     }
 
     if (!packagesOk) {
-      if (npm.can.ci) {
+      if (npm.can.ci()) {
         log(`  [template: ${name}]`, 'installing packages using "npm ci"')
         spawnSync('npm', ['ci'], { cwd: dir })
       } else {

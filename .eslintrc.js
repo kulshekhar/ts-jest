@@ -1,15 +1,15 @@
 module.exports = {
   env: {
     node: true,
-    es6: true,
   },
   extends: 'eslint:recommended',
   parserOptions: {
-    ecmaVersion: 6,
+    ecmaVersion: 5,
     sourceType: 'module',
     impliedStrict: true,
   },
   rules: {
+    'no-console': ['error', { allow: ['warn', 'error', 'log'] }],
     indent: ['error', 2],
     'linebreak-style': ['error', 'unix'],
     quotes: ['error', 'single'],

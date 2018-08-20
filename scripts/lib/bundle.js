@@ -7,7 +7,7 @@ const { join } = require('path')
 // Except that on npm < 4.0.0 the prepare doesn't exists
 
 module.exports = function createBundle() {
-  if (!npm.can.prepare) {
+  if (!npm.can.prepare()) {
     logger.log('building ts-jest')
     npm.spawnSync(['-s', 'run', 'build'], { cwd: rootDir })
   }
