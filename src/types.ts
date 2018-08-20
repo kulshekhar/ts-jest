@@ -10,7 +10,6 @@ export type TBabel = typeof _babel;
 export type TBabelPluginIstanbul = typeof _babelIstanbul;
 export type TBabelPresetEnv = typeof _babelEnv;
 export type TBabelPresetJest = typeof _babelJest;
-export type TJSON5 = typeof _json5;
 
 export interface JestCacheKeyOptions {
   rootDir: string;
