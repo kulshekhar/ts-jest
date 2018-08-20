@@ -69,6 +69,7 @@
   "dependencies": {
     "closest-file-data": "^0.1.4",
     "fs-extra": "6.0.1",
+    "json5": "^0.5.0",
     "lodash": "^4.17.10"
   },
   "peerDependencies": {
@@ -85,6 +86,7 @@
     "@types/es6-shim": "0.31.37",
     "@types/fs-extra": "5.0.4",
     "@types/jest": "^23.3.0",
+    "@types/json5": "^0.0.29",
     "@types/lodash": "^4.14.109",
     "@types/node": "10.7.0",
     "@types/react": "16.4.10",
