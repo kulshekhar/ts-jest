@@ -100,7 +100,7 @@
     "doctoc": "latest",
     "husky": "^0.14.3",
     "jest": "^23.4.1",
-    "jest-config": "^23.4.1",
+    "jest-config": "^23.5.0",
     "lint-staged": "^7.1.2",
     "pkg-dir": "^3.0.0",
     "prettier": "^1.12.1",
