@@ -5,7 +5,8 @@ import * as fakers from '../__helpers__/fakers'
 import { createCompiler } from './compiler'
 import {
   extractSourceMaps,
-  relativiseSourceRoot,
+  rewriteSourceMaps,
+  relativisePaths,
 } from '../__helpers__/source-maps'
 import { relativeToRoot, tempDir, ROOT } from '../__helpers__/path'
 import { __setup } from './debug'
@@ -101,7 +102,8 @@ describe('cache', () => {
       __filename,
     )
 
-    expect(relativiseSourceRoot(ROOT, compiled1)).toMatchInlineSnapshot(`
+    expect(rewriteSourceMaps(compiled1, maps => relativisePaths(maps, ROOT)))
+      .toMatchInlineSnapshot(`
 "\\"use strict\\";
 console.log(\\"hello\\");
 //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoic3JjL2xpYi9jb21waWxlci5zcGVjLnRzIiwibWFwcGluZ3MiOiI7QUFBQSxPQUFPLENBQUMsR0FBRyxDQUFDLE9BQU8sQ0FBQyxDQUFBIiwibmFtZXMiOltdLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyJzcmMvbGliL2NvbXBpbGVyLnNwZWMudHMiXSwic291cmNlc0NvbnRlbnQiOlsiY29uc29sZS5sb2coXCJoZWxsb1wiKSJdLCJ2ZXJzaW9uIjozfQ=="

@@ -6,6 +6,8 @@ import {
 export const test = (val: any) => val && val instanceof TestRunResult
 export const print = (val: TestRunResult, serialize: any, indent: any) => {
   const out = [
+    `${val.status === 0 ? '√' : '×'} ${val.cmdLine}`,
+    `↳ exit code: ${val.status}`,
     `===[ STDOUT ]${'='.repeat(67)}`,
     sanitizeOutput(val.stdout),
     `===[ STDERR ]${'='.repeat(67)}`,
@@ -14,5 +16,5 @@ export const print = (val: TestRunResult, serialize: any, indent: any) => {
   ]
     .map(l => indent(l))
     .join('\n')
-  return `jest exit code: ${val.status}\n${out}`
+  return out
 }

@@ -1,7 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`With unsupported version test should pass using template "with-unsupported-version" 1`] = `
-jest exit code: 0
+  √ jest
+  ↳ exit code: 0
   ===[ STDOUT ]===================================================================
   
   ===[ STDERR ]===================================================================

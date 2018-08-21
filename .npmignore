@@ -1,11 +1,11 @@
 # Tests
-e2e/
+e2e
 
 # sources are inlined
-src/
+src
 
 # Developement scripts
-scripts/
+scripts
 
 # Logs
 logs
@@ -24,7 +24,7 @@ pids
 lib-cov
 
 # Coverage directory used by tools like istanbul
-coverage/
+coverage
 
 # nyc test coverage
 .nyc_output
@@ -39,8 +39,8 @@ coverage/
 build/Release
 
 # Dependency directories
-node_modules/
-jspm_packages/
+node_modules
+jspm_packages
 
 # Optional npm cache directory
 .npm
@@ -48,6 +48,6 @@ jspm_packages/
 # Optional REPL history
 .node_repl_history
 # while refactoring...
-old/
+old
 
 *.tgz

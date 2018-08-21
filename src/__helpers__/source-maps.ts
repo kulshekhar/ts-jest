@@ -24,25 +24,33 @@ export function sourceMapsToBase64(sourceMaps: RawSourceMap): string {
   return bufferFrom(stableStringify(sourceMaps)).toString('base64')
 }
 
-export function relativiseSourceRoot(
+export function relativisePaths(
+  map: RawSourceMap,
   fromPath: string,
-  source: string,
-  prefix: string = '',
-): string {
+  newPrefix: string = '',
+): RawSourceMap {
+  const res = { ...map }
   const from = realpathSync(fromPath)
   const remap = (path: string): string =>
     (isAbsolute(path)
-      ? `${prefix}${relative(from, realpathSync(path))}`
+      ? `${newPrefix}${relative(from, realpathSync(path))}`
       : path
     ).replace(/\\/g, '/')
+  if (res.sourceRoot) res.sourceRoot = remap(res.sourceRoot)
+  if (res.sources) res.sources = res.sources.map(remap)
+  if (res.file) res.file = remap(res.file)
+  return res
+}
 
+export function rewriteSourceMaps(
+  source: string,
+  sourceMapsTransformer: (maps: RawSourceMap) => RawSourceMap,
+): string {
   return source.replace(
     /([\n^]\/\/#\s*sourceMappingURL=data:application\/json;(?:charset=utf-8;)?base64,)(\S+)(\s*)$/,
     (_, before, base64, after) => {
-      const map = base64ToSourceMaps(base64)
-      if (map.sourceRoot) map.sourceRoot = remap(map.sourceRoot)
-      if (map.sources) map.sources = map.sources.map(remap)
-      if (map.file) map.file = remap(map.file)
+      let map = base64ToSourceMaps(base64)
+      map = sourceMapsTransformer(map)
       return `${before}${sourceMapsToBase64(map)}${after}`
     },
   )

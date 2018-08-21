@@ -54,8 +54,9 @@ export class Importer implements TsJestImporter {
   }
 
   babelCore(why: ImportReasons): TBabelCore {
-    return this._import(why, '@babel/core', {
-      alternatives: ['babel-core'],
+    // the bridge will choose correct babel version
+    return this._import(why, 'babel-core', {
+      alternatives: ['@babel/core'],
       installTip: [
         // as in https://github.com/facebook/jest/tree/master/packages/babel-jest
         {

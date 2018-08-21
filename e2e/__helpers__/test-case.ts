@@ -1,13 +1,14 @@
 // tslint:disable-file:no-shadowed-variable
 import { sync as spawnSync } from 'cross-spawn'
-import { join, relative, sep } from 'path'
+import { join, relative, sep, isAbsolute } from 'path'
 import * as Paths from '../../scripts/lib/paths'
 import * as fs from 'fs-extra'
 import { RawSourceMap } from 'source-map'
-import { relativiseSourceRoot, extractSourceMaps } from './source-maps'
+import { extractSourceMaps } from './source-maps'
 import { SpawnSyncReturns } from 'child_process'
 import merge from 'lodash.merge'
 import { TsJestConfig } from '../../src/lib/types'
+import { rewriteSourceMaps, relativisePaths } from '../../src/__helpers__/source-maps'
 
 const TEMPLATE_EXCLUDED_ITEMS = ['node_modules', 'package-lock.json']
 
@@ -144,7 +145,12 @@ export class TestRunResult {
   constructor(
     readonly cwd: string,
     readonly result: SpawnSyncReturns<Buffer>,
-    readonly ioDir?: string,
+    readonly context: Readonly<{
+      ioDir?: string | undefined,
+      cmd: string,
+      args: string[],
+      env: { [key: string]: string },
+    }>,
   ) { }
   get isPass() { return this.status === 0 }
   get isFail() { return !this.isPass }
@@ -152,19 +158,23 @@ export class TestRunResult {
   get output() { return stripAnsiColors((this.result.output ? this.result.output.join('\n\n') : '')) }
   get stderr() { return stripAnsiColors((this.result.stderr || '').toString()) }
   get stdout() { return stripAnsiColors((this.result.stdout || '').toString()) }
+  get cmdLine() {
+    return [this.context.cmd, ...this.context.args].join(' ')
+  }
   ioFor(relFilePath: string): TestFileIo {
-    if (!this.ioDir) {
+    if (!this.context.ioDir) {
       throw new Error('IO not written for test, you must configure the test with `writeIo: true`.')
     }
-    const io = require(`${this.ioDir}/${relFilePath}.json`)
-    return new TestFileIo(this.cwd, io.in, io.out)
+    const io = require(`${this.context.ioDir}/${relFilePath}.json`)
+    return new TestFileIo(this.cwd, relFilePath, io.in, io.out)
   }
 }
 
 // tslint:disable-next-line:max-classes-per-file
-class TestFileIo {
+export class TestFileIo {
   constructor(
     private _cwd: string,
+    readonly filename: string,
     readonly input: [string, jest.Path, jest.ProjectConfig, jest.TransformOptions?],
     readonly output: string | jest.TransformedSource,
   ) { }
@@ -172,7 +182,20 @@ class TestFileIo {
   get inputPath(): string { return this.input[1] }
   get outputCode(): string { return typeof this.output === 'object' ? this.output.code : this.output }
   get outputSourceMaps(): RawSourceMap | undefined { return extractSourceMaps(this.outputCode) }
-  get normalizedOutputCode(): string { return relativiseSourceRoot(this._cwd, this.outputCode, '<cwd>/') }
+  get normalizedOutputCode(): string {
+    return rewriteSourceMaps(
+      this.outputCode,
+      this.sourceMapsNormalizer,
+    )
+  }
+  get normalizedOutputSourceMaps(): RawSourceMap | undefined {
+    const maps = this.outputSourceMaps
+    if (maps) return this.sourceMapsNormalizer(maps)
+    return
+  }
+  get sourceMapsNormalizer() {
+    return (maps: RawSourceMap): RawSourceMap => relativisePaths(maps, this._cwd, '<cwd>/')
+  }
 }
 
 // tslint:disable-next-line:interface-over-type-literal
@@ -240,6 +263,7 @@ export function run(name: string, options: RunTestOptions = {}): TestRunResult {
   )
   const pkg = require(join(dir, 'package.json'))
 
+  let shortCmd: string
   let cmdArgs: string[] = []
   if (inject) {
     cmdArgs.push('--testPathPattern="/__eval\\\\.ts$"')
@@ -253,8 +277,10 @@ export function run(name: string, options: RunTestOptions = {}): TestRunResult {
       cmdArgs.unshift('--')
     }
     cmdArgs = ['npm', '-s', 'run', 'test', ...cmdArgs]
+    shortCmd = 'npm'
   } else {
     cmdArgs.unshift(join(dir, 'node_modules', '.bin', 'jest'))
+    shortCmd = 'jest'
   }
 
   // merge given config extend
@@ -316,7 +342,12 @@ export function run(name: string, options: RunTestOptions = {}): TestRunResult {
     })
   })
 
-  return new TestRunResult(fs.realpathSync(dir), result, writeIo ? ioDir : undefined)
+  return new TestRunResult(fs.realpathSync(dir), result, {
+    cmd: shortCmd,
+    args: cmdArgs,
+    env: mergedEnv,
+    ioDir: writeIo ? ioDir : undefined,
+  })
 }
 
 // from https://stackoverflow.com/questions/25245716/remove-all-ansi-colors-styles-from-strings

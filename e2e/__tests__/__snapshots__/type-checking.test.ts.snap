@@ -1,7 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`With type checking should fail using template "default" 1`] = `
-jest exit code: 1
+  × jest --config {"preset":"ts-jest","testEnvironment":"node","globals":{"ts-jest":{"tsConfig":{},"typeCheck":true}}}
+  ↳ exit code: 1
   ===[ STDOUT ]===================================================================
   
   ===[ STDERR ]===================================================================
@@ -23,7 +24,8 @@ jest exit code: 1
 `;
 
 exports[`With type checking should fail using template "with-babel-6" 1`] = `
-jest exit code: 1
+  × jest --config {"preset":"ts-jest","testEnvironment":"node","globals":{"ts-jest":{"tsConfig":{},"babelConfig":true,"typeCheck":true}}}
+  ↳ exit code: 1
   ===[ STDOUT ]===================================================================
   
   ===[ STDERR ]===================================================================
@@ -45,7 +47,8 @@ jest exit code: 1
 `;
 
 exports[`With type checking should fail using template "with-babel-7" 1`] = `
-jest exit code: 1
+  × jest --config {"preset":"ts-jest","testEnvironment":"node","globals":{"ts-jest":{"tsConfig":{},"babelConfig":true,"typeCheck":true}}}
+  ↳ exit code: 1
   ===[ STDOUT ]===================================================================
   
   ===[ STDERR ]===================================================================
@@ -67,7 +70,8 @@ jest exit code: 1
 `;
 
 exports[`With type checking should fail using template "with-jest-22" 1`] = `
-jest exit code: 1
+  × jest --config {"transform":{"^.+\\\\.tsx?$":"ts-jest"},"testMatch":["**/__tests__/**/*.js?(x)","**/?(*.)+(spec|test).js?(x)","**/__tests__/**/*.ts?(x)","**/?(*.)+(spec|test).ts?(x)"],"moduleFileExtensions":["js","json","jsx","node","ts","tsx"],"testEnvironment":"node","globals":{"ts-jest":{"tsConfig":{},"typeCheck":true}}}
+  ↳ exit code: 1
   ===[ STDOUT ]===================================================================
   
   ===[ STDERR ]===================================================================
@@ -89,7 +93,8 @@ jest exit code: 1
 `;
 
 exports[`With type checking should fail using template "with-typescript-2-7" 1`] = `
-jest exit code: 1
+  × jest --config {"preset":"ts-jest","testEnvironment":"node","globals":{"ts-jest":{"tsConfig":{},"diagnostics":{"ignoreCodes":[5023]},"typeCheck":true}}}
+  ↳ exit code: 1
   ===[ STDOUT ]===================================================================
   
   ===[ STDERR ]===================================================================
@@ -111,7 +116,8 @@ jest exit code: 1
 `;
 
 exports[`Without type checking should pass using template "default" 1`] = `
-jest exit code: 0
+  √ jest --config {"preset":"ts-jest","testEnvironment":"node","globals":{"ts-jest":{"tsConfig":{},"typeCheck":false}}}
+  ↳ exit code: 0
   ===[ STDOUT ]===================================================================
   
   ===[ STDERR ]===================================================================
@@ -127,7 +133,8 @@ jest exit code: 0
 `;
 
 exports[`Without type checking should pass using template "with-babel-6" 1`] = `
-jest exit code: 0
+  √ jest --config {"preset":"ts-jest","testEnvironment":"node","globals":{"ts-jest":{"tsConfig":{},"babelConfig":true,"typeCheck":false}}}
+  ↳ exit code: 0
   ===[ STDOUT ]===================================================================
   
   ===[ STDERR ]===================================================================
@@ -143,7 +150,8 @@ jest exit code: 0
 `;
 
 exports[`Without type checking should pass using template "with-babel-7" 1`] = `
-jest exit code: 0
+  √ jest --config {"preset":"ts-jest","testEnvironment":"node","globals":{"ts-jest":{"tsConfig":{},"babelConfig":true,"typeCheck":false}}}
+  ↳ exit code: 0
   ===[ STDOUT ]===================================================================
   
   ===[ STDERR ]===================================================================
@@ -159,7 +167,8 @@ jest exit code: 0
 `;
 
 exports[`Without type checking should pass using template "with-jest-22" 1`] = `
-jest exit code: 0
+  √ jest --config {"transform":{"^.+\\\\.tsx?$":"ts-jest"},"testMatch":["**/__tests__/**/*.js?(x)","**/?(*.)+(spec|test).js?(x)","**/__tests__/**/*.ts?(x)","**/?(*.)+(spec|test).ts?(x)"],"moduleFileExtensions":["js","json","jsx","node","ts","tsx"],"testEnvironment":"node","globals":{"ts-jest":{"tsConfig":{},"typeCheck":false}}}
+  ↳ exit code: 0
   ===[ STDOUT ]===================================================================
   
   ===[ STDERR ]===================================================================
@@ -175,7 +184,8 @@ jest exit code: 0
 `;
 
 exports[`Without type checking should pass using template "with-typescript-2-7" 1`] = `
-jest exit code: 0
+  √ jest --config {"preset":"ts-jest","testEnvironment":"node","globals":{"ts-jest":{"tsConfig":{},"diagnostics":{"ignoreCodes":[5023]},"typeCheck":false}}}
+  ↳ exit code: 0
   ===[ STDOUT ]===================================================================
   
   ===[ STDERR ]===================================================================

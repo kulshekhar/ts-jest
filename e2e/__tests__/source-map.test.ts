@@ -17,7 +17,7 @@ testCase.runWithTemplates(allValidPackageSets, 1, (runTest, { templateName }) =>
     // and the debugger cannot find the line where to go
     it(`should have the source mpas comment`, () => {
       const io = result.ioFor('main.ts')
-      expect(io.normalizedOutputCode).toMatchSnapshot()
+      expect(io).toMatchSnapshot()
       // we could keep only the snapshot testing, but this ensure fixed stuff are the same over versions
       expect(io.outputSourceMaps).toMatchObject({
         names: [],

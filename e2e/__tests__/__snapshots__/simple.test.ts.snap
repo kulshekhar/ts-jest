@@ -1,7 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Simple test should pass using template "default" 1`] = `
-jest exit code: 0
+  √ jest
+  ↳ exit code: 0
   ===[ STDOUT ]===================================================================
   
   ===[ STDERR ]===================================================================
@@ -18,7 +19,8 @@ jest exit code: 0
 `;
 
 exports[`Simple test should pass using template "with-babel-6" 1`] = `
-jest exit code: 0
+  √ jest
+  ↳ exit code: 0
   ===[ STDOUT ]===================================================================
   
   ===[ STDERR ]===================================================================
@@ -35,7 +37,8 @@ jest exit code: 0
 `;
 
 exports[`Simple test should pass using template "with-babel-7" 1`] = `
-jest exit code: 0
+  √ jest
+  ↳ exit code: 0
   ===[ STDOUT ]===================================================================
   
   ===[ STDERR ]===================================================================
@@ -52,7 +55,8 @@ jest exit code: 0
 `;
 
 exports[`Simple test should pass using template "with-jest-22" 1`] = `
-jest exit code: 0
+  √ jest
+  ↳ exit code: 0
   ===[ STDOUT ]===================================================================
   
   ===[ STDERR ]===================================================================
@@ -69,7 +73,8 @@ jest exit code: 0
 `;
 
 exports[`Simple test should pass using template "with-typescript-2-7" 1`] = `
-jest exit code: 0
+  √ jest
+  ↳ exit code: 0
   ===[ STDOUT ]===================================================================
   
   ===[ STDERR ]===================================================================

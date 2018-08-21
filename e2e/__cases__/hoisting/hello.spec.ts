@@ -1,5 +1,10 @@
 import hello from './hello';
 
+afterAll(() => {
+  // this should go after
+  jest.unmock('./hello');
+})
+
 jest.mock('./hello');
 
 describe('hello', () => {
@@ -9,5 +14,7 @@ describe('hello', () => {
     expect(hello).not.toBe(original);
     expect(msg).toBeUndefined();
     expect(hello).toHaveProperty('mock');
+    expect(require('foo')).toBe('bar');
+    jest.mock('foo', () => 'bar', { virtual: true });
   });
 });
