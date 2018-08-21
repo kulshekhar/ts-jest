@@ -1,15 +1,15 @@
 // tslint:disable:max-line-length
 import { TsJestGlobalOptions } from './types'
-import { ConfigSet } from './config-set'
-import * as fakers from '../__helpers__/fakers'
+import { ConfigSet } from './config/config-set'
+import * as fakers from './__helpers__/fakers'
 import { createCompiler } from './compiler'
 import {
   extractSourceMaps,
   rewriteSourceMaps,
   relativisePaths,
-} from '../__helpers__/source-maps'
-import { relativeToRoot, tempDir, ROOT } from '../__helpers__/path'
-import { __setup } from './debug'
+} from './__helpers__/source-maps'
+import { relativeToRoot, tempDir, ROOT } from './__helpers__/path'
+import { __setup } from './util/debug'
 
 // not really unit-testing here, but it's hard to mock all those values :-D
 

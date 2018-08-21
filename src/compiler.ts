@@ -34,11 +34,11 @@ import mkdirp = require('mkdirp')
 import bufferFrom from 'buffer-from'
 import stableStringify = require('fast-json-stable-stringify')
 import _ts, { CustomTransformers } from 'typescript'
-import { wrapWithDebug, debug } from './debug'
-import { ConfigSet } from './config-set'
-import { sha1 } from './sha1'
+import { wrapWithDebug, debug } from './util/debug'
+import { ConfigSet } from './config/config-set'
+import { sha1 } from './util/sha1'
 import { TsCompiler, MemoryCache, TypeInfo } from './types'
-import { Errors, interpolate } from './messages'
+import { Errors, interpolate } from './util/messages'
 import { factory as customTransformersFactory } from './transformers'
 
 /**

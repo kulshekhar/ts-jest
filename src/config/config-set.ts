@@ -8,7 +8,7 @@
  * version of the `jest.ProjectConfig`, and then later it calls `process()`
  * with the complete, object version of it.
  */
-import { JsonableValue } from './jsonable-value'
+import { JsonableValue } from '../util/jsonable-value'
 import {
   BabelConfig,
   TsJestConfig,
@@ -17,24 +17,24 @@ import {
   TsJestHooksMap,
   BabelJestTransformer,
   TsCompiler,
-} from './types'
+} from '../types'
 import { resolve, isAbsolute, join, dirname } from 'path'
-import { Memoize } from './memoize'
-import { backportJestConfig } from './backports'
-import { Errors, ImportReasons, interpolate } from './messages'
+import { Memoize } from '../util/memoize'
+import { backportJestConfig } from '../util/backports'
+import { Errors, ImportReasons, interpolate } from '../util/messages'
 import json5 from 'json5'
 import { existsSync, readFileSync } from 'fs'
-import { importer } from './importer'
+import { importer } from '../util/importer'
 import {
   Diagnostic,
   FormatDiagnosticsHost,
   ParsedCommandLine,
 } from 'typescript'
-import { TSError } from './ts-error'
-import { sha1 } from './sha1'
-import { stringify } from './json'
-import { normalizeSlashes } from './normalize-slashes'
-import { createCompiler } from './compiler'
+import { TSError } from '../util/ts-error'
+import { sha1 } from '../util/sha1'
+import { stringify } from '../util/json'
+import { normalizeSlashes } from '../util/normalize-slashes'
+import { createCompiler } from '../compiler'
 import { version as myVersion } from '..'
 import semver from 'semver'
 

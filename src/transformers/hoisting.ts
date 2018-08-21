@@ -10,7 +10,7 @@ import {
   Block,
   Transformer,
 } from 'typescript'
-import { ConfigSet } from '../config-set'
+import { ConfigSet } from '../../config/config-set'
 
 /**
  * What methods of `jest` should we hoist

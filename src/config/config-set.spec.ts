@@ -1,11 +1,11 @@
 import { ConfigSet, MATCH_NOTHING, IGNORE_DIAGNOSTIC_CODES } from './config-set'
 import * as fakers from '../__helpers__/fakers'
-import { TsJestGlobalOptions } from './types'
-import * as _backports from './backports'
+import { TsJestGlobalOptions } from '../types'
+import * as _backports from '../util/backports'
 import { mocked } from '../__helpers__/mocks'
 import { ScriptTarget, ModuleKind } from 'typescript'
 import { resolve } from 'path'
-import { normalizeSlashes } from './normalize-slashes'
+import { normalizeSlashes } from '../util/normalize-slashes'
 
 jest.mock('./backports')
 

@@ -1,5 +1,5 @@
 import * as jestConfig from 'jest-config'
-import { CreateJestPresetOptions } from './types'
+import { CreateJestPresetOptions } from '../types'
 
 // jest 22 doesn't have defaults
 const defaults = jestConfig.defaults || {

@@ -1,8 +1,8 @@
 import { TsJestGlobalOptions } from './types'
-import { sha1 } from './sha1'
-import { JsonableValue } from './jsonable-value'
-import { ConfigSet } from './config-set'
-import { stringify, parse } from './json'
+import { sha1 } from './util/sha1'
+import { JsonableValue } from './util/jsonable-value'
+import { ConfigSet } from './config/config-set'
+import { stringify, parse } from './util/json'
 import { inspect } from 'util'
 
 /**

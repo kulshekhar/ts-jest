@@ -1,7 +1,7 @@
-import { TsJestTransformer } from './lib/ts-jest-transformer'
-import { createJestPreset } from './lib/create-jest-preset'
-import { TsJestGlobalOptions } from './lib/types'
-import { VersionCheckers } from './lib/version-checkers'
+import { TsJestTransformer } from './ts-jest-transformer'
+import { createJestPreset } from './config/create-jest-preset'
+import { TsJestGlobalOptions } from './types'
+import { VersionCheckers } from './util/version-checkers'
 
 // tslint:disable-next-line:no-var-requires
 const version: string = require('../package.json').version

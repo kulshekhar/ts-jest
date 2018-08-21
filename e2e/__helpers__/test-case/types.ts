@@ -1,4 +1,4 @@
-import { TsJestConfig } from '../../../src/lib/types'
+import { TsJestConfig } from '../../../src/types'
 import RunResult from './RunResult'
 
 export interface RunTestOptions {

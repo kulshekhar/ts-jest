@@ -1,7 +1,7 @@
 // tslint:disable:max-line-length
-import { __setup } from './lib/debug'
+import { __setup } from './util/debug'
 import * as tsJest from '.'
-import { TsJestTransformer } from './lib/ts-jest-transformer'
+import { TsJestTransformer } from './ts-jest-transformer'
 
 jest.mock('./lib/ts-jest-transformer', () => {
   class TsJestTransformer {

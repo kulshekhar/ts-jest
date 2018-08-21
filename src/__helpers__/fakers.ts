@@ -1,6 +1,6 @@
-import { TsJestGlobalOptions, BabelConfig, TsJestConfig } from '../lib/types'
+import { TsJestGlobalOptions, BabelConfig, TsJestConfig } from '../types'
 import { resolve } from 'path'
-import { ImportReasons } from '../lib/messages'
+import { ImportReasons } from '../util/messages'
 
 export function filePath(relPath: string): string {
   return resolve(__dirname, '..', '..', relPath)

@@ -1,4 +1,4 @@
-import { ConfigSet } from '../config-set'
+import { ConfigSet } from '../../config/config-set'
 import { CustomTransformers } from 'typescript'
 import { factory as hoistingFactory } from './hoisting'
 

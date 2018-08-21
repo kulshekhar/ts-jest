@@ -5,7 +5,7 @@ import {
   ModulePatcher,
   TTypeScript,
   TsJestImporter,
-} from './types'
+} from '../types'
 import * as hacks from './hacks'
 import { ImportReasons, Errors, interpolate, Helps } from './messages'
 import { VersionCheckers } from './version-checkers'

@@ -1,4 +1,4 @@
-import { TBabelCore, ModulePatcher, BabelConfig } from './types'
+import { TBabelCore, ModulePatcher, BabelConfig } from '../types'
 import semver from 'semver'
 
 // tslint:disable-next-line:variable-name
