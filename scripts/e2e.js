@@ -131,6 +131,9 @@ function setupE2e() {
     }
 
     if (!packagesOk) {
+      // faster to remove them first
+      log(`  [template: ${name}]`, 'removing `node_modules` directory')
+      fs.removeSync(path.join(dir, 'node_modules'))
       if (npm.can.ci()) {
         log(`  [template: ${name}]`, 'installing packages using "npm ci"')
         spawnSync('npm', ['ci'], { cwd: dir })
