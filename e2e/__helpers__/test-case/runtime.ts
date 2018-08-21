@@ -20,7 +20,7 @@ import {
   outputJsonSync,
 } from 'fs-extra'
 import merge from 'lodash.merge'
-import { sync as spawnSync } from 'cross-spawn'
+import { spawnSync } from 'child_process'
 
 const TEMPLATE_EXCLUDED_ITEMS = ['node_modules', 'package-lock.json']
 
@@ -94,6 +94,11 @@ export function run(name: string, options: RunTestOptions = {}): RunResult {
       options.jestConfig,
       { globals: { 'ts-jest': options.tsJestConfig || {} } },
     )))
+  }
+
+  // run in band
+  if (!cmdArgs.includes('--runInBand')) {
+    cmdArgs.push('--runInBand')
   }
 
   const cmd = cmdArgs.shift() as string

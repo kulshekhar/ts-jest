@@ -5,8 +5,10 @@ const stderrSpy = jest.spyOn(process.stderr, 'write')
 
 beforeEach(() => {
   delete process.env.TS_JEST_DEBUG
-  stderrSpy.mockClear()
-  stdoutSpy.mockClear()
+  stderrSpy.mockReset()
+  stdoutSpy.mockReset()
+  stdoutSpy.mockImplementation(() => undefined)
+  stderrSpy.mockImplementation(() => undefined)
 })
 afterAll(() => {
   stderrSpy.mockRestore()

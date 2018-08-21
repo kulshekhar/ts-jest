@@ -1,6 +1,6 @@
 {
   "name": "ts-jest",
-  "version": "23.2.0",
+  "version": "24.0.0-beta.0",
   "main": "dist/index.js",
   "types": "./dist/index.d.ts",
   "description": "A preprocessor with sourcemap support to help use Typescript with Jest",
@@ -49,8 +49,8 @@
     "semver": "^5.5.1"
   },
   "peerDependencies": {
-    "babel-jest": "23.x",
-    "jest": "23.x",
+    "babel-jest": ">=22 <24",
+    "jest": ">=22 <24",
     "typescript": ">=2.7.0 <4.0.0"
   },
   "devDependencies": {

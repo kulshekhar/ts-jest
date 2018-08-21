@@ -20,6 +20,7 @@ if (parentArgs.includes('--coverage')) {
   )
   parentArgs = parentArgs.filter(a => a !== '--coverage')
 }
+if (!parentArgs.includes('--runInBand')) parentArgs.push('--runInBand')
 
 function getDirectories(rootDir) {
   return fs.readdirSync(rootDir).filter(function(file) {
@@ -73,6 +74,22 @@ function setupE2e() {
     const pkgLockFile = path.join(sourceDir, 'package-lock.json')
     const e2eFile = path.join(nodeModulesDir, '.ts-jest-e2e.json')
 
+    // log installed versions
+    const logPackageVersions = () => {
+      log(`  [template: ${name}]`, 'installed direct dependencies:')
+      let deps = npm.directDepsPkg(dir)
+      Object.keys(deps)
+        .sort()
+        .forEach(name => {
+          log(
+            '      -',
+            `${name}${' '.repeat(20 - name.length)}`,
+            deps[name].version
+          )
+        })
+      deps = null
+    }
+
     // remove all files expect node_modules
     if (fs.existsSync(dir)) {
       log(`  [template: ${name}]`, 'removing old files')
@@ -96,9 +113,6 @@ function setupE2e() {
     }
 
     const pkgLockHash = sha1(fs.readFileSync(pkgLockFile))
-
-    // TODO: create a hash of package-lock.json as well as the bundle, and test it over one copied in each
-    // template dir, to know if we should re-install or not
     const e2eData = fs.existsSync(e2eFile) ? fs.readJsonSync(e2eFile) : {}
     let bundleOk = e2eData.bundleHash === bundleHash
     let packagesOk = e2eData.packageLockHash === pkgLockHash
@@ -111,6 +125,7 @@ function setupE2e() {
           `  [template: ${name}]`,
           'bundle and packages unchanged, nothing to do'
         )
+        logPackageVersions()
         return
       }
     }
@@ -129,6 +144,8 @@ function setupE2e() {
       log(`  [template: ${name}]`, 'installing bundle')
       spawnSync('npm', ['i', '-D', bundle], { cwd: dir })
     }
+
+    logPackageVersions()
 
     // write our data
     e2eData.bundleHash = bundleHash

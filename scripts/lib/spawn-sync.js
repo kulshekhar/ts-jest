@@ -1,4 +1,4 @@
-const { sync } = require('cross-spawn')
+const { spawnSync: sync } = require('child_process')
 
 /**
  * @type {typeof sync}
@@ -9,7 +9,13 @@ const spawnSync = (...args) => {
     throw res.error
   }
   if (res.status !== 0) {
-    throw new Error(res.stderr.toString('utf8'))
+    let msg = 'unknown error'
+    try {
+      msg = res.stderr.toString('utf8')
+    } catch (err) {
+      null
+    }
+    throw new Error(msg)
   }
   return res
 }

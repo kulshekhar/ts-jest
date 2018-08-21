@@ -142,8 +142,8 @@ export class Importer implements TsJestImporter {
 
 export const importer = Importer.instance
 
-let requireModule = require
+let requireModule = (mod: string) => require(mod)
 // so that we can test easier
-export function __requireModule(req: typeof require) {
-  requireModule = req
+export function __requireModule(localRequire: typeof requireModule) {
+  requireModule = localRequire
 }

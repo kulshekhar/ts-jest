@@ -35,7 +35,7 @@ exports[`using template "default" should have the source mpas comment 1`] = `
 `;
 
 exports[`using template "default" should report correct line numbers 1`] = `
-  × jest
+  × jest --runInBand
   ↳ exit code: 1
   ===[ STDOUT ]===================================================================
   console.log main.ts:2
@@ -123,7 +123,7 @@ exports[`using template "with-babel-6" should have the source mpas comment 1`] =
 `;
 
 exports[`using template "with-babel-6" should report correct line numbers 1`] = `
-  × jest
+  × jest --runInBand
   ↳ exit code: 1
   ===[ STDOUT ]===================================================================
   console.log main.ts:2
@@ -217,7 +217,7 @@ exports[`using template "with-babel-7" should have the source mpas comment 1`] =
 `;
 
 exports[`using template "with-babel-7" should report correct line numbers 1`] = `
-  × jest
+  × jest --runInBand
   ↳ exit code: 1
   ===[ STDOUT ]===================================================================
   console.log main.ts:2
@@ -305,7 +305,7 @@ exports[`using template "with-jest-22" should have the source mpas comment 1`] =
 `;
 
 exports[`using template "with-jest-22" should report correct line numbers 1`] = `
-  × jest
+  × jest --runInBand
   ↳ exit code: 1
   ===[ STDOUT ]===================================================================
   console.log main.ts:2
@@ -391,7 +391,7 @@ exports[`using template "with-typescript-2-7" should have the source mpas commen
 `;
 
 exports[`using template "with-typescript-2-7" should report correct line numbers 1`] = `
-  × jest
+  × jest --runInBand
   ↳ exit code: 1
   ===[ STDOUT ]===================================================================
   console.log main.ts:2

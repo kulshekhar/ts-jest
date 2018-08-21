@@ -13,7 +13,7 @@ if (process.argv.indexOf('--when-ci-commit-message') !== -1) {
   if (process.env.APPVEYOR_REPO_COMMIT_MESSAGE_EXTENDED) {
     msg = `${msg}\n${process.env.APPVEYOR_REPO_COMMIT_MESSAGE_EXTENDED}`
   }
-  if (!/\[ci npm-clean\]/.test(msg)) process.exit(0)
+  if (!/\[ci clean\]/.test(msg)) process.exit(0)
 }
 
 removeSync(Paths.distDir)

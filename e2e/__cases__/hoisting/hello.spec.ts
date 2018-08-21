@@ -2,6 +2,7 @@ import hello from './hello';
 
 afterAll(() => {
   // this should go after
+  const zz = 20;
   jest.unmock('./hello');
 })
 
