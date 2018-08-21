@@ -1,0 +1,245 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`backportJestConfig with "globals.__TRANSFORM_HTML__" set to false should have changed the config correctly: before 1`] = `
+Object {
+  "globals": Object {
+    "__TRANSFORM_HTML__": false,
+  },
+}
+`;
+
+exports[`backportJestConfig with "globals.__TRANSFORM_HTML__" set to false should have changed the config correctly: migrated 1`] = `
+Object {
+  "globals": Object {
+    "ts-jest": Object {},
+  },
+}
+`;
+
+exports[`backportJestConfig with "globals.__TRANSFORM_HTML__" set to false should wran the user 1`] = `"warn ts-jest: \\"[jest-config].globals.__TRANSFORM_HTML__\\" is deprecated, use \\"[jest-config].globals.ts-jest.stringifyContentPathRegex\\" instead."`;
+
+exports[`backportJestConfig with "globals.__TRANSFORM_HTML__" set to true should have changed the config correctly: before 1`] = `
+Object {
+  "globals": Object {
+    "__TRANSFORM_HTML__": true,
+  },
+}
+`;
+
+exports[`backportJestConfig with "globals.__TRANSFORM_HTML__" set to true should have changed the config correctly: migrated 1`] = `
+Object {
+  "globals": Object {
+    "ts-jest": Object {
+      "stringifyContentPathRegex": "\\\\.html?$",
+    },
+  },
+}
+`;
+
+exports[`backportJestConfig with "globals.__TRANSFORM_HTML__" set to true should wran the user 1`] = `"warn ts-jest: \\"[jest-config].globals.__TRANSFORM_HTML__\\" is deprecated, use \\"[jest-config].globals.ts-jest.stringifyContentPathRegex\\" instead."`;
+
+exports[`backportJestConfig with "globals.__TS_CONFIG__" set to { foo: 'bar' } should have changed the config correctly: before 1`] = `
+Object {
+  "globals": Object {
+    "__TS_CONFIG__": Object {
+      "foo": "bar",
+    },
+  },
+}
+`;
+
+exports[`backportJestConfig with "globals.__TS_CONFIG__" set to { foo: 'bar' } should have changed the config correctly: migrated 1`] = `
+Object {
+  "globals": Object {
+    "ts-jest": Object {
+      "tsConfig": Object {
+        "foo": "bar",
+      },
+    },
+  },
+}
+`;
+
+exports[`backportJestConfig with "globals.__TS_CONFIG__" set to { foo: 'bar' } should wran the user 1`] = `"warn ts-jest: \\"[jest-config].globals.__TS_CONFIG__\\" is deprecated, use \\"[jest-config].globals.ts-jest.tsConfig\\" instead."`;
+
+exports[`backportJestConfig with "globals.ts-jest.enableTsDiagnostics" set to '\\\\.spec\\\\.ts$' should have changed the config correctly: before 1`] = `
+Object {
+  "globals": Object {
+    "ts-jest": Object {
+      "enableTsDiagnostics": "\\\\.spec\\\\.ts$",
+    },
+  },
+}
+`;
+
+exports[`backportJestConfig with "globals.ts-jest.enableTsDiagnostics" set to '\\\\.spec\\\\.ts$' should have changed the config correctly: migrated 1`] = `
+Object {
+  "globals": Object {
+    "ts-jest": Object {
+      "diagnostics": Object {
+        "pathRegex": "\\\\.spec\\\\.ts$",
+      },
+    },
+  },
+}
+`;
+
+exports[`backportJestConfig with "globals.ts-jest.enableTsDiagnostics" set to '\\\\.spec\\\\.ts$' should wran the user 1`] = `"warn ts-jest: \\"[jest-config].globals.ts-jest.enableTsDiagnostics\\" is deprecated, use \\"[jest-config].globals.ts-jest.diagnostics\\" instead."`;
+
+exports[`backportJestConfig with "globals.ts-jest.enableTsDiagnostics" set to false should have changed the config correctly: before 1`] = `
+Object {
+  "globals": Object {
+    "ts-jest": Object {
+      "enableTsDiagnostics": false,
+    },
+  },
+}
+`;
+
+exports[`backportJestConfig with "globals.ts-jest.enableTsDiagnostics" set to false should have changed the config correctly: migrated 1`] = `
+Object {
+  "globals": Object {
+    "ts-jest": Object {
+      "diagnostics": false,
+    },
+  },
+}
+`;
+
+exports[`backportJestConfig with "globals.ts-jest.enableTsDiagnostics" set to false should wran the user 1`] = `"warn ts-jest: \\"[jest-config].globals.ts-jest.enableTsDiagnostics\\" is deprecated, use \\"[jest-config].globals.ts-jest.diagnostics\\" instead."`;
+
+exports[`backportJestConfig with "globals.ts-jest.enableTsDiagnostics" set to true should have changed the config correctly: before 1`] = `
+Object {
+  "globals": Object {
+    "ts-jest": Object {
+      "enableTsDiagnostics": true,
+    },
+  },
+}
+`;
+
+exports[`backportJestConfig with "globals.ts-jest.enableTsDiagnostics" set to true should have changed the config correctly: migrated 1`] = `
+Object {
+  "globals": Object {
+    "ts-jest": Object {
+      "diagnostics": true,
+    },
+  },
+}
+`;
+
+exports[`backportJestConfig with "globals.ts-jest.enableTsDiagnostics" set to true should wran the user 1`] = `"warn ts-jest: \\"[jest-config].globals.ts-jest.enableTsDiagnostics\\" is deprecated, use \\"[jest-config].globals.ts-jest.diagnostics\\" instead."`;
+
+exports[`backportJestConfig with "globals.ts-jest.skipBabel" set to false should have changed the config correctly: before 1`] = `
+Object {
+  "globals": Object {
+    "ts-jest": Object {
+      "skipBabel": false,
+    },
+  },
+}
+`;
+
+exports[`backportJestConfig with "globals.ts-jest.skipBabel" set to false should have changed the config correctly: migrated 1`] = `
+Object {
+  "globals": Object {
+    "ts-jest": Object {
+      "babelConfig": true,
+    },
+  },
+}
+`;
+
+exports[`backportJestConfig with "globals.ts-jest.skipBabel" set to false should wran the user 1`] = `"warn ts-jest: \\"[jest-config].globals.ts-jest.skipBabel\\" is deprecated, use \\"[jest-config].globals.ts-jest.babelConfig\\" instead."`;
+
+exports[`backportJestConfig with "globals.ts-jest.skipBabel" set to true should have changed the config correctly: before 1`] = `
+Object {
+  "globals": Object {
+    "ts-jest": Object {
+      "skipBabel": true,
+    },
+  },
+}
+`;
+
+exports[`backportJestConfig with "globals.ts-jest.skipBabel" set to true should have changed the config correctly: migrated 1`] = `
+Object {
+  "globals": Object {
+    "ts-jest": Object {},
+  },
+}
+`;
+
+exports[`backportJestConfig with "globals.ts-jest.skipBabel" set to true should wran the user 1`] = `"warn ts-jest: \\"[jest-config].globals.ts-jest.skipBabel\\" is deprecated, use \\"[jest-config].globals.ts-jest.babelConfig\\" instead."`;
+
+exports[`backportJestConfig with "globals.ts-jest.tsConfigFile" set to 'tsconfig.build.json' should have changed the config correctly: before 1`] = `
+Object {
+  "globals": Object {
+    "ts-jest": Object {
+      "tsConfigFile": "tsconfig.build.json",
+    },
+  },
+}
+`;
+
+exports[`backportJestConfig with "globals.ts-jest.tsConfigFile" set to 'tsconfig.build.json' should have changed the config correctly: migrated 1`] = `
+Object {
+  "globals": Object {
+    "ts-jest": Object {
+      "tsConfig": "tsconfig.build.json",
+    },
+  },
+}
+`;
+
+exports[`backportJestConfig with "globals.ts-jest.tsConfigFile" set to 'tsconfig.build.json' should wran the user 1`] = `"warn ts-jest: \\"[jest-config].globals.ts-jest.tsConfigFile\\" is deprecated, use \\"[jest-config].globals.ts-jest.tsConfig\\" instead."`;
+
+exports[`backportJestConfig with "globals.ts-jest.useBabelrc" set to false should have changed the config correctly: before 1`] = `
+Object {
+  "globals": Object {
+    "ts-jest": Object {
+      "useBabelrc": false,
+    },
+  },
+}
+`;
+
+exports[`backportJestConfig with "globals.ts-jest.useBabelrc" set to false should have changed the config correctly: migrated 1`] = `
+Object {
+  "globals": Object {
+    "ts-jest": Object {
+      "babelConfig": Object {},
+    },
+  },
+}
+`;
+
+exports[`backportJestConfig with "globals.ts-jest.useBabelrc" set to false should wran the user 1`] = `
+"warn ts-jest: \\"[jest-config].globals.ts-jest.useBabelrc\\" is deprecated, use \\"[jest-config].globals.ts-jest.babelConfig\\" instead.
+    ↳ See \`babel-jest\` related issue: https://github.com/facebook/jest/issues/3845"
+`;
+
+exports[`backportJestConfig with "globals.ts-jest.useBabelrc" set to true should have changed the config correctly: before 1`] = `
+Object {
+  "globals": Object {
+    "ts-jest": Object {
+      "useBabelrc": true,
+    },
+  },
+}
+`;
+
+exports[`backportJestConfig with "globals.ts-jest.useBabelrc" set to true should have changed the config correctly: migrated 1`] = `
+Object {
+  "globals": Object {
+    "ts-jest": Object {
+      "babelConfig": true,
+    },
+  },
+}
+`;
+
+exports[`backportJestConfig with "globals.ts-jest.useBabelrc" set to true should wran the user 1`] = `
+"warn ts-jest: \\"[jest-config].globals.ts-jest.useBabelrc\\" is deprecated, use \\"[jest-config].globals.ts-jest.babelConfig\\" instead.
+    ↳ See \`babel-jest\` related issue: https://github.com/facebook/jest/issues/3845"
+`;

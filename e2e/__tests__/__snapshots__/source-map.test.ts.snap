@@ -1,0 +1,445 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`using template "default" should have the source mpas comment 1`] = `
+  ===[ FILE: main.ts ]============================================================
+  "use strict";
+  Object.defineProperty(exports, "__esModule", { value: true });
+  function consoleLog() {
+      console.log('WITHIN SOURCE');
+  }
+  exports.consoleLog = consoleLog;
+  function throwError() {
+      throw new Error('WITHIN SOURCE');
+  }
+  exports.throwError = throwError;
+  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoibWFpbi50cyIsIm1hcHBpbmdzIjoiOztBQUFBLFNBQWdCLFVBQVU7SUFDeEIsT0FBTyxDQUFDLEdBQUcsQ0FBQyxlQUFlLENBQUMsQ0FBQTtBQUM5QixDQUFDO0FBRkQsZ0NBRUM7QUFFRCxTQUFnQixVQUFVO0lBQ3hCLE1BQU0sSUFBSSxLQUFLLENBQUMsZUFBZSxDQUFDLENBQUE7QUFDbEMsQ0FBQztBQUZELGdDQUVDIiwibmFtZXMiOltdLCJzb3VyY2VSb290IjoiPGN3ZD4vIiwic291cmNlcyI6WyJtYWluLnRzIl0sInNvdXJjZXNDb250ZW50IjpbImV4cG9ydCBmdW5jdGlvbiBjb25zb2xlTG9nKCkge1xuICBjb25zb2xlLmxvZygnV0lUSElOIFNPVVJDRScpXG59XG5cbmV4cG9ydCBmdW5jdGlvbiB0aHJvd0Vycm9yKCkge1xuICB0aHJvdyBuZXcgRXJyb3IoJ1dJVEhJTiBTT1VSQ0UnKVxufVxuIl0sInZlcnNpb24iOjN9
+  ===[ INLINE SOURCE MAPS ]=======================================================
+  file: main.ts
+  mappings: >-
+    ;;AAAA,SAAgB,UAAU;IACxB,OAAO,CAAC,GAAG,CAAC,eAAe,CAAC,CAAA;AAC9B,CAAC;AAFD,gCAEC;AAED,SAAgB,UAAU;IACxB,MAAM,IAAI,KAAK,CAAC,eAAe,CAAC,CAAA;AAClC,CAAC;AAFD,gCAEC
+  names: []
+  sourceRoot: <cwd>/
+  sources:
+    - main.ts
+  sourcesContent:
+    - |
+      export function consoleLog() {
+        console.log('WITHIN SOURCE')
+      }
+  
+      export function throwError() {
+        throw new Error('WITHIN SOURCE')
+      }
+  version: 3
+  ================================================================================
+`;
+
+exports[`using template "default" should report correct line numbers 1`] = `
+  × jest --runInBand
+  ↳ exit code: 1
+  ===[ STDOUT ]===================================================================
+  console.log main.ts:2
+      WITHIN SOURCE
+  
+    console.log main.spec.ts:9
+      WITHIN TEST
+  ===[ STDERR ]===================================================================
+  FAIL ./main.spec.ts
+    console.log()
+      √ from sources
+      √ from tests
+    throw new Error()
+      × throws from sources
+      × throws from tests
+  
+    ● throw new Error() › throws from sources
+  
+      WITHIN SOURCE
+  
+        4 | 
+        5 | export function throwError() {
+      > 6 |   throw new Error('WITHIN SOURCE')
+          |         ^
+        7 | }
+        8 | 
+  
+        at Object.throwError (main.ts:6:9)
+        at Object.<anonymous> (main.spec.ts:16:5)
+  
+    ● throw new Error() › throws from tests
+  
+      WITHIN TEST
+  
+        18 |   });
+        19 |   test('throws from tests', () => {
+      > 20 |     throw new Error('WITHIN TEST');
+           |           ^
+        21 |     expect(true).toBe(true);
+        22 |   });
+        23 | });
+  
+        at Object.<anonymous> (main.spec.ts:20:11)
+  
+  Test Suites: 1 failed, 1 total
+  Tests:       2 failed, 2 passed, 4 total
+  Snapshots:   0 total
+  Time:        XXs
+  Ran all test suites.
+  ================================================================================
+`;
+
+exports[`using template "with-babel-6" should have the source mpas comment 1`] = `
+  ===[ FILE: main.ts ]============================================================
+  "use strict";
+  
+  Object.defineProperty(exports, "__esModule", { value: true });
+  function consoleLog() {
+      console.log('WITHIN SOURCE');
+  }
+  exports.consoleLog = consoleLog;
+  function throwError() {
+      throw new Error('WITHIN SOURCE');
+  }
+  exports.throwError = throwError;
+  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJtYXBwaW5ncyI6Ijs7O0FBQUEsU0FBZ0IsVUFBaEIsR0FBMEI7QUFDeEIsWUFBUSxHQUFSLENBQVksZUFBWjtBQUNEO0FBRkQsUUFBQSxVQUFBLEdBQUEsVUFBQTtBQUlBLFNBQWdCLFVBQWhCLEdBQTBCO0FBQ3hCLFVBQU0sSUFBSSxLQUFKLENBQVUsZUFBVixDQUFOO0FBQ0Q7QUFGRCxRQUFBLFVBQUEsR0FBQSxVQUFBIiwibmFtZXMiOltdLCJzb3VyY2VSb290IjoiPGN3ZD4vIiwic291cmNlcyI6WyJtYWluLnRzIl0sInNvdXJjZXNDb250ZW50IjpbImV4cG9ydCBmdW5jdGlvbiBjb25zb2xlTG9nKCkge1xuICBjb25zb2xlLmxvZygnV0lUSElOIFNPVVJDRScpXG59XG5cbmV4cG9ydCBmdW5jdGlvbiB0aHJvd0Vycm9yKCkge1xuICB0aHJvdyBuZXcgRXJyb3IoJ1dJVEhJTiBTT1VSQ0UnKVxufVxuIl0sInZlcnNpb24iOjN9
+  ===[ INLINE SOURCE MAPS ]=======================================================
+  mappings: >-
+    ;;;AAAA,SAAgB,UAAhB,GAA0B;AACxB,YAAQ,GAAR,CAAY,eAAZ;AACD;AAFD,QAAA,UAAA,GAAA,UAAA;AAIA,SAAgB,UAAhB,GAA0B;AACxB,UAAM,IAAI,KAAJ,CAAU,eAAV,CAAN;AACD;AAFD,QAAA,UAAA,GAAA,UAAA
+  names: []
+  sourceRoot: <cwd>/
+  sources:
+    - main.ts
+  sourcesContent:
+    - |
+      export function consoleLog() {
+        console.log('WITHIN SOURCE')
+      }
+  
+      export function throwError() {
+        throw new Error('WITHIN SOURCE')
+      }
+  version: 3
+  ================================================================================
+`;
+
+exports[`using template "with-babel-6" should report correct line numbers 1`] = `
+  × jest --runInBand
+  ↳ exit code: 1
+  ===[ STDOUT ]===================================================================
+  console.log main.ts:2
+      WITHIN SOURCE
+  
+    console.log main.spec.ts:9
+      WITHIN TEST
+  ===[ STDERR ]===================================================================
+  FAIL ./main.spec.ts
+    console.log()
+      √ from sources
+      √ from tests
+    throw new Error()
+      × throws from sources
+      × throws from tests
+  
+    ● throw new Error() › throws from sources
+  
+      WITHIN SOURCE
+  
+        4 | 
+        5 | export function throwError() {
+      > 6 |   throw new Error('WITHIN SOURCE')
+          |         ^
+        7 | }
+        8 | 
+  
+        at Object.throwError (main.ts:6:9)
+        at Object.<anonymous> (main.spec.ts:16:5)
+  
+    ● throw new Error() › throws from tests
+  
+      WITHIN TEST
+  
+        18 |   });
+        19 |   test('throws from tests', () => {
+      > 20 |     throw new Error('WITHIN TEST');
+           |           ^
+        21 |     expect(true).toBe(true);
+        22 |   });
+        23 | });
+  
+        at Object.<anonymous> (main.spec.ts:20:11)
+  
+  Test Suites: 1 failed, 1 total
+  Tests:       2 failed, 2 passed, 4 total
+  Snapshots:   0 total
+  Time:        XXs
+  Ran all test suites.
+  ================================================================================
+`;
+
+exports[`using template "with-babel-7" should have the source mpas comment 1`] = `
+  ===[ FILE: main.ts ]============================================================
+  "use strict";
+  
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  
+  function consoleLog() {
+    console.log('WITHIN SOURCE');
+  }
+  
+  exports.consoleLog = consoleLog;
+  
+  function throwError() {
+    throw new Error('WITHIN SOURCE');
+  }
+  
+  exports.throwError = throwError;
+  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJtYXBwaW5ncyI6Ijs7Ozs7O0FBQUEsU0FBZ0IsVUFBaEIsR0FBMEI7QUFDeEIsRUFBQSxPQUFPLENBQUMsR0FBUixDQUFZLGVBQVo7QUFDRDs7QUFGRCxPQUFBLENBQUEsVUFBQSxHQUFBLFVBQUE7O0FBSUEsU0FBZ0IsVUFBaEIsR0FBMEI7QUFDeEIsUUFBTSxJQUFJLEtBQUosQ0FBVSxlQUFWLENBQU47QUFDRDs7QUFGRCxPQUFBLENBQUEsVUFBQSxHQUFBLFVBQUEiLCJuYW1lcyI6W10sInNvdXJjZVJvb3QiOiI8Y3dkPi8iLCJzb3VyY2VzIjpbIm1haW4udHMiXSwic291cmNlc0NvbnRlbnQiOlsiZXhwb3J0IGZ1bmN0aW9uIGNvbnNvbGVMb2coKSB7XG4gIGNvbnNvbGUubG9nKCdXSVRISU4gU09VUkNFJylcbn1cblxuZXhwb3J0IGZ1bmN0aW9uIHRocm93RXJyb3IoKSB7XG4gIHRocm93IG5ldyBFcnJvcignV0lUSElOIFNPVVJDRScpXG59XG4iXSwidmVyc2lvbiI6M30=
+  ===[ INLINE SOURCE MAPS ]=======================================================
+  mappings: >-
+    ;;;;;;AAAA,SAAgB,UAAhB,GAA0B;AACxB,EAAA,OAAO,CAAC,GAAR,CAAY,eAAZ;AACD;;AAFD,OAAA,CAAA,UAAA,GAAA,UAAA;;AAIA,SAAgB,UAAhB,GAA0B;AACxB,QAAM,IAAI,KAAJ,CAAU,eAAV,CAAN;AACD;;AAFD,OAAA,CAAA,UAAA,GAAA,UAAA
+  names: []
+  sourceRoot: <cwd>/
+  sources:
+    - main.ts
+  sourcesContent:
+    - |
+      export function consoleLog() {
+        console.log('WITHIN SOURCE')
+      }
+  
+      export function throwError() {
+        throw new Error('WITHIN SOURCE')
+      }
+  version: 3
+  ================================================================================
+`;
+
+exports[`using template "with-babel-7" should report correct line numbers 1`] = `
+  × jest --runInBand
+  ↳ exit code: 1
+  ===[ STDOUT ]===================================================================
+  console.log main.ts:2
+      WITHIN SOURCE
+  
+    console.log main.spec.ts:9
+      WITHIN TEST
+  ===[ STDERR ]===================================================================
+  FAIL ./main.spec.ts
+    console.log()
+      √ from sources
+      √ from tests
+    throw new Error()
+      × throws from sources
+      × throws from tests
+  
+    ● throw new Error() › throws from sources
+  
+      WITHIN SOURCE
+  
+        4 | 
+        5 | export function throwError() {
+      > 6 |   throw new Error('WITHIN SOURCE')
+          |         ^
+        7 | }
+        8 | 
+  
+        at Object.throwError (main.ts:6:9)
+        at Object.<anonymous> (main.spec.ts:16:5)
+  
+    ● throw new Error() › throws from tests
+  
+      WITHIN TEST
+  
+        18 |   });
+        19 |   test('throws from tests', () => {
+      > 20 |     throw new Error('WITHIN TEST');
+           |           ^
+        21 |     expect(true).toBe(true);
+        22 |   });
+        23 | });
+  
+        at Object.<anonymous> (main.spec.ts:20:11)
+  
+  Test Suites: 1 failed, 1 total
+  Tests:       2 failed, 2 passed, 4 total
+  Snapshots:   0 total
+  Time:        XXs
+  Ran all test suites.
+  ================================================================================
+`;
+
+exports[`using template "with-jest-22" should have the source mpas comment 1`] = `
+  ===[ FILE: main.ts ]============================================================
+  "use strict";
+  Object.defineProperty(exports, "__esModule", { value: true });
+  function consoleLog() {
+      console.log('WITHIN SOURCE');
+  }
+  exports.consoleLog = consoleLog;
+  function throwError() {
+      throw new Error('WITHIN SOURCE');
+  }
+  exports.throwError = throwError;
+  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoibWFpbi50cyIsIm1hcHBpbmdzIjoiOztBQUFBLFNBQWdCLFVBQVU7SUFDeEIsT0FBTyxDQUFDLEdBQUcsQ0FBQyxlQUFlLENBQUMsQ0FBQTtBQUM5QixDQUFDO0FBRkQsZ0NBRUM7QUFFRCxTQUFnQixVQUFVO0lBQ3hCLE1BQU0sSUFBSSxLQUFLLENBQUMsZUFBZSxDQUFDLENBQUE7QUFDbEMsQ0FBQztBQUZELGdDQUVDIiwibmFtZXMiOltdLCJzb3VyY2VSb290IjoiPGN3ZD4vIiwic291cmNlcyI6WyJtYWluLnRzIl0sInNvdXJjZXNDb250ZW50IjpbImV4cG9ydCBmdW5jdGlvbiBjb25zb2xlTG9nKCkge1xuICBjb25zb2xlLmxvZygnV0lUSElOIFNPVVJDRScpXG59XG5cbmV4cG9ydCBmdW5jdGlvbiB0aHJvd0Vycm9yKCkge1xuICB0aHJvdyBuZXcgRXJyb3IoJ1dJVEhJTiBTT1VSQ0UnKVxufVxuIl0sInZlcnNpb24iOjN9
+  ===[ INLINE SOURCE MAPS ]=======================================================
+  file: main.ts
+  mappings: >-
+    ;;AAAA,SAAgB,UAAU;IACxB,OAAO,CAAC,GAAG,CAAC,eAAe,CAAC,CAAA;AAC9B,CAAC;AAFD,gCAEC;AAED,SAAgB,UAAU;IACxB,MAAM,IAAI,KAAK,CAAC,eAAe,CAAC,CAAA;AAClC,CAAC;AAFD,gCAEC
+  names: []
+  sourceRoot: <cwd>/
+  sources:
+    - main.ts
+  sourcesContent:
+    - |
+      export function consoleLog() {
+        console.log('WITHIN SOURCE')
+      }
+  
+      export function throwError() {
+        throw new Error('WITHIN SOURCE')
+      }
+  version: 3
+  ================================================================================
+`;
+
+exports[`using template "with-jest-22" should report correct line numbers 1`] = `
+  × jest --runInBand
+  ↳ exit code: 1
+  ===[ STDOUT ]===================================================================
+  console.log main.ts:2
+      WITHIN SOURCE
+  
+    console.log main.spec.ts:9
+      WITHIN TEST
+  ===[ STDERR ]===================================================================
+  FAIL ./main.spec.ts
+    console.log()
+      √ from sources
+      √ from tests
+    throw new Error()
+      × throws from sources
+      × throws from tests
+  
+    ● throw new Error() › throws from sources
+  
+      WITHIN SOURCE
+  
+        4 | 
+        5 | export function throwError() {
+      > 6 |   throw new Error('WITHIN SOURCE')
+        7 | }
+        8 | 
+        
+        at Object.throwError (main.ts:6:9)
+        at Object.<anonymous> (main.spec.ts:16:5)
+  
+    ● throw new Error() › throws from tests
+  
+      WITHIN TEST
+  
+        18 |   });
+        19 |   test('throws from tests', () => {
+      > 20 |     throw new Error('WITHIN TEST');
+        21 |     expect(true).toBe(true);
+        22 |   });
+        23 | });
+        
+        at Object.<anonymous> (main.spec.ts:20:11)
+  
+  Test Suites: 1 failed, 1 total
+  Tests:       2 failed, 2 passed, 4 total
+  Snapshots:   0 total
+  Time:        XXs
+  Ran all test suites.
+  ================================================================================
+`;
+
+exports[`using template "with-typescript-2-7" should have the source mpas comment 1`] = `
+  ===[ FILE: main.ts ]============================================================
+  "use strict";
+  Object.defineProperty(exports, "__esModule", { value: true });
+  function consoleLog() {
+      console.log('WITHIN SOURCE');
+  }
+  exports.consoleLog = consoleLog;
+  function throwError() {
+      throw new Error('WITHIN SOURCE');
+  }
+  exports.throwError = throwError;
+  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoibWFpbi50cyIsIm1hcHBpbmdzIjoiOztBQUFBO0lBQ0UsT0FBTyxDQUFDLEdBQUcsQ0FBQyxlQUFlLENBQUMsQ0FBQTtBQUM5QixDQUFDO0FBRkQsZ0NBRUM7QUFFRDtJQUNFLE1BQU0sSUFBSSxLQUFLLENBQUMsZUFBZSxDQUFDLENBQUE7QUFDbEMsQ0FBQztBQUZELGdDQUVDIiwibmFtZXMiOltdLCJzb3VyY2VSb290IjoiPGN3ZD4vIiwic291cmNlcyI6WyJtYWluLnRzIl0sInNvdXJjZXNDb250ZW50IjpbImV4cG9ydCBmdW5jdGlvbiBjb25zb2xlTG9nKCkge1xuICBjb25zb2xlLmxvZygnV0lUSElOIFNPVVJDRScpXG59XG5cbmV4cG9ydCBmdW5jdGlvbiB0aHJvd0Vycm9yKCkge1xuICB0aHJvdyBuZXcgRXJyb3IoJ1dJVEhJTiBTT1VSQ0UnKVxufVxuIl0sInZlcnNpb24iOjN9
+  ===[ INLINE SOURCE MAPS ]=======================================================
+  file: main.ts
+  mappings: >-
+    ;;AAAA;IACE,OAAO,CAAC,GAAG,CAAC,eAAe,CAAC,CAAA;AAC9B,CAAC;AAFD,gCAEC;AAED;IACE,MAAM,IAAI,KAAK,CAAC,eAAe,CAAC,CAAA;AAClC,CAAC;AAFD,gCAEC
+  names: []
+  sourceRoot: <cwd>/
+  sources:
+    - main.ts
+  sourcesContent:
+    - |
+      export function consoleLog() {
+        console.log('WITHIN SOURCE')
+      }
+  
+      export function throwError() {
+        throw new Error('WITHIN SOURCE')
+      }
+  version: 3
+  ================================================================================
+`;
+
+exports[`using template "with-typescript-2-7" should report correct line numbers 1`] = `
+  × jest --runInBand
+  ↳ exit code: 1
+  ===[ STDOUT ]===================================================================
+  console.log main.ts:2
+      WITHIN SOURCE
+  
+    console.log main.spec.ts:9
+      WITHIN TEST
+  ===[ STDERR ]===================================================================
+  FAIL ./main.spec.ts
+    console.log()
+      √ from sources
+      √ from tests
+    throw new Error()
+      × throws from sources
+      × throws from tests
+  
+    ● throw new Error() › throws from sources
+  
+      WITHIN SOURCE
+  
+        4 | 
+        5 | export function throwError() {
+      > 6 |   throw new Error('WITHIN SOURCE')
+          |         ^
+        7 | }
+        8 | 
+  
+        at Object.throwError (main.ts:6:9)
+        at Object.<anonymous> (main.spec.ts:16:5)
+  
+    ● throw new Error() › throws from tests
+  
+      WITHIN TEST
+  
+        18 |   });
+        19 |   test('throws from tests', () => {
+      > 20 |     throw new Error('WITHIN TEST');
+           |           ^
+        21 |     expect(true).toBe(true);
+        22 |   });
+        23 | });
+  
+        at Object.<anonymous> (main.spec.ts:20:11)
+  
+  Test Suites: 1 failed, 1 total
+  Tests:       2 failed, 2 passed, 4 total
+  Snapshots:   0 total
+  Time:        XXs
+  Ran all test suites.
+  ================================================================================
+`;

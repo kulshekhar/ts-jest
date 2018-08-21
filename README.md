@@ -1,16 +1,21 @@
-# ts-jest  [![npm version](https://badge.fury.io/js/ts-jest.svg)](https://badge.fury.io/js/ts-jest) [![NPM downloads](https://img.shields.io/npm/dm/ts-jest.svg?style=flat)](https://npmjs.org/package/ts-jest) [![Greenkeeper badge](https://badges.greenkeeper.io/kulshekhar/ts-jest.svg)](https://greenkeeper.io/) [![Build Status for linux](https://travis-ci.org/kulshekhar/ts-jest.svg?branch=master)](https://travis-ci.org/kulshekhar/ts-jest) [![Build Status for Windows](https://ci.appveyor.com/api/projects/status/g8tt9qd7usv0tolb/branch/master?svg=true)](https://ci.appveyor.com/project/kulshekhar/ts-jest/branch/master)
+# ts-jest  [![npm version](https://badge.fury.io/js/ts-jest.svg)](https://badge.fury.io/js/ts-jest) [![NPM downloads](https://img.shields.io/npm/dm/ts-jest.svg?style=flat)](https://npmjs.org/package/ts-jest) [![Greenkeeper badge](https://badges.greenkeeper.io/kulshekhar/ts-jest.svg)](https://greenkeeper.io/) [![Build Status for linux](https://travis-ci.org/kulshekhar/ts-jest.svg?branch=master)](https://travis-ci.org/kulshekhar/ts-jest) [![Build Status for Windows](https://ci.appveyor.com/api/projects/status/g8tt9qd7usv0tolb/branch/master?svg=true)](https://ci.appveyor.com/project/kulshekhar/ts-jest/branch/master) <img align="right" src="./logo.png" height="48">
 
-**Important note**: Before reporting any issue, be sure to check the [troubleshooting page](https://github.com/kulshekhar/ts-jest/wiki/Troubleshooting).
-
-
-> Note: Looking for collaborators. [Want to help improve ts-jest?](https://github.com/kulshekhar/ts-jest/issues/223)
 
 **ts-jest** is a TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript.
 
-## Table of Contents
+---
+
+[<img src="./doc/assets/troubleshooting.png" align="left" height="24"> Before reporting any issue, be sure to check the troubleshooting page](https://github.com/kulshekhar/ts-jest/wiki/Troubleshooting)
+
+[<img src="./doc/assets/slack.png" align="left" height="24"> You can also find help on the ts-jest community on Slack](https://join.slack.com/t/ts-jest/shared_invite/enQtNDE1ODQ0OTEzMTczLWU2ZTk5YTMzYTE1YjBkZTk5ODI1NWU3NWU0NzhlOWJlZDNkYTRlM2Y3NWQ1YWVjMjc5Mjg1NmY1NTdkNWQ3MTA)
+
+[<img src="./doc/assets/pull-request.png" align="left" height="24"> Looking for collaborators. Want to help improve ts-jest?](https://github.com/kulshekhar/ts-jest/issues/223)
+
+---
+
+# Table of Contents
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-
 
 - [Usage](#usage)
   - [Versioning](#versioning)
@@ -21,22 +26,19 @@
   - [Supports synthetic modules](#supports-synthetic-modules)
   - [Supports automatic of jest.mock() calls](#supports-automatic-of-jestmock-calls)
 - [Configuration](#configuration)
-  - [tsconfig](#tsconfig)
+  - [TypeScript configuration](#typescript-configuration)
   - [Module path mapping](#module-path-mapping)
-  - [Skipping Babel](#skipping-babel)
-  - [Using `.babelrc`](#using-babelrc)
-  - [Using a custom Babel config](#using-a-custom-babel-config)
+  - [Using `babel-jest`](#using-babel-jest)
   - [TS compiler & error reporting](#ts-compiler--error-reporting)
   - [Ignore coverage on decorators](#ignore-coverage-on-decorators)
+  - [extending](#extending)
 - [Use cases](#use-cases)
   - [React Native](#react-native)
 - [Angular 2](#angular-2)
-- [Using ES2015+ features in Javascript files](#using-es2015-features-in-javascript-files)
 - [Tips](#tips)
   - [Importing packages written in TypeScript](#importing-packages-written-in-typescript)
 - [Known Limitations](#known-limitations)
   - [Known limitations for TS compiler options](#known-limitations-for-ts-compiler-options)
-  - [Known Limitations for hoisting](#known-limitations-for-hoisting)
   - [`const enum` is not supported](#const-enum-is-not-supported)
 - [How to Contribute](#how-to-contribute)
   - [Quickstart to run tests (only if you're working on this package)](#quickstart-to-run-tests-only-if-youre-working-on-this-package)
@@ -58,20 +60,15 @@ Modify your project's `package.json` so that the `jest` section looks something 
 ```json
 {
   "jest": {
-    "transform": {
-      "^.+\\.tsx?$": "ts-jest"
-    },
-    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "jsx",
-      "json",
-      "node"
-    ]
+    "preset": "ts-jest"
   }
 }
+```
+or create/modify the `jest.config.js`:
+```js
+module.exports = {
+  preset: 'ts-jest',
+};
 ```
 This setup should allow you to write Jest tests in Typescript and be able to locate errors without any additional gymnastics.
 
@@ -79,13 +76,11 @@ This setup should allow you to write Jest tests in Typescript and be able to loc
 From version `"jest": "17.0.0"` we are using same MAJOR.MINOR as [`Jest`](https://github.com/facebook/jest).
 For `"jest": "< 17.0.0"` use `"ts-jest": "0.1.13"`. Docs for it see [here](https://github.com/kulshekhar/ts-jest/blob/e1f95e524ed62091736f70abf63530f1f107ec03/README.md).
 
-You can try using ts-jest with `jest@test`; use at your own risk! (And file an issue if you find problems.)
+You can try using ts-jest with `jest@next`; use at your own risk! (And file an issue if you find problems.)
 
 ### Coverage
 
 Prior to version `20.0.0`, coverage reports could be obtained using the inbuilt coverage processor in ts-jest. Starting with version `20.0.0`, ts-jest delegates coverage processing to jest and no longer includes a coverage processor.
-
-> Please note that the `outDir` property in the `jest` configuration section is removed in coverage mode, due to [#201](https://github.com/kulshekhar/ts-jest/issues/201).
 
 ## Default Setup
 ts-jest tries to ship with sensible defaults, to get you on your feet as quickly as possible.
@@ -96,7 +91,7 @@ and you should be able to step through the TypeScript code using a debugger.
 
 ### Automatically finds tsconfig.json
 ts-jest automatically located your `tsconfig` file.
-If you want to compile typescript with a special configuration, you [can do that too](#tsconfig)
+If you want to compile typescript with a special configuration, you [can do that too](#typescript-configuration).
 
 ### Supports synthetic modules
 If you're on a codebase where you're using synthetic default imports, e.g.
@@ -107,182 +102,186 @@ import * as React from 'react';
 //Synthetic default imports:
 import React from 'react';
 ```
-ts-jest tries to support that. If `allowSyntheticDefaultImports` is set to true in your `tsconfig` file, it uses babel
-to automatically create the synthetic default exports for you - nothing else needed.
-You can opt-out of this behaviour with the [skipBabel flag](#skipping-babel)
-
-**Typescript 2.7 has built-in support for this feature via the `esModuleInterop` flag. We're looking to deprecate this feature.
-Please use `esModuleInterop` instead. More details [here](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-7.html)**
+ts-jest does that by using TypeScript 2.7+ `esModuleInterop` option. More details [here](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-7.html).
 
 ### Supports automatic of jest.mock() calls
 [Just like Jest](https://facebook.github.io/jest/docs/manual-mocks.html#using-with-es-module-imports) ts-jest
-automatically uses babel to hoist your `jest.mock()` calls to the top of your file.
-You can opt-out of this behaviour with the [skipBabel flag](#skipping-babel)
+automatically hoist your `jest.mock()` calls to the top of their block.
 
 ## Configuration
-If the default setup doesn't address your requirements, you can create a custom setup to suit your project.
+If the default setup doesn't address your requirements, you can create a custom setup to suit your project. All ts-jest specific configuration is done in an object with the `ts-jest` key within jest `gobals` config:
 
-### tsconfig
-By default this package will try to locate `tsconfig.json` and use its compiler options for your `.ts` and `.tsx` files.
-
-You can override this behaviour by pointing ts-jest to a custom TypeScript configuration file.
-You can do this by setting the `tsConfigFile` option in your global variables under the `ts-jest` key to path of the
-custom configuration file (relative to the project's root directory)
-
-```json
+```js
+// package.json
 {
   "jest": {
     "globals": {
       "ts-jest": {
-        "tsConfigFile": "my-tsconfig.json"
+        // ts-jest specific configuration
       }
     }
   }
 }
 ```
-**Warning: In the past, a `__TS_CONFIG__` section could be used to provide an inline TypeScript configuration. Going forward, all custom configurations should be in a different file and the `tsConfigFile` key in the `ts-jest` section (under `globals`) should point to this file (as shown above). You can ignore this if the configuration you want is identical to the main `tsconfig.json`.**
-
-For all available `tsc` options see [TypeScript docs](https://www.typescriptlang.org/docs/handbook/compiler-options.html).
-
-Note that if you haven't explicitly set the `module` property through a separate configuration file with `tsConfigFile`, it will be overwritten to `commonjs` (regardless of the value in `tsconfig.json`) since that is the format Jest expects. This only happens during testing.
-
-If you *have* explicitly set the `module` property but to a different value than `commonjs`, Jest may throw errors. In that case, a practical workaround is to make a `tsconfig.jest.json` file which [`extends`](http://www.typescriptlang.org/docs/handbook/tsconfig-json.html#configuration-inheritance-with-extends) your real `tsconfig.json` but sets `module` to `commonjs`:
-
+**OR**
 ```js
-// tsconfig.jest.json
-{
-  "extends": "./tsconfig",
-  "compilerOptions": {
-    "module": "commonjs"
+// jest.config.js
+module.exports = {
+  globals: {
+    'ts-jest': {
+      // ts-jest specific configuration
+    }
   }
 }
 ```
+
+In following documentation we'll show you examples as if you were using a `jest.config.js` file, but the same applies if you were putting the configuration optons within `package.json`'s `jest` section of course.
+
+Any configuration options which is a path to some file can make the use of `<rootDir>`. It'll be replaced with the value of `rootDir` as in other Jest config options.
+
+### TypeScript configuration
+By default this package will try to locate `tsconfig.json` and use its compiler options for your `.ts` and `.tsx` files.
+
+You can override this behavior with the `tsConfig` option of ts-jest. It can be:
+
+- the path to a `tsconfig` JSON file (relative to `rootDir`):
+  ```js
+  // jest.config.js
+  module.exports = {
+    globals: {
+      'ts-jest': {
+        tsConfig: 'my-tsconfig.json'
+      }
+    }
+  };
+  ```
+
+- a plain object containing the `compilerOptions`:
+  ```js
+  // jest.config.js
+  module.exports = {
+    globals: {
+      'ts-jest': {
+        tsConfig: {
+          experimentalDecorators: true,
+          // ...
+        }
+      }
+    }
+  };
+  ```
+
+For all available `tsc` options see [TypeScript docs](https://www.typescriptlang.org/docs/handbook/compiler-options.html).
+
+Note that files are transpiled as isolated modules. Because of that some compiler options have no effect: `declaration`, `declarationDir`, `esModuleInterop`, `inlineSourceMaps`, `inlineSources`, `lib`, `module`, `noEmit`, `noEmitOnError`, `out`, `outFile`, `paths`, `rootDirs`, `sourceMaps` and `types`. See TypeScript `transpileModule`'s [function source](https://github.com/Microsoft/TypeScript/blob/v3.0.1/src/services/transpile.ts#L44-L53).
 
 ### Module path mapping
 
 If you use ["baseUrl"](https://www.typescriptlang.org/docs/handbook/module-resolution.html) and "paths" options for the compiler, see ["moduleNameMapper"](https://facebook.github.io/jest/docs/en/configuration.html#modulenamemapper-object-string-string) option on Jest docs.
 
 For example, with the below config in your tsconfig:
-```
-   "paths": {
-      "@App/*": [
-        "src/*"
-      ],
-      "@Shared/*": [
-        "src/Shared/*"
-      ]
-    },
-```
-
-Here's what your jest config should look like:
-
-```
-"moduleNameMapper": {
-  "@App/(.*)": "<rootDir>/src/$1",
-  "@Shared/(.*)": "<rootDir>/src/Shared/$1"
-}
-```
-
-### Skipping Babel
-If you don't use mocks, or synthetic default imports you can skip the babel-transpilation step.
-This means `jest.mock()` calls will not be hoisted to the top,
-and synthetic default exports will never be created.
-Simply add skipBabel to your global variables under the `ts-jest` key:
-```json
-//This will skip babel transpilation
+```js
+// tsconfig.json
 {
-  "jest": {
-    "globals": {
-      "ts-jest": {
-        "skipBabel": true
-      }
+  "compilerOptions": {
+    "paths": {
+      "@App/*": ["src/*"],
+      "@Shared/*": ["src/Shared/*"]
     }
   }
 }
 ```
 
-### Using `.babelrc`
-
-When using Babel, ts-jest, by default, doesn't use the `.babelrc` file. If you want ts-jest to use `.babelrc`, you should set the `globals > ts-jest > useBabelrc` flag to `true` in your `jest` configuration.
-
-```json
-{
-  "jest": {
-    "globals": {
-      "ts-jest": {
-        "useBabelrc": true
-      }
-    }
+...here's what your jest config should look like:
+```js
+// jest.config.js
+module.exports = {
+  moduleNameMapper: {
+    '@App/(.*)': '<rootDir>/src/$1',
+    '@Shared/(.*)': '<rootDir>/src/Shared/$1'
   }
-}
+};
 ```
 
-### Using a custom Babel config
+### Using `babel-jest`
+By default ts-jest does not rely on babel-jest. But you may want to use some babel plugins and stll be able to write TypeScript. This can be achieved using the `babelConfig` config key. It can be:
 
-In some cases, projects may not want to have a `.babelrc` file, but still need to provide custom Babel configuration. In these cases, you can provide a Babel config directly to `ts-jest` using the `globals > ts-jest > babelConfig` option in your `jest` configuration.
+- `true`, in which case it'll use defaults from babelrc or any other found config file:
+  ```js
+  // jest.config.js
+  module.exports = {
+    globals: {
+      'ts-jest': {
+        babelConfig: true
+      }
+    }
+  };
+  ```
 
-```json
-{
-  "jest": {
-    "globals": {
-      "ts-jest": {
-        "babelConfig": {
-          "presets": ["@babel/env"]
+- the path to a babel config file:
+  ```js
+  // jest.config.js
+  module.exports = {
+    globals: {
+      'ts-jest': {
+        babelConfig: 'babelrc.test.js'
+      }
+    }
+  };
+  ```
+
+- a plain object containing babel configuration:
+  ```js
+  // jest.config.js
+  module.exports = {
+    globals: {
+      'ts-jest': {
+        babelConfig: {
+          plugins: [
+            // ...
+          ]
         }
       }
     }
-  }
-}
-```
+  };
+  ```
 
-Note that if you also set the `useBabelrc` option to `true`, any configuration passed using this method will be overwritten by corresponding keys in `.babelrc` files.
+- `false`, in which case it'll disable the use of babel-jest (which is the default):
+  ```js
+  // jest.config.js
+  module.exports = {
+    globals: {
+      'ts-jest': {
+        babelConfig: false
+      }
+    }
+  };
+  ```
 
 ### TS compiler & error reporting
-If you want to enable Syntactic & Semantic TypeScript error reporting you can enable this through `enableTsDiagnostics` flag, , or by specifying a regex for the files that you want to do diagnostics;
 
-```json
-// This will report errors in all related files
-{
-  "jest": {
-    "globals": {
-      "ts-jest": {
-        "enableTsDiagnostics": true
-      }
-    }
-  }
-}
-
-// This will only report errors in the files which match the regex
-{
-  "jest": {
-    "globals": {
-      "ts-jest": {
-        "enableTsDiagnostics": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$"
-      }
-    }
-  }
-}
-```
-
-**Note:** This is an experimental feature, comes with no guarantees and could be removed if it causes more problems than it solves. Testing is not the place to look for type errors. That should be done separately. Moreover, ts-jest only processes the files that are passed in by jest. It doesn't read files off the disk by default which is why `enableTsDiagnostics` will hurt performance compared to the normal use case.
+<center>=== To be documented ===</center>
 
 ### Ignore coverage on decorators
 
-**Note:** This is an experimental feature, comes with no guarantees and could be removed if it causes more problems than it solves
+<center>=== To be documented ===</center>
 
-If you want to ignore coverage on decorators you can enable this through `ignoreCoverageForDecorators` and `ignoreCoverageForAllDecorators` flags. If you enable the first option you have to add the `/* istanbul ignore decorator */` comment after the decorator. If you choose the second option all decorators will be ignored.
+### extending
+You can extend the defaults shipped with ts-jest in its preset (this is only possible in an external `jest.config.js` file):
+```js
+// jest.config.js
+const { jestPreset } = require('ts-jest');
 
-```json
-{
-  "jest": {
-    "globals": {
-      "ts-jest": {
-        "ignoreCoverageForDecorators": true,
-        "ignoreCoverageForAllDecorators": true
-      }
-    }
+module.exports = {
+  // ...
+  ...jestPreset,
+  moduleFileExtensions: ['ts'],
+  transform: {
+    ...jestPreset.transform,
+    // ...
   }
-}
+  // ...
+};
 ```
 
 ## Use cases
@@ -291,100 +290,59 @@ If you want to ignore coverage on decorators you can enable this through `ignore
 
 There is a few additional steps if you want to use it with React Native.
 
-Install `babel-jest` and `babel-preset-react-native` modules.
+Install `babel-preset-react-native` modules.
 
 ```sh
-npm install -D babel-jest babel-preset-react-native
+npm install -D babel-preset-react-native
 ```
 
 Ensure `.babelrc` contains:
 
-```json
+```js
+// .babelrc
 {
   "presets": ["react-native"],
-  "sourceMaps": "inline"
 }
 ```
 
-In `package.json`, inside `jest` section, the `transform` should be like this:
-```json
-"transform": {
-  "^.+\\.jsx?$": "<rootDir>/node_modules/babel-jest",
-  "^.+\\.tsx?$": "ts-jest"
-}
-```
+And your jest config should look like:
 
-Fully completed jest section should look like this:
+```js
+// jest.config.js
+const { jestPreset } = require('ts-jest');
 
-```json
-"jest": {
-    "preset": "react-native",
-    "transform": {
-      "^.+\\.jsx?$": "<rootDir>/node_modules/babel-jest",
-      "^.+\\.tsx?$": "ts-jest"
-    },
-    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "jsx",
-      "json",
-      "node"
-    ],
-    "globals": {
-      "ts-jest": {
-        "useBabelrc": true
-      }
+module.exports = {
+  ...jestPreset,
+  preset: 'react-native',
+  globals: {
+    'ts-jest': {
+      babelConfig: true
     }
   }
+};
 ```
-If only testing typescript files then remove the `js` option in the testRegex.
 
 ## Angular 2
-When using Jest with Angular (a.k.a Angular 2) apps you will likely need to parse HTML templates. If you're unable to add `html-loader` to webpack config (e.g. because you don't want to eject from `angular-cli`) you can do so by defining `__TRANSFORM_HTML__` key in `globals` for `jest`.
+When using Jest with Angular (a.k.a Angular 2) apps you will likely need to parse HTML templates. If you're unable to add `html-loader` to webpack config (e.g. because you don't want to eject from `angular-cli`) you can do so by using the `stringifyContentPathRegex` config option:
 
-```json
-{
-  "jest": {
-    "globals": {
-      "__TRANSFORM_HTML__": true
+```js
+// jest.config.js
+const { jestPreset } = require('ts-jest');
+
+module.exports = {
+  // ...
+  transform: {
+    ...jestPreset.transform,
+    '^.+\\.html$': 'ts-jest'
+  },
+  globals: {
+    'ts-jest': {
+      stringifyContentPathRegex: '\\.html$'
     }
   }
-}
+};
 ```
 
-You'll also need to extend your `transform` regex with `html` extension:
-```json
-{
-  "jest": {
-    "transform": {
-      "^.+\\.(tsx?|html)$": "ts-jest"
-    }
-  }
-}
-```
-
-## Using ES2015+ features in Javascript files
-
-The default setup shown here picks up only `.ts` and `.tsx` files. However, if there are javascript files in your project that use ES2015+ features (spread operator, import, etc), you probably want them processed. There are two ways you can do this:
-
-- use ts-jest to process js files
-
-````
-    "transform": {
-      "^.+\\.(t|j)sx?$": "ts-jest"
-    }
-````
-
-- use another transformer to process js files
-
-```
-    "transform": {
-      "^.+\\.jsx?$": "<rootDir>/node_modules/babel-jest",
-      "^.+\\.tsx?$": "ts-jest"
-    }
-```
 
 ## Tips
 ### Importing packages written in TypeScript
@@ -398,35 +356,30 @@ your Jest configuration:
 {
   // ...
   "transformIgnorePatterns": [
-    "<rootDir>/node_modules/(?!@foo)"
+    "<rootDir>/node_modules/(?!@foo/bar)"
   ]
   // ...
 }
 ```
 
-By default Jest ignores everything in `node_modules`. This setting prevents Jest from ignoring the package you're interested in, in this case `@foo`, while continuing to ignore everything else in `node_modules`.
+By default Jest ignores everything in `node_modules`. This setting prevents Jest from ignoring the package you're interested in, in this case `@foo/bar`, while continuing to ignore everything else in `node_modules`.
 
 
 ## Known Limitations
+
 ### Known limitations for TS compiler options
-- You can't use `"target": "ES6"` while using `node v4` in your test environment;
-- If you use `"baseUrl": "<path_to_your_sources>"`, you also have to change `jest config` a little bit (also check [Module path mapping](#module-path-mapping) section):
+
+If you use `"baseUrl": "<path_to_your_sources>"`, you also have to change `jest config` a little bit (also check [Module path mapping](#module-path-mapping) section):
+
 ```json
 "jest": {
   "moduleDirectories": ["node_modules", "<path_to_your_sources>"]
 }
 ```
 
-### Known Limitations for hoisting
-If the `jest.mock()` calls is placed after actual code, (e.g. after functions or classes) and `skipBabel` is not set,
-the line numbers in stacktraces will be off.
-We suggest placing the `jest.mock()` calls after the imports, but before any actual code.
+### `const enum` is not supported if `typeCheck` is not enabled
 
-### `const enum` is not supported
-
-This is due to a limitation in the ts-jest preprocessor which compiles each test file individually, therefore ignoring implementations of ambient declarations. The TypeScript team currently have [no plan to support const enum inlining](https://github.com/Microsoft/TypeScript/issues/5243) for this particular compiler method. See [#112](https://github.com/kulshekhar/ts-jest/issues/112) and [#281](https://github.com/kulshekhar/ts-jest/issues/281) for more information.
-
-One possible workaround is to manually inline usage of const enum values - i.e. in your code, use `let x: Enum = 1 as Enum` as opposed to `let x: Enum = Enum.FirstValue`. This allows you to keep the type checking on enums without running into this issue.
+This is due to a limitation in the ts-jest basic processor which compiles each test file individually, therefore ignoring implementations of ambient declarations. The TypeScript team currently have [no plan to support const enum inlining](https://github.com/Microsoft/TypeScript/issues/5243) for this particular compiler method. See [#112](https://github.com/kulshekhar/ts-jest/issues/112) and [#281](https://github.com/kulshekhar/ts-jest/issues/281) for more information.
 
 ## How to Contribute
 If you have any suggestions/pull requests to turn this into a useful package, just open an issue and I'll be happy to work with you to improve this.

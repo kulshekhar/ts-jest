@@ -1,0 +1,201 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`With type checking should fail using template "default" 1`] = `
+  × jest --config {"preset":"ts-jest","testEnvironment":"node","globals":{"ts-jest":{"tsConfig":{},"typeCheck":true}}} --runInBand
+  ↳ exit code: 1
+  ===[ STDOUT ]===================================================================
+  
+  ===[ STDERR ]===================================================================
+  FAIL ./main.spec.ts
+    ● Test suite failed to run
+  
+      Unable to compile TypeScript (add code(s) in \`[jest-config].globals.ts-jest.diagnostics.ignoreCodes\` to ignore):
+      main.ts:2:3 - error TS2322: Type 'string' is not assignable to type 'number'.
+  
+      2   return input
+          ~~~~~~~~~~~~
+  
+  Test Suites: 1 failed, 1 total
+  Tests:       0 total
+  Snapshots:   0 total
+  Time:        XXs
+  Ran all test suites.
+  ================================================================================
+`;
+
+exports[`With type checking should fail using template "with-babel-6" 1`] = `
+  × jest --config {"preset":"ts-jest","testEnvironment":"node","globals":{"ts-jest":{"tsConfig":{},"babelConfig":true,"typeCheck":true}}} --runInBand
+  ↳ exit code: 1
+  ===[ STDOUT ]===================================================================
+  
+  ===[ STDERR ]===================================================================
+  FAIL ./main.spec.ts
+    ● Test suite failed to run
+  
+      Unable to compile TypeScript (add code(s) in \`[jest-config].globals.ts-jest.diagnostics.ignoreCodes\` to ignore):
+      main.ts:2:3 - error TS2322: Type 'string' is not assignable to type 'number'.
+  
+      2   return input
+          ~~~~~~~~~~~~
+  
+  Test Suites: 1 failed, 1 total
+  Tests:       0 total
+  Snapshots:   0 total
+  Time:        XXs
+  Ran all test suites.
+  ================================================================================
+`;
+
+exports[`With type checking should fail using template "with-babel-7" 1`] = `
+  × jest --config {"preset":"ts-jest","testEnvironment":"node","globals":{"ts-jest":{"tsConfig":{},"babelConfig":true,"typeCheck":true}}} --runInBand
+  ↳ exit code: 1
+  ===[ STDOUT ]===================================================================
+  
+  ===[ STDERR ]===================================================================
+  FAIL ./main.spec.ts
+    ● Test suite failed to run
+  
+      Unable to compile TypeScript (add code(s) in \`[jest-config].globals.ts-jest.diagnostics.ignoreCodes\` to ignore):
+      main.ts:2:3 - error TS2322: Type 'string' is not assignable to type 'number'.
+  
+      2   return input
+          ~~~~~~~~~~~~
+  
+  Test Suites: 1 failed, 1 total
+  Tests:       0 total
+  Snapshots:   0 total
+  Time:        XXs
+  Ran all test suites.
+  ================================================================================
+`;
+
+exports[`With type checking should fail using template "with-jest-22" 1`] = `
+  × jest --config {"transform":{"^.+\\\\.tsx?$":"ts-jest"},"testMatch":["**/__tests__/**/*.js?(x)","**/?(*.)+(spec|test).js?(x)","**/__tests__/**/*.ts?(x)","**/?(*.)+(spec|test).ts?(x)"],"moduleFileExtensions":["js","json","jsx","node","ts","tsx"],"testEnvironment":"node","globals":{"ts-jest":{"tsConfig":{},"typeCheck":true}}} --runInBand
+  ↳ exit code: 1
+  ===[ STDOUT ]===================================================================
+  
+  ===[ STDERR ]===================================================================
+  FAIL ./main.spec.ts
+    ● Test suite failed to run
+  
+      Unable to compile TypeScript (add code(s) in \`[jest-config].globals.ts-jest.diagnostics.ignoreCodes\` to ignore):
+      main.ts:2:3 - error TS2322: Type 'string' is not assignable to type 'number'.
+      
+      2   return input
+          ~~~~~~~~~~~~
+  
+  Test Suites: 1 failed, 1 total
+  Tests:       0 total
+  Snapshots:   0 total
+  Time:        XXs
+  Ran all test suites.
+  ================================================================================
+`;
+
+exports[`With type checking should fail using template "with-typescript-2-7" 1`] = `
+  × jest --config {"preset":"ts-jest","testEnvironment":"node","globals":{"ts-jest":{"tsConfig":{},"diagnostics":{"ignoreCodes":[5023]},"typeCheck":true}}} --runInBand
+  ↳ exit code: 1
+  ===[ STDOUT ]===================================================================
+  
+  ===[ STDERR ]===================================================================
+  FAIL ./main.spec.ts
+    ● Test suite failed to run
+  
+      Unable to compile TypeScript (add code(s) in \`[jest-config].globals.ts-jest.diagnostics.ignoreCodes\` to ignore):
+      main.ts:2:3 - error TS2322: Type 'string' is not assignable to type 'number'.
+  
+      2   return input
+          ~~~~~~~~~~~~
+  
+  Test Suites: 1 failed, 1 total
+  Tests:       0 total
+  Snapshots:   0 total
+  Time:        XXs
+  Ran all test suites.
+  ================================================================================
+`;
+
+exports[`Without type checking should pass using template "default" 1`] = `
+  √ jest --config {"preset":"ts-jest","testEnvironment":"node","globals":{"ts-jest":{"tsConfig":{},"typeCheck":false}}} --runInBand
+  ↳ exit code: 0
+  ===[ STDOUT ]===================================================================
+  
+  ===[ STDERR ]===================================================================
+  PASS ./main.spec.ts
+    √ should pass
+  
+  Test Suites: 1 passed, 1 total
+  Tests:       1 passed, 1 total
+  Snapshots:   0 total
+  Time:        XXs
+  Ran all test suites.
+  ================================================================================
+`;
+
+exports[`Without type checking should pass using template "with-babel-6" 1`] = `
+  √ jest --config {"preset":"ts-jest","testEnvironment":"node","globals":{"ts-jest":{"tsConfig":{},"babelConfig":true,"typeCheck":false}}} --runInBand
+  ↳ exit code: 0
+  ===[ STDOUT ]===================================================================
+  
+  ===[ STDERR ]===================================================================
+  PASS ./main.spec.ts
+    √ should pass
+  
+  Test Suites: 1 passed, 1 total
+  Tests:       1 passed, 1 total
+  Snapshots:   0 total
+  Time:        XXs
+  Ran all test suites.
+  ================================================================================
+`;
+
+exports[`Without type checking should pass using template "with-babel-7" 1`] = `
+  √ jest --config {"preset":"ts-jest","testEnvironment":"node","globals":{"ts-jest":{"tsConfig":{},"babelConfig":true,"typeCheck":false}}} --runInBand
+  ↳ exit code: 0
+  ===[ STDOUT ]===================================================================
+  
+  ===[ STDERR ]===================================================================
+  PASS ./main.spec.ts
+    √ should pass
+  
+  Test Suites: 1 passed, 1 total
+  Tests:       1 passed, 1 total
+  Snapshots:   0 total
+  Time:        XXs
+  Ran all test suites.
+  ================================================================================
+`;
+
+exports[`Without type checking should pass using template "with-jest-22" 1`] = `
+  √ jest --config {"transform":{"^.+\\\\.tsx?$":"ts-jest"},"testMatch":["**/__tests__/**/*.js?(x)","**/?(*.)+(spec|test).js?(x)","**/__tests__/**/*.ts?(x)","**/?(*.)+(spec|test).ts?(x)"],"moduleFileExtensions":["js","json","jsx","node","ts","tsx"],"testEnvironment":"node","globals":{"ts-jest":{"tsConfig":{},"typeCheck":false}}} --runInBand
+  ↳ exit code: 0
+  ===[ STDOUT ]===================================================================
+  
+  ===[ STDERR ]===================================================================
+  PASS ./main.spec.ts
+    √ should pass
+  
+  Test Suites: 1 passed, 1 total
+  Tests:       1 passed, 1 total
+  Snapshots:   0 total
+  Time:        XXs
+  Ran all test suites.
+  ================================================================================
+`;
+
+exports[`Without type checking should pass using template "with-typescript-2-7" 1`] = `
+  √ jest --config {"preset":"ts-jest","testEnvironment":"node","globals":{"ts-jest":{"tsConfig":{},"diagnostics":{"ignoreCodes":[5023]},"typeCheck":false}}} --runInBand
+  ↳ exit code: 0
+  ===[ STDOUT ]===================================================================
+  
+  ===[ STDERR ]===================================================================
+  PASS ./main.spec.ts
+    √ should pass
+  
+  Test Suites: 1 passed, 1 total
+  Tests:       1 passed, 1 total
+  Snapshots:   0 total
+  Time:        XXs
+  Ran all test suites.
+  ================================================================================
+`;

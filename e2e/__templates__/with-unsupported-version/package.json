@@ -1,0 +1,10 @@
+{
+  "name": "ts-jest-e2e-tmpl-with-unsupported-version",
+  "version": "0.0.0-tmpl.0",
+  "private": true,
+  "devDependencies": {
+    "@types/jest": "23.3.1",
+    "jest": "23.4.2",
+    "typescript": "2.5.3"
+  }
+}

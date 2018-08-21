@@ -1,0 +1,33 @@
+{
+  "compilerOptions": {
+    "sourceMap": false,
+    "inlineSourceMap": true,
+    "declaration": true,
+    "downlevelIteration": true,
+    "target": "es5",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "noEmitOnError": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "removeComments": true,
+    "strict": true,
+    "experimentalDecorators": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "lib": ["es2015", "es2016.array.include"],
+    "types": ["jest", "node"],
+  },
+  "include": [
+    "src",
+    "scripts/",
+    "test/**/*.spec.ts",
+    "test/__helpers__",
+    "e2e/__tests__",
+    "e2e/__serializer__",
+    "e2e/__helpers__",
+    "scripts/lib/paths.d.ts",
+  ]
+}
