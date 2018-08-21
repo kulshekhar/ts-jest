@@ -10,7 +10,7 @@ describe('babelConfig flag', () => {
     const result = runJest('../babel-config-invalid', ['--no-cache', '-u']);
     const stderr = result.stderr;
     expect(result.status).toBe(1);
-    expect(stderr).toContain('ReferenceError: [BABEL]');
+    expect(stderr).toContain('ReferenceError: Unknown option: .foo.');
     expect(stderr).toContain(
       'Check out http://babeljs.io/docs/usage/options/ for more information about options.',
     );
@@ -31,6 +31,6 @@ describe('babelConfig flag', () => {
     ]);
     const stderr = result.stderr;
     expect(result.status).toBe(1);
-    expect(stderr).toContain(`Couldn't find preset "nonexistent"`);
+    expect(stderr).toContain(`Cannot find module 'babel-preset-nonexistent'`);
   });
 });

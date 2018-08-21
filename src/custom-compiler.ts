@@ -1,7 +1,7 @@
 // Only for types; take care never to use ts_types in expressions, only in type annotations
 import * as ts_types from 'typescript';
-import { TsJestConfig } from './jest-types';
-import { wrapError } from './utils';
+import { wrapError } from './utils/wrap-error';
+import { TsJestConfig } from './types';
 
 /**
  * Return a typescript compiler.

@@ -1,8 +1,11 @@
 import { MockedPath } from '../__mocks__/path';
 jest.mock('path');
 import * as fs from 'fs';
-import { getTSConfig } from '../../src/utils';
+import getTSConfig from '../../dist/utils/get-ts-config';
 import * as path from 'path';
+import mockJestConfig from '../__helpers__/mock-jest-config';
+
+const TEST_CASE = 'tsconfig-test';
 
 describe('parse tsconfig with comments', () => {
   const configFile1 = './tests/tsconfig-test/allows-comments.json';
@@ -11,6 +14,7 @@ describe('parse tsconfig with comments', () => {
   beforeEach(() => {
     // Set up some mocked out file info before each test
     ((path as any) as MockedPath).__setBaseDir('./tests/tsconfig-test');
+    getTSConfig.cache.clear();
   });
 
   it('the two config files should exist', () => {
@@ -24,34 +28,28 @@ describe('parse tsconfig with comments', () => {
 
     expect(() => {
       JSON.parse(fs.readFileSync(configFile1, 'utf8'));
-    }).toThrowError();
+    }).toThrow();
 
     expect(() => {
       JSON.parse(fs.readFileSync(configFile2, 'utf8'));
-    }).toThrowError();
+    }).toThrow();
   });
 
   describe('new behaviour (tsConfigFile & tsConfig)', () => {
-    it('one config file should extend the other', () => {
-      const config = getTSConfig({
-        'ts-jest': {
-          tsConfigFile: 'allows-comments.json',
-        },
-      });
-
-      // allows-comments.json does not contain a "pretty" field,
-      // while allows-comments2.json does. Default value would be "false".
-      expect(config.pretty).toEqual(true);
-    });
-
+    // allows-comments.json does not contain a "pretty" field,
+    // while allows-comments2.json does.
+    // allow-comments.json extends allow-comments2.json
     it('should correctly read allow-comments.json', () => {
-      expect(() => {
-        getTSConfig({
-          'ts-jest': {
-            tsConfigFile: 'allows-comments.json',
-          },
-        });
-      }).not.toThrow();
+      const tsConfig = getTSConfig(
+        mockJestConfig(TEST_CASE, { tsConfigFile: 'allows-comments.json' }),
+      );
+      expect(tsConfig).toMatchSnapshot();
+    });
+    it('should correctly read allow-comments2.json', () => {
+      const tsConfig = getTSConfig(
+        mockJestConfig(TEST_CASE, { tsConfigFile: 'allows-comments2.json' }),
+      );
+      expect(tsConfig).toMatchSnapshot();
     });
   });
 });

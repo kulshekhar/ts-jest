@@ -1,0 +1,53 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`get ts config from string new behaviour (tsConfigFile & tsConfig) should correctly override any config in the "extends" directive 1`] = `
+Object {
+  "configFilePath": undefined,
+  "declaration": false,
+  "declarationMap": false,
+  "emitDeclarationOnly": false,
+  "inlineSourceMap": false,
+  "inlineSources": true,
+  "jsx": 2,
+  "module": 1,
+  "moduleResolution": 2,
+  "noEmitOnError": true,
+  "noImplicitAny": true,
+  "sourceMap": true,
+  "target": 1,
+}
+`;
+
+exports[`get ts config from string new behaviour (tsConfigFile & tsConfig) should correctly read my-tsconfig.json 1`] = `
+Object {
+  "configFilePath": undefined,
+  "declaration": false,
+  "declarationMap": false,
+  "emitDeclarationOnly": false,
+  "inlineSourceMap": false,
+  "inlineSources": true,
+  "jsx": 2,
+  "module": 1,
+  "moduleResolution": 2,
+  "noEmitOnError": true,
+  "sourceMap": true,
+  "target": 2,
+}
+`;
+
+exports[`get ts config from string new behaviour (tsConfigFile & tsConfig) should correctly resolve the "extends" directive 1`] = `
+Object {
+  "configFilePath": undefined,
+  "declaration": false,
+  "declarationMap": false,
+  "emitDeclarationOnly": false,
+  "inlineSourceMap": false,
+  "inlineSources": true,
+  "jsx": 2,
+  "module": 1,
+  "moduleResolution": 2,
+  "noEmitOnError": true,
+  "sourceMap": true,
+  "target": 2,
+}
+`;

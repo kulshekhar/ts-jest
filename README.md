@@ -1,17 +1,11 @@
-# ts-jest
+# ts-jest  [![npm version](https://badge.fury.io/js/ts-jest.svg)](https://badge.fury.io/js/ts-jest) [![NPM downloads](https://img.shields.io/npm/dm/ts-jest.svg?style=flat)](https://npmjs.org/package/ts-jest) [![Greenkeeper badge](https://badges.greenkeeper.io/kulshekhar/ts-jest.svg)](https://greenkeeper.io/) [![Build Status for linux](https://travis-ci.org/kulshekhar/ts-jest.svg?branch=master)](https://travis-ci.org/kulshekhar/ts-jest) [![Build Status for Windows](https://ci.appveyor.com/api/projects/status/g8tt9qd7usv0tolb/branch/master?svg=true)](https://ci.appveyor.com/project/kulshekhar/ts-jest/branch/master)
 
-[![npm version](https://badge.fury.io/js/ts-jest.svg)](https://badge.fury.io/js/ts-jest)
-[![NPM downloads](https://img.shields.io/npm/dm/ts-jest.svg?style=flat)](https://npmjs.org/package/ts-jest)
-[![Greenkeeper badge](https://badges.greenkeeper.io/kulshekhar/ts-jest.svg)](https://greenkeeper.io/)
+**Important note**: Before reporting any issue, be sure to check the [troubleshooting page](https://github.com/kulshekhar/ts-jest/wiki/Troubleshooting).
 
-[![Build Status for linux](https://travis-ci.org/kulshekhar/ts-jest.svg?branch=master)](https://travis-ci.org/kulshekhar/ts-jest)
-[![Build Status for Windows](https://ci.appveyor.com/api/projects/status/g8tt9qd7usv0tolb/branch/master?svg=true)](https://ci.appveyor.com/project/kulshekhar/ts-jest/branch/master)
-
-**Important note: When using React 16 with Node version 8, you might see wrong line numbers for errors originating from tsx files. There's [an issue with more details on this](https://github.com/kulshekhar/ts-jest/issues/334)**
 
 > Note: Looking for collaborators. [Want to help improve ts-jest?](https://github.com/kulshekhar/ts-jest/issues/223)
 
-ts-jest is a TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript.
+**ts-jest** is a TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript.
 
 ## Table of Contents
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
@@ -118,7 +112,7 @@ to automatically create the synthetic default exports for you - nothing else nee
 You can opt-out of this behaviour with the [skipBabel flag](#skipping-babel)
 
 **Typescript 2.7 has built-in support for this feature via the `esModuleInterop` flag. We're looking to deprecate this feature.
-Please use `esModuleInterop` instead. More details [here](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-7.html)** 
+Please use `esModuleInterop` instead. More details [here](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-7.html)**
 
 ### Supports automatic of jest.mock() calls
 [Just like Jest](https://facebook.github.io/jest/docs/manual-mocks.html#using-with-es-module-imports) ts-jest
@@ -150,7 +144,7 @@ custom configuration file (relative to the project's root directory)
 
 For all available `tsc` options see [TypeScript docs](https://www.typescriptlang.org/docs/handbook/compiler-options.html).
 
-Note that if you haven't explicitly set the `module` property through a separate configuration file with `tsConfigFile`, it will be overwritten to `commonjs` (regardless of the value in `tsconfig.json`) since that is the format Jest expects. This only happens during testing. 
+Note that if you haven't explicitly set the `module` property through a separate configuration file with `tsConfigFile`, it will be overwritten to `commonjs` (regardless of the value in `tsconfig.json`) since that is the format Jest expects. This only happens during testing.
 
 If you *have* explicitly set the `module` property but to a different value than `commonjs`, Jest may throw errors. In that case, a practical workaround is to make a `tsconfig.jest.json` file which [`extends`](http://www.typescriptlang.org/docs/handbook/tsconfig-json.html#configuration-inheritance-with-extends) your real `tsconfig.json` but sets `module` to `commonjs`:
 
@@ -167,6 +161,27 @@ If you *have* explicitly set the `module` property but to a different value than
 ### Module path mapping
 
 If you use ["baseUrl"](https://www.typescriptlang.org/docs/handbook/module-resolution.html) and "paths" options for the compiler, see ["moduleNameMapper"](https://facebook.github.io/jest/docs/en/configuration.html#modulenamemapper-object-string-string) option on Jest docs.
+
+For example, with the below config in your tsconfig:
+```
+   "paths": {
+      "@App/*": [
+        "src/*"
+      ],
+      "@Shared/*": [
+        "src/Shared/*"
+      ]
+    },
+```
+
+Here's what your jest config should look like:
+
+```
+"moduleNameMapper": {
+  "@App/(.*)": "<rootDir>/src/$1",
+  "@Shared/(.*)": "<rootDir>/src/Shared/$1"
+}
+```
 
 ### Skipping Babel
 If you don't use mocks, or synthetic default imports you can skip the babel-transpilation step.
@@ -212,7 +227,7 @@ In some cases, projects may not want to have a `.babelrc` file, but still need t
     "globals": {
       "ts-jest": {
         "babelConfig": {
-          "presets": ["env"]
+          "presets": ["@babel/env"]
         }
       }
     }
@@ -239,14 +254,26 @@ If you want to use an alternative Typescript compiler such as `ntypescript` or `
 ```
 
 ### TS compiler & error reporting
-If you want to enable Syntactic & Semantic TypeScript error reporting you can enable this through `enableTsDiagnostics` flag;
+If you want to enable Syntactic & Semantic TypeScript error reporting you can enable this through `enableTsDiagnostics` flag, , or by specifying a regex for the files that you want to do diagnostics;
 
 ```json
+// This will report errors in all related files
 {
   "jest": {
     "globals": {
       "ts-jest": {
         "enableTsDiagnostics": true
+      }
+    }
+  }
+}
+
+// This will only report errors in the files which match the regex
+{
+  "jest": {
+    "globals": {
+      "ts-jest": {
+        "enableTsDiagnostics": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$"
       }
     }
   }
@@ -399,7 +426,6 @@ By default Jest ignores everything in `node_modules`. This setting prevents Jest
 ## Known Limitations
 ### Known limitations for TS compiler options
 - You can't use `"target": "ES6"` while using `node v4` in your test environment;
-- You can't use `"jsx": "preserve"` for now (see [progress of this issue](https://github.com/kulshekhar/ts-jest/issues/63));
 - If you use `"baseUrl": "<path_to_your_sources>"`, you also have to change `jest config` a little bit (also check [Module path mapping](#module-path-mapping) section):
 ```json
 "jest": {

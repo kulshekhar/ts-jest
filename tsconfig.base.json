@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "sourceMap": false,
+    "inlineSourceMap": true,
+    "declaration": true,
+    "target": "es5",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "noEmitOnError": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitAny": false,
+    "noImplicitReturns": true,
+    "removeComments": true,
+    "strictNullChecks": false,
+    "jsx": "react",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": false,
+    "skipLibCheck": true,
+    "lib": ["es2015"],
+    "types": ["jest"]
+  },
+  "exclude": ["**/node_modules/**/*"]
+}

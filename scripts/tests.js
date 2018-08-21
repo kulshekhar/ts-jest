@@ -13,11 +13,19 @@ function getDirectories(rootDir) {
   });
 }
 
+function isJestFolder(basename) {
+  return basename.startsWith('__') && basename.endsWith('__');
+}
+
+// TODO: later we could add a `.test-case-keep` empty file in each folder?
+// ...or move all into a `test-cases` dedicated directory
+function isTestCaseFolder(basename) {
+  return !isJestFolder(basename);
+}
+
 function createIntegrationMock() {
   const testsRoot = 'tests';
-  const testCaseFolders = getDirectories(testsRoot).filter(function(testDir) {
-    return !(testDir.startsWith('__') && testDir.endsWith('__'));
-  });
+  const testCaseFolders = getDirectories(testsRoot).filter(isTestCaseFolder);
 
   testCaseFolders.forEach(directory => {
     const testCaseNodeModules = path.join(testsRoot, directory, 'node_modules');
@@ -25,20 +33,17 @@ function createIntegrationMock() {
     const rootDir = path.resolve('.');
     const testCaseModuleFolder = path.join(testCaseNodeModules, 'ts-jest');
 
-    // Copy javascript files
-    fs.copySync(
-      path.resolve(rootDir, 'index.js'),
-      path.resolve(testCaseModuleFolder, 'index.js')
-    );
-    fs.copySync(
-      path.resolve(rootDir, 'preprocessor.js'),
-      path.resolve(testCaseModuleFolder, 'preprocessor.js')
-    );
-
     // Copy package.json
     fs.copySync(
       path.resolve(rootDir, 'package.json'),
       path.resolve(testCaseModuleFolder, 'package.json')
+    );
+
+    // TODO: remove this in next major version as well as the test, and the preprocessor.js file in root
+    // Copy preprocessor.js
+    fs.copySync(
+      path.resolve(rootDir, 'preprocessor.js'),
+      path.resolve(testCaseModuleFolder, 'preprocessor.js')
     );
 
     // Copy dist folder

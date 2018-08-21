@@ -19,11 +19,11 @@ describe('Local mocks', () => {
     expect((SomeClass as any).mockReturnValue).toBeDefined();
   });
 
-  it('Jest should be able to mock a local class', () => {
+  it('Jest should be able to mock a local function', () => {
     expect((SomeFunction as any).mockReturnValueOnce).toBeDefined();
   });
 
-  it('Jest should be able to mock a local class', () => {
+  it('Jest should be able to mock a local const', () => {
     expect(
       (SomeFunctionDeclaredAsConst as any).mockImplementation,
     ).toBeDefined();

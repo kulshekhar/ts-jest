@@ -6,5 +6,8 @@
     "noEmitOnError": false,
     "jsx": "react",
     "allowJs": true
-  }
+  },
+  "include": [
+    "../../**/*"
+  ]
 }
