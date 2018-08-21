@@ -1,8 +1,8 @@
-import { TestFileIo } from '../__helpers__/test-case'
 import { safeDump } from 'js-yaml'
+import ProcessedFileIo from '../__helpers__/test-case/ProcessedFileIo'
 
-export const test = (val: any) => val && val instanceof TestFileIo
-export const print = (val: TestFileIo, serialize: any, indent: any) => {
+export const test = (val: any) => val && val instanceof ProcessedFileIo
+export const print = (val: ProcessedFileIo, serialize: any, indent: any) => {
   const sourceMaps = val.normalizedOutputSourceMaps
   const out = [
     `===[ FILE: ${val.filename.replace(/\\/g, '/')} ]${'='.repeat(67 - val.filename.length)}`,
