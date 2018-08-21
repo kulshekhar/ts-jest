@@ -8,8 +8,8 @@ import { TsJestConfig } from './types';
  * Allows config to specify alternative compiler.
  * For example, `ntypescript`.
  */
-export function getTypescriptCompiler(config: TsJestConfig): typeof ts_types {
-  const compilerName = typeof config.compiler === 'string' ? config.compiler : 'typescript';
+export function getTypescriptCompiler(config: TsJestConfig | undefined): typeof ts_types {
+  const compilerName = config && typeof config.compiler === 'string' ? config.compiler : 'typescript';
   try {
     return require(compilerName);
   } catch (err) {
