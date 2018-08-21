@@ -7,7 +7,7 @@ const { tmpdir } = require('os')
 const { rootDir } = require('./lib/paths')
 const { existsSync, realpathSync } = require('fs')
 const logger = require('./lib/logger')
-const createBundle = require('./lib/bundle')
+const { createBundle } = require('./lib/bundle')
 const npm = require('./lib/npm')
 
 let projectPath = process.argv[2]

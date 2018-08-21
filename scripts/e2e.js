@@ -8,10 +8,11 @@ const path = require('path')
 const Paths = require('./lib/paths')
 const { createHash } = require('crypto')
 const logger = require('./lib/logger')
-const { createBundle, realDigest } = require('./lib/bundle')
+const { createBundle, packageDigest } = require('./lib/bundle')
 const npm = require('./lib/npm')
 
-const configFile = path.resolve(__dirname, '..', 'e2e', 'jest.config.js')
+const configFile = path.join(Paths.e2eRootDir, 'jest.config.js')
+
 let parentArgs = process.argv.slice(2)
 if (parentArgs.includes('--coverage')) {
   logger.warn(
@@ -19,7 +20,6 @@ if (parentArgs.includes('--coverage')) {
   )
   parentArgs = parentArgs.filter(a => a !== '--coverage')
 }
-if (!parentArgs.includes('--verbose')) parentArgs.push('--verbose')
 
 function getDirectories(rootDir) {
   return fs.readdirSync(rootDir).filter(function(file) {
@@ -30,7 +30,7 @@ function getDirectories(rootDir) {
 function sha1(...data) {
   const hash = createHash('sha1')
   data.forEach(item => hash.update(item))
-  return hash.digest('base64').toString()
+  return hash.digest('hex').toString()
 }
 
 function log(...msg) {
@@ -48,8 +48,8 @@ function setupE2e() {
 
   // get the hash of the bundle (to know if we should install it again or not)
   // we need to compute it ourselfs as the npm pack creates different tgz even tho content has not changed
-  const bundleHash = realDigest(bundle)
-  log('bundled ts-jest digest:', bundleHash)
+  const bundleHash = packageDigest(bundle)
+  log('ts-jest digest:', bundleHash)
 
   // ensure directory exists before copying over
   fs.mkdirpSync(Paths.e2eWorkTemplatesDir)

@@ -19,7 +19,7 @@ describe('debug', () => {
     __setup()
     debug('foo')
     expect(stdoutSpy).toHaveBeenCalledTimes(1)
-    expect(stdoutSpy).toHaveBeenCalledWith('ts-jest: foo\n')
+    expect(stdoutSpy.mock.calls[0][0]).toBe('ts-jest: foo\n')
   })
   it('should NOT log to stdout when TS_JEST_DEBUG is falsy', () => {
     process.env.TS_JEST_DEBUG = ''
@@ -40,14 +40,14 @@ describe('warn', () => {
     __setup()
     warn('foo')
     expect(stderrSpy).toHaveBeenCalledTimes(1)
-    expect(stderrSpy).toHaveBeenCalledWith('ts-jest: foo\n')
+    expect(stderrSpy.mock.calls[0][0]).toBe('ts-jest: foo\n')
   })
   it('should log to stderr even when TS_JEST_DEBUG is falsy', () => {
     delete process.env.TS_JEST_DEBUG
     __setup()
     warn('foo')
     expect(stderrSpy).toHaveBeenCalledTimes(1)
-    expect(stderrSpy).toHaveBeenCalledWith('ts-jest: foo\n')
+    expect(stderrSpy.mock.calls[0][0]).toBe('ts-jest: foo\n')
   })
 })
 
@@ -60,7 +60,7 @@ describe('wrapWithDebug', () => {
     __setup()
     expect(wrapAndCall('bar')).toBe('hello bar')
     expect(stdoutSpy).toHaveBeenCalledTimes(1)
-    expect(stdoutSpy).toHaveBeenCalledWith('ts-jest: foo\n')
+    expect(stdoutSpy.mock.calls[0][0]).toBe('ts-jest: foo\n')
   })
   it('should NOT log to stdout when TS_JEST_DEBUG is falsy', () => {
     process.env.TS_JEST_DEBUG = ''

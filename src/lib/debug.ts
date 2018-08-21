@@ -21,10 +21,11 @@ export const defaultLogger: Logger = (
   ...args: any[]
 ) => {
   // we use stderr/stdout dirrectly so that the log won't be swallowed by jest
+  // the dummy calback is to ensure output on CI with node 6
   if (kind === 'warn') {
-    process.stderr.write(format(msg, ...args) + '\n')
+    process.stderr.write(format(msg, ...args) + '\n', () => undefined)
   } else if (kind) {
-    process.stdout.write(format(msg, ...args) + '\n')
+    process.stdout.write(format(msg, ...args) + '\n', () => undefined)
   }
 }
 

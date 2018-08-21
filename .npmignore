@@ -51,3 +51,18 @@ jspm_packages
 old
 
 *.tgz
+
+# others
+.npmignore
+.eslintrc.js
+jest.config.js
+.vscode
+.github
+appveyor.yml
+.editorconfig
+.prettierignore
+tsconfig.json
+.prettierrc
+.travis.yml
+tsconfig.build.json
+tslint.json

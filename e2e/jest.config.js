@@ -10,4 +10,5 @@ module.exports = {
     '<rootDir>/e2e/__serializers__/test-run-result.ts',
     '<rootDir>/e2e/__serializers__/test-file-io.ts',
   ],
+  verbose: true,
 }
