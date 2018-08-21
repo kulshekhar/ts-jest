@@ -1,3 +1,5 @@
+import { format } from 'util'
+
 export let DEBUG_MODE!: boolean
 
 export let debug!: typeof console.log
@@ -8,13 +10,22 @@ export let wrapWithDebug!: <T extends (...args: any[]) => any>(
   func: T,
 ) => T
 
-type LogKind = 'log' | 'warn' | 'debug' | 'info'
+type LogKind = 'log' | 'warn'
 type Logger = (kind: LogKind, ...args: any[]) => void
 
 export let LOG_PREFIX = 'ts-jest:'
 
-export const defaultLogger: Logger = (kind: LogKind, ...args: any[]) => {
-  console[kind](...args)
+export const defaultLogger: Logger = (
+  kind: LogKind,
+  msg: string = '',
+  ...args: any[]
+) => {
+  // we use stderr/stdout dirrectly so that the log won't be swallowed by jest
+  if (kind === 'warn') {
+    process.stderr.write(format(msg, ...args) + '\n')
+  } else if (kind) {
+    process.stdout.write(format(msg, ...args) + '\n')
+  }
 }
 
 interface SetupOptions {

@@ -1,13 +1,12 @@
 import { backportJestConfig } from './backports'
-import { spyThese } from '../__helpers__/mocks'
 import set from 'lodash.set'
 import { inspect } from 'util'
+import { __setup } from './debug'
 
-const consoleSpies = spyThese(console, {
-  warn: () => undefined,
-})
-afterEach(() => {
-  consoleSpies.mockReset()
+const logger = jest.fn()
+__setup({ logger })
+beforeEach(() => {
+  logger.mockClear()
 })
 
 describe('backportJestConfig', () => {
@@ -21,8 +20,8 @@ describe('backportJestConfig', () => {
       describe(`with "${oldPath}" set to ${inspect(val)}`, () => {
         it(`should wran the user`, () => {
           backportJestConfig(original)
-          expect(consoleSpies.warn).toHaveBeenCalledTimes(1)
-          expect(consoleSpies.warn.mock.calls[0].join(' ')).toMatchSnapshot()
+          expect(logger).toHaveBeenCalledTimes(1)
+          expect(logger.mock.calls[0].join(' ')).toMatchSnapshot()
         }) // should warn the user
         it(`should have changed the config correctly`, () => {
           expect(original).toMatchSnapshot('before')

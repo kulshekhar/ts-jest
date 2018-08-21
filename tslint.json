@@ -14,7 +14,7 @@
           "functions": "always",
           "typeLiterals": "ignore"
         },
-        "esSpecCompliant": false
+        "esSpecCompliant": true
       }
     ],
     "no-shadowed-variable": false,
