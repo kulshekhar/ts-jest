@@ -20,7 +20,7 @@ import {
   outputJsonSync,
 } from 'fs-extra'
 import merge from 'lodash.merge'
-import { spawnSync } from 'child_process'
+import { sync as spawnSync } from 'cross-spawn'
 
 const TEMPLATE_EXCLUDED_ITEMS = ['node_modules', 'package-lock.json']
 

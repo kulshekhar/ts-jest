@@ -1,4 +1,4 @@
-const { spawnSync: sync } = require('child_process')
+const { sync } = require('cross-spawn')
 
 /**
  * @type {typeof sync}
