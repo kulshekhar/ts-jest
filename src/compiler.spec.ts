@@ -3,13 +3,9 @@ import { TsJestGlobalOptions } from './types'
 import { ConfigSet } from './config/config-set'
 import * as fakers from './__helpers__/fakers'
 import { createCompiler } from './compiler'
-import {
-  extractSourceMaps,
-  rewriteSourceMaps,
-  relativisePaths,
-} from './__helpers__/source-maps'
 import { relativeToRoot, tempDir, ROOT } from './__helpers__/path'
 import { __setup } from './util/debug'
+import ProcessedSource from './__helpers__/ProcessedSource'
 
 // not really unit-testing here, but it's hard to mock all those values :-D
 
@@ -63,11 +59,12 @@ foo.ts(4,7): error TS2322: Type 'string' is not assignable to type 'boolean'."
 
 describe('source-maps', () => {
   const compiler = makeCompiler()
-  it('should report diagnostics related to typings', () => {
+  it('should have correct source maps', () => {
     const source = 'const f = (v: number) => v\nconst t: number = f(5)'
     const compiled = compiler.compile(source, __filename)
+    const processed = new ProcessedSource(compiled, __filename)
     const expectedFileName = relativeToRoot(__filename)
-    expect(extractSourceMaps(compiled)).toMatchObject({
+    expect(processed.outputSourceMaps).toMatchObject({
       file: expectedFileName,
       sources: [expectedFileName],
       sourcesContent: [source],
@@ -102,11 +99,22 @@ describe('cache', () => {
       __filename,
     )
 
-    expect(rewriteSourceMaps(compiled1, maps => relativisePaths(maps, ROOT)))
-      .toMatchInlineSnapshot(`
-"\\"use strict\\";
-console.log(\\"hello\\");
-//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoic3JjL2xpYi9jb21waWxlci5zcGVjLnRzIiwibWFwcGluZ3MiOiI7QUFBQSxPQUFPLENBQUMsR0FBRyxDQUFDLE9BQU8sQ0FBQyxDQUFBIiwibmFtZXMiOltdLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyJzcmMvbGliL2NvbXBpbGVyLnNwZWMudHMiXSwic291cmNlc0NvbnRlbnQiOlsiY29uc29sZS5sb2coXCJoZWxsb1wiKSJdLCJ2ZXJzaW9uIjozfQ=="
+    expect(new ProcessedSource(compiled1, __filename)).toMatchInlineSnapshot(`
+  ===[ FILE: src/compiler.spec.ts ]===============================================
+  "use strict";
+  console.log("hello");
+  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoic3JjL2NvbXBpbGVyLnNwZWMudHMiLCJtYXBwaW5ncyI6IjtBQUFBLE9BQU8sQ0FBQyxHQUFHLENBQUMsT0FBTyxDQUFDLENBQUEiLCJuYW1lcyI6W10sInNvdXJjZVJvb3QiOiI8Y3dkPi8iLCJzb3VyY2VzIjpbInNyYy9jb21waWxlci5zcGVjLnRzIl0sInNvdXJjZXNDb250ZW50IjpbImNvbnNvbGUubG9nKFwiaGVsbG9cIikiXSwidmVyc2lvbiI6M30=
+  ===[ INLINE SOURCE MAPS ]=======================================================
+  file: src/compiler.spec.ts
+  mappings: ';AAAA,OAAO,CAAC,GAAG,CAAC,OAAO,CAAC,CAAA'
+  names: []
+  sourceRoot: <cwd>/
+  sources:
+    - src/compiler.spec.ts
+  sourcesContent:
+    - console.log("hello")
+  version: 3
+  ================================================================================
 `)
     expect(compiled2).toBe(compiled1)
   })

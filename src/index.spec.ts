@@ -3,7 +3,7 @@ import { __setup } from './util/debug'
 import * as tsJest from '.'
 import { TsJestTransformer } from './ts-jest-transformer'
 
-jest.mock('./lib/ts-jest-transformer', () => {
+jest.mock('./ts-jest-transformer', () => {
   class TsJestTransformer {
     process: jest.Mock = jest.fn()
     getCacheKey: jest.Mock = jest.fn()
@@ -11,7 +11,7 @@ jest.mock('./lib/ts-jest-transformer', () => {
   }
   return { TsJestTransformer }
 })
-jest.mock('./lib/create-jest-preset', () => ({
+jest.mock('./config/create-jest-preset', () => ({
   createJestPreset: () => ({ jestPreset: true }),
 }))
 
@@ -47,7 +47,7 @@ describe('old entry point', () => {
     expect(spy).toHaveBeenCalledTimes(1)
     expect(spy.mock.calls[0]).toMatchInlineSnapshot(`
 Array [
-  "ts-jest",
+  "ts-jest:",
   "[deprecated]",
   "Replace any occurrences of \\"ts-jest/dist/preprocessor.js\\" or  \\"<rootDir>/node_modules/ts-jest/preprocessor.js\\" in the 'transform' section of your Jest config with just \\"ts-jest\\".",
 ]

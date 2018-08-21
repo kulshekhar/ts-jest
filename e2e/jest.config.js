@@ -7,8 +7,8 @@ module.exports = {
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json'],
   testEnvironment: 'node',
   snapshotSerializers: [
-    '<rootDir>/e2e/__serializers__/test-run-result.ts',
-    '<rootDir>/e2e/__serializers__/test-file-io.ts',
+    '<rootDir>/e2e/__serializers__/run-result.ts',
+    '<rootDir>/e2e/__serializers__/processed-source.ts',
   ],
   verbose: true,
 }

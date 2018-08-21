@@ -2,12 +2,15 @@
 import * as fakers from '../__helpers__/fakers'
 import { __requireModule, Importer } from './importer'
 
-const moduleNotFound = () => {
-  throw new Error()
-}
-
 const requireModule = jest.fn(
-  mod => (mod in modules ? modules[mod]() : moduleNotFound()),
+  mod =>
+    mod in modules
+      ? modules[mod]()
+      : (() => {
+          const err: any = new Error(`Module not found: ${mod}.`)
+          err.code = 'MODULE_NOT_FOUND'
+          throw err
+        })(),
 )
 __requireModule(requireModule as any)
 

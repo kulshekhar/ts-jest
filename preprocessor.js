@@ -1,5 +1,5 @@
 console.warn(
-  'ts-jest',
+  'ts-jest:',
   '[deprecated]',
   'Replace any occurrences of "ts-jest/dist/preprocessor.js" or ' +
     ' "<rootDir>/node_modules/ts-jest/preprocessor.js"' +

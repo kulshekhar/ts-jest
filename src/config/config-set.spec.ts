@@ -7,7 +7,7 @@ import { ScriptTarget, ModuleKind } from 'typescript'
 import { resolve } from 'path'
 import { normalizeSlashes } from '../util/normalize-slashes'
 
-jest.mock('./backports')
+jest.mock('../util/backports')
 
 const backports = mocked(_backports)
 
@@ -227,7 +227,7 @@ describe('typescript', () => {
   })
 
   it('should include compiler config from `tsConfig` option key', () => {
-    expect(get({ tsConfig: { baseUrl: 'src/lib' } }).options.baseUrl).toBe(
+    expect(get({ tsConfig: { baseUrl: 'src/config' } }).options.baseUrl).toBe(
       normalizeSlashes(__dirname),
     )
   })

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 'use strict'
 
-const { sync: spawnSync } = require('cross-spawn')
+const { spawnSync } = require('./lib/spawn-sync')
 const { resolve, join } = require('path')
 const { tmpdir } = require('os')
 const { rootDir } = require('./lib/paths')
@@ -41,11 +41,7 @@ const bundle = createBundle()
 // if it's a git URL we first need to clone
 if (gitUrl) {
   logger.log('found what could be a git URL, trying to clone')
-  const gitRes = spawnSync('git', ['clone', gitUrl, projectPath])
-  if (gitRes.status !== 0) {
-    logger.error(gitRes.stderr.toString('utf8'))
-    process.exit(gitRes.status)
-  }
+  spawnSync('git', ['clone', gitUrl, projectPath])
 }
 
 // we change current directory

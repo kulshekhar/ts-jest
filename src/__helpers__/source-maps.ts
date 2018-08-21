@@ -5,23 +5,38 @@ import { relative, isAbsolute } from 'path'
 import stableStringify = require('fast-json-stable-stringify')
 import { realpathSync } from 'fs'
 
-// source-map module doesn't provide a sync method to extract the source-maps
-export function extractSourceMaps(source: string): RawSourceMap | undefined {
-  const [, comment]: [any, string | undefined] =
-    (source.match(
-      /[\n^]\/\/#\s*sourceMappingURL=data:application\/json;(?:charset=utf-8;)?base64,(\S+)\s*$/,
-    ) as any) || []
-  if (!comment) return
-
-  return base64ToSourceMaps(comment)
-}
-
 export function base64ToSourceMaps(base64: string): RawSourceMap {
   return JSON.parse(bufferFrom(base64, 'base64').toString('utf8'))
 }
 
 export function sourceMapsToBase64(sourceMaps: RawSourceMap): string {
   return bufferFrom(stableStringify(sourceMaps)).toString('base64')
+}
+
+export interface ParsedSourceWithMaps {
+  sourceMaps?: RawSourceMap
+  comment?: string
+  source: string
+}
+export function parseSource(source: string): ParsedSourceWithMaps {
+  const [comment, b64Maps]: [string, string | undefined] =
+    (source.match(
+      /[\n^]\/\/#\s*sourceMappingURL=data:application\/json;(?:charset=utf-8;)?base64,(\S+)\s*$/,
+    ) as any) || []
+  if (b64Maps) {
+    const map = base64ToSourceMaps(b64Maps)
+    return {
+      source: source.substr(0, -comment.length),
+      comment: comment.trim(),
+      sourceMaps: map,
+    }
+  }
+  return { source }
+}
+
+// source-map module doesn't provide a sync method to extract the source-maps
+export function extractSourceMaps(source: string): RawSourceMap | undefined {
+  return parseSource(source).sourceMaps
 }
 
 export function relativisePaths(

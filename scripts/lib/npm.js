@@ -1,4 +1,4 @@
-const spawn = require('cross-spawn')
+const { spawnSync: spawn } = require('./spawn-sync')
 const { satisfies } = require('semver')
 const memoize = require('lodash.memoize')
 
@@ -9,7 +9,7 @@ const version = memoize(() => {
 })
 
 const spawnSync = (args, options = {}) => {
-  return spawn.sync('npm', args, options)
+  return spawn('npm', args, options)
 }
 
 const can = {

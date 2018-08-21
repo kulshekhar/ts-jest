@@ -2,7 +2,7 @@
 'use strict'
 
 const jest = require('jest')
-const { sync: spawnSync } = require('cross-spawn')
+const { spawnSync } = require('./lib/spawn-sync')
 const fs = require('fs-extra')
 const path = require('path')
 const Paths = require('./lib/paths')

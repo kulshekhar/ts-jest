@@ -13,4 +13,5 @@ module.exports = {
   ],
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json'],
   testEnvironment: 'node',
+  snapshotSerializers: ['<rootDir>/src/__serializers__/processed-source.ts'],
 }

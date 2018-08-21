@@ -29,6 +29,5 @@
     "e2e/__serializer__",
     "e2e/__helpers__",
     "scripts/lib/paths.d.ts",
-    "e2e/__serializers__/test-file-io.ts"
   ]
 }
