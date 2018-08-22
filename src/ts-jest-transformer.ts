@@ -89,9 +89,6 @@ export class TsJestTransformer implements jest.Transformer {
     const stringify = configs.shouldStringifyContent(filePath)
     const babelJest = stringify ? undefined : configs.babelJestTransformer
 
-    // get the compiler instance
-    const compiler = configs.tsCompiler
-
     // handles here what we should simply stringify
     if (stringify) {
       source = `module.exports=${JSON.stringify(source)}`
@@ -100,7 +97,7 @@ export class TsJestTransformer implements jest.Transformer {
     // transpile TS code (source maps are included)
     result = filePath.endsWith('.d.ts')
       ? '' // do not try to compile declaration files
-      : compiler.compile(source, filePath)
+      : configs.tsCompiler.compile(source, filePath)
 
     // calling babel-jest transformer
     if (babelJest) {

@@ -101,7 +101,9 @@ export function createCompiler(configs: ConfigSet): TsCompiler {
       ? configs.filterDiagnostics(result.diagnostics)
       : []
 
-    if (diagnosticList.length) throw configs.createTsError(diagnosticList)
+    if (diagnosticList.length) {
+      throw configs.createTsError(diagnosticList)
+    }
 
     return [result.outputText, result.sourceMapText as string]
   }
@@ -174,16 +176,18 @@ export function createCompiler(configs: ConfigSet): TsCompiler {
 
       const output = service.getEmitOutput(fileName)
 
-      // Get the relevant diagnostics - this is 3x faster than `getPreEmitDiagnostics`.
-      const diagnostics = service
-        .getCompilerOptionsDiagnostics()
-        .concat(service.getSyntacticDiagnostics(fileName))
-        .concat(service.getSemanticDiagnostics(fileName))
+      if (configs.shouldReportDiagnostic(fileName)) {
+        // Get the relevant diagnostics - this is 3x faster than `getPreEmitDiagnostics`.
+        const diagnostics = service
+          .getCompilerOptionsDiagnostics()
+          .concat(service.getSyntacticDiagnostics(fileName))
+          .concat(service.getSemanticDiagnostics(fileName))
 
-      const diagnosticList = configs.filterDiagnostics(diagnostics)
+        const diagnosticList = configs.filterDiagnostics(diagnostics)
 
-      if (diagnosticList.length) {
-        throw configs.createTsError(diagnosticList)
+        if (diagnosticList.length) {
+          throw configs.createTsError(diagnosticList)
+        }
       }
 
       if (output.emitSkipped) {
