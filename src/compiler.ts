@@ -41,10 +41,18 @@ import { TsCompiler, MemoryCache, TypeInfo } from './types'
 import { Errors, interpolate } from './util/messages'
 import { factory as customTransformersFactory } from './transformers'
 
+const hasOwn = Object.prototype.hasOwnProperty
+
 /**
  * Register TypeScript compiler.
  */
 export function createCompiler(configs: ConfigSet): TsCompiler {
+  debug(
+    'createCompiler',
+    configs.tsJest.typeCheck ? 'with' : 'without',
+    'type-checking, config:',
+    configs.toJSON(),
+  )
   const cachedir = configs.tsCacheDir
 
   const memoryCache: MemoryCache = {
@@ -90,6 +98,7 @@ export function createCompiler(configs: ConfigSet): TsCompiler {
     fileName: string,
     lineOffset = 0,
   ): SourceOutput => {
+    debug(`compiler#getOutput`, 'compiling as isolated module')
     const result = ts.transpileModule(code, {
       fileName,
       transformers,
@@ -120,6 +129,7 @@ export function createCompiler(configs: ConfigSet): TsCompiler {
   if (configs.tsJest.typeCheck) {
     // Set the file contents into cache.
     const updateMemoryCache = (code: string, fileName: string) => {
+      debug(`compiler#updateMemoryCache`, fileName)
       if (memoryCache.contents[fileName] !== code) {
         memoryCache.contents[fileName] = code
         memoryCache.versions[fileName] =
@@ -143,10 +153,10 @@ export function createCompiler(configs: ConfigSet): TsCompiler {
           : String(version)
       },
       getScriptSnapshot(fileName: string) {
-        // Read contents into TypeScript memory cache.
-        if (
-          !Object.prototype.hasOwnProperty.call(memoryCache.contents, fileName)
-        ) {
+        const hit = hasOwn.call(memoryCache.contents, fileName)
+        debug(`compiler#getScriptSnapshot`, 'cache', hit ? 'hit' : 'miss')
+        // Read contents from TypeScript memory cache.
+        if (!hit) {
           memoryCache.contents[fileName] = ts.sys.readFile(fileName)
         }
 
@@ -168,15 +178,18 @@ export function createCompiler(configs: ConfigSet): TsCompiler {
       getCustomTransformers: () => transformers,
     }
 
+    debug(`createCompiler`, 'creating language service')
     const service = ts.createLanguageService(serviceHost)
 
     getOutput = (code: string, fileName: string, lineOffset: number = 0) => {
+      debug(`compiler#getOutput`, 'compiling using language service', fileName)
       // Must set memory cache before attempting to read file.
       updateMemoryCache(code, fileName)
 
       const output = service.getEmitOutput(fileName)
 
       if (configs.shouldReportDiagnostic(fileName)) {
+        debug(`compiler#getOutput`, 'computing diagnostics', fileName)
         // Get the relevant diagnostics - this is 3x faster than `getPreEmitDiagnostics`.
         const diagnostics = service
           .getCompilerOptionsDiagnostics()
@@ -280,6 +293,7 @@ function readThrough(
     const [value, sourceMap] = compile(code, fileName, lineOffset)
     const output = updateOutput(value, fileName, sourceMap, getExtension, cwd)
 
+    debug('readThrough:write-caches', fileName, 'cache file', outputPath)
     memoryCache.outputs[fileName] = output
     writeFileSync(outputPath, output)
 

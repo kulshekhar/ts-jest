@@ -1,5 +1,5 @@
 import { satisfies, Range } from 'semver'
-import { warn } from './debug'
+import { warn, debug } from './debug'
 import { interpolate, Errors } from './messages'
 import { getPackageVersion } from './get-package-version'
 
@@ -48,7 +48,12 @@ function checkVersion(
 ): boolean | never {
   const version = getPackageVersion(name)
   const success = !!version && satisfies(version, expectedRange)
+  debug('checkVersion', name, success ? 'OK' : 'NOT OK', {
+    actual: version,
+    expected: expectedRange,
+  })
   if (!action || success) return success
+
   const message = interpolate(
     version ? Errors.UntestedDependencyVersion : Errors.MissingDependency,
     {

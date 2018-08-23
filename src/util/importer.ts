@@ -9,6 +9,7 @@ import {
 import * as hacks from './hacks'
 import { ImportReasons, Errors, interpolate, Helps } from './messages'
 import { VersionCheckers } from './version-checkers'
+import { debug } from './debug'
 
 // When ading an optional dependency which has another reason, add the reason in ImportReasons, and
 // create a new method in Importer. Thus uses the importer.yourMethod(ImportReasons.TheReason)
@@ -28,6 +29,7 @@ const passThru = (action: () => void) => (input: any) => {
 export class Importer implements TsJestImporter {
   @Memoize()
   static get instance() {
+    debug('Importer.instance', 'creating Importer singleton')
     // here we can define patches to apply to modules.
     // it could be fixes that are not deployed, or
     // abstractions so that multiple versions work the same
@@ -81,8 +83,11 @@ export class Importer implements TsJestImporter {
     while ((name = tries.shift() as string) !== undefined) {
       try {
         loaded = requireModule(name)
+        debug('Importer#tryThese', 'loaded module', name)
         break
-      } catch (err) {}
+      } catch (err) {
+        debug('Importer#tryThese', 'fail loading module', name)
+      }
     }
 
     return loaded && this._patch(name, loaded)
@@ -91,6 +96,7 @@ export class Importer implements TsJestImporter {
   @Memoize(name => name)
   protected _patch<T>(name: string, unpatched: T): T {
     if (name in this._patches) {
+      debug('Importer#_patch', 'patching', name)
       return this._patches[name].reduce(
         (mod, patcher) => patcher(mod),
         unpatched,

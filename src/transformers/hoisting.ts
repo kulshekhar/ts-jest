@@ -11,6 +11,7 @@ import {
   Transformer,
 } from 'typescript'
 import { ConfigSet } from '../config/config-set'
+import { wrapWithDebug } from '../util/debug'
 
 /**
  * What methods of `jest` should we hoist
@@ -121,6 +122,9 @@ export function factory(cs: ConfigSet) {
 
   // returns the transformer factory
   return (ctx: TransformationContext): Transformer<SourceFile> => {
-    return (sf: SourceFile) => ts.visitNode(sf, createVisitor(ctx, sf))
+    return wrapWithDebug(
+      (sf: SourceFile) => ['customTranformer#hoisting', sf.fileName],
+      (sf: SourceFile) => ts.visitNode(sf, createVisitor(ctx, sf)),
+    )
   }
 }

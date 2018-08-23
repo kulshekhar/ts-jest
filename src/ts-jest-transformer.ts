@@ -4,6 +4,7 @@ import { JsonableValue } from './util/jsonable-value'
 import { ConfigSet } from './config/config-set'
 import { stringify, parse } from './util/json'
 import { inspect } from 'util'
+import { debug } from './util/debug'
 
 /**
  * @internal
@@ -32,6 +33,7 @@ export class TsJestTransformer implements jest.Transformer {
   constructor(baseOptions: TsJestGlobalOptions = {}) {
     this.options = { ...baseOptions }
     this.id = TsJestTransformer._nextTransformerId
+    debug('created new transformer', this)
   }
 
   [INSPECT_CUSTOM]() {

@@ -7,9 +7,9 @@ https://github.com/kulshekhar/ts-jest/wiki/Troubleshooting -->
 ## Expected behavior <!-- describe the expected behavior below -->:
 
 
-## Output from debug log <!-- You can activate the debug logger by setting the environment variable TS_JEST_DEBUG="true" before running yarn test. The output of the logger will be in **<your_project_dir>/node_modules/ts-jest/debug.txt**, paste it below -->:
+## Output from debug log <!-- You can activate the debug logger by setting the environment variable TS_JEST_DEBUG="true" before running tests. The output of the logger will be in **ts-jest-debug.log**, paste it below -->:
 ```bash
-# content of debug.txt :
+# content of ts-jest-debug.log :
 
 ```
 

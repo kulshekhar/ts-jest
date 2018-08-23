@@ -81,13 +81,12 @@ describe('cache', () => {
 
   it('should use the cache', () => {
     const compiled1 = compiler.compile(source, __filename)
-    expect(logger).toHaveBeenCalledTimes(1)
-    expect(logger).toHaveBeenCalledWith(
-      'log',
-      'ts-jest:',
+    expect(logger.mock.calls.map(callArgs => callArgs[2])).toEqual([
       'readThrough:cache-miss',
-      __filename,
-    )
+      'compiler#getOutput',
+      'customTranformer#hoisting',
+      'readThrough:write-caches',
+    ])
 
     logger.mockClear()
     const compiled2 = compiler.compile(source, __filename)

@@ -414,6 +414,10 @@ export class ConfigSet {
     return this.jest.cwd || process.cwd()
   }
 
+  get isDoctoring() {
+    return !!process.env.TS_JEST_DOCTOR
+  }
+
   readTsConfig(
     compilerOptions?: object,
     project?: string | null,
@@ -503,9 +507,18 @@ export class ConfigSet {
 
   @Memoize()
   get jsonValue() {
+    const jest = { ...this.jest }
+    const globals = (jest.globals = { ...jest.globals } as any)
+    // we need to remove some stuff from jest config
+    // this which does not depend on config
+    delete jest.name
+    delete jest.cacheDirectory
+    // we do not need this since its normalized version is in tsJest
+    delete globals['ts-jest']
+
     return new JsonableValue({
       version: myVersion,
-      jest: this.jest,
+      jest,
       tsJest: this.tsJest,
       babel: this.babel,
       tsconfig: this.tsconfig,
@@ -514,5 +527,9 @@ export class ConfigSet {
 
   get cacheKey(): string {
     return this.jsonValue.serialized
+  }
+
+  toJSON() {
+    return this.jsonValue.value
   }
 }

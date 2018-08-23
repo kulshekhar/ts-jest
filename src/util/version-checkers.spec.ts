@@ -64,9 +64,9 @@ function describeChecker(
 
         it(`should log with warn()`, () => {
           checker.warn()
-          expect(logger).toHaveBeenCalledTimes(1)
-          expect(logger.mock.calls[0][0]).toBe('warn')
-          expect(logger.mock.calls[0][2]).toMatch(
+          const warnings = logger.mock.calls.filter(args => args[0] === 'warn')
+          expect(warnings).toHaveLength(1)
+          expect(warnings[0][2]).toMatch(
             testVersion
               ? 'has not been tested with ts-jest'
               : 'is not installed',
@@ -75,7 +75,11 @@ function describeChecker(
         it(`should log only once with warn()`, () => {
           checker.warn()
           checker.warn()
-          expect(logger).toHaveBeenCalledTimes(1)
+          expect(
+            logger.mock.calls
+              .map(args => args[0])
+              .filter(lvl => lvl === 'warn'),
+          ).toHaveLength(1)
         })
         it(`should throw with raise()`, () => {
           expect(checker.raise).toThrow()
@@ -94,7 +98,7 @@ function describeChecker(
         })
         it(`should not log with warn()`, () => {
           checker.warn()
-          expect(logger).not.toHaveBeenCalled()
+          expect(logger.mock.calls.map(args => args[0])).not.toContain('warn')
         })
         it(`should not throw with raise()`, () => {
           expect(checker.raise).not.toThrow()

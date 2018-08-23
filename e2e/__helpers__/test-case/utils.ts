@@ -52,3 +52,7 @@ export function normalizeJestOutput(output: string): string {
   }
   return out
 }
+
+export function escapeRegex(s: string) {
+  return s.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')
+}

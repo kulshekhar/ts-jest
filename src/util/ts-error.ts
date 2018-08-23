@@ -1,6 +1,7 @@
 import { inspect } from 'util'
 import { BaseError } from 'make-error'
 import { Helps, Errors, interpolate } from './messages'
+import { debug } from './debug'
 
 /**
  * @internal
@@ -20,6 +21,7 @@ export class TSError extends BaseError {
         help: Helps.IgnoreDiagnosticCode,
       }),
     )
+    debug('TSError#constructor', diagnosticCodes, diagnosticText)
     // ensure we blacklist any of our code
     Object.defineProperty(this, 'stack', { value: '' })
   }
