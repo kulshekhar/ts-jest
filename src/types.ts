@@ -40,6 +40,7 @@ export type PostProcessHook = (
 
 export interface TsJestConfig {
   babelConfig?: BabelTransformOpts;
+  compiler?: string;
   disableSourceMapSupport?: boolean;
   enableInternalCache?: boolean;
   enableTsDiagnostics?: boolean;

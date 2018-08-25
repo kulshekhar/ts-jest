@@ -1,17 +1,25 @@
-import * as ts from 'typescript';
+import * as fs from 'fs';
+import { cwd } from 'process';
+// Only for types; take care never to use ts_types in expressions, only in type annotations
+import * as ts_types from 'typescript';
 import { logOnce } from './utils/logger';
+import { getTypescriptCompiler } from './custom-compiler';
+import { TsJestConfig } from './types';
 
 // Takes the typescript code and by whatever method configured, makes it into javascript code.
 export function transpileTypescript(
   filePath: string,
   fileSrc: string,
-  compilerOptions: ts.CompilerOptions,
+  compilerOptions: ts_types.CompilerOptions,
+  tsJestConfig: TsJestConfig,
 ): jest.TransformedSource {
   logOnce('Compiling via normal transpileModule call');
+  const ts = getTypescriptCompiler(tsJestConfig);
   const { outputText: code, sourceMapText: map } = transpileViaTranspileModule(
     filePath,
     fileSrc,
     compilerOptions,
+    ts,
   );
   return { code, map };
 }
@@ -22,8 +30,9 @@ export function transpileTypescript(
 function transpileViaTranspileModule(
   filePath: string,
   fileSource: string,
-  compilerOptions: ts.CompilerOptions,
-): ts.TranspileOutput {
+  compilerOptions: ts_types.CompilerOptions,
+  ts: typeof ts_types,
+): ts_types.TranspileOutput {
   const transpileOutput = ts.transpileModule(fileSource, {
     compilerOptions,
     fileName: filePath,
@@ -41,7 +50,7 @@ function transpileViaTranspileModule(
   return transpileOutput;
 }
 
-function formatDiagnostics(diagnostics: ts.Diagnostic[]): string {
+function formatDiagnostics(diagnostics: ts_types.Diagnostic[]): string {
   // TODO consider using ts.formatDiagnosticsWithColorAndContext()
   return `${diagnostics.map(d => d.messageText)}\n`;
 }

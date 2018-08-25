@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import { normalize } from 'jest-config';
-import * as setFromArgv from 'jest-config/build/set_from_argv';
+import * as setFromArgv from 'jest-config/build/setFromArgv';
 import * as path from 'path';
 import { JestConfigNormalize } from '../../dist/types';
 import { Arguments } from 'yargs';

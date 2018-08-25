@@ -50,7 +50,7 @@ export default function preprocess(
     runTsDiagnostics(filePath, compilerOptions);
   }
 
-  const transpileOutput = transpileTypescript(filePath, src, compilerOptions);
+  const transpileOutput = transpileTypescript(filePath, src, compilerOptions, tsJestConfig);
 
   // FIXME: this should be done in the typescript source, else it's invalidating source maps
   if (tsJestConfig.ignoreCoverageForAllDecorators === true) {
