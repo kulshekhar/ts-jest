@@ -17,15 +17,6 @@ describe('get default ts config', () => {
     getTSConfig.cache.clear();
   });
 
-  it('should bail when no default tsconfig.json found', () => {
-    // there is no tsconfig file in that test module
-    ((path as any) as MockedPath).__setBaseDir('./tests/jestconfig-test');
-
-    expect(() => getTSConfig(mockJestConfig('jestconfig-test'))).toThrowError(
-      /unable to find ts configuration file/i,
-    );
-  });
-
   it('should correctly read tsconfig.json', () => {
     const result = getTSConfig(mockJestConfig(TEST_CASE));
 
