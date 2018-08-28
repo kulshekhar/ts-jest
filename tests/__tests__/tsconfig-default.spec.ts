@@ -21,7 +21,7 @@ describe('get default ts config', () => {
     // there is no tsconfig file in that test module
     ((path as any) as MockedPath).__setBaseDir('./tests/jestconfig-test');
 
-    expect(() => getTSConfig(mockJestConfig('jestconfig-test'))).toBeDefined();
+    expect(getTSConfig(mockJestConfig('jestconfig-test'))).toBeDefined();
   });
 
   it('should correctly read tsconfig.json', () => {
