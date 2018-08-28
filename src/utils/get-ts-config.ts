@@ -26,15 +26,16 @@ export default getTSConfig;
 // Non-memoized version of TSConfig
 function getTSConfig_local(jestConfig: jest.ProjectConfig): CompilerOptions {
   const configMeta = findTSConfigPath(jestConfig);
-  if (!configMeta) {
-    throw new ReferenceError(
-      `[ts-jest] Unable to find TS configuration file given current configuration`,
-    );
+  let config;
+  if (configMeta) {
+    const { path: configPath } = configMeta;
+    logOnce(`Reading tsconfig file from path ${configPath}`);
+    config = readCompilerOptions(configPath);
+  } else {
+    logOnce(`Unable to find TS configuration file given current configuration`);
+    config = {};
   }
-  const { path: configPath } = configMeta;
-  logOnce(`Reading tsconfig file from path ${configPath}`);
 
-  const config = readCompilerOptions(configPath);
   logOnce('Original typescript config before modifications: ', { ...config });
 
   // tsc should not emit declaration map when used for tests
@@ -57,7 +58,7 @@ function getTSConfig_local(jestConfig: jest.ProjectConfig): CompilerOptions {
   delete config.outDir;
   delete config.outFile;
 
-  if (!configMeta.isUserDefined) {
+  if (!configMeta || !configMeta.isUserDefined) {
     // hardcode module to 'commonjs' in case the config is being loaded
     // from the default tsconfig file. This is to ensure that coverage
     // works well. If there's a need to override, it can be done using
