@@ -49,6 +49,7 @@ export default class RunResult {
   normalize(str: string) {
     // TODO: hmmm clean this!
     return [
+      { from: /\\/g, to: '/' },
       { from: this.cwd, to: '<cwd>' },
       { from: realpathSync(this.cwd), to: '<cwd>' },
       { from: tmpdir(), to: '<tmp>' },
