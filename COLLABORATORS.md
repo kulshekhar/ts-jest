@@ -2,13 +2,10 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**
 
-- [Collaborator Guidelines](#collaborator-guidelines)
-  - [Installing and building the project](#installing-and-building-the-project)
-  - [Merging PRs](#merging-prs)
-  - [Versioning](#versioning)
-  - [Tests](#tests)
-    - [How to add tests](#how-to-add-tests)
-    - [How to run tests](#how-to-run-tests)
+- [Installing and building the project](#installing-and-building-the-project)
+- [Merging PRs](#merging-prs)
+- [Versioning](#versioning)
+- [Tests](#tests)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -19,12 +16,7 @@ and best practices, so that we can ensure that we can maintain this project in t
 
 ## Installing and building the project
 
-To be able to install and build the project probably, `rimraf` is required. Install `rimraf` by running
-```
-yarn global add rimraf
-```
-
-After installing `rimraf`, `yarn` command can be run normally when installing dependencies for the project
+=== TBD ===
 
 ## Merging PRs
 
@@ -49,12 +41,4 @@ All new features or bugfixes should be accompanied with a new test, to ensure th
 
 If you are simply refactoring code, it is not needed to add a test.
 
-### How to add tests
-- Tests are added by creating a new file in tests/__tests__ 
-- A test usually consists of two parts
-	 - A directory under tests/ that have some files that should result in a specific output when jest is passed through it
-	 - A file under tests/__tests__ that uses the runJest command to run Jest on the specified directory, and makes asserts on the output of stdout and stderr
-	 	When asserting things on the output, it is common to both assert something about the exit code, and something about the output. Always assert on the output first, before asserting on the status code - as it leads to much nicer error messages when refactoring. (You get the full output text, rather than just '0 didn't equal 1')
-
-### How to run tests
-Tests are run through `yarn test`
+See [e2e README](e2e/README.md) and [e2e tech doc](doc/tech/e2e/index.md) for more information.
