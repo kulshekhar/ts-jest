@@ -9,16 +9,11 @@ const spawnSync = (...args) => {
     throw res.error
   }
   if (res.status !== 0) {
-    let msg = 'unknown error'
-    try {
-      msg =
-        res.stderr.toString('utf8').trim() ||
-        res.stdout.toString('utf8').trim() ||
-        msg
-    } catch (err) {
-      null
-    }
-    throw new Error(msg)
+    const msgs = []
+    if (res && res.stderr) msgs.push(res.stderr.toString('utf8').trim())
+    if (res && res.stdout) msgs.push(res.stdout.toString('utf8').trim())
+    msgs.push('unknown error')
+    throw new Error(msgs.find(s => s))
   }
   return res
 }

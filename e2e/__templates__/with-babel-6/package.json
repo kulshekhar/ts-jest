@@ -5,7 +5,13 @@
   "devDependencies": {
     "@types/jest": "23.3.1",
     "babel-core": "6.26.3",
-    "jest": "23.4.2",
-    "typescript": "3.0.1"
+    "jest": "23.5.0",
+    "typescript": "3.0.3"
+  },
+  "wantedDependencies": {
+    "@types/jest": "latest",
+    "babel-core": "6",
+    "jest": "latest",
+    "typescript": "latest"
   }
 }

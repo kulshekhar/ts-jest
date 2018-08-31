@@ -4,7 +4,12 @@
   "private": true,
   "devDependencies": {
     "@types/jest": "23.3.1",
-    "jest": "23.4.2",
+    "jest": "23.5.0",
     "typescript": "2.5.3"
+  },
+  "wantedDependencies": {
+    "@types/jest": "latest",
+    "jest": "latest",
+    "typescript": "2.5"
   }
 }
