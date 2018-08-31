@@ -1,5 +1,8 @@
 import { TBabelCore, ModulePatcher, BabelConfig } from '../types'
 import semver from 'semver'
+import { rootLogger } from './logger'
+
+const logger = rootLogger.child({ namespace: 'hacks' })
 
 // tslint:disable-next-line:variable-name
 export const patchBabelCore_githubIssue6577: ModulePatcher<
@@ -16,7 +19,7 @@ export const patchBabelCore_githubIssue6577: ModulePatcher<
     try {
       const File = require('babel-core/lib/transformation/file').File
       File.prototype.initOptions = (original => {
-        return function(this: any, opt: BabelConfig) {
+        return function initOptions(this: any, opt: BabelConfig) {
           const before = opt.sourceMaps
           const result = original.apply(this, arguments)
           if (before && before !== result.sourceMaps) {
@@ -25,6 +28,7 @@ export const patchBabelCore_githubIssue6577: ModulePatcher<
           return result
         }
       })(File.prototype.initOptions)
+      logger.info('patched babel-core/lib/transformation/file')
     } catch (err) {}
   }
   return babel

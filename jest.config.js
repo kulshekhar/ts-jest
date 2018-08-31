@@ -1,5 +1,6 @@
 module.exports = {
   rootDir: '.',
+  setupTestFrameworkScriptFile: '<rootDir>/src/__helpers__/setup.ts',
   transform: {
     '\\.ts$': '<rootDir>/dist/index.js',
   },

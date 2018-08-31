@@ -1,7 +1,9 @@
 import { inspect } from 'util'
 import { BaseError } from 'make-error'
 import { Helps, Errors, interpolate } from './messages'
-import { debug } from './debug'
+import { rootLogger } from './logger'
+
+const logger = rootLogger.child({ namespace: 'TSError' })
 
 /**
  * @internal
@@ -21,7 +23,7 @@ export class TSError extends BaseError {
         help: Helps.IgnoreDiagnosticCode,
       }),
     )
-    debug('TSError#constructor', diagnosticCodes, diagnosticText)
+    logger.debug({ diagnosticCodes, diagnosticText }, 'created new TSError')
     // ensure we blacklist any of our code
     Object.defineProperty(this, 'stack', { value: '' })
   }

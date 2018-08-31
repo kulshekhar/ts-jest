@@ -1,5 +1,5 @@
 import { safeDump } from 'js-yaml'
-import ProcessedSource from '../__helpers__/ProcessedSource'
+import ProcessedSource from '../__helpers__/processed-source'
 
 export const test = (val: any) => val && val instanceof ProcessedSource
 export const print = (val: ProcessedSource, serialize: any, indent: any) => {

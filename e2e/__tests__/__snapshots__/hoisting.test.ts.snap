@@ -1,24 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Hoisting jest.mock() & jest.unmock() should pass using template "default" 1`] = `
-  √ jest --runInBand
-  ↳ exit code: 0
-  ===[ STDOUT ]===================================================================
-  
-  ===[ STDERR ]===================================================================
-  PASS ./hello.spec.ts
-    hello
-      √ should have been mocked
-  
-  Test Suites: 1 passed, 1 total
-  Tests:       1 passed, 1 total
-  Snapshots:   0 total
-  Time:        XXs
-  Ran all test suites.
-  ================================================================================
-`;
-
-exports[`Hoisting jest.mock() & jest.unmock() should pass using template "default" 2`] = `
+exports[`Hoisting jest.mock() & jest.unmock() should pass using template "default": io 1`] = `
   ===[ FILE: hello.spec.ts ]======================================================
   "use strict";
   var __importDefault = (this && this.__importDefault) || function (mod) {
@@ -79,7 +61,7 @@ exports[`Hoisting jest.mock() & jest.unmock() should pass using template "defaul
   ================================================================================
 `;
 
-exports[`Hoisting jest.mock() & jest.unmock() should pass using template "with-babel-6" 1`] = `
+exports[`Hoisting jest.mock() & jest.unmock() should pass using template "default": output 1`] = `
   √ jest --runInBand
   ↳ exit code: 0
   ===[ STDOUT ]===================================================================
@@ -97,7 +79,7 @@ exports[`Hoisting jest.mock() & jest.unmock() should pass using template "with-b
   ================================================================================
 `;
 
-exports[`Hoisting jest.mock() & jest.unmock() should pass using template "with-babel-6" 2`] = `
+exports[`Hoisting jest.mock() & jest.unmock() should pass using template "with-babel-6": io 1`] = `
   ===[ FILE: hello.spec.ts ]======================================================
   "use strict";
   
@@ -159,7 +141,7 @@ exports[`Hoisting jest.mock() & jest.unmock() should pass using template "with-b
   ================================================================================
 `;
 
-exports[`Hoisting jest.mock() & jest.unmock() should pass using template "with-babel-7" 1`] = `
+exports[`Hoisting jest.mock() & jest.unmock() should pass using template "with-babel-6": output 1`] = `
   √ jest --runInBand
   ↳ exit code: 0
   ===[ STDOUT ]===================================================================
@@ -177,7 +159,7 @@ exports[`Hoisting jest.mock() & jest.unmock() should pass using template "with-b
   ================================================================================
 `;
 
-exports[`Hoisting jest.mock() & jest.unmock() should pass using template "with-babel-7" 2`] = `
+exports[`Hoisting jest.mock() & jest.unmock() should pass using template "with-babel-7": io 1`] = `
   ===[ FILE: hello.spec.ts ]======================================================
   "use strict";
   
@@ -251,7 +233,7 @@ exports[`Hoisting jest.mock() & jest.unmock() should pass using template "with-b
   ================================================================================
 `;
 
-exports[`Hoisting jest.mock() & jest.unmock() should pass using template "with-jest-22" 1`] = `
+exports[`Hoisting jest.mock() & jest.unmock() should pass using template "with-babel-7": output 1`] = `
   √ jest --runInBand
   ↳ exit code: 0
   ===[ STDOUT ]===================================================================
@@ -269,7 +251,7 @@ exports[`Hoisting jest.mock() & jest.unmock() should pass using template "with-j
   ================================================================================
 `;
 
-exports[`Hoisting jest.mock() & jest.unmock() should pass using template "with-jest-22" 2`] = `
+exports[`Hoisting jest.mock() & jest.unmock() should pass using template "with-jest-22": io 1`] = `
   ===[ FILE: hello.spec.ts ]======================================================
   "use strict";
   var __importDefault = (this && this.__importDefault) || function (mod) {
@@ -330,7 +312,7 @@ exports[`Hoisting jest.mock() & jest.unmock() should pass using template "with-j
   ================================================================================
 `;
 
-exports[`Hoisting jest.mock() & jest.unmock() should pass using template "with-typescript-2-7" 1`] = `
+exports[`Hoisting jest.mock() & jest.unmock() should pass using template "with-jest-22": output 1`] = `
   √ jest --runInBand
   ↳ exit code: 0
   ===[ STDOUT ]===================================================================
@@ -348,7 +330,7 @@ exports[`Hoisting jest.mock() & jest.unmock() should pass using template "with-t
   ================================================================================
 `;
 
-exports[`Hoisting jest.mock() & jest.unmock() should pass using template "with-typescript-2-7" 2`] = `
+exports[`Hoisting jest.mock() & jest.unmock() should pass using template "with-typescript-2-7": io 1`] = `
   ===[ FILE: hello.spec.ts ]======================================================
   "use strict";
   var __importDefault = (this && this.__importDefault) || function (mod) {
@@ -406,5 +388,23 @@ exports[`Hoisting jest.mock() & jest.unmock() should pass using template "with-t
         });
       });
   version: 3
+  ================================================================================
+`;
+
+exports[`Hoisting jest.mock() & jest.unmock() should pass using template "with-typescript-2-7": output 1`] = `
+  √ jest --runInBand
+  ↳ exit code: 0
+  ===[ STDOUT ]===================================================================
+  
+  ===[ STDERR ]===================================================================
+  PASS ./hello.spec.ts
+    hello
+      √ should have been mocked
+  
+  Test Suites: 1 passed, 1 total
+  Tests:       1 passed, 1 total
+  Snapshots:   0 total
+  Time:        XXs
+  Ran all test suites.
   ================================================================================
 `;

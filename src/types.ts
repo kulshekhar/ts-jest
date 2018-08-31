@@ -1,5 +1,6 @@
 import _ts, { CompilerOptions } from 'typescript'
 import * as _babel from 'babel__core'
+import { Writable } from 'stream'
 
 export type TBabelCore = typeof _babel
 export type TTypeScript = typeof _ts

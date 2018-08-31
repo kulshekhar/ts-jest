@@ -42,11 +42,13 @@
   },
   "homepage": "https://github.com/kulshekhar/ts-jest#readme",
   "dependencies": {
+    "bs-logger": "^0.2.3",
     "buffer-from": "^1.1.1",
     "fast-json-stable-stringify": "^2.0.0",
     "make-error": "^1.3.4",
     "mkdirp": "^0.5.1",
-    "semver": "^5.5.1"
+    "semver": "^5.5.1",
+    "tslib": "^1.9.3"
   },
   "peerDependencies": {
     "babel-jest": ">=22 <24",

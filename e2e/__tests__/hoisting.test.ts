@@ -8,8 +8,8 @@ describe('Hoisting jest.mock() & jest.unmock()', () => {
     it(testLabel, () => {
       const result = runTest()
       expect(result.status).toBe(0)
-      expect(result).toMatchSnapshot()
-      expect(result.ioFor('hello.spec.ts')).toMatchSnapshot()
+      expect(result).toMatchSnapshot('output')
+      expect(result.ioFor('hello.spec.ts')).toMatchSnapshot('io')
     })
   })
 })

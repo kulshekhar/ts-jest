@@ -1,5 +1,5 @@
 import { RunTestOptions } from './types'
-import RunDescriptor from './RunDescriptor'
+import RunDescriptor from './run-descriptor'
 
 export function configureTestCase(
   name: string,

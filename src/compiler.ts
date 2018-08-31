@@ -1,7 +1,8 @@
 /**
  * This code is heavilly inspired from
  * https://github.com/JsCommunity/make-error/blob/v1.3.4/index.js
- * Below is the original license:
+ * ...but more modified than expected :-D
+ * Below is the original license anyway:
  *
  * ---
  *
@@ -34,12 +35,12 @@ import mkdirp = require('mkdirp')
 import bufferFrom from 'buffer-from'
 import stableStringify = require('fast-json-stable-stringify')
 import _ts, { CustomTransformers } from 'typescript'
-import { wrapWithDebug, debug } from './util/debug'
 import { ConfigSet } from './config/config-set'
 import { sha1 } from './util/sha1'
 import { TsCompiler, MemoryCache, TypeInfo } from './types'
 import { Errors, interpolate } from './util/messages'
 import { factory as customTransformersFactory } from './transformers'
+import { Logger, LogContexts, LogLevels } from 'bs-logger'
 
 const hasOwn = Object.prototype.hasOwnProperty
 
@@ -47,11 +48,11 @@ const hasOwn = Object.prototype.hasOwnProperty
  * Register TypeScript compiler.
  */
 export function createCompiler(configs: ConfigSet): TsCompiler {
-  debug(
-    'createCompiler',
+  const logger = configs.logger.child({ namespace: 'ts-compiler' })
+  logger.debug(
+    'creating typescript compiler',
     configs.tsJest.typeCheck ? 'with' : 'without',
-    'type-checking, config:',
-    configs.toJSON(),
+    'type-checking',
   )
   const cachedir = configs.tsCacheDir
 
@@ -98,7 +99,7 @@ export function createCompiler(configs: ConfigSet): TsCompiler {
     fileName: string,
     lineOffset = 0,
   ): SourceOutput => {
-    debug(`compiler#getOutput`, 'compiling as isolated module')
+    logger.debug({ fileName }, 'getOutput(): compiling as isolated module')
     const result = ts.transpileModule(code, {
       fileName,
       transformers,
@@ -129,7 +130,7 @@ export function createCompiler(configs: ConfigSet): TsCompiler {
   if (configs.tsJest.typeCheck) {
     // Set the file contents into cache.
     const updateMemoryCache = (code: string, fileName: string) => {
-      debug(`compiler#updateMemoryCache`, fileName)
+      logger.debug({ fileName }, `updateMemoryCache()`)
       if (memoryCache.contents[fileName] !== code) {
         memoryCache.contents[fileName] = code
         memoryCache.versions[fileName] =
@@ -138,6 +139,11 @@ export function createCompiler(configs: ConfigSet): TsCompiler {
     }
 
     // Create the compiler host for type checking.
+    const serviceHostCtx = {
+      [LogContexts.logLevel]: LogLevels.debug,
+      namespace: 'ts:serviceHost',
+      call: null,
+    }
     const serviceHost = {
       getScriptFileNames: () => Object.keys(memoryCache.versions),
       getScriptVersion: (fileName: string) => {
@@ -154,7 +160,12 @@ export function createCompiler(configs: ConfigSet): TsCompiler {
       },
       getScriptSnapshot(fileName: string) {
         const hit = hasOwn.call(memoryCache.contents, fileName)
-        debug(`compiler#getScriptSnapshot`, 'cache', hit ? 'hit' : 'miss')
+        logger.debug(
+          { fileName, cacheHit: hit },
+          `getScriptSnapshot():`,
+          'cache',
+          hit ? 'hit' : 'miss',
+        )
         // Read contents from TypeScript memory cache.
         if (!hit) {
           memoryCache.contents[fileName] = ts.sys.readFile(fileName)
@@ -166,11 +177,23 @@ export function createCompiler(configs: ConfigSet): TsCompiler {
         }
         return ts.ScriptSnapshot.fromString(contents)
       },
-      fileExists: wrapWithDebug('fileExists', ts.sys.fileExists),
-      readFile: wrapWithDebug('readFile', ts.sys.readFile),
-      readDirectory: wrapWithDebug('readDirectory', ts.sys.readDirectory),
-      getDirectories: wrapWithDebug('getDirectories', ts.sys.getDirectories),
-      directoryExists: wrapWithDebug('directoryExists', ts.sys.directoryExists),
+      fileExists: logger.wrap(serviceHostCtx, 'fileExists', ts.sys.fileExists),
+      readFile: logger.wrap(serviceHostCtx, 'readFile', ts.sys.readFile),
+      readDirectory: logger.wrap(
+        serviceHostCtx,
+        'readDirectory',
+        ts.sys.readDirectory,
+      ),
+      getDirectories: logger.wrap(
+        serviceHostCtx,
+        'getDirectories',
+        ts.sys.getDirectories,
+      ),
+      directoryExists: logger.wrap(
+        serviceHostCtx,
+        'directoryExists',
+        ts.sys.directoryExists,
+      ),
       getNewLine: () => '\n',
       getCurrentDirectory: () => cwd,
       getCompilationSettings: () => compilerOptions,
@@ -178,18 +201,21 @@ export function createCompiler(configs: ConfigSet): TsCompiler {
       getCustomTransformers: () => transformers,
     }
 
-    debug(`createCompiler`, 'creating language service')
+    logger.debug('creating language service')
     const service = ts.createLanguageService(serviceHost)
 
     getOutput = (code: string, fileName: string, lineOffset: number = 0) => {
-      debug(`compiler#getOutput`, 'compiling using language service', fileName)
+      logger.debug(
+        { fileName },
+        'getOutput(): compiling using language service',
+      )
       // Must set memory cache before attempting to read file.
       updateMemoryCache(code, fileName)
 
       const output = service.getEmitOutput(fileName)
 
       if (configs.shouldReportDiagnostic(fileName)) {
-        debug(`compiler#getOutput`, 'computing diagnostics', fileName)
+        logger.debug({ fileName }, 'getOutput(): computing diagnostics')
         // Get the relevant diagnostics - this is 3x faster than `getPreEmitDiagnostics`.
         const diagnostics = service
           .getCompilerOptionsDiagnostics()
@@ -236,6 +262,7 @@ export function createCompiler(configs: ConfigSet): TsCompiler {
     getOutput,
     getExtension,
     cwd,
+    logger,
   )
   return { cwd, compile, getTypeInfo, extensions, cachedir, ts }
 }
@@ -258,10 +285,11 @@ function readThrough(
   ) => SourceOutput,
   getExtension: (fileName: string) => string,
   cwd: string,
+  logger: Logger,
 ) {
   if (!cachedir) {
     return (code: string, fileName: string, lineOffset?: number) => {
-      debug('readThrough:no-cache', fileName)
+      logger.debug({ fileName }, 'readThrough(): no cache')
 
       const [value, sourceMap] = compile(code, fileName, lineOffset)
       const output = updateOutput(value, fileName, sourceMap, getExtension, cwd)
@@ -283,17 +311,17 @@ function readThrough(
     try {
       const output = readFileSync(outputPath, 'utf8')
       if (isValidCacheContent(output)) {
-        debug('readThrough:cache-hit', fileName)
+        logger.debug({ fileName }, 'readThrough(): cache hit')
         memoryCache.outputs[fileName] = output
         return output
       }
     } catch (err) {}
 
-    debug('readThrough:cache-miss', fileName)
+    logger.debug({ fileName }, 'readThrough(): cache miss')
     const [value, sourceMap] = compile(code, fileName, lineOffset)
     const output = updateOutput(value, fileName, sourceMap, getExtension, cwd)
 
-    debug('readThrough:write-caches', fileName, 'cache file', outputPath)
+    logger.debug({ fileName, outputPath }, 'readThrough(): writing caches')
     memoryCache.outputs[fileName] = output
     writeFileSync(outputPath, output)
 

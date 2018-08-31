@@ -37,9 +37,10 @@
 - [Angular 2](#angular-2)
 - [Tips](#tips)
   - [Importing packages written in TypeScript](#importing-packages-written-in-typescript)
+  - [Logging](#logging)
 - [Known Limitations](#known-limitations)
   - [Known limitations for TS compiler options](#known-limitations-for-ts-compiler-options)
-  - [`const enum` is not supported](#const-enum-is-not-supported)
+  - [`const enum` is not supported if `typeCheck` is not enabled](#const-enum-is-not-supported-if-typecheck-is-not-enabled)
 - [How to Contribute](#how-to-contribute)
   - [Quickstart to run tests (only if you're working on this package)](#quickstart-to-run-tests-only-if-youre-working-on-this-package)
 - [License](#license)
@@ -364,6 +365,20 @@ your Jest configuration:
 
 By default Jest ignores everything in `node_modules`. This setting prevents Jest from ignoring the package you're interested in, in this case `@foo/bar`, while continuing to ignore everything else in `node_modules`.
 
+### Logging
+
+This package is using [`bs-logger`](https://www.npmjs.com/package/bs-logger).
+
+Use environment variable `TS_JEST_LOG=xxx` to configure log targets. By default it'll log entries with level _warning_ and above to **stderr**.
+
+See the examples in [there](https://github.com/huafu/bs-logger#using-targets) to configure different target(s).
+
+When posting an issue, it's best to join the full log file which you can create in CWD using:
+```sh
+TS_JEST_LOG=ts-jest.log jest
+# or
+TS_JEST_LOG=ts-jest.log npm run test
+```
 
 ## Known Limitations
 

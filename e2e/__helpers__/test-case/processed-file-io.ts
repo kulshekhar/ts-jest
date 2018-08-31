@@ -1,4 +1,4 @@
-import ProcessedSource from '../../../src/__helpers__/ProcessedSource'
+import ProcessedSource from '../../../src/__helpers__/processed-source'
 
 // tslint:disable-next-line:no-default-export
 export default class ProcessedFileIo extends ProcessedSource {

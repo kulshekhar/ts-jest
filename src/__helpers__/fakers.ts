@@ -1,6 +1,8 @@
 import { TsJestGlobalOptions, BabelConfig, TsJestConfig } from '../types'
 import { resolve } from 'path'
 import { ImportReasons } from '../util/messages'
+import { Writable } from 'stream'
+import { LogTarget, LogMessage } from 'bs-logger'
 
 export function filePath(relPath: string): string {
   return resolve(__dirname, '..', '..', relPath)

@@ -1,10 +1,10 @@
 import { SpawnSyncReturns } from 'child_process'
-import ProcessedFileIo from './ProcessedFileIo'
+import ProcessedFileIo from './processed-file-io'
 import { stripAnsiColors, normalizeJestOutput, escapeRegex } from './utils'
 import { resolve } from 'path'
 import { readFileSync, realpathSync } from 'fs'
-import { LOG_PREFIX } from '../../../src/util/debug'
 import { tmpdir } from 'os'
+import { LogMessage } from 'bs-logger'
 
 // tslint:disable-next-line:no-default-export
 export default class RunResult {
@@ -18,13 +18,13 @@ export default class RunResult {
       env: { [key: string]: string },
     }>,
   ) { }
-  get logFilePath() { return resolve(this.cwd, 'ts-jest-debug.log') }
+  get logFilePath() { return resolve(this.cwd, 'ts-jest.log') }
   get logFileContent() { return readFileSync(this.logFilePath).toString('utf8') }
-  get normalizedLogFileContent() {
-    const prefix = ` ${LOG_PREFIX} `
-    return this.normalize(this.logFileContent.split(/\n/g).map(s => {
-      return s.split(prefix).slice(1).join(prefix)
-    }).join('\n'))
+  get logFileEntries(): LogMessage[] {
+    const lines = this.logFileContent.split(/\n/g)
+    // remove last, empty line
+    lines.pop()
+    return lines.map(s => JSON.parse(s))
   }
   get isPass() { return this.status === 0 }
   get isFail() { return !this.isPass }
@@ -35,7 +35,7 @@ export default class RunResult {
   get stdout() { return stripAnsiColors((this.result.stdout || '').toString()) }
   get normalizedStdout() { return normalizeJestOutput(this.stdout) }
   get cmdLine() {
-    return [this.context.cmd, ...this.context.args].join(' ')
+    return [this.context.cmd, ...this.context.args].filter(a => !['-u', '--updateSnapshot'].includes(a)).join(' ')
   }
 
   ioFor(relFilePath: string): ProcessedFileIo {

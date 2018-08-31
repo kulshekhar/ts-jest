@@ -37,6 +37,10 @@ import { normalizeSlashes } from '../util/normalize-slashes'
 import { createCompiler } from '../compiler'
 import { version as myVersion } from '..'
 import semver from 'semver'
+import { rootLogger } from '../util/logger'
+import { Logger } from 'bs-logger'
+
+const logger = rootLogger.child({ namespace: 'config' })
 
 interface ReadTsConfigResult {
   // what we get from reading the config file if any, or inline options
@@ -120,10 +124,17 @@ const toDiagnosticCodeList = (items: any, into: number[] = []): number[] => {
 }
 
 export class ConfigSet {
+  readonly logger: Logger
+
   constructor(
     private _jestConfig: jest.ProjectConfig,
     readonly parentOptions?: TsJestGlobalOptions,
-  ) {}
+    parentLogger?: Logger,
+  ) {
+    this.logger = parentLogger
+      ? parentLogger.child({ namespace: 'config' })
+      : logger
+  }
 
   @Memoize()
   get jest(): jest.ProjectConfig {
@@ -136,6 +147,7 @@ export class ConfigSet {
         ...globals['ts-jest'],
       }
     }
+    this.logger.debug({ jestConfig: config }, 'normalized jest config')
     return config
   }
 
@@ -219,7 +231,7 @@ export class ConfigSet {
     )
 
     // parsed options
-    return {
+    const res: TsJestConfig = {
       tsConfig,
       babelConfig,
       diagnostics,
@@ -227,6 +239,8 @@ export class ConfigSet {
       compiler: options.compiler || 'typescript',
       stringifyContentPathRegex,
     }
+    this.logger.debug({ tsJestConfig: res }, 'normalized ts-jest config')
+    return res
   }
 
   get typescript(): ParsedCommandLine {
@@ -252,6 +266,8 @@ export class ConfigSet {
     if (configDiagnosticList.length) {
       throw this.createTsError(configDiagnosticList)
     }
+
+    this.logger.debug({ tsconfig: result }, 'normalized typescript config')
     return result
   }
 
@@ -260,7 +276,10 @@ export class ConfigSet {
     const {
       tsJest: { babelConfig },
     } = this
-    if (babelConfig == null) return
+    if (babelConfig == null) {
+      this.logger.debug('babel is disabled')
+      return
+    }
     let base: BabelConfig = { cwd: this.cwd }
     if (babelConfig.kind === 'file') {
       if (babelConfig.value) {
@@ -289,6 +308,7 @@ export class ConfigSet {
       config = new OptionManager().init(base) as BabelConfig
     }
 
+    this.logger.debug({ babelConfig: config }, 'normalized babel config')
     return config
   }
 
@@ -301,6 +321,7 @@ export class ConfigSet {
   get babelJestTransformer(): BabelJestTransformer | undefined {
     const { babel } = this
     if (!babel) return
+    this.logger.debug('creating babel-jest transformer')
     return importer
       .babelJest(ImportReasons.BabelJest)
       .createTransformer(babel) as BabelJestTransformer
@@ -393,7 +414,10 @@ export class ConfigSet {
 
   @Memoize()
   get tsCacheDir(): string | undefined {
-    if (!this.jest.cache) return
+    if (!this.jest.cache) {
+      logger.debug('file caching disabled')
+      return
+    }
     const cacheSufix = sha1(
       stringify({
         version: this.compilerModule.version,
@@ -403,7 +427,9 @@ export class ConfigSet {
         ignoreDiagnostics: this.tsJest.diagnostics.ignoreCodes,
       }),
     )
-    return join(this.jest.cacheDirectory, `ts-jest-${cacheSufix}`)
+    const res = join(this.jest.cacheDirectory, `ts-jest-${cacheSufix}`)
+    logger.debug({ cacheDirectory: res }, `will use file caching`)
+    return res
   }
 
   get rootDir(): string {
@@ -438,6 +464,11 @@ export class ConfigSet {
         : ts.findConfigFile(normalizeSlashes(this.cwd), ts.sys.fileExists)
 
       if (configFileName) {
+        this.logger.debug(
+          { tsConfigFileName: configFileName },
+          'readTsConfig(): reading',
+          configFileName,
+        )
         const result = ts.readConfigFile(configFileName, ts.sys.readFile)
 
         // Return diagnostics.
@@ -502,6 +533,13 @@ export class ConfigSet {
         interpolate(Errors.FileNotFound, { inputPath, resolvedPath: path }),
       )
     }
+    this.logger.debug(
+      { fromPath: inputPath, toPath: path },
+      'resolved path from',
+      inputPath,
+      'to',
+      path,
+    )
     return path
   }
 

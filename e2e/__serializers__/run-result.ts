@@ -1,4 +1,4 @@
-import RunResult from '../__helpers__/test-case/RunResult'
+import RunResult from '../__helpers__/test-case/run-result'
 
 export const test = (val: any) => val && val instanceof RunResult
 export const print = (val: RunResult, serialize: any, indent: any) => {

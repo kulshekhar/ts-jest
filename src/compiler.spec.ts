@@ -3,12 +3,13 @@ import { TsJestGlobalOptions } from './types'
 import { ConfigSet } from './config/config-set'
 import * as fakers from './__helpers__/fakers'
 import { createCompiler } from './compiler'
-import { relativeToRoot, tempDir, ROOT } from './__helpers__/path'
-import { __setup } from './util/debug'
-import ProcessedSource from './__helpers__/ProcessedSource'
+import { relativeToRoot, tempDir } from './__helpers__/path'
+import ProcessedSource from './__helpers__/processed-source'
+import { logTargetMock } from './__helpers__/mocks'
+
+const logTarget = logTargetMock()
 
 // not really unit-testing here, but it's hard to mock all those values :-D
-
 function makeCompiler({
   jestConfig,
   tsJestConfig,
@@ -30,11 +31,8 @@ function makeCompiler({
   return createCompiler(cs)
 }
 
-const logger = jest.fn()
-__setup({ logger })
-
 beforeEach(() => {
-  logger.mockClear()
+  logTarget.clear()
 })
 
 describe('typeCheck', () => {
@@ -81,22 +79,27 @@ describe('cache', () => {
 
   it('should use the cache', () => {
     const compiled1 = compiler.compile(source, __filename)
-    expect(logger.mock.calls.map(callArgs => callArgs[2])).toEqual([
-      'readThrough:cache-miss',
-      'compiler#getOutput',
-      'customTranformer#hoisting',
-      'readThrough:write-caches',
-    ])
+    expect(logTarget.lines).toMatchInlineSnapshot(`
+Array [
+  "[level:20] readThrough(): cache miss
+",
+  "[level:20] getOutput(): compiling as isolated module
+",
+  "[level:20] visitSourceFileNode(): hoisting
+",
+  "[level:20] readThrough(): writing caches
+",
+]
+`)
 
-    logger.mockClear()
+    logTarget.clear()
     const compiled2 = compiler.compile(source, __filename)
-    expect(logger).toHaveBeenCalledTimes(1)
-    expect(logger).toHaveBeenCalledWith(
-      'log',
-      'ts-jest:',
-      'readThrough:cache-hit',
-      __filename,
-    )
+    expect(logTarget.lines).toMatchInlineSnapshot(`
+Array [
+  "[level:20] readThrough(): cache hit
+",
+]
+`)
 
     expect(new ProcessedSource(compiled1, __filename)).toMatchInlineSnapshot(`
   ===[ FILE: src/compiler.spec.ts ]===============================================

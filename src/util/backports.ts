@@ -1,111 +1,140 @@
 import { interpolate, Deprecateds } from './messages'
-import { warn, wrapWithDebug } from './debug'
+import { Logger } from 'bs-logger'
 
-export const backportJestConfig = wrapWithDebug(
-  'backportJestConfig',
-  function backportJestConfig<
-    T extends jest.InitialOptions | jest.ProjectConfig
-  >(config: T = {} as any, silent = false): T {
-    const { globals = {} } = config as any
-    const { 'ts-jest': tsJest = {} } = globals as any
-    const mergeTsJest: any = {}
-    const warnConfig = silent
-      ? () => undefined
-      : (oldPath: string, newPath: string, note?: string) => {
-          warn(
-            interpolate(
-              note
-                ? Deprecateds.ConfigOptionWithNote
-                : Deprecateds.ConfigOption,
-              {
-                oldPath,
-                newPath,
-                note,
-              },
-            ),
-          )
-        }
-
-    if ('__TS_CONFIG__' in globals) {
-      warnConfig('globals.__TS_CONFIG__', 'globals.ts-jest.tsConfig')
-      if (typeof globals.__TS_CONFIG__ === 'object') {
-        mergeTsJest.tsConfig = globals.__TS_CONFIG__
-      }
-      delete globals.__TS_CONFIG__
-    }
-
-    if ('__TRANSFORM_HTML__' in globals) {
-      warnConfig(
-        'globals.__TRANSFORM_HTML__',
-        'globals.ts-jest.stringifyContentPathRegex',
-      )
-      if (globals.__TRANSFORM_HTML__) {
-        mergeTsJest.stringifyContentPathRegex = '\\.html?$'
-      }
-      delete globals.__TRANSFORM_HTML__
-    }
-
-    if ('tsConfigFile' in tsJest) {
-      warnConfig('globals.ts-jest.tsConfigFile', 'globals.ts-jest.tsConfig')
-      if (tsJest.tsConfigFile) {
-        mergeTsJest.tsConfig = tsJest.tsConfigFile
-      }
-      delete tsJest.tsConfigFile
-    }
-
-    if ('enableTsDiagnostics' in tsJest) {
-      warnConfig(
-        'globals.ts-jest.enableTsDiagnostics',
-        'globals.ts-jest.diagnostics',
-      )
-      if (tsJest.enableTsDiagnostics) {
-        mergeTsJest.diagnostics =
-          typeof tsJest.enableTsDiagnostics === 'string'
-            ? { pathRegex: tsJest.enableTsDiagnostics }
-            : true
-      } else {
-        mergeTsJest.diagnostics = false
-      }
-      delete tsJest.enableTsDiagnostics
-    }
-
-    if ('useBabelrc' in tsJest) {
-      warnConfig(
-        'globals.ts-jest.useBabelrc',
-        'globals.ts-jest.babelConfig',
-        Deprecateds.ConfigOptionUseBabelRcNote,
-      )
-      if (tsJest.useBabelrc != null) {
-        mergeTsJest.babelConfig = tsJest.useBabelrc ? true : {}
-      }
-      delete tsJest.useBabelrc
-    }
-
-    // if ('babelConfig' in tsJest) {
-    //   warnConfig('globals.ts-jest.babelConfig', 'globals.ts-jest.babelConfig')
-    //   if (tsJest.babelConfig != null) {
-    //     mergeTsJest.babelConfig = tsJest.babelConfig
-    //   }
-    //   delete tsJest.babelConfig
-    // }
-
-    if ('skipBabel' in tsJest) {
-      warnConfig('globals.ts-jest.skipBabel', 'globals.ts-jest.babelConfig')
-      if (tsJest.skipBabel === false && !mergeTsJest.babelConfig) {
-        mergeTsJest.babelConfig = true
-      }
-      delete tsJest.skipBabel
-    }
-
-    return {
-      ...(config as any),
-      globals: {
-        ...globals,
-        'ts-jest': {
-          ...mergeTsJest,
-          ...tsJest,
-        },
-      },
-    }
+// we must use a getter here since the root logger is using ourself
+let _logger: Logger
+const logger = {
+  get get() {
+    return (
+      _logger ||
+      (_logger = require('./logger').rootLogger.child({
+        namespace: 'backports',
+      }))
+    )
   },
-)
+}
+
+export const backportJestConfig = <
+  T extends jest.InitialOptions | jest.ProjectConfig
+>(
+  config: T = {} as any,
+): T => {
+  logger.get.debug({ config }, 'backporting config')
+
+  const { globals = {} } = config as any
+  const { 'ts-jest': tsJest = {} } = globals as any
+  const mergeTsJest: any = {}
+  const warnConfig = (oldPath: string, newPath: string, note?: string) => {
+    logger.get.warn(
+      interpolate(
+        note ? Deprecateds.ConfigOptionWithNote : Deprecateds.ConfigOption,
+        {
+          oldPath,
+          newPath,
+          note,
+        },
+      ),
+    )
+  }
+
+  if ('__TS_CONFIG__' in globals) {
+    warnConfig('globals.__TS_CONFIG__', 'globals.ts-jest.tsConfig')
+    if (typeof globals.__TS_CONFIG__ === 'object') {
+      mergeTsJest.tsConfig = globals.__TS_CONFIG__
+    }
+    delete globals.__TS_CONFIG__
+  }
+
+  if ('__TRANSFORM_HTML__' in globals) {
+    warnConfig(
+      'globals.__TRANSFORM_HTML__',
+      'globals.ts-jest.stringifyContentPathRegex',
+    )
+    if (globals.__TRANSFORM_HTML__) {
+      mergeTsJest.stringifyContentPathRegex = '\\.html?$'
+    }
+    delete globals.__TRANSFORM_HTML__
+  }
+
+  if ('tsConfigFile' in tsJest) {
+    warnConfig('globals.ts-jest.tsConfigFile', 'globals.ts-jest.tsConfig')
+    if (tsJest.tsConfigFile) {
+      mergeTsJest.tsConfig = tsJest.tsConfigFile
+    }
+    delete tsJest.tsConfigFile
+  }
+
+  if ('enableTsDiagnostics' in tsJest) {
+    warnConfig(
+      'globals.ts-jest.enableTsDiagnostics',
+      'globals.ts-jest.diagnostics',
+    )
+    if (tsJest.enableTsDiagnostics) {
+      mergeTsJest.diagnostics =
+        typeof tsJest.enableTsDiagnostics === 'string'
+          ? { pathRegex: tsJest.enableTsDiagnostics }
+          : true
+    } else {
+      mergeTsJest.diagnostics = false
+    }
+    delete tsJest.enableTsDiagnostics
+  }
+
+  if ('useBabelrc' in tsJest) {
+    warnConfig(
+      'globals.ts-jest.useBabelrc',
+      'globals.ts-jest.babelConfig',
+      Deprecateds.ConfigOptionUseBabelRcNote,
+    )
+    if (tsJest.useBabelrc != null) {
+      mergeTsJest.babelConfig = tsJest.useBabelrc ? true : {}
+    }
+    delete tsJest.useBabelrc
+  }
+
+  // if ('babelConfig' in tsJest) {
+  //   warnConfig('globals.ts-jest.babelConfig', 'globals.ts-jest.babelConfig')
+  //   if (tsJest.babelConfig != null) {
+  //     mergeTsJest.babelConfig = tsJest.babelConfig
+  //   }
+  //   delete tsJest.babelConfig
+  // }
+
+  if ('skipBabel' in tsJest) {
+    warnConfig('globals.ts-jest.skipBabel', 'globals.ts-jest.babelConfig')
+    if (tsJest.skipBabel === false && !mergeTsJest.babelConfig) {
+      mergeTsJest.babelConfig = true
+    }
+    delete tsJest.skipBabel
+  }
+
+  return {
+    ...(config as any),
+    globals: {
+      ...globals,
+      'ts-jest': {
+        ...mergeTsJest,
+        ...tsJest,
+      },
+    },
+  }
+}
+
+export const backportTsJestDebugEnvVar = () => {
+  if ('TS_JEST_DEBUG' in process.env) {
+    const shouldLog = !/^\s*(?:0|f(?:alse)?|no?|disabled?|off|)\s*$/i.test(
+      process.env.TS_JEST_DEBUG || '',
+    )
+    delete process.env.TS_JEST_DEBUG
+    if (shouldLog) {
+      process.env.TS_JEST_LOG = `ts-jest.log,stderr:warn`
+    }
+    // must be called after because this function is used when the root logger is created
+    logger.get.warn(
+      interpolate(Deprecateds.EnvVar, {
+        old: 'TS_JEST_DEBUG',
+        new: 'TS_JEST_LOG',
+      }),
+    )
+  }
+}

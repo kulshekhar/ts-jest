@@ -1,5 +1,5 @@
 import { TsJestConfig } from '../../../src/types'
-import RunResult from './RunResult'
+import RunResult from './run-result'
 
 export interface RunTestOptions {
   template?: string

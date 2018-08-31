@@ -6,7 +6,7 @@ import {
 } from './types'
 import { join } from 'path'
 import * as Paths from '../../../scripts/lib/paths'
-import RunResult from './RunResult'
+import RunResult from './run-result'
 import { run } from './runtime'
 
 // tslint:disable-next-line:no-default-export

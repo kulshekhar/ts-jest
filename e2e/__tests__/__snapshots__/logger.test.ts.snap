@@ -1,122 +1,183 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`TS_JEST_DEBUG should pass and create log file when using tempalte "default" 1`] = `
-"initiailized
-Importer.instance creating Importer singleton
-checkVersion jest OK { actual: '23.4.2', expected: '>=22 <24' }
-created new transformer [object TsJestTransformer<#1>]
-backportJestConfig
-Importer#tryThese loaded module typescript
-Importer#_patch patching typescript
-checkVersion typescript OK { actual: '3.0.1', expected: '>=2.7 <4' }
-createCompiler without type-checking, config: { version: '24.0.0-beta.0',\\\\n  jest:\\\\n   { automock: false,\\\\n     browser: false,\\\\n     cache: true,\\\\n     clearMocks: false,\\\\n     coveragePathIgnorePatterns: [ '/node_modules/' ],\\\\n     cwd:\\\\n      '<cwd>',\\\\n     detectLeaks: false,\\\\n     detectOpenHandles: false,\\\\n     errorOnDeprecated: false,\\\\n     filter: null,\\\\n     forceCoverageMatch: [],\\\\n     globals: {},\\\\n     haste: { providesModuleNodeModules: [] },\\\\n     moduleDirectories: [ 'node_modules' ],\\\\n     moduleFileExtensions: [ 'js', 'json', 'jsx', 'node', 'ts', 'tsx' ],\\\\n     moduleNameMapper: {},\\\\n     modulePathIgnorePatterns: [],\\\\n     prettierPath: null,\\\\n     resetMocks: false,\\\\n     resetModules: false,\\\\n     resolver: null,\\\\n     restoreMocks: false,\\\\n     rootDir:\\\\n      '<cwd>',\\\\n     roots:\\\\n      [ '<cwd>' ],\\\\n     runner: 'jest-runner',\\\\n     setupFiles: [],\\\\n     setupTestFrameworkScriptFile: null,\\\\n     skipFilter: false,\\\\n     snapshotSerializers: [],\\\\n     testEnvironment:\\\\n      '<tmp>/--ts-jest-temp-e2e--/__templates__/default/node_modules/jest-environment-node/build/index.js',\\\\n     testEnvironmentOptions: {},\\\\n     testLocationInResults: false,\\\\n     testMatch:\\\\n      [ '**/__tests__/**/*.js?(x)',\\\\n        '**/?(*.)+(spec|test).js?(x)',\\\\n        '**/__tests__/**/*.ts?(x)',\\\\n        '**/?(*.)+(spec|test).ts?(x)' ],\\\\n     testPathIgnorePatterns: [ '/node_modules/' ],\\\\n     testRegex: '',\\\\n     testRunner:\\\\n      '<tmp>/--ts-jest-temp-e2e--/__templates__/default/node_modules/jest-jasmine2/build/index.js',\\\\n     testURL: 'about:blank',\\\\n     timers: 'real',\\\\n     transform: [ [Array] ],\\\\n     transformIgnorePatterns: [ '/node_modules/' ],\\\\n     watchPathIgnorePatterns: [] },\\\\n  tsJest:\\\\n   { tsConfig: { kind: 'inline', value: {} },\\\\n     babelConfig: undefined,\\\\n     diagnostics: { ignoreCodes: [Array], pretty: true },\\\\n     typeCheck: false,\\\\n     compiler: 'typescript',\\\\n     stringifyContentPathRegex: undefined },\\\\n  babel: undefined,\\\\n  tsconfig: undefined }
-readThrough:cache-miss <cwd>/Hello.spec.ts
-compiler#getOutput compiling as isolated module
-customTranformer#hoisting <cwd>/Hello.spec.ts
-readThrough:write-caches <cwd>/Hello.spec.ts cache file <tmp>/jest_dx/ts-jest-<hex:40>/<hex:40>.js
-readThrough:cache-miss <cwd>/Hello.ts
-compiler#getOutput compiling as isolated module
-customTranformer#hoisting <cwd>/Hello.ts
-readThrough:write-caches <cwd>/Hello.ts cache file <tmp>/jest_dx/ts-jest-<hex:40>/<hex:40>.js
-"
+exports[`TS_JEST_LOG should pass and create log file when using tempalte "default" 1`] = `
+Array [
+  "[level:20] creating jest presets not handling JavaScript files",
+  "[level:20] creating Importer singleton",
+  "[level:20] creating jest presets not handling JavaScript files",
+  "[level:20] checking version of jest: OK",
+  "[level:20] created new transformer",
+  "[level:20] computing cache key for <cwd>/Hello.spec.ts",
+  "[level:20] backporting config",
+  "[level:20] normalized jest config",
+  "[level:20] normalized ts-jest config",
+  "[level:20] babel is disabled",
+  "[level:20] loaded module typescript",
+  "[level:20] patching typescript",
+  "[level:20] checking version of typescript: OK",
+  "[level:20] normalized typescript config",
+  "[level:20] processing <cwd>/Hello.spec.ts",
+  "[level:20] creating typescript compiler without type-checking",
+  "[level:20] will use file caching",
+  "[level:20] readThrough(): cache miss",
+  "[level:20] getOutput(): compiling as isolated module",
+  "[level:20] visitSourceFileNode(): hoisting",
+  "[level:20] readThrough(): writing caches",
+  "[level:20] computing cache key for <cwd>/Hello.ts",
+  "[level:20] processing <cwd>/Hello.ts",
+  "[level:20] readThrough(): cache miss",
+  "[level:20] getOutput(): compiling as isolated module",
+  "[level:20] visitSourceFileNode(): hoisting",
+  "[level:20] readThrough(): writing caches",
+]
 `;
 
-exports[`TS_JEST_DEBUG should pass and create log file when using tempalte "with-babel-6" 1`] = `
-"initiailized
-Importer.instance creating Importer singleton
-checkVersion jest OK { actual: '23.4.2', expected: '>=22 <24' }
-created new transformer [object TsJestTransformer<#1>]
-backportJestConfig
-Importer#tryThese loaded module babel-core
-Importer#_patch patching babel-core
-checkVersion babel-core OK { actual: '6.26.3', expected: '>=6 <7 || 7.0.0-bridge.0' }
-Importer#tryThese loaded module typescript
-Importer#_patch patching typescript
-checkVersion typescript OK { actual: '3.0.1', expected: '>=2.7 <4' }
-Importer#tryThese loaded module babel-core
-Importer#tryThese loaded module babel-jest
-Importer#_patch patching babel-jest
-checkVersion babel-jest OK { actual: '23.4.2', expected: '>=22 <24' }
-createCompiler without type-checking, config: { version: '24.0.0-beta.0',\\\\n  jest:\\\\n   { automock: false,\\\\n     browser: false,\\\\n     cache: true,\\\\n     clearMocks: false,\\\\n     coveragePathIgnorePatterns: [ '/node_modules/' ],\\\\n     cwd:\\\\n      '<cwd>',\\\\n     detectLeaks: false,\\\\n     detectOpenHandles: false,\\\\n     errorOnDeprecated: false,\\\\n     filter: null,\\\\n     forceCoverageMatch: [],\\\\n     globals: {},\\\\n     haste: { providesModuleNodeModules: [] },\\\\n     moduleDirectories: [ 'node_modules' ],\\\\n     moduleFileExtensions: [ 'js', 'json', 'jsx', 'node', 'ts', 'tsx' ],\\\\n     moduleNameMapper: {},\\\\n     modulePathIgnorePatterns: [],\\\\n     prettierPath: null,\\\\n     resetMocks: false,\\\\n     resetModules: false,\\\\n     resolver: null,\\\\n     restoreMocks: false,\\\\n     rootDir:\\\\n      '<cwd>',\\\\n     roots:\\\\n      [ '<cwd>' ],\\\\n     runner: 'jest-runner',\\\\n     setupFiles: [],\\\\n     setupTestFrameworkScriptFile: null,\\\\n     skipFilter: false,\\\\n     snapshotSerializers: [],\\\\n     testEnvironment:\\\\n      '<tmp>/--ts-jest-temp-e2e--/__templates__/with-babel-6/node_modules/jest-environment-node/build/index.js',\\\\n     testEnvironmentOptions: {},\\\\n     testLocationInResults: false,\\\\n     testMatch:\\\\n      [ '**/__tests__/**/*.js?(x)',\\\\n        '**/?(*.)+(spec|test).js?(x)',\\\\n        '**/__tests__/**/*.ts?(x)',\\\\n        '**/?(*.)+(spec|test).ts?(x)' ],\\\\n     testPathIgnorePatterns: [ '/node_modules/' ],\\\\n     testRegex: '',\\\\n     testRunner:\\\\n      '<tmp>/--ts-jest-temp-e2e--/__templates__/with-babel-6/node_modules/jest-jasmine2/build/index.js',\\\\n     testURL: 'about:blank',\\\\n     timers: 'real',\\\\n     transform: [ [Array] ],\\\\n     transformIgnorePatterns: [ '/node_modules/' ],\\\\n     watchPathIgnorePatterns: [] },\\\\n  tsJest:\\\\n   { tsConfig: { kind: 'inline', value: {} },\\\\n     babelConfig: { kind: 'file', value: undefined },\\\\n     diagnostics: { ignoreCodes: [Array], pretty: true },\\\\n     typeCheck: false,\\\\n     compiler: 'typescript',\\\\n     stringifyContentPathRegex: undefined },\\\\n  babel:\\\\n   { filename: 'unknown',\\\\n     filenameRelative: undefined,\\\\n     inputSourceMap: undefined,\\\\n     env: {},\\\\n     mode: undefined,\\\\n     retainLines: false,\\\\n     highlightCode: true,\\\\n     suppressDeprecationMessages: false,\\\\n     presets: [],\\\\n     plugins: [],\\\\n     ignore: [],\\\\n     only: undefined,\\\\n     code: true,\\\\n     metadata: true,\\\\n     ast: true,\\\\n     extends: undefined,\\\\n     comments: true,\\\\n     shouldPrintComment: undefined,\\\\n     wrapPluginVisitorMethod: undefined,\\\\n     compact: 'auto',\\\\n     minified: false,\\\\n     sourceMap: undefined,\\\\n     sourceMaps: undefined,\\\\n     sourceMapTarget: undefined,\\\\n     sourceFileName: undefined,\\\\n     sourceRoot: undefined,\\\\n     babelrc: true,\\\\n     sourceType: 'module',\\\\n     auxiliaryCommentBefore: undefined,\\\\n     auxiliaryCommentAfter: undefined,\\\\n     resolveModuleSource: undefined,\\\\n     getModuleId: undefined,\\\\n     moduleRoot: undefined,\\\\n     moduleIds: false,\\\\n     moduleId: undefined,\\\\n     passPerPreset: false,\\\\n     parserOpts: false,\\\\n     generatorOpts: false },\\\\n  tsconfig: undefined }
-readThrough:cache-miss <cwd>/Hello.spec.ts
-compiler#getOutput compiling as isolated module
-customTranformer#hoisting <cwd>/Hello.spec.ts
-readThrough:write-caches <cwd>/Hello.spec.ts cache file <tmp>/jest_dx/ts-jest-<hex:40>/<hex:40>.js
-readThrough:cache-miss <cwd>/Hello.ts
-compiler#getOutput compiling as isolated module
-customTranformer#hoisting <cwd>/Hello.ts
-readThrough:write-caches <cwd>/Hello.ts cache file <tmp>/jest_dx/ts-jest-<hex:40>/<hex:40>.js
-"
+exports[`TS_JEST_LOG should pass and create log file when using tempalte "with-babel-6" 1`] = `
+Array [
+  "[level:20] creating jest presets not handling JavaScript files",
+  "[level:20] creating Importer singleton",
+  "[level:20] creating jest presets not handling JavaScript files",
+  "[level:20] checking version of jest: OK",
+  "[level:20] created new transformer",
+  "[level:20] computing cache key for <cwd>/Hello.spec.ts",
+  "[level:20] backporting config",
+  "[level:20] normalized jest config",
+  "[level:20] normalized ts-jest config",
+  "[level:20] loaded module babel-core",
+  "[level:20] patching babel-core",
+  "[level:20] checking version of babel-core: OK",
+  "[level:30] patched babel-core/lib/transformation/file",
+  "[level:20] normalized babel config",
+  "[level:20] loaded module typescript",
+  "[level:20] patching typescript",
+  "[level:20] checking version of typescript: OK",
+  "[level:20] normalized typescript config",
+  "[level:20] processing <cwd>/Hello.spec.ts",
+  "[level:20] creating babel-jest transformer",
+  "[level:20] loaded module babel-core",
+  "[level:20] loaded module babel-jest",
+  "[level:20] patching babel-jest",
+  "[level:20] checking version of babel-jest: OK",
+  "[level:20] creating typescript compiler without type-checking",
+  "[level:20] will use file caching",
+  "[level:20] readThrough(): cache miss",
+  "[level:20] getOutput(): compiling as isolated module",
+  "[level:20] visitSourceFileNode(): hoisting",
+  "[level:20] readThrough(): writing caches",
+  "[level:20] calling babel-jest processor",
+  "[level:20] computing cache key for <cwd>/Hello.ts",
+  "[level:20] processing <cwd>/Hello.ts",
+  "[level:20] readThrough(): cache miss",
+  "[level:20] getOutput(): compiling as isolated module",
+  "[level:20] visitSourceFileNode(): hoisting",
+  "[level:20] readThrough(): writing caches",
+  "[level:20] calling babel-jest processor",
+]
 `;
 
-exports[`TS_JEST_DEBUG should pass and create log file when using tempalte "with-babel-7" 1`] = `
-"initiailized
-Importer.instance creating Importer singleton
-checkVersion jest OK { actual: '23.4.2', expected: '>=22 <24' }
-created new transformer [object TsJestTransformer<#1>]
-backportJestConfig
-Importer#tryThese loaded module babel-core
-Importer#_patch patching babel-core
-checkVersion babel-core OK { actual: '7.0.0-bridge.0',\\\\n  expected: '>=6 <7 || 7.0.0-bridge.0' }
-Importer#tryThese loaded module typescript
-Importer#_patch patching typescript
-checkVersion typescript OK { actual: '3.0.1', expected: '>=2.7 <4' }
-Importer#tryThese loaded module babel-core
-Importer#tryThese loaded module babel-jest
-Importer#_patch patching babel-jest
-checkVersion babel-jest OK { actual: '23.4.2', expected: '>=22 <24' }
-createCompiler without type-checking, config: { version: '24.0.0-beta.0',\\\\n  jest:\\\\n   { automock: false,\\\\n     browser: false,\\\\n     cache: true,\\\\n     clearMocks: false,\\\\n     coveragePathIgnorePatterns: [ '/node_modules/' ],\\\\n     cwd:\\\\n      '<cwd>',\\\\n     detectLeaks: false,\\\\n     detectOpenHandles: false,\\\\n     errorOnDeprecated: false,\\\\n     filter: null,\\\\n     forceCoverageMatch: [],\\\\n     globals: {},\\\\n     haste: { providesModuleNodeModules: [] },\\\\n     moduleDirectories: [ 'node_modules' ],\\\\n     moduleFileExtensions: [ 'js', 'json', 'jsx', 'node', 'ts', 'tsx' ],\\\\n     moduleNameMapper: {},\\\\n     modulePathIgnorePatterns: [],\\\\n     prettierPath: null,\\\\n     resetMocks: false,\\\\n     resetModules: false,\\\\n     resolver: null,\\\\n     restoreMocks: false,\\\\n     rootDir:\\\\n      '<cwd>',\\\\n     roots:\\\\n      [ '<cwd>' ],\\\\n     runner: 'jest-runner',\\\\n     setupFiles: [],\\\\n     setupTestFrameworkScriptFile: null,\\\\n     skipFilter: false,\\\\n     snapshotSerializers: [],\\\\n     testEnvironment:\\\\n      '<tmp>/--ts-jest-temp-e2e--/__templates__/with-babel-7/node_modules/jest-environment-node/build/index.js',\\\\n     testEnvironmentOptions: {},\\\\n     testLocationInResults: false,\\\\n     testMatch:\\\\n      [ '**/__tests__/**/*.js?(x)',\\\\n        '**/?(*.)+(spec|test).js?(x)',\\\\n        '**/__tests__/**/*.ts?(x)',\\\\n        '**/?(*.)+(spec|test).ts?(x)' ],\\\\n     testPathIgnorePatterns: [ '/node_modules/' ],\\\\n     testRegex: '',\\\\n     testRunner:\\\\n      '<tmp>/--ts-jest-temp-e2e--/__templates__/with-babel-7/node_modules/jest-jasmine2/build/index.js',\\\\n     testURL: 'about:blank',\\\\n     timers: 'real',\\\\n     transform: [ [Array] ],\\\\n     transformIgnorePatterns: [ '/node_modules/' ],\\\\n     watchPathIgnorePatterns: [] },\\\\n  tsJest:\\\\n   { tsConfig: { kind: 'inline', value: {} },\\\\n     babelConfig: { kind: 'file', value: undefined },\\\\n     diagnostics: { ignoreCodes: [Array], pretty: true },\\\\n     typeCheck: false,\\\\n     compiler: 'typescript',\\\\n     stringifyContentPathRegex: undefined },\\\\n  babel:\\\\n   { cwd:\\\\n      '<cwd>',\\\\n     babelrc: false,\\\\n     configFile: false,\\\\n     passPerPreset: false,\\\\n     envName: 'test',\\\\n     root:\\\\n      '<cwd>',\\\\n     plugins: [],\\\\n     presets: [] },\\\\n  tsconfig: undefined }
-readThrough:cache-miss <cwd>/Hello.spec.ts
-compiler#getOutput compiling as isolated module
-customTranformer#hoisting <cwd>/Hello.spec.ts
-readThrough:write-caches <cwd>/Hello.spec.ts cache file <tmp>/jest_dx/ts-jest-<hex:40>/<hex:40>.js
-readThrough:cache-miss <cwd>/Hello.ts
-compiler#getOutput compiling as isolated module
-customTranformer#hoisting <cwd>/Hello.ts
-readThrough:write-caches <cwd>/Hello.ts cache file <tmp>/jest_dx/ts-jest-<hex:40>/<hex:40>.js
-"
+exports[`TS_JEST_LOG should pass and create log file when using tempalte "with-babel-7" 1`] = `
+Array [
+  "[level:20] creating jest presets not handling JavaScript files",
+  "[level:20] creating Importer singleton",
+  "[level:20] creating jest presets not handling JavaScript files",
+  "[level:20] checking version of jest: OK",
+  "[level:20] created new transformer",
+  "[level:20] computing cache key for <cwd>/Hello.spec.ts",
+  "[level:20] backporting config",
+  "[level:20] normalized jest config",
+  "[level:20] normalized ts-jest config",
+  "[level:20] loaded module babel-core",
+  "[level:20] patching babel-core",
+  "[level:20] checking version of babel-core: OK",
+  "[level:20] normalized babel config",
+  "[level:20] loaded module typescript",
+  "[level:20] patching typescript",
+  "[level:20] checking version of typescript: OK",
+  "[level:20] normalized typescript config",
+  "[level:20] processing <cwd>/Hello.spec.ts",
+  "[level:20] creating babel-jest transformer",
+  "[level:20] loaded module babel-core",
+  "[level:20] loaded module babel-jest",
+  "[level:20] patching babel-jest",
+  "[level:20] checking version of babel-jest: OK",
+  "[level:20] creating typescript compiler without type-checking",
+  "[level:20] will use file caching",
+  "[level:20] readThrough(): cache miss",
+  "[level:20] getOutput(): compiling as isolated module",
+  "[level:20] visitSourceFileNode(): hoisting",
+  "[level:20] readThrough(): writing caches",
+  "[level:20] calling babel-jest processor",
+  "[level:20] computing cache key for <cwd>/Hello.ts",
+  "[level:20] processing <cwd>/Hello.ts",
+  "[level:20] readThrough(): cache miss",
+  "[level:20] getOutput(): compiling as isolated module",
+  "[level:20] visitSourceFileNode(): hoisting",
+  "[level:20] readThrough(): writing caches",
+  "[level:20] calling babel-jest processor",
+]
 `;
 
-exports[`TS_JEST_DEBUG should pass and create log file when using tempalte "with-jest-22" 1`] = `
-"initiailized
-Importer.instance creating Importer singleton
-checkVersion jest OK { actual: '22.4.4', expected: '>=22 <24' }
-created new transformer [object TsJestTransformer<#1>]
-backportJestConfig
-Importer#tryThese loaded module typescript
-Importer#_patch patching typescript
-checkVersion typescript OK { actual: '3.0.1', expected: '>=2.7 <4' }
-createCompiler without type-checking, config: { version: '24.0.0-beta.0',\\\\n  jest:\\\\n   { automock: false,\\\\n     browser: false,\\\\n     cache: true,\\\\n     clearMocks: false,\\\\n     coveragePathIgnorePatterns: [ '/node_modules/' ],\\\\n     cwd:\\\\n      '<cwd>',\\\\n     detectLeaks: false,\\\\n     forceCoverageMatch: [],\\\\n     globals: {},\\\\n     haste: { providesModuleNodeModules: [] },\\\\n     moduleDirectories: [ 'node_modules' ],\\\\n     moduleFileExtensions: [ 'js', 'json', 'jsx', 'node', 'ts', 'tsx' ],\\\\n     moduleNameMapper: {},\\\\n     modulePathIgnorePatterns: [],\\\\n     resetMocks: false,\\\\n     resetModules: false,\\\\n     restoreMocks: false,\\\\n     rootDir:\\\\n      '<cwd>',\\\\n     roots:\\\\n      [ '<cwd>' ],\\\\n     runner: 'jest-runner',\\\\n     setupFiles: [],\\\\n     snapshotSerializers: [],\\\\n     testEnvironment:\\\\n      '<tmp>/--ts-jest-temp-e2e--/__templates__/with-jest-22/node_modules/jest-environment-node/build/index.js',\\\\n     testEnvironmentOptions: {},\\\\n     testLocationInResults: false,\\\\n     testMatch:\\\\n      [ '**/__tests__/**/*.js?(x)',\\\\n        '**/?(*.)+(spec|test).js?(x)',\\\\n        '**/__tests__/**/*.ts?(x)',\\\\n        '**/?(*.)+(spec|test).ts?(x)' ],\\\\n     testPathIgnorePatterns: [ '/node_modules/' ],\\\\n     testRegex: '',\\\\n     testRunner:\\\\n      '<tmp>/--ts-jest-temp-e2e--/__templates__/with-jest-22/node_modules/jest-jasmine2/build/index.js',\\\\n     testURL: 'about:blank',\\\\n     timers: 'real',\\\\n     transform: [ [Array] ],\\\\n     transformIgnorePatterns: [ '/node_modules/' ],\\\\n     watchPathIgnorePatterns: [] },\\\\n  tsJest:\\\\n   { tsConfig: { kind: 'inline', value: {} },\\\\n     babelConfig: undefined,\\\\n     diagnostics: { ignoreCodes: [Array], pretty: true },\\\\n     typeCheck: false,\\\\n     compiler: 'typescript',\\\\n     stringifyContentPathRegex: undefined },\\\\n  babel: undefined,\\\\n  tsconfig: undefined }
-readThrough:cache-miss <cwd>/Hello.spec.ts
-compiler#getOutput compiling as isolated module
-customTranformer#hoisting <cwd>/Hello.spec.ts
-readThrough:write-caches <cwd>/Hello.spec.ts cache file <tmp>/jest_dx/ts-jest-<hex:40>/<hex:40>.js
-readThrough:cache-miss <cwd>/Hello.ts
-compiler#getOutput compiling as isolated module
-customTranformer#hoisting <cwd>/Hello.ts
-readThrough:write-caches <cwd>/Hello.ts cache file <tmp>/jest_dx/ts-jest-<hex:40>/<hex:40>.js
-"
+exports[`TS_JEST_LOG should pass and create log file when using tempalte "with-jest-22" 1`] = `
+Array [
+  "[level:20] creating Importer singleton",
+  "[level:20] creating jest presets not handling JavaScript files",
+  "[level:20] checking version of jest: OK",
+  "[level:20] created new transformer",
+  "[level:20] computing cache key for <cwd>/Hello.spec.ts",
+  "[level:20] backporting config",
+  "[level:20] normalized jest config",
+  "[level:20] normalized ts-jest config",
+  "[level:20] babel is disabled",
+  "[level:20] loaded module typescript",
+  "[level:20] patching typescript",
+  "[level:20] checking version of typescript: OK",
+  "[level:20] normalized typescript config",
+  "[level:20] processing <cwd>/Hello.spec.ts",
+  "[level:20] creating typescript compiler without type-checking",
+  "[level:20] will use file caching",
+  "[level:20] readThrough(): cache miss",
+  "[level:20] getOutput(): compiling as isolated module",
+  "[level:20] visitSourceFileNode(): hoisting",
+  "[level:20] readThrough(): writing caches",
+  "[level:20] computing cache key for <cwd>/Hello.ts",
+  "[level:20] processing <cwd>/Hello.ts",
+  "[level:20] readThrough(): cache miss",
+  "[level:20] getOutput(): compiling as isolated module",
+  "[level:20] visitSourceFileNode(): hoisting",
+  "[level:20] readThrough(): writing caches",
+]
 `;
 
-exports[`TS_JEST_DEBUG should pass and create log file when using tempalte "with-typescript-2-7" 1`] = `
-"initiailized
-Importer.instance creating Importer singleton
-checkVersion jest OK { actual: '23.4.2', expected: '>=22 <24' }
-created new transformer [object TsJestTransformer<#1>]
-backportJestConfig
-Importer#tryThese loaded module typescript
-Importer#_patch patching typescript
-checkVersion typescript OK { actual: '2.7.2', expected: '>=2.7 <4' }
-createCompiler without type-checking, config: { version: '24.0.0-beta.0',\\\\n  jest:\\\\n   { automock: false,\\\\n     browser: false,\\\\n     cache: true,\\\\n     clearMocks: false,\\\\n     coveragePathIgnorePatterns: [ '/node_modules/' ],\\\\n     cwd:\\\\n      '<cwd>',\\\\n     detectLeaks: false,\\\\n     detectOpenHandles: false,\\\\n     errorOnDeprecated: false,\\\\n     filter: null,\\\\n     forceCoverageMatch: [],\\\\n     globals: {},\\\\n     haste: { providesModuleNodeModules: [] },\\\\n     moduleDirectories: [ 'node_modules' ],\\\\n     moduleFileExtensions: [ 'js', 'json', 'jsx', 'node', 'ts', 'tsx' ],\\\\n     moduleNameMapper: {},\\\\n     modulePathIgnorePatterns: [],\\\\n     prettierPath: null,\\\\n     resetMocks: false,\\\\n     resetModules: false,\\\\n     resolver: null,\\\\n     restoreMocks: false,\\\\n     rootDir:\\\\n      '<cwd>',\\\\n     roots:\\\\n      [ '<cwd>' ],\\\\n     runner: 'jest-runner',\\\\n     setupFiles: [],\\\\n     setupTestFrameworkScriptFile: null,\\\\n     skipFilter: false,\\\\n     snapshotSerializers: [],\\\\n     testEnvironment:\\\\n      '<tmp>/--ts-jest-temp-e2e--/__templates__/with-typescript-2-7/node_modules/jest-environment-node/build/index.js',\\\\n     testEnvironmentOptions: {},\\\\n     testLocationInResults: false,\\\\n     testMatch:\\\\n      [ '**/__tests__/**/*.js?(x)',\\\\n        '**/?(*.)+(spec|test).js?(x)',\\\\n        '**/__tests__/**/*.ts?(x)',\\\\n        '**/?(*.)+(spec|test).ts?(x)' ],\\\\n     testPathIgnorePatterns: [ '/node_modules/' ],\\\\n     testRegex: '',\\\\n     testRunner:\\\\n      '<tmp>/--ts-jest-temp-e2e--/__templates__/with-typescript-2-7/node_modules/jest-jasmine2/build/index.js',\\\\n     testURL: 'about:blank',\\\\n     timers: 'real',\\\\n     transform: [ [Array] ],\\\\n     transformIgnorePatterns: [ '/node_modules/' ],\\\\n     watchPathIgnorePatterns: [] },\\\\n  tsJest:\\\\n   { tsConfig: { kind: 'inline', value: {} },\\\\n     babelConfig: undefined,\\\\n     diagnostics: { pretty: true, ignoreCodes: [Array], pathRegex: undefined },\\\\n     typeCheck: false,\\\\n     compiler: 'typescript',\\\\n     stringifyContentPathRegex: undefined },\\\\n  babel: undefined,\\\\n  tsconfig: undefined }
-readThrough:cache-miss <cwd>/Hello.spec.ts
-compiler#getOutput compiling as isolated module
-customTranformer#hoisting <cwd>/Hello.spec.ts
-readThrough:write-caches <cwd>/Hello.spec.ts cache file <tmp>/jest_dx/ts-jest-<hex:40>/<hex:40>.js
-readThrough:cache-miss <cwd>/Hello.ts
-compiler#getOutput compiling as isolated module
-customTranformer#hoisting <cwd>/Hello.ts
-readThrough:write-caches <cwd>/Hello.ts cache file <tmp>/jest_dx/ts-jest-<hex:40>/<hex:40>.js
-"
+exports[`TS_JEST_LOG should pass and create log file when using tempalte "with-typescript-2-7" 1`] = `
+Array [
+  "[level:20] creating jest presets not handling JavaScript files",
+  "[level:20] creating Importer singleton",
+  "[level:20] creating jest presets not handling JavaScript files",
+  "[level:20] checking version of jest: OK",
+  "[level:20] created new transformer",
+  "[level:20] computing cache key for <cwd>/Hello.spec.ts",
+  "[level:20] backporting config",
+  "[level:20] normalized jest config",
+  "[level:20] normalized ts-jest config",
+  "[level:20] babel is disabled",
+  "[level:20] loaded module typescript",
+  "[level:20] patching typescript",
+  "[level:20] checking version of typescript: OK",
+  "[level:20] normalized typescript config",
+  "[level:20] processing <cwd>/Hello.spec.ts",
+  "[level:20] creating typescript compiler without type-checking",
+  "[level:20] will use file caching",
+  "[level:20] readThrough(): cache miss",
+  "[level:20] getOutput(): compiling as isolated module",
+  "[level:20] visitSourceFileNode(): hoisting",
+  "[level:20] readThrough(): writing caches",
+  "[level:20] computing cache key for <cwd>/Hello.ts",
+  "[level:20] processing <cwd>/Hello.ts",
+  "[level:20] readThrough(): cache miss",
+  "[level:20] getOutput(): compiling as isolated module",
+  "[level:20] visitSourceFileNode(): hoisting",
+  "[level:20] readThrough(): writing caches",
+]
 `;
 
 exports[`With unsupported version test should pass using template "with-unsupported-version" 1`] = `
@@ -125,7 +186,7 @@ exports[`With unsupported version test should pass using template "with-unsuppor
   ===[ STDOUT ]===================================================================
   
   ===[ STDERR ]===================================================================
-  ts-jest: Version 2.5.3 of typescript installed has not been tested with ts-jest. If you're experiencing issues, consider using a supported version (>=2.7.0 <4.0.0). Please do not report issues in ts-jest if you are using unsupported versions.
+  ts-jest[versions] (WARN) Version 2.5.3 of typescript installed has not been tested with ts-jest. If you're experiencing issues, consider using a supported version (>=2.7.0 <4.0.0). Please do not report issues in ts-jest if you are using unsupported versions.
   PASS ./Hello.spec.ts
     Hello Class
       √ should create a new Hello

@@ -1,12 +1,12 @@
 import { backportJestConfig } from './backports'
 import set from 'lodash.set'
 import { inspect } from 'util'
-import { __setup } from './debug'
+import { logTargetMock } from '../__helpers__/mocks'
 
-const logger = jest.fn()
-__setup({ logger })
+const logTarget = logTargetMock()
+
 beforeEach(() => {
-  logger.mockClear()
+  logTarget.clear()
 })
 
 describe('backportJestConfig', () => {
@@ -20,8 +20,7 @@ describe('backportJestConfig', () => {
       describe(`with "${oldPath}" set to ${inspect(val)}`, () => {
         it(`should wran the user`, () => {
           backportJestConfig(original)
-          expect(logger).toHaveBeenCalledTimes(1)
-          expect(logger.mock.calls[0].join(' ')).toMatchSnapshot()
+          expect(logTarget.lines.warn.last).toMatchSnapshot()
         }) // should warn the user
         it(`should have changed the config correctly`, () => {
           expect(original).toMatchSnapshot('before')

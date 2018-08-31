@@ -4,7 +4,8 @@ import { JsonableValue } from './util/jsonable-value'
 import { ConfigSet } from './config/config-set'
 import { stringify, parse } from './util/json'
 import { inspect } from 'util'
-import { debug } from './util/debug'
+import { Logger } from 'bs-logger'
+import { rootLogger } from './util/logger'
 
 /**
  * @internal
@@ -25,6 +26,7 @@ export class TsJestTransformer implements jest.Transformer {
     return ++TsJestTransformer._lastTransformerId
   }
 
+  readonly logger: Logger
   readonly id: number
   readonly options: TsJestGlobalOptions
 
@@ -33,7 +35,11 @@ export class TsJestTransformer implements jest.Transformer {
   constructor(baseOptions: TsJestGlobalOptions = {}) {
     this.options = { ...baseOptions }
     this.id = TsJestTransformer._nextTransformerId
-    debug('created new transformer', this)
+    this.logger = rootLogger.child({
+      transformerId: this.id,
+      namespace: 'jest-transformer',
+    })
+    this.logger.debug({ baseOptions }, 'created new transformer')
   }
 
   [INSPECT_CUSTOM]() {
@@ -68,7 +74,7 @@ export class TsJestTransformer implements jest.Transformer {
     }
 
     // create the new record in the index
-    const configSet = new ConfigSet(jestConfigObj, this.options)
+    const configSet = new ConfigSet(jestConfigObj, this.options, this.logger)
     this._configSetsIndex.push({
       jestConfig: new JsonableValue(jestConfigObj),
       configSet,
@@ -82,6 +88,11 @@ export class TsJestTransformer implements jest.Transformer {
     jestConfig: jest.ProjectConfig,
     transformOptions?: jest.TransformOptions,
   ): jest.TransformedSource | string {
+    this.logger.debug(
+      { fileName: filePath, transformOptions },
+      'processing',
+      filePath,
+    )
     let result: string | jest.TransformedSource
     let source: string = input
 
@@ -103,11 +114,16 @@ export class TsJestTransformer implements jest.Transformer {
 
     // calling babel-jest transformer
     if (babelJest) {
+      this.logger.debug({ fileName: filePath }, 'calling babel-jest processor')
       result = babelJest.process(result, filePath, jestConfig, transformOptions)
     }
 
     // allows hooks (usefull for testing)
     if (hooks.afterProcess) {
+      this.logger.debug(
+        { fileName: filePath, hookName: 'afterProcess' },
+        'calling afterProcess hook',
+      )
       const newResult = hooks.afterProcess(
         [input, filePath, jestConfig, transformOptions],
         result,
@@ -136,6 +152,11 @@ export class TsJestTransformer implements jest.Transformer {
     jestConfigStr: string,
     transformOptions: { instrument?: boolean; rootDir?: string } = {},
   ): string {
+    this.logger.debug(
+      { fileName: filePath, transformOptions },
+      'computing cache key for',
+      filePath,
+    )
     const configs = this.configsFor(jestConfigStr)
     const { instrument = false } = transformOptions
     return sha1(

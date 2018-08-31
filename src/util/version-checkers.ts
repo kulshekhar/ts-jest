@@ -1,7 +1,9 @@
 import { satisfies, Range } from 'semver'
-import { warn, debug } from './debug'
 import { interpolate, Errors } from './messages'
 import { getPackageVersion } from './get-package-version'
+import { rootLogger } from './logger'
+
+const logger = rootLogger.child({ namespace: 'versions' })
 
 export enum ExpectedVersions {
   Jest = '>=22 <24',
@@ -48,10 +50,15 @@ function checkVersion(
 ): boolean | never {
   const version = getPackageVersion(name)
   const success = !!version && satisfies(version, expectedRange)
-  debug('checkVersion', name, success ? 'OK' : 'NOT OK', {
-    actual: version,
-    expected: expectedRange,
-  })
+  logger.debug(
+    {
+      actualVersion: version,
+      expectedVersion: expectedRange,
+    },
+    'checking version of %s: %s',
+    name,
+    success ? 'OK' : 'NOT OK',
+  )
   if (!action || success) return success
 
   const message = interpolate(
@@ -63,8 +70,9 @@ function checkVersion(
     },
   )
   if (action === 'warn') {
-    warn(message)
+    logger.warn(message)
   } else if (action === 'throw') {
+    logger.fatal(message)
     throw new RangeError(message)
   }
   return success

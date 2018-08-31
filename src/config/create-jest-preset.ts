@@ -1,5 +1,8 @@
 import * as jestConfig from 'jest-config'
 import { CreateJestPresetOptions } from '../types'
+import { rootLogger } from '../util/logger'
+
+const logger = rootLogger.child({ namespace: 'jest-preset' })
 
 // jest 22 doesn't have defaults
 const defaults = jestConfig.defaults || {
@@ -14,6 +17,12 @@ const defaults = jestConfig.defaults || {
 export function createJestPreset({
   allowJs = false,
 }: CreateJestPresetOptions = {}) {
+  logger.debug(
+    { allowJs },
+    'creating jest presets',
+    allowJs ? 'handling' : 'not handling',
+    'JavaScript files',
+  )
   return {
     transform: {
       ...defaults.transform,

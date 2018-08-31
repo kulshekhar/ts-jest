@@ -1,11 +1,13 @@
 // tslint:disable:max-line-length
-import { __setup } from './debug'
 import * as _pv from './get-package-version'
 import { VersionCheckers, VersionChecker } from './version-checkers'
-import { mocked } from '../__helpers__/mocks'
+import { mocked, logTargetMock } from '../__helpers__/mocks'
 
-const logger = jest.fn()
-__setup({ logger })
+const logTarget = logTargetMock()
+
+beforeEach(() => {
+  logTarget.clear()
+})
 
 jest.mock('./get-package-version')
 
@@ -50,7 +52,6 @@ function describeChecker(
 ) {
   describe(moduleName, () => {
     beforeEach(() => {
-      logger.mockClear()
       checker.forget()
     })
 
@@ -64,9 +65,9 @@ function describeChecker(
 
         it(`should log with warn()`, () => {
           checker.warn()
-          const warnings = logger.mock.calls.filter(args => args[0] === 'warn')
+          const warnings = logTarget.messages.warn
           expect(warnings).toHaveLength(1)
-          expect(warnings[0][2]).toMatch(
+          expect(warnings[0].message).toMatch(
             testVersion
               ? 'has not been tested with ts-jest'
               : 'is not installed',
@@ -75,11 +76,7 @@ function describeChecker(
         it(`should log only once with warn()`, () => {
           checker.warn()
           checker.warn()
-          expect(
-            logger.mock.calls
-              .map(args => args[0])
-              .filter(lvl => lvl === 'warn'),
-          ).toHaveLength(1)
+          expect(logTarget.messages.warn).toHaveLength(1)
         })
         it(`should throw with raise()`, () => {
           expect(checker.raise).toThrow()
@@ -98,7 +95,7 @@ function describeChecker(
         })
         it(`should not log with warn()`, () => {
           checker.warn()
-          expect(logger.mock.calls.map(args => args[0])).not.toContain('warn')
+          expect(logTarget.messages.warn).toHaveLength(0)
         })
         it(`should not throw with raise()`, () => {
           expect(checker.raise).not.toThrow()

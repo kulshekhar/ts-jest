@@ -11,7 +11,7 @@ import {
   Transformer,
 } from 'typescript'
 import { ConfigSet } from '../config/config-set'
-import { wrapWithDebug } from '../util/debug'
+import { LogContexts, LogLevels } from 'bs-logger'
 
 /**
  * What methods of `jest` should we hoist
@@ -23,6 +23,7 @@ const HOIST_METHODS = ['mock', 'unmock']
  * @param cs Current jest configuration-set
  */
 export function factory(cs: ConfigSet) {
+  const logger = cs.logger.child({ namespace: 'ts-hoisting' })
   /**
    * Our compiler (typescript, or a module with typescript-like interface)
    */
@@ -122,8 +123,9 @@ export function factory(cs: ConfigSet) {
 
   // returns the transformer factory
   return (ctx: TransformationContext): Transformer<SourceFile> => {
-    return wrapWithDebug(
-      (sf: SourceFile) => ['customTranformer#hoisting', sf.fileName],
+    return logger.wrap(
+      { [LogContexts.logLevel]: LogLevels.debug, call: null },
+      'visitSourceFileNode(): hoisting',
       (sf: SourceFile) => ts.visitNode(sf, createVisitor(ctx, sf)),
     )
   }

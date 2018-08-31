@@ -87,7 +87,7 @@ if (has afterProcess hook?) then (yes)
   :call afterProcess hook;
   -> update
   source;
-  floating note left
+  note left
     if the hook returns
     something it'll be
     used as new source

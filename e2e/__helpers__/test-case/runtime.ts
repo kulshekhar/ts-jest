@@ -1,5 +1,5 @@
 import { RunTestOptions, PreparedTest } from './types'
-import RunResult from './RunResult'
+import RunResult from './run-result'
 import { templateNameForPath } from './utils'
 import { join, relative, sep } from 'path'
 import * as Paths from '../../../scripts/lib/paths'
