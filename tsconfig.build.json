@@ -4,7 +4,6 @@
     "sourceMap": true,
     "inlineSources": true,
     "inlineSourceMap": false,
-    "removeComments": true,
     "outDir": "dist",
     "rootDir": "src",
   },
