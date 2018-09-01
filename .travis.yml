@@ -13,7 +13,9 @@ node_js:
   - "8"
   - "6"
 
+before_install:
+  - dpkg --compare-versions `npm -v` ge 5.8 || npm i -g npm@latest
+
 script:
-  - npm -g install npm@latest
   - npm run clean -- --when-ci-commit-message
   - npm run test -- --coverage
