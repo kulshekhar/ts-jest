@@ -20,7 +20,7 @@ if (parentArgs.includes('--coverage')) {
   )
   parentArgs = parentArgs.filter(a => a !== '--coverage')
 }
-// if (!parentArgs.includes('--runInBand')) parentArgs.push('--runInBand')
+if (!parentArgs.includes('--runInBand')) parentArgs.push('--runInBand')
 
 function getDirectories(rootDir) {
   return fs.readdirSync(rootDir).filter(function(file) {
