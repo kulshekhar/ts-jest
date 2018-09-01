@@ -5,11 +5,11 @@
 
 ---
 
-[<img src="./doc/assets/troubleshooting.png" align="left" height="24"> Before reporting any issue, be sure to check the troubleshooting page](https://github.com/kulshekhar/ts-jest/wiki/Troubleshooting)
+[<img src="./docs/assets/troubleshooting.png" align="left" height="24"> Before reporting any issue, be sure to check the troubleshooting page](https://github.com/kulshekhar/ts-jest/wiki/Troubleshooting)
 
-[<img src="./doc/assets/slack.png" align="left" height="24"> You can also find help on the ts-jest community on Slack](https://join.slack.com/t/ts-jest/shared_invite/enQtNDE1ODQ0OTEzMTczLWU2ZTk5YTMzYTE1YjBkZTk5ODI1NWU3NWU0NzhlOWJlZDNkYTRlM2Y3NWQ1YWVjMjc5Mjg1NmY1NTdkNWQ3MTA)
+[<img src="./docs/assets/slack.png" align="left" height="24"> You can also find help on the ts-jest community on Slack](https://join.slack.com/t/ts-jest/shared_invite/enQtNDE1ODQ0OTEzMTczLWU2ZTk5YTMzYTE1YjBkZTk5ODI1NWU3NWU0NzhlOWJlZDNkYTRlM2Y3NWQ1YWVjMjc5Mjg1NmY1NTdkNWQ3MTA)
 
-[<img src="./doc/assets/pull-request.png" align="left" height="24"> Looking for collaborators. Want to help improve ts-jest?](https://github.com/kulshekhar/ts-jest/issues/223)
+[<img src="./docs/assets/pull-request.png" align="left" height="24"> Looking for collaborators. Want to help improve ts-jest?](https://github.com/kulshekhar/ts-jest/issues/223)
 
 ---
 

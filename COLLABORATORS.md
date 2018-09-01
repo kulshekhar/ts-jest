@@ -41,4 +41,4 @@ All new features or bugfixes should be accompanied with a new test, to ensure th
 
 If you are simply refactoring code, it is not needed to add a test.
 
-See [e2e README](e2e/README.md) and [e2e tech doc](doc/tech/e2e/index.md) for more information.
+See [e2e README](e2e/README.md) and [e2e tech doc](docs/tech/e2e/index.md) for more information.
