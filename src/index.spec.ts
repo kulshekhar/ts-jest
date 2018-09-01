@@ -27,6 +27,9 @@ describe('ts-jest', () => {
   it('should export a `createJestPreset` function', () => {
     expect(typeof tsJest.createJestPreset).toBe('function')
   })
+  it('should export a `pathsToModuleNameMapper` function', () => {
+    expect(typeof tsJest.pathsToModuleNameMapper).toBe('function')
+  })
   it('should export a `jestPreset` object', () => {
     expect(tsJest.jestPreset).toEqual({ jestPreset: true })
   })
