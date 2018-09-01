@@ -186,7 +186,7 @@ Array [
 `;
 
 exports[`With unsupported version test should pass using template "with-unsupported-version" 1`] = `
-  √ jest --runInBand
+  √ jest
   ↳ exit code: 0
   ===[ STDOUT ]===================================================================
   
