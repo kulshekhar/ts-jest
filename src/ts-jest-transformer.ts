@@ -18,19 +18,18 @@ interface ConfigSetIndexItem {
 }
 
 export class TsJestTransformer implements jest.Transformer {
-  protected static _lastTransformerId: number = 0
+  private static _configSetsIndex: ConfigSetIndexItem[] = []
+  private static _lastTransformerId: number = 0
   static get lastTransformerId() {
     return TsJestTransformer._lastTransformerId
   }
-  protected static get _nextTransformerId() {
+  private static get _nextTransformerId() {
     return ++TsJestTransformer._lastTransformerId
   }
 
   readonly logger: Logger
   readonly id: number
   readonly options: TsJestGlobalOptions
-
-  private _configSetsIndex: ConfigSetIndexItem[] = []
 
   constructor(baseOptions: TsJestGlobalOptions = {}) {
     this.options = { ...baseOptions }
@@ -50,17 +49,19 @@ export class TsJestTransformer implements jest.Transformer {
     let csi: ConfigSetIndexItem | undefined
     let jestConfigObj: jest.ProjectConfig
     if (typeof jestConfig === 'string') {
-      csi = this._configSetsIndex.find(
+      csi = TsJestTransformer._configSetsIndex.find(
         cs => cs.jestConfig.serialized === jestConfig,
       )
       if (csi) return csi.configSet
       jestConfigObj = parse(jestConfig)
     } else {
-      csi = this._configSetsIndex.find(cs => cs.jestConfig.value === jestConfig)
+      csi = TsJestTransformer._configSetsIndex.find(
+        cs => cs.jestConfig.value === jestConfig,
+      )
       if (csi) return csi.configSet
       // try to look-it up by stringified version
       const serialized = stringify(jestConfig)
-      csi = this._configSetsIndex.find(
+      csi = TsJestTransformer._configSetsIndex.find(
         cs => cs.jestConfig.serialized === serialized,
       )
       if (csi) {
@@ -74,8 +75,9 @@ export class TsJestTransformer implements jest.Transformer {
     }
 
     // create the new record in the index
+    this.logger.info(`no matching config-set found, creating a new one`)
     const configSet = new ConfigSet(jestConfigObj, this.options, this.logger)
-    this._configSetsIndex.push({
+    TsJestTransformer._configSetsIndex.push({
       jestConfig: new JsonableValue(jestConfigObj),
       configSet,
     })
