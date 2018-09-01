@@ -1,9 +1,10 @@
 import { backportJestConfig } from './backports'
 import set from 'lodash.set'
 import { inspect } from 'util'
-import { logTargetMock } from '../__helpers__/mocks'
+import { testing } from 'bs-logger'
 
-const logTarget = logTargetMock()
+const logger = testing.createLoggerMock()
+const logTarget = logger.target
 
 beforeEach(() => {
   logTarget.clear()
@@ -19,12 +20,14 @@ describe('backportJestConfig', () => {
       })
       describe(`with "${oldPath}" set to ${inspect(val)}`, () => {
         it(`should wran the user`, () => {
-          backportJestConfig(original)
+          backportJestConfig(logger, original)
           expect(logTarget.lines.warn.last).toMatchSnapshot()
         }) // should warn the user
         it(`should have changed the config correctly`, () => {
           expect(original).toMatchSnapshot('before')
-          expect(backportJestConfig(original)).toMatchSnapshot('migrated')
+          expect(backportJestConfig(logger, original)).toMatchSnapshot(
+            'migrated',
+          )
         }) // should have changed the config
       }) // with xxx set to yyy
     }) // for

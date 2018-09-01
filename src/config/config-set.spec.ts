@@ -11,7 +11,7 @@ jest.mock('../util/backports')
 
 const backports = mocked(_backports)
 
-backports.backportJestConfig.mockImplementation(config => ({
+backports.backportJestConfig.mockImplementation((_, config) => ({
   ...config,
   __backported: true,
 }))

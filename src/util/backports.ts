@@ -1,31 +1,22 @@
 import { interpolate, Deprecateds } from './messages'
-import { Logger } from 'bs-logger'
+import { Logger, LogContexts } from 'bs-logger'
 
-// we must use a getter here since the root logger is using ourself
-let _logger: Logger
-const logger = {
-  get get() {
-    return (
-      _logger ||
-      (_logger = require('./logger').rootLogger.child({
-        namespace: 'backports',
-      }))
-    )
-  },
-}
+const context = { [LogContexts.namespace]: 'backports' }
 
 export const backportJestConfig = <
   T extends jest.InitialOptions | jest.ProjectConfig
 >(
-  config: T = {} as any,
+  logger: Logger,
+  config: T,
 ): T => {
-  logger.get.debug({ config }, 'backporting config')
+  logger.debug({ ...context, config }, 'backporting config')
 
-  const { globals = {} } = config as any
+  const { globals = {} } = (config || {}) as any
   const { 'ts-jest': tsJest = {} } = globals as any
   const mergeTsJest: any = {}
   const warnConfig = (oldPath: string, newPath: string, note?: string) => {
-    logger.get.warn(
+    logger.warn(
+      context,
       interpolate(
         note ? Deprecateds.ConfigOptionWithNote : Deprecateds.ConfigOption,
         {
@@ -120,7 +111,7 @@ export const backportJestConfig = <
   }
 }
 
-export const backportTsJestDebugEnvVar = () => {
+export const backportTsJestDebugEnvVar = (logger: Logger) => {
   if ('TS_JEST_DEBUG' in process.env) {
     const shouldLog = !/^\s*(?:0|f(?:alse)?|no?|disabled?|off|)\s*$/i.test(
       process.env.TS_JEST_DEBUG || '',
@@ -129,8 +120,8 @@ export const backportTsJestDebugEnvVar = () => {
     if (shouldLog) {
       process.env.TS_JEST_LOG = `ts-jest.log,stderr:warn`
     }
-    // must be called after because this function is used when the root logger is created
-    logger.get.warn(
+    logger.warn(
+      context,
       interpolate(Deprecateds.EnvVar, {
         old: 'TS_JEST_DEBUG',
         new: 'TS_JEST_LOG',
