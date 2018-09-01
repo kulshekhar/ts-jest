@@ -14,5 +14,6 @@ node_js:
   - "6"
 
 script:
+  - npm -g install npm@latest
   - npm run clean -- --when-ci-commit-message
   - npm run test -- --coverage

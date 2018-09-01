@@ -18,7 +18,7 @@ install:
   # Typical npm stuff.
   - set CI=true
   - set TS_JEST_E2E_WORKDIR=%APPDATA%\ts-jest-e2e
-  - npm version
+  - npm -g install npm@latest
   - npm ci || npm install
   - npm run clean -- --when-ci-commit-message
 
