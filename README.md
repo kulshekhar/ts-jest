@@ -204,6 +204,19 @@ module.exports = {
 };
 ```
 
+TS Jest provides a helper to automatically create this map from the `paths` compiler option of your TS config:
+
+```js
+// jest.config.js
+const { pathsToModuleNameMapper } = require('ts-jest');
+const { compilerOptions } = require('./tsconfig'); // replace with the path to your tsconfig.json file
+
+module.exports = {
+  // [...]
+  moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths /*, { prefix: '<rootDir>/' } */ )
+};
+```
+
 ### Using `babel-jest`
 By default ts-jest does not rely on babel-jest. But you may want to use some babel plugins and stll be able to write TypeScript. This can be achieved using the `babelConfig` config key. It can be:
 

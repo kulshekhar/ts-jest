@@ -2,6 +2,7 @@ import { TsJestTransformer } from './ts-jest-transformer'
 import { createJestPreset } from './config/create-jest-preset'
 import { TsJestGlobalOptions } from './types'
 import { VersionCheckers } from './util/version-checkers'
+import { pathsToModuleNameMapper } from './config/paths-to-module-name-mapper'
 
 // tslint:disable-next-line:no-var-requires
 const version: string = require('../package.json').version
@@ -39,6 +40,7 @@ export {
   // extra ==================
   createJestPreset,
   jestPreset,
+  pathsToModuleNameMapper,
   // tests ==================
   __singleton,
   __resetModule,

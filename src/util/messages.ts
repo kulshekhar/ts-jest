@@ -8,6 +8,9 @@ export enum Errors {
   UntestedDependencyVersion = "Version {{actualVersion}} of {{module}} installed has not been tested with ts-jest. If you're experiencing issues, consider using a supported version ({{expectedVersion}}). Please do not report issues in ts-jest if you are using unsupported versions.",
   MissingDependency = "Module {{module}} is not installed. If you're experiencing issues, consider installing a supported version ({{expectedVersion}}).",
   UnableToCompileTypeScript = 'Unable to compile TypeScript ({{help}}):\n{{diagnostics}}',
+  NotMappingMultiStarPath = 'Not mapping "{{path}}" because it has more than one star (`*`).',
+  NotMappingPathWithEmptyMap = 'Not mapping "{{path}}" because it has no target.',
+  MappingOnlyFirstTargetOfPath = 'Mapping only to first target of "{{path}}" becuase it has more than one ({{count}}).',
 }
 
 export enum Helps {
