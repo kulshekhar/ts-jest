@@ -97,9 +97,9 @@ export function run(name: string, options: RunTestOptions = {}): RunResult {
   }
 
   // run in band
-  // if (!cmdArgs.includes('--runInBand')) {
-  //   cmdArgs.push('--runInBand')
-  // }
+  if (!cmdArgs.includes('--runInBand')) {
+    cmdArgs.push('--runInBand')
+  }
 
   const cmd = cmdArgs.shift() as string
 

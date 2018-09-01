@@ -35,7 +35,9 @@ export default class RunResult {
   get stdout() { return stripAnsiColors((this.result.stdout || '').toString()) }
   get normalizedStdout() { return normalizeJestOutput(this.stdout) }
   get cmdLine() {
-    return [this.context.cmd, ...this.context.args].filter(a => !['-u', '--updateSnapshot'].includes(a)).join(' ')
+    return [this.context.cmd, ...this.context.args]
+      .filter(a => !['-u', '--updateSnapshot', '--runInBand'].includes(a))
+      .join(' ')
   }
 
   ioFor(relFilePath: string): ProcessedFileIo {
