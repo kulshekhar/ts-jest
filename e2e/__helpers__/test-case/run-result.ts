@@ -44,7 +44,12 @@ export default class RunResult {
     if (!this.context.ioDir) {
       throw new Error('IO not written for test, you must configure the test with `writeIo: true`.')
     }
-    const io = require(`${this.context.ioDir}/${relFilePath}.json`)
+    let io: any = { in: ['', '', {}, {}], out: '' }
+    try {
+      io = require(`${this.context.ioDir}/${relFilePath}.json`)
+    } catch (err) {
+      io.out = `/* ts-jest after hook has not been called! ${err} */`
+    }
     return new ProcessedFileIo(this.cwd, relFilePath, io.in, io.out)
   }
 
