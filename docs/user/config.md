@@ -83,6 +83,9 @@ module.exports = {
 
 All options have default values which should fit most of the projects.
 
-- **`compiler`**: TypeScript module to use as compiler (default: `typescript`).
-- **`tsConfig`**: TypeScript compiler options, inline or path to a `tsconfig.json` file (default: `tsconfig.json`).
-- **`isolatedModules`**: Whether to compile each file as an isolated module or not (default: `false`).
+- **`compiler`**: TypeScript module to use as compiler.
+- **`tsConfig`**: TypeScript compiler related configuration.
+- **`isolatedModules`**: Enables/disables the TypeScript language service.
+- **`diagnostics`**: Diagnostics related configuration.
+- **`babelConfig`**: Babel(Jest) related configuration.
+- **`stringifyContentPathRegex`**: Configure which file(s) will become a module returning its content.
