@@ -48,7 +48,7 @@ export default class RunResult {
     try {
       io = require(`${this.context.ioDir}/${relFilePath}.json`)
     } catch (err) {
-      io.out = `/* ts-jest after hook has not been called! ${err} */`
+      io.out = `/*\nts-jest after hook has not been called!\n${err}\noutput:\n${this.output}*/`
     }
     return new ProcessedFileIo(this.cwd, relFilePath, io.in, io.out)
   }

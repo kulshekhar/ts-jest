@@ -23,9 +23,9 @@ export interface TsJestGlobalOptions {
   tsConfig?: boolean | string | CompilerOptions
 
   /**
-   * Whether to typecheck (slower, default to `false`):
+   * Whether to compile files as isolated modules (disables some features and type-checking, default to `false`):
    */
-  typeCheck?: boolean
+  isolatedModules?: boolean
 
   /**
    * Compiler to use (default to 'typescript'):
@@ -33,7 +33,7 @@ export interface TsJestGlobalOptions {
   compiler?: string
 
   /**
-   * TS diagnostics - more to be reported if `typeCheck` is `true`. It can be:
+   * TS diagnostics - less to be reported if `isolatedModules` is `true`. It can be:
    *     - `true` (or `undefined`, it's the default): show all diagnostics
    *     - `false`: hide diagnostics of all files (kind of useless)
    *     - `{...}`: an inline object with fine grained settings
@@ -97,7 +97,7 @@ type TsJestConfig$stringifyContentPathRegex = string | undefined
 
 export interface TsJestConfig {
   tsConfig: TsJestConfig$tsConfig
-  typeCheck: boolean
+  isolatedModules: boolean
   compiler: string
   diagnostics: TsJestConfig$diagnostics
   babelConfig: TsJestConfig$babelConfig

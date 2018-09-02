@@ -51,8 +51,9 @@ export function createCompiler(configs: ConfigSet): TsCompiler {
   const logger = configs.logger.child({ namespace: 'ts-compiler' })
   logger.debug(
     'creating typescript compiler',
-    configs.tsJest.typeCheck ? 'with' : 'without',
-    'type-checking',
+    configs.tsJest.isolatedModules
+      ? '(isolated modules)'
+      : '(language service)',
   )
   const cachedir = configs.tsCacheDir
 
@@ -127,7 +128,7 @@ export function createCompiler(configs: ConfigSet): TsCompiler {
   }
 
   // Use full language services when the fast option is disabled.
-  if (configs.tsJest.typeCheck) {
+  if (!configs.tsJest.isolatedModules) {
     // Set the file contents into cache.
     const updateMemoryCache = (code: string, fileName: string) => {
       logger.debug({ fileName }, `updateMemoryCache()`)

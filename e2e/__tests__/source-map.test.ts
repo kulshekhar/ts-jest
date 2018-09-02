@@ -3,6 +3,9 @@ import { allValidPackageSets } from '../__helpers__/templates'
 
 const testCase = configureTestCase('source-maps', {
   writeIo: true,
+  // TS5023 - unrecognized compiler option
+  // TS7027 - unreachable code
+  tsJestConfig: { diagnostics: { ignoreCodes: [5023, 7027] } },
 })
 
 testCase.runWithTemplates(allValidPackageSets, 1, (runTest, { templateName }) => {

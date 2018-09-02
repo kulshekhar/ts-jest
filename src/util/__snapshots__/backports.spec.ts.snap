@@ -221,6 +221,56 @@ exports[`backportJestConfig with "globals.ts-jest.tsConfigFile" set to 'tsconfig
 "
 `;
 
+exports[`backportJestConfig with "globals.ts-jest.typeCheck" set to false should have changed the config correctly: before 1`] = `
+Object {
+  "globals": Object {
+    "ts-jest": Object {
+      "typeCheck": false,
+    },
+  },
+}
+`;
+
+exports[`backportJestConfig with "globals.ts-jest.typeCheck" set to false should have changed the config correctly: migrated 1`] = `
+Object {
+  "globals": Object {
+    "ts-jest": Object {
+      "isolatedModules": true,
+    },
+  },
+}
+`;
+
+exports[`backportJestConfig with "globals.ts-jest.typeCheck" set to false should wran the user 1`] = `
+"[level:40] \\"[jest-config].globals.ts-jest.typeCheck\\" is deprecated, use \\"[jest-config].globals.ts-jest.isolatedModules\\" instead.
+"
+`;
+
+exports[`backportJestConfig with "globals.ts-jest.typeCheck" set to true should have changed the config correctly: before 1`] = `
+Object {
+  "globals": Object {
+    "ts-jest": Object {
+      "typeCheck": true,
+    },
+  },
+}
+`;
+
+exports[`backportJestConfig with "globals.ts-jest.typeCheck" set to true should have changed the config correctly: migrated 1`] = `
+Object {
+  "globals": Object {
+    "ts-jest": Object {
+      "isolatedModules": false,
+    },
+  },
+}
+`;
+
+exports[`backportJestConfig with "globals.ts-jest.typeCheck" set to true should wran the user 1`] = `
+"[level:40] \\"[jest-config].globals.ts-jest.typeCheck\\" is deprecated, use \\"[jest-config].globals.ts-jest.isolatedModules\\" instead.
+"
+`;
+
 exports[`backportJestConfig with "globals.ts-jest.useBabelrc" set to false should have changed the config correctly: before 1`] = `
 Object {
   "globals": Object {

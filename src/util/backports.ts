@@ -47,6 +47,12 @@ export const backportJestConfig = <
     delete globals.__TRANSFORM_HTML__
   }
 
+  if ('typeCheck' in tsJest) {
+    warnConfig('globals.ts-jest.typeCheck', 'globals.ts-jest.isolatedModules')
+    mergeTsJest.isolatedModules = !tsJest.typeCheck
+    delete tsJest.typeCheck
+  }
+
   if ('tsConfigFile' in tsJest) {
     warnConfig('globals.ts-jest.tsConfigFile', 'globals.ts-jest.tsConfig')
     if (tsJest.tsConfigFile) {

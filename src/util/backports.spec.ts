@@ -58,6 +58,11 @@ describe('backportJestConfig', () => {
     false,
   ])
 
+  makeTestsFor('globals.ts-jest.typeCheck', 'globals.ts-jest.isolatedModules', [
+    true,
+    false,
+  ])
+
   makeTestsFor('globals.ts-jest.skipBabel', 'globals.ts-jest.babelConfig', [
     true,
     false,

@@ -35,8 +35,8 @@ beforeEach(() => {
   logTarget.clear()
 })
 
-describe('typeCheck', () => {
-  const compiler = makeCompiler({ tsJestConfig: { typeCheck: true } })
+describe('isolatedModules', () => {
+  const compiler = makeCompiler()
   it('should report diagnostics related to typings', () => {
     expect(() =>
       compiler.compile(
@@ -83,9 +83,731 @@ describe('cache', () => {
 Array [
   "[level:20] readThrough(): cache miss
 ",
-  "[level:20] getOutput(): compiling as isolated module
+  "[level:20] getOutput(): compiling using language service
+",
+  "[level:20] updateMemoryCache()
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] readFile
+",
+  "[level:20] readFile
+",
+  "[level:20] readFile
+",
+  "[level:20] readFile
+",
+  "[level:20] readFile
+",
+  "[level:20] readFile
+",
+  "[level:20] readFile
+",
+  "[level:20] readFile
+",
+  "[level:20] readFile
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] readFile
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] readFile
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] readFile
+",
+  "[level:20] readFile
+",
+  "[level:20] readFile
+",
+  "[level:20] readFile
+",
+  "[level:20] readFile
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] readFile
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] readFile
+",
+  "[level:20] readFile
+",
+  "[level:20] readFile
+",
+  "[level:20] readFile
+",
+  "[level:20] readFile
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] readFile
+",
+  "[level:20] readFile
+",
+  "[level:20] readFile
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] readFile
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] readFile
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] readFile
+",
+  "[level:20] readFile
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] readFile
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] readFile
+",
+  "[level:20] readFile
+",
+  "[level:20] readFile
+",
+  "[level:20] readFile
+",
+  "[level:20] readFile
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] readFile
+",
+  "[level:20] readFile
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] readFile
+",
+  "[level:20] readFile
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] readFile
+",
+  "[level:20] readFile
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] readFile
+",
+  "[level:20] readFile
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] readFile
+",
+  "[level:20] readFile
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] readFile
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] readFile
+",
+  "[level:20] readFile
+",
+  "[level:20] readFile
+",
+  "[level:20] readFile
+",
+  "[level:20] readFile
+",
+  "[level:20] readFile
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] readFile
+",
+  "[level:20] readFile
+",
+  "[level:20] readFile
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
+",
+  "[level:20] getScriptSnapshot(): cache miss
 ",
   "[level:20] visitSourceFileNode(): hoisting
+",
+  "[level:20] getOutput(): computing diagnostics
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
+",
+  "[level:20] getScriptSnapshot(): cache hit
 ",
   "[level:20] readThrough(): writing caches
 ",
@@ -123,7 +845,7 @@ Array [
 })
 
 describe('getTypeInfo', () => {
-  const compiler = makeCompiler({ tsJestConfig: { typeCheck: true } })
+  const compiler = makeCompiler()
   const source = `
 type MyType {
   /** the prop 1! */

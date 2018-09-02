@@ -1,6 +1,6 @@
 {
   "name": "ts-jest",
-  "version": "23.10.0-beta.1",
+  "version": "23.10.0-beta.2",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "description": "A preprocessor with sourcemap support to help use Typescript with Jest",
@@ -11,6 +11,7 @@
     "clean": "node scripts/clean.js",
     "pretest": "npm run lint",
     "test": "run-s -s test:e2e \"test:unit -- {@}\" --",
+    "test:prepare": "npm run test:e2e -- --prepareOnly",
     "test:e2e": "node scripts/e2e.js",
     "test:unit": "jest",
     "test:external": "node scripts/test-external-project.js",

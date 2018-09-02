@@ -30,11 +30,11 @@ Object {
     ],
     "pretty": true,
   },
+  "isolatedModules": false,
   "stringifyContentPathRegex": undefined,
   "tsConfig": Object {
     "kind": "file",
     "value": undefined,
   },
-  "typeCheck": false,
 }
 `;

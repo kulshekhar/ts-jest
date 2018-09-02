@@ -40,7 +40,7 @@
   - [Logging](#logging)
 - [Known Limitations](#known-limitations)
   - [Known limitations for TS compiler options](#known-limitations-for-ts-compiler-options)
-  - [`const enum` is not supported if `typeCheck` is not enabled](#const-enum-is-not-supported-if-typecheck-is-not-enabled)
+  - [`const enum` is not supported if `isolatedModules` is enabled](#const-enum-is-not-supported-if-isolatedmodules-is-enabled)
 - [How to Contribute](#how-to-contribute)
   - [Quickstart to run tests (only if you're working on this package)](#quickstart-to-run-tests-only-if-youre-working-on-this-package)
 - [License](#license)
@@ -405,7 +405,7 @@ If you use `"baseUrl": "<path_to_your_sources>"`, you also have to change `jest 
 }
 ```
 
-### `const enum` is not supported if `typeCheck` is not enabled
+### `const enum` is not supported if `isolatedModules` is enabled
 
 This is due to a limitation in the ts-jest basic processor which compiles each test file individually, therefore ignoring implementations of ambient declarations. The TypeScript team currently have [no plan to support const enum inlining](https://github.com/Microsoft/TypeScript/issues/5243) for this particular compiler method. See [#112](https://github.com/kulshekhar/ts-jest/issues/112) and [#281](https://github.com/kulshekhar/ts-jest/issues/281) for more information.
 

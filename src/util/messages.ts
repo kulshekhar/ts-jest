@@ -2,7 +2,7 @@
 export enum Errors {
   UnableToLoadOneModule = 'Unable to load the module {{module}}. {{reason}} To fix it:\n{{fix}}',
   UnableToLoadAnyModule = 'Unable to load any of these modules: {{module}}. {{reason}}. To fix it:\n{{fix}}',
-  TypesUnavailableWithoutTypeCheck = 'Type information is unavailable without "typeCheck"',
+  TypesUnavailableWithoutTypeCheck = 'Type information is unavailable with "isolatedModules"',
   UnableToRequireDefinitionFile = 'Unable to require `.d.ts` file.\nThis is usually the result of a faulty configuration or import. Make sure there is a `.js`, `.json` or another executable extension available alongside `{{file}}`.',
   FileNotFound = 'File not found: {{inputPath}} (resolved as: {{resolvedPath}})',
   UntestedDependencyVersion = "Version {{actualVersion}} of {{module}} installed has not been tested with ts-jest. If you're experiencing issues, consider using a supported version ({{expectedVersion}}). Please do not report issues in ts-jest if you are using unsupported versions.",

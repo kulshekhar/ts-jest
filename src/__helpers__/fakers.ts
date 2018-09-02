@@ -56,7 +56,7 @@ describe('hello', () => {
 
 export function tsJestConfig(options?: Partial<TsJestConfig>): TsJestConfig {
   return {
-    typeCheck: false,
+    isolatedModules: false,
     compiler: 'typescript',
     babelConfig: undefined,
     tsConfig: undefined,

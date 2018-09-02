@@ -192,16 +192,16 @@ describe('tsJest', () => {
     })
   }) // stringifyContentPathRegex
 
-  describe('typeCheck', () => {
+  describe('isolatedModules', () => {
     it('should be correct for default value', () => {
-      expect(get().typeCheck).toBe(false)
-      expect(get({ typeCheck: false }).typeCheck).toBe(false)
+      expect(get().isolatedModules).toBe(false)
+      expect(get({ isolatedModules: false }).isolatedModules).toBe(false)
     })
     it('should be normalized to a boolean', () => {
-      expect(get({ typeCheck: 'yes' as any }).typeCheck).toBe(true)
-      expect(get({ typeCheck: false }).typeCheck).toBe(false)
+      expect(get({ isolatedModules: 'yes' as any }).isolatedModules).toBe(true)
+      expect(get({ isolatedModules: 1 as any }).isolatedModules).toBe(true)
     })
-  }) // typeCheck
+  }) // isolatedModules
 
   describe('compiler', () => {
     it('should be correct for default value', () => {

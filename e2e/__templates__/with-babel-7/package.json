@@ -5,6 +5,7 @@
   "devDependencies": {
     "@babel/core": "7.0.0",
     "@types/jest": "23.3.1",
+    "@types/node": "10.9.4",
     "babel-core": "7.0.0-bridge.0",
     "jest": "23.5.0",
     "typescript": "3.0.3"
@@ -12,6 +13,7 @@
   "wantedDependencies": {
     "@babel/core": "7",
     "@types/jest": "latest",
+    "@types/node": "latest",
     "babel-core": "7.0.0-bridge.0",
     "jest": "latest",
     "typescript": "latest"
