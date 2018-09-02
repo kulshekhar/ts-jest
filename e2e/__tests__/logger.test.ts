@@ -1,7 +1,7 @@
 import { configureTestCase } from '../__helpers__/test-case'
 import { PackageSets, allValidPackageSets } from '../__helpers__/templates'
 import { existsSync } from 'fs'
-import { LogContexts } from 'bs-logger'
+import { LogContexts, LogLevels } from 'bs-logger'
 
 describe('With unsupported version test', () => {
   const testCase = configureTestCase('simple')
@@ -23,9 +23,12 @@ describe('TS_JEST_LOG', () => {
       const result = runTest()
       expect(result.status).toBe(0)
       expect(existsSync(result.logFilePath))
-      expect(result.logFileEntries.map(
-        e => result.normalize(`[level:${e.context[LogContexts.logLevel]}] ${e.message}`),
-      )).toMatchSnapshot()
+      const filteredEntries = result.logFileEntries
+        // keep only debu and above
+        .filter(m => (m.context[LogContexts.logLevel] || 0) >= LogLevels.debug)
+        // simplify entires
+        .map(e => result.normalize(`[level:${e.context[LogContexts.logLevel]}] ${e.message}`))
+      expect(filteredEntries).toMatchSnapshot()
     })
   })
 })

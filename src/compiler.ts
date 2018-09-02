@@ -140,10 +140,14 @@ export function createCompiler(configs: ConfigSet): TsCompiler {
     }
 
     // Create the compiler host for type checking.
-    const serviceHostCtx = {
+    const serviceHostDebugCtx = {
       [LogContexts.logLevel]: LogLevels.debug,
       namespace: 'ts:serviceHost',
       call: null,
+    }
+    const serviceHostTraceCtx = {
+      ...serviceHostDebugCtx,
+      [LogContexts.logLevel]: LogLevels.trace,
     }
     const serviceHost = {
       getScriptFileNames: () => Object.keys(memoryCache.versions),
@@ -161,7 +165,7 @@ export function createCompiler(configs: ConfigSet): TsCompiler {
       },
       getScriptSnapshot(fileName: string) {
         const hit = hasOwn.call(memoryCache.contents, fileName)
-        logger.debug(
+        logger.trace(
           { fileName, cacheHit: hit },
           `getScriptSnapshot():`,
           'cache',
@@ -179,7 +183,7 @@ export function createCompiler(configs: ConfigSet): TsCompiler {
         return ts.ScriptSnapshot.fromString(contents)
       },
       fileExists: ts.sys.fileExists,
-      readFile: logger.wrap(serviceHostCtx, 'readFile', ts.sys.readFile),
+      readFile: logger.wrap(serviceHostTraceCtx, 'readFile', ts.sys.readFile),
       readDirectory: ts.sys.readDirectory,
       getDirectories: ts.sys.getDirectories,
       directoryExists: ts.sys.directoryExists,
