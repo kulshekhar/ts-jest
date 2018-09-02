@@ -39,6 +39,7 @@ import { version as myVersion } from '..'
 import semver from 'semver'
 import { rootLogger } from '../util/logger'
 import { Logger } from 'bs-logger'
+import { getPackageVersion } from '../util/get-package-version'
 
 const logger = rootLogger.child({ namespace: 'config' })
 
@@ -235,7 +236,7 @@ export class ConfigSet {
       tsConfig,
       babelConfig,
       diagnostics,
-      typeCheck: !!options.typeCheck,
+      isolatedModules: !!options.isolatedModules,
       compiler: options.compiler || 'typescript',
       stringifyContentPathRegex,
     }
@@ -249,6 +250,21 @@ export class ConfigSet {
 
   get tsconfig(): any {
     return this._typescript.input
+  }
+
+  @Memoize()
+  get versions(): Record<string, string> {
+    const modules = ['jest', this.tsJest.compiler, 'tslib']
+    if (this.tsJest.babelConfig) {
+      modules.push('@babel/core', 'babel-core', 'babel-jest')
+    }
+    return modules.reduce(
+      (map, name) => {
+        map[name] = getPackageVersion(name) || '-'
+        return map
+      },
+      { 'ts-jest': myVersion } as Record<string, string>,
+    )
   }
 
   @Memoize()
@@ -423,7 +439,7 @@ export class ConfigSet {
         version: this.compilerModule.version,
         compiler: this.tsJest.compiler,
         compilerOptions: this.typescript.options,
-        typeCheck: this.tsJest.typeCheck,
+        isolatedModules: this.tsJest.isolatedModules,
         ignoreDiagnostics: this.tsJest.diagnostics.ignoreCodes,
       }),
     )
@@ -555,7 +571,7 @@ export class ConfigSet {
     delete globals['ts-jest']
 
     return new JsonableValue({
-      version: myVersion,
+      versions: this.versions,
       jest,
       tsJest: this.tsJest,
       babel: this.babel,
