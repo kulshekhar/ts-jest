@@ -177,23 +177,11 @@ export function createCompiler(configs: ConfigSet): TsCompiler {
         }
         return ts.ScriptSnapshot.fromString(contents)
       },
-      fileExists: logger.wrap(serviceHostCtx, 'fileExists', ts.sys.fileExists),
+      fileExists: ts.sys.fileExists,
       readFile: logger.wrap(serviceHostCtx, 'readFile', ts.sys.readFile),
-      readDirectory: logger.wrap(
-        serviceHostCtx,
-        'readDirectory',
-        ts.sys.readDirectory,
-      ),
-      getDirectories: logger.wrap(
-        serviceHostCtx,
-        'getDirectories',
-        ts.sys.getDirectories,
-      ),
-      directoryExists: logger.wrap(
-        serviceHostCtx,
-        'directoryExists',
-        ts.sys.directoryExists,
-      ),
+      readDirectory: ts.sys.readDirectory,
+      getDirectories: ts.sys.getDirectories,
+      directoryExists: ts.sys.directoryExists,
       getNewLine: () => '\n',
       getCurrentDirectory: () => cwd,
       getCompilationSettings: () => compilerOptions,
