@@ -46,6 +46,7 @@ plugins:
 
 keep_files:
   - .gitkeep
+  - .git
 
 defaults:
   # _pages
