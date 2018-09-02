@@ -1,5 +1,4 @@
 ---
-layout: page
 title: E2E tests flow
 ---
 ## Preparing

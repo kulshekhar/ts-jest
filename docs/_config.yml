@@ -26,9 +26,10 @@ description: >- # this means to ignore newlines until "baseurl:"
 
 # Build settings
 markdown: kramdown
-theme: minima
+# theme: minima
+theme: minima-reboot
 plugins:
-  - jekyll-feed
+  # - jekyll-feed
   - jekyll-plantuml
 
 # Exclude from processing.
@@ -42,3 +43,10 @@ plugins:
 #   - vendor/cache/
 #   - vendor/gems/
 #   - vendor/ruby/
+defaults:
+  # _pages
+  - scope:
+      path: ""
+      type: pages
+    values:
+      layout: page

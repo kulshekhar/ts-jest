@@ -1,5 +1,4 @@
 ---
-layout: page
 title: Jest flow
 ---
 ## Jest process
@@ -53,7 +52,7 @@ endif
 
 if (filename ends with .d.ts) then (yes)
   :wipe source;
-  note left
+  note right
     no need to compile
     definition files
   end note
@@ -88,12 +87,21 @@ else (no)
     else (no)
       :compile with
       transpileModule;
-      note right
+      note left
         files will be compiled
         as isolated modules
       end note
 
     endif
+
+    :custom AST
+    transformers;
+    note left
+      here is where hoisting of
+      jest.mock is done, as well as
+      user-defined transformations
+      based on config
+    end note
 
     -> compiled source;
 
