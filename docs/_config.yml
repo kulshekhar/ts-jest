@@ -43,6 +43,10 @@ plugins:
 #   - vendor/cache/
 #   - vendor/gems/
 #   - vendor/ruby/
+
+keep_files:
+  - .gitkeep
+
 defaults:
   # _pages
   - scope:
