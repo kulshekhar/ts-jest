@@ -19,7 +19,7 @@ description: >- # this means to ignore newlines until "baseurl:"
   TSJest (ts-jest) is a TypeScript preprocessor with source map
   support for Jest that lets you use Jest to test projects written
   in TypeScript.
-# baseurl: "" # the subpath of your site, e.g. /blog
+baseurl: "/ts-jest" # the subpath of your site, e.g. /blog
 # url: "" # the base hostname & protocol for your site, e.g. http://example.com
 # twitter_username: jekyllrb
 # github_username:  jekyll
