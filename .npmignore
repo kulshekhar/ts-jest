@@ -66,3 +66,6 @@ tsconfig.json
 .travis.yml
 tsconfig.build.json
 tslint.json
+
+# Github Pages
+docs
