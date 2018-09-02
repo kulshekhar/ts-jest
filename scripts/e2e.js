@@ -21,6 +21,7 @@ if (parentArgs.includes('--coverage')) {
   parentArgs = parentArgs.filter(a => a !== '--coverage')
 }
 if (!parentArgs.includes('--runInBand')) parentArgs.push('--runInBand')
+const prepareOnly = parentArgs.includes('--prepareOnly')
 
 function getDirectories(rootDir) {
   return fs.readdirSync(rootDir).filter(function(file) {
@@ -162,10 +163,12 @@ function setupE2e() {
 
 setupE2e()
 
-log('templates are ready, clearing Jest cache')
+log('templates are ready')
 
-spawnSync('jest', ['--clearCache'])
+if (!prepareOnly) {
+  log('clearing Jest cache')
+  spawnSync('jest', ['--clearCache'])
 
-log('running tests')
-
-jest.run(['--config', configFile, ...parentArgs])
+  log('running tests')
+  jest.run(['--config', configFile, ...parentArgs])
+}
