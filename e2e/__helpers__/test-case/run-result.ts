@@ -1,7 +1,7 @@
 import { SpawnSyncReturns } from 'child_process'
 import ProcessedFileIo from './processed-file-io'
 import { stripAnsiColors, normalizeJestOutput, escapeRegex } from './utils'
-import { resolve } from 'path'
+import { resolve, sep } from 'path'
 import { readFileSync, realpathSync } from 'fs'
 import { tmpdir } from 'os'
 import { LogMessage } from 'bs-logger'
@@ -55,15 +55,27 @@ export default class RunResult {
 
   normalize(str: string) {
     // TODO: hmmm clean this!
-    return [
-      { from: /\\/g, to: '/' },
-      { from: this.cwd, to: '<cwd>' },
-      { from: realpathSync(this.cwd), to: '<cwd>' },
-      { from: tmpdir(), to: '<tmp>' },
-      { from: realpathSync(tmpdir()), to: '<tmp>' },
+    const cwd = this.cwd
+    const realCwd = realpathSync(cwd)
+    const tmp = tmpdir()
+    const realTmp = realpathSync(tmp)
+    const map = [
+      { from: cwd, to: '<cwd>' },
+      { from: tmp, to: '<tmp>' },
       { from: /\b[a-f0-9]{40}\b/g, to: '<hex:40>' },
     ]
-      .sort((a, b) => ((b.from as any).length || 0) - ((a.from as any).length || 0))
+    if (cwd !== realCwd) map.push({ from: realCwd, to: '<cwd>' })
+    if (tmp !== realTmp) map.push({ from: realTmp, to: '<tmp>' })
+    if (sep === '\\') {
+      map.push({ from: /\\/g, to: '/' })
+      map.push({ from: cwd.replace(/\\/g, '/'), to: '<cwd>' })
+      map.push({ from: tmp.replace(/\\/g, '/'), to: '<tmp>' })
+      if (cwd !== realCwd) map.push({ from: realCwd.replace(/\\/g, '/'), to: '<cwd>' })
+      if (tmp !== realTmp) map.push({ from: realTmp.replace(/\\/g, '/'), to: '<tmp>' })
+    }
+
+    return map
+      .sort((a, b) => ((b.from as any).length || Infinity) - ((a.from as any).length || Infinity))
       .reduce((str, { from, to }) => {
         return str.replace(typeof from === 'string' ? new RegExp(`${escapeRegex(from)}`, 'g') : from, to)
       }, str)
