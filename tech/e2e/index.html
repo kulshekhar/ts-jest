@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+
+  <link rel="stylesheet" href="/assets/main.css">
+  <link rel="canonical" href="/tech/e2e/">
+  <link rel="alternate" type="application/rss+xml" title="TSJest" href="/feed.xml">
+
+  
+
+  
+
+  <!-- Begin Jekyll SEO tag v2.5.0 -->
+<title>E2E tests flow | TSJest</title>
+<meta name="generator" content="Jekyll v3.8.3" />
+<meta property="og:title" content="E2E tests flow" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="TSJest (ts-jest) is a TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript." />
+<meta property="og:description" content="TSJest (ts-jest) is a TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript." />
+<meta property="og:site_name" content="TSJest" />
+<script type="application/ld+json">
+{"headline":"E2E tests flow","url":"/tech/e2e/","description":"TSJest (ts-jest) is a TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript.","@type":"WebPage","@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+  
+</head>
+
+
+  <body>
+
+    <header id="nav-header" class="border-dark border-left-0 border-right-0">
+  <div id="nav-container" class="container position-relative d-flex justify-content-between align-items-center">
+    
+    
+    <a class="h4 m-0 text-dark" href="/">TSJest</a>
+
+    
+      <nav id="nav-menu-container" class="text-right navbar-light">
+        <input type="checkbox" id="nav-trigger" class="d-none"/>
+        <label for="nav-trigger" id="nav-trigger-label" class="m-2 d-inline-block d-md-none navbar-toggler-icon">
+        </label>
+
+        <div id="nav-menu" class="d-none d-md-block">
+          
+            
+            
+          
+            
+            
+              <a class="text-dark ml-3 ml-md-0 p-2 d-block d-md-inline-block" href="/about/">About</a>
+            
+          
+            
+            
+              <a class="text-dark ml-3 ml-md-0 p-2 d-block d-md-inline-block" href="/user/config.html">Configuration</a>
+            
+          
+            
+            
+              <a class="text-dark ml-3 ml-md-0 p-2 d-block d-md-inline-block" href="/tech/e2e/">E2E tests flow</a>
+            
+          
+            
+            
+              <a class="text-dark ml-3 ml-md-0 p-2 d-block d-md-inline-block" href="/tech/process/">Jest flow</a>
+            
+          
+            
+            
+          
+            
+            
+          
+        </div>
+      </nav>
+    
+  </div>
+</header>
+
+
+    <main aria-label="Content">
+      <div class="container">
+        <article>
+
+  <header class="pt-4 pb-3">
+    <h1>E2E tests flow</h1>
+  </header>
+
+  <div id="content">
+    <h2 id="preparing">Preparing</h2>
+
+<p>The preparation of E2E test directory is done in <code class="highlighter-rouge">scripts/e2e.js</code>. Here is the process:</p>
+
+<p><img src="/uml/988c294c9d12cec695525fc30bfac21a.svg" alt="PlantUML SVG diagram" class="plantuml" /></p>
+
+<h2 id="running">Running</h2>
+
+<p>When a test-case needs to be run with a given template within tests, here is what’s happening (in <code class="highlighter-rouge">e2e/__helpers__/test-case/runtime.ts</code>):</p>
+
+<p><img src="/uml/8f8b59668db25411556918585f5e53d8.svg" alt="PlantUML SVG diagram" class="plantuml" /></p>
+
+  </div>
+
+</article>
+
+      </div>
+    </main>
+
+    <footer id="site-footer">
+  <div class="container">
+    <div class="h5 pt-4">TSJest</div>
+
+    <div class="row">
+      <div class="col col-lg-3">
+        <ul class="list-unstyled">
+          <li class="text-secondary">
+            
+              TSJest
+            
+            </li>
+            
+        </ul>
+      </div>
+      
+      <div class="col-12 col-lg">
+        <p class="text-secondary text-justify">TSJest (ts-jest) is a TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript.</p>
+      </div>
+    </div>
+
+  </div>
+</footer>
+
+
+  </body>
+
+</html>
