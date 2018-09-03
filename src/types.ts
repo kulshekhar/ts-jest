@@ -1,14 +1,11 @@
-import _ts, { CompilerOptions } from 'typescript'
 import * as _babel from 'babel__core'
+import _ts, { CompilerOptions } from 'typescript'
 
 export type TBabelCore = typeof _babel
 export type TTypeScript = typeof _ts
 export type TBabelJest = Required<jest.Transformer>
 export type BabelJestTransformer = {
-  [K in Exclude<keyof jest.Transformer, 'createTransformer'>]: Exclude<
-    jest.Transformer[K],
-    undefined
-  >
+  [K in Exclude<keyof jest.Transformer, 'createTransformer'>]: Exclude<jest.Transformer[K], undefined>
 }
 export type BabelConfig = _babel.TransformOptions
 
@@ -72,10 +69,7 @@ interface TsJestConfig$tsConfig$inline {
   kind: 'inline'
   value: CompilerOptions
 }
-type TsJestConfig$tsConfig =
-  | TsJestConfig$tsConfig$file
-  | TsJestConfig$tsConfig$inline
-  | undefined
+type TsJestConfig$tsConfig = TsJestConfig$tsConfig$file | TsJestConfig$tsConfig$inline | undefined
 interface TsJestConfig$diagnostics {
   pretty: boolean
   ignoreCodes: number[]
@@ -89,10 +83,7 @@ interface TsJestConfig$babelConfig$inline {
   kind: 'inline'
   value: BabelConfig
 }
-type TsJestConfig$babelConfig =
-  | TsJestConfig$babelConfig$file
-  | TsJestConfig$babelConfig$inline
-  | undefined
+type TsJestConfig$babelConfig = TsJestConfig$babelConfig$file | TsJestConfig$babelConfig$inline | undefined
 type TsJestConfig$stringifyContentPathRegex = string | undefined
 
 export interface TsJestConfig {
@@ -107,10 +98,7 @@ export interface TsJestConfig {
 }
 
 export interface TsJestHooksMap {
-  afterProcess?(
-    args: any[],
-    result: string | jest.TransformedSource,
-  ): string | jest.TransformedSource | void
+  afterProcess?(args: any[], result: string | jest.TransformedSource): string | jest.TransformedSource | void
 }
 
 export interface CreateJestPresetOptions {

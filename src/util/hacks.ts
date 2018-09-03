@@ -1,21 +1,18 @@
-import { TBabelCore, ModulePatcher, BabelConfig } from '../types'
 import semver from 'semver'
+
+import { BabelConfig, ModulePatcher, TBabelCore } from '../types'
+
 import { rootLogger } from './logger'
 
 const logger = rootLogger.child({ namespace: 'hacks' })
 
 // tslint:disable-next-line:variable-name
-export const patchBabelCore_githubIssue6577: ModulePatcher<
-  TBabelCore
-> = babel => {
+export const patchBabelCore_githubIssue6577: ModulePatcher<TBabelCore> = babel => {
   // There is an issue still open in Babel 6: https://github.com/babel/babel/issues/6577
   // This is a hack to bypass it and fix our issue #627
   // The bug disallow debugging when using Babel Jest with babel-core@6.x because of
   // source-maps not being inlined
-  if (
-    typeof babel.version === 'string' &&
-    semver.satisfies(babel.version, '>=6 <7')
-  ) {
+  if (typeof babel.version === 'string' && semver.satisfies(babel.version, '>=6 <7')) {
     try {
       const File = require('babel-core/lib/transformation/file').File
       File.prototype.initOptions = (original => {

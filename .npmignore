@@ -55,6 +55,7 @@ old
 # others
 .npmignore
 .eslintrc.js
+.eslintignore
 jest.config.js
 .vscode
 .github

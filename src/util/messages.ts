@@ -30,12 +30,6 @@ export enum ImportReasons {
   BabelJest = 'Using "babel-jest" requires this package to be installed.',
 }
 
-export function interpolate(
-  msg: string,
-  vars: Record<string, any> = {},
-): string {
-  return msg.replace(
-    /\{\{([^\}]+)\}\}/g,
-    (_, key) => (key in vars ? vars[key] : _),
-  )
+export function interpolate(msg: string, vars: Record<string, any> = {}): string {
+  return msg.replace(/\{\{([^\}]+)\}\}/g, (_, key) => (key in vars ? vars[key] : _))
 }

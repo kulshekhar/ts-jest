@@ -1,8 +1,8 @@
-import { TsJestTransformer } from './ts-jest-transformer'
 import { createJestPreset } from './config/create-jest-preset'
+import { pathsToModuleNameMapper } from './config/paths-to-module-name-mapper'
+import { TsJestTransformer } from './ts-jest-transformer'
 import { TsJestGlobalOptions } from './types'
 import { VersionCheckers } from './util/version-checkers'
-import { pathsToModuleNameMapper } from './config/paths-to-module-name-mapper'
 
 // tslint:disable-next-line:no-var-requires
 const version: string = require('../package.json').version

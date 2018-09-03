@@ -1,15 +1,10 @@
-import { Memoize } from './memoize'
-import {
-  TBabelJest,
-  TBabelCore,
-  ModulePatcher,
-  TTypeScript,
-  TsJestImporter,
-} from '../types'
+import { ModulePatcher, TBabelCore, TBabelJest, TTypeScript, TsJestImporter } from '../types'
+
 import * as hacks from './hacks'
-import { ImportReasons, Errors, interpolate, Helps } from './messages'
-import { VersionCheckers } from './version-checkers'
 import { rootLogger } from './logger'
+import { Memoize } from './memoize'
+import { Errors, Helps, ImportReasons, interpolate } from './messages'
+import { VersionCheckers } from './version-checkers'
 
 const logger = rootLogger.child({ namespace: 'Importer' })
 
@@ -36,10 +31,7 @@ export class Importer implements TsJestImporter {
     // it could be fixes that are not deployed, or
     // abstractions so that multiple versions work the same
     return new Importer({
-      'babel-core': [
-        passThru(VersionCheckers.babelCoreLegacy.warn),
-        hacks.patchBabelCore_githubIssue6577,
-      ],
+      'babel-core': [passThru(VersionCheckers.babelCoreLegacy.warn), hacks.patchBabelCore_githubIssue6577],
       '@babel/core': [passThru(VersionCheckers.babelCore.warn)],
       'babel-jest': [passThru(VersionCheckers.babelJest.warn)],
       typescript: [passThru(VersionCheckers.typescript.warn)],
@@ -47,9 +39,7 @@ export class Importer implements TsJestImporter {
     })
   }
 
-  constructor(
-    protected _patches: { [moduleName: string]: ModulePatcher[] } = {},
-  ) {}
+  constructor(protected _patches: { [moduleName: string]: ModulePatcher[] } = {}) {}
 
   babelJest(why: ImportReasons): TBabelJest {
     // this is to ensure babel-core is patched
@@ -99,10 +89,7 @@ export class Importer implements TsJestImporter {
   protected _patch<T>(name: string, unpatched: T): T {
     if (name in this._patches) {
       logger.debug('patching', name)
-      return this._patches[name].reduce(
-        (mod, patcher) => patcher(mod),
-        unpatched,
-      )
+      return this._patches[name].reduce((mod, patcher) => patcher(mod), unpatched)
     }
     return unpatched
   }
@@ -120,21 +107,14 @@ export class Importer implements TsJestImporter {
     }
 
     // if it couldn't load, build a nice error message so the user can fix it by himself
-    const msg = alternatives.length
-      ? Errors.UnableToLoadAnyModule
-      : Errors.UnableToLoadOneModule
-    const loadModule = [moduleName, ...alternatives]
-      .map(m => `"${m}"`)
-      .join(', ')
+    const msg = alternatives.length ? Errors.UnableToLoadAnyModule : Errors.UnableToLoadOneModule
+    const loadModule = [moduleName, ...alternatives].map(m => `"${m}"`).join(', ')
     if (typeof installTip === 'string') {
       installTip = [{ module: installTip, label: `install "${installTip}"` }]
     }
     const fix = installTip
       .map(tip => {
-        return `    ${installTip.length === 1 ? '↳' : '•'} ${interpolate(
-          Helps.FixMissingModule,
-          tip,
-        )}`
+        return `    ${installTip.length === 1 ? '↳' : '•'} ${interpolate(Helps.FixMissingModule, tip)}`
       })
       .join('\n')
 

@@ -1,5 +1,6 @@
-import { getPackageVersion } from './get-package-version'
 import { valid } from 'semver'
+
+import { getPackageVersion } from './get-package-version'
 
 it('should get the version of a package', () => {
   const version = require('../../node_modules/jest/package.json').version

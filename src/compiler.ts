@@ -29,18 +29,19 @@
  * THE SOFTWARE.
  */
 
-import { relative, basename, extname, join } from 'path'
-import { readFileSync, writeFileSync } from 'fs'
-import mkdirp = require('mkdirp')
+import { LogContexts, LogLevels, Logger } from 'bs-logger'
 import bufferFrom from 'buffer-from'
 import stableStringify = require('fast-json-stable-stringify')
-import _ts, { CustomTransformers } from 'typescript'
+import { readFileSync, writeFileSync } from 'fs'
+import mkdirp = require('mkdirp')
+import { basename, extname, join, relative } from 'path'
+import { CustomTransformers } from 'typescript'
+
 import { ConfigSet } from './config/config-set'
-import { sha1 } from './util/sha1'
-import { TsCompiler, MemoryCache, TypeInfo } from './types'
-import { Errors, interpolate } from './util/messages'
 import { factory as customTransformersFactory } from './transformers'
-import { Logger, LogContexts, LogLevels } from 'bs-logger'
+import { MemoryCache, TsCompiler, TypeInfo } from './types'
+import { Errors, interpolate } from './util/messages'
+import { sha1 } from './util/sha1'
 
 const hasOwn = Object.prototype.hasOwnProperty
 
@@ -51,9 +52,7 @@ export function createCompiler(configs: ConfigSet): TsCompiler {
   const logger = configs.logger.child({ namespace: 'ts-compiler' })
   logger.debug(
     'creating typescript compiler',
-    configs.tsJest.isolatedModules
-      ? '(isolated modules)'
-      : '(language service)',
+    configs.tsJest.isolatedModules ? '(isolated modules)' : '(language service)',
   )
   const cachedir = configs.tsCacheDir
 
@@ -95,11 +94,7 @@ export function createCompiler(configs: ConfigSet): TsCompiler {
   /**
    * Create the basic required function using transpile mode.
    */
-  let getOutput = (
-    code: string,
-    fileName: string,
-    lineOffset = 0,
-  ): SourceOutput => {
+  let getOutput = (code: string, fileName: string /* , lineOffset = 0 */): SourceOutput => {
     logger.debug({ fileName }, 'getOutput(): compiling as isolated module')
     const result = ts.transpileModule(code, {
       fileName,
@@ -108,9 +103,7 @@ export function createCompiler(configs: ConfigSet): TsCompiler {
       reportDiagnostics: configs.shouldReportDiagnostic(fileName),
     })
 
-    const diagnosticList = result.diagnostics
-      ? configs.filterDiagnostics(result.diagnostics)
-      : []
+    const diagnosticList = result.diagnostics ? configs.filterDiagnostics(result.diagnostics) : []
 
     if (diagnosticList.length) {
       throw configs.createTsError(diagnosticList)
@@ -119,11 +112,7 @@ export function createCompiler(configs: ConfigSet): TsCompiler {
     return [result.outputText, result.sourceMapText as string]
   }
 
-  let getTypeInfo = (
-    _code: string,
-    _fileName: string,
-    _position: number,
-  ): TypeInfo => {
+  let getTypeInfo = (_code: string, _fileName: string, _position: number): TypeInfo => {
     throw new TypeError(Errors.TypesUnavailableWithoutTypeCheck)
   }
 
@@ -134,8 +123,7 @@ export function createCompiler(configs: ConfigSet): TsCompiler {
       logger.debug({ fileName }, `updateMemoryCache()`)
       if (memoryCache.contents[fileName] !== code) {
         memoryCache.contents[fileName] = code
-        memoryCache.versions[fileName] =
-          (memoryCache.versions[fileName] || 0) + 1
+        memoryCache.versions[fileName] = (memoryCache.versions[fileName] || 0) + 1
       }
     }
 
@@ -159,18 +147,11 @@ export function createCompiler(configs: ConfigSet): TsCompiler {
         // If we don't return `undefined` it results in `undefined === "undefined"` and run
         // `createProgram` again (which is very slow). Using a `string` assertion here to avoid
         // TypeScript errors from the function signature (expects `(x: string) => string`).
-        return version === undefined
-          ? ((undefined as any) as string)
-          : String(version)
+        return version === undefined ? ((undefined as any) as string) : String(version)
       },
       getScriptSnapshot(fileName: string) {
         const hit = hasOwn.call(memoryCache.contents, fileName)
-        logger.trace(
-          { fileName, cacheHit: hit },
-          `getScriptSnapshot():`,
-          'cache',
-          hit ? 'hit' : 'miss',
-        )
+        logger.trace({ fileName, cacheHit: hit }, `getScriptSnapshot():`, 'cache', hit ? 'hit' : 'miss')
         // Read contents from TypeScript memory cache.
         if (!hit) {
           memoryCache.contents[fileName] = ts.sys.readFile(fileName)
@@ -197,11 +178,8 @@ export function createCompiler(configs: ConfigSet): TsCompiler {
     logger.debug('creating language service')
     const service = ts.createLanguageService(serviceHost)
 
-    getOutput = (code: string, fileName: string, lineOffset: number = 0) => {
-      logger.debug(
-        { fileName },
-        'getOutput(): compiling using language service',
-      )
+    getOutput = (code: string, fileName: string /*, lineOffset = 0 */) => {
+      logger.debug({ fileName }, 'getOutput(): compiling using language service')
       // Must set memory cache before attempting to read file.
       updateMemoryCache(code, fileName)
 
@@ -249,14 +227,7 @@ export function createCompiler(configs: ConfigSet): TsCompiler {
     }
   }
 
-  const compile = readThrough(
-    cachedir,
-    memoryCache,
-    getOutput,
-    getExtension,
-    cwd,
-    logger,
-  )
+  const compile = readThrough(cachedir, memoryCache, getOutput, getExtension, cwd, logger)
   return { cwd, compile, getTypeInfo, extensions, cachedir, ts }
 }
 
@@ -271,11 +242,7 @@ type SourceOutput = [string, string]
 function readThrough(
   cachedir: string | undefined,
   memoryCache: MemoryCache,
-  compile: (
-    code: string,
-    fileName: string,
-    lineOffset?: number,
-  ) => SourceOutput,
+  compile: (code: string, fileName: string, lineOffset?: number) => SourceOutput,
   getExtension: (fileName: string) => string,
   cwd: string,
   logger: Logger,
@@ -333,14 +300,9 @@ function updateOutput(
   sourceRoot: string,
 ) {
   const base = basename(fileName)
-  const base64Map = bufferFrom(
-    updateSourceMap(sourceMap, fileName, sourceRoot),
-    'utf8',
-  ).toString('base64')
+  const base64Map = bufferFrom(updateSourceMap(sourceMap, fileName, sourceRoot), 'utf8').toString('base64')
   const sourceMapContent = `data:application/json;charset=utf-8;base64,${base64Map}`
-  const sourceMapLength =
-    `${base}.map`.length +
-    (getExtension(fileName).length - extname(fileName).length)
+  const sourceMapLength = `${base}.map`.length + (getExtension(fileName).length - extname(fileName).length)
 
   return outputText.slice(0, -sourceMapLength) + sourceMapContent
 }
@@ -348,11 +310,7 @@ function updateOutput(
 /**
  * Update the source map contents for improved output.
  */
-function updateSourceMap(
-  sourceMapText: string,
-  fileName: string,
-  sourceRoot: string,
-) {
+function updateSourceMap(sourceMapText: string, fileName: string, sourceRoot: string) {
   const sourceMap = JSON.parse(sourceMapText)
   const relativeFilePath = relative(sourceRoot, fileName)
   sourceMap.file = relativeFilePath

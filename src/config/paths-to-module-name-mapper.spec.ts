@@ -1,5 +1,6 @@
-import { pathsToModuleNameMapper } from './paths-to-module-name-mapper'
 import { logTargetMock } from '../__helpers__/mocks'
+
+import { pathsToModuleNameMapper } from './paths-to-module-name-mapper'
 
 const tsconfigMap = {
   log: ['src/util/log'],
@@ -27,8 +28,7 @@ Object {
   })
 
   it('should use the given prefix', () => {
-    expect(pathsToModuleNameMapper(tsconfigMap, { prefix: '<rootDir>/' }))
-      .toMatchInlineSnapshot(`
+    expect(pathsToModuleNameMapper(tsconfigMap, { prefix: '<rootDir>/' })).toMatchInlineSnapshot(`
 Object {
   "^api/(.*)$": "<rootDir>/src/api/$1",
   "^log$": "<rootDir>/src/util/log",

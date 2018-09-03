@@ -1,12 +1,9 @@
-import { join } from 'path'
 import { existsSync } from 'fs-extra'
+import { join } from 'path'
 
 // from https://stackoverflow.com/questions/25245716/remove-all-ansi-colors-styles-from-strings
 export function stripAnsiColors(stringToStrip: string): string {
-  return stringToStrip.replace(
-    /[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g,
-    '',
-  )
+  return stringToStrip.replace(/[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g, '')
 }
 
 export function templateNameForPath(path: string): string {
@@ -30,21 +27,15 @@ export function normalizeJestOutput(output: string): string {
   let out: string = output
     .trim()
     // removes total and estimated times
-    .replace(
-      /^(\s*Time\s*:\s*)[\d.]+m?s(?:(,\s*estimated\s+)[\d.]+m?s)?$/gm,
-      (_, start) => {
-        return `${start}XXs`
-      },
-    )
+    .replace(/^(\s*Time\s*:\s*)[\d.]+m?s(?:(,\s*estimated\s+)[\d.]+m?s)?$/gm, (_, start) => {
+      return `${start}XXs`
+    })
     // remove times after PASS/FAIL path/to/file (xxxs)
-    .replace(
-      /^\s*((?:PASS|FAIL) .+) \([\d.]+m?s\)$/gm,
-      (_, start) => `${start}`,
-    )
+    .replace(/^\s*((?:PASS|FAIL) .+) \([\d.]+m?s\)$/gm, (_, start) => `${start}`)
     // removes each test time values
     .replace(
       /^(\s*)(✕|×|✓|√)(\s+[^\(]+)(\s+\([\d.]+m?s\))?$/gm,
-      (_, start, mark, mid, time) => `${start}${normalizeTestMark(mark)}${mid}`,
+      (_, start, mark, mid /*, time */) => `${start}${normalizeTestMark(mark)}${mid}`,
     )
   // TODO: improves this...
   if (process.platform === 'win32') {

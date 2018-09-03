@@ -1,8 +1,7 @@
-import { TsJestGlobalOptions, BabelConfig, TsJestConfig } from '../types'
 import { resolve } from 'path'
+
+import { BabelConfig, TsJestConfig, TsJestGlobalOptions } from '../types'
 import { ImportReasons } from '../util/messages'
-import { Writable } from 'stream'
-import { LogTarget, LogMessage } from 'bs-logger'
 
 export function filePath(relPath: string): string {
   return resolve(__dirname, '..', '..', relPath)
@@ -88,6 +87,6 @@ export function babelConfig<T extends BabelConfig>(options?: BabelConfig): T {
   } as any
 }
 
-export function importReason(text: string = '[[BECAUSE]]'): ImportReasons {
+export function importReason(text = '[[BECAUSE]]'): ImportReasons {
   return text as any
 }

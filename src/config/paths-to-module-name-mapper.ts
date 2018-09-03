@@ -1,7 +1,8 @@
-import { CompilerOptions } from 'typescript'
-import { rootLogger } from '../util/logger'
-import { interpolate, Errors } from '../util/messages'
 import { LogContexts } from 'bs-logger'
+import { CompilerOptions } from 'typescript'
+
+import { rootLogger } from '../util/logger'
+import { Errors, interpolate } from '../util/messages'
 
 type TsPathMapping = Exclude<CompilerOptions['paths'], undefined>
 type JestPathMapping = jest.InitialOptions['moduleNameMapper']
@@ -22,9 +23,7 @@ export const pathsToModuleNameMapper = (
     const toPaths = mapping[fromPath]
     // check that we have only one target path
     if (toPaths.length === 0) {
-      logger.warn(
-        interpolate(Errors.NotMappingPathWithEmptyMap, { path: fromPath }),
-      )
+      logger.warn(interpolate(Errors.NotMappingPathWithEmptyMap, { path: fromPath }))
       continue
     } else if (toPaths.length > 1) {
       logger.warn(
@@ -45,9 +44,7 @@ export const pathsToModuleNameMapper = (
       pattern = `^${escapeRegex(segments[0])}(.*)${escapeRegex(segments[1])}$`
       jestMap[pattern] = `${prefix}${target.replace(/\*/g, '$1')}`
     } else {
-      logger.warn(
-        interpolate(Errors.NotMappingMultiStarPath, { path: fromPath }),
-      )
+      logger.warn(interpolate(Errors.NotMappingMultiStarPath, { path: fromPath }))
       continue
     }
   }

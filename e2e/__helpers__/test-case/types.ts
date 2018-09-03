@@ -1,4 +1,5 @@
 import { TsJestConfig } from '../../../src/types'
+
 import RunResult from './run-result'
 
 export interface RunTestOptions {
@@ -11,10 +12,7 @@ export interface RunTestOptions {
   tsJestConfig?: TsJestConfig | any
 }
 
-export type RunWithTemplatesIterator = (
-  runtTest: () => RunResult,
-  context: RunWithTemplateIteratorContext,
-) => void
+export type RunWithTemplatesIterator = (runtTest: () => RunResult, context: RunWithTemplateIteratorContext) => void
 
 export interface RunWithTemplateIteratorContext {
   templateName: string
@@ -24,9 +22,7 @@ export interface RunWithTemplateIteratorContext {
 }
 
 // tslint:disable-next-line:interface-over-type-literal
-export type TestRunResultsMap<T extends string = string> = {
-  [key in T]: RunResult
-}
+export type TestRunResultsMap<T extends string = string> = { [key in T]: RunResult }
 
 export interface PreparedTest {
   workdir: string

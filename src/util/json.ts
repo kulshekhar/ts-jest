@@ -13,10 +13,7 @@ export function parse(input: string): any {
 interface NormalizeOptions {
   parse?: (input: string) => any
 }
-export function normalize(
-  input: string,
-  { parse: parser = parse }: NormalizeOptions = {},
-): string {
+export function normalize(input: string, { parse: parser = parse }: NormalizeOptions = {}): string {
   let result: string | undefined
   if (normalize.cache.has(input)) {
     result = normalize.cache.get(input)

@@ -1,12 +1,13 @@
 // tslint:disable:max-line-length
-import { TsJestGlobalOptions } from './types'
-import { ConfigSet } from './config/config-set'
+import { LogLevels } from 'bs-logger'
+
 import * as fakers from './__helpers__/fakers'
-import { createCompiler } from './compiler'
+import { logTargetMock } from './__helpers__/mocks'
 import { relativeToRoot, tempDir } from './__helpers__/path'
 import ProcessedSource from './__helpers__/processed-source'
-import { logTargetMock } from './__helpers__/mocks'
-import { LogLevels } from 'bs-logger'
+import { createCompiler } from './compiler'
+import { ConfigSet } from './config/config-set'
+import { TsJestGlobalOptions } from './types'
 
 const logTarget = logTargetMock()
 
@@ -25,10 +26,7 @@ function makeCompiler({
     ...(tsJestConfig.diagnostics as any),
     pretty: false,
   }
-  const cs = new ConfigSet(
-    fakers.jestConfig(jestConfig, tsJestConfig),
-    parentConfig,
-  )
+  const cs = new ConfigSet(fakers.jestConfig(jestConfig, tsJestConfig), parentConfig)
   return createCompiler(cs)
 }
 
@@ -80,8 +78,7 @@ describe('cache', () => {
 
   it('should use the cache', () => {
     const compiled1 = compiler.compile(source, __filename)
-    expect(logTarget.filteredLines(LogLevels.debug, Infinity))
-      .toMatchInlineSnapshot(`
+    expect(logTarget.filteredLines(LogLevels.debug, Infinity)).toMatchInlineSnapshot(`
 Array [
   "[level:20] readThrough(): cache miss
 ",
@@ -139,13 +136,7 @@ const val: MyType = {} as any
 console.log(val.p1/* <== that */)
 `
   it('should get correct type info', () => {
-    expect(
-      compiler.getTypeInfo(
-        source,
-        __filename,
-        source.indexOf('/* <== that */') - 1,
-      ),
-    ).toEqual({
+    expect(compiler.getTypeInfo(source, __filename, source.indexOf('/* <== that */') - 1)).toEqual({
       comment: 'the prop 1! ',
       name: '(property) p1: boolean',
     })

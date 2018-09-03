@@ -1,13 +1,10 @@
-import {
-  RunTestOptions,
-  RunWithTemplatesIterator,
-  TestRunResultsMap,
-  RunWithTemplateIteratorContext
-} from './types'
 import { join } from 'path'
+
 import * as Paths from '../../../scripts/lib/paths'
+
 import RunResult from './run-result'
 import { run } from './runtime'
+import { RunTestOptions, RunWithTemplateIteratorContext, RunWithTemplatesIterator, TestRunResultsMap } from './types'
 
 // tslint:disable-next-line:no-default-export
 export default class RunDescriptor {
@@ -29,10 +26,7 @@ export default class RunDescriptor {
   }
 
   get sourcePackageJson() {
-    return (
-      this._sourcePackageJson ||
-      (this._sourcePackageJson = require(join(this.sourceDir, 'package.json')))
-    )
+    return this._sourcePackageJson || (this._sourcePackageJson = require(join(this.sourceDir, 'package.json')))
   }
 
   get templateName(): string {
@@ -49,10 +43,9 @@ export default class RunDescriptor {
       template: this.templateName,
     })
     if (logUnlessStatus != null && logUnlessStatus !== result.status) {
+      // tslint:disable-next-line:no-console
       console.log(
-        `Output of test run in "${this.name}" using template "${
-        this.templateName
-        }" (exit code: ${result.status}):\n\n`,
+        `Output of test run in "${this.name}" using template "${this.templateName}" (exit code: ${result.status}):\n\n`,
         result.output.trim(),
       )
     }
@@ -65,15 +58,11 @@ export default class RunDescriptor {
     iterator?: RunWithTemplatesIterator,
   ): TestRunResultsMap<T> {
     if (templates.length < 1) {
-      throw new RangeError(
-        `There must be at least one template to run the test case with.`,
-      )
+      throw new RangeError(`There must be at least one template to run the test case with.`)
     }
 
     if (!templates.every((t, i) => templates.indexOf(t, i + 1) === -1)) {
-      throw new Error(
-        `Each template must be unique. Given ${templates.join(', ')}`,
-      )
+      throw new Error(`Each template must be unique. Given ${templates.join(', ')}`)
     }
     return templates.reduce(
       (map, template) => {
@@ -96,10 +85,7 @@ export default class RunDescriptor {
   }
 }
 
-function createIteratorContext(
-  templateName: string,
-  expectedStatus?: number,
-): RunWithTemplateIteratorContext {
+function createIteratorContext(templateName: string, expectedStatus?: number): RunWithTemplateIteratorContext {
   const actionForExpectedStatus = (status?: number): string => {
     if (status == null) {
       return 'run'
@@ -110,8 +96,6 @@ function createIteratorContext(
     templateName,
     describeLabel: `with template "${templateName}"`,
     itLabel: `should ${actionForExpectedStatus(expectedStatus)}`,
-    testLabel: `should ${actionForExpectedStatus(
-      expectedStatus,
-    )} using template "${templateName}"`,
+    testLabel: `should ${actionForExpectedStatus(expectedStatus)} using template "${templateName}"`,
   }
 }

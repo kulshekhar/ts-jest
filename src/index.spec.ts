@@ -64,9 +64,7 @@ describe('createTransformer', () => {
     expect(tr1).not.toBe(tr2)
   })
   it('should accept base options', () => {
-    expect(
-      (tsJest.createTransformer({ isolatedModules: true }) as any).opt,
-    ).toEqual({
+    expect((tsJest.createTransformer({ isolatedModules: true }) as any).opt).toEqual({
       isolatedModules: true,
     })
   })

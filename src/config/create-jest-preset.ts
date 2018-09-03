@@ -1,4 +1,5 @@
 import * as jestConfig from 'jest-config'
+
 import { CreateJestPresetOptions } from '../types'
 import { rootLogger } from '../util/logger'
 
@@ -14,25 +15,14 @@ const defaults = jestConfig.defaults || {
 // TODO: find out if tsconfig that we'll use contains `allowJs`
 // and change the transform so that it also uses ts-jest for js files
 
-export function createJestPreset({
-  allowJs = false,
-}: CreateJestPresetOptions = {}) {
-  logger.debug(
-    { allowJs },
-    'creating jest presets',
-    allowJs ? 'handling' : 'not handling',
-    'JavaScript files',
-  )
+export function createJestPreset({ allowJs = false }: CreateJestPresetOptions = {}) {
+  logger.debug({ allowJs }, 'creating jest presets', allowJs ? 'handling' : 'not handling', 'JavaScript files')
   return {
     transform: {
       ...defaults.transform,
       [allowJs ? '^.+\\.[tj]sx?$' : '^.+\\.tsx?$']: 'ts-jest',
     },
-    testMatch: [
-      ...defaults.testMatch,
-      '**/__tests__/**/*.ts?(x)',
-      '**/?(*.)+(spec|test).ts?(x)',
-    ],
+    testMatch: [...defaults.testMatch, '**/__tests__/**/*.ts?(x)', '**/?(*.)+(spec|test).ts?(x)'],
     moduleFileExtensions: [...defaults.moduleFileExtensions, 'ts', 'tsx'],
   }
 }

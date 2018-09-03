@@ -1,9 +1,9 @@
 // WARNING: this file is shared between e2e and unit tests
-import { RawSourceMap } from 'source-map'
 import bufferFrom from 'buffer-from'
-import { relative, isAbsolute } from 'path'
 import stableStringify = require('fast-json-stable-stringify')
 import { realpathSync } from 'fs'
+import { isAbsolute, relative } from 'path'
+import { RawSourceMap } from 'source-map'
 
 export function base64ToSourceMaps(base64: string): RawSourceMap {
   return JSON.parse(bufferFrom(base64, 'base64').toString('utf8'))
@@ -20,9 +20,8 @@ export interface ParsedSourceWithMaps {
 }
 export function parseSource(source: string): ParsedSourceWithMaps {
   const [comment, b64Maps]: [string, string | undefined] =
-    (source.match(
-      /[\n^]\/\/#\s*sourceMappingURL=data:application\/json;(?:charset=utf-8;)?base64,(\S+)\s*$/,
-    ) as any) || []
+    (source.match(/[\n^]\/\/#\s*sourceMappingURL=data:application\/json;(?:charset=utf-8;)?base64,(\S+)\s*$/) as any) ||
+    []
   if (b64Maps) {
     const map = base64ToSourceMaps(b64Maps)
     return {
@@ -39,28 +38,18 @@ export function extractSourceMaps(source: string): RawSourceMap | undefined {
   return parseSource(source).sourceMaps
 }
 
-export function relativisePaths(
-  map: RawSourceMap,
-  fromPath: string,
-  newPrefix: string = '',
-): RawSourceMap {
+export function relativisePaths(map: RawSourceMap, fromPath: string, newPrefix = ''): RawSourceMap {
   const res = { ...map }
   const from = realpathSync(fromPath)
   const remap = (path: string): string =>
-    (isAbsolute(path)
-      ? `${newPrefix}${relative(from, realpathSync(path))}`
-      : path
-    ).replace(/\\/g, '/')
+    (isAbsolute(path) ? `${newPrefix}${relative(from, realpathSync(path))}` : path).replace(/\\/g, '/')
   if (res.sourceRoot) res.sourceRoot = remap(res.sourceRoot)
   if (res.sources) res.sources = res.sources.map(remap)
   if (res.file) res.file = remap(res.file)
   return res
 }
 
-export function rewriteSourceMaps(
-  source: string,
-  sourceMapsTransformer: (maps: RawSourceMap) => RawSourceMap,
-): string {
+export function rewriteSourceMaps(source: string, sourceMapsTransformer: (maps: RawSourceMap) => RawSourceMap): string {
   return source.replace(
     /([\n^]\/\/#\s*sourceMappingURL=data:application\/json;(?:charset=utf-8;)?base64,)(\S+)(\s*)$/,
     (_, before, base64, after) => {

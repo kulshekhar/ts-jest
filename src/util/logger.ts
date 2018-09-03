@@ -1,4 +1,5 @@
-import { createLogger, LogContexts, LogLevels } from 'bs-logger'
+import { LogContexts, LogLevels, createLogger } from 'bs-logger'
+
 import { backportTsJestDebugEnvVar } from './backports'
 
 const original = process.env.TS_JEST_LOG

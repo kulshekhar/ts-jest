@@ -1,4 +1,4 @@
-import { stringify, parse, normalize } from './json'
+import { normalize, parse, stringify } from './json'
 
 describe('stringify/parse', () => {
   it('should (de)serialize undefined', () => {
@@ -26,7 +26,7 @@ describe('normalize', () => {
     expect(normalize(input)).toBe(expected)
   })
   it('should use custom parser if given', () => {
-    expect(normalize('foo bar', { parse: v => 'bar foo' })).toBe('"bar foo"')
+    expect(normalize('foo bar', { parse: () => 'bar foo' })).toBe('"bar foo"')
   })
   it('should cache the result', () => {
     const parse = jest.fn(() => 'foo')

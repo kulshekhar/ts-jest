@@ -1,6 +1,7 @@
 // tslint:disable:max-line-length
 import * as fakers from '../__helpers__/fakers'
-import { __requireModule, Importer } from './importer'
+
+import { Importer, __requireModule } from './importer'
 
 const requireModule = jest.fn(
   mod =>
@@ -74,8 +75,7 @@ describe('babelCore', () => {
     expect(new Importer().babelCore(fakers.importReason())).toBe('@babel/core')
   })
   it('should fail with correct error message', () => {
-    expect(() => new Importer().babelCore(fakers.importReason()))
-      .toThrowErrorMatchingInlineSnapshot(`
+    expect(() => new Importer().babelCore(fakers.importReason())).toThrowErrorMatchingInlineSnapshot(`
 "Unable to load any of these modules: \\"babel-core\\", \\"@babel/core\\". [[BECAUSE]]. To fix it:
     • for Babel 7: \`npm i -D babel-jest 'babel-core@^7.0.0-0' @babel/core\` (or \`yarn add --dev babel-jest 'babel-core@^7.0.0-0' @babel/core\`)
     • for Babel 6: \`npm i -D babel-jest babel-core\` (or \`yarn add --dev babel-jest babel-core\`)"

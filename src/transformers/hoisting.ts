@@ -1,17 +1,18 @@
 // tslint:disable:curly
 // take care of including ONLY TYPES here, for the rest use `ts`
+import { LogContexts, LogLevels } from 'bs-logger'
 import {
-  Node,
+  Block,
   ExpressionStatement,
-  TransformationContext,
+  Node,
   SourceFile,
   Statement,
-  Visitor,
-  Block,
+  TransformationContext,
   Transformer,
+  Visitor,
 } from 'typescript'
+
 import { ConfigSet } from '../config/config-set'
-import { LogContexts, LogLevels } from 'bs-logger'
 
 /**
  * What methods of `jest` should we hoist
@@ -50,7 +51,7 @@ export function factory(cs: ConfigSet) {
    * @param ctx The typescript transformation context
    * @param sf The owning source file
    */
-  function createVisitor(ctx: TransformationContext, sf: SourceFile) {
+  function createVisitor(ctx: TransformationContext, _: SourceFile) {
     /**
      * Current block level
      */
@@ -100,10 +101,7 @@ export function factory(cs: ConfigSet) {
         // re-order children so that hoisted ones appear first
         // this is actually the main work of this transformer
         const block = resultNode as Block
-        block.statements = ts.createNodeArray([
-          ...hoisted[level],
-          ...block.statements,
-        ])
+        block.statements = ts.createNodeArray([...hoisted[level], ...block.statements])
       }
 
       // exit the level

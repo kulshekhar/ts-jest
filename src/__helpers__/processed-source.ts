@@ -1,22 +1,14 @@
-import { RawSourceMap } from 'source-map'
-import {
-  rewriteSourceMaps,
-  relativisePaths,
-  parseSource,
-  ParsedSourceWithMaps,
-} from './source-maps'
-import { ROOT } from './path'
 import { isAbsolute, relative } from 'path'
+import { RawSourceMap } from 'source-map'
+
+import { ROOT } from './path'
+import { ParsedSourceWithMaps, parseSource, relativisePaths, rewriteSourceMaps } from './source-maps'
 
 // tslint:disable-next-line:no-default-export
 export default class ProcessedSource {
   readonly filename: string
 
-  constructor(
-    readonly output: string,
-    filename: string,
-    readonly cwd: string = ROOT,
-  ) {
+  constructor(readonly output: string, filename: string, readonly cwd: string = ROOT) {
     if (isAbsolute(filename)) filename = relative(this.cwd, filename)
     this.filename = filename
   }
@@ -41,7 +33,6 @@ export default class ProcessedSource {
     return
   }
   get sourceMapsNormalizer() {
-    return (maps: RawSourceMap): RawSourceMap =>
-      relativisePaths(maps, this.cwd, '<cwd>/')
+    return (maps: RawSourceMap): RawSourceMap => relativisePaths(maps, this.cwd, '<cwd>/')
   }
 }

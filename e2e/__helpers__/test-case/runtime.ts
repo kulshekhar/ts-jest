@@ -1,26 +1,28 @@
-import { RunTestOptions, PreparedTest } from './types'
-import RunResult from './run-result'
-import { templateNameForPath } from './utils'
-import { join, relative, sep } from 'path'
-import * as Paths from '../../../scripts/lib/paths'
+import { sync as spawnSync } from 'cross-spawn'
 import {
-  existsSync,
-  readdirSync,
-  realpathSync,
   copySync,
-  statSync,
-  removeSync,
-  mkdirpSync,
-  symlinkSync,
-  writeFileSync,
   ensureSymlinkSync,
+  existsSync,
+  mkdirpSync,
   outputFileSync,
+  outputJsonSync,
   readFileSync,
   readJsonSync,
-  outputJsonSync,
+  readdirSync,
+  realpathSync,
+  removeSync,
+  statSync,
+  symlinkSync,
+  writeFileSync,
 } from 'fs-extra'
 import merge from 'lodash.merge'
-import { sync as spawnSync } from 'cross-spawn'
+import { join, relative, sep } from 'path'
+
+import * as Paths from '../../../scripts/lib/paths'
+
+import RunResult from './run-result'
+import { PreparedTest, RunTestOptions } from './types'
+import { templateNameForPath } from './utils'
 
 const TEMPLATE_EXCLUDED_ITEMS = ['node_modules', 'package-lock.json']
 
@@ -41,14 +43,9 @@ eval(process.__TS_JEST_EVAL);
 let __hooksSource: string
 function hooksSourceWith(vars: Record<string, any>): string {
   if (!__hooksSource) {
-    __hooksSource = readFileSync(
-      join(__dirname, '__hooks-source__.js.hbs'),
-      'utf8',
-    )
+    __hooksSource = readFileSync(join(__dirname, '__hooks-source__.js.hbs'), 'utf8')
   }
-  return __hooksSource.replace(/\{\{([^\}]+)\}\}/g, (_, key) =>
-    JSON.stringify(vars[key]),
-  )
+  return __hooksSource.replace(/\{\{([^\}]+)\}\}/g, (_, key) => JSON.stringify(vars[key]))
 }
 
 export function run(name: string, options: RunTestOptions = {}): RunResult {
@@ -88,12 +85,14 @@ export function run(name: string, options: RunTestOptions = {}): RunResult {
     } else {
       originalConfig = require(join(dir, 'package.json')).jest || {}
     }
-    cmdArgs.push('--config', JSON.stringify(merge(
-      {},
-      originalConfig,
-      options.jestConfig,
-      { globals: { 'ts-jest': options.tsJestConfig || {} } },
-    )))
+    cmdArgs.push(
+      '--config',
+      JSON.stringify(
+        merge({}, originalConfig, options.jestConfig, {
+          globals: { 'ts-jest': options.tsJestConfig || {} },
+        }),
+      ),
+    )
   }
 
   // run in band
@@ -109,10 +108,7 @@ export function run(name: string, options: RunTestOptions = {}): RunResult {
     ...env,
   }
   if (inject) {
-    const injected =
-      typeof inject === 'function'
-        ? `(${inject.toString()}).apply(this);`
-        : inject
+    const injected = typeof inject === 'function' ? `(${inject.toString()}).apply(this);` : inject
     mergedEnv.__TS_JEST_EVAL = injected
   }
   if (writeIo) {
@@ -126,10 +122,7 @@ export function run(name: string, options: RunTestOptions = {}): RunResult {
 
   // we need to copy each snapshot which does NOT exists in the source dir
   readdirSync(dir).forEach(item => {
-    if (
-      item === 'node_modules' ||
-      !statSync(join(dir, item)).isDirectory()
-    ) {
+    if (item === 'node_modules' || !statSync(join(dir, item)).isDirectory()) {
       return
     }
     const srcDir = join(sourceDir, item)
@@ -152,11 +145,7 @@ export function run(name: string, options: RunTestOptions = {}): RunResult {
   })
 }
 
-export function prepareTest(
-  name: string,
-  template: string,
-  options: RunTestOptions = {},
-): PreparedTest {
+export function prepareTest(name: string, template: string, options: RunTestOptions = {}): PreparedTest {
   const sourceDir = join(Paths.e2eSourceDir, name)
   // working directory is in the temp directory, different for each template name
   const caseWorkdir = join(Paths.e2eWorkDir, template, name)

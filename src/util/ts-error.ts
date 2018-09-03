@@ -1,7 +1,8 @@
-import { inspect } from 'util'
 import { BaseError } from 'make-error'
-import { Helps, Errors, interpolate } from './messages'
+import { inspect } from 'util'
+
 import { rootLogger } from './logger'
+import { Errors, Helps, interpolate } from './messages'
 
 const logger = rootLogger.child({ namespace: 'TSError' })
 

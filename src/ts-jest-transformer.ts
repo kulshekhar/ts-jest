@@ -1,11 +1,12 @@
-import { TsJestGlobalOptions } from './types'
-import { sha1 } from './util/sha1'
-import { JsonableValue } from './util/jsonable-value'
-import { ConfigSet } from './config/config-set'
-import { stringify, parse } from './util/json'
-import { inspect } from 'util'
 import { Logger } from 'bs-logger'
+import { inspect } from 'util'
+
+import { ConfigSet } from './config/config-set'
+import { TsJestGlobalOptions } from './types'
+import { parse, stringify } from './util/json'
+import { JsonableValue } from './util/jsonable-value'
 import { rootLogger } from './util/logger'
+import { sha1 } from './util/sha1'
 
 /**
  * @internal
@@ -18,8 +19,8 @@ interface ConfigSetIndexItem {
 }
 
 export class TsJestTransformer implements jest.Transformer {
-  private static _configSetsIndex: ConfigSetIndexItem[] = []
-  private static _lastTransformerId: number = 0
+  private static readonly _configSetsIndex: ConfigSetIndexItem[] = []
+  private static _lastTransformerId = 0
   static get lastTransformerId() {
     return TsJestTransformer._lastTransformerId
   }
@@ -49,21 +50,15 @@ export class TsJestTransformer implements jest.Transformer {
     let csi: ConfigSetIndexItem | undefined
     let jestConfigObj: jest.ProjectConfig
     if (typeof jestConfig === 'string') {
-      csi = TsJestTransformer._configSetsIndex.find(
-        cs => cs.jestConfig.serialized === jestConfig,
-      )
+      csi = TsJestTransformer._configSetsIndex.find(cs => cs.jestConfig.serialized === jestConfig)
       if (csi) return csi.configSet
       jestConfigObj = parse(jestConfig)
     } else {
-      csi = TsJestTransformer._configSetsIndex.find(
-        cs => cs.jestConfig.value === jestConfig,
-      )
+      csi = TsJestTransformer._configSetsIndex.find(cs => cs.jestConfig.value === jestConfig)
       if (csi) return csi.configSet
       // try to look-it up by stringified version
       const serialized = stringify(jestConfig)
-      csi = TsJestTransformer._configSetsIndex.find(
-        cs => cs.jestConfig.serialized === serialized,
-      )
+      csi = TsJestTransformer._configSetsIndex.find(cs => cs.jestConfig.serialized === serialized)
       if (csi) {
         // update the object so that we can find it later
         // this happens because jest first calls getCacheKey with stringified version of
@@ -90,11 +85,7 @@ export class TsJestTransformer implements jest.Transformer {
     jestConfig: jest.ProjectConfig,
     transformOptions?: jest.TransformOptions,
   ): jest.TransformedSource | string {
-    this.logger.debug(
-      { fileName: filePath, transformOptions },
-      'processing',
-      filePath,
-    )
+    this.logger.debug({ fileName: filePath, transformOptions }, 'processing', filePath)
     let result: string | jest.TransformedSource
     let source: string = input
 
@@ -122,14 +113,8 @@ export class TsJestTransformer implements jest.Transformer {
 
     // allows hooks (usefull for testing)
     if (hooks.afterProcess) {
-      this.logger.debug(
-        { fileName: filePath, hookName: 'afterProcess' },
-        'calling afterProcess hook',
-      )
-      const newResult = hooks.afterProcess(
-        [input, filePath, jestConfig, transformOptions],
-        result,
-      )
+      this.logger.debug({ fileName: filePath, hookName: 'afterProcess' }, 'calling afterProcess hook')
+      const newResult = hooks.afterProcess([input, filePath, jestConfig, transformOptions], result)
       if (newResult !== undefined) {
         return newResult
       }
@@ -154,11 +139,7 @@ export class TsJestTransformer implements jest.Transformer {
     jestConfigStr: string,
     transformOptions: { instrument?: boolean; rootDir?: string } = {},
   ): string {
-    this.logger.debug(
-      { fileName: filePath, transformOptions },
-      'computing cache key for',
-      filePath,
-    )
+    this.logger.debug({ fileName: filePath, transformOptions }, 'computing cache key for', filePath)
     const configs = this.configsFor(jestConfigStr)
     const { instrument = false } = transformOptions
     return sha1(

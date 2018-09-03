@@ -8,38 +8,35 @@
  * version of the `jest.ProjectConfig`, and then later it calls `process()`
  * with the complete, object version of it.
  */
-import { JsonableValue } from '../util/jsonable-value'
+import { Logger } from 'bs-logger'
+import { existsSync, readFileSync } from 'fs'
+import json5 from 'json5'
+import { dirname, isAbsolute, join, resolve } from 'path'
+import semver from 'semver'
+import { Diagnostic, FormatDiagnosticsHost, ParsedCommandLine } from 'typescript'
+
+import { version as myVersion } from '..'
+import { createCompiler } from '../compiler'
 import {
   BabelConfig,
+  BabelJestTransformer,
+  TTypeScript,
+  TsCompiler,
   TsJestConfig,
   TsJestGlobalOptions,
-  TTypeScript,
   TsJestHooksMap,
-  BabelJestTransformer,
-  TsCompiler,
 } from '../types'
-import { resolve, isAbsolute, join, dirname } from 'path'
-import { Memoize } from '../util/memoize'
 import { backportJestConfig } from '../util/backports'
-import { Errors, ImportReasons, interpolate } from '../util/messages'
-import json5 from 'json5'
-import { existsSync, readFileSync } from 'fs'
-import { importer } from '../util/importer'
-import {
-  Diagnostic,
-  FormatDiagnosticsHost,
-  ParsedCommandLine,
-} from 'typescript'
-import { TSError } from '../util/ts-error'
-import { sha1 } from '../util/sha1'
-import { stringify } from '../util/json'
-import { normalizeSlashes } from '../util/normalize-slashes'
-import { createCompiler } from '../compiler'
-import { version as myVersion } from '..'
-import semver from 'semver'
-import { rootLogger } from '../util/logger'
-import { Logger } from 'bs-logger'
 import { getPackageVersion } from '../util/get-package-version'
+import { importer } from '../util/importer'
+import { stringify } from '../util/json'
+import { JsonableValue } from '../util/jsonable-value'
+import { rootLogger } from '../util/logger'
+import { Memoize } from '../util/memoize'
+import { Errors, ImportReasons, interpolate } from '../util/messages'
+import { normalizeSlashes } from '../util/normalize-slashes'
+import { sha1 } from '../util/sha1'
+import { TSError } from '../util/ts-error'
 
 const logger = rootLogger.child({ namespace: 'config' })
 
@@ -86,20 +83,12 @@ const FORCE_COMPILER_OPTIONS = {
   sourceRoot: undefined,
 }
 
-const normalizeRegex = (
-  pattern: string | RegExp | undefined,
-): string | undefined => {
-  return pattern
-    ? typeof pattern === 'string'
-      ? pattern
-      : pattern.source
-    : undefined
+const normalizeRegex = (pattern: string | RegExp | undefined): string | undefined => {
+  return pattern ? (typeof pattern === 'string' ? pattern : pattern.source) : undefined
 }
 
 const toDiagnosticCode = (code: any): number | undefined => {
-  return code
-    ? parseInt(('' + code).trim().replace(/^TS/, ''), 10) || undefined
-    : undefined
+  return code ? parseInt(`${code}`.trim().replace(/^TS/, ''), 10) || undefined : undefined
 }
 
 const toDiagnosticCodeList = (items: any, into: number[] = []): number[] => {
@@ -128,13 +117,11 @@ export class ConfigSet {
   readonly logger: Logger
 
   constructor(
-    private _jestConfig: jest.ProjectConfig,
+    private readonly _jestConfig: jest.ProjectConfig,
     readonly parentOptions?: TsJestGlobalOptions,
     parentLogger?: Logger,
   ) {
-    this.logger = parentLogger
-      ? parentLogger.child({ namespace: 'config' })
-      : logger
+    this.logger = parentLogger ? parentLogger.child({ namespace: 'config' }) : logger
   }
 
   @Memoize()
@@ -161,17 +148,10 @@ export class ConfigSet {
     // tsconfig
     const { tsConfig: tsConfigOpt } = options
     let tsConfig: TsJestConfig['tsConfig']
-    if (
-      typeof tsConfigOpt === 'string' ||
-      tsConfigOpt == null ||
-      tsConfigOpt === true
-    ) {
+    if (typeof tsConfigOpt === 'string' || tsConfigOpt == null || tsConfigOpt === true) {
       tsConfig = {
         kind: 'file',
-        value:
-          typeof tsConfigOpt === 'string'
-            ? this.resolvePath(tsConfigOpt)
-            : undefined,
+        value: typeof tsConfigOpt === 'string' ? this.resolvePath(tsConfigOpt) : undefined,
       }
     } else if (typeof tsConfigOpt === 'object') {
       tsConfig = {
@@ -186,10 +166,7 @@ export class ConfigSet {
     if (typeof babelConfigOpt === 'string' || babelConfigOpt === true) {
       babelConfig = {
         kind: 'file',
-        value:
-          babelConfigOpt === true
-            ? undefined
-            : this.resolvePath(babelConfigOpt as string),
+        value: babelConfigOpt === true ? undefined : this.resolvePath(babelConfigOpt as string),
       }
     } else if (babelConfigOpt) {
       babelConfig = {
@@ -202,10 +179,7 @@ export class ConfigSet {
     let diagnostics: TsJestConfig['diagnostics']
     const { diagnostics: diagnosticsOpt = true } = options
     // messy list of stuff to ignore (will be casted later)
-    const ignoreList: any[] = [
-      IGNORE_DIAGNOSTIC_CODES,
-      process.env.TS_JEST_IGNORE_DIAGNOSTICS,
-    ]
+    const ignoreList: any[] = [IGNORE_DIAGNOSTIC_CODES, process.env.TS_JEST_IGNORE_DIAGNOSTICS]
 
     if (diagnosticsOpt === true || diagnosticsOpt == null) {
       diagnostics = { ignoreCodes: [], pretty: true }
@@ -227,9 +201,7 @@ export class ConfigSet {
     diagnostics.ignoreCodes = toDiagnosticCodeList(ignoreList)
 
     // stringifyContentPathRegex option
-    const stringifyContentPathRegex = normalizeRegex(
-      options.stringifyContentPathRegex,
-    )
+    const stringifyContentPathRegex = normalizeRegex(options.stringifyContentPathRegex)
 
     // parsed options
     const res: TsJestConfig = {
@@ -309,9 +281,7 @@ export class ConfigSet {
     }
 
     // loadOptions is from babel 7+, and OptionManager is backward compatible but deprecated 6 API
-    const { OptionManager, loadOptions, version } = importer.babelCore(
-      ImportReasons.BabelJest,
-    )
+    const { OptionManager, loadOptions, version } = importer.babelCore(ImportReasons.BabelJest)
     // cwd is only supported from babel >= 7
     if (version && semver.satisfies(version, '>=6 <7')) {
       delete base.cwd
@@ -338,9 +308,7 @@ export class ConfigSet {
     const { babel } = this
     if (!babel) return
     this.logger.debug('creating babel-jest transformer')
-    return importer
-      .babelJest(ImportReasons.BabelJest)
-      .createTransformer(babel) as BabelJestTransformer
+    return importer.babelJest(ImportReasons.BabelJest).createTransformer(babel) as BabelJestTransformer
   }
 
   @Memoize()
@@ -369,11 +337,7 @@ export class ConfigSet {
     return (diagnostics: Diagnostic[], filePath?: string): Diagnostic[] => {
       if (filePath && !shouldReportDiagnostic(filePath)) return []
       return diagnostics.filter(diagnostic => {
-        if (
-          diagnostic.file &&
-          diagnostic.file.fileName &&
-          !shouldReportDiagnostic(diagnostic.file.fileName)
-        ) {
+        if (diagnostic.file && diagnostic.file.fileName && !shouldReportDiagnostic(diagnostic.file.fileName)) {
           return false
         }
         return ignoreCodes.indexOf(diagnostic.code) === -1
@@ -460,11 +424,7 @@ export class ConfigSet {
     return !!process.env.TS_JEST_DOCTOR
   }
 
-  readTsConfig(
-    compilerOptions?: object,
-    project?: string | null,
-    noProject?: boolean | null,
-  ): ReadTsConfigResult {
+  readTsConfig(compilerOptions?: object, project?: string | null, noProject?: boolean | null): ReadTsConfigResult {
     let config = { compilerOptions: {} }
     let basePath = normalizeSlashes(this.cwd)
     let configFileName: string | undefined
@@ -480,11 +440,7 @@ export class ConfigSet {
         : ts.findConfigFile(normalizeSlashes(this.cwd), ts.sys.fileExists)
 
       if (configFileName) {
-        this.logger.debug(
-          { tsConfigFileName: configFileName },
-          'readTsConfig(): reading',
-          configFileName,
-        )
+        this.logger.debug({ tsConfigFileName: configFileName }, 'readTsConfig(): reading', configFileName)
         const result = ts.readConfigFile(configFileName, ts.sys.readFile)
 
         // Return diagnostics.
@@ -514,13 +470,7 @@ export class ConfigSet {
       ...FORCE_COMPILER_OPTIONS,
     }
 
-    const result = ts.parseJsonConfigFileContent(
-      config,
-      ts.sys,
-      basePath,
-      undefined,
-      configFileName,
-    )
+    const result = ts.parseJsonConfigFileContent(config, ts.sys, basePath, undefined, configFileName)
 
     // Target ES5 output by default (instead of ES3).
     if (result.options.target === undefined) {
@@ -537,7 +487,7 @@ export class ConfigSet {
     return { input, resolved: result }
   }
 
-  resolvePath(inputPath: string, noFailIfMissing: boolean = false): string {
+  resolvePath(inputPath: string, noFailIfMissing = false): string {
     let path: string = inputPath
     if (path.startsWith('<rootDir>')) {
       path = resolve(this.rootDir, path.substr(9))
@@ -545,17 +495,9 @@ export class ConfigSet {
       path = resolve(this.cwd, path)
     }
     if (!noFailIfMissing && !existsSync(path)) {
-      throw new Error(
-        interpolate(Errors.FileNotFound, { inputPath, resolvedPath: path }),
-      )
+      throw new Error(interpolate(Errors.FileNotFound, { inputPath, resolvedPath: path }))
     }
-    this.logger.debug(
-      { fromPath: inputPath, toPath: path },
-      'resolved path from',
-      inputPath,
-      'to',
-      path,
-    )
+    this.logger.debug({ fromPath: inputPath, toPath: path }, 'resolved path from', inputPath, 'to', path)
     return path
   }
 

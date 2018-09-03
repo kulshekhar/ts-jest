@@ -1,11 +1,13 @@
-import { ConfigSet, MATCH_NOTHING, IGNORE_DIAGNOSTIC_CODES } from './config-set'
+import { resolve } from 'path'
+import { ModuleKind, ScriptTarget } from 'typescript'
+
 import * as fakers from '../__helpers__/fakers'
+import { mocked } from '../__helpers__/mocks'
 import { TsJestGlobalOptions } from '../types'
 import * as _backports from '../util/backports'
-import { mocked } from '../__helpers__/mocks'
-import { ScriptTarget, ModuleKind } from 'typescript'
-import { resolve } from 'path'
 import { normalizeSlashes } from '../util/normalize-slashes'
+
+import { ConfigSet, IGNORE_DIAGNOSTIC_CODES, MATCH_NOTHING } from './config-set'
 
 jest.mock('../util/backports')
 
@@ -29,10 +31,7 @@ function createConfigSet({
   parentConfig?: TsJestGlobalOptions
   resolve?: ((path: string) => string) | null
 } = {}) {
-  const cs = new ConfigSet(
-    fakers.jestConfig(jestConfig, tsJestConfig),
-    parentConfig,
-  )
+  const cs = new ConfigSet(fakers.jestConfig(jestConfig, tsJestConfig), parentConfig)
   if (resolve) {
     jest.spyOn(cs, 'resolvePath').mockImplementation(resolve)
   }
@@ -50,15 +49,12 @@ describe('jest', () => {
   })
 
   it('should merge parent config if any', () => {
-    expect(
-      createConfigSet({ parentConfig: { __parent: true } as any }).jest,
-    ).toMatchSnapshot()
+    expect(createConfigSet({ parentConfig: { __parent: true } as any }).jest).toMatchSnapshot()
   })
 })
 
 describe('tsJest', () => {
-  const get = (tsJest?: TsJestGlobalOptions) =>
-    createConfigSet({ tsJestConfig: tsJest }).tsJest
+  const get = (tsJest?: TsJestGlobalOptions) => createConfigSet({ tsJestConfig: tsJest }).tsJest
 
   it('should return correct defaults', () => {
     expect(get()).toMatchSnapshot()
@@ -177,18 +173,11 @@ describe('tsJest', () => {
   describe('stringifyContentPathRegex', () => {
     it('should be correct for default value', () => {
       expect(get().stringifyContentPathRegex).toBeUndefined()
-      expect(
-        get({ stringifyContentPathRegex: null as any })
-          .stringifyContentPathRegex,
-      ).toBeUndefined()
+      expect(get({ stringifyContentPathRegex: null as any }).stringifyContentPathRegex).toBeUndefined()
     })
     it('should be normalized to a string', () => {
-      expect(
-        get({ stringifyContentPathRegex: /abc/ }).stringifyContentPathRegex,
-      ).toBe('abc')
-      expect(
-        get({ stringifyContentPathRegex: 'abc' }).stringifyContentPathRegex,
-      ).toBe('abc')
+      expect(get({ stringifyContentPathRegex: /abc/ }).stringifyContentPathRegex).toBe('abc')
+      expect(get({ stringifyContentPathRegex: 'abc' }).stringifyContentPathRegex).toBe('abc')
     })
   }) // stringifyContentPathRegex
 
@@ -215,10 +204,8 @@ describe('tsJest', () => {
 }) // tsJest
 
 describe('typescript', () => {
-  const get = (
-    tsJest?: TsJestGlobalOptions,
-    parentConfig?: TsJestGlobalOptions,
-  ) => createConfigSet({ tsJestConfig: tsJest, parentConfig }).typescript
+  const get = (tsJest?: TsJestGlobalOptions, parentConfig?: TsJestGlobalOptions) =>
+    createConfigSet({ tsJestConfig: tsJest, parentConfig }).typescript
 
   it('should read file list from default tsconfig', () => {
     // since the default is to lookup for tsconfig,
@@ -227,22 +214,18 @@ describe('typescript', () => {
   })
 
   it('should include compiler config from `tsConfig` option key', () => {
-    expect(get({ tsConfig: { baseUrl: 'src/config' } }).options.baseUrl).toBe(
-      normalizeSlashes(__dirname),
-    )
+    expect(get({ tsConfig: { baseUrl: 'src/config' } }).options.baseUrl).toBe(normalizeSlashes(__dirname))
   })
 
   it('should include compiler config from base config', () => {
-    expect(
-      get(void 0, { tsConfig: { target: 'esnext' as any } }).options.target,
-    ).toBe(ScriptTarget.ESNext)
+    expect(get(void 0, { tsConfig: { target: 'esnext' as any } }).options.target).toBe(ScriptTarget.ESNext)
   })
 
   it('should override some options', () => {
-    expect(
-      get({ tsConfig: { module: 'esnext' as any, inlineSources: false } })
-        .options,
-    ).toMatchObject({ module: ModuleKind.CommonJS, inlineSources: true })
+    expect(get({ tsConfig: { module: 'esnext' as any, inlineSources: false } }).options).toMatchObject({
+      module: ModuleKind.CommonJS,
+      inlineSources: true,
+    })
   })
 
   it('should be able to read extends', () => {
@@ -257,20 +240,3 @@ describe('typescript', () => {
     })
   })
 })
-
-describe.skip('rootDir', () => {})
-describe.skip('cwd', () => {})
-describe.skip('babel', () => {})
-describe.skip('compilerModule', () => {})
-describe.skip('babelJestTransformer', () => {})
-describe.skip('tsCompiler', () => {})
-describe.skip('hooks', () => {})
-describe.skip('filterDiagnostics', () => {})
-describe.skip('shouldReportDiagnostic', () => {})
-describe.skip('shouldStringifyContent', () => {})
-describe.skip('createTsError', () => {})
-describe.skip('tsCacheDir', () => {})
-describe.skip('readTsConfig', () => {})
-describe.skip('resolvePath', () => {})
-describe.skip('jsonValue', () => {})
-describe.skip('cacheKey', () => {})

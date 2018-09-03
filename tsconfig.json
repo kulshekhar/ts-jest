@@ -30,13 +30,16 @@
     ]
   },
   "include": [
-    "src",
-    "scripts/",
-    "test/**/*.spec.ts",
-    "test/__helpers__",
-    "e2e/__tests__",
-    "e2e/__serializer__",
     "e2e/__helpers__",
-    "scripts/lib/paths.d.ts"
+    "e2e/__serializer__",
+    "e2e/__tests__",
+    "scripts/",
+    "src"
+  ],
+  "exclude": [
+    "e2e/__cases__",
+    "e2e/__templates__",
+    "e2e/__workdir_synlink__",
+    "node_modules"
   ]
 }

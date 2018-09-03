@@ -1,5 +1,5 @@
-import { configureTestCase } from '../__helpers__/test-case'
 import { allValidPackageSets } from '../__helpers__/templates'
+import { configureTestCase } from '../__helpers__/test-case'
 
 describe('Const enum', () => {
   const testCase = configureTestCase('const-enum')

@@ -1,7 +1,8 @@
-import { satisfies, Range } from 'semver'
-import { interpolate, Errors } from './messages'
+import { Range, satisfies } from 'semver'
+
 import { getPackageVersion } from './get-package-version'
 import { rootLogger } from './logger'
+import { Errors, interpolate } from './messages'
 
 const logger = rootLogger.child({ namespace: 'versions' })
 
@@ -24,25 +25,14 @@ export const VersionCheckers = {
   jest: createVersionChecker('jest', ExpectedVersions.Jest),
   typescript: createVersionChecker('typescript', ExpectedVersions.TypeScript),
   babelJest: createVersionChecker('babel-jest', ExpectedVersions.BabelJest),
-  babelCoreLegacy: createVersionChecker(
-    'babel-core',
-    ExpectedVersions.BabelCoreLegacy,
-  ),
+  babelCoreLegacy: createVersionChecker('babel-core', ExpectedVersions.BabelCoreLegacy),
   babelCore: createVersionChecker('@babel/core', ExpectedVersions.BabelCore),
 }
 
 type CheckVersionAction = 'warn' | 'throw'
 
-function checkVersion(
-  name: string,
-  expectedRange: string,
-  action?: Exclude<CheckVersionAction, 'throw'>,
-): boolean
-function checkVersion(
-  name: string,
-  expectedRange: string,
-  action: 'throw',
-): true | never
+function checkVersion(name: string, expectedRange: string, action?: Exclude<CheckVersionAction, 'throw'>): boolean
+function checkVersion(name: string, expectedRange: string, action: 'throw'): true | never
 function checkVersion(
   name: string,
   expectedRange: string,
@@ -61,14 +51,11 @@ function checkVersion(
   )
   if (!action || success) return success
 
-  const message = interpolate(
-    version ? Errors.UntestedDependencyVersion : Errors.MissingDependency,
-    {
-      module: name,
-      actualVersion: version || '??',
-      expectedVersion: rangeToHumanString(expectedRange),
-    },
-  )
+  const message = interpolate(version ? Errors.UntestedDependencyVersion : Errors.MissingDependency, {
+    module: name,
+    actualVersion: version || '??',
+    expectedVersion: rangeToHumanString(expectedRange),
+  })
   if (action === 'warn') {
     logger.warn(message)
   } else if (action === 'throw') {
@@ -82,10 +69,7 @@ function rangeToHumanString(versionRange: string): string {
   return new Range(versionRange).toString()
 }
 
-function createVersionChecker(
-  moduleName: string,
-  expectedVersion: string,
-): VersionChecker {
+function createVersionChecker(moduleName: string, expectedVersion: string): VersionChecker {
   let memo: boolean | undefined
   const warn = () => {
     if (memo !== undefined) return memo
