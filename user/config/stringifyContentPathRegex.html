@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
 
   <link rel="stylesheet" href="/ts-jest/assets/main.css">
-  <link rel="canonical" href="/ts-jest/user/config/isolatedModules.html">
+  <link rel="canonical" href="/ts-jest/user/config/stringifyContentPathRegex.html">
   <link rel="alternate" type="application/rss+xml" title="TSJest" href="/ts-jest/feed.xml">
 
   
@@ -17,15 +17,15 @@
   
 
   <!-- Begin Jekyll SEO tag v2.5.0 -->
-<title>Isolated Modules option | TSJest</title>
+<title>Stringify content option | TSJest</title>
 <meta name="generator" content="Jekyll v3.8.3" />
-<meta property="og:title" content="Isolated Modules option" />
+<meta property="og:title" content="Stringify content option" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="TSJest (ts-jest) is a TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript." />
 <meta property="og:description" content="TSJest (ts-jest) is a TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript." />
 <meta property="og:site_name" content="TSJest" />
 <script type="application/ld+json">
-{"url":"/ts-jest/user/config/isolatedModules.html","description":"TSJest (ts-jest) is a TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript.","headline":"Isolated Modules option","@type":"WebPage","@context":"http://schema.org"}</script>
+{"url":"/ts-jest/user/config/stringifyContentPathRegex.html","description":"TSJest (ts-jest) is a TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript.","headline":"Stringify content option","@type":"WebPage","@context":"http://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
 
@@ -125,25 +125,37 @@
         <article>
 
   <header class="pt-4 pb-3">
-    <h1>Isolated Modules option</h1>
+    <h1>Stringify content option</h1>
   </header>
 
   <div id="content">
-    <p>By default TSJest uses TypeScript compiler in the context of a project (yours), with full type-checking and features. But it can also be used to compile each file separatly, as an isolated module. That’s what the <code class="highlighter-rouge">isolatedModules</code> option (which defaults to <code class="highlighter-rouge">false</code>) comes for.</p>
+    <p>The <code class="highlighter-rouge">stringifyContentPathRegex</code> option has been kept for backward compatibility of <code class="highlighter-rouge">__HTML_TRANSFORM__</code>, and should actually be another simple Jest processor. It’s a regular expression pattern used to match the path of file to be transformed. If it matches, the file will be exported as a module exporting its content.</p>
 
-<p>You’ll loose type-checking ability and some features such as <code class="highlighter-rouge">const enum</code>, but in the case you plan on using Jest with the cache disabled (<code class="highlighter-rouge">jest --no-cache</code>), your tests will then run much faster.</p>
+<p>Let’s say for example that you have a file <code class="highlighter-rouge">foo.ts</code> which contains <code class="highlighter-rouge">export default "bar"</code>, and your <code class="highlighter-rouge">stringifyContentPathRegex</code> is set to <code class="highlighter-rouge">foo\\.ts$</code>, the resulting module won’t be the result of compiling <code class="highlighter-rouge">foo.ts</code> source, but instead it’ll be a module which exports the string <code class="highlighter-rouge">"export default \"bar\""</code>.</p>
 
-<p>Here is how to disable type-checking and compile each file as an isolated module:</p>
+<p><strong>CAUTION</strong>: Whatever file(s) you want to match with <code class="highlighter-rouge">stringifyContentPathRegex</code> pattern, you must ensure the Jest <code class="highlighter-rouge">transform</code> option pointing to <code class="highlighter-rouge">ts-jest</code> matches them. You may also have to add the extendson(s) of this/those file(s) to <code class="highlighter-rouge">moduleFileExtensions</code> Jest option.</p>
 
 <h3 id="example">Example:</h3>
 
+<p>In the <code class="highlighter-rouge">jest.config.js</code> version, you could do as in the <code class="highlighter-rouge">package.json</code> version of the config, but extending from the preset will ensure more compatiblity without any changes when updating.</p>
+
 <div class="row"><div class="col-md-6">
     <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// jest.config.js</span>
+<span class="kd">const</span> <span class="p">{</span> <span class="nx">jestPreset</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'ts-jest'</span><span class="p">);</span>
+
 <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
   <span class="c1">// [...]</span>
-  <span class="na">globals</span><span class="p">:</span> <span class="p">{</span>
+  <span class="na">moduleFileExtensions</span><span class="p">:</span> <span class="p">[</span>
+    <span class="p">...</span><span class="nx">jestPreset</span><span class="p">.</span><span class="nx">moduleFileExtensions</span><span class="p">,</span>
+    <span class="s1">'html'</span>
+  <span class="p">],</span>
+  <span class="na">transform</span><span class="p">:</span> <span class="p">{</span>
+    <span class="p">...</span><span class="nx">jestPreset</span><span class="p">.</span><span class="nx">transform</span><span class="p">,</span>
+    <span class="s1">'</span><span class="err">\\</span><span class="s1">.html$'</span><span class="p">:</span> <span class="s1">'ts-jest'</span>
+  <span class="p">}</span>
+  <span class="nl">globals</span><span class="p">:</span> <span class="p">{</span>
     <span class="s1">'ts-jest'</span><span class="p">:</span> <span class="p">{</span>
-      <span class="na">isolatedModules</span><span class="p">:</span> <span class="kc">true</span>
+      <span class="na">stringifyContentPathRegex</span><span class="p">:</span> <span class="sr">/</span><span class="se">\.</span><span class="sr">html$/</span>
     <span class="p">}</span>
   <span class="p">}</span>
 <span class="p">};</span>
@@ -153,9 +165,13 @@
 <span class="p">{</span>
   <span class="c1">// [...]</span>
   <span class="s2">"jest"</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">"moduleFileExtensions"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"js"</span><span class="p">,</span> <span class="s2">"ts"</span><span class="p">,</span> <span class="s2">"html"</span><span class="p">]</span>
+    <span class="s2">"transform"</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s2">"</span><span class="err">\\</span><span class="s2">.(html|ts|js)$"</span><span class="p">:</span> <span class="s2">"ts-jest"</span>
+    <span class="p">}</span>
     <span class="s2">"globals"</span><span class="p">:</span> <span class="p">{</span>
       <span class="s2">"ts-jest"</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">"isolatedModules"</span><span class="p">:</span> <span class="kc">false</span>
+        <span class="s2">"stringifyContentPathRegex"</span><span class="p">:</span> <span class="s2">"</span><span class="err">\\</span><span class="s2">.html$"</span>
       <span class="p">}</span>
     <span class="p">}</span>
   <span class="p">}</span>
