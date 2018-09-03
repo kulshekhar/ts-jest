@@ -8,6 +8,7 @@ const buildOptions = () => ({
   context: {
     [LogContexts.package]: 'ts-jest',
     [LogContexts.logLevel]: LogLevels.trace,
+    version: require('../../package.json').version,
   },
   targets: process.env.TS_JEST_LOG || undefined,
 })
