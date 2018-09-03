@@ -69,3 +69,5 @@ tslint.json
 
 # Github Pages
 docs
+
+commitlint.config.js

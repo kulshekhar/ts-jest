@@ -1,70 +1,77 @@
 {
-  "defaultSeverity": "error",
   "extends": [
-    "tslint:recommended"
+    "tslint:recommended",
+    "tslint-config-prettier",
+    "tslint-plugin-prettier"
   ],
+  "linterOptions": {
+    "exclude": [
+      "dist/**/*",
+      "**/node_modules/**/*",
+      "e2e/__cases__/**/*"
+    ]
+  },
   "rules": {
-    "no-default-export": true,
-    "trailing-comma": [
-      true,
-      {
-        "multiline": {
-          "objects": "always",
-          "arrays": "always",
-          "functions": "always",
-          "typeLiterals": "ignore"
-        },
-        "esSpecCompliant": true
-      }
+    "arrow-return-shorthand": [
+      true
     ],
-    "no-shadowed-variable": false,
+    "class-name": true,
     "curly": [
       true,
       "ignore-same-line"
     ],
-    "variable-name": [
-      true,
-      "ban-keywords",
-      "check-format",
-      "allow-leading-underscore"
+    "encoding": true,
+    "interface-name": [
+      false
     ],
-    "arrow-parens": false,
-    "quotemark": [
+    "interface-over-type-literal": true,
+    "max-classes-per-file": false,
+    "member-access": [
       true,
-      "single",
-      "jsx-double",
-      "avoid-escape"
+      "no-public"
     ],
+    "no-bitwise": false,
+    "no-boolean-literal-compare": true,
+    "no-duplicate-imports": true,
+    "no-empty": [
+      true,
+      "allow-empty-catch"
+    ],
+    "no-empty-interface": false,
+    "no-for-in-array": true,
+    "no-inferrable-types": true,
+    "no-invalid-template-strings": true,
+    "no-return-await": true,
+    "no-shadowed-variable": false,
+    "no-string-throw": true,
+    "no-var-keyword": true,
+    "object-literal-sort-keys": false,
+    "ordered-imports": [
+      true,
+      {
+        "grouped-imports": true,
+        "import-sources-order": "lowercase-last",
+        "named-imports-order": "lowercase-last"
+      }
+    ],
+    "prefer-const": true,
+    "prefer-for-of": false,
+    "prefer-function-over-method": true,
+    "prefer-object-spread": true,
+    "prefer-readonly": true,
+    "prefer-template": true,
+    "prettier": true,
     "semicolon": [
       true,
       "never"
     ],
-    "interface-name": [
+    "switch-default": true,
+    "variable-name": [
       true,
-      "never-prefix"
-    ],
-    "ordered-imports": false,
-    "align": false,
-    "object-literal-key-quotes": [
-      true,
-      "as-needed"
-    ],
-    "object-literal-sort-keys": false,
-    "no-console": [
-      true,
-      "debug",
-      "info",
-      "time",
-      "timeEnd",
-      "trace"
-    ],
-    "no-empty": false,
-    "member-access": false
-  },
-  "linterOptions": {
-    "exclude": [
-      "dist/**/*",
-      "**/node_modules/**/*"
+      "allow-leading-underscore",
+      "ban-keywords",
+      "check-format",
+      "allow-pascal-case"
     ]
   }
 }

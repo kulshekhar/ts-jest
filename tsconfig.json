@@ -6,20 +6,28 @@
     "experimentalDecorators": true,
     "importHelpers": true,
     "inlineSourceMap": true,
-    "lib": ["es2015", "es2016.array.include"],
+    "lib": [
+      "es2015",
+      "es2016.array.include"
+    ],
     "module": "commonjs",
     "moduleResolution": "node",
     "noEmitOnError": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitAny": true,
     "noImplicitReturns": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
     "removeComments": false,
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "sourceMap": false,
     "strict": true,
     "target": "es5",
-    "types": ["jest", "node"],
+    "types": [
+      "jest",
+      "node"
+    ]
   },
   "include": [
     "src",
@@ -29,6 +37,6 @@
     "e2e/__tests__",
     "e2e/__serializer__",
     "e2e/__helpers__",
-    "scripts/lib/paths.d.ts",
+    "scripts/lib/paths.d.ts"
   ]
 }
