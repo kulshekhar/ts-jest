@@ -29,11 +29,12 @@
     "doc:build-commit": "npm run doc:build && cd docs/_site && git add --all && git commit --",
     "prepare": "npm run build",
     "prepublishOnly": "npm run test",
+    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0",
     "commitmsg": "commitlint -E GIT_PARAMS",
     "precommit": "lint-staged",
     "postcommit": "git reset",
     "preversion": "npm run test",
-    "version": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0 && git add CHANGELOG.md"
+    "version": "npm run changelog && git add CHANGELOG.md"
   },
   "repository": {
     "type": "git",
