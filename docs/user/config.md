@@ -11,21 +11,21 @@ In most of the case, simply adding `preset: 'ts-jest'` to your Jest config shoul
 
 <div class="row"><div class="col-md-6" markdown="block">
 ```js
-// package.json
+// jest.config.js
+module.exports = {
+  // [...]
+  preset: 'ts-jest'
+};
+```
+</div><div class="col-md-6" markdown="block">
+```js
+// OR package.json
 {
   // [...]
   "jest": {
     "preset": "ts-jest"
   }
 }
-```
-</div><div class="col-md-6" markdown="block">
-```js
-// jest.config.js
-module.exports = {
-  // [...]
-  preset: 'ts-jest'
-};
 ```
 </div></div>
 
@@ -53,7 +53,19 @@ All configration of TSJest specific options are located under `globals.ts-jest` 
 
 <div class="row"><div class="col-md-6" markdown="block">
 ```js
-// package.json
+// jest.config.js
+module.exports = {
+  // [...]
+  globals: {
+    'ts-jest': {
+      // TSJest configuration goes here
+    }
+  }
+};
+```
+</div><div class="col-md-6" markdown="block">
+```js
+// OR package.json
 {
   // [...]
   "jest": {
@@ -65,27 +77,15 @@ All configration of TSJest specific options are located under `globals.ts-jest` 
   }
 }
 ```
-</div><div class="col-md-6" markdown="block">
-```js
-// jest.config.js
-module.exports = {
-  // [...]
-  globals: {
-    'ts-jest': {
-      // TSJest configuration goes here
-    }
-  }
-};
-```
 </div></div>
 
 ### Options
 
 All options have default values which should fit most of the projects.
 
-- **`compiler`**: TypeScript module to use as compiler.
-- **`tsConfig`**: TypeScript compiler related configuration.
-- **`isolatedModules`**: Enables/disables the TypeScript language service.
-- **`diagnostics`**: Diagnostics related configuration.
-- **`babelConfig`**: Babel(Jest) related configuration.
-- **`stringifyContentPathRegex`**: Configure which file(s) will become a module returning its content.
+- [**`compiler`**: TypeScript module to use as compiler](config/compiler).
+- [**`tsConfig`**: TypeScript compiler related configuration.](config/tsConfig)
+- [**`isolatedModules`**: Enables/disables the TypeScript language service.](config/isolatedModules)
+- [**`diagnostics`**: Diagnostics related configuration.](config/diagnostics)
+- [**`babelConfig`**: Babel(Jest) related configuration.](config/babelConfig)
+- [**`stringifyContentPathRegex`**: Configure which file(s) will become a module returning its content.](config/stringifyContentPathRegex)
