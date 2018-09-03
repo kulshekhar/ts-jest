@@ -17,8 +17,12 @@ Object {
 `;
 
 exports[`backportJestConfig with "globals.__TRANSFORM_HTML__" set to false should wran the user 1`] = `
-"[level:40] \\"[jest-config].globals.__TRANSFORM_HTML__\\" is deprecated, use \\"[jest-config].globals.ts-jest.stringifyContentPathRegex\\" instead.
-"
+Array [
+  "[level:40] \\"[jest-config].globals.__TRANSFORM_HTML__\\" is deprecated, use \\"[jest-config].globals.ts-jest.stringifyContentPathRegex\\" instead.
+",
+  "[level:40] Your Jest configuration is outdated. Use the CLI to help migrating it: ts-jest config:migrate <config-file>.
+",
+]
 `;
 
 exports[`backportJestConfig with "globals.__TRANSFORM_HTML__" set to true should have changed the config correctly: before 1`] = `
@@ -40,8 +44,12 @@ Object {
 `;
 
 exports[`backportJestConfig with "globals.__TRANSFORM_HTML__" set to true should wran the user 1`] = `
-"[level:40] \\"[jest-config].globals.__TRANSFORM_HTML__\\" is deprecated, use \\"[jest-config].globals.ts-jest.stringifyContentPathRegex\\" instead.
-"
+Array [
+  "[level:40] \\"[jest-config].globals.__TRANSFORM_HTML__\\" is deprecated, use \\"[jest-config].globals.ts-jest.stringifyContentPathRegex\\" instead.
+",
+  "[level:40] Your Jest configuration is outdated. Use the CLI to help migrating it: ts-jest config:migrate <config-file>.
+",
+]
 `;
 
 exports[`backportJestConfig with "globals.__TS_CONFIG__" set to { foo: 'bar' } should have changed the config correctly: before 1`] = `
@@ -67,8 +75,12 @@ Object {
 `;
 
 exports[`backportJestConfig with "globals.__TS_CONFIG__" set to { foo: 'bar' } should wran the user 1`] = `
-"[level:40] \\"[jest-config].globals.__TS_CONFIG__\\" is deprecated, use \\"[jest-config].globals.ts-jest.tsConfig\\" instead.
-"
+Array [
+  "[level:40] \\"[jest-config].globals.__TS_CONFIG__\\" is deprecated, use \\"[jest-config].globals.ts-jest.tsConfig\\" instead.
+",
+  "[level:40] Your Jest configuration is outdated. Use the CLI to help migrating it: ts-jest config:migrate <config-file>.
+",
+]
 `;
 
 exports[`backportJestConfig with "globals.ts-jest.enableTsDiagnostics" set to '\\\\.spec\\\\.ts$' should have changed the config correctly: before 1`] = `
@@ -94,8 +106,12 @@ Object {
 `;
 
 exports[`backportJestConfig with "globals.ts-jest.enableTsDiagnostics" set to '\\\\.spec\\\\.ts$' should wran the user 1`] = `
-"[level:40] \\"[jest-config].globals.ts-jest.enableTsDiagnostics\\" is deprecated, use \\"[jest-config].globals.ts-jest.diagnostics\\" instead.
-"
+Array [
+  "[level:40] \\"[jest-config].globals.ts-jest.enableTsDiagnostics\\" is deprecated, use \\"[jest-config].globals.ts-jest.diagnostics\\" instead.
+",
+  "[level:40] Your Jest configuration is outdated. Use the CLI to help migrating it: ts-jest config:migrate <config-file>.
+",
+]
 `;
 
 exports[`backportJestConfig with "globals.ts-jest.enableTsDiagnostics" set to false should have changed the config correctly: before 1`] = `
@@ -119,8 +135,12 @@ Object {
 `;
 
 exports[`backportJestConfig with "globals.ts-jest.enableTsDiagnostics" set to false should wran the user 1`] = `
-"[level:40] \\"[jest-config].globals.ts-jest.enableTsDiagnostics\\" is deprecated, use \\"[jest-config].globals.ts-jest.diagnostics\\" instead.
-"
+Array [
+  "[level:40] \\"[jest-config].globals.ts-jest.enableTsDiagnostics\\" is deprecated, use \\"[jest-config].globals.ts-jest.diagnostics\\" instead.
+",
+  "[level:40] Your Jest configuration is outdated. Use the CLI to help migrating it: ts-jest config:migrate <config-file>.
+",
+]
 `;
 
 exports[`backportJestConfig with "globals.ts-jest.enableTsDiagnostics" set to true should have changed the config correctly: before 1`] = `
@@ -144,8 +164,12 @@ Object {
 `;
 
 exports[`backportJestConfig with "globals.ts-jest.enableTsDiagnostics" set to true should wran the user 1`] = `
-"[level:40] \\"[jest-config].globals.ts-jest.enableTsDiagnostics\\" is deprecated, use \\"[jest-config].globals.ts-jest.diagnostics\\" instead.
-"
+Array [
+  "[level:40] \\"[jest-config].globals.ts-jest.enableTsDiagnostics\\" is deprecated, use \\"[jest-config].globals.ts-jest.diagnostics\\" instead.
+",
+  "[level:40] Your Jest configuration is outdated. Use the CLI to help migrating it: ts-jest config:migrate <config-file>.
+",
+]
 `;
 
 exports[`backportJestConfig with "globals.ts-jest.skipBabel" set to false should have changed the config correctly: before 1`] = `
@@ -169,8 +193,12 @@ Object {
 `;
 
 exports[`backportJestConfig with "globals.ts-jest.skipBabel" set to false should wran the user 1`] = `
-"[level:40] \\"[jest-config].globals.ts-jest.skipBabel\\" is deprecated, use \\"[jest-config].globals.ts-jest.babelConfig\\" instead.
-"
+Array [
+  "[level:40] \\"[jest-config].globals.ts-jest.skipBabel\\" is deprecated, use \\"[jest-config].globals.ts-jest.babelConfig\\" instead.
+",
+  "[level:40] Your Jest configuration is outdated. Use the CLI to help migrating it: ts-jest config:migrate <config-file>.
+",
+]
 `;
 
 exports[`backportJestConfig with "globals.ts-jest.skipBabel" set to true should have changed the config correctly: before 1`] = `
@@ -192,8 +220,12 @@ Object {
 `;
 
 exports[`backportJestConfig with "globals.ts-jest.skipBabel" set to true should wran the user 1`] = `
-"[level:40] \\"[jest-config].globals.ts-jest.skipBabel\\" is deprecated, use \\"[jest-config].globals.ts-jest.babelConfig\\" instead.
-"
+Array [
+  "[level:40] \\"[jest-config].globals.ts-jest.skipBabel\\" is deprecated, use \\"[jest-config].globals.ts-jest.babelConfig\\" instead.
+",
+  "[level:40] Your Jest configuration is outdated. Use the CLI to help migrating it: ts-jest config:migrate <config-file>.
+",
+]
 `;
 
 exports[`backportJestConfig with "globals.ts-jest.tsConfigFile" set to 'tsconfig.build.json' should have changed the config correctly: before 1`] = `
@@ -217,8 +249,12 @@ Object {
 `;
 
 exports[`backportJestConfig with "globals.ts-jest.tsConfigFile" set to 'tsconfig.build.json' should wran the user 1`] = `
-"[level:40] \\"[jest-config].globals.ts-jest.tsConfigFile\\" is deprecated, use \\"[jest-config].globals.ts-jest.tsConfig\\" instead.
-"
+Array [
+  "[level:40] \\"[jest-config].globals.ts-jest.tsConfigFile\\" is deprecated, use \\"[jest-config].globals.ts-jest.tsConfig\\" instead.
+",
+  "[level:40] Your Jest configuration is outdated. Use the CLI to help migrating it: ts-jest config:migrate <config-file>.
+",
+]
 `;
 
 exports[`backportJestConfig with "globals.ts-jest.typeCheck" set to false should have changed the config correctly: before 1`] = `
@@ -242,8 +278,12 @@ Object {
 `;
 
 exports[`backportJestConfig with "globals.ts-jest.typeCheck" set to false should wran the user 1`] = `
-"[level:40] \\"[jest-config].globals.ts-jest.typeCheck\\" is deprecated, use \\"[jest-config].globals.ts-jest.isolatedModules\\" instead.
-"
+Array [
+  "[level:40] \\"[jest-config].globals.ts-jest.typeCheck\\" is deprecated, use \\"[jest-config].globals.ts-jest.isolatedModules\\" instead.
+",
+  "[level:40] Your Jest configuration is outdated. Use the CLI to help migrating it: ts-jest config:migrate <config-file>.
+",
+]
 `;
 
 exports[`backportJestConfig with "globals.ts-jest.typeCheck" set to true should have changed the config correctly: before 1`] = `
@@ -267,8 +307,12 @@ Object {
 `;
 
 exports[`backportJestConfig with "globals.ts-jest.typeCheck" set to true should wran the user 1`] = `
-"[level:40] \\"[jest-config].globals.ts-jest.typeCheck\\" is deprecated, use \\"[jest-config].globals.ts-jest.isolatedModules\\" instead.
-"
+Array [
+  "[level:40] \\"[jest-config].globals.ts-jest.typeCheck\\" is deprecated, use \\"[jest-config].globals.ts-jest.isolatedModules\\" instead.
+",
+  "[level:40] Your Jest configuration is outdated. Use the CLI to help migrating it: ts-jest config:migrate <config-file>.
+",
+]
 `;
 
 exports[`backportJestConfig with "globals.ts-jest.useBabelrc" set to false should have changed the config correctly: before 1`] = `
@@ -292,9 +336,13 @@ Object {
 `;
 
 exports[`backportJestConfig with "globals.ts-jest.useBabelrc" set to false should wran the user 1`] = `
-"[level:40] \\"[jest-config].globals.ts-jest.useBabelrc\\" is deprecated, use \\"[jest-config].globals.ts-jest.babelConfig\\" instead.
+Array [
+  "[level:40] \\"[jest-config].globals.ts-jest.useBabelrc\\" is deprecated, use \\"[jest-config].globals.ts-jest.babelConfig\\" instead.
     ↳ See \`babel-jest\` related issue: https://github.com/facebook/jest/issues/3845
-"
+",
+  "[level:40] Your Jest configuration is outdated. Use the CLI to help migrating it: ts-jest config:migrate <config-file>.
+",
+]
 `;
 
 exports[`backportJestConfig with "globals.ts-jest.useBabelrc" set to true should have changed the config correctly: before 1`] = `
@@ -318,7 +366,11 @@ Object {
 `;
 
 exports[`backportJestConfig with "globals.ts-jest.useBabelrc" set to true should wran the user 1`] = `
-"[level:40] \\"[jest-config].globals.ts-jest.useBabelrc\\" is deprecated, use \\"[jest-config].globals.ts-jest.babelConfig\\" instead.
+Array [
+  "[level:40] \\"[jest-config].globals.ts-jest.useBabelrc\\" is deprecated, use \\"[jest-config].globals.ts-jest.babelConfig\\" instead.
     ↳ See \`babel-jest\` related issue: https://github.com/facebook/jest/issues/3845
-"
+",
+  "[level:40] Your Jest configuration is outdated. Use the CLI to help migrating it: ts-jest config:migrate <config-file>.
+",
+]
 `;

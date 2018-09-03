@@ -17,3 +17,8 @@ declare module 'jest-config' {
 }
 
 declare module 'babel-core/lib/transformation/file'
+
+declare module 'yargs-parser' {
+  import yargs from 'yargs'
+  export = yargs.parse
+}

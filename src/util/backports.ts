@@ -1,6 +1,6 @@
 import { LogContexts, Logger } from 'bs-logger'
 
-import { Deprecateds, interpolate } from './messages'
+import { Deprecateds, Helps, interpolate } from './messages'
 
 const context = { [LogContexts.namespace]: 'backports' }
 
@@ -13,7 +13,9 @@ export const backportJestConfig = <T extends jest.InitialOptions | jest.ProjectC
   const { globals = {} } = (config || {}) as any
   const { 'ts-jest': tsJest = {} } = globals as any
   const mergeTsJest: any = {}
+  let hadWarnings = false
   const warnConfig = (oldPath: string, newPath: string, note?: string) => {
+    hadWarnings = true
     logger.warn(
       context,
       interpolate(note ? Deprecateds.ConfigOptionWithNote : Deprecateds.ConfigOption, {
@@ -87,6 +89,11 @@ export const backportJestConfig = <T extends jest.InitialOptions | jest.ProjectC
       mergeTsJest.babelConfig = true
     }
     delete tsJest.skipBabel
+  }
+
+  // if we had some warnings we can inform the user about the CLI tool
+  if (hadWarnings) {
+    logger.warn(context, Helps.MigrateConfigUsingCLI)
   }
 
   return {
