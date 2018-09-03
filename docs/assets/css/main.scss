@@ -1,0 +1,7 @@
+---
+---
+
+$baseurl: "{{ site.baseurl }}";
+$fa-font-path: $baseurl + "/assets/fonts/font-awesome";
+
+@import 'main';

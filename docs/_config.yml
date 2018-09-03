@@ -31,6 +31,7 @@ theme: minima-reboot
 plugins:
   # - jekyll-feed
   - jekyll-plantuml
+  - jekyll-font-awesome-sass
 
 # Exclude from processing.
 # The following items will not be processed, by default. Create a custom list
@@ -47,7 +48,8 @@ plugins:
 keep_files:
   - .gitkeep
   - .git
-
+font-awesome:
+  assets: true
 defaults:
   # _pages
   - scope:
