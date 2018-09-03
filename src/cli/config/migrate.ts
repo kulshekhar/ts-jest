@@ -1,4 +1,4 @@
-import { Logger } from 'bs-logger'
+import { createLogger } from 'bs-logger'
 import stringifyJson from 'fast-json-stable-stringify'
 import { existsSync } from 'fs'
 import { stringify as stringifyJson5 } from 'json5'
@@ -9,7 +9,8 @@ import { CliCommand } from '..'
 import { createJestPreset } from '../../config/create-jest-preset'
 import { backportJestConfig } from '../../util/backports'
 
-export const run: CliCommand = async (args: Arguments, logger: Logger) => {
+export const run: CliCommand = async (args: Arguments /*, logger: Logger*/) => {
+  const nullLogger = createLogger({ targets: [] })
   const file = args._[0]
   const filePath = join(process.cwd(), file)
   if (!existsSync(filePath)) {
@@ -28,7 +29,7 @@ export const run: CliCommand = async (args: Arguments, logger: Logger) => {
 
   // migrate
   // first we backport our options
-  const migratedConfig = backportJestConfig(logger, actualConfig)
+  const migratedConfig = backportJestConfig(nullLogger, actualConfig)
   // then we check if we can use `preset`
   if (!migratedConfig.preset && args.jestPreset) {
     migratedConfig.preset = 'ts-jest'
