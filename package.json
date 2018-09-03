@@ -31,7 +31,9 @@
     "prepublishOnly": "npm run test",
     "commitmsg": "commitlint -E GIT_PARAMS",
     "precommit": "lint-staged",
-    "postcommit": "git reset"
+    "postcommit": "git reset",
+    "preversion": "npm run test",
+    "version": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0 && git add CHANGELOG.md"
   },
   "repository": {
     "type": "git",
@@ -83,6 +85,7 @@
     "@types/mkdirp": "^0.5.2",
     "@types/node": "^10.9.4",
     "@types/semver": "^5.5.0",
+    "conventional-changelog-cli": "^2.0.5",
     "cross-spawn": "^6.0.5",
     "doctoc": "^1.3.1",
     "eslint": "^5.4.0",

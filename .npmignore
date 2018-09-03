@@ -67,6 +67,7 @@ tsconfig.json
 .travis.yml
 tsconfig.build.json
 tslint.json
+.npmrc
 
 # Github Pages
 docs
