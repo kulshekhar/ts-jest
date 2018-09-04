@@ -1,9 +1,10 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "sourceMap": true,
-    "inlineSources": true,
+    "sourceMap": false,
+    "inlineSources": false,
     "inlineSourceMap": false,
+    "removeComments": true,
     "outDir": "dist",
     "rootDir": "src",
   },

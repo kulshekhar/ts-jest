@@ -4,7 +4,7 @@
     "downlevelIteration": true,
     "esModuleInterop": true,
     "experimentalDecorators": true,
-    "importHelpers": true,
+    "importHelpers": false,
     "inlineSourceMap": true,
     "lib": [
       "es2015",
