@@ -56,7 +56,7 @@
   "bugs": {
     "url": "https://github.com/kulshekhar/ts-jest/issues"
   },
-  "homepage": "https://github.com/kulshekhar/ts-jest#readme",
+  "homepage": "https://kulshekhar.github.io/ts-jest",
   "dependencies": {
     "bs-logger": "^0.2.5",
     "buffer-from": "^1.1.1",
