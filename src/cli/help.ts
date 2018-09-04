@@ -6,8 +6,9 @@ Usage:
   ts-jest command [options] [...args]
 
 Commands:
-  help [command]        Show this help, or help about a command
+  config:init           Creates initial Jest configuration
   config:migrate        Migrates a given Jest configuration
+  help [command]        Show this help, or help about a command
 
 Example:
   ts-jest help config:migrate

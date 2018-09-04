@@ -89,3 +89,19 @@ All options have default values which should fit most of the projects.
 - [**`diagnostics`**: Diagnostics related configuration.](config/diagnostics)
 - [**`babelConfig`**: Babel(Jest) related configuration.](config/babelConfig)
 - [**`stringifyContentPathRegex`**: Configure which file(s) will become a module returning its content.](config/stringifyContentPathRegex)
+
+### Upgrading
+
+You can use the `config:migrate` tool of TSJest CLI if you're coming from an older version to help you migrate your Jest configuration.
+
+<div class="row"><div class="col-md-6" markdown="block">
+If you're using `jest.config.json`:
+```sh
+node ./node_modules/.bin/ts-jest config:migrate jest.config.js
+```
+</div><div class="col-md-6" markdown="block">
+If you're using `jest` config property of `package.json`:
+```sh
+node ./node_modules/.bin/ts-jest config:migrate package.json
+```
+</div></div>

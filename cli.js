@@ -1,3 +1,3 @@
 #!/usr/bin/env node
 
-require('./dist/cli')
+require('./dist/cli').processArgv()
