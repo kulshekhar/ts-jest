@@ -3789,6 +3789,36 @@ readers do not read off random characters that represent icons */
   position: static;
   width: auto; }
 
+table {
+  /* Remove spacing between table cells (from Normalize.css) */
+  border-collapse: collapse;
+  border-spacing: 0;
+  empty-cells: show;
+  border: 1px solid #cbcbcb; }
+  table td, table th {
+    border-left: 1px solid #cbcbcb;
+    /*  inner column border */
+    border-width: 0 0 0 1px;
+    font-size: inherit;
+    margin: 0;
+    overflow: visible;
+    /*to make ths where the title is really long work*/
+    padding: 0.5em 1em;
+    /* cell padding */ }
+    table td:first-child, table th:first-child {
+      border-left-width: 0; }
+    table td code.highlighter-rouge, table th code.highlighter-rouge {
+      background-color: transparent; }
+  table thead {
+    background-color: #e0e0e0;
+    color: #000;
+    text-align: left;
+    vertical-align: bottom; }
+  table td {
+    background-color: transparent; }
+  table tr:nth-child(2n-1) td {
+    background-color: #f2f2f2; }
+
 h2[id], h3[id], h4[id], h5[id], h6[id] {
   position: relative; }
   h2[id] > a.auto-anchor, h3[id] > a.auto-anchor, h4[id] > a.auto-anchor, h5[id] > a.auto-anchor, h6[id] > a.auto-anchor {

@@ -226,7 +226,7 @@
     <tr>
       <td style="text-align: right"><a href="config/compiler"><strong><code class="highlighter-rouge">compiler</code></strong></a></td>
       <td>TypeScript module to use as compiler.</td>
-      <td><code class="highlighter-rouge">'typescript'</code></td>
+      <td><code class="highlighter-rouge">"typescript"</code></td>
     </tr>
     <tr>
       <td style="text-align: right"><a href="config/tsConfig"><strong><code class="highlighter-rouge">tsConfig</code></strong></a></td>
@@ -262,19 +262,15 @@
 
 <div class="row"><div class="col-md-6">
 
-    <p>If you’re using <code class="highlighter-rouge">jest.config.json</code>:</p>
-    <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>node ./node_modules/.bin/ts-jest config:migrate jest.config.js
+    <p><em>If you’re using <code class="highlighter-rouge">jest.config.json</code>:</em></p>
+    <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npx ts-jest config:migrate jest.config.js
 </code></pre></div>    </div>
 
   </div><div class="col-md-6">
 
-    <p>If you’re using <code class="highlighter-rouge">jest</code> config property of <code class="highlighter-rouge">package.json</code>:</p>
-    <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>node ./node_modules/.bin/ts-jest config:migrate package.json
+    <p><em>If you’re using <code class="highlighter-rouge">jest</code> config property of <code class="highlighter-rouge">package.json</code>:</em></p>
+    <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npx ts-jest config:migrate package.json
 </code></pre></div>    </div>
-
-    <blockquote>
-      <p><strong>Pro tip</strong>: <code class="highlighter-rouge">node ./node_modules/.bin/ts-jest</code> can be replaced with <code class="highlighter-rouge">npx ts-jest</code> (or <code class="highlighter-rouge">yarn ts-jest</code> if you are using <code class="highlighter-rouge">yarn</code>)</p>
-    </blockquote>
 
   </div></div>
 
