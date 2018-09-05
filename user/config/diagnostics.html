@@ -165,6 +165,7 @@
 <h4 id="disabling-diagnostics">Disabling diagnostics:</h4>
 
 <div class="row"><div class="col-md-6">
+
     <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// jest.config.js</span>
 <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
   <span class="c1">// [...]</span>
@@ -175,7 +176,9 @@
   <span class="p">}</span>
 <span class="p">};</span>
 </code></pre></div>    </div>
+
   </div><div class="col-md-6">
+
     <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// OR package.json</span>
 <span class="p">{</span>
   <span class="c1">// [...]</span>
@@ -188,6 +191,7 @@
   <span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div>    </div>
+
   </div></div>
 
 <h4 id="advanced-options">Advanced options:</h4>
@@ -197,6 +201,7 @@
 <p>Assuming all your test files ends with <code class="highlighter-rouge">.spec.ts</code> or <code class="highlighter-rouge">.test.ts</code>, using the following config will enable error reporting only for those files:</p>
 
 <div class="row"><div class="col-md-6">
+
     <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// jest.config.js</span>
 <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
   <span class="c1">// [...]</span>
@@ -209,7 +214,9 @@
   <span class="p">}</span>
 <span class="p">};</span>
 </code></pre></div>    </div>
+
   </div><div class="col-md-6">
+
     <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// OR package.json</span>
 <span class="p">{</span>
   <span class="c1">// [...]</span>
@@ -224,6 +231,7 @@
   <span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div>    </div>
+
   </div></div>
 
 <h5 id="ignoring-some-error-codes">Ignoring some error codes:</h5>
@@ -231,18 +239,15 @@
 <p>All TypeScript error codes can be found <a href="https://github.com/Microsoft/TypeScript/blob/master/src/compiler/diagnosticMessages.json">there</a>. The <code class="highlighter-rouge">ignoreCodes</code> option accepts this values:</p>
 <ol>
   <li>A single <code class="highlighter-rouge">number</code> (example: <code class="highlighter-rouge">1009</code>): unique error code to ignore</li>
-  <li>A <code class="highlighter-rouge">string</code>, can be:
-    <ol>
-      <li>Unique code (example <code class="highlighter-rouge">"1009"</code>, <code class="highlighter-rouge">"TS1009"</code> or <code class="highlighter-rouge">"ts1009"</code>)</li>
-      <li>List of the above (example: <code class="highlighter-rouge">"1009, TS2571, 4072 ,ts6031 "</code>)</li>
-    </ol>
-  </li>
-  <li>An <code class="highlighter-rouge">array</code> of one or more from <code class="highlighter-rouge">1</code> or <code class="highlighter-rouge">2.1</code> (example: <code class="highlighter-rouge">[1009, "TS2571", "6031"]</code>)</li>
+  <li>A <code class="highlighter-rouge">string</code> with a code (example <code class="highlighter-rouge">"1009"</code>, <code class="highlighter-rouge">"TS1009"</code> or <code class="highlighter-rouge">"ts1009"</code>)</li>
+  <li>A <code class="highlighter-rouge">string</code> with a list of the above (example: <code class="highlighter-rouge">"1009, TS2571, 4072 ,ts6031 "</code>)</li>
+  <li>An <code class="highlighter-rouge">array</code> of one or more from <code class="highlighter-rouge">1</code> or <code class="highlighter-rouge">3</code> (example: <code class="highlighter-rouge">[1009, "TS2571", "6031"]</code>)</li>
 </ol>
 
 <p>It’s advised to use concise types along the list of course:</p>
 
 <div class="row"><div class="col-md-6">
+
     <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// jest.config.js</span>
 <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
   <span class="c1">// [...]</span>
@@ -255,7 +260,9 @@
   <span class="p">}</span>
 <span class="p">};</span>
 </code></pre></div>    </div>
+
   </div><div class="col-md-6">
+
     <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// OR package.json</span>
 <span class="p">{</span>
   <span class="c1">// [...]</span>
@@ -270,6 +277,7 @@
   <span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div>    </div>
+
   </div></div>
 
   </div>

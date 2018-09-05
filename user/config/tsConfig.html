@@ -142,6 +142,7 @@
 <p>The path should be relative to the current working directory where you start Jest from. You can also use <code class="highlighter-rouge">&lt;rootDir&gt;</code> in the path, or use an absolute path (this last one is strongly not recommanded).</p>
 
 <div class="row"><div class="col-md-6">
+
     <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// jest.config.js</span>
 <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
   <span class="c1">// [...]</span>
@@ -152,7 +153,9 @@
   <span class="p">}</span>
 <span class="p">};</span>
 </code></pre></div>    </div>
+
   </div><div class="col-md-6">
+
     <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// OR package.json</span>
 <span class="p">{</span>
   <span class="c1">// [...]</span>
@@ -165,6 +168,7 @@
   <span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div>    </div>
+
   </div></div>
 
 <h4 id="inline-compiler-options">Inline compiler options:</h4>
@@ -172,6 +176,7 @@
 <p>Refer to the <a href="https://www.typescriptlang.org/docs/handbook/compiler-options.html">TypeScript compiler options</a> to know what can be used. It’s basically the same that you’d put in your <code class="highlighter-rouge">tsconfig.json</code>’s <code class="highlighter-rouge">compilerOptions</code>.</p>
 
 <div class="row"><div class="col-md-6">
+
     <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// jest.config.js</span>
 <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
   <span class="c1">// [...]</span>
@@ -184,7 +189,9 @@
   <span class="p">}</span>
 <span class="p">};</span>
 </code></pre></div>    </div>
+
   </div><div class="col-md-6">
+
     <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// OR package.json</span>
 <span class="p">{</span>
   <span class="c1">// [...]</span>
@@ -199,6 +206,7 @@
   <span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div>    </div>
+
   </div></div>
 
 <h4 id="disable-auto-lookup">Disable auto-lookup:</h4>
@@ -206,6 +214,7 @@
 <p>By default TSJest will try to find the <code class="highlighter-rouge">tsconfig.json</code> in your project. But you may want to not use it at all and keep TypeScript default options. You can achieve this by setting <code class="highlighter-rouge">tsConfig</code> to <code class="highlighter-rouge">false</code>.</p>
 
 <div class="row"><div class="col-md-6">
+
     <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// jest.config.js</span>
 <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
   <span class="c1">// [...]</span>
@@ -216,7 +225,9 @@
   <span class="p">}</span>
 <span class="p">};</span>
 </code></pre></div>    </div>
+
   </div><div class="col-md-6">
+
     <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// OR package.json</span>
 <span class="p">{</span>
   <span class="c1">// [...]</span>
@@ -229,6 +240,7 @@
   <span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div>    </div>
+
   </div></div>
 
   </div>

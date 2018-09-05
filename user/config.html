@@ -138,13 +138,16 @@
 <p>In most of the case, simply adding <code class="highlighter-rouge">preset: 'ts-jest'</code> to your Jest config should be enough starting using TypeScript with Jest (suposing you did add <code class="highlighter-rouge">ts-jest</code> to your dev. npm dependencies of course):</p>
 
 <div class="row"><div class="col-md-6">
+
     <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// jest.config.js</span>
 <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
   <span class="c1">// [...]</span>
   <span class="na">preset</span><span class="p">:</span> <span class="s1">'ts-jest'</span>
 <span class="p">};</span>
 </code></pre></div>    </div>
+
   </div><div class="col-md-6">
+
     <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// OR package.json</span>
 <span class="p">{</span>
   <span class="c1">// [...]</span>
@@ -153,6 +156,7 @@
   <span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div>    </div>
+
   </div></div>
 
 <h3 id="advanced">Advanced</h3>
@@ -177,6 +181,7 @@
 <p>All configration of TSJest specific options are located under <code class="highlighter-rouge">globals.ts-jest</code> path of your Jest config:</p>
 
 <div class="row"><div class="col-md-6">
+
     <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// jest.config.js</span>
 <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
   <span class="c1">// [...]</span>
@@ -187,7 +192,9 @@
   <span class="p">}</span>
 <span class="p">};</span>
 </code></pre></div>    </div>
+
   </div><div class="col-md-6">
+
     <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// OR package.json</span>
 <span class="p">{</span>
   <span class="c1">// [...]</span>
@@ -200,20 +207,76 @@
   <span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div>    </div>
+
   </div></div>
 
 <h3 id="options">Options</h3>
 
-<p>All options have default values which should fit most of the projects.</p>
+<p>All options have default values which should fit most of the projects. Click on the option’s name to see details and example(s).</p>
 
-<ul>
-  <li><a href="config/compiler"><strong><code class="highlighter-rouge">compiler</code></strong>: TypeScript module to use as compiler</a>.</li>
-  <li><a href="config/tsConfig"><strong><code class="highlighter-rouge">tsConfig</code></strong>: TypeScript compiler related configuration.</a></li>
-  <li><a href="config/isolatedModules"><strong><code class="highlighter-rouge">isolatedModules</code></strong>: Enables/disables the TypeScript language service.</a></li>
-  <li><a href="config/diagnostics"><strong><code class="highlighter-rouge">diagnostics</code></strong>: Diagnostics related configuration.</a></li>
-  <li><a href="config/babelConfig"><strong><code class="highlighter-rouge">babelConfig</code></strong>: Babel(Jest) related configuration.</a></li>
-  <li><a href="config/stringifyContentPathRegex"><strong><code class="highlighter-rouge">stringifyContentPathRegex</code></strong>: Configure which file(s) will become a module returning its content.</a></li>
-</ul>
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: right">Option</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: right"><a href="config/compiler"><strong><code class="highlighter-rouge">compiler</code></strong></a></td>
+      <td>TypeScript module to use as compiler.</td>
+      <td><code class="highlighter-rouge">'typescript'</code></td>
+    </tr>
+    <tr>
+      <td style="text-align: right"><a href="config/tsConfig"><strong><code class="highlighter-rouge">tsConfig</code></strong></a></td>
+      <td>TypeScript compiler related configuration.</td>
+      <td><em>auto</em></td>
+    </tr>
+    <tr>
+      <td style="text-align: right"><a href="config/isolatedModules"><strong><code class="highlighter-rouge">isolatedModules</code></strong></a></td>
+      <td>Enables/disables the TypeScript language service</td>
+      <td><code class="highlighter-rouge">false</code></td>
+    </tr>
+    <tr>
+      <td style="text-align: right"><a href="config/diagnostics"><strong><code class="highlighter-rouge">diagnostics</code></strong></a></td>
+      <td>Diagnostics related configuration.</td>
+      <td><code class="highlighter-rouge">true</code></td>
+    </tr>
+    <tr>
+      <td style="text-align: right"><a href="config/babelConfig"><strong><code class="highlighter-rouge">babelConfig</code></strong></a></td>
+      <td>Babel(Jest) related configuration.</td>
+      <td><em>disabled</em></td>
+    </tr>
+    <tr>
+      <td style="text-align: right"><a href="config/stringifyContentPathRegex"><strong><code class="highlighter-rouge">stringifyContentPathRegex</code></strong></a></td>
+      <td>Configure which file(s) will become a module returning its content.</td>
+      <td><em>disabled</em></td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="upgrading">Upgrading</h3>
+
+<p>You can use the <code class="highlighter-rouge">config:migrate</code> tool of TSJest CLI if you’re coming from an older version to help you migrate your Jest configuration.</p>
+
+<div class="row"><div class="col-md-6">
+
+    <p>If you’re using <code class="highlighter-rouge">jest.config.json</code>:</p>
+    <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>node ./node_modules/.bin/ts-jest config:migrate jest.config.js
+</code></pre></div>    </div>
+
+  </div><div class="col-md-6">
+
+    <p>If you’re using <code class="highlighter-rouge">jest</code> config property of <code class="highlighter-rouge">package.json</code>:</p>
+    <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>node ./node_modules/.bin/ts-jest config:migrate package.json
+</code></pre></div>    </div>
+
+    <blockquote>
+      <p><strong>Pro tip</strong>: <code class="highlighter-rouge">node ./node_modules/.bin/ts-jest</code> can be replaced with <code class="highlighter-rouge">npx ts-jest</code> (or <code class="highlighter-rouge">yarn ts-jest</code> if you are using <code class="highlighter-rouge">yarn</code>)</p>
+    </blockquote>
+
+  </div></div>
 
   </div>
 

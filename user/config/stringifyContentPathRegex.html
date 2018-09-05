@@ -140,6 +140,7 @@
 <p>In the <code class="highlighter-rouge">jest.config.js</code> version, you could do as in the <code class="highlighter-rouge">package.json</code> version of the config, but extending from the preset will ensure more compatiblity without any changes when updating.</p>
 
 <div class="row"><div class="col-md-6">
+
     <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// jest.config.js</span>
 <span class="kd">const</span> <span class="p">{</span> <span class="nx">jestPreset</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'ts-jest'</span><span class="p">);</span>
 
@@ -160,7 +161,9 @@
   <span class="p">}</span>
 <span class="p">};</span>
 </code></pre></div>    </div>
+
   </div><div class="col-md-6">
+
     <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// OR package.json</span>
 <span class="p">{</span>
   <span class="c1">// [...]</span>
@@ -177,6 +180,7 @@
   <span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div>    </div>
+
   </div></div>
 
   </div>
