@@ -93,12 +93,12 @@ All options have default values which should fit most of the projects. Click on 
 
 | Option | Description | Default |
 |---:|---|---|
-| [**`compiler`**](config/compiler) | TypeScript module to use as compiler. | `'typescript'` |
+| [**`compiler`**](config/compiler) | TypeScript module to use as compiler. | `"typescript"` |
 | [**`tsConfig`**](config/tsConfig) | TypeScript compiler related configuration. | _auto_ |
 | [**`isolatedModules`**](config/isolatedModules) | Enables/disables the TypeScript language service | `false` |
 | [**`diagnostics`**](config/diagnostics) | Diagnostics related configuration. | `true` |
 | [**`babelConfig`**](config/babelConfig) | Babel(Jest) related configuration. | _disabled_ |
-| [**`stringifyContentPathRegex`**](config/stringifyContentPathRegex) | Configure which file(s) will become a module returning its content. | _disabled_
+| [**`stringifyContentPathRegex`**](config/stringifyContentPathRegex) | Configure which file(s) will become a module returning its content. | _disabled_ |
 
 ### Upgrading
 
@@ -106,18 +106,16 @@ You can use the `config:migrate` tool of TSJest CLI if you're coming from an old
 
 <div class="row"><div class="col-md-6" markdown="block">
 
-If you're using `jest.config.json`:
+_If you're using `jest.config.json`:_
 ```sh
-node ./node_modules/.bin/ts-jest config:migrate jest.config.js
+npx ts-jest config:migrate jest.config.js
 ```
 
 </div><div class="col-md-6" markdown="block">
 
-If you're using `jest` config property of `package.json`:
+_If you're using `jest` config property of `package.json`:_
 ```sh
-node ./node_modules/.bin/ts-jest config:migrate package.json
+npx ts-jest config:migrate package.json
 ```
-
-> **Pro tip**: `node ./node_modules/.bin/ts-jest` can be replaced with `npx ts-jest` (or `yarn ts-jest` if you are using `yarn`)
 
 </div></div>
