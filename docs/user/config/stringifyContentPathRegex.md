@@ -13,6 +13,7 @@ Let's say for example that you have a file `foo.ts` which contains `export defau
 In the `jest.config.js` version, you could do as in the `package.json` version of the config, but extending from the preset will ensure more compatiblity without any changes when updating.
 
 <div class="row"><div class="col-md-6" markdown="block">
+
 ```js
 // jest.config.js
 const { jestPreset } = require('ts-jest');
@@ -34,7 +35,9 @@ module.exports = {
   }
 };
 ```
+
 </div><div class="col-md-6" markdown="block">
+
 ```js
 // OR package.json
 {
@@ -52,4 +55,5 @@ module.exports = {
   }
 }
 ```
+
 </div></div>

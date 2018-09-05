@@ -15,6 +15,7 @@ If you need to use defaults and force TSJest to use the defaults even if there i
 The path should be relative to the current working directory where you start Jest from. You can also use `<rootDir>` in the path, or use an absolute path (this last one is strongly not recommanded).
 
 <div class="row"><div class="col-md-6" markdown="block">
+
 ```js
 // jest.config.js
 module.exports = {
@@ -26,7 +27,9 @@ module.exports = {
   }
 };
 ```
+
 </div><div class="col-md-6" markdown="block">
+
 ```js
 // OR package.json
 {
@@ -40,6 +43,7 @@ module.exports = {
   }
 }
 ```
+
 </div></div>
 
 #### Inline compiler options:
@@ -47,6 +51,7 @@ module.exports = {
 Refer to the [TypeScript compiler options](https://www.typescriptlang.org/docs/handbook/compiler-options.html) to know what can be used. It's basically the same that you'd put in your `tsconfig.json`'s `compilerOptions`.
 
 <div class="row"><div class="col-md-6" markdown="block">
+
 ```js
 // jest.config.js
 module.exports = {
@@ -60,7 +65,9 @@ module.exports = {
   }
 };
 ```
+
 </div><div class="col-md-6" markdown="block">
+
 ```js
 // OR package.json
 {
@@ -76,6 +83,7 @@ module.exports = {
   }
 }
 ```
+
 </div></div>
 
 #### Disable auto-lookup:
@@ -83,6 +91,7 @@ module.exports = {
 By default TSJest will try to find the `tsconfig.json` in your project. But you may want to not use it at all and keep TypeScript default options. You can achieve this by setting `tsConfig` to `false`.
 
 <div class="row"><div class="col-md-6" markdown="block">
+
 ```js
 // jest.config.js
 module.exports = {
@@ -94,7 +103,9 @@ module.exports = {
   }
 };
 ```
+
 </div><div class="col-md-6" markdown="block">
+
 ```js
 // OR package.json
 {
@@ -108,4 +119,5 @@ module.exports = {
   }
 }
 ```
+
 </div></div>

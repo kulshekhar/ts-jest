@@ -11,6 +11,7 @@ If you use a custom compiler, such as `ttypescript` for example, be sure its API
 ### Example:
 
 <div class="row"><div class="col-md-6" markdown="block">
+
 ```js
 // jest.config.js
 module.exports = {
@@ -22,7 +23,9 @@ module.exports = {
   }
 };
 ```
+
 </div><div class="col-md-6" markdown="block">
+
 ```js
 // OR package.json
 {
@@ -36,4 +39,5 @@ module.exports = {
   }
 }
 ```
+
 </div></div>

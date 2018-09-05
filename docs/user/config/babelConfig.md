@@ -14,6 +14,7 @@ The option is `babelConfig` and it works pretty much as the `tsConfig` option, e
 #### Use default `babelrc` file:
 
 <div class="row"><div class="col-md-6" markdown="block">
+
 ```js
 // jest.config.js
 module.exports = {
@@ -25,7 +26,9 @@ module.exports = {
   }
 };
 ```
+
 </div><div class="col-md-6" markdown="block">
+
 ```js
 // OR package.json
 {
@@ -39,6 +42,7 @@ module.exports = {
   }
 }
 ```
+
 </div></div>
 
 #### Path to a `balelrc` file:
@@ -46,6 +50,7 @@ module.exports = {
 The path should be relative to the current working directory where you start Jest from. You can also use `<rootDir>` in the path, or use an absolute path (this last one is strongly not recommanded).
 
 <div class="row"><div class="col-md-6" markdown="block">
+
 ```js
 // jest.config.js
 module.exports = {
@@ -57,7 +62,9 @@ module.exports = {
   }
 };
 ```
+
 </div><div class="col-md-6" markdown="block">
+
 ```js
 // OR package.json
 {
@@ -71,6 +78,7 @@ module.exports = {
   }
 }
 ```
+
 </div></div>
 
 #### Inline compiler options:
@@ -78,6 +86,7 @@ module.exports = {
 Refer to the [Babel options](https://babeljs.io/docs/en/next/options) to know what can be used there.
 
 <div class="row"><div class="col-md-6" markdown="block">
+
 ```js
 // jest.config.js
 module.exports = {
@@ -92,7 +101,9 @@ module.exports = {
   }
 };
 ```
+
 </div><div class="col-md-6" markdown="block">
+
 ```js
 // OR package.json
 {
@@ -109,4 +120,5 @@ module.exports = {
   }
 }
 ```
+
 </div></div>

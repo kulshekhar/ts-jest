@@ -31,6 +31,7 @@ The option's value can also accpet an object for more advanced configuration. Ea
 #### Disabling diagnostics:
 
 <div class="row"><div class="col-md-6" markdown="block">
+
 ```js
 // jest.config.js
 module.exports = {
@@ -42,7 +43,9 @@ module.exports = {
   }
 };
 ```
+
 </div><div class="col-md-6" markdown="block">
+
 ```js
 // OR package.json
 {
@@ -56,6 +59,7 @@ module.exports = {
   }
 }
 ```
+
 </div></div>
 
 #### Advanced options:
@@ -65,6 +69,7 @@ module.exports = {
 Assuming all your test files ends with `.spec.ts` or `.test.ts`, using the following config will enable error reporting only for those files:
 
 <div class="row"><div class="col-md-6" markdown="block">
+
 ```js
 // jest.config.js
 module.exports = {
@@ -78,7 +83,9 @@ module.exports = {
   }
 };
 ```
+
 </div><div class="col-md-6" markdown="block">
+
 ```js
 // OR package.json
 {
@@ -94,20 +101,21 @@ module.exports = {
   }
 }
 ```
+
 </div></div>
 
 ##### Ignoring some error codes:
 
 All TypeScript error codes can be found [there](https://github.com/Microsoft/TypeScript/blob/master/src/compiler/diagnosticMessages.json). The `ignoreCodes` option accepts this values:
 1. A single `number` (example: `1009`): unique error code to ignore
-2. A `string`, can be:
-    1. Unique code (example `"1009"`, `"TS1009"` or `"ts1009"`)
-    2. List of the above (example: `"1009, TS2571, 4072 ,ts6031 "`)
-3. An `array` of one or more from `1` or `2.1` (example: `[1009, "TS2571", "6031"]`)
+2. A `string` with a code (example `"1009"`, `"TS1009"` or `"ts1009"`)
+3. A `string` with a list of the above (example: `"1009, TS2571, 4072 ,ts6031 "`)
+4. An `array` of one or more from `1` or `3` (example: `[1009, "TS2571", "6031"]`)
 
 It's advised to use concise types along the list of course:
 
 <div class="row"><div class="col-md-6" markdown="block">
+
 ```js
 // jest.config.js
 module.exports = {
@@ -121,7 +129,9 @@ module.exports = {
   }
 };
 ```
+
 </div><div class="col-md-6" markdown="block">
+
 ```js
 // OR package.json
 {
@@ -137,4 +147,5 @@ module.exports = {
   }
 }
 ```
+
 </div></div>
