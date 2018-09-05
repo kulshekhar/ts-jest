@@ -13,11 +13,13 @@ import { existsSync, readFileSync } from 'fs'
 import json5 from 'json5'
 import { dirname, isAbsolute, join, resolve } from 'path'
 import semver from 'semver'
-import { Diagnostic, FormatDiagnosticsHost, ParsedCommandLine } from 'typescript'
+import { CustomTransformers, Diagnostic, FormatDiagnosticsHost, ParsedCommandLine } from 'typescript'
 
 import { version as myVersion } from '..'
 import { createCompiler } from '../compiler'
+import { internals as internalAstTransformers } from '../transformers'
 import {
+  AstTransformerDesc,
   BabelConfig,
   BabelJestTransformer,
   TTypeScript,
@@ -160,6 +162,9 @@ export class ConfigSet {
       }
     }
 
+    // transformers
+    const transformers = (options.astTransformers || []).map(mod => this.resolvePath(mod, { nodeResolve: true }))
+
     // babel jest
     const { babelConfig: babelConfigOpt } = options
     let babelConfig: TsJestConfig['babelConfig']
@@ -210,6 +215,7 @@ export class ConfigSet {
       diagnostics,
       isolatedModules: !!options.isolatedModules,
       compiler: options.compiler || 'typescript',
+      transformers,
       stringifyContentPathRegex,
     }
     this.logger.debug({ tsJestConfig: res }, 'normalized ts-jest config')
@@ -314,6 +320,18 @@ export class ConfigSet {
   @Memoize()
   get tsCompiler(): TsCompiler {
     return createCompiler(this)
+  }
+
+  @Memoize()
+  get astTransformers(): AstTransformerDesc[] {
+    return [...internalAstTransformers, ...this.tsJest.transformers.map(m => require(m))]
+  }
+
+  @Memoize()
+  get tsCustomTransformers(): CustomTransformers {
+    return {
+      before: this.astTransformers.map(t => t.factory(this)),
+    }
   }
 
   @Memoize()
@@ -487,14 +505,32 @@ export class ConfigSet {
     return { input, resolved: result }
   }
 
-  resolvePath(inputPath: string, noFailIfMissing = false): string {
+  resolvePath(
+    inputPath: string,
+    { throwIfMissing = true, nodeResolve = false }: { throwIfMissing?: boolean; nodeResolve?: boolean } = {},
+  ): string {
     let path: string = inputPath
+    let nodeResolved = false
     if (path.startsWith('<rootDir>')) {
       path = resolve(this.rootDir, path.substr(9))
     } else if (!isAbsolute(path)) {
-      path = resolve(this.cwd, path)
+      if (!path.startsWith('.') && nodeResolve) {
+        try {
+          path = require.resolve(path)
+          nodeResolved = true
+        } catch (_) {}
+      }
+      if (!nodeResolved) {
+        path = resolve(this.cwd, path)
+      }
     }
-    if (!noFailIfMissing && !existsSync(path)) {
+    if (!nodeResolved && nodeResolve) {
+      try {
+        path = require.resolve(path)
+        nodeResolved = true
+      } catch (_) {}
+    }
+    if (throwIfMissing && !existsSync(path)) {
       throw new Error(interpolate(Errors.FileNotFound, { inputPath, resolvedPath: path }))
     }
     this.logger.debug({ fromPath: inputPath, toPath: path }, 'resolved path from', inputPath, 'to', path)
@@ -514,6 +550,7 @@ export class ConfigSet {
 
     return new JsonableValue({
       versions: this.versions,
+      transformers: this.astTransformers.map(t => `${t.name}@${t.version}`),
       jest,
       tsJest: this.tsJest,
       babel: this.babel,

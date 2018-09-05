@@ -1,11 +1,5 @@
-import { CustomTransformers } from 'typescript'
+import { AstTransformerDesc } from '../types'
 
-import { ConfigSet } from '../config/config-set'
+import * as hoisting from './hoisting'
 
-import { factory as hoistingFactory } from './hoisting'
-
-export function factory(cs: ConfigSet): CustomTransformers {
-  return {
-    before: [hoistingFactory(cs)],
-  }
-}
+export const internals: AstTransformerDesc[] = [hoisting]

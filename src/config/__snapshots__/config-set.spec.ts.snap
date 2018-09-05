@@ -32,6 +32,7 @@ Object {
   },
   "isolatedModules": false,
   "stringifyContentPathRegex": undefined,
+  "transformers": Array [],
   "tsConfig": Object {
     "kind": "file",
     "value": undefined,

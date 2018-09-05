@@ -19,6 +19,10 @@ import { ConfigSet } from '../config/config-set'
  */
 const HOIST_METHODS = ['mock', 'unmock']
 
+export const name = 'hoisting-jest-mock'
+// increment this each time the code is modified
+export const version = 1
+
 /**
  * The factory of hoisting transformer factory
  * @param cs Current jest configuration-set

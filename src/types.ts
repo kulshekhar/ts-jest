@@ -1,5 +1,7 @@
 import * as _babel from 'babel__core'
-import _ts, { CompilerOptions } from 'typescript'
+import _ts, { CompilerOptions, SourceFile, TransformerFactory } from 'typescript'
+
+import { ConfigSet } from './config/config-set'
 
 export type TBabelCore = typeof _babel
 export type TTypeScript = typeof _ts
@@ -28,6 +30,11 @@ export interface TsJestGlobalOptions {
    * Compiler to use (default to 'typescript'):
    */
   compiler?: string
+
+  /**
+   * Custom transformers (mostly used by jest presets)
+   */
+  astTransformers?: string[]
 
   /**
    * TS diagnostics - less to be reported if `isolatedModules` is `true`. It can be:
@@ -92,6 +99,7 @@ export interface TsJestConfig {
   compiler: string
   diagnostics: TsJestConfig$diagnostics
   babelConfig: TsJestConfig$babelConfig
+  transformers: string[]
 
   // to deprecate / deprecated === === ===
   stringifyContentPathRegex: TsJestConfig$stringifyContentPathRegex
@@ -157,4 +165,10 @@ export interface TsCompiler {
   ts: TSCommon
   compile(code: string, fileName: string, lineOffset?: number): string
   getTypeInfo(code: string, fileName: string, position: number): TypeInfo
+}
+
+export interface AstTransformerDesc {
+  name: string
+  version: number
+  factory(cs: ConfigSet): TransformerFactory<SourceFile>
 }

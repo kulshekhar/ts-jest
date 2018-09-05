@@ -35,10 +35,8 @@ import stableStringify = require('fast-json-stable-stringify')
 import { readFileSync, writeFileSync } from 'fs'
 import mkdirp = require('mkdirp')
 import { basename, extname, join, relative } from 'path'
-import { CustomTransformers } from 'typescript'
 
 import { ConfigSet } from './config/config-set'
-import { factory as customTransformersFactory } from './transformers'
 import { MemoryCache, TsCompiler, TypeInfo } from './types'
 import { Errors, interpolate } from './util/messages'
 import { sha1 } from './util/sha1'
@@ -88,8 +86,7 @@ export function createCompiler(configs: ConfigSet): TsCompiler {
       ? (path: string) => (/\.[tj]sx$/.test(path) ? '.jsx' : '.js')
       : (_: string) => '.js'
 
-  // TODO: grab internal transformers
-  const transformers: CustomTransformers = customTransformersFactory(configs)
+  const transformers = configs.tsCustomTransformers
 
   /**
    * Create the basic required function using transpile mode.

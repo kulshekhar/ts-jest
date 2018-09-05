@@ -13,6 +13,11 @@ import {
 } from 'typescript';
 import { ConfigSet } from '../config-set'
 
+// this is a unique identifier for your transformer
+export const name = 'my-transformer'
+// increment this each time you change the behavior of your transformer
+export const version = 1
+
 export function factory(cs: ConfigSet) {
   const ts = cs.compilerModule
   function createVisitor(ctx: TransformationContext, sf: SourceFile) {

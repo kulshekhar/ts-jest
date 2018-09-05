@@ -57,6 +57,7 @@ export function tsJestConfig(options?: Partial<TsJestConfig>): TsJestConfig {
   return {
     isolatedModules: false,
     compiler: 'typescript',
+    transformers: [],
     babelConfig: undefined,
     tsConfig: undefined,
     stringifyContentPathRegex: undefined,
