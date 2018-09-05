@@ -73,8 +73,8 @@
     "typescript": ">=2.7.0 <4.0.0"
   },
   "devDependencies": {
-    "@commitlint/cli": "^7.1.1",
-    "@commitlint/config-conventional": "^7.1.1",
+    "@commitlint/cli": "^7.1.2",
+    "@commitlint/config-conventional": "^7.1.2",
     "@types/babel__core": "^7.0.1",
     "@types/buffer-from": "^1.1.0",
     "@types/cross-spawn": "^6.0.0",
