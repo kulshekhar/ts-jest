@@ -1,3 +1,13 @@
+<a name="23.10.0-beta.4"></a>
+# [23.10.0-beta.4](https://github.com/kulshekhar/ts-jest/compare/v23.10.0-beta.3...v23.10.0-beta.4) (2018-09-06)
+
+
+### Bug Fixes
+
+* **config:** fixes a bug in the tsconfig file resolver ([3910f2c](https://github.com/kulshekhar/ts-jest/commit/3910f2c))
+
+
+
 <a name="23.10.0-beta.3"></a>
 # [23.10.0-beta.3](https://github.com/kulshekhar/ts-jest/compare/v23.10.0-beta.2...v23.10.0-beta.3) (2018-09-06)
 
