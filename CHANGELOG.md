@@ -1,3 +1,26 @@
+<a name="23.10.0-beta.3"></a>
+# [23.10.0-beta.3](https://github.com/kulshekhar/ts-jest/compare/v23.10.0-beta.2...v23.10.0-beta.3) (2018-09-06)
+
+
+### Bug Fixes
+
+* **config:** fixes a bug in path resolver ([ceb0424](https://github.com/kulshekhar/ts-jest/commit/ceb0424))
+
+
+### Features
+
+* **cli:** adds a cli tool to migrate old config ([714f5f0](https://github.com/kulshekhar/ts-jest/commit/714f5f0))
+* **cli:** ads a simple config:init helper + tests ([6700522](https://github.com/kulshekhar/ts-jest/commit/6700522))
+* **config:** exposes custom transformers to config for presets ([885bc44](https://github.com/kulshekhar/ts-jest/commit/885bc44))
+* **logger:** adds ts-jest version in the logger's context ([bb0c06e](https://github.com/kulshekhar/ts-jest/commit/bb0c06e))
+
+
+### Performance Improvements
+
+* **bundle:** improves bundle size ([34eedc3](https://github.com/kulshekhar/ts-jest/commit/34eedc3))
+
+
+
 <a name="23.10.0-beta.2"></a>
 # [23.10.0-beta.2](https://github.com/kulshekhar/ts-jest/compare/v23.10.0-beta.1...v23.10.0-beta.2) (2018-09-02)
 
