@@ -244,9 +244,10 @@ describe('typescript', () => {
 describe('resolvePath', () => {
   it('should resolve paths', () => {
     const cs = createConfigSet({ jestConfig: { rootDir: '/root', cwd: '/cwd' } as any, resolve: null })
-    expect(normalizeSlashes(cs.resolvePath('bar.js', { throwIfMissing: false }))).toBe('/cwd/bar.js')
-    expect(normalizeSlashes(cs.resolvePath('./bar.js', { throwIfMissing: false }))).toBe('/cwd/bar.js')
-    expect(normalizeSlashes(cs.resolvePath('<rootDir>bar.js', { throwIfMissing: false }))).toBe('/root/bar.js')
-    expect(normalizeSlashes(cs.resolvePath('<rootDir>/bar.js', { throwIfMissing: false }))).toBe('/root/bar.js')
+    const doResolve = (path: string) => cs.resolvePath(path, { throwIfMissing: false })
+    expect(doResolve('bar.js')).toBe(resolve('/cwd/bar.js'))
+    expect(doResolve('./bar.js')).toBe(resolve('/cwd/./bar.js'))
+    expect(doResolve('<rootDir>bar.js')).toBe(resolve('/root/bar.js'))
+    expect(doResolve('<rootDir>/bar.js')).toBe(resolve('/root//bar.js'))
   })
 })
