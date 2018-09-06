@@ -91,14 +91,14 @@ module.exports = {
 
 All options have default values which should fit most of the projects. Click on the option's name to see details and example(s).
 
-| Option | Description | Default |
-|---:|---|---|
-| [**`compiler`**](config/compiler) | TypeScript module to use as compiler. | `"typescript"` |
-| [**`tsConfig`**](config/tsConfig) | TypeScript compiler related configuration. | _auto_ |
-| [**`isolatedModules`**](config/isolatedModules) | Enables/disables the TypeScript language service | `false` |
-| [**`diagnostics`**](config/diagnostics) | Diagnostics related configuration. | `true` |
-| [**`babelConfig`**](config/babelConfig) | Babel(Jest) related configuration. | _disabled_ |
-| [**`stringifyContentPathRegex`**](config/stringifyContentPathRegex) | Configure which file(s) will become a module returning its content. | _disabled_ |
+| Option | Description | Type | Default |
+|---|---|---|
+| [**`compiler`**][compiler] | [TypeScript module to use as compiler.][compiler] | `string` | `"typescript"` |
+| [**`tsConfig`**][tsConfig] | [TypeScript compiler related configuration.][tsConfig] | `string`/`object`/`boolean` | _auto_ |
+| [**`isolatedModules`**][isolatedModules] | [Enables/disables the TypeScript language service][isolatedModules] | `boolean` | `false` |
+| [**`diagnostics`**][diagnostics] | [Diagnostics related configuration.][diagnostics] | `boolean`/`object` | `true` |
+| [**`babelConfig`**][babelConfig] | [Babel(Jest) related configuration.][babelConfig] | `boolean`/`object` | _disabled_ |
+| [**`stringifyContentPathRegex`**][stringifyContentPathRegex] | [Files which will become modules returning self content.][stringifyContentPathRegex] | `string`/`RegExp` | _disabled_ |
 
 ### Upgrading
 
@@ -119,3 +119,10 @@ npx ts-jest config:migrate package.json
 ```
 
 </div></div>
+
+[compiler]: config/compiler
+[tsConfig]: config/tsConfig
+[isolatedModules]: config/isolatedModules
+[diagnostics]: config/diagnostics
+[babelConfig]: config/babelConfig
+[stringifyContentPathRegex]: config/stringifyContentPathRegex

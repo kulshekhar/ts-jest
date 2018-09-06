@@ -1,5 +1,7 @@
 ---
+# Main SCSS file
 ---
+@charset "utf-8";
 
 $baseurl: "{{ site.baseurl }}";
 $fa-font-path: $baseurl + "/assets/fonts/font-awesome";
