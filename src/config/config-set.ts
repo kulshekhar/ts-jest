@@ -512,7 +512,7 @@ export class ConfigSet {
     let path: string = inputPath
     let nodeResolved = false
     if (path.startsWith('<rootDir>')) {
-      path = resolve(this.rootDir, path.substr(9))
+      path = resolve(join(this.rootDir, path.substr(9)))
     } else if (!isAbsolute(path)) {
       if (!path.startsWith('.') && nodeResolve) {
         try {

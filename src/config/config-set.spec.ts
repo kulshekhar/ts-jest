@@ -33,7 +33,7 @@ function createConfigSet({
 } = {}) {
   const cs = new ConfigSet(fakers.jestConfig(jestConfig, tsJestConfig), parentConfig)
   if (resolve) {
-    jest.spyOn(cs, 'resolvePath').mockImplementation(resolve)
+    cs.resolvePath = resolve
   }
   return cs
 }
@@ -238,5 +238,15 @@ describe('typescript', () => {
       rootDir: normalizeSlashes(resolve(__dirname, '..')),
       skipLibCheck: true,
     })
+  })
+})
+
+describe('resolvePath', () => {
+  it('should resolve paths', () => {
+    const cs = createConfigSet({ jestConfig: { rootDir: '/root', cwd: '/cwd' } as any, resolve: null })
+    expect(normalizeSlashes(cs.resolvePath('bar.js', { throwIfMissing: false }))).toBe('/cwd/bar.js')
+    expect(normalizeSlashes(cs.resolvePath('./bar.js', { throwIfMissing: false }))).toBe('/cwd/bar.js')
+    expect(normalizeSlashes(cs.resolvePath('<rootDir>bar.js', { throwIfMissing: false }))).toBe('/root/bar.js')
+    expect(normalizeSlashes(cs.resolvePath('<rootDir>/bar.js', { throwIfMissing: false }))).toBe('/root/bar.js')
   })
 })
