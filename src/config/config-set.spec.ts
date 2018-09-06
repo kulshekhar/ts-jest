@@ -1,5 +1,5 @@
 import { resolve } from 'path'
-import { ModuleKind, ScriptTarget } from 'typescript'
+import ts, { ModuleKind, ScriptTarget } from 'typescript'
 
 import * as fakers from '../__helpers__/fakers'
 import { mocked } from '../__helpers__/mocks'
@@ -249,5 +249,47 @@ describe('resolvePath', () => {
     expect(doResolve('./bar.js')).toBe(resolve('/cwd/./bar.js'))
     expect(doResolve('<rootDir>bar.js')).toBe(resolve('/root/bar.js'))
     expect(doResolve('<rootDir>/bar.js')).toBe(resolve('/root//bar.js'))
+  })
+})
+
+describe('readTsConfig', () => {
+  let findConfig!: jest.SpyInstance<typeof ts.findConfigFile>
+  let readConfig!: jest.SpyInstance<typeof ts.readConfigFile>
+  let parseConfig!: jest.SpyInstance<typeof ts.parseJsonSourceFileConfigFileContent>
+  let cs!: ConfigSet
+  beforeAll(() => {
+    findConfig = jest.spyOn(ts, 'findConfigFile')
+    readConfig = jest.spyOn(ts, 'readConfigFile')
+    parseConfig = jest.spyOn(ts, 'parseJsonConfigFileContent')
+    cs = createConfigSet({ jestConfig: { rootDir: '/root', cwd: '/cwd' } as any })
+    findConfig.mockImplementation(p => `${p}/tsconfig.json`)
+    readConfig.mockImplementation(p => ({ config: { path: p, compilerOptions: {} } }))
+    parseConfig.mockImplementation((conf: any) => ({ options: conf }))
+  })
+  beforeEach(() => {
+    findConfig.mockClear()
+    readConfig.mockClear()
+    parseConfig.mockClear()
+  })
+  afterAll(() => {
+    findConfig.mockRestore()
+    readConfig.mockRestore()
+    parseConfig.mockRestore()
+  })
+  it('should use correct paths when searching', () => {
+    const conf = cs.readTsConfig()
+    expect(conf.input.path).toBe('/root/tsconfig.json')
+    expect(findConfig.mock.calls[0][0]).toBe('/root')
+    expect(readConfig.mock.calls[0][0]).toBe('/root/tsconfig.json')
+    expect(parseConfig.mock.calls[0][2]).toBe('/root')
+    expect(parseConfig.mock.calls[0][4]).toBe('/root/tsconfig.json')
+  })
+  it('should use given tsconfig path', () => {
+    const conf = cs.readTsConfig(undefined, '/foo/tsconfig.bar.json')
+    expect(conf.input.path).toBe('/foo/tsconfig.bar.json')
+    expect(findConfig).not.toBeCalled()
+    expect(readConfig.mock.calls[0][0]).toBe('/foo/tsconfig.bar.json')
+    expect(parseConfig.mock.calls[0][2]).toBe('/foo')
+    expect(parseConfig.mock.calls[0][4]).toBe('/foo/tsconfig.bar.json')
   })
 })

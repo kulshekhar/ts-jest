@@ -442,9 +442,13 @@ export class ConfigSet {
     return !!process.env.TS_JEST_DOCTOR
   }
 
-  readTsConfig(compilerOptions?: object, project?: string | null, noProject?: boolean | null): ReadTsConfigResult {
+  readTsConfig(
+    compilerOptions?: object,
+    resolvedConfigFile?: string | null,
+    noProject?: boolean | null,
+  ): ReadTsConfigResult {
     let config = { compilerOptions: {} }
-    let basePath = normalizeSlashes(this.cwd)
+    let basePath = normalizeSlashes(this.rootDir)
     let configFileName: string | undefined
     const ts = this.compilerModule
     let input: any
@@ -453,9 +457,9 @@ export class ConfigSet {
       input = { compilerOptions: { ...compilerOptions } }
     } else {
       // Read project configuration when available.
-      configFileName = project
-        ? normalizeSlashes(resolve(this.cwd, project))
-        : ts.findConfigFile(normalizeSlashes(this.cwd), ts.sys.fileExists)
+      configFileName = resolvedConfigFile
+        ? normalizeSlashes(resolvedConfigFile)
+        : ts.findConfigFile(normalizeSlashes(this.rootDir), ts.sys.fileExists)
 
       if (configFileName) {
         this.logger.debug({ tsConfigFileName: configFileName }, 'readTsConfig(): reading', configFileName)
