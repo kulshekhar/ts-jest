@@ -3819,6 +3819,9 @@ table {
   table tr:nth-child(2n-1) td {
     background-color: #f2f2f2; }
 
+p > img[align="left"] {
+  margin-right: 0.5em; }
+
 h2[id], h3[id], h4[id], h5[id], h6[id] {
   position: relative; }
   h2[id] > a.auto-anchor, h3[id] > a.auto-anchor, h4[id] > a.auto-anchor, h5[id] > a.auto-anchor, h6[id] > a.auto-anchor {

@@ -217,40 +217,47 @@
 <table>
   <thead>
     <tr>
-      <th style="text-align: right">Option</th>
+      <th>Option</th>
       <th>Description</th>
+      <th>Type</th>
       <th>Default</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td style="text-align: right"><a href="config/compiler"><strong><code class="highlighter-rouge">compiler</code></strong></a></td>
-      <td>TypeScript module to use as compiler.</td>
+      <td><a href="config/compiler"><strong><code class="highlighter-rouge">compiler</code></strong></a></td>
+      <td><a href="config/compiler">TypeScript module to use as compiler.</a></td>
+      <td><code class="highlighter-rouge">string</code></td>
       <td><code class="highlighter-rouge">"typescript"</code></td>
     </tr>
     <tr>
-      <td style="text-align: right"><a href="config/tsConfig"><strong><code class="highlighter-rouge">tsConfig</code></strong></a></td>
-      <td>TypeScript compiler related configuration.</td>
+      <td><a href="config/tsConfig"><strong><code class="highlighter-rouge">tsConfig</code></strong></a></td>
+      <td><a href="config/tsConfig">TypeScript compiler related configuration.</a></td>
+      <td><code class="highlighter-rouge">string</code>/<code class="highlighter-rouge">object</code>/<code class="highlighter-rouge">boolean</code></td>
       <td><em>auto</em></td>
     </tr>
     <tr>
-      <td style="text-align: right"><a href="config/isolatedModules"><strong><code class="highlighter-rouge">isolatedModules</code></strong></a></td>
-      <td>Enables/disables the TypeScript language service</td>
+      <td><a href="config/isolatedModules"><strong><code class="highlighter-rouge">isolatedModules</code></strong></a></td>
+      <td><a href="config/isolatedModules">Enables/disables the TypeScript language service</a></td>
+      <td><code class="highlighter-rouge">boolean</code></td>
       <td><code class="highlighter-rouge">false</code></td>
     </tr>
     <tr>
-      <td style="text-align: right"><a href="config/diagnostics"><strong><code class="highlighter-rouge">diagnostics</code></strong></a></td>
-      <td>Diagnostics related configuration.</td>
+      <td><a href="config/diagnostics"><strong><code class="highlighter-rouge">diagnostics</code></strong></a></td>
+      <td><a href="config/diagnostics">Diagnostics related configuration.</a></td>
+      <td><code class="highlighter-rouge">boolean</code>/<code class="highlighter-rouge">object</code></td>
       <td><code class="highlighter-rouge">true</code></td>
     </tr>
     <tr>
-      <td style="text-align: right"><a href="config/babelConfig"><strong><code class="highlighter-rouge">babelConfig</code></strong></a></td>
-      <td>Babel(Jest) related configuration.</td>
+      <td><a href="config/babelConfig"><strong><code class="highlighter-rouge">babelConfig</code></strong></a></td>
+      <td><a href="config/babelConfig">Babel(Jest) related configuration.</a></td>
+      <td><code class="highlighter-rouge">boolean</code>/<code class="highlighter-rouge">object</code></td>
       <td><em>disabled</em></td>
     </tr>
     <tr>
-      <td style="text-align: right"><a href="config/stringifyContentPathRegex"><strong><code class="highlighter-rouge">stringifyContentPathRegex</code></strong></a></td>
-      <td>Configure which file(s) will become a module returning its content.</td>
+      <td><a href="config/stringifyContentPathRegex"><strong><code class="highlighter-rouge">stringifyContentPathRegex</code></strong></a></td>
+      <td><a href="config/stringifyContentPathRegex">Files which will become modules returning self content.</a></td>
+      <td><code class="highlighter-rouge">string</code>/<code class="highlighter-rouge">RegExp</code></td>
       <td><em>disabled</em></td>
     </tr>
   </tbody>
@@ -273,6 +280,7 @@
 </code></pre></div>    </div>
 
   </div></div>
+
 
   </div>
 
