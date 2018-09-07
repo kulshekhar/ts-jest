@@ -27,7 +27,7 @@
     "doc:link": "git worktree add docs/_site gh-pages",
     "doc:unlink": "git worktree prune",
     "doc:build": "cd docs && bundle exec jekyll build",
-    "doc:build-commit": "npm run doc:build && cd docs/_site && git add --all && git commit --",
+    "doc:build-commit": "npm run doc:build && cd docs/_site && git add --all && git commit -m \"Updates github pages\"",
     "prepare": "npm run build",
     "prepublishOnly": "npm run test",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0",
