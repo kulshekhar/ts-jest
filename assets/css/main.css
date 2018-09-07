@@ -4908,7 +4908,7 @@ a.text-dark:hover, a.text-dark:focus { color: #1d2124 !important; }
 .page-content img { max-width: 100%; }
 
 h2[id], h3[id], h4[id], h5[id], h6[id] { position: relative; }
-h2[id] > a.auto-anchor, h3[id] > a.auto-anchor, h4[id] > a.auto-anchor, h5[id] > a.auto-anchor, h6[id] > a.auto-anchor { position: absolute; left: -1.5em; top: 0; right: 0; display: none; }
+h2[id] > a.auto-anchor, h3[id] > a.auto-anchor, h4[id] > a.auto-anchor, h5[id] > a.auto-anchor, h6[id] > a.auto-anchor { position: absolute; left: -2rem; top: 1rem; right: 0; display: none; }
 h2[id] > a.auto-anchor > i, h3[id] > a.auto-anchor > i, h4[id] > a.auto-anchor > i, h5[id] > a.auto-anchor > i, h6[id] > a.auto-anchor > i { font-size: 1.5rem !important; }
 h2[id]:hover > a.auto-anchor, h3[id]:hover > a.auto-anchor, h4[id]:hover > a.auto-anchor, h5[id]:hover > a.auto-anchor, h6[id]:hover > a.auto-anchor { display: block; }
 
