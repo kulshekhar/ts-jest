@@ -1,0 +1,22 @@
+p > img[align="left"] {
+  margin-right: 0.5em;
+}
+
+blockquote {
+  > p {
+    margin: 0;
+  }
+  color: $info;
+  background-color: $light;
+  padding: 0.75rem;
+}
+
+h2 {
+  margin-top: 1rem;
+  &::before {
+    display: block;
+    content: '';
+    border-top: 1px $light solid;
+    margin-bottom: 1rem;
+  }
+}

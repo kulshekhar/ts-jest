@@ -1,0 +1,14 @@
+- title: User Doc.
+  url: /user
+  sublinks:
+    - title: Installation
+      url: /user/install
+    - title: Configuration
+      url: /user/config
+- title: Tech Doc.
+  url: /tech
+  sublinks:
+    - title: Processing
+      url: /tech/process
+    - title: E2E Testing
+      url: /tech/e2e

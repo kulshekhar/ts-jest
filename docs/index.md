@@ -1,17 +1,16 @@
 ---
-# Feel free to add content and custom Front Matter to this file.
-# To modify the layout, see https://jekyllrb.com/docs/themes/#overriding-theme-defaults
-
 layout: home
 ---
-# ts-jest [![npm version](https://badge.fury.io/js/ts-jest.svg)](https://badge.fury.io/js/ts-jest) [![NPM downloads](https://img.shields.io/npm/dm/ts-jest.svg?style=flat)](https://npmjs.org/package/ts-jest) [![Known Vulnerabilities](https://snyk.io/test/github/kulshekhar/ts-jest/badge.svg)](https://snyk.io/test/github/kulshekhar/ts-jest) [![Build Status for linux](https://travis-ci.org/kulshekhar/ts-jest.svg?branch=master)](https://travis-ci.org/kulshekhar/ts-jest) [![Build Status for Windows](https://ci.appveyor.com/api/projects/status/g8tt9qd7usv0tolb/branch/master?svg=true)](https://ci.appveyor.com/project/kulshekhar/ts-jest/branch/master)
-
-<img src="assets/img/logo.png" align="right"
+<p align="center">
+<img src="assets/img/logo.png"
      title="TSJest Logo by Huafu Gandon" width="128" height="128">
+</p>
 
 **TSJest** (`ts-jest`) is a TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript.
 
 It supports all features of TypeScript _(even those which Babel 7 typescript plugin does not)_ and has an internal cache for your tests to run faster.
+
+[![npm version](https://badge.fury.io/js/ts-jest.svg)](https://badge.fury.io/js/ts-jest) [![NPM downloads](https://img.shields.io/npm/dm/ts-jest.svg?style=flat)](https://npmjs.org/package/ts-jest) [![Known Vulnerabilities](https://snyk.io/test/github/kulshekhar/ts-jest/badge.svg)](https://snyk.io/test/github/kulshekhar/ts-jest) [![Build Status for linux](https://travis-ci.org/kulshekhar/ts-jest.svg?branch=master)](https://travis-ci.org/kulshekhar/ts-jest) [![Build Status for Windows](https://ci.appveyor.com/api/projects/status/g8tt9qd7usv0tolb/branch/master?svg=true)](https://ci.appveyor.com/project/kulshekhar/ts-jest/branch/master)
 
 ---
 
@@ -26,20 +25,9 @@ It supports all features of TypeScript _(even those which Babel 7 typescript plu
 
 ---
 
-## Getting Started
+## Usage
 
-These instructions will get you setup to use TSJest in your project.
-
-| | using npm | using yarn |
-|---:|---|---|
-| **Prerequisites** | `npm i -D jest typescript` | `yarn add --dev jest typescript` |
-| **Installing** | `npm i -D ts-jest` | `yarn add --dev ts-jest` |
-| **Creating config** | `node_modules/.bin/ts-jest config:init` | `yarn ts-jest config:init` |
-| **Running tests** | `npm t` or `node_modules/.bin/jest` | `yarn test` or `yarn jest` |
-
-## Configuration
-
-See the documentation about how to configure TSJest [there](user/config).
+Refer to the [installation](user/install) and [configration](user/config) instructions.
 
 ## Built With
 

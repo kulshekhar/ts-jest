@@ -14,6 +14,7 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 title: TSJest
+repository: "kulshekhar/ts-jest"
 # email: your-email@example.com
 description: >- # this means to ignore newlines until "baseurl:"
   TSJest (ts-jest) is a TypeScript preprocessor with source map
@@ -27,11 +28,12 @@ baseurl: "/ts-jest" # the subpath of your site, e.g. /blog
 # Build settings
 markdown: kramdown
 # theme: minima
-theme: minima-reboot
+
 plugins:
-  # - jekyll-feed
-  - jekyll-plantuml
   - jekyll-font-awesome-sass
+  - jekyll-sitemap
+  - jekyll-feed
+  - jekyll-plantuml
 
 # Exclude from processing.
 # The following items will not be processed, by default. Create a custom list
@@ -48,8 +50,7 @@ plugins:
 keep_files:
   - .gitkeep
   - .git
-font-awesome:
-  assets: true
+
 defaults:
   # _pages
   - scope:
