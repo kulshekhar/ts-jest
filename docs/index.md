@@ -41,7 +41,7 @@ Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduc
 
 ## Versioning
 
-We **DOT NOT** use [SemVer](http://semver.org/) for versioning. Tho you can think about SemVer when reading our version, except our major number follow the one of Jest. For the versions available, see the [tags on this repository](https://github.com/kulshekhar/ts-jest/tags).
+We **DO NOT** use [Semantic Versioning](http://semver.org/). TSJest's major version number follows that of the compatible/required version of Jest. While we try to avoid breaking changes within a major version, sometimes it can be unavoidable. In such cases, we increase the minor version. For the versions available, see the [tags in this repository](https://github.com/kulshekhar/ts-jest/tags).
 
 ## Authors/maintainers
 
