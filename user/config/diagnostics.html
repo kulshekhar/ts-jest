@@ -1,134 +1,122 @@
 <!DOCTYPE html>
-<html lang="en">
-
-  <head>
-  <meta charset="utf-8">
+<html lang="en"><head>
+ <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
-
-  <link rel="stylesheet" href="/ts-jest/assets/main.css">
-  <link rel="canonical" href="/ts-jest/user/config/diagnostics.html">
-  <link rel="alternate" type="application/rss+xml" title="TSJest" href="/ts-jest/feed.xml">
-
-  
-
-  
-
-  <!-- Begin Jekyll SEO tag v2.5.0 -->
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.5.0 -->
 <title>Diagnostics option | TSJest</title>
-<meta name="generator" content="Jekyll v3.8.3" />
+<meta name="generator" content="Jekyll v3.7.3" />
 <meta property="og:title" content="Diagnostics option" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="TSJest (ts-jest) is a TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript." />
 <meta property="og:description" content="TSJest (ts-jest) is a TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript." />
 <meta property="og:site_name" content="TSJest" />
 <script type="application/ld+json">
-{"url":"/ts-jest/user/config/diagnostics.html","description":"TSJest (ts-jest) is a TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript.","headline":"Diagnostics option","@type":"WebPage","@context":"http://schema.org"}</script>
+{"headline":"Diagnostics option","url":"/ts-jest/user/config/diagnostics.html","description":"TSJest (ts-jest) is a TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript.","@type":"WebPage","@context":"http://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
-
-
-  
+<link rel="stylesheet" href="/ts-jest/assets/css/main.css"><link type="application/atom+xml" rel="alternate" href="/ts-jest/feed.xml" title="TSJest" /><script src="/ts-jest/assets/js/bootstrap/jquery.min.js"></script>
+  <script src="/ts-jest/assets/js/bootstrap/bootstrap.bundle.min.js"></script>
 </head>
+<body><nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container">
+    <a class="navbar-brand"
+    href="/ts-jest/">
+      <!--img width="30" height="30"
+           class="d-inline-block align-top"
+           src="/ts-jest/assets/img/logo.png"
+           alt="TSJest Logo"-->
+      TSJest
+    </a>
 
-  <link rel="stylesheet" href="/ts-jest/assets/css/main.css">
-
-
-  <body>
-
-    <header id="nav-header" class="border-dark border-left-0 border-right-0">
-  <div id="nav-container" class="container position-relative d-flex justify-content-between align-items-center">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto">
+  
+  
     
     
-    <a class="h4 m-0 text-dark" href="/ts-jest/">TSJest</a>
-
     
-      <nav id="nav-menu-container" class="text-right navbar-light">
-        <input type="checkbox" id="nav-trigger" class="d-none"/>
-        <label for="nav-trigger" id="nav-trigger-label" class="m-2 d-inline-block d-md-none navbar-toggler-icon">
-        </label>
-
-        <div id="nav-menu" class="d-none d-md-block">
+      <li class="nav-item dropdown active">
+        <a href="/ts-jest/user"
+           class="nav-link dropdown-toggle"
+           data-toggle="dropdown"
+           role="button"
+           aria-haspopup="true"
+           aria-expanded="false">
+           User Doc.
+        </a>
+        <div class="dropdown-menu">
           
             
-            
-          
-            
-            
-              <a class="text-dark ml-3 ml-md-0 p-2 d-block d-md-inline-block" href="/ts-jest/about/">About</a>
-            
-          
-            
-            
-              <a class="text-dark ml-3 ml-md-0 p-2 d-block d-md-inline-block" href="/ts-jest/user/config/babelConfig.html">Babel Config option</a>
-            
-          
-            
-            
-              <a class="text-dark ml-3 ml-md-0 p-2 d-block d-md-inline-block" href="/ts-jest/user/config/compiler.html">Compiler option</a>
+              <a href="/ts-jest/user/install"
+                 class="dropdown-item">
+                 Installation
+              </a>
             
           
             
-            
-              <a class="text-dark ml-3 ml-md-0 p-2 d-block d-md-inline-block" href="/ts-jest/user/config.html">Configuration</a>
-            
-          
-            
-            
-              <a class="text-dark ml-3 ml-md-0 p-2 d-block d-md-inline-block" href="/ts-jest/user/config/diagnostics.html">Diagnostics option</a>
-            
-          
-            
-            
-              <a class="text-dark ml-3 ml-md-0 p-2 d-block d-md-inline-block" href="/ts-jest/tech/e2e/">E2E tests flow</a>
-            
-          
-            
-            
-              <a class="text-dark ml-3 ml-md-0 p-2 d-block d-md-inline-block" href="/ts-jest/tech/process/">Jest flow</a>
-            
-          
-            
-            
-          
-            
-            
-              <a class="text-dark ml-3 ml-md-0 p-2 d-block d-md-inline-block" href="/ts-jest/user/config/isolatedModules.html">Isolated Modules option</a>
-            
-          
-            
-            
-          
-            
-            
-              <a class="text-dark ml-3 ml-md-0 p-2 d-block d-md-inline-block" href="/ts-jest/user/config/stringifyContentPathRegex.html">Stringify content option</a>
-            
-          
-            
-            
-              <a class="text-dark ml-3 ml-md-0 p-2 d-block d-md-inline-block" href="/ts-jest/user/config/tsConfig.html">TypeScript Config option</a>
-            
-          
-            
+              <a href="/ts-jest/user/config"
+                 class="dropdown-item">
+                 Configuration
+              </a>
             
           
         </div>
-      </nav>
+      </li>
     
+  
+    
+    
+    
+      <li class="nav-item dropdown ">
+        <a href="/ts-jest/tech"
+           class="nav-link dropdown-toggle"
+           data-toggle="dropdown"
+           role="button"
+           aria-haspopup="true"
+           aria-expanded="false">
+           Tech Doc.
+        </a>
+        <div class="dropdown-menu">
+          
+            
+              <a href="/ts-jest/tech/process"
+                 class="dropdown-item">
+                 Processing
+              </a>
+            
+          
+            
+              <a href="/ts-jest/tech/e2e"
+                 class="dropdown-item">
+                 E2E Testing
+              </a>
+            
+          
+        </div>
+      </li>
+    
+  
+  <li class="nav-item">
+    <a class="nav-link inverse"
+       href="http://github.com/kulshekhar/ts-jest">Fork me <span class="fab fa-github"></span></a>
+  </li>
+</ul>
+
+    </div>
   </div>
-</header>
+</nav>
+<div class="py-5">
+      <div class="container page-content">
+          <article>
 
-
-    <main aria-label="Content">
-      <div class="container">
-        <article>
-
-  <header class="pt-4 pb-3">
+  <header>
     <h1>Diagnostics option</h1>
   </header>
 
-  <div id="content">
+  <section>
     <p>The <code class="highlighter-rouge">diagnostics</code> option allows to enable/disable the error reporting. But it can also be used to filter which one should throw during tests, as well from which file it should be reported or not.</p>
 
 <p>A diagnostic can be:</p>
@@ -280,40 +268,35 @@
 
   </div></div>
 
-  </div>
+  </section>
 
 </article>
 
       </div>
-    </main>
-
-    <footer id="site-footer">
+    </div>
+<!--div class="py-5 border-top">
   <div class="container">
-    <div class="h5 pt-4">TSJest</div>
+
+    <p class="h5 mb-3">TSJest</p>
 
     <div class="row">
-      <div class="col col-lg-3">
+
+      <div class="col-sm">
         <ul class="list-unstyled">
-          <li class="text-secondary">
-            
-              TSJest
-            
-            </li>
-            
-        </ul>
+          <li>TSJest</li></ul>
       </div>
-      
-      <div class="col-12 col-lg">
-        <p class="text-secondary text-justify">TSJest (ts-jest) is a TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript.</p>
+
+
+      <div class="col-sm text-right">
+        <p>TSJest (ts-jest) is a TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript.</p>
       </div>
+
     </div>
 
   </div>
-</footer>
-
-    <script src="/ts-jest/assets/js/anchors.js"></script>
-
-
-  </body>
+</div-->
+<script src="/ts-jest/assets/js/bootstrap-additions.js"></script>
+<script src="/ts-jest/assets/js/anchors.js"></script>
+</body>
 
 </html>

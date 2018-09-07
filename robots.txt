@@ -1,0 +1,1 @@
+Sitemap: /ts-jest/sitemap.xml
