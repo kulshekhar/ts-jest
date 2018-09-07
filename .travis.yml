@@ -14,6 +14,16 @@ node_js:
   - "6"
 
 before_install:
+  # https://github.com/scikit-learn/scikit-learn/issues/10927
+  - |
+      set -e
+      # fail loudly when force-pushed
+      MODIFIED_FILES=$(git diff --name-only $TRAVIS_COMMIT_RANGE)
+      # waiting for native solution https://github.com/travis-ci/travis-ci/issues/6301
+      if ! echo ${MODIFIED_FILES} | grep -qvE '(\.md$)|(^docs)/'; then
+        echo "Only docs were updated, stopping build process."
+        exit
+      fi
   - dpkg --compare-versions `npm -v` ge 5.8 || npm i -g npm@latest
 
 script:
