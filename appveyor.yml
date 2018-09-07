@@ -38,5 +38,11 @@ version: "{build}"
 
 skip_commits:
   files:
-    - 'docs/*'
+    - 'docs/**/*'
     - '**/*.md'
+    - .gitignore
+    - .gitattributes
+    - .travis.yml
+    - icon.png
+    - commitlint.config.js
+
