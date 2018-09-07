@@ -21,7 +21,7 @@ It supports all features of TypeScript _(even those which Babel 7 typescript plu
 
 ## Getting Started
 
-These instructions will get you setup to use TSJest in your project. For more detailed documentation, please check [online documentation](kulshekhar.github.io/ts-jest).
+These instructions will get you setup to use TSJest in your project. For more detailed documentation, please check [online documentation](https://kulshekhar.github.io/ts-jest).
 
 | | using npm | using yarn |
 |---:|---|---|
