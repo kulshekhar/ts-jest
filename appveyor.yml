@@ -35,3 +35,8 @@ build: off
 
 # Set build version format here instead of in the admin panel.
 version: "{build}"
+
+skip_commits:
+  files:
+    - 'docs/*'
+    - '**/*.md'
