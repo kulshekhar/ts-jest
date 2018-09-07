@@ -22,6 +22,7 @@ group :jekyll_plugins do
   # PlantUML
   gem "jekyll-plantuml"
   gem "jekyll-font-awesome-sass"
+  gem "jekyll-git_metadata"
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

@@ -34,6 +34,7 @@ plugins:
   - jekyll-sitemap
   - jekyll-feed
   - jekyll-plantuml
+  - jekyll-git_metadata
 
 # Exclude from processing.
 # The following items will not be processed, by default. Create a custom list

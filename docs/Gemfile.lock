@@ -123,6 +123,8 @@ GEM
       jekyll (>= 2.5, < 4.0)
     jekyll-gist (1.5.0)
       octokit (~> 4.2)
+    jekyll-git_metadata (0.2.0)
+      jekyll (~> 3.0)
     jekyll-github-metadata (2.9.4)
       jekyll (~> 3.1)
       octokit (~> 4.0, != 4.4.0)
@@ -255,6 +257,7 @@ DEPENDENCIES
   github-pages
   jekyll
   jekyll-font-awesome-sass
+  jekyll-git_metadata
   jekyll-plantuml
   tzinfo-data
 
