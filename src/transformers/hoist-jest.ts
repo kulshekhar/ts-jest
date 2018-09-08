@@ -98,14 +98,17 @@ export function factory(cs: ConfigSet) {
       enter()
 
       // visit each child
-      const resultNode = ts.visitEachChild(node, visitor, ctx)
+      let resultNode = ts.visitEachChild(node, visitor, ctx)
 
       // check if we have something to hoist in this level
       if (hoisted[level] && hoisted[level].length) {
         // re-order children so that hoisted ones appear first
-        // this is actually the main work of this transformer
-        const block = resultNode as Block
-        block.statements = ts.createNodeArray([...hoisted[level], ...block.statements])
+        // this is actually the main job of this transformer
+        const hoistedStmts = hoisted[level]
+        const otherStmts = (resultNode as Block).statements.filter(s => !hoistedStmts.includes(s))
+        const newNode = ts.getMutableClone(resultNode) as Block
+        newNode.statements = ts.createNodeArray([...hoistedStmts, ...otherStmts])
+        resultNode = newNode
       }
 
       // exit the level
@@ -114,7 +117,6 @@ export function factory(cs: ConfigSet) {
       if (shouldHoistNode(resultNode)) {
         // hoist into current level
         hoist(resultNode as Statement)
-        return
       }
 
       // finsally returns the currently visited node

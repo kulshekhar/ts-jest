@@ -5,13 +5,9 @@ See https://dev.doctorevidence.com/how-to-write-a-typescript-transform-plugin-fc
 ## Boilerplate
 
 ```ts
-import {
-  TransformationContext,
-  SourceFile,
-  Visitor,
-  Transformer,
-} from 'typescript';
-import { ConfigSet } from '../config-set'
+import { SourceFile, TransformationContext, Transformer, Visitor } from 'typescript'
+
+import { ConfigSet } from '../config/config-set'
 
 // this is a unique identifier for your transformer
 export const name = 'my-transformer'
@@ -26,7 +22,7 @@ export function factory(cs: ConfigSet) {
       // new nodes if we want to leave the node as is, and
       // continue searching through child nodes:
       return ts.visitEachChild(node, visitor, ctx)
-    };
+    }
     return visitor
   }
   // we return the factory expected in CustomTransformers
