@@ -68,7 +68,6 @@
     "yargs-parser": "^10.1.0"
   },
   "peerDependencies": {
-    "babel-jest": ">=22 <24",
     "jest": ">=22 <24",
     "typescript": ">=2.7.0 <4.0.0"
   },
