@@ -117,13 +117,13 @@
   </header>
 
   <section>
-    <p>TSJest configuration is done within Jest configuration object. This latest can be in <code class="highlighter-rouge">package.json</code> under the <code class="highlighter-rouge">jest</code> property, or in its own <code class="highlighter-rouge">jest.config.js</code> file. The later is prefered since it’s a JavaScript file, but it depends on your needs and preference.</p>
+    <p>TSJest configuration is done within Jest configuration object. This latest can be in <code class="highlighter-rouge">package.json</code> under the <code class="highlighter-rouge">jest</code> property, or in its own <code class="highlighter-rouge">jest.config.js</code> file. The later is preferred since it’s a JavaScript file, but it depends on your needs and preference.</p>
 
 <h2 id="jest-preset">Jest preset</h2>
 
 <h3 id="basic-usage">Basic usage</h3>
 
-<p>In most of the case, simply adding <code class="highlighter-rouge">preset: 'ts-jest'</code> to your Jest config should be enough starting using TypeScript with Jest (suposing you did add <code class="highlighter-rouge">ts-jest</code> to your dev. npm dependencies of course):</p>
+<p>In most of the case, simply adding <code class="highlighter-rouge">preset: 'ts-jest'</code> to your Jest config should be enough starting using TypeScript with Jest (supposing you did add <code class="highlighter-rouge">ts-jest</code> to your dev. npm dependencies of course):</p>
 
 <div class="row"><div class="col-md-6">
 
@@ -163,10 +163,75 @@
 <span class="p">}</span>
 </code></pre></div></div>
 
+<h2 id="paths-mapping">Paths mapping</h2>
+
+<p>If you use <a href="https://www.typescriptlang.org/docs/handbook/module-resolution.html">“baseUrl” asn “paths” options</a> in your <code class="highlighter-rouge">tsconfig</code> file, you should make sure the <a href="https://facebook.github.io/jest/docs/en/configuration.html#modulenamemapper-object-string-string">“moduleNameMapper”</a> option in your Jest config is setup accordingly.</p>
+
+<p>TSJest provides a helper to transform the mapping from <code class="highlighter-rouge">tsconfig</code> to Jest config format, but it needs the <code class="highlighter-rouge">.js</code> version of the config.</p>
+
+<h3 id="example">Example:</h3>
+
+<h4 id="typescript-config">TypeScript config</h4>
+
+<p>With the below config in your <code class="highlighter-rouge">tsconfig</code>:</p>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span>
+  <span class="s2">"compilerOptions"</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">"paths"</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s2">"@App/*"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"src/*"</span><span class="p">],</span>
+      <span class="s2">"lib/*"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"common/*"</span><span class="p">]</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h4 id="jest-config-without-helper">Jest config (without helper):</h4>
+
+<div class="row"><div class="col-md-6">
+
+    <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// jest.config.js</span>
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="c1">// [...]</span>
+  <span class="na">moduleNameMapper</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s1">'^@App/(.*)$'</span><span class="p">:</span> <span class="s1">'&lt;rootDir&gt;/src/$1'</span><span class="p">,</span>
+    <span class="s1">'^lib/(.*)$'</span><span class="p">:</span> <span class="s1">'&lt;rootDir&gt;/common/$1'</span>
+  <span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div>    </div>
+
+  </div><div class="col-md-6">
+
+    <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// OR package.json</span>
+<span class="p">{</span>
+  <span class="c1">// [...]</span>
+  <span class="s2">"jest"</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">"moduleNameMapper"</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s2">"^@App/(.*)$"</span><span class="p">:</span> <span class="s2">"&lt;rootDir&gt;/src/$1"</span><span class="p">,</span>
+      <span class="s2">"^lib/(.*)$"</span><span class="p">:</span> <span class="s2">"&lt;rootDir&gt;/common/$1"</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>    </div>
+
+  </div></div>
+
+<h4 id="jest-config-with-helper">Jest config (with helper):</h4>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// jest.config.js</span>
+<span class="kd">const</span> <span class="p">{</span> <span class="nx">pathsToModuleNameMapper</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'ts-jest'</span><span class="p">);</span>
+<span class="c1">// In the following statement, replace `./tsconfig` with the path to your `tsconfig` file</span>
+<span class="c1">// which contains the path mapping (ie the `compilerOptions.paths` option):</span>
+<span class="kd">const</span> <span class="p">{</span> <span class="nx">compilerOptions</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'./tsconfig'</span><span class="p">);</span>
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="c1">// [...]</span>
+  <span class="na">moduleNameMapper</span><span class="p">:</span> <span class="nx">pathsToModuleNameMapper</span><span class="p">(</span><span class="nx">compilerOptions</span><span class="p">.</span><span class="nx">paths</span> <span class="cm">/*, { prefix: '&lt;rootDir&gt;/' } */</span> <span class="p">)</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
 <h2 id="tsjest-options">TSJest options</h2>
 
 <h3 id="introduction">Introduction</h3>
-<p>All configration of TSJest specific options are located under <code class="highlighter-rouge">globals.ts-jest</code> path of your Jest config:</p>
+<p>All configuration of TSJest specific options are located under <code class="highlighter-rouge">globals.ts-jest</code> path of your Jest config:</p>
 
 <div class="row"><div class="col-md-6">
 

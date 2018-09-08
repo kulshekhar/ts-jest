@@ -126,22 +126,22 @@
   <li>type/semantic errors, what TypeScript has actually been made for 😁</li>
 </ul>
 
-<p>If a diagnostic is not filtered out, it’ll fail the compilatin within TSJest, and so will your related test.</p>
+<p>If a diagnostic is not filtered out, it’ll fail the compilation within TSJest, and so will your related test.</p>
 
 <h3 id="disablingenabling">Disabling/enabling</h3>
 
-<p>By default all diagnostic are enabled. This is the same as setting the <code class="highlighter-rouge">diagnostics</code> option to <code class="highlighter-rouge">true</code>. To disable all diagnostics, set <code class="highlighter-rouge">diagnostics</code> to <code class="highlighter-rouge">false</code> (you might experience slightly better performence as well, especially if you disabled Jest cache).</p>
+<p>By default all diagnostic are enabled. This is the same as setting the <code class="highlighter-rouge">diagnostics</code> option to <code class="highlighter-rouge">true</code>. To disable all diagnostics, set <code class="highlighter-rouge">diagnostics</code> to <code class="highlighter-rouge">false</code> (you might experience slightly better performance as well, especially if you disabled Jest cache).</p>
 
 <h3 id="advanced-configuration">Advanced configuration</h3>
 
-<p>The option’s value can also accpet an object for more advanced configuration. Each config. key is optional:</p>
+<p>The option’s value can also accept an object for more advanced configuration. Each config. key is optional:</p>
 
 <ul>
   <li><strong><code class="highlighter-rouge">pretty</code></strong>: Enables/disable colorful and pretty output of errors (default: <em>enabled</em>).</li>
   <li><strong><code class="highlighter-rouge">ignoreCodes</code></strong>: List of TypeScript error codes to ignore. Complete list can be found <a href="https://github.com/Microsoft/TypeScript/blob/master/src/compiler/diagnosticMessages.json">there</a>. By default here are the ones ignored:
     <ul>
       <li><code class="highlighter-rouge">6059</code>: <em>‘rootDir’ is expected to contain all source files.</em></li>
-      <li><code class="highlighter-rouge">18002</code>: <em>The ‘files’ list in config file is empty.</em> (it is strongly recommanded to include this one)</li>
+      <li><code class="highlighter-rouge">18002</code>: <em>The ‘files’ list in config file is empty.</em> (it is strongly recommended to include this one)</li>
       <li><code class="highlighter-rouge">18003</code>: <em>No inputs were found in config file.</em></li>
     </ul>
   </li>
@@ -196,7 +196,7 @@
   <span class="na">globals</span><span class="p">:</span> <span class="p">{</span>
     <span class="s1">'ts-jest'</span><span class="p">:</span> <span class="p">{</span>
       <span class="na">diagnostics</span><span class="p">:</span> <span class="p">{</span>
-        <span class="na">pathRegex</span><span class="p">:</span> <span class="sr">/</span><span class="se">\.(</span><span class="sr">spec|test</span><span class="se">)</span><span class="sr">.ts$/</span>
+        <span class="na">pathRegex</span><span class="p">:</span> <span class="sr">/</span><span class="se">\.(</span><span class="sr">spec|test</span><span class="se">)\.</span><span class="sr">ts$/</span>
       <span class="p">}</span>
     <span class="p">}</span>
   <span class="p">}</span>

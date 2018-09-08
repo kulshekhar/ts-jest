@@ -24,7 +24,7 @@ note right
   all files in template dir are
   copied to test case work dir
   except `node_modules` and
-  `package-lock.josn`
+  `package-lock.json`
 end note
 
 while (for each file in test case dir)
@@ -53,7 +53,7 @@ while (for each file in test case dir)
       all files in test case source
       dir are copied to the work dir
       except `node_modules` and
-      `package-lock.josn`
+      `package-lock.json`
     end note
 
   endif

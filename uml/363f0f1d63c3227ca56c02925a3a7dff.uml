@@ -16,10 +16,10 @@ end note
 
 while (for each template)
   note right
-    tempaltes are in `e2e/~__templates__/`
+    templates are in `e2e/~__templates__/`
   end note
 
-  if (template's build directory) then (esists)
+  if (template's build directory) then (exists)
     :wipe but `node_modules` dir;
   else (not exists)
     :create;
