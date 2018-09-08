@@ -9,20 +9,20 @@ A diagnostic can be:
 - syntax errors in some of your TypeScript files (source or tests)
 - type/semantic errors, what TypeScript has actually been made for 😁
 
-If a diagnostic is not filtered out, it'll fail the compilatin within TSJest, and so will your related test.
+If a diagnostic is not filtered out, it'll fail the compilation within TSJest, and so will your related test.
 
 ### Disabling/enabling
 
-By default all diagnostic are enabled. This is the same as setting the `diagnostics` option to `true`. To disable all diagnostics, set `diagnostics` to `false` (you might experience slightly better performence as well, especially if you disabled Jest cache).
+By default all diagnostic are enabled. This is the same as setting the `diagnostics` option to `true`. To disable all diagnostics, set `diagnostics` to `false` (you might experience slightly better performance as well, especially if you disabled Jest cache).
 
 ### Advanced configuration
 
-The option's value can also accpet an object for more advanced configuration. Each config. key is optional:
+The option's value can also accept an object for more advanced configuration. Each config. key is optional:
 
 - **`pretty`**: Enables/disable colorful and pretty output of errors (default: _enabled_).
 - **`ignoreCodes`**: List of TypeScript error codes to ignore. Complete list can be found [there](https://github.com/Microsoft/TypeScript/blob/master/src/compiler/diagnosticMessages.json). By default here are the ones ignored:
   - `6059`: _'rootDir' is expected to contain all source files._
-  - `18002`: _The 'files' list in config file is empty._ (it is strongly recommanded to include this one)
+  - `18002`: _The 'files' list in config file is empty._ (it is strongly recommended to include this one)
   - `18003`: _No inputs were found in config file._
 - **`pathRegex`**: If specified, diagnostics of source files which path does **not** match will be ignored.
 

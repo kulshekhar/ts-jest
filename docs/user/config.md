@@ -1,13 +1,13 @@
 ---
 title: Configuration
 ---
-TSJest configuration is done within Jest configuration object. This latest can be in `package.json` under the `jest` property, or in its own `jest.config.js` file. The later is prefered since it's a JavaScript file, but it depends on your needs and preference.
+TSJest configuration is done within Jest configuration object. This latest can be in `package.json` under the `jest` property, or in its own `jest.config.js` file. The later is preferred since it's a JavaScript file, but it depends on your needs and preference.
 
 ## Jest preset
 
 ### Basic usage
 
-In most of the case, simply adding `preset: 'ts-jest'` to your Jest config should be enough starting using TypeScript with Jest (suposing you did add `ts-jest` to your dev. npm dependencies of course):
+In most of the case, simply adding `preset: 'ts-jest'` to your Jest config should be enough starting using TypeScript with Jest (supposing you did add `ts-jest` to your dev. npm dependencies of course):
 
 <div class="row"><div class="col-md-6" markdown="block">
 
@@ -122,7 +122,7 @@ module.exports = {
 ## TSJest options
 
 ### Introduction
-All configration of TSJest specific options are located under `globals.ts-jest` path of your Jest config:
+All configuration of TSJest specific options are located under `globals.ts-jest` path of your Jest config:
 
 <div class="row"><div class="col-md-6" markdown="block">
 

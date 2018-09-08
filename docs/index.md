@@ -27,7 +27,7 @@ It supports all features of TypeScript _(even those which Babel 7 typescript plu
 
 ## Usage
 
-Refer to the [installation](user/install) and [configration](user/config) instructions.
+Refer to the [installation](user/install) and [configuration](user/config) instructions.
 
 ## Built With
 
@@ -45,7 +45,7 @@ We **DO NOT** use [Semantic Versioning](http://semver.org/). TSJest's major vers
 
 ## Authors/maintainers
 
-* **Kulshekhar Kabra** - [kulshekar](https://github.com/kulshekhar)
+* **Kulshekhar Kabra** - [kulshekhar](https://github.com/kulshekhar)
 * **Gustav Wengel** - [GeeWee](https://github.com/GeeWee)
 * **Ahn** - [ahnpnl](https://github.com/ahnpnl)
 * **Huafu Gandon** - [huafu](https://github.com/huafu)

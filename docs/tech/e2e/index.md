@@ -22,10 +22,10 @@ end note
 
 while (for each template)
   note right
-    tempaltes are in `e2e/~__templates__/`
+    templates are in `e2e/~__templates__/`
   end note
 
-  if (template's build directory) then (esists)
+  if (template's build directory) then (exists)
     :wipe but `node_modules` dir;
   else (not exists)
     :create;
@@ -91,7 +91,7 @@ note right
   all files in template dir are
   copied to test case work dir
   except `node_modules` and
-  `package-lock.josn`
+  `package-lock.json`
 end note
 
 while (for each file in test case dir)
@@ -120,7 +120,7 @@ while (for each file in test case dir)
       all files in test case source
       dir are copied to the work dir
       except `node_modules` and
-      `package-lock.josn`
+      `package-lock.json`
     end note
 
   endif

@@ -7,7 +7,7 @@
 - `__templates__`: contains the package dependency templates for test cases
 - `__templates__/default`: is the default template
 - `__tests__`: contains the actual tests
-- `__workdir_synlink__`: is created during a test run and is a symbolic link to a subfolder in the temp folder of the OS where all test cases are installed
+- `__workdir_symlink__`: is created during a test run and is a symbolic link to a subfolder in the temp folder of the OS where all test cases are installed
 
 
 ## Test helpers
@@ -41,7 +41,7 @@ The returned value is an object with those properties and methods:
     - `stderr`, _string_: the data written to stderr during the run
     - `output`, _string_: the data written to stdout and stderr during the run
 
-    **Note 1**: _The value returned by `run()` is snapshot friendly (ie.: you can `expect(x.run()).toMatchSnapshot()`, it'll remove any changin values such as time values)_
+    **Note 1**: _The value returned by `run()` is snapshot friendly (ie.: you can `expect(x.run()).toMatchSnapshot()`, it'll remove any changing values such as time values)_
 
     **Note 2**: _You can optionally pass the expected status code as the first argument of `run()`. In the case it's not the correct one, it'll write in the console the actual `output` so that you can debug the test case._
 
@@ -59,7 +59,7 @@ You can find more information on how to create and use templates [there](./__tem
 You run the E2E tests with `yarn test:e2e` (or `npm run test:e2e`). What will happen in order is as follow (directories are related to `[ts-jest]/e2e` path):
 
 1. A bundle (we'll call it `[bundle]`) will be created for `ts-jest` using `npm pack` (`yarn pack` is buggy).
-   
+
     The `prepublish` script will be run, so `clean` and `build` (that is why e2e tests are launched before the others, since it's building as part of the process)
 
 2. a sub-folder is created in the main temp dir of the OS, let's refer to it as `[e2e-temp]`
@@ -73,8 +73,8 @@ You run the E2E tests with `yarn test:e2e` (or `npm run test:e2e`). What will ha
 
 Then within tests, when the `configureTestCase(...).run()` is called (see [how to use `configureTestCase`](./__templates__/README.md#using-a-specific-template)), this is what happen:
 
-1. the test case folder is recusivly copied from `__cases__/[case-name]` to `[e2e-temp]/[template-name]/[case-name]`
-2. a `node_modules` symbolic link is created, targeting its appropriate template's `node_modules` path (`[e2e-temp]/__templatses__/[template-name]/node_modules`)
+1. the test case folder is recursively copied from `__cases__/[case-name]` to `[e2e-temp]/[template-name]/[case-name]`
+2. a `node_modules` symbolic link is created, targeting its appropriate template's `node_modules` path (`[e2e-temp]/__templates__/[template-name]/node_modules`)
 
     Using templates allow us to install only once the node modules for each template, a template being a kind of "package-set".
     If the template name is not given in `configureTestCase()`, the one in `e2eTemplate` field of `__cases__/[case-name]/package.json` is used. If this field is not set, the `default` template is used.
