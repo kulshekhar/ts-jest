@@ -68,8 +68,7 @@
     "yargs-parser": "^10.1.0"
   },
   "peerDependencies": {
-    "jest": ">=22 <24",
-    "typescript": ">=2.7.0 <4.0.0"
+    "jest": ">=22 <24"
   },
   "devDependencies": {
     "@commitlint/cli": "^7.1.2",
