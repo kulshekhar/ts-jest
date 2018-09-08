@@ -52,9 +52,9 @@ module.exports = {
 
 ## Paths mapping
 
-If you use ["baseUrl" asn "paths" options](https://www.typescriptlang.org/docs/handbook/module-resolution.html) in your `tsconfig` file, you should make sure the ["moduleNameMapper"](https://facebook.github.io/jest/docs/en/configuration.html#modulenamemapper-object-string-string) option in your Jest config is setup accordingly.
+If you use ["baseUrl" and "paths" options](https://www.typescriptlang.org/docs/handbook/module-resolution.html) in your `tsconfig` file, you should make sure the ["moduleNameMapper"](https://facebook.github.io/jest/docs/en/configuration.html#modulenamemapper-object-string-string) option in your Jest config is setup accordingly.
 
-TSJest provides a helper to transform the mapping from `tsconfig` to Jest config format, but it needs the `.js` version of the config.
+TSJest provides a helper to transform the mapping from `tsconfig` to Jest config format, but it needs the `.js` version of the config file.
 
 ### Example:
 
@@ -62,6 +62,7 @@ TSJest provides a helper to transform the mapping from `tsconfig` to Jest config
 
 With the below config in your `tsconfig`:
 ```js
+// tsconfig.json
 {
   "compilerOptions": {
     "paths": {
@@ -189,9 +190,9 @@ npx ts-jest config:migrate package.json
 
 </div></div>
 
-[compiler]: config/compiler
-[tsConfig]: config/tsConfig
-[isolatedModules]: config/isolatedModules
-[diagnostics]: config/diagnostics
-[babelConfig]: config/babelConfig
-[stringifyContentPathRegex]: config/stringifyContentPathRegex
+[compiler]: compiler
+[tsConfig]: tsConfig
+[isolatedModules]: isolatedModules
+[diagnostics]: diagnostics
+[babelConfig]: babelConfig
+[stringifyContentPathRegex]: stringifyContentPathRegex
