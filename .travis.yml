@@ -15,9 +15,6 @@ node_js:
 
 sudo: false
 
-after_success:
-  - 'if [[ "$(node --version)" == v10.* ]]; then npm run coveralls; fi'
-
 before_install:
   # https://github.com/scikit-learn/scikit-learn/issues/10927
   - |
@@ -36,4 +33,14 @@ before_install:
 
 script:
   - npm run clean -- --when-ci-commit-message
-  - npm run test -- --coverage
+  # only grab coverage data on node 10
+  - |
+      if [[ "$(node --version)" == v10.* ]]; then
+        npm run test -- --coverage;
+      else
+        npm run test;
+      fi
+
+after_success:
+  # report coverages to coveralls
+  - 'if [[ "$(node --version)" == v10.* && -s coverage/lcov.info ]]; then cat coverage/lcov.info | coveralls; fi'
