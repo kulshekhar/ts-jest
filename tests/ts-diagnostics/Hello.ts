@@ -1,3 +1,6 @@
+import * as DELETE_DOG_MUTATION from './deleteDog.graphql';
+import styles from './styles.css';
+
 export class Hello {
   x = ''.push();
 
