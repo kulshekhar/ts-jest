@@ -13,6 +13,11 @@ node_js:
   - "8"
   - "6"
 
+sudo: false
+
+after_success:
+  - 'if [ "$node_js" = "10" ]; then npm run coveralls; fi'
+
 before_install:
   # https://github.com/scikit-learn/scikit-learn/issues/10927
   - |
@@ -20,11 +25,14 @@ before_install:
       # fail loudly when force-pushed
       MODIFIED_FILES=$(git diff --name-only $TRAVIS_COMMIT_RANGE)
       # waiting for native solution https://github.com/travis-ci/travis-ci/issues/6301
-      if ! echo ${MODIFIED_FILES} | grep -qvE '(\.md$)|(^docs)/'; then
+      if ! echo ${MODIFIED_FILES} | grep -qvE '^docs/|^\.gitignore|^\.gitattributes|\.md$|^appveyor\.yml$|^icon.png$|^commitlint\.config\.js$'; then
         echo "Only docs were updated, stopping build process."
         exit
       fi
+  # ensure we have npm >= 5.8 so that we can use `npm ci` instead of `npm install` (much faster)
   - dpkg --compare-versions `npm -v` ge 5.8 || npm i -g npm@latest
+  # we report coverages only within node 10, ensure we have the coveralls bin installed
+  - 'if [ "$node_js" = "10" ]; then npm install --global coveralls; fi'
 
 script:
   - npm run clean -- --when-ci-commit-message
