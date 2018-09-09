@@ -1,11 +1,14 @@
 # ts-jest  [![npm version](https://badge.fury.io/js/ts-jest.svg)](https://badge.fury.io/js/ts-jest) [![NPM downloads](https://img.shields.io/npm/dm/ts-jest.svg?style=flat)](https://npmjs.org/package/ts-jest) [![Greenkeeper badge](https://badges.greenkeeper.io/kulshekhar/ts-jest.svg)](https://greenkeeper.io/) [![Build Status for linux](https://travis-ci.org/kulshekhar/ts-jest.svg?branch=master)](https://travis-ci.org/kulshekhar/ts-jest) [![Build Status for Windows](https://ci.appveyor.com/api/projects/status/g8tt9qd7usv0tolb/branch/master?svg=true)](https://ci.appveyor.com/project/kulshekhar/ts-jest/branch/master)
 
-**Important note**: Before reporting any issue, be sure to check the [troubleshooting page](https://github.com/kulshekhar/ts-jest/wiki/Troubleshooting).
-
-
-> Note: Looking for collaborators. [Want to help improve ts-jest?](https://github.com/kulshekhar/ts-jest/issues/223)
-
 **ts-jest** is a TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript.
+
+|  ✨ Help us testing the beta version ✨ _refer to [#697](https://github.com/kulshekhar/ts-jest/issues/697) for how to instal and report issues_ |
+|---|
+
+> 💬 Join our brand new [Slack community](https://join.slack.com/t/ts-jest/shared_invite/enQtNDE1ODQ0OTEzMTczLWU2ZTk5YTMzYTE1YjBkZTk5ODI1NWU3NWU0NzhlOWJlZDNkYTRlM2Y3NWQ1YWVjMjc5Mjg1NmY1NTdkNWQ3MTA) for help and more!
+> <br>🔧 Don't forget to check the [troubleshooting page](https://github.com/kulshekhar/ts-jest/wiki/Troubleshooting) before reporting an issue.
+> <br>👥 We are looking for collaborators. [Want to help improve ts-jest?](https://github.com/kulshekhar/ts-jest/issues/223)
+
 
 ## Table of Contents
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
