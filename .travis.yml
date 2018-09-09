@@ -16,7 +16,7 @@ node_js:
 sudo: false
 
 after_success:
-  - 'if [ "$node_js" = "10" ]; then npm run coveralls; fi'
+  - 'if [[ "$(node --version)" == v10.* ]]; then npm run coveralls; fi'
 
 before_install:
   # https://github.com/scikit-learn/scikit-learn/issues/10927
@@ -32,7 +32,7 @@ before_install:
   # ensure we have npm >= 5.8 so that we can use `npm ci` instead of `npm install` (much faster)
   - dpkg --compare-versions `npm -v` ge 5.8 || npm i -g npm@latest
   # we report coverages only within node 10, ensure we have the coveralls bin installed
-  - 'if [ "$node_js" = "10" ]; then npm install --global coveralls; fi'
+  - 'if [[ "$(node --version)" == v10.* ]]; then npm install --global coveralls; fi'
 
 script:
   - npm run clean -- --when-ci-commit-message
