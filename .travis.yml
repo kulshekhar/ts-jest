@@ -21,7 +21,7 @@ before_install:
       # fail loudly when force-pushed, that is why there is the `|| 'dummy.js'` part
       MODIFIED_FILES=$(git diff --name-only $TRAVIS_COMMIT_RANGE || echo 'dummy.js')
       # waiting for native solution https://github.com/travis-ci/travis-ci/issues/6301
-      if ! echo ${MODIFIED_FILES} | grep -qvE '^docs/|^\.gitignore|^\.gitattributes|\.md$|^appveyor\.yml$|^icon.png$|^commitlint\.config\.js$'; then
+      if ! echo ${MODIFIED_FILES} | grep -qvE '^docs/|^\.gitignore|^\.gitattributes|\.md$|^appveyor\.yml$|^icon\.png$|^commitlint\.config\.js$'; then
         echo "Only docs were updated, stopping build process."
         exit
       fi
