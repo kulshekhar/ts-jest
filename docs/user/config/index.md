@@ -1,13 +1,13 @@
 ---
 title: Configuration
 ---
-TSJest configuration is done within Jest configuration object. This latest can be in `package.json` under the `jest` property, or in its own `jest.config.js` file. The later is preferred since it's a JavaScript file, but it depends on your needs and preference.
+TSJest configuration is done within Jest configuration object. This configuration can be in `package.json` under the `jest` property, or in its own `jest.config.js` file. The latter is preferred since it's a JavaScript file, but it depends on your needs and preference.
 
 ## Jest preset
 
 ### Basic usage
 
-In most of the case, simply adding `preset: 'ts-jest'` to your Jest config should be enough starting using TypeScript with Jest (supposing you did add `ts-jest` to your dev. npm dependencies of course):
+In most cases, simply adding `preset: 'ts-jest'` to your Jest config should be enough to start using TypeScript with Jest (assuming you did add `ts-jest` to your dev. dependencies of course):
 
 <div class="row"><div class="col-md-6" markdown="block">
 
@@ -35,7 +35,7 @@ module.exports = {
 
 ### Advanced
 
-Preset can also be used alongside other options, but when you are already using another preset (ie `preset` is already set to something else than `ts-jest`), you'll want to "pick" some settings from it. In this case, you'll need to use the JavaScript version of Jest config:
+The preset can also be used alongside other options, but when you are already using another preset (ie `preset` is already set to something else than `ts-jest`), you might want to "pick" some settings from it. In this case, you'll need to use the JavaScript version of Jest config:
 
 ```js
 // jest.config.js
@@ -162,13 +162,13 @@ module.exports = {
 All options have default values which should fit most of the projects. Click on the option's name to see details and example(s).
 
 | Option | Description | Type | Default |
-|---|---|---|
+|---|---|---|---|
 | [**`compiler`**][compiler] | [TypeScript module to use as compiler.][compiler] | `string` | `"typescript"` |
-| [**`tsConfig`**][tsConfig] | [TypeScript compiler related configuration.][tsConfig] | `string`/`object`/`boolean` | _auto_ |
+| [**`tsConfig`**][tsConfig] | [TypeScript compiler related configuration.][tsConfig] | `string` \| `object` \| `boolean` | _auto_ |
 | [**`isolatedModules`**][isolatedModules] | [Enables/disables the TypeScript language service][isolatedModules] | `boolean` | `false` |
-| [**`diagnostics`**][diagnostics] | [Diagnostics related configuration.][diagnostics] | `boolean`/`object` | `true` |
-| [**`babelConfig`**][babelConfig] | [Babel(Jest) related configuration.][babelConfig] | `boolean`/`object` | _disabled_ |
-| [**`stringifyContentPathRegex`**][stringifyContentPathRegex] | [Files which will become modules returning self content.][stringifyContentPathRegex] | `string`/`RegExp` | _disabled_ |
+| [**`diagnostics`**][diagnostics] | [Diagnostics related configuration.][diagnostics] | `boolean` \| `object` | `true` |
+| [**`babelConfig`**][babelConfig] | [Babel(Jest) related configuration.][babelConfig] | `boolean` \| `object` | _disabled_ |
+| [**`stringifyContentPathRegex`**][stringifyContentPathRegex] | [Files which will become modules returning self content.][stringifyContentPathRegex] | `string` \| `RegExp` | _disabled_ |
 
 ### Upgrading
 
