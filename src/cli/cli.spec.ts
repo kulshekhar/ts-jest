@@ -281,4 +281,76 @@ Jest configuration written to "${normalize('/foo/bar/package.json')}".
       ])
     })
   })
+  describe('migrate', async () => {
+    const noOption = ['config:migrate']
+    const fullOptions = [...noOption, '--no-jest-preset', '--allow-js']
+
+    it('should migrate from package.json (without options)', async () => {
+      expect.assertions(2)
+      fs.existsSync.mockImplementation(() => true)
+      jest.mock(
+        `/migrate/1/package.json`,
+        () => ({
+          jest: { globals: { __TS_CONFIG__: { target: 'es6' } } },
+        }),
+        { virtual: true },
+      )
+      const res = await runCli(...noOption, '/migrate/1/package.json')
+      expect(res).toMatchInlineSnapshot(`
+Object {
+  "exitCode": 0,
+  "log": "[level:20] creating jest presets not handling JavaScript files
+",
+  "stderr": "
+Migrated Jest configuration:
+",
+  "stdout": "{
+  \\"globals\\": {
+    \\"ts-jest\\": {
+      \\"tsConfig\\": {
+        \\"target\\": \\"es6\\"
+      }
+    }
+  },
+  \\"preset\\": \\"ts-jest\\"
+}
+",
+}
+`)
+      expect(fs.writeFileSync).not.toHaveBeenCalled()
+    })
+    it('should migrate from package.json (with options)', async () => {
+      expect.assertions(2)
+      fs.existsSync.mockImplementation(() => true)
+      jest.mock(
+        `/migrate/2/package.json`,
+        () => ({
+          jest: { globals: { __TS_CONFIG__: { target: 'es6' } } },
+        }),
+        { virtual: true },
+      )
+      const res = await runCli(...fullOptions, '/migrate/2/package.json')
+      expect(res).toMatchInlineSnapshot(`
+Object {
+  "exitCode": 0,
+  "log": "[level:20] creating jest presets handling JavaScript files
+",
+  "stderr": "
+Migrated Jest configuration:
+",
+  "stdout": "{
+  \\"globals\\": {
+    \\"ts-jest\\": {
+      \\"tsConfig\\": {
+        \\"target\\": \\"es6\\"
+      }
+    }
+  }
+}
+",
+}
+`)
+      expect(fs.writeFileSync).not.toHaveBeenCalled()
+    })
+  })
 })
