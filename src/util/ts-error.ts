@@ -29,9 +29,7 @@ export class TSError extends BaseError {
     Object.defineProperty(this, 'stack', { value: '' })
   }
 
-  /**
-   * @internal
-   */
+  /* istanbul ignore next */
   [INSPECT_CUSTOM]() {
     return this.diagnosticText
   }

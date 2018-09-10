@@ -42,6 +42,7 @@ export class TsJestTransformer implements jest.Transformer {
     this.logger.debug({ baseOptions }, 'created new transformer')
   }
 
+  /* istanbul ignore next */
   [INSPECT_CUSTOM]() {
     return `[object TsJestTransformer<#${this.id}>]`
   }
@@ -111,7 +112,7 @@ export class TsJestTransformer implements jest.Transformer {
       result = babelJest.process(result, filePath, jestConfig, transformOptions)
     }
 
-    // allows hooks (usefull for testing)
+    // allows hooks (useful for testing)
     if (hooks.afterProcess) {
       this.logger.debug({ fileName: filePath, hookName: 'afterProcess' }, 'calling afterProcess hook')
       const newResult = hooks.afterProcess([input, filePath, jestConfig, transformOptions], result)
@@ -141,7 +142,9 @@ export class TsJestTransformer implements jest.Transformer {
   ): string {
     this.logger.debug({ fileName: filePath, transformOptions }, 'computing cache key for', filePath)
     const configs = this.configsFor(jestConfigStr)
-    const { instrument = false } = transformOptions
+    // we do not instrument, ensure it is false all the time
+    // const { instrument = false } = transformOptions
+    const instrument = false
     return sha1(
       configs.cacheKey,
       '\x00',
