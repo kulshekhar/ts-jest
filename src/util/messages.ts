@@ -10,12 +10,12 @@ export enum Errors {
   UnableToCompileTypeScript = 'Unable to compile TypeScript ({{help}}):\n{{diagnostics}}',
   NotMappingMultiStarPath = 'Not mapping "{{path}}" because it has more than one star (`*`).',
   NotMappingPathWithEmptyMap = 'Not mapping "{{path}}" because it has no target.',
-  MappingOnlyFirstTargetOfPath = 'Mapping only to first target of "{{path}}" becuase it has more than one ({{count}}).',
+  MappingOnlyFirstTargetOfPath = 'Mapping only to first target of "{{path}}" because it has more than one ({{count}}).',
 }
 
 export enum Helps {
   FixMissingModule = '{{label}}: `npm i -D {{module}}` (or `yarn add --dev {{module}}`)',
-  IgnoreDiagnosticCode = 'add code(s) in `[jest-config].globals.ts-jest.diagnostics.ignoreCodes` to ignore',
+  IgnoreDiagnosticCode = 'customize using `[jest-config].globals.ts-jest.diagnostics` option',
   MigrateConfigUsingCLI = 'Your Jest configuration is outdated. Use the CLI to help migrating it: ts-jest config:migrate <config-file>.',
 }
 

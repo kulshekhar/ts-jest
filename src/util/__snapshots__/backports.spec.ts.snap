@@ -99,6 +99,7 @@ Object {
     "ts-jest": Object {
       "diagnostics": Object {
         "pathRegex": "\\\\.spec\\\\.ts$",
+        "warnOnly": true,
       },
     },
   },
@@ -157,7 +158,9 @@ exports[`backportJestConfig with "globals.ts-jest.enableTsDiagnostics" set to tr
 Object {
   "globals": Object {
     "ts-jest": Object {
-      "diagnostics": true,
+      "diagnostics": Object {
+        "warnOnly": true,
+      },
     },
   },
 }

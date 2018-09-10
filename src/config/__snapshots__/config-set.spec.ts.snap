@@ -29,6 +29,7 @@ Object {
       18003,
     ],
     "pretty": true,
+    "throws": true,
   },
   "isolatedModules": false,
   "stringifyContentPathRegex": undefined,

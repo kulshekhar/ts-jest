@@ -48,6 +48,7 @@ export interface TsJestGlobalOptions {
         pretty?: boolean
         ignoreCodes?: number | string | Array<number | string>
         pathRegex?: RegExp | string
+        warnOnly?: boolean
       }
 
   /**
@@ -81,6 +82,7 @@ interface TsJestConfig$diagnostics {
   pretty: boolean
   ignoreCodes: number[]
   pathRegex?: string | undefined
+  throws: boolean
 }
 interface TsJestConfig$babelConfig$file {
   kind: 'file'
