@@ -62,7 +62,7 @@ export class TsJestTransformer implements jest.Transformer {
       if (csi) {
         // update the object so that we can find it later
         // this happens because jest first calls getCacheKey with stringified version of
-        // the config, and then it calls the tranformer with the proper object
+        // the config, and then it calls the transformer with the proper object
         csi.jestConfig.value = jestConfig
         return csi.configSet
       }
