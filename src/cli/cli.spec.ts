@@ -84,7 +84,7 @@ beforeEach(() => {
   // jest.resetModules()
   lastExitCode = undefined
   mockedProcess = mockObject(process, {
-    cwd: () => FAKE_CWD,
+    cwd: jest.fn(() => FAKE_CWD),
     argv: ['node', resolve(__dirname, '..', '..', 'cli.js')],
     stderr: mockWriteStream(),
     stdout: mockWriteStream(),
@@ -282,20 +282,27 @@ Jest configuration written to "${normalize('/foo/bar/package.json')}".
     })
   })
   describe('migrate', async () => {
+    const pkgPaths = {
+      withoutOptions: './a/package.json',
+      withOptions: './b/package.json',
+    }
     const noOption = ['config:migrate']
     const fullOptions = [...noOption, '--no-jest-preset', '--allow-js']
+    beforeEach(() => {
+      mockedProcess.cwd.mockImplementation(() => __dirname)
+    })
 
     it('should migrate from package.json (without options)', async () => {
       expect.assertions(2)
       fs.existsSync.mockImplementation(() => true)
       jest.mock(
-        `/migrate/1/package.json`,
+        pkgPaths.withoutOptions,
         () => ({
           jest: { globals: { __TS_CONFIG__: { target: 'es6' } } },
         }),
         { virtual: true },
       )
-      const res = await runCli(...noOption, '/migrate/1/package.json')
+      const res = await runCli(...noOption, pkgPaths.withoutOptions)
       expect(res).toMatchInlineSnapshot(`
 Object {
   "exitCode": 0,
@@ -323,13 +330,13 @@ Migrated Jest configuration:
       expect.assertions(2)
       fs.existsSync.mockImplementation(() => true)
       jest.mock(
-        `/migrate/2/package.json`,
+        pkgPaths.withOptions,
         () => ({
           jest: { globals: { __TS_CONFIG__: { target: 'es6' } } },
         }),
         { virtual: true },
       )
-      const res = await runCli(...fullOptions, '/migrate/2/package.json')
+      const res = await runCli(...fullOptions, pkgPaths.withOptions)
       expect(res).toMatchInlineSnapshot(`
 Object {
   "exitCode": 0,
