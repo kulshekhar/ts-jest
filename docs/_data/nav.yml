@@ -1,11 +1,11 @@
-- title: User Doc.
+- title: User Documentation
   url: /user
   sublinks:
     - title: Installation
       url: /user/install
     - title: Configuration
       url: /user/config
-- title: Tech Doc.
+- title: Contributor Reference
   url: /tech
   sublinks:
     - title: Processing
