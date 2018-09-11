@@ -117,7 +117,8 @@
   </header>
 
   <section>
-    <p>TSJest configuration is done within Jest configuration object. This configuration can be in <code class="highlighter-rouge">package.json</code> under the <code class="highlighter-rouge">jest</code> property, or in its own <code class="highlighter-rouge">jest.config.js</code> file. The latter is preferred since it’s a JavaScript file, but it depends on your needs and preference.</p>
+    <p>ts-jest configuration is done within Jest configuration object. This latest can be in <code class="highlighter-rouge">package.json</code> under the <code class="highlighter-rouge">jest</code> property, or in its own <code class="highlighter-rouge">jest.config.js</code> file.
+The later is preferred since it’s more customizable, but it depends on your needs and preference.</p>
 
 <h2 id="jest-preset">Jest preset</h2>
 
@@ -149,7 +150,9 @@
 
 <h3 id="advanced">Advanced</h3>
 
-<p>The preset can also be used alongside other options, but when you are already using another preset (ie <code class="highlighter-rouge">preset</code> is already set to something else than <code class="highlighter-rouge">ts-jest</code>), you might want to “pick” some settings from it. In this case, you’ll need to use the JavaScript version of Jest config:</p>
+<p>The ts-jest preset can also be used with other options.
+If you’re already using another preset, you might want only some specific settings from the ts-jest preset.
+In this case you’ll need to use the JavaScript version of Jest config:</p>
 
 <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// jest.config.js</span>
 <span class="kd">const</span> <span class="p">{</span> <span class="na">jestPreset</span><span class="p">:</span> <span class="nx">tsJestPreset</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'ts-jest'</span><span class="p">);</span>
@@ -229,10 +232,10 @@
 <span class="p">};</span>
 </code></pre></div></div>
 
-<h2 id="tsjest-options">TSJest options</h2>
+<h2 id="ts-jest-options">ts-jest options</h2>
 
 <h3 id="introduction">Introduction</h3>
-<p>All configuration of TSJest specific options are located under <code class="highlighter-rouge">globals.ts-jest</code> path of your Jest config:</p>
+<p>All configuration of ts-jest specific options are located under <code class="highlighter-rouge">globals.ts-jest</code> path of your Jest config:</p>
 
 <div class="row"><div class="col-md-6">
 
@@ -241,7 +244,7 @@
   <span class="c1">// [...]</span>
   <span class="na">globals</span><span class="p">:</span> <span class="p">{</span>
     <span class="s1">'ts-jest'</span><span class="p">:</span> <span class="p">{</span>
-      <span class="c1">// TSJest configuration goes here</span>
+      <span class="c1">// ts-jest configuration goes here</span>
     <span class="p">}</span>
   <span class="p">}</span>
 <span class="p">};</span>
@@ -255,7 +258,7 @@
   <span class="s2">"jest"</span><span class="p">:</span> <span class="p">{</span>
     <span class="s2">"globals"</span><span class="p">:</span> <span class="p">{</span>
       <span class="s2">"ts-jest"</span><span class="p">:</span> <span class="p">{</span>
-        <span class="c1">// TSJest configuration goes here</span>
+        <span class="c1">// ts-jest configuration goes here</span>
       <span class="p">}</span>
     <span class="p">}</span>
   <span class="p">}</span>
@@ -287,31 +290,31 @@
     <tr>
       <td><a href="tsConfig"><strong><code class="highlighter-rouge">tsConfig</code></strong></a></td>
       <td><a href="tsConfig">TypeScript compiler related configuration.</a></td>
-      <td><code class="highlighter-rouge">string</code> | <code class="highlighter-rouge">object</code> | <code class="highlighter-rouge">boolean</code></td>
+      <td><code class="highlighter-rouge">string</code>|<code class="highlighter-rouge">object</code>|<code class="highlighter-rouge">boolean</code></td>
       <td><em>auto</em></td>
     </tr>
     <tr>
       <td><a href="isolatedModules"><strong><code class="highlighter-rouge">isolatedModules</code></strong></a></td>
-      <td><a href="isolatedModules">Enables/disables the TypeScript language service</a></td>
+      <td><a href="isolatedModules">Disable type-checking</a></td>
       <td><code class="highlighter-rouge">boolean</code></td>
       <td><code class="highlighter-rouge">false</code></td>
     </tr>
     <tr>
       <td><a href="diagnostics"><strong><code class="highlighter-rouge">diagnostics</code></strong></a></td>
       <td><a href="diagnostics">Diagnostics related configuration.</a></td>
-      <td><code class="highlighter-rouge">boolean</code> | <code class="highlighter-rouge">object</code></td>
+      <td><code class="highlighter-rouge">boolean</code>|<code class="highlighter-rouge">object</code></td>
       <td><code class="highlighter-rouge">true</code></td>
     </tr>
     <tr>
       <td><a href="babelConfig"><strong><code class="highlighter-rouge">babelConfig</code></strong></a></td>
       <td><a href="babelConfig">Babel(Jest) related configuration.</a></td>
-      <td><code class="highlighter-rouge">boolean</code> | <code class="highlighter-rouge">object</code></td>
+      <td><code class="highlighter-rouge">boolean</code>|<code class="highlighter-rouge">object</code></td>
       <td><em>disabled</em></td>
     </tr>
     <tr>
       <td><a href="stringifyContentPathRegex"><strong><code class="highlighter-rouge">stringifyContentPathRegex</code></strong></a></td>
       <td><a href="stringifyContentPathRegex">Files which will become modules returning self content.</a></td>
-      <td><code class="highlighter-rouge">string</code> | <code class="highlighter-rouge">RegExp</code></td>
+      <td><code class="highlighter-rouge">string</code>|<code class="highlighter-rouge">RegExp</code></td>
       <td><em>disabled</em></td>
     </tr>
   </tbody>
@@ -319,7 +322,7 @@
 
 <h3 id="upgrading">Upgrading</h3>
 
-<p>You can use the <code class="highlighter-rouge">config:migrate</code> tool of TSJest CLI if you’re coming from an older version to help you migrate your Jest configuration.</p>
+<p>You can use the <code class="highlighter-rouge">config:migrate</code> tool of ts-jest CLI if you’re coming from an older version to help you migrate your Jest configuration.</p>
 
 <div class="row"><div class="col-md-6">
 

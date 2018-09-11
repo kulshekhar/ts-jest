@@ -119,9 +119,10 @@
   <section>
     <p>The <code class="highlighter-rouge">compiler</code> option allows you to define the compiler to be used. It’ll be used to load the NodeJS module holding the TypeScript compiler.</p>
 
-<p>The default value is <code class="highlighter-rouge">typescript</code>, which will load the original <a href="https://www.npmjs.com/package/typescript">TypeScript compiler module</a>. The version loaded will depend on the one installed in your project.</p>
+<p>The default value is <code class="highlighter-rouge">typescript</code>, which will load the original <a href="https://www.npmjs.com/package/typescript">TypeScript compiler module</a>.
+The loaded version will depend on the one installed in your project.</p>
 
-<p>If you use a custom compiler, such as <code class="highlighter-rouge">ttypescript</code> for example, be sure its API is the same as the original TypeScript, at least for what TSJest is using.</p>
+<p>If you use a custom compiler, such as <code class="highlighter-rouge">ttypescript</code>, make sure its API is the same as the original TypeScript, at least for what ts-jest is using.</p>
 
 <h3 id="example">Example:</h3>
 
@@ -132,7 +133,7 @@
   <span class="c1">// [...]</span>
   <span class="na">globals</span><span class="p">:</span> <span class="p">{</span>
     <span class="s1">'ts-jest'</span><span class="p">:</span> <span class="p">{</span>
-      <span class="na">compiler</span><span class="p">:</span> <span class="s1">'ttypsecript'</span>
+      <span class="na">compiler</span><span class="p">:</span> <span class="s1">'ttypescript'</span>
     <span class="p">}</span>
   <span class="p">}</span>
 <span class="p">};</span>
@@ -146,7 +147,7 @@
   <span class="s2">"jest"</span><span class="p">:</span> <span class="p">{</span>
     <span class="s2">"globals"</span><span class="p">:</span> <span class="p">{</span>
       <span class="s2">"ts-jest"</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">"compiler"</span><span class="p">:</span> <span class="s2">"ttypsecript"</span>
+        <span class="s2">"compiler"</span><span class="p">:</span> <span class="s2">"ttypescript"</span>
       <span class="p">}</span>
     <span class="p">}</span>
   <span class="p">}</span>

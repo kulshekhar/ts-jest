@@ -119,15 +119,15 @@
   <section>
     <p>The <code class="highlighter-rouge">tsConfig</code> option allows you to define the which <code class="highlighter-rouge">tsconfig</code> JSON file to use. An inline compiler options object can also be specified instead of the path to a file.</p>
 
-<p>By default, TSJest will do like <code class="highlighter-rouge">tsc</code> and use the project’s <code class="highlighter-rouge">tsconfig.json</code> file. If it cannot find one, it’ll use defaults TypeScript compiler options (except <code class="highlighter-rouge">es5</code> is used as target instead of <code class="highlighter-rouge">es3</code>).</p>
+<p>By default, it’ll use the default TypeScript and use the project’s <code class="highlighter-rouge">tsconfig.json</code> file. If it cannot find one, it’ll use defaults TypeScript compiler options (except <code class="highlighter-rouge">es5</code> is used as target instead of <code class="highlighter-rouge">es3</code>).</p>
 
-<p>If you need to use defaults and force TSJest to use the defaults even if there is a <code class="highlighter-rouge">tsconfig.json</code>, you can set this option to <code class="highlighter-rouge">false</code>.</p>
+<p>If you need to use defaults and force ts-jest to use the defaults even if there is a <code class="highlighter-rouge">tsconfig.json</code> in your project, you can set this option to <code class="highlighter-rouge">false</code>.</p>
 
 <h3 id="examples">Examples</h3>
 
 <h4 id="path-to-a-tsconfig-file">Path to a <code class="highlighter-rouge">tsconfig</code> file:</h4>
 
-<p>The path should be relative to the current working directory where you start Jest from. You can also use <code class="highlighter-rouge">&lt;rootDir&gt;</code> in the path, or use an absolute path (this last one is strongly not recommended).</p>
+<p>The path should be relative to the current working directory where you start Jest from. You can also use <code class="highlighter-rouge">&lt;rootDir&gt;</code> in the path to start from the project root dir.</p>
 
 <div class="row"><div class="col-md-6">
 
@@ -161,7 +161,8 @@
 
 <h4 id="inline-compiler-options">Inline compiler options:</h4>
 
-<p>Refer to the <a href="https://www.typescriptlang.org/docs/handbook/compiler-options.html">TypeScript compiler options</a> to know what can be used. It’s basically the same that you’d put in your <code class="highlighter-rouge">tsconfig.json</code>’s <code class="highlighter-rouge">compilerOptions</code>.</p>
+<p>Refer to the <a href="https://www.typescriptlang.org/docs/handbook/compiler-options.html">TypeScript compiler options</a> to know what can be used.
+It’s basically the same object you’d put in your <code class="highlighter-rouge">tsconfig.json</code>’s <code class="highlighter-rouge">compilerOptions</code>.</p>
 
 <div class="row"><div class="col-md-6">
 
@@ -199,7 +200,7 @@
 
 <h4 id="disable-auto-lookup">Disable auto-lookup:</h4>
 
-<p>By default TSJest will try to find the <code class="highlighter-rouge">tsconfig.json</code> in your project. But you may want to not use it at all and keep TypeScript default options. You can achieve this by setting <code class="highlighter-rouge">tsConfig</code> to <code class="highlighter-rouge">false</code>.</p>
+<p>By default ts-jest will try to find the <code class="highlighter-rouge">tsconfig.json</code> in your project. But you may want to not use it at all and keep TypeScript default options. You can achieve this by setting <code class="highlighter-rouge">tsConfig</code> to <code class="highlighter-rouge">false</code>.</p>
 
 <div class="row"><div class="col-md-6">
 

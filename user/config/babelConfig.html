@@ -117,12 +117,12 @@
   </header>
 
   <section>
-    <p>TSJest by default does <strong>NOT</strong> use Babel. But you may want to use it, especially if your code rely on Babel plugins to make some transformations. TSJest can call the BabelJest processor once TypeScript has transformed the source into JavaScript.</p>
+    <p>ts-jest by default does <strong>NOT</strong> use Babel. But you may want to use it, especially if your code rely on Babel plugins to make some transformations. ts-jest can call the BabelJest processor once TypeScript has transformed the source into JavaScript.</p>
 
 <p>The option is <code class="highlighter-rouge">babelConfig</code> and it works pretty much as the <code class="highlighter-rouge">tsConfig</code> option, except that it is disabled by default. Here is the possible values it can take:</p>
 <ul>
   <li><code class="highlighter-rouge">false</code>: the default, disables the use of Babel</li>
-  <li><code class="highlighter-rouge">true</code>: enables Babel processing. TSJest will try to find a <code class="highlighter-rouge">.babelrc</code>, <code class="highlighter-rouge">.babelrc.js</code> file or a <code class="highlighter-rouge">babel</code> section in the <code class="highlighter-rouge">package.json</code> file of your project and use it as the config to pass to <code class="highlighter-rouge">babel-jest</code> processor</li>
+  <li><code class="highlighter-rouge">true</code>: enables Babel processing. ts-jest will try to find a <code class="highlighter-rouge">.babelrc</code>, <code class="highlighter-rouge">.babelrc.js</code> file or a <code class="highlighter-rouge">babel</code> section in the <code class="highlighter-rouge">package.json</code> file of your project and use it as the config to pass to <code class="highlighter-rouge">babel-jest</code> processor.</li>
   <li><code class="highlighter-rouge">{ ... }</code>: inline <a href="https://babeljs.io/docs/en/next/options">Babel options</a>. You can also set this to an empty object (<code class="highlighter-rouge">{}</code>) so that the default Babel config file is not used.</li>
 </ul>
 

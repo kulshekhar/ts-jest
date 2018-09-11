@@ -117,9 +117,11 @@
   </header>
 
   <section>
-    <p>By default TSJest uses TypeScript compiler in the context of a project (yours), with full type-checking and features. But it can also be used to compile each file separately, as an isolated module. That’s what the <code class="highlighter-rouge">isolatedModules</code> option (which defaults to <code class="highlighter-rouge">false</code>) comes for.</p>
+    <p>By default ts-jest uses TypeScript compiler in the context of a project (yours), with full type-checking and features.
+But it can also be used to compile each file separately, what TypeScript calls an ‘isolated module’.
+That’s what the <code class="highlighter-rouge">isolatedModules</code> option (which defaults to <code class="highlighter-rouge">false</code>) does.</p>
 
-<p>You’ll loose type-checking ability and some features such as <code class="highlighter-rouge">const enum</code>, but in the case you plan on using Jest with the cache disabled (<code class="highlighter-rouge">jest --no-cache</code>), your tests will then run much faster.</p>
+<p>You’ll lose type-checking ability and some features such as <code class="highlighter-rouge">const enum</code>, but in the case you plan on using Jest with the cache disabled (<code class="highlighter-rouge">jest --no-cache</code>), your tests will then run much faster.</p>
 
 <p>Here is how to disable type-checking and compile each file as an isolated module:</p>
 

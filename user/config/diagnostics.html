@@ -117,20 +117,16 @@
   </header>
 
   <section>
-    <p>The <code class="highlighter-rouge">diagnostics</code> option allows to enable/disable the error reporting. But it can also be used to filter which one should throw during tests, as well from which file it should be reported or not.</p>
+    <p>The <code class="highlighter-rouge">diagnostics</code> option allows to configure error reporting. 
+It can both be enabled/disabled entirely or limited to a specific type of errors and/or files.</p>
 
-<p>A diagnostic can be:</p>
-<ul>
-  <li>an error in your TypeScript config (whether it’s a file or inline)</li>
-  <li>syntax errors in some of your TypeScript files (source or tests)</li>
-  <li>type/semantic errors, what TypeScript has actually been made for 😁</li>
-</ul>
-
-<p>If a diagnostic is not filtered out, it’ll fail the compilation within TSJest, and so will your related test.</p>
+<p>If a diagnostic is not filtered out, ts-jest will fail the compilation and your test.</p>
 
 <h3 id="disablingenabling">Disabling/enabling</h3>
 
-<p>By default all diagnostic are enabled. This is the same as setting the <code class="highlighter-rouge">diagnostics</code> option to <code class="highlighter-rouge">true</code>. To disable all diagnostics, set <code class="highlighter-rouge">diagnostics</code> to <code class="highlighter-rouge">false</code> (you might experience slightly better performance as well, especially if you disabled Jest cache).</p>
+<p>By default all diagnostics are enabled. This is the same as setting the <code class="highlighter-rouge">diagnostics</code> option to <code class="highlighter-rouge">true</code>.
+To disable all diagnostics, set <code class="highlighter-rouge">diagnostics</code> to <code class="highlighter-rouge">false</code>.
+This might lead to slightly better performance, especially if you’re not using Jest’s cache.</p>
 
 <h3 id="advanced-configuration">Advanced configuration</h3>
 
@@ -270,8 +266,6 @@
   <li>A <code class="highlighter-rouge">string</code> with a list of the above (example: <code class="highlighter-rouge">"1009, TS2571, 4072 ,ts6031 "</code>)</li>
   <li>An <code class="highlighter-rouge">array</code> of one or more from <code class="highlighter-rouge">1</code> or <code class="highlighter-rouge">3</code> (example: <code class="highlighter-rouge">[1009, "TS2571", "6031"]</code>)</li>
 </ol>
-
-<p>It’s advised to use concise types along the list of course:</p>
 
 <div class="row"><div class="col-md-6">
 

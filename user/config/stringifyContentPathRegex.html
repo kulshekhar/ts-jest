@@ -117,7 +117,9 @@
   </header>
 
   <section>
-    <p>The <code class="highlighter-rouge">stringifyContentPathRegex</code> option has been kept for backward compatibility of <code class="highlighter-rouge">__HTML_TRANSFORM__</code>, and should actually be another simple Jest processor. It’s a regular expression pattern used to match the path of file to be transformed. If it matches, the file will be exported as a module exporting its content.</p>
+    <p>The <code class="highlighter-rouge">stringifyContentPathRegex</code> option has been kept for backward compatibility of <code class="highlighter-rouge">__HTML_TRANSFORM__</code>
+It’s a regular expression pattern used to match the path of file to be transformed.
+If it matches, the file will be exported as a module exporting its content.</p>
 
 <p>Let’s say for example that you have a file <code class="highlighter-rouge">foo.ts</code> which contains <code class="highlighter-rouge">export default "bar"</code>, and your <code class="highlighter-rouge">stringifyContentPathRegex</code> is set to <code class="highlighter-rouge">foo\\.ts$</code>, the resulting module won’t be the result of compiling <code class="highlighter-rouge">foo.ts</code> source, but instead it’ll be a module which exports the string <code class="highlighter-rouge">"export default \"bar\""</code>.</p>
 
