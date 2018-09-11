@@ -14,7 +14,7 @@ const createTransformer = (options?: any): jest.Transformer => {
         flushLogs();
       }
     },
-    createTransformer: undefined as any,
+    createTransformer: undefined,
   };
 };
 
