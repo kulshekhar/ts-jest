@@ -27,7 +27,7 @@ yarn add --dev jest typescript ts-jest
 
 ### Creating
 
-By default Jest can run without any config file, but it will not compile `.ts` files.
+By default Jest can run without any config files, but it will not compile `.ts` files.
 To make it transpile TypeScript with ts-jest, we will need to create a configuration file.
 
 ts-jest can create the configuration file for you automatically:
@@ -50,7 +50,7 @@ yarn ts-jest config:init
 This will create a basic Jest configuration file which will make Jest know about your `.ts` files and handle them correctly.
 
 You can also use the `jest --init` command (prefixed with either `npx` or `yarn` depending on what you're using) to have more options related to Jest.
-However, answer `no` to the Jest question about whether or not to enable Typescript. Instead add the line: `preset: "ts-jest"` to the the `jest.config.js` file afterwards
+However, answer `no` to the Jest question about whether or not to enable Typescript. Instead, add the line: `preset: "ts-jest"` to the the `jest.config.js` file afterwardss
 
 ### Customizing
 

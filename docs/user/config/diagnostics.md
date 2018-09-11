@@ -3,7 +3,7 @@ title: Diagnostics option
 ---
 
 The `diagnostics` option allows to configure error reporting. 
-It can both be enabled/disabled entirely or limited to a specific type of errors or files.
+It can both be enabled/disabled entirely or limited to a specific type of errors and/or files.
 
 If a diagnostic is not filtered out, ts-jest will fail the compilation and your test.
 
