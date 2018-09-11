@@ -15,7 +15,7 @@ It supports all features of TypeScript _(even those which Babel 7 typescript plu
 
 [<img src="./docs/assets/img/troubleshooting.png" align="left" height="24"> Before reporting any issue, be sure to check the troubleshooting page](https://kulshekhar.github.io/ts-jest/user/troubleshooting)
 
-[<img src="./docs/assets/img/pull-request.png" align="left" height="24"> Looking for collaborators. Want to help improve ts-jest?](https://github.com/kulshekhar/ts-jest/issues/223)
+[<img src="./docs/assets/img/pull-request.png" align="left" height="24"> We're looking for collaborators! Want to help improve ts-jest?](https://github.com/kulshekhar/ts-jest/issues/223)
 
 ---
 

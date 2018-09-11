@@ -61,8 +61,11 @@ stop
 
 {% endplantuml %}
 
-
 ## Running
+
+
+*These are internal technical documents. If you're not a contributor to ts-jest, but simply trying to use the library you'll find nothing of value here* 
+
 
 When a test-case needs to be run with a given template within tests, here is what's happening (in `e2e/__helpers__/test-case/runtime.ts`):
 

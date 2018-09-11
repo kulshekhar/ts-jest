@@ -3,10 +3,10 @@ layout: home
 ---
 <p align="center">
 <img src="assets/img/logo.png"
-     title="TSJest Logo by Huafu Gandon" width="128" height="128">
+     title="ts-jest Logo by Huafu Gandon" width="128" height="128">
 </p>
 
-**TSJest** (`ts-jest`) is a TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript.
+**ts-jest** (`ts-jest`) is a TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript.
 
 It supports all features of TypeScript _(even those which Babel 7 typescript plugin does not)_ and has an internal cache for your tests to run faster.
 
@@ -33,7 +33,7 @@ Refer to the [installation](user/install) and [configuration](user/config) instr
 
 * [TypeScript](https://www.typescriptlang.org/) - JavaScript that scales
 * [Jest](https://jestjs.io/) - Delightful JavaScript Testing
-* [TSJest](https:/github.com/kulshekhar/ts-jest) - Jest processor for TypeScript _(yes, TSJest uses itself for its tests)_
+* [ts-jest](https:/github.com/kulshekhar/ts-jest) - Jest processor for TypeScript _(yes, TSJest uses itself for its tests)_
 
 ## Contributing
 
@@ -41,7 +41,8 @@ Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduc
 
 ## Versioning
 
-We **DO NOT** use [Semantic Versioning](http://semver.org/). TSJest's major version number follows that of the compatible/required version of Jest. While we try to avoid breaking changes within a major version, sometimes it can be unavoidable. In such cases, we increase the minor version. For the versions available, see the [tags in this repository](https://github.com/kulshekhar/ts-jest/tags).
+We **DO NOT** use [SemVer](http://semver.org/) for versioning. Our Major version follows Jest, which means that our **minor changes can be breaking.**
+Please make sure to pin your version of ts-jest to a specific version if this is a problem. For the versions available, see the [tags on this repository](https://github.com/kulshekhar/ts-jest/tags).
 
 ## Authors/maintainers
 

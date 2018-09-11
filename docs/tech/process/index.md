@@ -3,6 +3,9 @@ title: Jest flow
 ---
 ## Jest process
 
+*These are internal technical documents. If you're not a contributor to ts-jest, but simply trying to use the library you'll find nothing of value here* 
+
+
 {% plantuml %}
 
 start
@@ -33,7 +36,7 @@ end
 {% endplantuml %}
 
 
-## TsJest process
+## ts-jest process
 
 {% plantuml %}
 

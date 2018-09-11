@@ -4,9 +4,10 @@ title: Compiler option
 
 The `compiler` option allows you to define the compiler to be used. It'll be used to load the NodeJS module holding the TypeScript compiler.
 
-The default value is `typescript`, which will load the original [TypeScript compiler module](https://www.npmjs.com/package/typescript). The version loaded will depend on the one installed in your project.
+The default value is `typescript`, which will load the original [TypeScript compiler module](https://www.npmjs.com/package/typescript).
+The loaded version will depend on the one installed in your project.
 
-If you use a custom compiler, such as `ttypescript` for example, be sure its API is the same as the original TypeScript, at least for what TSJest is using.
+If you use a custom compiler, such as `ttypescript`, make sure its API is the same as the original TypeScript, at least for what ts-jest is using.
 
 ### Example:
 
@@ -18,7 +19,7 @@ module.exports = {
   // [...]
   globals: {
     'ts-jest': {
-      compiler: 'ttypsecript'
+      compiler: 'ttypescript'
     }
   }
 };
@@ -33,7 +34,7 @@ module.exports = {
   "jest": {
     "globals": {
       "ts-jest": {
-        "compiler": "ttypsecript"
+        "compiler": "ttypescript"
       }
     }
   }
