@@ -1,7 +1,7 @@
 ---
 title: Configuration
 ---
-TSJest configuration is done within Jest configuration object. This configuration can be in `package.json` under the `jest` property, or in its own `jest.config.js` file. The latter is preferred since it's a JavaScript file, but it depends on your needs and preference.
+TSJest configuration is done within Jest configuration object. This configuration can be in `package.json` under the `jest` property, or in its own `jest.config.js` file. The 2nd option is preferred since it's a JavaScript file, but it depends on your needs and preference.
 
 ## Jest preset
 

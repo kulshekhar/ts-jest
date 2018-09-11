@@ -13,7 +13,7 @@ If a diagnostic is not filtered out, it'll fail the compilation within TSJest, a
 
 ### Disabling/enabling
 
-By default all diagnostic are enabled. This is the same as setting the `diagnostics` option to `true`. To disable all diagnostics, set `diagnostics` to `false` (you might experience slightly better performance as well, especially if you disabled Jest cache).
+By default all diagnostics are enabled. This is the same as setting the `diagnostics` option to `true`. To disable all diagnostics, set `diagnostics` to `false` (you might experience slightly better performance as well, especially if you disabled Jest cache).
 
 ### Advanced configuration
 
