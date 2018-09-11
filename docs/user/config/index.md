@@ -8,7 +8,7 @@ The later is preferred since it's more customizable, but it depends on your need
 
 ### Basic usage
 
-ts-jest defines a preset which Jest can use. In most of the case, simply adding `preset: 'ts-jest'` to your Jest config should be enough starting using TypeScript with Jest.
+In most cases, simply adding `preset: 'ts-jest'` to your Jest config should be enough to start using TypeScript with Jest (assuming you did add `ts-jest` to your dev. dependencies of course):
 
 <div class="row"><div class="col-md-6" markdown="block">
 
@@ -53,6 +53,76 @@ module.exports = {
 }
 ```
 
+## Paths mapping
+
+If you use ["baseUrl" and "paths" options](https://www.typescriptlang.org/docs/handbook/module-resolution.html) in your `tsconfig` file, you should make sure the ["moduleNameMapper"](https://facebook.github.io/jest/docs/en/configuration.html#modulenamemapper-object-string-string) option in your Jest config is setup accordingly.
+
+TSJest provides a helper to transform the mapping from `tsconfig` to Jest config format, but it needs the `.js` version of the config file.
+
+### Example:
+
+#### TypeScript config
+
+With the below config in your `tsconfig`:
+```js
+// tsconfig.json
+{
+  "compilerOptions": {
+    "paths": {
+      "@App/*": ["src/*"],
+      "lib/*": ["common/*"]
+    }
+  }
+}
+```
+
+#### Jest config (without helper):
+
+<div class="row"><div class="col-md-6" markdown="block">
+
+```js
+// jest.config.js
+module.exports = {
+  // [...]
+  moduleNameMapper: {
+    '^@App/(.*)$': '<rootDir>/src/$1',
+    '^lib/(.*)$': '<rootDir>/common/$1'
+  }
+};
+```
+
+</div><div class="col-md-6" markdown="block">
+
+```js
+// OR package.json
+{
+  // [...]
+  "jest": {
+    "moduleNameMapper": {
+      "^@App/(.*)$": "<rootDir>/src/$1",
+      "^lib/(.*)$": "<rootDir>/common/$1"
+    }
+  }
+}
+```
+
+</div></div>
+
+#### Jest config (with helper):
+
+```js
+// jest.config.js
+const { pathsToModuleNameMapper } = require('ts-jest');
+// In the following statement, replace `./tsconfig` with the path to your `tsconfig` file
+// which contains the path mapping (ie the `compilerOptions.paths` option):
+const { compilerOptions } = require('./tsconfig');
+
+module.exports = {
+  // [...]
+  moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths /*, { prefix: '<rootDir>/' } */ )
+};
+```
+
 ## ts-jest options
 
 ### Introduction
@@ -95,7 +165,7 @@ module.exports = {
 All options have default values which should fit most of the projects. Click on the option's name to see details and example(s).
 
 | Option | Description | Type | Default |
-|---|---|---|
+|---|---|---|---|
 | [**`compiler`**][compiler] | [TypeScript module to use as compiler.][compiler] | `string` | `"typescript"` |
 | [**`tsConfig`**][tsConfig] | [TypeScript compiler related configuration.][tsConfig] | `string`/`object`/`boolean` | _auto_ |
 | [**`isolatedModules`**][isolatedModules] | [Disable type-checking][isolatedModules] | `boolean` | `false` |
@@ -123,9 +193,9 @@ npx ts-jest config:migrate package.json
 
 </div></div>
 
-[compiler]: config/compiler
-[tsConfig]: config/tsConfig
-[isolatedModules]: config/isolatedModules
-[diagnostics]: config/diagnostics
-[babelConfig]: config/babelConfig
-[stringifyContentPathRegex]: config/stringifyContentPathRegex
+[compiler]: compiler
+[tsConfig]: tsConfig
+[isolatedModules]: isolatedModules
+[diagnostics]: diagnostics
+[babelConfig]: babelConfig
+[stringifyContentPathRegex]: stringifyContentPathRegex
