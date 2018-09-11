@@ -61,7 +61,7 @@ export function tsJestConfig(options?: Partial<TsJestConfig>): TsJestConfig {
     babelConfig: undefined,
     tsConfig: undefined,
     stringifyContentPathRegex: undefined,
-    diagnostics: { ignoreCodes: [], pretty: false },
+    diagnostics: { ignoreCodes: [], pretty: false, throws: true },
     ...options,
   }
 }

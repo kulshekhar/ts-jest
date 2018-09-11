@@ -100,11 +100,7 @@ export function createCompiler(configs: ConfigSet): TsCompiler {
       reportDiagnostics: configs.shouldReportDiagnostic(fileName),
     })
 
-    const diagnosticList = result.diagnostics ? configs.filterDiagnostics(result.diagnostics) : []
-
-    if (diagnosticList.length) {
-      throw configs.createTsError(diagnosticList)
-    }
+    if (result.diagnostics) configs.raiseDiagnostics(result.diagnostics, fileName, logger)
 
     return [result.outputText, result.sourceMapText as string]
   }
@@ -190,11 +186,8 @@ export function createCompiler(configs: ConfigSet): TsCompiler {
           .concat(service.getSyntacticDiagnostics(fileName))
           .concat(service.getSemanticDiagnostics(fileName))
 
-        const diagnosticList = configs.filterDiagnostics(diagnostics)
-
-        if (diagnosticList.length) {
-          throw configs.createTsError(diagnosticList)
-        }
+        // will raise or just warn diagnostics depending on config
+        configs.raiseDiagnostics(diagnostics, fileName, logger)
       }
 
       if (output.emitSkipped) {

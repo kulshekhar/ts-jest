@@ -84,7 +84,7 @@ beforeEach(() => {
   // jest.resetModules()
   lastExitCode = undefined
   mockedProcess = mockObject(process, {
-    cwd: () => FAKE_CWD,
+    cwd: jest.fn(() => FAKE_CWD),
     argv: ['node', resolve(__dirname, '..', '..', 'cli.js')],
     stderr: mockWriteStream(),
     stdout: mockWriteStream(),
@@ -279,6 +279,85 @@ Jest configuration written to "${normalize('/foo/bar/package.json')}".
 }`,
         ],
       ])
+    })
+  })
+  describe('migrate', async () => {
+    const pkgPaths = {
+      withoutOptions: './a/package.json',
+      withOptions: './b/package.json',
+    }
+    const noOption = ['config:migrate']
+    const fullOptions = [...noOption, '--no-jest-preset', '--allow-js']
+    beforeEach(() => {
+      mockedProcess.cwd.mockImplementation(() => __dirname)
+    })
+
+    it('should migrate from package.json (without options)', async () => {
+      expect.assertions(2)
+      fs.existsSync.mockImplementation(() => true)
+      jest.mock(
+        pkgPaths.withoutOptions,
+        () => ({
+          jest: { globals: { __TS_CONFIG__: { target: 'es6' } } },
+        }),
+        { virtual: true },
+      )
+      const res = await runCli(...noOption, pkgPaths.withoutOptions)
+      expect(res).toMatchInlineSnapshot(`
+Object {
+  "exitCode": 0,
+  "log": "[level:20] creating jest presets not handling JavaScript files
+",
+  "stderr": "
+Migrated Jest configuration:
+",
+  "stdout": "{
+  \\"globals\\": {
+    \\"ts-jest\\": {
+      \\"tsConfig\\": {
+        \\"target\\": \\"es6\\"
+      }
+    }
+  },
+  \\"preset\\": \\"ts-jest\\"
+}
+",
+}
+`)
+      expect(fs.writeFileSync).not.toHaveBeenCalled()
+    })
+    it('should migrate from package.json (with options)', async () => {
+      expect.assertions(2)
+      fs.existsSync.mockImplementation(() => true)
+      jest.mock(
+        pkgPaths.withOptions,
+        () => ({
+          jest: { globals: { __TS_CONFIG__: { target: 'es6' } } },
+        }),
+        { virtual: true },
+      )
+      const res = await runCli(...fullOptions, pkgPaths.withOptions)
+      expect(res).toMatchInlineSnapshot(`
+Object {
+  "exitCode": 0,
+  "log": "[level:20] creating jest presets handling JavaScript files
+",
+  "stderr": "
+Migrated Jest configuration:
+",
+  "stdout": "{
+  \\"globals\\": {
+    \\"ts-jest\\": {
+      \\"tsConfig\\": {
+        \\"target\\": \\"es6\\"
+      }
+    }
+  }
+}
+",
+}
+`)
+      expect(fs.writeFileSync).not.toHaveBeenCalled()
     })
   })
 })

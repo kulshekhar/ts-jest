@@ -60,10 +60,10 @@ if (filename ends with .d.ts) then (yes)
 else (no)
 
   |#Thistle|compiler (cached)|
-  if (has type-checking?) then (yes)
+  if (isolated modules?) then (yes)
+  else (no)
     :create and cache
     ts lang service;
-  else (no)
   endif
 
   -> source;
@@ -73,7 +73,15 @@ else (no)
     from persistent cache;
 
   else (no)
-    if (has type checking?) then (yes)
+    if (isolated modules?) then (yes)
+      :compile with
+      transpileModule;
+      note left
+        files will be compiled
+        as isolated modules
+      end note
+
+    else (no)
       :compile with
       service;
       note left
@@ -82,14 +90,6 @@ else (no)
 
         mem cache is used when
         reading files
-      end note
-
-    else (no)
-      :compile with
-      transpileModule;
-      note left
-        files will be compiled
-        as isolated modules
       end note
 
     endif

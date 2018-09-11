@@ -61,7 +61,7 @@ Object {
 Array [
   "[level:40] Not mapping \\"no-target\\" because it has no target.
 ",
-  "[level:40] Mapping only to first target of \\"too-many-target\\" becuase it has more than one (2).
+  "[level:40] Mapping only to first target of \\"too-many-target\\" because it has more than one (2).
 ",
   "[level:40] Not mapping \\"too/*/many/*/stars\\" because it has more than one star (\`*\`).
 ",
