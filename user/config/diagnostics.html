@@ -137,7 +137,7 @@
 <p>The option’s value can also accept an object for more advanced configuration. Each config. key is optional:</p>
 
 <ul>
-  <li><strong><code class="highlighter-rouge">pretty</code></strong>: Enables/disable colorful and pretty output of errors (default: <em>enabled</em>).</li>
+  <li><strong><code class="highlighter-rouge">warnOnly</code></strong>: If specified and <code class="highlighter-rouge">true</code>, diagnostics will be reported but won’t stop compilation (default: <em>disabled</em>).</li>
   <li><strong><code class="highlighter-rouge">ignoreCodes</code></strong>: List of TypeScript error codes to ignore. Complete list can be found <a href="https://github.com/Microsoft/TypeScript/blob/master/src/compiler/diagnosticMessages.json">there</a>. By default here are the ones ignored:
     <ul>
       <li><code class="highlighter-rouge">6059</code>: <em>‘rootDir’ is expected to contain all source files.</em></li>
@@ -146,6 +146,7 @@
     </ul>
   </li>
   <li><strong><code class="highlighter-rouge">pathRegex</code></strong>: If specified, diagnostics of source files which path does <strong>not</strong> match will be ignored.</li>
+  <li><strong><code class="highlighter-rouge">pretty</code></strong>: Enables/disables colorful and pretty output of errors (default: <em>enabled</em>).</li>
 </ul>
 
 <h3 id="examples">Examples</h3>
@@ -213,6 +214,44 @@
       <span class="s2">"ts-jest"</span><span class="p">:</span> <span class="p">{</span>
         <span class="s2">"diagnostics"</span><span class="p">:</span> <span class="p">{</span>
           <span class="s2">"pathRegex"</span><span class="p">:</span> <span class="s2">"</span><span class="err">\\</span><span class="s2">.(spec|test)</span><span class="err">\\</span><span class="s2">.ts$"</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>    </div>
+
+  </div></div>
+
+<h5 id="do-not-fail-on-first-error">Do not fail on first error</h5>
+
+<p>While some diagnostics are stop-blockers for the compilation, most of them are not. If you want the compilation (and so your tests) to continue when encountering those, set the <code class="highlighter-rouge">warnOnly</code> to <code class="highlighter-rouge">true</code>:</p>
+
+<div class="row"><div class="col-md-6">
+
+    <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// jest.config.js</span>
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="c1">// [...]</span>
+  <span class="na">globals</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s1">'ts-jest'</span><span class="p">:</span> <span class="p">{</span>
+      <span class="na">diagnostics</span><span class="p">:</span> <span class="p">{</span>
+        <span class="na">warnOnly</span><span class="p">:</span> <span class="kc">true</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div>    </div>
+
+  </div><div class="col-md-6">
+
+    <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// OR package.json</span>
+<span class="p">{</span>
+  <span class="c1">// [...]</span>
+  <span class="s2">"jest"</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">"globals"</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s2">"ts-jest"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">"diagnostics"</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s2">"warnOnly"</span><span class="p">:</span> <span class="kc">true</span>
         <span class="p">}</span>
       <span class="p">}</span>
     <span class="p">}</span>

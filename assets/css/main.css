@@ -4917,11 +4917,5 @@ p > img[align="left"] { margin-right: 0.5em; }
 blockquote { color: #17a2b8; background-color: #f8f9fa; padding: 0.75rem; }
 blockquote > p { margin: 0; }
 
-h2 { margin-top: 1.5rem; }
-h2::before { display: block; content: ''; margin-top: 1rem; margin-bottom: 1rem; border: 0; border-top: 1px solid rgba(0, 0, 0, 0.1); }
-
-h3 { margin-top: 1rem; }
-
-h4 { margin-top: .75rem; }
-
-div.highlighter-rouge { margin-bottom: 1rem; }
+h2 { margin-top: 1rem; }
+h2::before { display: block; content: ''; border-top: 1px #f8f9fa solid; margin-bottom: 1rem; }

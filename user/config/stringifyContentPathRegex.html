@@ -121,11 +121,11 @@
 
 <p>Let’s say for example that you have a file <code class="highlighter-rouge">foo.ts</code> which contains <code class="highlighter-rouge">export default "bar"</code>, and your <code class="highlighter-rouge">stringifyContentPathRegex</code> is set to <code class="highlighter-rouge">foo\\.ts$</code>, the resulting module won’t be the result of compiling <code class="highlighter-rouge">foo.ts</code> source, but instead it’ll be a module which exports the string <code class="highlighter-rouge">"export default \"bar\""</code>.</p>
 
-<p><strong>CAUTION</strong>: Whatever file(s) you want to match with <code class="highlighter-rouge">stringifyContentPathRegex</code> pattern, you must ensure the Jest <code class="highlighter-rouge">transform</code> option pointing to <code class="highlighter-rouge">ts-jest</code> matches them. You may also have to add the extension(s) of this/those file(s) to <code class="highlighter-rouge">moduleFileExtensions</code> Jest option.</p>
+<p><strong>CAUTION</strong>: Whatever file(s) you want to match with <code class="highlighter-rouge">stringifyContentPathRegex</code> pattern, you must ensure the Jest <code class="highlighter-rouge">transform</code> option pointing to <code class="highlighter-rouge">ts-jest</code> matches them. You may also have to add the extendson(s) of this/those file(s) to <code class="highlighter-rouge">moduleFileExtensions</code> Jest option.</p>
 
 <h3 id="example">Example:</h3>
 
-<p>In the <code class="highlighter-rouge">jest.config.js</code> version, you could do as in the <code class="highlighter-rouge">package.json</code> version of the config, but extending from the preset will ensure more compatibility without any changes when updating.</p>
+<p>In the <code class="highlighter-rouge">jest.config.js</code> version, you could do as in the <code class="highlighter-rouge">package.json</code> version of the config, but extending from the preset will ensure more compatiblity without any changes when updating.</p>
 
 <div class="row"><div class="col-md-6">
 
