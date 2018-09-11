@@ -12,11 +12,23 @@ blockquote {
 }
 
 h2 {
-  margin-top: 1rem;
+  margin-top: 1.5rem;
   &::before {
     display: block;
     content: '';
-    border-top: 1px $light solid;
-    margin-bottom: 1rem;
-  }
+    margin-top: $hr-margin-y;
+    margin-bottom: $hr-margin-y;
+    border: 0;
+    border-top: $hr-border-width solid $hr-border-color;
+    }
+}
+h3 {
+  margin-top: 1rem;
+}
+h4 {
+  margin-top: .75rem;
+}
+
+div.highlighter-rouge {
+  margin-bottom: 1rem;
 }

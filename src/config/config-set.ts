@@ -8,7 +8,7 @@
  * version of the `jest.ProjectConfig`, and then later it calls `process()`
  * with the complete, object version of it.
  */
-import { Logger } from 'bs-logger'
+import { LogContexts, Logger } from 'bs-logger'
 import { existsSync, readFileSync } from 'fs'
 import json5 from 'json5'
 import { dirname, isAbsolute, join, resolve } from 'path'
@@ -123,7 +123,7 @@ export class ConfigSet {
     readonly parentOptions?: TsJestGlobalOptions,
     parentLogger?: Logger,
   ) {
-    this.logger = parentLogger ? parentLogger.child({ namespace: 'config' }) : logger
+    this.logger = parentLogger ? parentLogger.child({ [LogContexts.namespace]: 'config' }) : logger
   }
 
   @Memoize()
@@ -187,9 +187,10 @@ export class ConfigSet {
     const ignoreList: any[] = [IGNORE_DIAGNOSTIC_CODES, process.env.TS_JEST_IGNORE_DIAGNOSTICS]
 
     if (diagnosticsOpt === true || diagnosticsOpt == null) {
-      diagnostics = { ignoreCodes: [], pretty: true }
+      diagnostics = { ignoreCodes: [], pretty: true, throws: true }
     } else if (diagnosticsOpt === false) {
       diagnostics = {
+        throws: false,
         pretty: true,
         ignoreCodes: [],
         pathRegex: MATCH_NOTHING.source, // matches nothing
@@ -200,9 +201,10 @@ export class ConfigSet {
         pretty: diagnosticsOpt.pretty == null ? true : !!diagnosticsOpt.pretty,
         ignoreCodes: [],
         pathRegex: normalizeRegex(diagnosticsOpt.pathRegex),
+        throws: !diagnosticsOpt.warnOnly,
       }
     }
-    // now we clean and flaten the list
+    // now we clean and flatten the list
     diagnostics.ignoreCodes = toDiagnosticCodeList(ignoreList)
 
     // stringifyContentPathRegex option
@@ -250,19 +252,35 @@ export class ConfigSet {
     const {
       tsJest: { tsConfig },
     } = this
+    const configFilePath = tsConfig && tsConfig.kind === 'file' ? tsConfig.value : undefined
     const result = this.readTsConfig(
       tsConfig && tsConfig.kind === 'inline' ? tsConfig.value : undefined,
-      tsConfig && tsConfig.kind === 'file' ? tsConfig.value : undefined,
+      configFilePath,
       tsConfig == null,
     )
     // throw errors if any matching wanted diagnostics
-    const configDiagnosticList = this.filterDiagnostics(result.resolved.errors)
-    if (configDiagnosticList.length) {
-      throw this.createTsError(configDiagnosticList)
-    }
+    this.raiseDiagnostics(result.resolved.errors, configFilePath)
 
     this.logger.debug({ tsconfig: result }, 'normalized typescript config')
     return result
+  }
+
+  @Memoize()
+  get raiseDiagnostics() {
+    const {
+      createTsError,
+      filterDiagnostics,
+      tsJest: {
+        diagnostics: { throws },
+      },
+    } = this
+    return (diagnostics: Diagnostic[], filePath?: string, logger: Logger = this.logger): void | never => {
+      const filteredDiagnostics = filterDiagnostics(diagnostics, filePath)
+      if (filteredDiagnostics.length === 0) return
+      const error = createTsError(filteredDiagnostics)
+      if (throws) throw error
+      logger.warn({ error }, error.message)
+    }
   }
 
   @Memoize()
@@ -416,7 +434,7 @@ export class ConfigSet {
       logger.debug('file caching disabled')
       return
     }
-    const cacheSufix = sha1(
+    const cacheSuffix = sha1(
       stringify({
         version: this.compilerModule.version,
         compiler: this.tsJest.compiler,
@@ -425,7 +443,7 @@ export class ConfigSet {
         ignoreDiagnostics: this.tsJest.diagnostics.ignoreCodes,
       }),
     )
-    const res = join(this.jest.cacheDirectory, `ts-jest-${cacheSufix}`)
+    const res = join(this.jest.cacheDirectory, `ts-jest-${cacheSuffix}`)
     logger.debug({ cacheDirectory: res }, `will use file caching`)
     return res
   }

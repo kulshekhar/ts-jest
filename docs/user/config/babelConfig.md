@@ -47,7 +47,7 @@ module.exports = {
 
 #### Path to a `balelrc` file:
 
-The path should be relative to the current working directory where you start Jest from. You can also use `<rootDir>` in the path, or use an absolute path (this last one is strongly not recommanded).
+The path should be relative to the current working directory where you start Jest from. You can also use `<rootDir>` in the path, or use an absolute path (this last one is strongly not recommended).
 
 <div class="row"><div class="col-md-6" markdown="block">
 

@@ -59,8 +59,8 @@ export const backportJestConfig = <T extends jest.InitialOptions | jest.ProjectC
   if ('enableTsDiagnostics' in tsJest) {
     warnConfig('globals.ts-jest.enableTsDiagnostics', 'globals.ts-jest.diagnostics')
     if (tsJest.enableTsDiagnostics) {
-      mergeTsJest.diagnostics =
-        typeof tsJest.enableTsDiagnostics === 'string' ? { pathRegex: tsJest.enableTsDiagnostics } : true
+      mergeTsJest.diagnostics = { warnOnly: true }
+      if (typeof tsJest.enableTsDiagnostics === 'string') mergeTsJest.diagnostics.pathRegex = tsJest.enableTsDiagnostics
     } else {
       mergeTsJest.diagnostics = false
     }

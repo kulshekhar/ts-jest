@@ -129,6 +129,7 @@ describe('tsJest', () => {
       const EXPECTED = {
         ignoreCodes: IGNORE_DIAGNOSTIC_CODES,
         pretty: true,
+        throws: true,
       }
       expect(get().diagnostics).toEqual(EXPECTED)
       expect(get({ diagnostics: true }).diagnostics).toEqual(EXPECTED)
@@ -139,6 +140,7 @@ describe('tsJest', () => {
         ignoreCodes: IGNORE_DIAGNOSTIC_CODES,
         pretty: true,
         pathRegex: MATCH_NOTHING.source,
+        throws: false,
       }
       expect(get({ diagnostics: false }).diagnostics).toEqual(EXPECTED)
     })
@@ -148,6 +150,7 @@ describe('tsJest', () => {
         ignoreCodes: [...IGNORE_DIAGNOSTIC_CODES, 10, 25],
         pretty: false,
         pathRegex: '\\.test\\.ts',
+        throws: true,
       }
       expect(
         get({
@@ -167,6 +170,14 @@ describe('tsJest', () => {
           },
         }).diagnostics,
       ).toEqual(EXPECTED)
+    })
+    it('should have correct throws value', () => {
+      const EXPECTED = {
+        ignoreCodes: IGNORE_DIAGNOSTIC_CODES,
+        pretty: true,
+      }
+      expect(get({ diagnostics: { warnOnly: true } }).diagnostics).toEqual({ ...EXPECTED, throws: false })
+      expect(get({ diagnostics: { warnOnly: false } }).diagnostics).toEqual({ ...EXPECTED, throws: true })
     })
   }) // diagnostics
 

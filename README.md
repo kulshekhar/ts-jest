@@ -46,7 +46,7 @@ We **DOT NOT** use [SemVer](http://semver.org/) for versioning. Tho you can thin
 
 ## Authors/maintainers
 
-* **Kulshekhar Kabra** - [kulshekar](https://github.com/kulshekhar)
+* **Kulshekhar Kabra** - [kulshekhar](https://github.com/kulshekhar)
 * **Gustav Wengel** - [GeeWee](https://github.com/GeeWee)
 * **Ahn** - [ahnpnl](https://github.com/ahnpnl)
 * **Huafu Gandon** - [huafu](https://github.com/huafu)
