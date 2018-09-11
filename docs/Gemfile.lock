@@ -24,10 +24,12 @@ GEM
     ethon (0.11.0)
       ffi (>= 1.3.0)
     eventmachine (1.2.7)
+    eventmachine (1.2.7-x64-mingw32)
     execjs (2.7.0)
     faraday (0.15.2)
       multipart-post (>= 1.2, < 3)
     ffi (1.9.25)
+    ffi (1.9.25-x64-mingw32)
     font-awesome-sass (5.3.1)
       sassc (>= 1.11)
     forwardable-extended (2.6.0)
@@ -216,6 +218,8 @@ GEM
     multipart-post (2.0.0)
     nokogiri (1.8.4)
       mini_portile2 (~> 2.3.0)
+    nokogiri (1.8.4-x64-mingw32)
+      mini_portile2 (~> 2.3.0)
     octokit (4.11.0)
       sawyer (~> 0.8.0, >= 0.5.3)
     pathutil (0.16.1)
@@ -248,10 +252,14 @@ GEM
       ethon (>= 0.9.0)
     tzinfo (1.2.5)
       thread_safe (~> 0.1)
+    tzinfo-data (1.2018.5)
+      tzinfo (>= 1.0.0)
     unicode-display_width (1.4.0)
+    wdm (0.1.1)
 
 PLATFORMS
   ruby
+  x64-mingw32
 
 DEPENDENCIES
   github-pages
@@ -260,6 +268,7 @@ DEPENDENCIES
   jekyll-git_metadata
   jekyll-plantuml
   tzinfo-data
+  wdm (~> 0.1.0)
 
 BUNDLED WITH
    1.16.2

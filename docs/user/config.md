@@ -1,13 +1,14 @@
 ---
 title: Configuration
 ---
-TSJest configuration is done within Jest configuration object. This latest can be in `package.json` under the `jest` property, or in its own `jest.config.js` file. The later is prefered since it's a JavaScript file, but it depends on your needs and preference.
+ts-jest configuration is done within Jest configuration object. This latest can be in `package.json` under the `jest` property, or in its own `jest.config.js` file.
+The later is preferred since it's more customizable, but it depends on your needs and preference.
 
 ## Jest preset
 
 ### Basic usage
 
-In most of the case, simply adding `preset: 'ts-jest'` to your Jest config should be enough starting using TypeScript with Jest (suposing you did add `ts-jest` to your dev. npm dependencies of course):
+ts-jest defines a preset which Jest can use. In most of the case, simply adding `preset: 'ts-jest'` to your Jest config should be enough starting using TypeScript with Jest.
 
 <div class="row"><div class="col-md-6" markdown="block">
 
@@ -35,7 +36,9 @@ module.exports = {
 
 ### Advanced
 
-Preset can also be used alongside other options, but when you are already using another preset (ie `preset` is already set to something else than `ts-jest`), you'll want to "pick" some settings from it. In this case, you'll need to use the JavaScript version of Jest config:
+The ts-jest preset can also be used with other options.
+If you're already using another preset, you might want only some specific settings from the ts-jest preset.
+In this case you'll need to use the JavaScript version of Jest config:
 
 ```js
 // jest.config.js
@@ -50,10 +53,10 @@ module.exports = {
 }
 ```
 
-## TSJest options
+## ts-jest options
 
 ### Introduction
-All configration of TSJest specific options are located under `globals.ts-jest` path of your Jest config:
+All configuration of ts-jest specific options are located under `globals.ts-jest` path of your Jest config:
 
 <div class="row"><div class="col-md-6" markdown="block">
 
@@ -63,7 +66,7 @@ module.exports = {
   // [...]
   globals: {
     'ts-jest': {
-      // TSJest configuration goes here
+      // ts-jest configuration goes here
     }
   }
 };
@@ -78,7 +81,7 @@ module.exports = {
   "jest": {
     "globals": {
       "ts-jest": {
-        // TSJest configuration goes here
+        // ts-jest configuration goes here
       }
     }
   }
@@ -95,14 +98,14 @@ All options have default values which should fit most of the projects. Click on 
 |---|---|---|
 | [**`compiler`**][compiler] | [TypeScript module to use as compiler.][compiler] | `string` | `"typescript"` |
 | [**`tsConfig`**][tsConfig] | [TypeScript compiler related configuration.][tsConfig] | `string`/`object`/`boolean` | _auto_ |
-| [**`isolatedModules`**][isolatedModules] | [Enables/disables the TypeScript language service][isolatedModules] | `boolean` | `false` |
+| [**`isolatedModules`**][isolatedModules] | [Disable type-checking][isolatedModules] | `boolean` | `false` |
 | [**`diagnostics`**][diagnostics] | [Diagnostics related configuration.][diagnostics] | `boolean`/`object` | `true` |
 | [**`babelConfig`**][babelConfig] | [Babel(Jest) related configuration.][babelConfig] | `boolean`/`object` | _disabled_ |
 | [**`stringifyContentPathRegex`**][stringifyContentPathRegex] | [Files which will become modules returning self content.][stringifyContentPathRegex] | `string`/`RegExp` | _disabled_ |
 
 ### Upgrading
 
-You can use the `config:migrate` tool of TSJest CLI if you're coming from an older version to help you migrate your Jest configuration.
+You can use the `config:migrate` tool of ts-jest CLI if you're coming from an older version to help you migrate your Jest configuration.
 
 <div class="row"><div class="col-md-6" markdown="block">
 
