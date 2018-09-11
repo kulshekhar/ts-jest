@@ -1,4 +1,4 @@
-import { flushLogs, logOnce } from './utils/logger';
+import { logOnce } from './utils/logger';
 import { postProcessCode } from './postprocess';
 import { transpileTypescript } from './transpiler';
 import runTsDiagnostics from './utils/run-ts-diagnostics';
@@ -72,8 +72,6 @@ export default function preprocess(
     transpileOutput,
     filePath,
   );
-
-  flushLogs();
 
   return { code: outputText.code, map: outputText.map };
 }
