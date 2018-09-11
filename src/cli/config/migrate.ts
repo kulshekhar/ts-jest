@@ -2,7 +2,7 @@ import { createLogger } from 'bs-logger'
 import stringifyJson from 'fast-json-stable-stringify'
 import { existsSync } from 'fs'
 import { stringify as stringifyJson5 } from 'json5'
-import { basename, join } from 'path'
+import { basename, resolve } from 'path'
 import { Arguments } from 'yargs'
 
 import { CliCommand } from '..'
@@ -12,7 +12,7 @@ import { backportJestConfig } from '../../util/backports'
 export const run: CliCommand = async (args: Arguments /*, logger: Logger*/) => {
   const nullLogger = createLogger({ targets: [] })
   const file = args._[0]
-  const filePath = join(process.cwd(), file)
+  const filePath = resolve(process.cwd(), file)
   if (!existsSync(filePath)) {
     throw new Error(`Configuration file ${file} does not exists.`)
   }
@@ -118,9 +118,11 @@ If it is the case, you can safely remove the "transform" from what I've migrated
 Migrated Jest configuration:
 `)
   process.stdout.write(`${stringify(migratedConfig, undefined, '  ')}\n`)
-  process.stderr.write(`
+  if (footNotes.length) {
+    process.stderr.write(`
 ${footNotes.join('\n')}
 `)
+  }
 }
 
 function cleanupConfig(config: jest.InitialOptions): void {
