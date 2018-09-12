@@ -155,7 +155,4 @@ export class TsJestTransformer implements jest.Transformer {
       filePath,
     )
   }
-
-  // we let jest doing the instrumentation, it does it well
-  // get canInstrument() {}
 }

@@ -23,6 +23,9 @@ function getCacheKey(...args: any[]): any {
   return (defaultTransformer().getCacheKey as any)(...args)
 }
 
+// we let jest doing the instrumentation, it does it well
+const canInstrument = false
+
 const jestPreset = createJestPreset()
 
 // for tests
@@ -37,6 +40,7 @@ export {
   createTransformer,
   tsProcess as process,
   getCacheKey,
+  canInstrument,
   // extra ==================
   createJestPreset,
   jestPreset,
