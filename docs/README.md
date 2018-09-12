@@ -1,4 +1,4 @@
-# TSJest Documentation
+# `ts-jest` Documentation
 
 ## Setup
 
@@ -7,6 +7,8 @@ Make sure you have latest Ruby, then make sure you have the bundler:
 ```sh
 gem install bundler
 ```
+
+You will also need [PlantUML](http://plantuml.com/download) to build the docs
 
 Finally you can install requirements:
 

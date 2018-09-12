@@ -164,7 +164,7 @@ Arguments:
                         the "jest" property.
 
 Options:
-  --allow-js            TSJest will be used to process JS files as well
+  --allow-js            ts-jest will be used to process JS files as well
   --no-jest-preset      Disable the use of Jest presets
 `)
 }

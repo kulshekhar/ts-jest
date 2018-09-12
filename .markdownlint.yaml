@@ -1,0 +1,6 @@
+default: true
+no-hard-tabs: true
+MD002: false
+MD013: false
+MD033: false
+MD041: false

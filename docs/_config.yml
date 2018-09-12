@@ -13,11 +13,11 @@
 # you will see them accessed via {{ site.title }}, {{ site.email }}, and so on.
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
-title: TSJest
+title: ts-jest
 repository: "kulshekhar/ts-jest"
 # email: your-email@example.com
 description: >- # this means to ignore newlines until "baseurl:"
-  TSJest (ts-jest) is a TypeScript preprocessor with source map
+  `ts-jest` is a TypeScript preprocessor with source map
   support for Jest that lets you use Jest to test projects written
   in TypeScript.
 baseurl: "/ts-jest" # the subpath of your site, e.g. /blog

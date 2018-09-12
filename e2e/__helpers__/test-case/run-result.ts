@@ -75,7 +75,7 @@ export default class RunResult {
   }
 
   normalize(str: string) {
-    // TODO: hmmm clean this!
+    // TODO: clean this!
     const cwd = this.cwd
     const realCwd = realpathSync(cwd)
     const tmp = tmpdir()

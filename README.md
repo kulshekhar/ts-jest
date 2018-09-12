@@ -1,9 +1,8 @@
 # ts-jest [![npm version](https://badge.fury.io/js/ts-jest.svg)](https://badge.fury.io/js/ts-jest) [![NPM downloads](https://img.shields.io/npm/dm/ts-jest.svg?style=flat)](https://npmjs.org/package/ts-jest) [![Known Vulnerabilities](https://snyk.io/test/github/kulshekhar/ts-jest/badge.svg)](https://snyk.io/test/github/kulshekhar/ts-jest) [![Coverage Status](https://coveralls.io/repos/github/kulshekhar/ts-jest/badge.svg?branch=master)](https://coveralls.io/github/kulshekhar/ts-jest?branch=master) [![Build Status for linux](https://travis-ci.org/kulshekhar/ts-jest.svg?branch=master)](https://travis-ci.org/kulshekhar/ts-jest) [![Build Status for Windows](https://ci.appveyor.com/api/projects/status/g8tt9qd7usv0tolb/branch/master?svg=true)](https://ci.appveyor.com/project/kulshekhar/ts-jest/branch/master)
 
-<img src="./icon.png" align="right"
-     title="TSJest Logo by Huafu Gandon" width="128" height="128">
+<img src="./icon.png" align="right" title="ts-jest Logo" width="128" height="128">
 
-**TSJest** (`ts-jest`) is a TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript.
+**`ts-jest`** is a TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript.
 
 It supports all features of TypeScript _(even those which Babel 7 typescript plugin does not)_ and has an internal cache for your tests to run faster.
 
@@ -11,17 +10,17 @@ It supports all features of TypeScript _(even those which Babel 7 typescript plu
 
 [<img src="./docs/assets/img/documentation.png" align="left" height="24"> View the online documentation (usage & technical)](https://kulshekhar.github.io/ts-jest)
 
-[<img src="./docs/assets/img/slack.png" align="left" height="24"> Ask for some help in the ts-jest community of Slack](https://join.slack.com/t/ts-jest/shared_invite/enQtNDE1ODQ0OTEzMTczLWU2ZTk5YTMzYTE1YjBkZTk5ODI1NWU3NWU0NzhlOWJlZDNkYTRlM2Y3NWQ1YWVjMjc5Mjg1NmY1NTdkNWQ3MTA)
+[<img src="./docs/assets/img/slack.png" align="left" height="24"> Ask for some help in the `ts-jest` community of Slack](https://join.slack.com/t/ts-jest/shared_invite/enQtNDE1ODQ0OTEzMTczLWU2ZTk5YTMzYTE1YjBkZTk5ODI1NWU3NWU0NzhlOWJlZDNkYTRlM2Y3NWQ1YWVjMjc5Mjg1NmY1NTdkNWQ3MTA)
 
 [<img src="./docs/assets/img/troubleshooting.png" align="left" height="24"> Before reporting any issue, be sure to check the troubleshooting page](https://kulshekhar.github.io/ts-jest/user/troubleshooting)
 
-[<img src="./docs/assets/img/pull-request.png" align="left" height="24"> Looking for collaborators. Want to help improve ts-jest?](https://github.com/kulshekhar/ts-jest/issues/223)
+[<img src="./docs/assets/img/pull-request.png" align="left" height="24"> We're looking for collaborators! Want to help improve `ts-jest`?](https://github.com/kulshekhar/ts-jest/issues/223)
 
 ---
 
 ## Getting Started
 
-These instructions will get you setup to use TSJest in your project. For more detailed documentation, please check [online documentation](https://kulshekhar.github.io/ts-jest).
+These instructions will get you setup to use `ts-jest` in your project. For more detailed documentation, please check [online documentation](https://kulshekhar.github.io/ts-jest).
 
 | | using npm | using yarn |
 |---:|---|---|
@@ -34,7 +33,7 @@ These instructions will get you setup to use TSJest in your project. For more de
 
 * [TypeScript](https://www.typescriptlang.org/) - JavaScript that scales
 * [Jest](https://jestjs.io/) - Delightful JavaScript Testing
-* [TSJest](https://kulshekhar.github.io/ts-jest) - Jest processor for TypeScript _(yes, TSJest uses itself for its tests)_
+* [`ts-jest`](https://kulshekhar.github.io/ts-jest) - Jest processor for TypeScript _(yes, `ts-jest` uses itself for its tests)_
 
 ## Contributing
 
@@ -46,7 +45,7 @@ We **DOT NOT** use [SemVer](http://semver.org/) for versioning. Tho you can thin
 
 ## Authors/maintainers
 
-* **Kulshekhar Kabra** - [kulshekar](https://github.com/kulshekhar)
+* **Kulshekhar Kabra** - [kulshekhar](https://github.com/kulshekhar)
 * **Gustav Wengel** - [GeeWee](https://github.com/GeeWee)
 * **Ahn** - [ahnpnl](https://github.com/ahnpnl)
 * **Huafu Gandon** - [huafu](https://github.com/huafu)

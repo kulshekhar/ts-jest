@@ -1,16 +1,17 @@
 ---
-title: Installing TSJest
+title: Installing ts-jest
 ---
-TSJest is a Jest pre-processor, so you'll need to install Jest. And it's a pre-processor for TypeScript... you'll need to install TypeScript as well in your project.
+`ts-jest` is a Typescript preprocessor for Jest pre-processor. You'll need both Jest and TypeScript installed inside your project.
 
 > Tip: If you get an error with the following `npm` commands such as `npx: command not found`, you can replace `npx XXX` with `node node_modules/.bin/XXX` from the root of your project.
 
-
 ## Dependencies
 
-<div class="row"><div class="col-md-6" markdown="block">
+You can install `ts-jest` and dependencies all at once with the following commands.
 
+<div class="row"><div class="col-md-6" markdown="block">
 Using `npm`:
+
 ```sh
 npm install --save-dev jest typescript ts-jest
 ```
@@ -18,6 +19,7 @@ npm install --save-dev jest typescript ts-jest
 </div><div class="col-md-6" markdown="block">
 
 Using `yarn`:
+
 ```sh
 yarn add --dev jest typescript ts-jest
 ```
@@ -28,11 +30,14 @@ yarn add --dev jest typescript ts-jest
 
 ### Creating
 
-By default Jest can run without any config file, but it'll not take care of `.ts` files. That is why we need to create a configuration file to let Jest know how to transpile TypeScript files using TSJest.
+By default Jest can run without any config files, but it will not compile `.ts` files.
+To make it transpile TypeScript with `ts-jest`, we will need to create a configuration file.
 
+`ts-jest` can create the configuration file for you automatically:
 <div class="row"><div class="col-md-6" markdown="block">
 
 Using `npm`:
+
 ```sh
 npx ts-jest config:init
 ```
@@ -40,6 +45,7 @@ npx ts-jest config:init
 </div><div class="col-md-6" markdown="block">
 
 Using `yarn`:
+
 ```sh
 yarn ts-jest config:init
 ```
@@ -48,11 +54,11 @@ yarn ts-jest config:init
 
 This will create a basic Jest configuration file which will make Jest know about your `.ts` files and handle them correctly.
 
-You can also use the `jest --init` command (prefixed with either `npx` or `yarn` depending on what you're using) to have more options related to Jest. But do not answer `yes` to the TypeScript related question, and then add `"preset": "ts-jest"` in the generated config.
-
+You can also use the `jest --init` command (prefixed with either `npx` or `yarn` depending on what you're using) to have more options related to Jest.
+However, answer `no` to the Jest question about whether or not to enable Typescript. Instead, add the line: `preset: "ts-jest"` to the the `jest.config.js` file afterwards.
 
 ### Customizing
 
-For what it is about Jest options, follow their [official guide online](https://jestjs.io/docs/en/configuration.html).
+For customizing jest, please follow their [official guide online](https://jestjs.io/docs/en/configuration.html).
 
-TSJest specific options can be found [here](config).
+`ts-jest` specific options can be found [here](config).
