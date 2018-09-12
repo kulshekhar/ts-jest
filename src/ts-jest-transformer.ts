@@ -109,7 +109,8 @@ export class TsJestTransformer implements jest.Transformer {
     // calling babel-jest transformer
     if (babelJest) {
       this.logger.debug({ fileName: filePath }, 'calling babel-jest processor')
-      result = babelJest.process(result, filePath, jestConfig, transformOptions)
+      // do not instrument here, jest will do it anyway afterwards
+      result = babelJest.process(result, filePath, jestConfig, { ...transformOptions, instrument: false })
     }
 
     // allows hooks (useful for testing)
