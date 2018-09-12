@@ -112,12 +112,20 @@ describe('getCacheKey', () => {
       fileContent: 'export default "foo"',
       fileName: 'foo.ts',
       jestConfigStr: '{"foo": "bar"}',
+      options: { instrument: false, rootDir: '/foo' },
     }
-    const key1 = tr.getCacheKey(input.fileContent, input.fileName, input.jestConfigStr)
-    const key2 = tr.getCacheKey(input.fileContent, 'bar.ts', input.jestConfigStr)
-    const key3 = tr.getCacheKey(input.fileContent, input.fileName, '{}')
-    expect(key2).not.toBe(key1)
-    expect(key3).not.toBe(key1)
-    expect(key3).not.toBe(key2)
+    const keys = [
+      tr.getCacheKey(input.fileContent, input.fileName, input.jestConfigStr, input.options),
+      tr.getCacheKey(input.fileContent, 'bar.ts', input.jestConfigStr, input.options),
+      tr.getCacheKey(input.fileContent, input.fileName, '{}', input.options),
+      tr.getCacheKey(input.fileContent, input.fileName, '{}', { ...input.options, instrument: true }),
+      tr.getCacheKey(input.fileContent, input.fileName, '{}', { ...input.options, rootDir: '/bar' }),
+    ]
+    // each key should have correct length
+    for (const key of keys) {
+      expect(key).toHaveLength(40)
+    }
+    // unique array should have same length
+    expect(keys.filter((k, i, all) => all.indexOf(k) === i)).toHaveLength(keys.length)
   })
 })

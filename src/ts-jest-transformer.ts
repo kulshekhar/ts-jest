@@ -143,10 +143,11 @@ export class TsJestTransformer implements jest.Transformer {
     this.logger.debug({ fileName: filePath, transformOptions }, 'computing cache key for', filePath)
     const configs = this.configsFor(jestConfigStr)
     // we do not instrument, ensure it is false all the time
-    // const { instrument = false } = transformOptions
-    const instrument = false
+    const { instrument = false, rootDir = configs.rootDir } = transformOptions
     return sha1(
       configs.cacheKey,
+      '\x00',
+      rootDir,
       '\x00',
       `instrument:${instrument ? 'on' : 'off'}`,
       '\x00',
