@@ -3,17 +3,17 @@
  <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.5.0 -->
-<title>Installing ts-jest | TSJest</title>
+<title>Installing ts-jest | ts-jest</title>
 <meta name="generator" content="Jekyll v3.7.3" />
 <meta property="og:title" content="Installing ts-jest" />
 <meta property="og:locale" content="en_US" />
-<meta name="description" content="TSJest (ts-jest) is a TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript." />
-<meta property="og:description" content="TSJest (ts-jest) is a TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript." />
-<meta property="og:site_name" content="TSJest" />
+<meta name="description" content="ts-jest is a TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript." />
+<meta property="og:description" content="ts-jest is a TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript." />
+<meta property="og:site_name" content="ts-jest" />
 <script type="application/ld+json">
-{"url":"/ts-jest/user/install.html","headline":"Installing ts-jest","description":"TSJest (ts-jest) is a TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript.","@type":"WebPage","@context":"http://schema.org"}</script>
+{"url":"/ts-jest/user/install.html","description":"ts-jest is a TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript.","headline":"Installing ts-jest","@type":"WebPage","@context":"http://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
-<link rel="stylesheet" href="/ts-jest/assets/css/main.css"><link type="application/atom+xml" rel="alternate" href="/ts-jest/feed.xml" title="TSJest" /><script src="/ts-jest/assets/js/bootstrap/jquery.min.js"></script>
+<link rel="stylesheet" href="/ts-jest/assets/css/main.css"><link type="application/atom+xml" rel="alternate" href="/ts-jest/feed.xml" title="ts-jest" /><script src="/ts-jest/assets/js/bootstrap/jquery.min.js"></script>
   <script src="/ts-jest/assets/js/bootstrap/bootstrap.bundle.min.js"></script>
 </head>
 <body><nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -23,8 +23,8 @@
       <!--img width="30" height="30"
            class="d-inline-block align-top"
            src="/ts-jest/assets/img/logo.png"
-           alt="TSJest Logo"-->
-      TSJest
+           alt="ts-jest Logo"-->
+      ts-jest
     </a>
 
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -117,23 +117,26 @@
   </header>
 
   <section>
-    <p>ts-jest is a Typescript preprocessor for Jest pre-processor. You’ll need both Jest and TypeScript installed inside your project.</p>
+    <p><code class="highlighter-rouge">ts-jest</code> is a Typescript preprocessor for Jest pre-processor. You’ll need both Jest and TypeScript installed inside your project.</p>
 
 <blockquote>
   <p>Tip: If you get an error with the following <code class="highlighter-rouge">npm</code> commands such as <code class="highlighter-rouge">npx: command not found</code>, you can replace <code class="highlighter-rouge">npx XXX</code> with <code class="highlighter-rouge">node node_modules/.bin/XXX</code> from the root of your project.</p>
 </blockquote>
 
 <h2 id="dependencies">Dependencies</h2>
-<p>You can install ts-jest and dependencies all at once with the following commands.</p>
+
+<p>You can install <code class="highlighter-rouge">ts-jest</code> and dependencies all at once with the following commands.</p>
 
 <div class="row"><div class="col-md-6">
     <p>Using <code class="highlighter-rouge">npm</code>:</p>
+
     <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm install <span class="nt">--save-dev</span> jest typescript ts-jest
 </code></pre></div>    </div>
 
   </div><div class="col-md-6">
 
     <p>Using <code class="highlighter-rouge">yarn</code>:</p>
+
     <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>yarn add <span class="nt">--dev</span> jest typescript ts-jest
 </code></pre></div>    </div>
 
@@ -144,18 +147,20 @@
 <h3 id="creating">Creating</h3>
 
 <p>By default Jest can run without any config files, but it will not compile <code class="highlighter-rouge">.ts</code> files.
-To make it transpile TypeScript with ts-jest, we will need to create a configuration file.</p>
+To make it transpile TypeScript with <code class="highlighter-rouge">ts-jest</code>, we will need to create a configuration file.</p>
 
-<p>ts-jest can create the configuration file for you automatically:</p>
+<p><code class="highlighter-rouge">ts-jest</code> can create the configuration file for you automatically:</p>
 <div class="row"><div class="col-md-6">
 
     <p>Using <code class="highlighter-rouge">npm</code>:</p>
+
     <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npx ts-jest config:init
 </code></pre></div>    </div>
 
   </div><div class="col-md-6">
 
     <p>Using <code class="highlighter-rouge">yarn</code>:</p>
+
     <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>yarn ts-jest config:init
 </code></pre></div>    </div>
 
@@ -170,7 +175,7 @@ However, answer <code class="highlighter-rouge">no</code> to the Jest question a
 
 <p>For customizing jest, please follow their <a href="https://jestjs.io/docs/en/configuration.html">official guide online</a>.</p>
 
-<p>ts-jest specific options can be found <a href="config">here</a>.</p>
+<p><code class="highlighter-rouge">ts-jest</code> specific options can be found <a href="config">here</a>.</p>
 
   </section>
 
@@ -192,18 +197,18 @@ However, answer <code class="highlighter-rouge">no</code> to the Jest question a
 <!--div class="py-5 border-top">
   <div class="container">
 
-    <p class="h5 mb-3">TSJest</p>
+    <p class="h5 mb-3">ts-jest</p>
 
     <div class="row">
 
       <div class="col-sm">
         <ul class="list-unstyled">
-          <li>TSJest</li></ul>
+          <li>ts-jest</li></ul>
       </div>
 
 
       <div class="col-sm text-right">
-        <p>TSJest (ts-jest) is a TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript.</p>
+        <p>`ts-jest` is a TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript.</p>
       </div>
 
     </div>

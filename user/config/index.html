@@ -3,17 +3,17 @@
  <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.5.0 -->
-<title>Configuration | TSJest</title>
+<title>Configuration | ts-jest</title>
 <meta name="generator" content="Jekyll v3.7.3" />
 <meta property="og:title" content="Configuration" />
 <meta property="og:locale" content="en_US" />
-<meta name="description" content="TSJest (ts-jest) is a TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript." />
-<meta property="og:description" content="TSJest (ts-jest) is a TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript." />
-<meta property="og:site_name" content="TSJest" />
+<meta name="description" content="ts-jest is a TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript." />
+<meta property="og:description" content="ts-jest is a TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript." />
+<meta property="og:site_name" content="ts-jest" />
 <script type="application/ld+json">
-{"url":"/ts-jest/user/config/","headline":"Configuration","description":"TSJest (ts-jest) is a TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript.","@type":"WebPage","@context":"http://schema.org"}</script>
+{"url":"/ts-jest/user/config/","description":"ts-jest is a TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript.","headline":"Configuration","@type":"WebPage","@context":"http://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
-<link rel="stylesheet" href="/ts-jest/assets/css/main.css"><link type="application/atom+xml" rel="alternate" href="/ts-jest/feed.xml" title="TSJest" /><script src="/ts-jest/assets/js/bootstrap/jquery.min.js"></script>
+<link rel="stylesheet" href="/ts-jest/assets/css/main.css"><link type="application/atom+xml" rel="alternate" href="/ts-jest/feed.xml" title="ts-jest" /><script src="/ts-jest/assets/js/bootstrap/jquery.min.js"></script>
   <script src="/ts-jest/assets/js/bootstrap/bootstrap.bundle.min.js"></script>
 </head>
 <body><nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -23,8 +23,8 @@
       <!--img width="30" height="30"
            class="d-inline-block align-top"
            src="/ts-jest/assets/img/logo.png"
-           alt="TSJest Logo"-->
-      TSJest
+           alt="ts-jest Logo"-->
+      ts-jest
     </a>
 
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -117,7 +117,7 @@
   </header>
 
   <section>
-    <p>ts-jest configuration is done within Jest configuration object. This latest can be in <code class="highlighter-rouge">package.json</code> under the <code class="highlighter-rouge">jest</code> property, or in its own <code class="highlighter-rouge">jest.config.js</code> file.
+    <p><code class="highlighter-rouge">ts-jest</code> configuration is done within Jest configuration object. This latest can be in <code class="highlighter-rouge">package.json</code> under the <code class="highlighter-rouge">jest</code> property, or in its own <code class="highlighter-rouge">jest.config.js</code> file.
 The later is preferred since it’s more customizable, but it depends on your needs and preference.</p>
 
 <h2 id="jest-preset">Jest preset</h2>
@@ -150,8 +150,8 @@ The later is preferred since it’s more customizable, but it depends on your ne
 
 <h3 id="advanced">Advanced</h3>
 
-<p>The ts-jest preset can also be used with other options.
-If you’re already using another preset, you might want only some specific settings from the ts-jest preset.
+<p>The <code class="highlighter-rouge">ts-jest</code> preset can also be used with other options.
+If you’re already using another preset, you might want only some specific settings from the <code class="highlighter-rouge">ts-jest</code> preset.
 In this case you’ll need to use the JavaScript version of Jest config:</p>
 
 <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// jest.config.js</span>
@@ -170,13 +170,14 @@ In this case you’ll need to use the JavaScript version of Jest config:</p>
 
 <p>If you use <a href="https://www.typescriptlang.org/docs/handbook/module-resolution.html">“baseUrl” and “paths” options</a> in your <code class="highlighter-rouge">tsconfig</code> file, you should make sure the <a href="https://facebook.github.io/jest/docs/en/configuration.html#modulenamemapper-object-string-string">“moduleNameMapper”</a> option in your Jest config is setup accordingly.</p>
 
-<p>TSJest provides a helper to transform the mapping from <code class="highlighter-rouge">tsconfig</code> to Jest config format, but it needs the <code class="highlighter-rouge">.js</code> version of the config file.</p>
+<p><code class="highlighter-rouge">ts-jest</code> provides a helper to transform the mapping from <code class="highlighter-rouge">tsconfig</code> to Jest config format, but it needs the <code class="highlighter-rouge">.js</code> version of the config file.</p>
 
-<h3 id="example">Example:</h3>
+<h3 id="example">Example</h3>
 
 <h4 id="typescript-config">TypeScript config</h4>
 
 <p>With the below config in your <code class="highlighter-rouge">tsconfig</code>:</p>
+
 <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// tsconfig.json</span>
 <span class="p">{</span>
   <span class="s2">"compilerOptions"</span><span class="p">:</span> <span class="p">{</span>
@@ -188,7 +189,7 @@ In this case you’ll need to use the JavaScript version of Jest config:</p>
 <span class="p">}</span>
 </code></pre></div></div>
 
-<h4 id="jest-config-without-helper">Jest config (without helper):</h4>
+<h4 id="jest-config-without-helper">Jest config (without helper)</h4>
 
 <div class="row"><div class="col-md-6">
 
@@ -218,7 +219,7 @@ In this case you’ll need to use the JavaScript version of Jest config:</p>
 
   </div></div>
 
-<h4 id="jest-config-with-helper">Jest config (with helper):</h4>
+<h4 id="jest-config-with-helper">Jest config (with helper)</h4>
 
 <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// jest.config.js</span>
 <span class="kd">const</span> <span class="p">{</span> <span class="nx">pathsToModuleNameMapper</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'ts-jest'</span><span class="p">);</span>
@@ -232,10 +233,11 @@ In this case you’ll need to use the JavaScript version of Jest config:</p>
 <span class="p">};</span>
 </code></pre></div></div>
 
-<h2 id="ts-jest-options">ts-jest options</h2>
+<h2 id="ts-jest-options"><code class="highlighter-rouge">ts-jest</code> options</h2>
 
 <h3 id="introduction">Introduction</h3>
-<p>All configuration of ts-jest specific options are located under <code class="highlighter-rouge">globals.ts-jest</code> path of your Jest config:</p>
+
+<p>All configuration of <code class="highlighter-rouge">ts-jest</code> specific options are located under <code class="highlighter-rouge">globals.ts-jest</code> path of your Jest config:</p>
 
 <div class="row"><div class="col-md-6">
 
@@ -322,17 +324,19 @@ In this case you’ll need to use the JavaScript version of Jest config:</p>
 
 <h3 id="upgrading">Upgrading</h3>
 
-<p>You can use the <code class="highlighter-rouge">config:migrate</code> tool of ts-jest CLI if you’re coming from an older version to help you migrate your Jest configuration.</p>
+<p>You can use the <code class="highlighter-rouge">config:migrate</code> tool of <code class="highlighter-rouge">ts-jest</code> CLI if you’re coming from an older version to help you migrate your Jest configuration.</p>
 
 <div class="row"><div class="col-md-6">
 
     <p><em>If you’re using <code class="highlighter-rouge">jest.config.json</code>:</em></p>
+
     <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npx ts-jest config:migrate jest.config.js
 </code></pre></div>    </div>
 
   </div><div class="col-md-6">
 
     <p><em>If you’re using <code class="highlighter-rouge">jest</code> config property of <code class="highlighter-rouge">package.json</code>:</em></p>
+
     <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npx ts-jest config:migrate package.json
 </code></pre></div>    </div>
 
@@ -359,18 +363,18 @@ In this case you’ll need to use the JavaScript version of Jest config:</p>
 <!--div class="py-5 border-top">
   <div class="container">
 
-    <p class="h5 mb-3">TSJest</p>
+    <p class="h5 mb-3">ts-jest</p>
 
     <div class="row">
 
       <div class="col-sm">
         <ul class="list-unstyled">
-          <li>TSJest</li></ul>
+          <li>ts-jest</li></ul>
       </div>
 
 
       <div class="col-sm text-right">
-        <p>TSJest (ts-jest) is a TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript.</p>
+        <p>`ts-jest` is a TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript.</p>
       </div>
 
     </div>
