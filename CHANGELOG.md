@@ -1,3 +1,18 @@
+<a name="23.10.0-beta.5"></a>
+# [23.10.0-beta.5](https://github.com/kulshekhar/ts-jest/compare/v23.10.0-beta.4...v23.10.0-beta.5) (2018-09-12)
+
+
+### Bug Fixes
+
+* **package:** fixes the outdated package-lock ([c5a5b7a](https://github.com/kulshekhar/ts-jest/commit/c5a5b7a))
+
+
+### Features
+
+* **diagnostics:** add option to enable/disable first-TS-error-throws ([2c840c2](https://github.com/kulshekhar/ts-jest/commit/2c840c2))
+
+
+
 <a name="23.10.0-beta.4"></a>
 # [23.10.0-beta.4](https://github.com/kulshekhar/ts-jest/compare/v23.10.0-beta.3...v23.10.0-beta.4) (2018-09-06)
 
