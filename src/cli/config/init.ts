@@ -103,14 +103,14 @@ Arguments:
   <config-file>         Can be a js or json Jest config file. If it is a
                         package.json file, the configuration will be read from
                         the "jest" property.
-                        Defaul: jest.config.js
+                        Default: jest.config.js
 
 Options:
-  --force               Dicard any existing Jest config
-  --allow-js            TSJest will be used to process JS files as well
+  --force               Discard any existing Jest config
+  --allow-js            ts-jest will be used to process JS files as well
   --no-jest-preset      Disable the use of Jest presets
   --tsconfig <file>     Path to the tsconfig.json file
-  --babel               Call BabelJest after TSJest
+  --babel               Call BabelJest after ts-jest
   --jsdom               Use jsdom as test environment instead of node
 `)
 }

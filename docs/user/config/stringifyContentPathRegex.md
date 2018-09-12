@@ -10,7 +10,7 @@ Let's say for example that you have a file `foo.ts` which contains `export defau
 
 **CAUTION**: Whatever file(s) you want to match with `stringifyContentPathRegex` pattern, you must ensure the Jest `transform` option pointing to `ts-jest` matches them. You may also have to add the extension(s) of this/those file(s) to `moduleFileExtensions` Jest option.
 
-### Example:
+### Example
 
 In the `jest.config.js` version, you could do as in the `package.json` version of the config, but extending from the preset will ensure more compatibility without any changes when updating.
 

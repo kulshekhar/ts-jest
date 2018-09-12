@@ -2,16 +2,17 @@
 title: Babel Config option
 ---
 
-ts-jest by default does **NOT** use Babel. But you may want to use it, especially if your code rely on Babel plugins to make some transformations. ts-jest can call the BabelJest processor once TypeScript has transformed the source into JavaScript.
+`ts-jest` by default does **NOT** use Babel. But you may want to use it, especially if your code rely on Babel plugins to make some transformations. `ts-jest` can call the BabelJest processor once TypeScript has transformed the source into JavaScript.
 
 The option is `babelConfig` and it works pretty much as the `tsConfig` option, except that it is disabled by default. Here is the possible values it can take:
+
 - `false`: the default, disables the use of Babel
-- `true`: enables Babel processing. ts-jest will try to find a `.babelrc`, `.babelrc.js` file or a `babel` section in the `package.json` file of your project and use it as the config to pass to `babel-jest` processor.
+- `true`: enables Babel processing. `ts-jest` will try to find a `.babelrc`, `.babelrc.js` file or a `babel` section in the `package.json` file of your project and use it as the config to pass to `babel-jest` processor.
 - `{ ... }`: inline [Babel options](https://babeljs.io/docs/en/next/options). You can also set this to an empty object (`{}`) so that the default Babel config file is not used.
 
 ### Examples
 
-#### Use default `babelrc` file:
+#### Use default `babelrc` file
 
 <div class="row"><div class="col-md-6" markdown="block">
 
@@ -45,9 +46,9 @@ module.exports = {
 
 </div></div>
 
-#### Path to a `balelrc` file:
+#### Path to a `balelrc` file
 
-The path should be relative to the current working directory where you start Jest from. You can also use `<rootDir>` in the path, or use an absolute path (this last one is strongly not recommended).
+The path should be relative to the current working directory where you start Jest from. You can also use `\<rootDir>` in the path, or use an absolute path (this last one is strongly not recommended).
 
 <div class="row"><div class="col-md-6" markdown="block">
 
@@ -81,7 +82,7 @@ module.exports = {
 
 </div></div>
 
-#### Inline compiler options:
+#### Inline compiler options
 
 Refer to the [Babel options](https://babeljs.io/docs/en/next/options) to know what can be used there.
 

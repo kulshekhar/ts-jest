@@ -1,7 +1,7 @@
 ---
 title: Configuration
 ---
-ts-jest configuration is done within Jest configuration object. This latest can be in `package.json` under the `jest` property, or in its own `jest.config.js` file.
+`ts-jest` configuration is done within Jest configuration object. This latest can be in `package.json` under the `jest` property, or in its own `jest.config.js` file.
 The later is preferred since it's more customizable, but it depends on your needs and preference.
 
 ## Jest preset
@@ -36,8 +36,8 @@ module.exports = {
 
 ### Advanced
 
-The ts-jest preset can also be used with other options.
-If you're already using another preset, you might want only some specific settings from the ts-jest preset.
+The `ts-jest` preset can also be used with other options.
+If you're already using another preset, you might want only some specific settings from the `ts-jest` preset.
 In this case you'll need to use the JavaScript version of Jest config:
 
 ```js
@@ -57,13 +57,14 @@ module.exports = {
 
 If you use ["baseUrl" and "paths" options](https://www.typescriptlang.org/docs/handbook/module-resolution.html) in your `tsconfig` file, you should make sure the ["moduleNameMapper"](https://facebook.github.io/jest/docs/en/configuration.html#modulenamemapper-object-string-string) option in your Jest config is setup accordingly.
 
-TSJest provides a helper to transform the mapping from `tsconfig` to Jest config format, but it needs the `.js` version of the config file.
+`ts-jest` provides a helper to transform the mapping from `tsconfig` to Jest config format, but it needs the `.js` version of the config file.
 
-### Example:
+### Example
 
 #### TypeScript config
 
 With the below config in your `tsconfig`:
+
 ```js
 // tsconfig.json
 {
@@ -76,7 +77,7 @@ With the below config in your `tsconfig`:
 }
 ```
 
-#### Jest config (without helper):
+#### Jest config (without helper)
 
 <div class="row"><div class="col-md-6" markdown="block">
 
@@ -108,7 +109,7 @@ module.exports = {
 
 </div></div>
 
-#### Jest config (with helper):
+#### Jest config (with helper)
 
 ```js
 // jest.config.js
@@ -123,10 +124,11 @@ module.exports = {
 };
 ```
 
-## ts-jest options
+## `ts-jest` options
 
 ### Introduction
-All configuration of ts-jest specific options are located under `globals.ts-jest` path of your Jest config:
+
+All configuration of `ts-jest` specific options are located under `globals.ts-jest` path of your Jest config:
 
 <div class="row"><div class="col-md-6" markdown="block">
 
@@ -175,11 +177,12 @@ All options have default values which should fit most of the projects. Click on 
 
 ### Upgrading
 
-You can use the `config:migrate` tool of ts-jest CLI if you're coming from an older version to help you migrate your Jest configuration.
+You can use the `config:migrate` tool of `ts-jest` CLI if you're coming from an older version to help you migrate your Jest configuration.
 
 <div class="row"><div class="col-md-6" markdown="block">
 
 _If you're using `jest.config.json`:_
+
 ```sh
 npx ts-jest config:migrate jest.config.js
 ```
@@ -187,6 +190,7 @@ npx ts-jest config:migrate jest.config.js
 </div><div class="col-md-6" markdown="block">
 
 _If you're using `jest` config property of `package.json`:_
+
 ```sh
 npx ts-jest config:migrate package.json
 ```

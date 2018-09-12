@@ -1,15 +1,17 @@
 ---
 title: Installing ts-jest
 ---
-ts-jest is a Typescript preprocessor for Jest pre-processor. You'll need both Jest and TypeScript installed inside your project.
+`ts-jest` is a Typescript preprocessor for Jest pre-processor. You'll need both Jest and TypeScript installed inside your project.
 
 > Tip: If you get an error with the following `npm` commands such as `npx: command not found`, you can replace `npx XXX` with `node node_modules/.bin/XXX` from the root of your project.
 
 ## Dependencies
-You can install ts-jest and dependencies all at once with the following commands.
+
+You can install `ts-jest` and dependencies all at once with the following commands.
 
 <div class="row"><div class="col-md-6" markdown="block">
 Using `npm`:
+
 ```sh
 npm install --save-dev jest typescript ts-jest
 ```
@@ -17,6 +19,7 @@ npm install --save-dev jest typescript ts-jest
 </div><div class="col-md-6" markdown="block">
 
 Using `yarn`:
+
 ```sh
 yarn add --dev jest typescript ts-jest
 ```
@@ -28,12 +31,13 @@ yarn add --dev jest typescript ts-jest
 ### Creating
 
 By default Jest can run without any config files, but it will not compile `.ts` files.
-To make it transpile TypeScript with ts-jest, we will need to create a configuration file.
+To make it transpile TypeScript with `ts-jest`, we will need to create a configuration file.
 
-ts-jest can create the configuration file for you automatically:
+`ts-jest` can create the configuration file for you automatically:
 <div class="row"><div class="col-md-6" markdown="block">
 
 Using `npm`:
+
 ```sh
 npx ts-jest config:init
 ```
@@ -41,6 +45,7 @@ npx ts-jest config:init
 </div><div class="col-md-6" markdown="block">
 
 Using `yarn`:
+
 ```sh
 yarn ts-jest config:init
 ```
@@ -56,4 +61,4 @@ However, answer `no` to the Jest question about whether or not to enable Typescr
 
 For customizing jest, please follow their [official guide online](https://jestjs.io/docs/en/configuration.html).
 
-ts-jest specific options can be found [here](config).
+`ts-jest` specific options can be found [here](config).

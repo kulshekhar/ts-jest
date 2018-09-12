@@ -2,10 +2,10 @@
 title: Diagnostics option
 ---
 
-The `diagnostics` option allows to configure error reporting. 
+The `diagnostics` option allows to configure error reporting.
 It can both be enabled/disabled entirely or limited to a specific type of errors and/or files.
 
-If a diagnostic is not filtered out, ts-jest will fail the compilation and your test.
+If a diagnostic is not filtered out, `ts-jest` will fail the compilation and your test.
 
 ### Disabling/enabling
 
@@ -27,7 +27,7 @@ The option's value can also accept an object for more advanced configuration. Ea
 
 ### Examples
 
-#### Disabling diagnostics:
+#### Disabling diagnostics
 
 <div class="row"><div class="col-md-6" markdown="block">
 
@@ -61,7 +61,7 @@ module.exports = {
 
 </div></div>
 
-#### Advanced options:
+#### Advanced options
 
 ##### Enabling diagnostics for test files only
 
@@ -143,9 +143,10 @@ module.exports = {
 
 </div></div>
 
-##### Ignoring some error codes:
+##### Ignoring some error codes
 
 All TypeScript error codes can be found [there](https://github.com/Microsoft/TypeScript/blob/master/src/compiler/diagnosticMessages.json). The `ignoreCodes` option accepts this values:
+
 1. A single `number` (example: `1009`): unique error code to ignore
 2. A `string` with a code (example `"1009"`, `"TS1009"` or `"ts1009"`)
 3. A `string` with a list of the above (example: `"1009, TS2571, 4072 ,ts6031 "`)

@@ -1,4 +1,4 @@
-# ts-jest Documentation
+# `ts-jest` Documentation
 
 ## Setup
 

@@ -2,7 +2,7 @@
 title: Isolated Modules option
 ---
 
-By default ts-jest uses TypeScript compiler in the context of a project (yours), with full type-checking and features.
+By default `ts-jest` uses TypeScript compiler in the context of a project (yours), with full type-checking and features.
 But it can also be used to compile each file separately, what TypeScript calls an 'isolated module'.
 That's what the `isolatedModules` option (which defaults to `false`) does.
 
@@ -10,7 +10,7 @@ You'll lose type-checking ability and some features such as `const enum`, but in
 
 Here is how to disable type-checking and compile each file as an isolated module:
 
-### Example:
+### Example
 
 <div class="row"><div class="col-md-6" markdown="block">
 

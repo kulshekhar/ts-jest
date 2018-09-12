@@ -1,6 +1,8 @@
 ---
 title: E2E tests flow
 ---
+*These are internal technical documents. If you're not a contributor to `ts-jest`, but simply trying to use the library you'll find nothing of value here*
+
 ## Preparing
 
 The preparation of E2E test directory is done in `scripts/e2e.js`. Here is the process:
@@ -62,10 +64,6 @@ stop
 {% endplantuml %}
 
 ## Running
-
-
-*These are internal technical documents. If you're not a contributor to ts-jest, but simply trying to use the library you'll find nothing of value here* 
-
 
 When a test-case needs to be run with a given template within tests, here is what's happening (in `e2e/__helpers__/test-case/runtime.ts`):
 
