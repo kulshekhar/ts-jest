@@ -1,3 +1,15 @@
+<a name="23.10.0-beta.6"></a>
+# [23.10.0-beta.6](https://github.com/kulshekhar/ts-jest/compare/v23.10.0-beta.5...v23.10.0-beta.6) (2018-09-13)
+
+
+### Bug Fixes
+
+* **babel:** instrumentation was done twice when using babel ([659a7fb](https://github.com/kulshekhar/ts-jest/commit/659a7fb)), closes [#713](https://github.com/kulshekhar/ts-jest/issues/713)
+* **cache:** includes all parameters in cache key computing ([70e1867](https://github.com/kulshekhar/ts-jest/commit/70e1867))
+* **e2e:** fixes the eval tool (not used yet) ([939d13a](https://github.com/kulshekhar/ts-jest/commit/939d13a))
+
+
+
 <a name="23.10.0-beta.5"></a>
 # [23.10.0-beta.5](https://github.com/kulshekhar/ts-jest/compare/v23.10.0-beta.4...v23.10.0-beta.5) (2018-09-12)
 
