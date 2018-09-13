@@ -10,6 +10,9 @@
 <loc>/ts-jest/user/config/diagnostics.html</loc>
 </url>
 <url>
+<loc>/ts-jest/</loc>
+</url>
+<url>
 <loc>/ts-jest/user/config/</loc>
 </url>
 <url>
@@ -19,7 +22,7 @@
 <loc>/ts-jest/tech/process/</loc>
 </url>
 <url>
-<loc>/ts-jest/</loc>
+<loc>/ts-jest/user/react-native/</loc>
 </url>
 <url>
 <loc>/ts-jest/user/install.html</loc>
