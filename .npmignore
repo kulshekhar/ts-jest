@@ -68,6 +68,7 @@ tsconfig.json
 tsconfig.build.json
 tslint.json
 .npmrc
+.markdownlint.yaml
 
 # Github Pages
 docs

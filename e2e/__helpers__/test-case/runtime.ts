@@ -36,7 +36,7 @@ describe.skip('__eval', () => {
   });
 });
 
-eval(process.__TS_JEST_EVAL);
+eval(process.env.__TS_JEST_EVAL);
 `
 
 // tslint:disable-next-line:variable-name
