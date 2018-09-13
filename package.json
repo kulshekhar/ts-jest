@@ -104,7 +104,7 @@
     "lint-staged": "^7.1.2",
     "pkg-dir": "^3.0.0",
     "prettier": "^1.12.1",
-    "react": "16.5.0",
+    "react": "16.5.1",
     "react-test-renderer": "16.5.0",
     "reflect-metadata": "^0.1.12",
     "rimraf": "^2.6.2",
