@@ -13,14 +13,11 @@ It supports all features of TypeScript _(even those which Babel 7 typescript plu
 
 ---
 
-<img src="assets/img/slack.png" align="left" height="24">
-[Ask for some help in the `ts-jest` community of Slack](https://join.slack.com/t/ts-jest/shared_invite/enQtNDE1ODQ0OTEzMTczLWU2ZTk5YTMzYTE1YjBkZTk5ODI1NWU3NWU0NzhlOWJlZDNkYTRlM2Y3NWQ1YWVjMjc5Mjg1NmY1NTdkNWQ3MTA)
+<img src="assets/img/slack.png" align="left" height="24"> [Ask for some help in the `ts-jest` community of Slack](https://join.slack.com/t/ts-jest/shared_invite/enQtNDE1ODQ0OTEzMTczLWU2ZTk5YTMzYTE1YjBkZTk5ODI1NWU3NWU0NzhlOWJlZDNkYTRlM2Y3NWQ1YWVjMjc5Mjg1NmY1NTdkNWQ3MTA)
 
-<img src="assets/img/troubleshooting.png" align="left" height="24">
-[Before reporting any issue, be sure to check the troubleshooting page](user/troubleshooting)
+<img src="assets/img/troubleshooting.png" align="left" height="24"> [Before reporting any issue, be sure to check the troubleshooting page](user/troubleshooting)
 
-<img src="assets/img/pull-request.png" align="left" height="24">
-[Looking for collaborators. Want to help improve `ts-jest`?](https://github.com/kulshekhar/ts-jest/issues/223)
+<img src="assets/img/pull-request.png" align="left" height="24"> [Looking for collaborators. Want to help improve `ts-jest`?](https://github.com/kulshekhar/ts-jest/issues/223)
 
 ---
 
