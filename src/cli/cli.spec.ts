@@ -81,7 +81,6 @@ fs.readFileSync.mockImplementation(f => {
 // === test ===================================================================
 
 beforeEach(() => {
-  // jest.resetModules()
   lastExitCode = undefined
   mockedProcess = mockObject(process, {
     cwd: jest.fn(() => FAKE_CWD),
@@ -283,8 +282,13 @@ Jest configuration written to "${normalize('/foo/bar/package.json')}".
   })
   describe('migrate', async () => {
     const pkgPaths = {
-      withoutOptions: './a/package.json',
-      withOptions: './b/package.json',
+      _id: 0,
+      get next() {
+        return `./foo/${++pkgPaths._id}/package.json`
+      },
+      get current() {
+        return `./foo/${pkgPaths._id}/package.json`
+      },
     }
     const noOption = ['config:migrate']
     const fullOptions = [...noOption, '--no-jest-preset', '--allow-js']
@@ -292,17 +296,31 @@ Jest configuration written to "${normalize('/foo/bar/package.json')}".
       mockedProcess.cwd.mockImplementation(() => __dirname)
     })
 
+    it('should fail if the config file does not exist', async () => {
+      expect.assertions(1)
+      fs.existsSync.mockImplementation(() => false)
+      const res = await runCli(...noOption, pkgPaths.next)
+      expect(res.log).toMatch(/does not exists/)
+    })
+
+    it('should fail if the config file is not of good type', async () => {
+      expect.assertions(1)
+      fs.existsSync.mockImplementation(() => true)
+      const res = await runCli(...noOption, `${pkgPaths.next}.foo`)
+      expect(res.log).toMatch(/must be a JavaScript or JSON file/)
+    })
+
     it('should migrate from package.json (without options)', async () => {
       expect.assertions(2)
       fs.existsSync.mockImplementation(() => true)
       jest.mock(
-        pkgPaths.withoutOptions,
+        pkgPaths.next,
         () => ({
           jest: { globals: { __TS_CONFIG__: { target: 'es6' } } },
         }),
         { virtual: true },
       )
-      const res = await runCli(...noOption, pkgPaths.withoutOptions)
+      const res = await runCli(...noOption, pkgPaths.current)
       expect(res).toMatchInlineSnapshot(`
 Object {
   "exitCode": 0,
@@ -326,17 +344,18 @@ Migrated Jest configuration:
 `)
       expect(fs.writeFileSync).not.toHaveBeenCalled()
     })
+
     it('should migrate from package.json (with options)', async () => {
       expect.assertions(2)
       fs.existsSync.mockImplementation(() => true)
       jest.mock(
-        pkgPaths.withOptions,
+        pkgPaths.next,
         () => ({
           jest: { globals: { __TS_CONFIG__: { target: 'es6' } } },
         }),
         { virtual: true },
       )
-      const res = await runCli(...fullOptions, pkgPaths.withOptions)
+      const res = await runCli(...fullOptions, pkgPaths.current)
       expect(res).toMatchInlineSnapshot(`
 Object {
   "exitCode": 0,
@@ -359,5 +378,70 @@ Migrated Jest configuration:
 `)
       expect(fs.writeFileSync).not.toHaveBeenCalled()
     })
-  })
-})
+
+    it('should detect same option values', async () => {
+      expect.assertions(1)
+      fs.existsSync.mockImplementation(() => true)
+      jest.mock(
+        pkgPaths.next,
+        () => ({
+          jest: {
+            globals: { __TS_CONFIG__: { target: 'es6' } },
+            moduleFileExtensions: ['js', 'json', 'tsx', 'jsx', 'node', 'ts'],
+            testMatch: [
+              '**/__tests__/**/*.js?(x)',
+              '**/?(*.)+(spec|test).js?(x)',
+              '**/__tests__/**/*.ts?(x)',
+              '**/?(*.)+(spec|test).ts?(x)',
+            ],
+          },
+        }),
+        { virtual: true },
+      )
+      const res = await runCli(...noOption, pkgPaths.current)
+      expect(res.stdout).toMatchInlineSnapshot(`
+"{
+  \\"globals\\": {
+    \\"ts-jest\\": {
+      \\"tsConfig\\": {
+        \\"target\\": \\"es6\\"
+      }
+    }
+  },
+  \\"preset\\": \\"ts-jest\\"
+}
+"
+`)
+    })
+
+    it('should normalize transform values', async () => {
+      expect.assertions(1)
+      fs.existsSync.mockImplementation(() => true)
+      jest.mock(
+        pkgPaths.next,
+        () => ({
+          jest: {
+            transform: {
+              '<rootDir>/src/.+\\.[jt]s$': 'node_modules/ts-jest/preprocessor.js',
+              'foo\\.ts': '<rootDir>/node_modules/ts-jest/preprocessor.js',
+              'bar\\.ts': '<rootDir>/node_modules/ts-jest',
+            },
+          },
+        }),
+        { virtual: true },
+      )
+      const res = await runCli(...noOption, pkgPaths.current)
+      expect(res.stdout).toMatchInlineSnapshot(`
+"{
+  \\"transform\\": {
+    \\"<rootDir>/src/.+\\\\\\\\.[jt]s$\\": \\"ts-jest\\",
+    \\"foo\\\\\\\\.ts\\": \\"ts-jest\\",
+    \\"bar\\\\\\\\.ts\\": \\"ts-jest\\"
+  },
+  \\"preset\\": \\"ts-jest\\"
+}
+"
+`)
+    })
+  }) // migrate
+}) // config
