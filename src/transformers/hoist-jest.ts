@@ -75,7 +75,7 @@ export function factory(cs: ConfigSet) {
       }
     }
     /**
-     * Called when we leave a block to devrease the level
+     * Called when we leave a block to decrease the level
      */
     const exit = () => level--
     /**
@@ -119,7 +119,7 @@ export function factory(cs: ConfigSet) {
         hoist(resultNode as Statement)
       }
 
-      // finsally returns the currently visited node
+      // finally returns the currently visited node
       return resultNode
     }
     return visitor
