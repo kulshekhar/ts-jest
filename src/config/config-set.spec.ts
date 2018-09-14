@@ -1,5 +1,6 @@
+import { testing } from 'bs-logger'
 import { resolve } from 'path'
-import ts, { ModuleKind, ScriptTarget } from 'typescript'
+import ts, { Diagnostic, ModuleKind, ScriptTarget } from 'typescript'
 
 import * as fakers from '../__helpers__/fakers'
 import { mocked } from '../__helpers__/mocks'
@@ -25,16 +26,21 @@ function createConfigSet({
   tsJestConfig,
   parentConfig,
   resolve = defaultResolve,
+  ...others
 }: {
   jestConfig?: jest.ProjectConfig
   tsJestConfig?: TsJestGlobalOptions
   parentConfig?: TsJestGlobalOptions
   resolve?: ((path: string) => string) | null
+  [key: string]: any
 } = {}) {
   const cs = new ConfigSet(fakers.jestConfig(jestConfig, tsJestConfig), parentConfig)
   if (resolve) {
     cs.resolvePath = resolve
   }
+  Object.keys(others).forEach(key => {
+    Object.defineProperty(cs, key, { value: others[key] })
+  })
   return cs
 }
 
@@ -250,7 +256,7 @@ describe('typescript', () => {
       skipLibCheck: true,
     })
   })
-})
+}) // typescript
 
 describe('resolvePath', () => {
   it('should resolve paths', () => {
@@ -261,7 +267,7 @@ describe('resolvePath', () => {
     expect(doResolve('<rootDir>bar.js')).toBe(resolve('/root/bar.js'))
     expect(doResolve('<rootDir>/bar.js')).toBe(resolve('/root//bar.js'))
   })
-})
+}) // resolvePath
 
 describe('readTsConfig', () => {
   let findConfig!: jest.SpyInstance<typeof ts.findConfigFile>
@@ -303,4 +309,179 @@ describe('readTsConfig', () => {
     expect(parseConfig.mock.calls[0][2]).toBe('/foo')
     expect(parseConfig.mock.calls[0][4]).toBe('/foo/tsconfig.bar.json')
   })
-})
+}) // readTsConfig
+
+describe('versions', () => {
+  describe('without babel', () => {
+    it('should return correct version map', () => {
+      expect(createConfigSet().versions).toMatchInlineSnapshot(`
+Object {
+  "jest": "23.6.0",
+  "ts-jest": "23.10.0-beta.6",
+  "tslib": "1.9.3",
+  "typescript": "3.0.3",
+}
+`)
+    })
+  })
+  describe('with babel', () => {
+    it('should return correct version map', () => {
+      expect(createConfigSet({ tsJestConfig: { babelConfig: {} } }).versions).toMatchInlineSnapshot(`
+Object {
+  "@babel/core": "-",
+  "babel-core": "6.26.3",
+  "babel-jest": "23.6.0",
+  "jest": "23.6.0",
+  "ts-jest": "23.10.0-beta.6",
+  "tslib": "1.9.3",
+  "typescript": "3.0.3",
+}
+`)
+    })
+  })
+}) // versions
+
+describe('tsconfig', () => {
+  it('should return input tsconfig', () => {
+    const cs = createConfigSet({ tsJestConfig: { tsConfig: { target: 'ES6' } } as any })
+    expect(cs.tsconfig.compilerOptions.target).toBe('ES6')
+  })
+}) // tsconfig
+
+describe('shouldStringifyContent', () => {
+  it('should return correct value', () => {
+    const cs = createConfigSet({ tsJestConfig: { tsConfig: false, stringifyContentPathRegex: '\\.str$' } as any })
+    expect(cs.shouldStringifyContent('/foo/bar.ts')).toBe(false)
+    expect(cs.shouldStringifyContent('/foo/bar.str')).toBe(true)
+  })
+}) // shouldStringifyContent
+
+describe('shouldReportDiagnostic', () => {
+  it('should return correct value', () => {
+    let cs = createConfigSet({ tsJestConfig: { tsConfig: false, diagnostics: { pathRegex: '/foo/' } } as any })
+    expect(cs.shouldReportDiagnostic('/foo/index.ts')).toBe(true)
+    expect(cs.shouldReportDiagnostic('/bar/index.ts')).toBe(false)
+    cs = createConfigSet({ tsJestConfig: { tsConfig: false } as any })
+    expect(cs.shouldReportDiagnostic('/foo/index.ts')).toBe(true)
+    expect(cs.shouldReportDiagnostic('/bar/index.ts')).toBe(true)
+  })
+}) // shouldReportDiagnostic
+
+describe('tsCompiler', () => {
+  it('should a compiler object', () => {
+    const cs = createConfigSet({ tsJestConfig: { tsConfig: false } as any })
+    const compiler = cs.tsCompiler
+    expect(compiler.cwd).toBe(cs.cwd)
+    expect(compiler.cachedir).toBe(cs.tsCacheDir)
+    expect(compiler.extensions).toMatchInlineSnapshot(`
+Array [
+  ".ts",
+  ".tsx",
+]
+`)
+    expect(compiler.ts).toBe(cs.compilerModule)
+    expect(typeof compiler.compile).toBe('function')
+    expect(typeof compiler.getTypeInfo).toBe('function')
+  })
+}) // tsCompiler
+
+describe('babelJestTransformer', () => {
+  it('should return a babel-jest transformer', () => {
+    let cs = createConfigSet({ tsJestConfig: { tsConfig: false } as any })
+    expect(cs.babelJestTransformer).toBeUndefined()
+    cs = createConfigSet({ tsJestConfig: { tsConfig: false, babelConfig: {} } as any })
+    const babelJest = cs.babelJestTransformer as jest.Transformer
+    expect(babelJest.canInstrument).toBe(true)
+    expect(babelJest.createTransformer).toBeUndefined()
+    expect(typeof babelJest.getCacheKey).toBe('function')
+    expect(typeof babelJest.process).toBe('function')
+  })
+}) // babelJestTransformer
+
+describe('cacheKey', () => {
+  it('should be a string', () => {
+    const cs = createConfigSet({ tsJestConfig: { tsConfig: false } as any })
+    // we tested those and don't want the snapshot to change all the time we upgrade
+    const val = cs.jsonValue.value
+    delete val.versions
+    cs.jsonValue.value = val
+    expect(cs.cacheKey).toMatchInlineSnapshot(
+      `"{\\"jest\\":{\\"__backported\\":true,\\"globals\\":{}},\\"transformers\\":[\\"hoisting-jest-mock@1\\"],\\"tsJest\\":{\\"compiler\\":\\"typescript\\",\\"diagnostics\\":{\\"ignoreCodes\\":[6059,18002,18003],\\"pretty\\":true,\\"throws\\":true},\\"isolatedModules\\":false,\\"transformers\\":[]},\\"tsconfig\\":{\\"compilerOptions\\":{}}}"`,
+    )
+  })
+}) // cacheKey
+
+describe('jsonValue', () => {
+  it('should create jsonValue based on each config and version', () => {
+    const cs = createConfigSet({ tsJestConfig: { tsConfig: false } as any })
+    const val = cs.jsonValue.valueOf()
+    expect(cs.toJSON()).toEqual(val)
+    // it will change each time we upgrade and we tested those in the `version` block
+    expect(val.versions).toEqual(cs.versions)
+    delete val.versions
+
+    expect(val).toMatchInlineSnapshot(`
+Object {
+  "babel": undefined,
+  "jest": Object {
+    "__backported": true,
+    "globals": Object {},
+  },
+  "transformers": Array [
+    "hoisting-jest-mock@1",
+  ],
+  "tsJest": Object {
+    "babelConfig": undefined,
+    "compiler": "typescript",
+    "diagnostics": Object {
+      "ignoreCodes": Array [
+        6059,
+        18002,
+        18003,
+      ],
+      "pretty": true,
+      "throws": true,
+    },
+    "isolatedModules": false,
+    "stringifyContentPathRegex": undefined,
+    "transformers": Array [],
+    "tsConfig": undefined,
+  },
+  "tsconfig": Object {
+    "compilerOptions": Object {},
+  },
+}
+`)
+  })
+}) // jsonValue
+
+describe('raiseDiagnostics', () => {
+  const createTsError = jest.fn(
+    (list: Diagnostic[]) => new Error(list.map(d => `[${d.code}] ${d.messageText}`).join('\n')),
+  )
+  const filterDiagnostics = jest.fn(list => list)
+  const logger = testing.createLoggerMock()
+  const diagnostic: Diagnostic = { messageText: 'foo', code: 'TS9999' } as any
+  it('should throw when warnOnly is false', () => {
+    const { raiseDiagnostics } = createConfigSet({ createTsError, filterDiagnostics })
+    expect(() => raiseDiagnostics([])).not.toThrow()
+    expect(() => raiseDiagnostics([diagnostic])).toThrowErrorMatchingInlineSnapshot(`"[TS9999] foo"`)
+  })
+  it('should not throw when warnOnly is true', () => {
+    const { raiseDiagnostics } = createConfigSet({
+      createTsError,
+      filterDiagnostics,
+      logger,
+      tsJestConfig: { diagnostics: { warnOnly: true } },
+    })
+    logger.target.clear()
+    expect(() => raiseDiagnostics([])).not.toThrow()
+    expect(() => raiseDiagnostics([diagnostic])).not.toThrow()
+    expect(logger.target.lines).toMatchInlineSnapshot(`
+Array [
+  "[level:40] [TS9999] foo
+",
+]
+`)
+  })
+}) // raiseDiagnostics
