@@ -125,6 +125,36 @@ Array [
   })
 })
 
+describe('isolatedModules', () => {
+  const compiler = makeCompiler({ tsJestConfig: { isolatedModules: true, tsConfig: false } })
+  const spy: jest.SpyInstance = jest.spyOn(require('typescript'), 'transpileModule')
+  afterAll(() => {
+    spy.mockRestore()
+  })
+  it('should compile using transpileModule', () => {
+    const compiled = compiler.compile('export default 42', __filename)
+    expect(new ProcessedSource(compiled, __filename)).toMatchInlineSnapshot(`
+  ===[ FILE: src/compiler.spec.ts ]===============================================
+  "use strict";
+  Object.defineProperty(exports, "__esModule", { value: true });
+  exports.default = 42;
+  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoic3JjL2NvbXBpbGVyLnNwZWMudHMiLCJtYXBwaW5ncyI6Ijs7QUFBQSxrQkFBZSxFQUFFLENBQUEiLCJuYW1lcyI6W10sInNvdXJjZVJvb3QiOiI8Y3dkPi8iLCJzb3VyY2VzIjpbInNyYy9jb21waWxlci5zcGVjLnRzIl0sInNvdXJjZXNDb250ZW50IjpbImV4cG9ydCBkZWZhdWx0IDQyIl0sInZlcnNpb24iOjN9
+  ===[ INLINE SOURCE MAPS ]=======================================================
+  file: src/compiler.spec.ts
+  mappings: ';;AAAA,kBAAe,EAAE,CAAA'
+  names: []
+  sourceRoot: <cwd>/
+  sources:
+    - src/compiler.spec.ts
+  sourcesContent:
+    - export default 42
+  version: 3
+  ================================================================================
+`)
+    expect(spy).toHaveBeenCalled()
+  })
+})
+
 describe('getTypeInfo', () => {
   const compiler = makeCompiler()
   const source = `
