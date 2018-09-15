@@ -2,54 +2,16 @@ import { testing } from 'bs-logger'
 import * as _fs from 'fs'
 import { normalize, resolve } from 'path'
 
-import { mocked } from '../__helpers__/mocks'
+import { mockObject, mockWriteStream, mocked } from '../__helpers__/mocks'
 import { rootLogger as _rootLogger } from '../util/logger'
 
 import { processArgv } from '.'
 
 // === helpers ================================================================
-jest.mock('../util/logger')
 jest.mock('fs')
+
 const fs = mocked(_fs)
 const rootLogger = _rootLogger as testing.LoggerMock
-
-const mockWriteStream = () => {
-  return {
-    written: [] as string[],
-    write(text: string) {
-      this.written.push(text)
-    },
-    clear() {
-      this.written = []
-    },
-  }
-}
-
-const mockObject = <T, M>(obj: T, newProps: M): T & M & { mockRestore: () => T } => {
-  const backup: any = Object.create(null)
-
-  Object.keys(newProps).forEach(key => {
-    const desc = (backup[key] = Object.getOwnPropertyDescriptor(obj, key))
-    const newDesc: any = { ...desc }
-    if (newDesc.get) {
-      newDesc.get = () => (newProps as any)[key]
-    } else {
-      newDesc.value = (newProps as any)[key]
-    }
-    Object.defineProperty(obj, key, newDesc)
-  })
-  if ((obj as any).mockRestore) backup.mockRestore = Object.getOwnPropertyDescriptor(obj, 'mockRestore')
-  return Object.defineProperty(obj, 'mockRestore', {
-    value() {
-      Object.keys(backup).forEach(key => {
-        Object.defineProperty(obj, key, backup[key])
-      })
-      return obj
-    },
-    configurable: true,
-  })
-}
-
 let lastExitCode: number | undefined
 
 const runCli = async (
