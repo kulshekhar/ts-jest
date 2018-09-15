@@ -3,6 +3,7 @@ import semver from 'semver'
 import { BabelConfig, ModulePatcher, TBabelCore } from '../types'
 
 import { rootLogger } from './logger'
+import { Errors, interpolate } from './messages'
 
 const logger = rootLogger.child({ namespace: 'hacks' })
 
@@ -32,7 +33,7 @@ export const patchBabelCore_githubIssue6577: ModulePatcher<TBabelCore> = babel =
       Object.defineProperty(File.prototype.initOptions, flag, { value: true })
       logger.info('patched babel-core/lib/transformation/file')
     } catch (error) {
-      logger.warn({ error }, 'error while trying to patch babel-core/lib/transformation/file', error)
+      logger.warn({ error }, interpolate(Errors.CannotPatchBabelCore6, { error: error.message }))
     }
   }
   return babel

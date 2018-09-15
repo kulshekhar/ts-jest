@@ -42,17 +42,3 @@ function memoize(
     return res
   }
 }
-/* tslint:disable:unified-signatures */
-export function clearCache<T extends { [cacheProp]: any }>(target: T): void
-export function clearCache<T extends { [cacheProp]: any }>(target: T, key: keyof T): void
-export function clearCache<T extends { [cacheProp]: any }>(target: T, key: keyof T, hash: string): void
-export function clearCache<T extends { [cacheProp]: any }>(target: T, key?: keyof T, hash?: string): void {
-  if (!target[cacheProp]) return
-  if (hash) {
-    ensureChildCache(target, key as keyof T).delete(hash)
-  } else if (key) {
-    ensureChildCache(target, key, true)
-  } else {
-    ensureCache(target, true)
-  }
-}

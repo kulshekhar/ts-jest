@@ -1,3 +1,5 @@
+import { logTargetMock } from '../__helpers__/mocks'
+
 import * as hacks from './hacks'
 
 describe('patchBabelCore_githubIssue6577', () => {
@@ -22,9 +24,11 @@ describe('patchBabelCore_githubIssue6577', () => {
     jest.unmock('babel-core/lib/transformation/file')
   })
 
+  const EXAMPLE_VERSION_TO_PATCH = '6.2.0'
   const INPUT = { input: 'input' }
-  const resetAndPatch = (version?: any) => {
-    FileMock.prototype.initOptions = originalInitOptions
+  const fileProtoFactory = () => ({ initOptions: originalInitOptions })
+  const resetAndPatch = (version?: any, protoFactory: () => any = fileProtoFactory) => {
+    Object.assign(FileMock.prototype, protoFactory())
     hacks.patchBabelCore_githubIssue6577({ version } as any)
   }
   const getClass = () => require('babel-core/lib/transformation/file').File
@@ -42,7 +46,7 @@ describe('patchBabelCore_githubIssue6577', () => {
   })
 
   it('should not restore sourceMaps input value if falsy', () => {
-    resetAndPatch('6.2.0')
+    resetAndPatch(EXAMPLE_VERSION_TO_PATCH)
     expect(initOptions(false).sourceMaps).toBe(RESET)
     expect(initOptions(undefined).sourceMaps).toBe(RESET)
     expect(initOptions(null).sourceMaps).toBe(RESET)
@@ -51,8 +55,29 @@ describe('patchBabelCore_githubIssue6577', () => {
   it('should restore sourceMaps input value if truthy', () => {
     resetAndPatch('6.9.4-alpha.0')
     expect(initOptions(INPUT).sourceMaps).toBe(INPUT)
-    resetAndPatch('6.1.5')
+    resetAndPatch(EXAMPLE_VERSION_TO_PATCH)
     expect(initOptions(INPUT).sourceMaps).toBe(INPUT)
     expect(initOptions('foo').sourceMaps).toBe('foo')
+  })
+
+  it('should not patch twice', () => {
+    resetAndPatch(EXAMPLE_VERSION_TO_PATCH)
+    let backup = getClass().prototype.initOptions
+    resetAndPatch(EXAMPLE_VERSION_TO_PATCH)
+    expect(getClass().prototype.initOptions).not.toBe(backup)
+
+    backup = getClass().prototype.initOptions
+    resetAndPatch(EXAMPLE_VERSION_TO_PATCH, () => ({}))
+    expect(getClass().prototype.initOptions).toBe(backup)
+  })
+
+  it('should warn if an error occurs while patching', () => {
+    const log = logTargetMock()
+    log.clear()
+    resetAndPatch(EXAMPLE_VERSION_TO_PATCH, () => ({ initOptions: null }))
+    expect(log.lines.warn.join('\n')).toMatchInlineSnapshot(`
+"[level:40] Error while trying to patch babel-core/lib/transformation/file: Cannot read property 'Symbol(ts-jest:patchBabelCore_githubIssue6577)' of null
+"
+`)
   })
 })
