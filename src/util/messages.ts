@@ -11,6 +11,7 @@ export enum Errors {
   NotMappingMultiStarPath = 'Not mapping "{{path}}" because it has more than one star (`*`).',
   NotMappingPathWithEmptyMap = 'Not mapping "{{path}}" because it has no target.',
   MappingOnlyFirstTargetOfPath = 'Mapping only to first target of "{{path}}" because it has more than one ({{count}}).',
+  CannotPatchBabelCore6 = 'Error while trying to patch babel-core/lib/transformation/file: {{error}}',
 }
 
 export enum Helps {
