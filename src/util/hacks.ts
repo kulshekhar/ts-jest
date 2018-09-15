@@ -12,7 +12,9 @@ export const patchBabelCore_githubIssue6577: ModulePatcher<TBabelCore> = babel =
   // This is a hack to bypass it and fix our issue #627
   // The bug disallow debugging when using Babel Jest with babel-core@6.x because of
   // source-maps not being inlined
-  if (typeof babel.version === 'string' && semver.satisfies(babel.version, '>=6 <7')) {
+  if (typeof babel.version !== 'string') return babel
+  const version = semver.coerce(babel.version)
+  if (version && version.major === 6) {
     try {
       const File = require('babel-core/lib/transformation/file').File
       File.prototype.initOptions = (original => {

@@ -1,5 +1,3 @@
-import { File } from 'babel-core/lib/transformation/file'
-
 import * as hacks from './hacks'
 
 jest.mock(
@@ -20,10 +18,15 @@ jest.mock(
   { virtual: true },
 )
 
+beforeEach(() => {
+  jest.resetModules()
+})
+
 describe('patchBabelCore_githubIssue6577', () => {
   const INPUT = 'foo:bar'
   const initOptions = ({ version = '6.0.0', sourceMaps }: { version?: any; sourceMaps?: any } = {}) => {
     hacks.patchBabelCore_githubIssue6577({ version } as any)
+    const { File } = require('babel-core/lib/transformation/file')
     return new File().initOptions({ sourceMaps, inputSourceMap: true })
   }
 
