@@ -108,6 +108,11 @@ Array [
 `)
   })
 
+  it('should return stringified version of file', () => {
+    config.shouldStringifyContent.mockImplementation(() => true)
+    expect(process()).toMatchInlineSnapshot(`"ts:module.exports=\\"export default \\\\\\"foo\\\\\\"\\""`)
+  })
+
   it('should not pass the instrument option to babel-jest', () => {
     args[3] = { instrument: true }
     expect(process()).toBe(`babel:ts:${INPUT}`)
