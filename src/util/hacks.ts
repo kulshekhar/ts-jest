@@ -15,8 +15,10 @@ export const patchBabelCore_githubIssue6577: ModulePatcher<TBabelCore> = babel =
   if (typeof babel.version !== 'string') return babel
   const version = semver.coerce(babel.version)
   if (version && version.major === 6) {
+    const flag = Symbol.for('ts-jest:patchBabelCore_githubIssue6577')
     try {
       const File = require('babel-core/lib/transformation/file').File
+      if (File.prototype.initOptions[flag]) return babel
       File.prototype.initOptions = (original => {
         return function initOptions(this: any, opt: BabelConfig) {
           const before = opt.sourceMaps
@@ -27,8 +29,11 @@ export const patchBabelCore_githubIssue6577: ModulePatcher<TBabelCore> = babel =
           return result
         }
       })(File.prototype.initOptions)
+      Object.defineProperty(File.prototype.initOptions, flag, { value: true })
       logger.info('patched babel-core/lib/transformation/file')
-    } catch (err) {}
+    } catch (error) {
+      logger.warn({ error }, 'error while trying to patch babel-core/lib/transformation/file', error)
+    }
   }
   return babel
 }

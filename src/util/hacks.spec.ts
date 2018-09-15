@@ -1,48 +1,58 @@
 import * as hacks from './hacks'
 
-jest.mock(
-  'babel-core/lib/transformation/file',
-  () => ({
-    File: class {
-      // tslint:disable-next-line:prefer-function-over-method
-      initOptions(options: any) {
-        const opt = { ...options }
-        // this is the buggy part overwriting the sourceMaps option that the patch should fix
-        if (opt.inputSourceMap) {
-          opt.sourceMaps = true
-        }
-        return opt
-      }
-    },
-  }),
-  { virtual: true },
-)
-
-beforeEach(() => {
-  jest.resetModules()
-})
-
 describe('patchBabelCore_githubIssue6577', () => {
-  const INPUT = 'foo:bar'
-  const initOptions = ({ version = '6.0.0', sourceMaps }: { version?: any; sourceMaps?: any } = {}) => {
+  class FileMock {
+    // tslint:disable-next-line:prefer-function-over-method no-empty
+    initOptions(_: any): any {}
+  }
+  const RESET = { reset: 'reset' }
+  const originalInitOptions = (options: any) => {
+    const opt = { ...options }
+    // this is the buggy part overwriting the sourceMaps option that the patch should fix
+    if (opt.inputSourceMap) {
+      opt.sourceMaps = RESET
+    }
+    return opt
+  }
+  beforeAll(() => {
+    jest.doMock('babel-core/lib/transformation/file', () => ({ File: FileMock }))
+    jest.resetModules()
+  })
+  afterAll(() => {
+    jest.unmock('babel-core/lib/transformation/file')
+  })
+
+  const INPUT = { input: 'input' }
+  const resetAndPatch = (version?: any) => {
+    FileMock.prototype.initOptions = originalInitOptions
     hacks.patchBabelCore_githubIssue6577({ version } as any)
-    const { File } = require('babel-core/lib/transformation/file')
+  }
+  const getClass = () => require('babel-core/lib/transformation/file').File
+  const initOptions = (sourceMaps?: any) => {
+    // reset it to the original version
+    const File = getClass()
     return new File().initOptions({ sourceMaps, inputSourceMap: true })
   }
 
-  it('should not reset if version of babel is not 6', () => {
-    expect(initOptions({ version: null, sourceMaps: INPUT }).sourceMaps).not.toBe(INPUT)
-    expect(initOptions({ version: '7.1.0', sourceMaps: INPUT }).sourceMaps).not.toBe(INPUT)
+  it('should not wrap the method if version of babel is not 6', () => {
+    resetAndPatch(null)
+    expect(getClass().prototype.initOptions).toBe(originalInitOptions)
+    resetAndPatch('7.1.0')
+    expect(getClass().prototype.initOptions).toBe(originalInitOptions)
   })
 
-  it('should not reset if option is falsy', () => {
-    expect(initOptions({ sourceMaps: false }).sourceMaps).not.toBe(false)
-    expect(initOptions({ sourceMaps: undefined }).sourceMaps).not.toBe(undefined)
-    expect(initOptions({ sourceMaps: null }).sourceMaps).not.toBe(null)
+  it('should not restore sourceMaps input value if falsy', () => {
+    resetAndPatch('6.2.0')
+    expect(initOptions(false).sourceMaps).toBe(RESET)
+    expect(initOptions(undefined).sourceMaps).toBe(RESET)
+    expect(initOptions(null).sourceMaps).toBe(RESET)
+    expect(initOptions(0).sourceMaps).toBe(RESET)
   })
-  it('should reset to input value if truthy', () => {
-    expect(initOptions({ version: '6.9.4-alpha.0', sourceMaps: INPUT }).sourceMaps).toBe(INPUT)
-    expect(initOptions({ sourceMaps: INPUT }).sourceMaps).toBe(INPUT)
-    expect(initOptions({ sourceMaps: 'dummy' }).sourceMaps).toBe('dummy')
+  it('should restore sourceMaps input value if truthy', () => {
+    resetAndPatch('6.9.4-alpha.0')
+    expect(initOptions(INPUT).sourceMaps).toBe(INPUT)
+    resetAndPatch('6.1.5')
+    expect(initOptions(INPUT).sourceMaps).toBe(INPUT)
+    expect(initOptions('foo').sourceMaps).toBe('foo')
   })
 })
