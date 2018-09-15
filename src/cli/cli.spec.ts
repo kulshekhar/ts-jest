@@ -241,7 +241,36 @@ Jest configuration written to "${normalize('/foo/bar/package.json')}".
         ],
       ])
     })
-  })
+    it('should output help', async () => {
+      const res = await runCli('help', noOption[0])
+      expect(res).toMatchInlineSnapshot(`
+Object {
+  "exitCode": 0,
+  "log": "",
+  "stderr": "",
+  "stdout": "
+Usage:
+  ts-jest config:init [options] [<config-file>]
+
+Arguments:
+  <config-file>         Can be a js or json Jest config file. If it is a
+                        package.json file, the configuration will be read from
+                        the \\"jest\\" property.
+                        Default: jest.config.js
+
+Options:
+  --force               Discard any existing Jest config
+  --allow-js            ts-jest will be used to process JS files as well
+  --no-jest-preset      Disable the use of Jest presets
+  --tsconfig <file>     Path to the tsconfig.json file
+  --babel               Call BabelJest after ts-jest
+  --jsdom               Use jsdom as test environment instead of node
+",
+}
+`)
+    })
+  }) // init
+
   describe('migrate', async () => {
     const pkgPaths = {
       _id: 0,
@@ -403,6 +432,29 @@ Migrated Jest configuration:
   \\"preset\\": \\"ts-jest\\"
 }
 "
+`)
+    })
+    it('should output help', async () => {
+      const res = await runCli('help', noOption[0])
+      expect(res).toMatchInlineSnapshot(`
+Object {
+  "exitCode": 0,
+  "log": "",
+  "stderr": "",
+  "stdout": "
+Usage:
+  ts-jest config:migrate [options] <config-file>
+
+Arguments:
+  <config-file>         Can be a js or json Jest config file. If it is a
+                        package.json file, the configuration will be read from
+                        the \\"jest\\" property.
+
+Options:
+  --allow-js            ts-jest will be used to process JS files as well
+  --no-jest-preset      Disable the use of Jest presets
+",
+}
 `)
     })
   }) // migrate
