@@ -7,7 +7,7 @@ const path = require('path')
 const Paths = require('./lib/paths')
 const logger = require('./lib/logger')
 
-logger.log('Updating E2E template depedency versions (this might take a while)')
+logger.log('Updating E2E template dependency versions (this might take a while)')
 const templateDirs = fs
   .readdirSync(Paths.e2eTemplatesDir)
   .filter(f => fs.statSync(path.join(Paths.e2eTemplatesDir, f)).isDirectory())
