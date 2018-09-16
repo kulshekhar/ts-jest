@@ -139,7 +139,8 @@
 
 <p>While <code class="highlighter-rouge">@babel/preset-typescript</code> is a great preset, you must know the limitation of it. Here is what is possible with TypeScript (and <code class="highlighter-rouge">ts-jest</code>), which is not with Babel7 and <code class="highlighter-rouge">@babel/preset-typescript</code>:</p>
 
-<h3 id="no-type-checking">No type-checking</h3>
+<hr />
+<h4 id="no-type-checking">No type-checking</h4>
 
 <p>This is the big <strong>PRO</strong> of using TypeScript vs Babel, you have type-checking out of the box.</p>
 
@@ -152,7 +153,8 @@
 
 <p>With Babel, files are transpiled as isolated modules, there is no notion of “project”. With TypeScript, files are part of a project and are compiled in that scope.</p>
 
-<h3 id="no-namespace">No <code class="highlighter-rouge">namespace</code></h3>
+<hr />
+<h4 id="no-namespace">No <code class="highlighter-rouge">namespace</code></h4>
 
 <div class="language-ts highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">namespace</span> <span class="nx">app</span> <span class="p">{</span>
   <span class="k">export</span> <span class="kd">const</span> <span class="nx">VERSION</span> <span class="o">=</span> <span class="s1">'1.0.0'</span>
@@ -160,23 +162,27 @@
 <span class="p">}</span>
 </code></pre></div></div>
 
-<h3 id="no-const-enum">No <code class="highlighter-rouge">const enum</code></h3>
+<hr />
+<h4 id="no-const-enum">No <code class="highlighter-rouge">const enum</code></h4>
 
 <div class="language-ts highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="kr">enum</span> <span class="nx">Directions</span> <span class="p">{</span> <span class="nx">Up</span><span class="p">,</span> <span class="nx">Down</span><span class="p">,</span> <span class="nx">Left</span><span class="p">,</span> <span class="nx">Right</span> <span class="p">}</span>
 </code></pre></div></div>
 
-<h3 id="ne-declaration-merging-enum-namespace-">Ne declaration merging (<code class="highlighter-rouge">enum</code>, <code class="highlighter-rouge">namespace</code>, …)</h3>
+<hr />
+<h4 id="no-declaration-merging-enum-namespace-">No declaration merging (<code class="highlighter-rouge">enum</code>, <code class="highlighter-rouge">namespace</code>, …)</h4>
 
 <p>You won’t be able to do <a href="https://www.typescriptlang.org/docs/handbook/declaration-merging.html">declaration merging</a>.</p>
 
-<h3 id="no-legacy-importexport">No legacy <code class="highlighter-rouge">import</code>/<code class="highlighter-rouge">export</code></h3>
+<hr />
+<h4 id="no-legacy-importexport">No legacy <code class="highlighter-rouge">import</code>/<code class="highlighter-rouge">export</code></h4>
 
 <div class="language-ts highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nx">lib</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'lib'</span><span class="p">)</span>
 <span class="c1">// ...</span>
 <span class="k">export</span> <span class="o">=</span> <span class="nx">myVar</span>
 </code></pre></div></div>
 
-<h3 id="no-caret-type-casting-with-jsx-enabled">No caret type-casting with JSX enabled</h3>
+<hr />
+<h4 id="no-caret-type-casting-with-jsx-enabled">No caret type-casting with JSX enabled</h4>
 
 <div class="language-ts highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">val</span> <span class="o">=</span> <span class="o">&lt;</span><span class="nx">string</span><span class="o">&gt;</span><span class="nx">input</span>
 </code></pre></div></div>
