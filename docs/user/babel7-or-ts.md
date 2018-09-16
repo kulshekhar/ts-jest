@@ -3,7 +3,8 @@ title: Babel7 or TypeScript
 ---
 In Sept. 2018 Babel7 got released with an interesting preset: `@babel/preset-typescript`.
 
-The goal is to make it easy for users using Babel to try TypeScript without moving out from Babel, just by adding a preset in their Babel config.
+The goal is to make it easy for users using Babel to try TypeScript without moving out from Babel, just by adding a preset in their Babel config (here is the [MSDN blog post](https://blogs.msdn.microsoft.com/typescript/2018/08/27/typescript-and-babel-7/) about TypeScript and Babel 7).
+
 
 ## Limitations
 
