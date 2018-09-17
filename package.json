@@ -90,7 +90,7 @@
     "@types/lodash": "^4.14.109",
     "@types/node": "10.9.4",
     "@types/react": "16.4.14",
-    "@types/yargs": "^11.0.0",
+    "@types/yargs": "^12.0.0",
     "babel-core": "^7.0.0-0",
     "babel-jest": "^23.4.0",
     "babel-preset-jest": "^23.2.0",
