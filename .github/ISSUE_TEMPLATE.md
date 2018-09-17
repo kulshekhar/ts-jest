@@ -10,7 +10,8 @@ https://github.com/kulshekhar/ts-jest/wiki/Troubleshooting -->
 ## Output from debug log <!-- Run: TS_JEST_LOG=debug.txt yarn test  --- The output of the logger will be in **<your_project_dir>/debug.txt**, paste it below -->:
 <details>
   <summary>debug.txt, Click to expand</summary>
-```bash
+
+  ```bash
 # PASTE CONTENTS OF debug.txt HERE!
 ```
 </details>
