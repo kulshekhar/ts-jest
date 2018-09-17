@@ -6,6 +6,7 @@ import { TsJestGlobalOptions } from './types'
 import { parse, stringify } from './util/json'
 import { JsonableValue } from './util/jsonable-value'
 import { rootLogger } from './util/logger'
+import { Errors, interpolate } from './util/messages'
 import { sha1 } from './util/sha1'
 
 /**
@@ -101,10 +102,18 @@ export class TsJestTransformer implements jest.Transformer {
       source = `module.exports=${JSON.stringify(source)}`
     }
 
-    // transpile TS code (source maps are included)
-    result = filePath.endsWith('.d.ts')
-      ? '' // do not try to compile declaration files
-      : configs.tsCompiler.compile(source, filePath)
+    // compilation
+    if (filePath.endsWith('.d.ts')) {
+      // do not try to compile declaration files
+      result = ''
+    } else if (!configs.typescript.options.allowJs && filePath.endsWith('.js')) {
+      // we've got a '.js' but the compiler option `allowJs` is not set or set to false
+      this.logger.warn({ fileName: filePath }, interpolate(Errors.GotJsFileButAllowJsFalse, { path: filePath }))
+      result = source
+    } else {
+      // transpile TS code (source maps are included)
+      result = configs.tsCompiler.compile(source, filePath)
+    }
 
     // calling babel-jest transformer
     if (babelJest) {
