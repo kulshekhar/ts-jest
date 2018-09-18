@@ -12,6 +12,9 @@ export enum Errors {
   NotMappingPathWithEmptyMap = 'Not mapping "{{path}}" because it has no target.',
   MappingOnlyFirstTargetOfPath = 'Mapping only to first target of "{{path}}" because it has more than one ({{count}}).',
   CannotPatchBabelCore6 = 'Error while trying to patch babel-core/lib/transformation/file: {{error}}',
+  GotJsFileButAllowJsFalse = 'Got a `.js` file to compile while `allowJs` option is not set to `true` (file: {{path}}). To fix this:\n  - if you want TypeScript to process JS files, set `allowJs` to `true` in your TypeScript config (usually tsconfig.json)\n  - if you do not want TypeScript to process your `.js` files, in your Jest config change the `transform` key which value is `ts-jest` so that it does not match `.js` files anymore',
+  GotUnknownFileTypeWithoutBabel = 'Got a unknown file type to compile (file: {{path}}). To fix this, in your Jest config change the `transform` key which value is `ts-jest` so that it does not match this kind of files anymore.',
+  GotUnknownFileTypeWithBabel = 'Got a unknown file type to compile (file: {{path}}). To fix this, in your Jest config change the `transform` key which value is `ts-jest` so that it does not match this kind of files anymore. If you still want Babel to process it, add another entry to the `transform` option with value `babel-jest` which key matches this type of files.',
 }
 
 export enum Helps {
