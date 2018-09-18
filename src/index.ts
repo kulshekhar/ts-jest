@@ -1,3 +1,4 @@
+import { flushLogs } from './utils/logger';
 import getCacheKey from './utils/get-cache-key';
 import preprocess from './preprocess';
 
@@ -6,8 +7,14 @@ const createTransformer = (options?: any): jest.Transformer => {
   return {
     canInstrument: true,
     getCacheKey,
-    process: preprocess,
-    createTransformer: undefined as any,
+    process: (...args) => {
+      try {
+        return preprocess(...args);
+      } finally {
+        flushLogs();
+      }
+    },
+    createTransformer: undefined,
   };
 };
 

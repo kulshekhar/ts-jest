@@ -17,8 +17,7 @@
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": false,
     "skipLibCheck": true,
-    "lib": ["es2015"],
-    "types": ["jest"]
+    "lib": ["es2015"]
   },
   "exclude": ["**/node_modules/**/*"]
 }
