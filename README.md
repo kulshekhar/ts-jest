@@ -405,6 +405,14 @@ The default setup shown here picks up only `.ts` and `.tsx` files. However, if t
     }
 ```
 
+If you want to use ts-jest to process `.js` files, you will also need TypeScript itself not to ignore them. `allowJs` is `false` by default, so you will need to add the following to your `tsconfig.json`:
+
+````
+    "compilerOptions": {
+      "allowJs": true
+    }
+````
+
 ## Tips
 ### Importing packages written in TypeScript
 
