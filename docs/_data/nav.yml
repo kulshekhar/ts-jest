@@ -7,6 +7,8 @@
       url: /user/config
     - title: React Native
       url: /user/react-native
+    - title: Babel7 or TypeScript
+      url: /user/babel7-or-ts
 - title: Contributor Reference
   url: /tech
   sublinks:

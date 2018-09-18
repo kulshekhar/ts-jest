@@ -4,9 +4,12 @@
 
 **`ts-jest`** is a TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript.
 
-It supports all features of TypeScript _(even those which Babel 7 typescript plugin does not)_ and has an internal cache for your tests to run faster.
+It supports all features of TypeScript including type-checking. [Read more about Babel7 + `preset-typescript` **vs** TypeScript (and `ts-jest`)](https://kulshekhar.github.io/ts-jest/user/babel7-or-ts).
 
 ---
+
+| We are not doing semantic versioning and `23.10` is a re-write, run `npm i -D ts-jest@"<23.10.0"` to go back to the previous version |
+|---|
 
 [<img src="./docs/assets/img/documentation.png" align="left" height="24"> View the online documentation (usage & technical)](https://kulshekhar.github.io/ts-jest)
 
