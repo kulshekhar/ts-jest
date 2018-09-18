@@ -117,7 +117,7 @@ Array [
 
   it('should return stringified version of file', () => {
     config.shouldStringifyContent.mockImplementation(() => true)
-    expect(process()).toMatchInlineSnapshot(`"ts:module.exports=\\"export default \\\\\\"foo\\\\\\"\\""`)
+    expect(process()).toMatchInlineSnapshot(`"module.exports=\\"export default \\\\\\"foo\\\\\\"\\""`)
   })
 
   it('should warn when trying to process js but allowJs is false', () => {
@@ -131,6 +131,28 @@ Array [
   "[level:40] Got a \`.js\` file to compile while \`allowJs\` option is not set to \`true\` (file: /foo/bar.js). To fix this:
   - if you want TypeScript to process JS files, set \`allowJs\` to \`true\` in your TypeScript config (usually tsconfig.json)
   - if you do not want TypeScript to process your \`.js\` files, in your Jest config change the \`transform\` key which value is \`ts-jest\` so that it does not match \`.js\` files anymore
+",
+]
+`)
+  })
+
+  it('should warn when trying to process unknown file types', () => {
+    args[1] = '/foo/bar.jest'
+    const logs = logTargetMock()
+    logs.clear()
+    expect(process()).toBe(INPUT)
+    expect(logs.lines.warn).toMatchInlineSnapshot(`
+Array [
+  "[level:40] Got a unknown file type to compile (file: /foo/bar.jest). To fix this, in your Jest config change the \`transform\` key which value is \`ts-jest\` so that it does not match this kind of files anymore.
+",
+]
+`)
+    logs.clear()
+    babel = { process: jest.fn(s => `babel:${s}`) }
+    expect(process()).toBe(`babel:${INPUT}`)
+    expect(logs.lines.warn).toMatchInlineSnapshot(`
+Array [
+  "[level:40] Got a unknown file type to compile (file: /foo/bar.jest). To fix this, in your Jest config change the \`transform\` key which value is \`ts-jest\` so that it does not match this kind of files anymore. If you still want Babel to process it, add another entry to the \`transform\` option with value \`babel-jest\` which key matches this type of files.
 ",
 ]
 `)

@@ -89,7 +89,7 @@ export class TsJestTransformer implements jest.Transformer {
   ): jest.TransformedSource | string {
     this.logger.debug({ fileName: filePath, transformOptions }, 'processing', filePath)
     let result: string | jest.TransformedSource
-    let source: string = input
+    const source: string = input
 
     const configs = this.configsFor(jestConfig)
     const { hooks } = configs
@@ -97,22 +97,30 @@ export class TsJestTransformer implements jest.Transformer {
     const stringify = configs.shouldStringifyContent(filePath)
     const babelJest = stringify ? undefined : configs.babelJestTransformer
 
-    // handles here what we should simply stringify
-    if (stringify) {
-      source = `module.exports=${JSON.stringify(source)}`
-    }
+    const isDefinitionFile = filePath.endsWith('.d.ts')
+    const isJsFile = !isDefinitionFile && /\.jsx?$/.test(filePath)
+    const isTsFile = isDefinitionFile || /\.tsx?$/.test(filePath)
 
-    // compilation
-    if (filePath.endsWith('.d.ts')) {
+    if (stringify) {
+      // handles here what we should simply stringify
+      result = `module.exports=${JSON.stringify(source)}`
+    } else if (isDefinitionFile) {
       // do not try to compile declaration files
       result = ''
-    } else if (!configs.typescript.options.allowJs && filePath.endsWith('.js')) {
+    } else if (!configs.typescript.options.allowJs && isJsFile) {
       // we've got a '.js' but the compiler option `allowJs` is not set or set to false
       this.logger.warn({ fileName: filePath }, interpolate(Errors.GotJsFileButAllowJsFalse, { path: filePath }))
       result = source
-    } else {
+    } else if (isTsFile) {
       // transpile TS code (source maps are included)
       result = configs.tsCompiler.compile(source, filePath)
+    } else {
+      // we should not get called for files with other extension than js[x], ts[x] and d.ts,
+      // TypeScript will bail if we try to compile, and if it was to call babel, users can
+      // define the transform value with `babel-jest` for this extension instead
+      const message = babelJest ? Errors.GotUnknownFileTypeWithBabel : Errors.GotUnknownFileTypeWithoutBabel
+      this.logger.warn({ fileName: filePath }, interpolate(message, { path: filePath }))
+      result = source
     }
 
     // calling babel-jest transformer

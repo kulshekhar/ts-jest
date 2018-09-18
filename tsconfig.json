@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
-    "declaration": true,
+    "declaration": false,
+    "noEmit": true,
     "downlevelIteration": true,
     "esModuleInterop": true,
     "experimentalDecorators": true,
@@ -18,7 +19,7 @@
     "noImplicitReturns": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "removeComments": false,
+    "removeComments": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "sourceMap": false,
