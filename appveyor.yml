@@ -58,4 +58,3 @@ skip_commits:
     - .travis.yml
     - icon.png
     - commitlint.config.js
-
