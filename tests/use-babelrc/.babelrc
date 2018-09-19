@@ -1,5 +1,0 @@
-{
-	// with a comment, as .babelrc files are serialized as JSON5
-	// http://babeljs.io/docs/en/babelrc
-	"foo": "bar"
-}

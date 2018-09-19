@@ -1,0 +1,18 @@
+- title: User Documentation
+  url: /user
+  sublinks:
+    - title: Installation
+      url: /user/install
+    - title: Configuration
+      url: /user/config
+    - title: React Native
+      url: /user/react-native
+    - title: Babel7 or TypeScript
+      url: /user/babel7-or-ts
+- title: Contributor Reference
+  url: /tech
+  sublinks:
+    - title: Processing
+      url: /tech/process
+    - title: E2E Testing
+      url: /tech/e2e

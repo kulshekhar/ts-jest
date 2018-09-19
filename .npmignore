@@ -1,11 +1,11 @@
-# TypeScript source code
+# Tests
+e2e
+
+# sources are inlined
 src
 
-# Tests
-tests
-
 # Developement scripts
-scripts 
+scripts
 
 # Logs
 logs
@@ -47,3 +47,30 @@ jspm_packages
 
 # Optional REPL history
 .node_repl_history
+# while refactoring...
+old
+
+*.tgz
+
+# others
+.npmignore
+.eslintrc.js
+.eslintignore
+jest.config.js
+.vscode
+.github
+appveyor.yml
+.editorconfig
+.prettierignore
+tsconfig.json
+.prettierrc
+.travis.yml
+tsconfig.build.json
+tslint.json
+.npmrc
+.markdownlint.yaml
+
+# Github Pages
+docs
+
+commitlint.config.js

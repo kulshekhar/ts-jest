@@ -1,9 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`Button renders correctly 1`] = `
-<div
-  className="button"
->
-  hi!
-</div>
-`;

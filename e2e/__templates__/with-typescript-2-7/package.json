@@ -1,0 +1,17 @@
+{
+  "name": "ts-jest-e2e-tmpl-with-typescript-2-7",
+  "version": "0.0.0-tmpl.0",
+  "private": true,
+  "devDependencies": {
+    "@types/jest": "23.3.2",
+    "@types/node": "10.9.4",
+    "jest": "23.6.0",
+    "typescript": "2.7.2"
+  },
+  "wantedDependencies": {
+    "@types/jest": "latest",
+    "@types/node": "latest",
+    "jest": "latest",
+    "typescript": "2.7"
+  }
+}

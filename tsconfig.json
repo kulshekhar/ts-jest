@@ -1,0 +1,46 @@
+{
+  "compilerOptions": {
+    "declaration": false,
+    "noEmit": true,
+    "downlevelIteration": true,
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "importHelpers": false,
+    "inlineSourceMap": true,
+    "lib": [
+      "es2015",
+      "es2016.array.include"
+    ],
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "noEmitOnError": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "removeComments": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "sourceMap": false,
+    "strict": true,
+    "target": "es5",
+    "types": [
+      "jest",
+      "node"
+    ]
+  },
+  "include": [
+    "e2e/__helpers__",
+    "e2e/__serializer__",
+    "e2e/__tests__",
+    "scripts/",
+    "src"
+  ],
+  "exclude": [
+    "e2e/__cases__",
+    "e2e/__templates__",
+    "e2e/__workdir_synlink__",
+    "node_modules"
+  ]
+}

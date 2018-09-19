@@ -1,22 +1,46 @@
-dist: trusty
-sudo: required
 language: node_js
-cache: yarn
-git:
-  depth: 5
+
+env:
+  - TS_JEST_E2E_WORKDIR=/tmp/ts-jest-e2e-workdir
+
+cache:
+  npm: true
+  directories:
+    - /tmp/ts-jest-e2e-workdir/__templates__
+
 node_js:
   - "10"
-  - "8"
   - "6"
+
+sudo: false
+
 before_install:
-  - sudo sysctl fs.inotify.max_user_watches=524288
-  - yarn global add greenkeeper-lockfile@1 rimraf
-before_script:
-  # - greenkeeper-lockfile-update
+  # Disabled, randomly works :-/
+  # https://github.com/scikit-learn/scikit-learn/issues/10927
+  # - |
+  #     set -e
+  #     # fail loudly when force-pushed, that is why there is the `|| 'dummy.js'` part
+  #     MODIFIED_FILES=$(git diff --name-only $TRAVIS_COMMIT_RANGE || echo 'dummy.js')
+  #     # waiting for native solution https://github.com/travis-ci/travis-ci/issues/6301
+  #     if ! echo ${MODIFIED_FILES} | grep -qvE '^docs/|^\.gitignore|^\.gitattributes|\.md$|^appveyor\.yml$|^icon\.png$|^commitlint\.config\.js$'; then
+  #       echo "Only docs were updated, stopping build process."
+  #       exit
+  #     fi
+  # ensure we have npm >= 5.8 so that we can use `npm ci` instead of `npm install` (much faster)
+  - dpkg --compare-versions `npm -v` ge 5.8 || npm i -g npm@latest
+  # we report coverages only within node 10, ensure we have the coveralls bin installed
+  - 'if [[ "$(node --version)" == v10.* ]]; then npm install --global coveralls; fi'
+
 script:
-  - yarn test
-after_script:
-  # - greenkeeper-lockfile-upload
-notifications:
-  slack:
-    secure: "Rj32dEDWEbNrwn0b+dFpUPPMg20IRScOA1eXUXaNY1TyluSd2rIRN1uwH0tOTglDieExeNOhfsc5iqxqSRomwelB3JzVwAJqv+IzFU3U0JlmntIZoxijiPr9Xxwu+ZB7nO1NSjHChyG/pVuKEYYYhmtHoIuI6D4hR2y4PRSPsKc5qOx4B7mfAzYio8JRNBVDe7B3CSWbXBnQ31pqjNhpNEiCkZyUzE9CdJnsr0GFUkZ6LlzlXMhXVXCihzlirSKKCEDj/A3O2jbfULqglKKHCwa/WVtObBCPOjp8Kk0sw0DSwU8GZPBv76iwPDgLCC5M45zM7vW0QhaLKtV5/tXIApuf2dOcOM3Q5wirfY4KetaNCpMqBIfBzo17h4pzWK/is6WyEYHyZmN9+mkBSYvWSM5s9vGubWKDnWAA2d6mtIgM6xAHNPyTJ8RWLGeyi1TJYOSIyIASaQEcXl25tD2KEjA7A33fJl2FXcsiDVE8+TUuecFl7A4TpFZU9mIS2N5RkIqE40xLCkIjx3m9YotlDSjATNLFQpQIESPhmlqN7Ray00aVd5tOCFg+674oGTPh2lQdSKIt1+Llr0uEEwcrUCKqyQ2lYGiTOuODj54Ix8gWSVsVtfy4/w3ckal/h2OlTeY88tAmFw4Ck+ZV+PrO2JsEmT7iipAQI0gkecJXUlE="
+  - npm run clean -- --when-ci-commit-message
+  # only grab coverage data on node 10
+  - |
+      if [[ "$(node --version)" == v10.* ]]; then
+        npm run test -- --coverage;
+      else
+        npm run test;
+      fi
+
+after_success:
+  # report coverages to coveralls
+  - 'if [[ "$(node --version)" == v10.* && -s coverage/lcov.info ]]; then cat coverage/lcov.info | coveralls; fi'

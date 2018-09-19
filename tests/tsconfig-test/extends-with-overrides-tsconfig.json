@@ -1,7 +1,0 @@
-{
-  "extends": "./my-tsconfig.json",
-  "compilerOptions": {
-    "target": "ES5",
-    "noImplicitAny": true
-  }
-}

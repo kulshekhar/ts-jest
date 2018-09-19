@@ -1,0 +1,41 @@
+<ul class="navbar-nav ml-auto">
+  {% assign links = site.data.nav %}
+  {% for link in links %}
+    {% assign class = nil %}
+    {% if page.url contains link.url %}
+      {% assign class = 'active' %}
+    {% endif %}
+    {% if link.sublinks %}
+      <li class="nav-item dropdown {{ class }}">
+        <a href="{{ site.baseurl }}{{ link.url }}"
+           class="nav-link dropdown-toggle"
+           data-toggle="dropdown"
+           role="button"
+           aria-haspopup="true"
+           aria-expanded="false">
+           {{ link.title }}
+        </a>
+        <div class="dropdown-menu">
+          {% for sublink in link.sublinks %}
+            {% if sublink.title == 'separator' %}
+              <div class="dropdown-divider"></div>
+            {% else %}
+              <a href="{{ site.baseurl }}{{ sublink.url }}"
+                 class="dropdown-item">
+                 {{ sublink.title }}
+              </a>
+            {% endif %}
+          {% endfor %}
+        </div>
+      </li>
+    {% else %}
+      <li class="nav-item {{ class }}">
+        <a href="{{ site.baseurl }}{{ link.url }}" class="nav-link">{{ link.title }}</a>
+      </li>
+    {% endif %}
+  {% endfor %}
+  <li class="nav-item">
+    <a class="nav-link inverse"
+       href="{{ site.github.repository_url }}">Fork me <span class="fab fa-github"></span></a>
+  </li>
+</ul>

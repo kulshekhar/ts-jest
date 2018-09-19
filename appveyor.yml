@@ -1,38 +1,61 @@
-# appveyor file
 # http://www.appveyor.com/docs/appveyor-yml
+platform:
+  - x64
+init:
+- ps: IF ($env:APPVEYOR_REPO_COMMIT_MESSAGE -Match "\[clean ci-cache\]" ) {$env:APPVEYOR_CACHE_SKIP_RESTORE = "true"}
+- ps: IF ($env:APPVEYOR_REPO_COMMIT_MESSAGE_EXTENDED -Match "\[clean ci-cache\]") {$env:APPVEYOR_CACHE_SKIP_RESTORE = "true"}
 
-# build version format
+# Set build version format here instead of in the admin panel.
 version: "{build}"
 
-clone_depth: 5
+# branches to build
+branches:
+  # blacklist
+  except:
+    - gh-pages
 
-# fix lineendings in Windows
-init:
-  - git config --global core.autocrlf input
-  - git config --system core.longpaths true
-
-# what combinations to test
+# Test against these versions of Node.js.
 environment:
   matrix:
-    - nodejs_version: 6
-    - nodejs_version: 8
-    - nodejs_version: 10
+    - nodejs_version: "8"
 
-# get the latest stable version of Node 0.STABLE.latest
+matrix:
+  fast_finish: true # set this flag to immediately finish build once one of the jobs fails.
+
+# Install scripts. (runs after repo cloning)
 install:
-  - ps: Install-Product node $env:nodejs_version
+  # Get the latest stable version of Node 0.STABLE.latest
+  - ps: Install-Product node $env:nodejs_version x64
+  # Typical npm stuff.
   - set CI=true
-  - set AppVeyor=true
-  - yarn global add rimraf
-  - yarn
-
-build: off
+  # Our E2E work dir
+  - set TS_JEST_E2E_WORKDIR=%APPDATA%\ts-jest-e2e
+  - npm install -g npm@^5
+  - npm ci --ignore-scripts
+  - npm run clean -- --when-ci-commit-message
 
 cache:
-  - "%LOCALAPPDATA%\\Yarn"
+  - '%APPDATA%\npm-cache -> package.json'
+  - '%APPDATA%\ts-jest-e2e\__templates__'
 
+# Post-install test scripts.
 test_script:
-  - node --version
-  - npm --version
-  - yarn --version
-  - cmd: yarn test
+  - cmd: npm run test
+
+# Don't actually build.
+build: off
+
+# Uses GitHub API to download the repo without git history
+# @see: https://www.appveyor.com/docs/how-to/repository-shallow-clone/#downloading-repository-via-github-or-bitbucket-api
+shallow_clone: true
+
+skip_commits:
+  files:
+    - 'docs/**/*'
+    - '**/*.md'
+    - .gitignore
+    - .gitattributes
+    - .travis.yml
+    - icon.png
+    - commitlint.config.js
+

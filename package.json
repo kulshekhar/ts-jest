@@ -1,23 +1,41 @@
 {
   "name": "ts-jest",
-  "version": "23.1.4",
+  "version": "23.10.0-beta.6",
   "main": "dist/index.js",
-  "types": "./dist/index.d.ts",
+  "types": "dist/index.d.ts",
+  "bin": "cli.js",
   "description": "A preprocessor with sourcemap support to help use Typescript with Jest",
   "scripts": {
+    "prebuild": "node scripts/clean-dist.js",
     "build": "tsc -p tsconfig.build.json",
     "build:watch": "tsc -p tsconfig.build.json -w",
-    "test:nolint": "npm run clean-build && jest --clearCache && node scripts/tests.js",
-    "clean": "rimraf dist/**/* && rimraf tests/*/coverage && rimraf tests/*/debug.txt && rimraf tests/*/node_modules",
-    "clean-build": "npm run clean && npm run build",
-    "pretest": "npm run tslint && npm run clean-build",
-    "test": "node scripts/tests.js",
-    "tslint": "tslint 'src/**/*.ts'",
-    "doc": "doctoc .",
-    "prepublish": "npm run clean-build",
+    "clean": "node scripts/clean.js",
+    "pretest": "run-p typecheck lint",
+    "test": "run-s -s test:e2e \"test:unit -- {@}\" --",
+    "test:prepare": "npm run test:e2e -- --prepareOnly",
+    "test:e2e": "node scripts/e2e.js",
+    "test:unit": "jest",
+    "test:external": "node scripts/test-external-project.js",
+    "lint": "run-p lint:ts lint:js",
+    "lint:js": "eslint . -f stylish",
+    "lint:ts": "tslint -t stylish --project .",
+    "lint:fix": "run-s lint:fix:ts lint:fix:js",
+    "lint:fix:js": "eslint . --fix",
+    "lint:fix:ts": "tslint --fix --project .",
+    "typecheck": "tsc -p . --noEmit",
+    "doc": "cd docs && bundle exec jekyll serve --livereload",
+    "doc:link": "git worktree add docs/_site gh-pages",
+    "doc:unlink": "git worktree prune",
+    "doc:build": "cd docs && bundle exec jekyll build",
+    "doc:build-commit": "npm run doc:build && cd docs/_site && git add --all && git commit -m \"Updates github pages\"",
+    "prepare": "npm run build",
+    "prepublishOnly": "npm run test",
+    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0",
+    "commitmsg": "commitlint -E GIT_PARAMS",
     "precommit": "lint-staged",
     "postcommit": "git reset",
-    "format": "prettier --single-quote --trailing-comma all --write \"{src,scripts,tests}/**/*.ts\" && prettier --single-quote --trailing-comma es5 --write \"{src,scripts,tests}/**/*.js\""
+    "preversion": "npm run test",
+    "version": "npm run changelog && git add CHANGELOG.md"
   },
   "repository": {
     "type": "git",
@@ -31,99 +49,75 @@
     "testing"
   ],
   "author": "Kulshekhar Kabra <kulshekhar@users.noreply.github.com> (https://github.com/kulshekhar)",
+  "contributors": [
+    "Huafu Gandon <huafu.gandon@gmail.com> (https://github.com/huafu)"
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/kulshekhar/ts-jest/issues"
   },
-  "homepage": "https://github.com/kulshekhar/ts-jest#readme",
-  "jest": {
-    "transform": {
-      "^.+\\.tsx?$": "<rootDir>/dist/index.js"
-    },
-    "testRegex": "tests/__tests__/.*\\.spec\\.ts$",
-    "testPathIgnorePatterns": [
-      "/node_modules/",
-      "tests/__tests__/watch.spec.ts"
-    ],
-    "coverageReporters": [
-      "text"
-    ],
-    "coverageDirectory": "test_coverage_dir",
-    "collectCoverageFrom": [
-      "src/**/*.tsx",
-      "src/**/*.ts"
-    ],
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "jsx",
-      "json"
-    ],
-    "globals": {
-      "ts-jest": {
-        "tsConfigFile": "tsconfig.base.json"
-      }
-    }
-  },
+  "homepage": "https://kulshekhar.github.io/ts-jest",
   "dependencies": {
-    "closest-file-data": "^0.1.4",
-    "fs-extra": "6.0.1",
-    "json5": "^0.5.0",
-    "lodash": "^4.17.10"
+    "bs-logger": "0.x",
+    "buffer-from": "1.x",
+    "fast-json-stable-stringify": "2.x",
+    "json5": "2.x",
+    "make-error": "1.x",
+    "mkdirp": "0.x",
+    "semver": "5.x",
+    "yargs-parser": "10.x"
   },
   "peerDependencies": {
-    "babel-core": "^6.0.0 || ^7.0.0-0",
-    "babel-jest": "^23.0.0 || ^24.0.0",
-    "jest": "^23.0.0 || ^24.0.0",
-    "typescript": "^2.0.0 || ^3.0.0"
+    "jest": ">=22 <24"
   },
   "devDependencies": {
-    "@babel/core": "^7.0.0-beta.54",
-    "@babel/preset-env": "^7.0.0-beta.54",
-    "@types/babel-core": "^6.25.5",
-    "@types/babel__core": "^7.0.1",
-    "@types/es6-shim": "0.31.37",
-    "@types/fs-extra": "5.0.4",
-    "@types/jest": "^23.3.0",
-    "@types/json5": "^0.0.29",
-    "@types/lodash": "^4.14.109",
-    "@types/node": "10.9.4",
-    "@types/react": "16.4.14",
-    "@types/yargs": "^11.0.0",
-    "babel-core": "^7.0.0-0",
-    "babel-jest": "^23.4.0",
-    "babel-preset-jest": "^23.2.0",
-    "cpx": "^1.5.0",
-    "cross-spawn": "latest",
-    "cross-spawn-with-kill": "latest",
-    "doctoc": "latest",
-    "husky": "^0.14.3",
-    "jest": "^23.4.1",
-    "jest-config": "^23.5.0",
-    "lint-staged": "^7.1.2",
-    "pkg-dir": "^3.0.0",
-    "prettier": "^1.12.1",
-    "react": "16.5.1",
-    "react-test-renderer": "16.5.1",
-    "reflect-metadata": "^0.1.12",
-    "rimraf": "^2.6.2",
-    "ts-jest": "22.4.6",
-    "ts-nameof": "^1.0.0",
-    "tslint": "^5.11.0",
-    "ttypescript": "^1.4.6",
-    "typescript": "^2.9.2",
-    "yargs": "^12.0.1"
+    "@commitlint/cli": "7.x",
+    "@commitlint/config-conventional": "7.x",
+    "@types/babel__core": "7.x",
+    "@types/buffer-from": "*",
+    "@types/cross-spawn": "*",
+    "@types/fs-extra": "*",
+    "@types/jest": "23.x",
+    "@types/js-yaml": "*",
+    "@types/json5": "*",
+    "@types/lodash.memoize": "4.x",
+    "@types/lodash.merge": "4.x",
+    "@types/lodash.set": "4.x",
+    "@types/mkdirp": "*",
+    "@types/node": "10.x",
+    "@types/semver": "*",
+    "@types/yargs": "*",
+    "conventional-changelog-cli": "2.x",
+    "cross-spawn": "*",
+    "eslint": "*",
+    "fs-extra": "*",
+    "glob-gitignore": "*",
+    "husky": "*",
+    "jest": "23.x",
+    "js-yaml": "*",
+    "lint-staged": "*",
+    "lodash.memoize": "4.x",
+    "lodash.merge": "4.x",
+    "lodash.set": "4.x",
+    "npm-run-all": "*",
+    "prettier": "*",
+    "source-map": "*",
+    "tslint": "*",
+    "tslint-config-prettier": "*",
+    "tslint-plugin-prettier": "*",
+    "typescript": "3.x"
   },
   "lint-staged": {
-    "*.js": [
-      "prettier --write --single-quote --trailing-comma es5",
-      "git add"
-    ],
-    "*.ts": [
-      "prettier --write --single-quote --trailing-comma all",
-      "git add"
-    ]
+    "linters": {
+      "*.{ts,tsx}": [
+        "tslint --fix",
+        "git add"
+      ],
+      "*.{js,jsx}": [
+        "eslint --fix",
+        "git add"
+      ]
+    }
   },
   "engines": {
     "node": ">= 6"
