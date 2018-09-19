@@ -234,7 +234,7 @@ export class ConfigSet {
 
   @Memoize()
   get versions(): Record<string, string> {
-    const modules = ['jest', this.tsJest.compiler, 'tslib']
+    const modules = ['jest', this.tsJest.compiler]
     if (this.tsJest.babelConfig) {
       modules.push('@babel/core', 'babel-core', 'babel-jest')
     }
