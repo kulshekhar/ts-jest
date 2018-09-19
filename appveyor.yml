@@ -1,60 +1,47 @@
 # http://www.appveyor.com/docs/appveyor-yml
-platform:
-  - x64
+version: '{build}'
+pull_requests:
+  do_not_increment_build_number: true
+skip_tags: true
+shallow_clone: true
+build: off
+deploy: off
+platform: x64
+branches:
+  except:
+    - gh-pages
+
+# clear the cache if commit contains given text
 init:
 - ps: IF ($env:APPVEYOR_REPO_COMMIT_MESSAGE -Match "\[clean ci-cache\]" ) {$env:APPVEYOR_CACHE_SKIP_RESTORE = "true"}
 - ps: IF ($env:APPVEYOR_REPO_COMMIT_MESSAGE_EXTENDED -Match "\[clean ci-cache\]") {$env:APPVEYOR_CACHE_SKIP_RESTORE = "true"}
 
-# Set build version format here instead of in the admin panel.
-version: "{build}"
-
-# branches to build
-branches:
-  # blacklist
-  except:
-    - gh-pages
-
-# Test against these versions of Node.js.
-environment:
-  matrix:
-    - nodejs_version: "8"
-
-matrix:
-  fast_finish: true # set this flag to immediately finish build once one of the jobs fails.
-
 # Install scripts. (runs after repo cloning)
 install:
-  # Get the latest stable version of Node 0.STABLE.latest
-  - ps: Install-Product node $env:nodejs_version x64
+  - ps: Install-Product node 8 x64
+  - npm install -g npm@^5
   # Typical npm stuff.
   - set CI=true
   # Our E2E work dir
   - set TS_JEST_E2E_WORKDIR=%APPDATA%\ts-jest-e2e
-  - npm install -g npm@^5
   - npm ci --ignore-scripts
   - npm run clean -- --when-ci-commit-message
 
 cache:
-  - '%APPDATA%\npm-cache -> package.json'
+  - 'node_modules -> package.json'
+  - '%APPDATA%\npm-cache'
   - '%APPDATA%\ts-jest-e2e\__templates__'
 
 # Post-install test scripts.
 test_script:
   - cmd: npm run test
 
-# Don't actually build.
-build: off
-
-# Uses GitHub API to download the repo without git history
-# @see: https://www.appveyor.com/docs/how-to/repository-shallow-clone/#downloading-repository-via-github-or-bitbucket-api
-shallow_clone: true
-
-skip_commits:
-  files:
-    - 'docs/**/*'
-    - '**/*.md'
-    - .gitignore
-    - .gitattributes
-    - .travis.yml
-    - icon.png
-    - commitlint.config.js
+# skip_commits:
+#   files:
+#     - 'docs/**/*'
+#     - '**/*.md'
+#     - .gitignore
+#     - .gitattributes
+#     - .travis.yml
+#     - icon.png
+#     - commitlint.config.js
