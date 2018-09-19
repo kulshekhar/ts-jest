@@ -2,6 +2,7 @@ import { testing } from 'bs-logger'
 import { resolve } from 'path'
 import ts, { Diagnostic, ModuleKind, ScriptTarget } from 'typescript'
 
+import { version as currentVersion } from '../../package.json'
 import * as fakers from '../__helpers__/fakers'
 import { mocked } from '../__helpers__/mocks'
 import { TsJestGlobalOptions } from '../types'
@@ -20,6 +21,7 @@ backports.backportJestConfig.mockImplementation((_, config) => ({
 }))
 
 const defaultResolve = (path: string) => `resolved:${path}`
+const pkgVersion = (pkgName: string) => require(`${pkgName}/package.json`).version || '????'
 
 function createConfigSet({
   jestConfig,
@@ -314,29 +316,23 @@ describe('readTsConfig', () => {
 describe('versions', () => {
   describe('without babel', () => {
     it('should return correct version map', () => {
-      expect(createConfigSet().versions).toMatchInlineSnapshot(`
-Object {
-  "jest": "23.6.0",
-  "ts-jest": "23.10.0-beta.6",
-  "tslib": "1.9.3",
-  "typescript": "3.0.3",
-}
-`)
+      expect(createConfigSet().versions).toEqual({
+        jest: pkgVersion('jest'),
+        'ts-jest': currentVersion,
+        typescript: pkgVersion('typescript'),
+      })
     })
   })
   describe('with babel', () => {
     it('should return correct version map', () => {
-      expect(createConfigSet({ tsJestConfig: { babelConfig: {} } }).versions).toMatchInlineSnapshot(`
-Object {
-  "@babel/core": "-",
-  "babel-core": "6.26.3",
-  "babel-jest": "23.6.0",
-  "jest": "23.6.0",
-  "ts-jest": "23.10.0-beta.6",
-  "tslib": "1.9.3",
-  "typescript": "3.0.3",
-}
-`)
+      expect(createConfigSet({ tsJestConfig: { babelConfig: {} } }).versions).toEqual({
+        '@babel/core': '-',
+        'babel-core': pkgVersion('babel-core'),
+        'babel-jest': pkgVersion('babel-jest'),
+        jest: pkgVersion('jest'),
+        'ts-jest': currentVersion,
+        typescript: pkgVersion('typescript'),
+      })
     })
   })
 }) // versions
