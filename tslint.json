@@ -6,6 +6,7 @@
   ],
   "linterOptions": {
     "exclude": [
+      "package.json",
       "dist/**/*",
       "**/node_modules/**/*",
       "e2e/__cases__/**/*"
