@@ -1,6 +1,6 @@
 # Contributing
 
-When contributing to this repository, please first discuss the change you wish to make via [slack](https://join.slack.com/t/ts-jest/shared_invite/enQtNDE1ODQ0OTEzMTczLWU2ZTk5YTMzYTE1YjBkZTk5ODI1NWU3NWU0NzhlOWJlZDNkYTRlM2Y3NWQ1YWVjMjc5Mjg1NmY1NTdkNWQ3MTA) or [issue](https://github.com/kulshekhar/ts-jest/issues) with the owners of this repository before making a change.
+When contributing to this repository, please first discuss the change you wish to make via [slack](https://bit.ly/ts-jest-slack) or [issue](https://github.com/kulshekhar/ts-jest/issues) with the owners of this repository before making a change.
 
 Please note we have a code of conduct, please follow it in all your interactions with the project.
 
