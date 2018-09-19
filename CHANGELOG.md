@@ -1,3 +1,19 @@
+<a name="23.10.0"></a>
+# [23.10.0](https://github.com/kulshekhar/ts-jest/compare/v23.10.0-beta.6...v23.10.0) (2018-09-19)
+
+
+### Bug Fixes
+
+* **babel:** fixes the babel 6 hack ([c8d51cf](https://github.com/kulshekhar/ts-jest/commit/c8d51cf))
+* **config:** jsx should also be considered as js files ([6c32a93](https://github.com/kulshekhar/ts-jest/commit/6c32a93))
+
+
+### Features
+
+* **hints:** warns if transform matches js without allowJs ([952cc87](https://github.com/kulshekhar/ts-jest/commit/952cc87))
+
+
+
 <a name="23.10.0-beta.6"></a>
 # [23.10.0-beta.6](https://github.com/kulshekhar/ts-jest/compare/v23.10.0-beta.5...v23.10.0-beta.6) (2018-09-13)
 
