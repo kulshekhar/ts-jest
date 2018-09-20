@@ -36,7 +36,7 @@
     "postcommit": "git reset",
     "preversion": "npm run test",
     "version": "npm run changelog && git add CHANGELOG.md",
-    "postinstall": "node scripts/port-install.js"
+    "postinstall": "node scripts/post-install.js"
   },
   "repository": {
     "type": "git",
