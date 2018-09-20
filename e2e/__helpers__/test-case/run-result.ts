@@ -57,7 +57,7 @@ export default class RunResult {
   }
   get cmdLine() {
     return [this.context.cmd, ...this.context.args]
-      .filter(a => !['-u', '--updateSnapshot', '--runInBand'].includes(a))
+      .filter(a => !['-u', '--updateSnapshot', '--runInBand', '--'].includes(a))
       .join(' ')
   }
 

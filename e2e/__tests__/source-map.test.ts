@@ -1,3 +1,5 @@
+import { join } from 'path'
+
 import { allValidPackageSets } from '../__helpers__/templates'
 import { configureTestCase } from '../__helpers__/test-case'
 
@@ -20,12 +22,12 @@ testCase.runWithTemplates(allValidPackageSets, 1, (runTest, { templateName }) =>
     // and the debugger cannot find the line where to go
     it(`should have the source maps comment`, () => {
       const io = result.ioFor('main.ts')
+      const filePath = join(result.cwd, 'main.ts')
       expect(io).toMatchSnapshot()
       // we could keep only the snapshot testing, but this ensure fixed stuff are the same over versions
       expect(io.outputSourceMaps).toMatchObject({
         names: [],
-        sourceRoot: result.cwd,
-        sources: ['main.ts'],
+        sources: [filePath],
         sourcesContent: [io.inputCode],
         version: 3,
       })

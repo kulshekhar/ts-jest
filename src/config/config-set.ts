@@ -11,7 +11,7 @@
 import { LogContexts, Logger } from 'bs-logger'
 import { existsSync, readFileSync } from 'fs'
 import json5 from 'json5'
-import { dirname, isAbsolute, join, resolve } from 'path'
+import { dirname, isAbsolute, join, normalize, resolve } from 'path'
 import semver from 'semver'
 import {
   CompilerOptions,
@@ -461,12 +461,14 @@ export class ConfigSet {
     }
   }
 
+  @Memoize()
   get rootDir(): string {
-    return this.jest.rootDir || this.cwd
+    return normalize(this.jest.rootDir || this.cwd)
   }
 
+  @Memoize()
   get cwd(): string {
-    return this.jest.cwd || process.cwd()
+    return normalize(this.jest.cwd || process.cwd())
   }
 
   get isDoctoring() {
