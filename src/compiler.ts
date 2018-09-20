@@ -300,12 +300,15 @@ function updateOutput(
 /**
  * Update the source map contents for improved output.
  */
-function updateSourceMap(sourceMapText: string, fileName: string, sourceRoot: string) {
+function updateSourceMap(sourceMapText: string, fileName: string, _sourceRoot: string) {
   const sourceMap = JSON.parse(sourceMapText)
-  const relativeFilePath = relative(sourceRoot, fileName)
-  sourceMap.file = relativeFilePath
-  sourceMap.sources = [relativeFilePath]
-  sourceMap.sourceRoot = sourceRoot
+  // const relativeFilePath = posix.normalize(relative(sourceRoot, fileName))
+  // sourceMap.file = relativeFilePath
+  // sourceMap.sources = [relativeFilePath]
+  // sourceMap.sourceRoot = normalize(sourceRoot)
+  sourceMap.file = fileName
+  sourceMap.sources = [fileName]
+  delete sourceMap.sourceRoot
   return stableStringify(sourceMap)
 }
 

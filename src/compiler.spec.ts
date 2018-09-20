@@ -3,7 +3,7 @@ import { LogLevels } from 'bs-logger'
 
 import * as fakers from './__helpers__/fakers'
 import { logTargetMock } from './__helpers__/mocks'
-import { relativeToRoot, tempDir } from './__helpers__/path'
+import { tempDir } from './__helpers__/path'
 import ProcessedSource from './__helpers__/processed-source'
 import { createCompiler } from './compiler'
 import { ConfigSet } from './config/config-set'
@@ -60,7 +60,8 @@ describe('source-maps', () => {
     const source = 'const f = (v: number) => v\nconst t: number = f(5)'
     const compiled = compiler.compile(source, __filename)
     const processed = new ProcessedSource(compiled, __filename)
-    const expectedFileName = relativeToRoot(__filename)
+    // const expectedFileName = relativeToRoot(__filename)
+    const expectedFileName = __filename
     expect(processed.outputSourceMaps).toMatchObject({
       file: expectedFileName,
       sources: [expectedFileName],
@@ -108,14 +109,13 @@ Array [
   ===[ FILE: src/compiler.spec.ts ]===============================================
   "use strict";
   console.log("hello");
-  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoic3JjL2NvbXBpbGVyLnNwZWMudHMiLCJtYXBwaW5ncyI6IjtBQUFBLE9BQU8sQ0FBQyxHQUFHLENBQUMsT0FBTyxDQUFDLENBQUEiLCJuYW1lcyI6W10sInNvdXJjZVJvb3QiOiI8Y3dkPi8iLCJzb3VyY2VzIjpbInNyYy9jb21waWxlci5zcGVjLnRzIl0sInNvdXJjZXNDb250ZW50IjpbImNvbnNvbGUubG9nKFwiaGVsbG9cIikiXSwidmVyc2lvbiI6M30=
+  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoiPGN3ZD4vc3JjL2NvbXBpbGVyLnNwZWMudHMiLCJtYXBwaW5ncyI6IjtBQUFBLE9BQU8sQ0FBQyxHQUFHLENBQUMsT0FBTyxDQUFDLENBQUEiLCJuYW1lcyI6W10sInNvdXJjZXMiOlsiPGN3ZD4vc3JjL2NvbXBpbGVyLnNwZWMudHMiXSwic291cmNlc0NvbnRlbnQiOlsiY29uc29sZS5sb2coXCJoZWxsb1wiKSJdLCJ2ZXJzaW9uIjozfQ==
   ===[ INLINE SOURCE MAPS ]=======================================================
-  file: src/compiler.spec.ts
+  file: <cwd>/src/compiler.spec.ts
   mappings: ';AAAA,OAAO,CAAC,GAAG,CAAC,OAAO,CAAC,CAAA'
   names: []
-  sourceRoot: <cwd>/
   sources:
-    - src/compiler.spec.ts
+    - <cwd>/src/compiler.spec.ts
   sourcesContent:
     - console.log("hello")
   version: 3
@@ -138,14 +138,13 @@ describe('isolatedModules', () => {
   "use strict";
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.default = 42;
-  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoic3JjL2NvbXBpbGVyLnNwZWMudHMiLCJtYXBwaW5ncyI6Ijs7QUFBQSxrQkFBZSxFQUFFLENBQUEiLCJuYW1lcyI6W10sInNvdXJjZVJvb3QiOiI8Y3dkPi8iLCJzb3VyY2VzIjpbInNyYy9jb21waWxlci5zcGVjLnRzIl0sInNvdXJjZXNDb250ZW50IjpbImV4cG9ydCBkZWZhdWx0IDQyIl0sInZlcnNpb24iOjN9
+  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoiPGN3ZD4vc3JjL2NvbXBpbGVyLnNwZWMudHMiLCJtYXBwaW5ncyI6Ijs7QUFBQSxrQkFBZSxFQUFFLENBQUEiLCJuYW1lcyI6W10sInNvdXJjZXMiOlsiPGN3ZD4vc3JjL2NvbXBpbGVyLnNwZWMudHMiXSwic291cmNlc0NvbnRlbnQiOlsiZXhwb3J0IGRlZmF1bHQgNDIiXSwidmVyc2lvbiI6M30=
   ===[ INLINE SOURCE MAPS ]=======================================================
-  file: src/compiler.spec.ts
+  file: <cwd>/src/compiler.spec.ts
   mappings: ';;AAAA,kBAAe,EAAE,CAAA'
   names: []
-  sourceRoot: <cwd>/
   sources:
-    - src/compiler.spec.ts
+    - <cwd>/src/compiler.spec.ts
   sourcesContent:
     - export default 42
   version: 3

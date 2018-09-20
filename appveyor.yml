@@ -28,9 +28,7 @@ install:
   - npm run clean -- --when-ci-commit-message
 
 cache:
-  - 'node_modules -> package.json'
   - '%APPDATA%\npm-cache'
-  - '%APPDATA%\npm'
   - '%APPDATA%\ts-jest-e2e\__templates__'
 
 # Post-install test scripts.
