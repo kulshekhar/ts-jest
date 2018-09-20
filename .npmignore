@@ -6,6 +6,7 @@ src
 
 # Developement scripts
 scripts
+!scripts/post-install.js
 
 # Logs
 logs

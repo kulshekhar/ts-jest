@@ -35,7 +35,8 @@
     "precommit": "lint-staged",
     "postcommit": "git reset",
     "preversion": "npm run test",
-    "version": "npm run changelog && git add CHANGELOG.md"
+    "version": "npm run changelog && git add CHANGELOG.md",
+    "postinstall": "node scripts/port-install.js"
   },
   "repository": {
     "type": "git",
