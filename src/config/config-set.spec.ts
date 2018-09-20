@@ -4,7 +4,7 @@ import ts, { Diagnostic, ModuleKind, ScriptTarget } from 'typescript'
 
 import { version as currentVersion } from '../../package.json'
 import * as fakers from '../__helpers__/fakers'
-import { mocked } from '../__helpers__/mocks'
+import { logTargetMock, mocked } from '../__helpers__/mocks'
 import { TsJestGlobalOptions } from '../types'
 import * as _backports from '../util/backports'
 import { normalizeSlashes } from '../util/normalize-slashes'
@@ -222,6 +222,35 @@ describe('tsJest', () => {
   }) // compiler
 }) // tsJest
 
+describe('makeDiagnostic', () => {
+  const cs = createConfigSet()
+  it('should create diagnostic with defaults', () => {
+    expect(cs.makeDiagnostic(1234, 'foo is not bar')).toMatchInlineSnapshot(`
+Object {
+  "category": 0,
+  "code": 1234,
+  "file": undefined,
+  "length": undefined,
+  "messageText": "foo is not bar",
+  "start": undefined,
+}
+`)
+  })
+  it('should set category', () => {
+    expect(cs.makeDiagnostic(4321, 'foo might be bar', { category: ts.DiagnosticCategory.Error }))
+      .toMatchInlineSnapshot(`
+Object {
+  "category": 1,
+  "code": 4321,
+  "file": undefined,
+  "length": undefined,
+  "messageText": "foo might be bar",
+  "start": undefined,
+}
+`)
+  })
+}) // makeDiagnostic
+
 describe('typescript', () => {
   const get = (tsJest?: TsJestGlobalOptions, parentConfig?: TsJestGlobalOptions) =>
     createConfigSet({ tsJestConfig: tsJest, parentConfig }).typescript
@@ -258,6 +287,28 @@ describe('typescript', () => {
       skipLibCheck: true,
     })
   })
+
+  it('should warn about possibly wrong module config and set synth. default imports', () => {
+    const target = logTargetMock()
+    target.clear()
+    const cs = createConfigSet({
+      tsJestConfig: {
+        tsConfig: { module: 'ES6', esModuleInterop: false, allowSyntheticDefaultImports: false } as any,
+        diagnostics: { warnOnly: true, pretty: false },
+      },
+      resolve: null,
+    })
+    expect(cs.typescript.options).toMatchObject({
+      module: ModuleKind.CommonJS,
+      allowSyntheticDefaultImports: true,
+      esModuleInterop: false,
+    })
+    expect(target.lines.warn.join()).toMatchInlineSnapshot(`
+"[level:40] TypeScript diagnostics (customize using \`[jest-config].globals.ts-jest.diagnostics\` option):
+warning TS151001: If you have issues related to imports, you should consider setting \`esModuleInterop\` to \`true\` in your TypeScript configuration file (usually \`tsconfig.json\`). See https://blogs.msdn.microsoft.com/typescript/2018/01/31/announcing-typescript-2-7/#easier-ecmascript-module-interoperability for more information.
+"
+`)
+  })
 }) // typescript
 
 describe('resolvePath', () => {
@@ -268,6 +319,22 @@ describe('resolvePath', () => {
     expect(doResolve('./bar.js')).toBe(resolve('/cwd/./bar.js'))
     expect(doResolve('<rootDir>bar.js')).toBe(resolve('/root/bar.js'))
     expect(doResolve('<rootDir>/bar.js')).toBe(resolve('/root//bar.js'))
+  })
+  it('should resolve node paths', () => {
+    const cs = createConfigSet({ jestConfig: { rootDir: '/root', cwd: '/cwd' } as any, resolve: null })
+    const doResolve = (path: string) => cs.resolvePath(path, { throwIfMissing: false, nodeResolve: true })
+    expect(doResolve('json5')).toBe(resolve(__dirname, '../../node_modules/json5', require('json5/package.json').main))
+    expect(doResolve('./bar.js')).toBe(resolve('/cwd/bar.js'))
+    expect(doResolve('<rootDir>bar.js')).toBe(resolve('/root/bar.js'))
+    expect(doResolve('<rootDir>/bar.js')).toBe(resolve('/root//bar.js'))
+  })
+  it('should throw for invalid paths', () => {
+    const cs = createConfigSet({ jestConfig: { rootDir: __dirname, cwd: __dirname } as any, resolve: null })
+    const doResolve = (path: string) => cs.resolvePath(path)
+    expect(() => doResolve('bar.js')).toThrow()
+    expect(() => doResolve('./bar.js')).toThrow()
+    expect(() => doResolve('<rootDir>bar.js')).toThrow()
+    expect(() => doResolve('<rootDir>/bar.js')).toThrow()
   })
 }) // resolvePath
 
@@ -364,7 +431,7 @@ describe('shouldReportDiagnostic', () => {
 }) // shouldReportDiagnostic
 
 describe('tsCompiler', () => {
-  it('should a compiler object', () => {
+  it('should be a compiler object', () => {
     const cs = createConfigSet({ tsJestConfig: { tsConfig: false } as any })
     const compiler = cs.tsCompiler
     expect(compiler.cwd).toBe(cs.cwd)
