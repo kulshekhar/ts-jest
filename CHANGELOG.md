@@ -1,3 +1,15 @@
+<a name="23.10.1"></a>
+## [23.10.1](https://github.com/kulshekhar/ts-jest/compare/v23.10.0...v23.10.1) (2018-09-20)
+
+
+### Bug Fixes
+
+* **compile:** js files were never transpiled thru TS ([374dca1](https://github.com/kulshekhar/ts-jest/commit/374dca1)), closes [#740](https://github.com/kulshekhar/ts-jest/issues/740)
+* **config:** warn instead of forcing ESM interoperability ([a2a4be2](https://github.com/kulshekhar/ts-jest/commit/a2a4be2))
+* **windows:** normalize paths ([c12dfff](https://github.com/kulshekhar/ts-jest/commit/c12dfff))
+
+
+
 <a name="23.10.0"></a>
 # [23.10.0](https://github.com/kulshekhar/ts-jest/compare/v23.10.0-beta.6...v23.10.0) (2018-09-19)
 
