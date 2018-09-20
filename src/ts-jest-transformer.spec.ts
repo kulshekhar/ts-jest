@@ -65,7 +65,7 @@ describe('process', () => {
     typescript = { options: {} } as any
   })
 
-  it('should process input without babel', () => {
+  it('should process ts input without babel', () => {
     expect(process()).toBe(`ts:${INPUT}`)
     expect(config.shouldStringifyContent.mock.calls).toMatchInlineSnapshot(`
 Array [
@@ -84,7 +84,28 @@ Array [
 `)
   })
 
-  it('should process input with babel', () => {
+  it('should process js input without babel', () => {
+    typescript.options.allowJs = true
+    args[1] = '/foo/bar.js'
+    expect(process()).toBe(`ts:${INPUT}`)
+    expect(config.shouldStringifyContent.mock.calls).toMatchInlineSnapshot(`
+Array [
+  Array [
+    "/foo/bar.js",
+  ],
+]
+`)
+    expect(config.tsCompiler.compile.mock.calls).toMatchInlineSnapshot(`
+Array [
+  Array [
+    "export default \\"foo\\"",
+    "/foo/bar.js",
+  ],
+]
+`)
+  })
+
+  it('should process ts input with babel', () => {
     babel = { process: jest.fn(s => `babel:${s}`) }
     expect(process()).toBe(`babel:ts:${INPUT}`)
     expect(config.shouldStringifyContent.mock.calls).toMatchInlineSnapshot(`
@@ -111,6 +132,40 @@ Array [
   Array [
     "export default \\"foo\\"",
     "/foo/bar.ts",
+  ],
+]
+`)
+  })
+
+  it('should process js input with babel', () => {
+    typescript.options.allowJs = true
+    babel = { process: jest.fn(s => `babel:${s}`) }
+    args[1] = '/foo/bar.js'
+    expect(process()).toBe(`babel:ts:${INPUT}`)
+    expect(config.shouldStringifyContent.mock.calls).toMatchInlineSnapshot(`
+Array [
+  Array [
+    "/foo/bar.js",
+  ],
+]
+`)
+    expect(config.babelJestTransformer.process.mock.calls).toMatchInlineSnapshot(`
+Array [
+  Array [
+    "ts:export default \\"foo\\"",
+    "/foo/bar.js",
+    Object {},
+    Object {
+      "instrument": false,
+    },
+  ],
+]
+`)
+    expect(config.tsCompiler.compile.mock.calls).toMatchInlineSnapshot(`
+Array [
+  Array [
+    "export default \\"foo\\"",
+    "/foo/bar.js",
   ],
 ]
 `)

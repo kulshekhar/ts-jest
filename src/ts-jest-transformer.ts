@@ -111,7 +111,7 @@ export class TsJestTransformer implements jest.Transformer {
       // we've got a '.js' but the compiler option `allowJs` is not set or set to false
       this.logger.warn({ fileName: filePath }, interpolate(Errors.GotJsFileButAllowJsFalse, { path: filePath }))
       result = source
-    } else if (isTsFile) {
+    } else if (isJsFile || isTsFile) {
       // transpile TS code (source maps are included)
       result = configs.tsCompiler.compile(source, filePath)
     } else {
