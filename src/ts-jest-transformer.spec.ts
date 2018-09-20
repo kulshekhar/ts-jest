@@ -1,4 +1,5 @@
 import stringify from 'fast-json-stable-stringify'
+import { sep } from 'path'
 import { ParsedCommandLine } from 'typescript'
 
 import { logTargetMock } from './__helpers__/mocks'
@@ -6,14 +7,14 @@ import { TsJestTransformer } from './ts-jest-transformer'
 
 describe('configFor', () => {
   it('should return the same config-set for same values', () => {
-    const obj1 = { cwd: '/foo', rootDir: '/bar', globals: {} }
+    const obj1 = { cwd: '/foo/.', rootDir: '/bar//dummy/..', globals: {} }
     const obj2 = { ...obj1 }
     const str = stringify(obj1)
     const cs1 = new TsJestTransformer().configsFor(obj1 as any)
     const cs2 = new TsJestTransformer().configsFor(obj2 as any)
     const cs3 = new TsJestTransformer().configsFor(str)
-    expect(cs1.cwd).toBe('/foo')
-    expect(cs1.rootDir).toBe('/bar')
+    expect(cs1.cwd).toBe(`${sep}foo`)
+    expect(cs1.rootDir).toBe(`${sep}bar`)
     expect(cs2).toBe(cs1)
     expect(cs3).toBe(cs1)
   })
