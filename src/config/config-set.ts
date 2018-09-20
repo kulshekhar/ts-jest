@@ -13,7 +13,15 @@ import { existsSync, readFileSync } from 'fs'
 import json5 from 'json5'
 import { dirname, isAbsolute, join, resolve } from 'path'
 import semver from 'semver'
-import { CustomTransformers, Diagnostic, FormatDiagnosticsHost, ParsedCommandLine } from 'typescript'
+import {
+  CompilerOptions,
+  CustomTransformers,
+  Diagnostic,
+  DiagnosticCategory,
+  FormatDiagnosticsHost,
+  ParsedCommandLine,
+  SourceFile,
+} from 'typescript'
 
 import { version as myVersion } from '..'
 import { createCompiler } from '../compiler'
@@ -57,32 +65,11 @@ export const IGNORE_DIAGNOSTIC_CODES = [
   18003, // "No inputs were found in config file."
 ]
 
-const DEFAULT_COMPILER_OPTIONS = {
-  inlineSourceMap: true,
-  inlineSources: true,
-}
-const FORCE_COMPILER_OPTIONS = {
-  // we handle sourcemaps this way and not another
-  sourceMap: true,
-  inlineSourceMap: false,
-  inlineSources: true,
-  // we don't want to create declaration files
-  declaration: false,
-  noEmit: false,
-  outDir: '$$ts-jest$$',
-  // commonjs + module interop should be compatible with every other setup
-  module: 'commonjs',
-  esModuleInterop: true,
-  // else istanbul related will be dropped
-  removeComments: false,
-  // to clear out else it's buggy
-  out: undefined,
-  outFile: undefined,
-  composite: undefined,
-  declarationDir: undefined,
-  declarationMap: undefined,
-  emitDeclarationOnly: undefined,
-  sourceRoot: undefined,
+// WARNING: DO NOT CHANGE THE ORDER OF CODE NAMES!
+// ONLY APPEND IF YOU NEED TO ADD SOME
+export enum DiagnosticCodes {
+  TsJest = 151000,
+  ConfigModuleOption,
 }
 
 const normalizeRegex = (pattern: string | RegExp | undefined): string | undefined => {
@@ -448,6 +435,32 @@ export class ConfigSet {
     return res
   }
 
+  @Memoize()
+  get overriddenCompilerOptions(): Partial<CompilerOptions> {
+    return {
+      // we handle sourcemaps this way and not another
+      sourceMap: true,
+      inlineSourceMap: false,
+      inlineSources: true,
+      // we don't want to create declaration files
+      declaration: false,
+      noEmit: false,
+      outDir: '$$ts-jest$$',
+      // commonjs is required for jest
+      module: this.compilerModule.ModuleKind.CommonJS,
+      // else istanbul related will be dropped
+      removeComments: false,
+      // to clear out else it's buggy
+      out: undefined,
+      outFile: undefined,
+      composite: undefined,
+      declarationDir: undefined,
+      declarationMap: undefined,
+      emitDeclarationOnly: undefined,
+      sourceRoot: undefined,
+    }
+  }
+
   get rootDir(): string {
     return this.jest.rootDir || this.cwd
   }
@@ -458,6 +471,22 @@ export class ConfigSet {
 
   get isDoctoring() {
     return !!process.env.TS_JEST_DOCTOR
+  }
+
+  makeDiagnostic(
+    code: number,
+    messageText: string,
+    options: { category?: DiagnosticCategory; file?: SourceFile; start?: number; length?: number } = {},
+  ): Diagnostic {
+    const { category = this.compilerModule.DiagnosticCategory.Warning, file, start, length } = options
+    return {
+      code,
+      messageText,
+      category,
+      file,
+      start,
+      length,
+    }
   }
 
   readTsConfig(
@@ -504,23 +533,41 @@ export class ConfigSet {
 
     // Override default configuration options `ts-jest` requires.
     config.compilerOptions = {
-      ...DEFAULT_COMPILER_OPTIONS,
       ...config.compilerOptions,
       ...compilerOptions,
-      ...FORCE_COMPILER_OPTIONS,
     }
 
+    // parse json, merge config extending others, ...
     const result = ts.parseJsonConfigFileContent(config, ts.sys, basePath, undefined, configFileName)
 
+    const { overriddenCompilerOptions: forcedOptions } = this
+    const finalOptions = result.options
+
     // Target ES5 output by default (instead of ES3).
-    if (result.options.target === undefined) {
-      result.options.target = ts.ScriptTarget.ES5
+    if (finalOptions.target === undefined) {
+      finalOptions.target = ts.ScriptTarget.ES5
     }
 
-    // ensure undefined in FORCE_COMPILER_OPTIONS are removed
-    for (const key in FORCE_COMPILER_OPTIONS) {
-      if ((FORCE_COMPILER_OPTIONS as any)[key] === undefined) {
-        delete result.options[key]
+    // check the module interoperability
+    const target = finalOptions.target!
+    // compute the default if not set
+    const defaultModule = [ts.ScriptTarget.ES3, ts.ScriptTarget.ES5].includes(target)
+      ? ts.ModuleKind.CommonJS
+      : ts.ModuleKind.ESNext
+    const moduleValue = finalOptions.module == null ? defaultModule : finalOptions.module
+    if (moduleValue !== forcedOptions.module && !finalOptions.esModuleInterop) {
+      result.errors.push(this.makeDiagnostic(DiagnosticCodes.ConfigModuleOption, Errors.ConfigNoModuleInterop))
+      // at least enable synthetic default imports
+      finalOptions.allowSyntheticDefaultImports = true
+    }
+
+    // ensure undefined are removed and other values are overridden
+    for (const key of Object.keys(forcedOptions)) {
+      const val = forcedOptions[key]
+      if (val === undefined) {
+        delete finalOptions[key]
+      } else {
+        finalOptions[key] = val
       }
     }
 
