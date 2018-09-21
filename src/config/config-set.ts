@@ -57,14 +57,23 @@ interface ReadTsConfigResult {
   resolved: ParsedCommandLine
 }
 
+/**
+ * @internal
+ */
 // this regex MUST match nothing, it's the goal ;-)
 export const MATCH_NOTHING = /a^/
+/**
+ * @internal
+ */
 export const IGNORE_DIAGNOSTIC_CODES = [
   6059, // "'rootDir' is expected to contain all source files."
   18002, // "The 'files' list in config file is empty."
   18003, // "No inputs were found in config file."
 ]
 
+/**
+ * @internal
+ */
 // WARNING: DO NOT CHANGE THE ORDER OF CODE NAMES!
 // ONLY APPEND IF YOU NEED TO ADD SOME
 export enum DiagnosticCodes {
@@ -103,16 +112,6 @@ const toDiagnosticCodeList = (items: any, into: number[] = []): number[] => {
 }
 
 export class ConfigSet {
-  readonly logger: Logger
-
-  constructor(
-    private readonly _jestConfig: jest.ProjectConfig,
-    readonly parentOptions?: TsJestGlobalOptions,
-    parentLogger?: Logger,
-  ) {
-    this.logger = parentLogger ? parentLogger.child({ [LogContexts.namespace]: 'config' }) : logger
-  }
-
   @Memoize()
   get jest(): jest.ProjectConfig {
     const config = backportJestConfig(this.logger, this._jestConfig)
@@ -234,6 +233,9 @@ export class ConfigSet {
     )
   }
 
+  /**
+   * @internal
+   */
   @Memoize()
   private get _typescript(): ReadTsConfigResult {
     const {
@@ -252,6 +254,9 @@ export class ConfigSet {
     return result
   }
 
+  /**
+   * @internal
+   */
   @Memoize()
   get raiseDiagnostics() {
     const {
@@ -349,6 +354,9 @@ export class ConfigSet {
     return {}
   }
 
+  /**
+   * @internal
+   */
   @Memoize()
   get filterDiagnostics() {
     const {
@@ -392,6 +400,9 @@ export class ConfigSet {
     }
   }
 
+  /**
+   * @internal
+   */
   @Memoize()
   get createTsError() {
     const {
@@ -471,10 +482,54 @@ export class ConfigSet {
     return normalize(this.jest.cwd || process.cwd())
   }
 
+  /**
+   * @internal
+   */
   get isDoctoring() {
     return !!process.env.TS_JEST_DOCTOR
   }
 
+  /**
+   * @internal
+   */
+  @Memoize()
+  get jsonValue() {
+    const jest = { ...this.jest }
+    const globals = (jest.globals = { ...jest.globals } as any)
+    // we need to remove some stuff from jest config
+    // this which does not depend on config
+    delete jest.name
+    delete jest.cacheDirectory
+    // we do not need this since its normalized version is in tsJest
+    delete globals['ts-jest']
+
+    return new JsonableValue({
+      versions: this.versions,
+      transformers: this.astTransformers.map(t => `${t.name}@${t.version}`),
+      jest,
+      tsJest: this.tsJest,
+      babel: this.babel,
+      tsconfig: this.tsconfig,
+    })
+  }
+
+  get cacheKey(): string {
+    return this.jsonValue.serialized
+  }
+  readonly logger: Logger
+  /**
+   * @internal
+   */
+  private readonly _jestConfig: jest.ProjectConfig
+
+  constructor(jestConfig: jest.ProjectConfig, readonly parentOptions?: TsJestGlobalOptions, parentLogger?: Logger) {
+    this._jestConfig = jestConfig
+    this.logger = parentLogger ? parentLogger.child({ [LogContexts.namespace]: 'config' }) : logger
+  }
+
+  /**
+   * @internal
+   */
   makeDiagnostic(
     code: number,
     messageText: string,
@@ -491,6 +546,9 @@ export class ConfigSet {
     }
   }
 
+  /**
+   * @internal
+   */
   readTsConfig(
     compilerOptions?: object,
     resolvedConfigFile?: string | null,
@@ -608,31 +666,9 @@ export class ConfigSet {
     return path
   }
 
-  @Memoize()
-  get jsonValue() {
-    const jest = { ...this.jest }
-    const globals = (jest.globals = { ...jest.globals } as any)
-    // we need to remove some stuff from jest config
-    // this which does not depend on config
-    delete jest.name
-    delete jest.cacheDirectory
-    // we do not need this since its normalized version is in tsJest
-    delete globals['ts-jest']
-
-    return new JsonableValue({
-      versions: this.versions,
-      transformers: this.astTransformers.map(t => `${t.name}@${t.version}`),
-      jest,
-      tsJest: this.tsJest,
-      babel: this.babel,
-      tsconfig: this.tsconfig,
-    })
-  }
-
-  get cacheKey(): string {
-    return this.jsonValue.serialized
-  }
-
+  /**
+   * @internal
+   */
   toJSON() {
     return this.jsonValue.value
   }

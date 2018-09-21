@@ -6,6 +6,9 @@ import { Errors, interpolate } from './messages'
 
 const logger = rootLogger.child({ namespace: 'versions' })
 
+/**
+ * @internal
+ */
 export enum ExpectedVersions {
   Jest = '>=22 <24',
   TypeScript = '>=2.7 <4',
@@ -14,12 +17,18 @@ export enum ExpectedVersions {
   BabelCore = '>=7.0.0-beta.0 <8',
 }
 
+/**
+ * @internal
+ */
 export interface VersionChecker {
   raise: () => boolean | never
   warn: () => boolean
   forget: () => void
 }
 
+/**
+ * @internal
+ */
 // tslint:disable-next-line:variable-name
 export const VersionCheckers = {
   jest: createVersionChecker('jest', ExpectedVersions.Jest),
@@ -31,6 +40,9 @@ export const VersionCheckers = {
 
 type CheckVersionAction = 'warn' | 'throw'
 
+/**
+ * @internal
+ */
 function checkVersion(name: string, expectedRange: string, action?: Exclude<CheckVersionAction, 'throw'>): boolean
 function checkVersion(name: string, expectedRange: string, action: 'throw'): true | never
 function checkVersion(

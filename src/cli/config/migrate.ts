@@ -9,6 +9,9 @@ import { CliCommand } from '..'
 import { createJestPreset } from '../../config/create-jest-preset'
 import { backportJestConfig } from '../../util/backports'
 
+/**
+ * @internal
+ */
 export const run: CliCommand = async (args: Arguments /*, logger: Logger*/) => {
   const nullLogger = createLogger({ targets: [] })
   const file = args._[0]
@@ -153,6 +156,9 @@ function dedupSort(arr: any[]) {
     .sort((a, b) => (a.toString() > b.toString() ? 1 : a.toString() < b.toString() ? -1 : 0))
 }
 
+/**
+ * @internal
+ */
 export const help: CliCommand = async () => {
   process.stdout.write(`
 Usage:

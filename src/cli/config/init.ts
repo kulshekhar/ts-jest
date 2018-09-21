@@ -12,6 +12,9 @@ import { Arguments } from 'yargs'
 import { CliCommand } from '..'
 import { createJestPreset } from '../../config/create-jest-preset'
 
+/**
+ * @internal
+ */
 export const run: CliCommand = async (args: Arguments /* , logger: Logger */) => {
   const file = args._[0] || 'jest.config.js'
   const filePath = join(process.cwd(), file)
@@ -94,6 +97,9 @@ Jest configuration written to "${filePath}".
 `)
 }
 
+/**
+ * @internal
+ */
 export const help: CliCommand = async () => {
   process.stdout.write(`
 Usage:

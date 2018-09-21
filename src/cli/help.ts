@@ -1,5 +1,8 @@
 import { Arguments } from 'yargs'
 
+/**
+ * @internal
+ */
 export const run = async (_: Arguments) => {
   process.stdout.write(`
 Usage:
@@ -15,4 +18,7 @@ Example:
 `)
 }
 
-export { run as help }
+/**
+ * @internal
+ */
+export const help = run

@@ -1,5 +1,8 @@
 import { stringify } from './json'
 
+/**
+ * @internal
+ */
 export class JsonableValue<V = any> {
   private _serialized!: string
   private _value!: V

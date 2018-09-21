@@ -8,6 +8,9 @@ const VALID_COMMANDS = ['help', 'config:migrate', 'config:init']
 
 const logger = rootLogger.child({ [LogContexts.namespace]: 'cli', [LogContexts.application]: 'ts-jest' })
 
+/**
+ * @internal
+ */
 export type CliCommand = (argv: Arguments, logger: Logger) => Promise<void>
 
 async function cli(args: string[]): Promise<void> {
@@ -33,6 +36,9 @@ async function cli(args: string[]): Promise<void> {
   return cmd(parsedArgv, logger)
 }
 
+/**
+ * @internal
+ */
 export async function processArgv(): Promise<void> {
   try {
     await cli(process.argv.slice(2))

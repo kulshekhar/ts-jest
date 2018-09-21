@@ -1,4 +1,8 @@
 // tslint:disable:max-line-length
+
+/**
+ * @internal
+ */
 export enum Errors {
   UnableToLoadOneModule = 'Unable to load the module {{module}}. {{reason}} To fix it:\n{{fix}}',
   UnableToLoadAnyModule = 'Unable to load any of these modules: {{module}}. {{reason}}. To fix it:\n{{fix}}',
@@ -18,12 +22,18 @@ export enum Errors {
   ConfigNoModuleInterop = 'If you have issues related to imports, you should consider setting `esModuleInterop` to `true` in your TypeScript configuration file (usually `tsconfig.json`). See https://blogs.msdn.microsoft.com/typescript/2018/01/31/announcing-typescript-2-7/#easier-ecmascript-module-interoperability for more information.',
 }
 
+/**
+ * @internal
+ */
 export enum Helps {
   FixMissingModule = '{{label}}: `npm i -D {{module}}` (or `yarn add --dev {{module}}`)',
   IgnoreDiagnosticCode = 'customize using `[jest-config].globals.ts-jest.diagnostics` option',
   MigrateConfigUsingCLI = 'Your Jest configuration is outdated. Use the CLI to help migrating it: ts-jest config:migrate <config-file>.',
 }
 
+/**
+ * @internal
+ */
 export enum Deprecateds {
   EnvVar = 'Using env. var "{{old}}" is deprecated, use "{{new}}" instead.',
   ConfigOption = '"[jest-config].{{oldPath}}" is deprecated, use "[jest-config].{{newPath}}" instead.',
@@ -31,11 +41,17 @@ export enum Deprecateds {
   ConfigOptionUseBabelRcNote = 'See `babel-jest` related issue: https://github.com/facebook/jest/issues/3845',
 }
 
+/**
+ * @internal
+ */
 export enum ImportReasons {
   TsJest = 'Using "ts-jest" requires this package to be installed.',
   BabelJest = 'Using "babel-jest" requires this package to be installed.',
 }
 
+/**
+ * @internal
+ */
 export function interpolate(msg: string, vars: Record<string, any> = {}): string {
   return msg.replace(/\{\{([^\}]+)\}\}/g, (_, key) => (key in vars ? vars[key] : _))
 }
