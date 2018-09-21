@@ -1,5 +1,8 @@
 const cacheProp = Symbol.for('[memoize]')
 
+/**
+ * @internal
+ */
 export function Memoize(keyBuilder?: (...args: any[]) => any) {
   return (_: object, propertyKey: string, descriptor: TypedPropertyDescriptor<any>) => {
     if (descriptor.value != null) {

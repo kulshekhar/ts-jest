@@ -45,6 +45,7 @@ const hasOwn = Object.prototype.hasOwnProperty
 
 /**
  * Register TypeScript compiler.
+ * @internal
  */
 export function createCompiler(configs: ConfigSet): TsCompiler {
   const logger = configs.logger.child({ namespace: 'ts-compiler' })

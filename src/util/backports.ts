@@ -4,6 +4,9 @@ import { Deprecateds, Helps, interpolate } from './messages'
 
 const context = { [LogContexts.namespace]: 'backports' }
 
+/**
+ * @internal
+ */
 export const backportJestConfig = <T extends jest.InitialOptions | jest.ProjectConfig>(
   logger: Logger,
   config: T,
@@ -108,6 +111,9 @@ export const backportJestConfig = <T extends jest.InitialOptions | jest.ProjectC
   }
 }
 
+/**
+ * @internal
+ */
 export const backportTsJestDebugEnvVar = (logger: Logger) => {
   if ('TS_JEST_DEBUG' in process.env) {
     const shouldLog = !/^\s*(?:0|f(?:alse)?|no?|disabled?|off|)\s*$/i.test(process.env.TS_JEST_DEBUG || '')

@@ -115,8 +115,14 @@ export interface CreateJestPresetOptions {
   allowJs?: boolean
 }
 
+/**
+ * @internal
+ */
 export type ModulePatcher<T = any> = (module: T) => T
 
+/**
+ * @internal
+ */
 export interface TsJestImporter {
   tryThese(moduleName: string, ...fallbacks: string[]): any
 }
@@ -145,6 +151,7 @@ export interface TSCommon {
 
 /**
  * Track the project information.
+ * @internal
  */
 export interface MemoryCache {
   contents: { [path: string]: string | undefined }

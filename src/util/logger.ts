@@ -13,7 +13,10 @@ const buildOptions = () => ({
   targets: process.env.TS_JEST_LOG || undefined,
 })
 
-let rootLogger = createLogger(buildOptions())
+/**
+ * @internal
+ */
+export let rootLogger = createLogger(buildOptions())
 
 backportTsJestDebugEnvVar(rootLogger)
 
@@ -21,5 +24,3 @@ backportTsJestDebugEnvVar(rootLogger)
 if (original !== process.env.TS_JEST_LOG) {
   rootLogger = createLogger(buildOptions())
 }
-
-export { rootLogger }

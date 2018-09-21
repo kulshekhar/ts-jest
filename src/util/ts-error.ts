@@ -13,6 +13,7 @@ export const INSPECT_CUSTOM = inspect.custom || 'inspect'
 
 /**
  * TypeScript diagnostics error.
+ * @internal
  */
 export class TSError extends BaseError {
   name = 'TSError'

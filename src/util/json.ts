@@ -2,10 +2,16 @@ import stableStringify = require('fast-json-stable-stringify')
 
 const UNDEFINED = 'undefined'
 
+/**
+ * @internal
+ */
 export function stringify(input: any): string {
   return input === undefined ? UNDEFINED : stableStringify(input)
 }
 
+/**
+ * @internal
+ */
 export function parse(input: string): any {
   return input === UNDEFINED ? undefined : JSON.parse(input)
 }
@@ -13,6 +19,9 @@ export function parse(input: string): any {
 interface NormalizeOptions {
   parse?: (input: string) => any
 }
+/**
+ * @internal
+ */
 export function normalize(input: string, { parse: parser = parse }: NormalizeOptions = {}): string {
   let result: string | undefined
   if (normalize.cache.has(input)) {
@@ -25,6 +34,10 @@ export function normalize(input: string, { parse: parser = parse }: NormalizeOpt
   }
   return result === undefined ? input : result
 }
+
+/**
+ * @internal
+ */
 // tslint:disable-next-line:no-namespace
 export namespace normalize {
   export const cache = new Map<string, string | undefined>()

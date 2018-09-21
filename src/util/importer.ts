@@ -8,7 +8,7 @@ import { VersionCheckers } from './version-checkers'
 
 const logger = rootLogger.child({ namespace: 'Importer' })
 
-// When ading an optional dependency which has another reason, add the reason in ImportReasons, and
+// When adding an optional dependency which has another reason, add the reason in ImportReasons, and
 // create a new method in Importer. Thus uses the importer.yourMethod(ImportReasons.TheReason)
 // in the relevant code, so that the user knows why it needs it and how to install it in the
 // case it can't import.
@@ -23,6 +23,9 @@ const passThru = (action: () => void) => (input: any) => {
   return input
 }
 
+/**
+ * @internal
+ */
 export class Importer implements TsJestImporter {
   @Memoize()
   static get instance() {
@@ -128,9 +131,15 @@ export class Importer implements TsJestImporter {
   }
 }
 
+/**
+ * @internal
+ */
 export const importer = Importer.instance
 
 let requireModule = (mod: string) => require(mod)
+/**
+ * @internal
+ */
 // so that we can test easier
 export function __requireModule(localRequire: typeof requireModule) {
   requireModule = localRequire

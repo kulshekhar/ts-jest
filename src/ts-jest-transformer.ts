@@ -20,11 +20,20 @@ interface ConfigSetIndexItem {
 }
 
 export class TsJestTransformer implements jest.Transformer {
+  /**
+   * @internal
+   */
   private static readonly _configSetsIndex: ConfigSetIndexItem[] = []
+  /**
+   * @internal
+   */
   private static _lastTransformerId = 0
   static get lastTransformerId() {
     return TsJestTransformer._lastTransformerId
   }
+  /**
+   * @internal
+   */
   private static get _nextTransformerId() {
     return ++TsJestTransformer._lastTransformerId
   }
@@ -43,6 +52,9 @@ export class TsJestTransformer implements jest.Transformer {
     this.logger.debug({ baseOptions }, 'created new transformer')
   }
 
+  /**
+   * @internal
+   */
   /* istanbul ignore next */
   [INSPECT_CUSTOM]() {
     return `[object TsJestTransformer<#${this.id}>]`
