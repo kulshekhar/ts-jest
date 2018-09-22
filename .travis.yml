@@ -6,6 +6,7 @@ env:
 cache:
   npm: true
   directories:
+    - .cache
     - /tmp/ts-jest-e2e-workdir/__templates__
 
 node_js:

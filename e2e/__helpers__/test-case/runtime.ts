@@ -49,26 +49,40 @@ function hooksSourceWith(vars: Record<string, any>): string {
 }
 
 export function run(name: string, options: RunTestOptions = {}): RunResult {
-  const { args = [], env = {}, template, inject, writeIo, noCache } = options
+  const {
+    args = [],
+    env = {},
+    template,
+    inject,
+    writeIo,
+    noCache,
+    jestConfigPath: configFile = 'jest.config.js',
+  } = options
   const { workdir: dir, sourceDir, hooksFile, ioDir } = prepareTest(
     name,
     template || templateNameForPath(join(Paths.e2eSourceDir, name)),
     options,
   )
-  const pkg = require(join(dir, 'package.json'))
+  const pkg = readJsonSync(join(dir, 'package.json'))
+
+  // grab base configuration
+  const jestConfigPath = resolve(dir, configFile)
+  let baseConfig: jest.InitialOptions = require(jestConfigPath)
+  if (configFile === 'package.json') baseConfig = (baseConfig as any).jest
+
+  const extraConfig = {} as jest.InitialOptions
 
   let shortCmd: string
   let cmdArgs: string[] = []
   if (inject) {
-    cmdArgs.push('--testPathPattern="/__eval\\\\.ts$"')
-  } // '--testRegex=""'
+    extraConfig.testMatch = undefined
+    extraConfig.testRegex = '/__eval\\.ts$'
+  }
   if (process.argv.find(v => ['--updateSnapshot', '-u'].includes(v))) {
     cmdArgs.push('-u')
   }
   cmdArgs.push(...args)
-  let isScriptWithConfig = false
   if (!inject && pkg.scripts && pkg.scripts.test) {
-    isScriptWithConfig = /['" ]\-\-config['" ]/.test(pkg.scripts.test)
     if (cmdArgs.length) {
       cmdArgs.unshift('--')
     }
@@ -80,49 +94,41 @@ export function run(name: string, options: RunTestOptions = {}): RunResult {
   }
 
   // check/merge config
-  if (isScriptWithConfig) {
-    throw new Error(`Cannot extend config of a test case using a package script which has '--config' in command line.`)
-  }
-  let originalConfig: any = join(dir, 'jest.config.js')
   if (cmdArgs.includes('--config')) {
-    const confArg = cmdArgs[cmdArgs.indexOf('--config') + 1]
-    if (confArg.startsWith('{')) {
-      originalConfig = JSON.parse(confArg)
-    } else {
-      originalConfig = require(resolve(dir, confArg))
-    }
-  } else if (existsSync(originalConfig)) {
-    originalConfig = require(originalConfig)
-  } else {
-    originalConfig = require(join(dir, 'package.json')).jest || {}
+    throw new Error(`Extend config using tsJestConfig and jestConfig options, not thru args.`)
   }
-  let finalConfig = originalConfig as jest.InitialOptions
+  if (cmdArgs.includes('--no-cache')) {
+    throw new Error(`Use the noCache option to disable cache, not thru args.`)
+  }
   // extends config
-  if (options.jestConfig || options.tsJestConfig) {
-    finalConfig = merge({}, originalConfig, options.jestConfig, {
-      globals: { 'ts-jest': options.tsJestConfig || {} },
-    })
-    cmdArgs.push(
-      '--config',
-      JSON.stringify(
-        merge({}, originalConfig, options.jestConfig, {
-          globals: { 'ts-jest': options.tsJestConfig || {} },
-        }),
-      ),
-    )
+  if (options.jestConfig) {
+    merge(extraConfig, options.jestConfig)
+  }
+  if (options.tsJestConfig) {
+    const globalConfig: any = extraConfig.globals || (extraConfig.globals = {})
+    const tsJestConfig = globalConfig['ts-jest'] || (globalConfig['ts-jest'] = {})
+    merge(tsJestConfig, options.tsJestConfig)
   }
 
-  // verify that we have the cache directory set
-  let hasCaching = !(cmdArgs.includes('--no-cache') || finalConfig.cache === false)
-  if (hasCaching && (noCache || writeIo)) {
+  if (noCache || writeIo) {
     cmdArgs.push('--no-cache')
-    hasCaching = false
-  }
-  if (hasCaching && !finalConfig.cacheDirectory) {
-    throw new Error(`The cacheDirectory is not set in the config`)
+  } else if (!(baseConfig.cacheDirectory || extraConfig.cacheDirectory)) {
+    // force the cache directory if not set
+    extraConfig.cacheDirectory = join(Paths.cacheDir, `e2e-${template}`)
   }
 
-  // run in band
+  // write final config
+  const finalConfig = merge({}, baseConfig, extraConfig)
+  if (Object.keys(extraConfig).length !== 0) {
+    if (configFile === 'package.json') {
+      pkg.jest = finalConfig
+      outputJsonSync(jestConfigPath, pkg)
+    } else {
+      outputFileSync(jestConfigPath, `module.exports = ${JSON.stringify(finalConfig, null, 2)}`, 'utf8')
+    }
+  }
+
+  // ensure we run in band
   if (!cmdArgs.includes('--runInBand')) {
     cmdArgs.push('--runInBand')
   }
@@ -169,6 +175,7 @@ export function run(name: string, options: RunTestOptions = {}): RunResult {
     args: cmdArgs,
     env: mergedEnv,
     ioDir: writeIo ? ioDir : undefined,
+    config: finalConfig,
   })
 }
 

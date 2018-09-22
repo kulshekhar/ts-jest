@@ -28,6 +28,7 @@ install:
   - npm run clean -- --when-ci-commit-message
 
 cache:
+  - .cache -> package.json
   - '%APPDATA%\npm-cache'
   - '%APPDATA%\ts-jest-e2e\__templates__'
 

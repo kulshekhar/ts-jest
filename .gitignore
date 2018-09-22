@@ -43,7 +43,7 @@ jspm_packages
 
 .vscode
 .idea
-
+.cache
 
 # tests specific
 tests/simple-long-path/long-src-path
