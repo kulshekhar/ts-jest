@@ -74,3 +74,6 @@ tslint.json
 docs
 
 commitlint.config.js
+
+# ensure we do not omit the digest
+!.ts-jest-digest

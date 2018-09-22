@@ -1,3 +1,6 @@
+import { readFileSync } from 'fs'
+import { resolve } from 'path'
+
 import { createJestPreset } from './config/create-jest-preset'
 import { pathsToModuleNameMapper } from './config/paths-to-module-name-mapper'
 import { TsJestTransformer } from './ts-jest-transformer'
@@ -6,6 +9,7 @@ import { VersionCheckers } from './util/version-checkers'
 
 // tslint:disable-next-line:no-var-requires
 export const version: string = require('../package.json').version
+export const digest: string = readFileSync(resolve(__dirname, '..', '.ts-jest-digest'), 'utf8')
 
 let transformer!: TsJestTransformer
 function defaultTransformer(): TsJestTransformer {

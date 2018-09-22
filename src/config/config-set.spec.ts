@@ -2,7 +2,7 @@ import { testing } from 'bs-logger'
 import { resolve } from 'path'
 import ts, { Diagnostic, ModuleKind, ScriptTarget } from 'typescript'
 
-import { version as currentVersion } from '../../package.json'
+import * as _myModule from '..'
 import * as fakers from '../__helpers__/fakers'
 import { logTargetMock, mocked } from '../__helpers__/mocks'
 import { TsJestGlobalOptions } from '../types'
@@ -12,8 +12,10 @@ import { normalizeSlashes } from '../util/normalize-slashes'
 import { ConfigSet, IGNORE_DIAGNOSTIC_CODES, MATCH_NOTHING } from './config-set'
 
 jest.mock('../util/backports')
+jest.mock('../index')
 
 const backports = mocked(_backports)
+const myModule = mocked(_myModule)
 
 backports.backportJestConfig.mockImplementation((_, config) => ({
   ...config,
@@ -385,7 +387,7 @@ describe('versions', () => {
     it('should return correct version map', () => {
       expect(createConfigSet().versions).toEqual({
         jest: pkgVersion('jest'),
-        'ts-jest': currentVersion,
+        'ts-jest': myModule.version,
         typescript: pkgVersion('typescript'),
       })
     })
@@ -397,12 +399,18 @@ describe('versions', () => {
         'babel-core': pkgVersion('babel-core'),
         'babel-jest': pkgVersion('babel-jest'),
         jest: pkgVersion('jest'),
-        'ts-jest': currentVersion,
+        'ts-jest': myModule.version,
         typescript: pkgVersion('typescript'),
       })
     })
   })
 }) // versions
+
+describe('tsJestDigest', () => {
+  it('should be the package digest', () => {
+    expect(createConfigSet().tsJestDigest).toBe(myModule.digest)
+  })
+}) // tsJestDigest
 
 describe('tsconfig', () => {
   it('should return input tsconfig', () => {
@@ -468,8 +476,9 @@ describe('cacheKey', () => {
     const val = cs.jsonValue.value
     delete val.versions
     cs.jsonValue.value = val
+    // digest is mocked in src/__mocks__/index.ts
     expect(cs.cacheKey).toMatchInlineSnapshot(
-      `"{\\"jest\\":{\\"__backported\\":true,\\"globals\\":{}},\\"transformers\\":[\\"hoisting-jest-mock@1\\"],\\"tsJest\\":{\\"compiler\\":\\"typescript\\",\\"diagnostics\\":{\\"ignoreCodes\\":[6059,18002,18003],\\"pretty\\":true,\\"throws\\":true},\\"isolatedModules\\":false,\\"transformers\\":[]},\\"tsconfig\\":{\\"compilerOptions\\":{}}}"`,
+      `"{\\"digest\\":\\"a0d51ca854194df8191d0e65c0ca4730f510f332\\",\\"jest\\":{\\"__backported\\":true,\\"globals\\":{}},\\"transformers\\":[\\"hoisting-jest-mock@1\\"],\\"tsJest\\":{\\"compiler\\":\\"typescript\\",\\"diagnostics\\":{\\"ignoreCodes\\":[6059,18002,18003],\\"pretty\\":true,\\"throws\\":true},\\"isolatedModules\\":false,\\"transformers\\":[]},\\"tsconfig\\":{\\"declaration\\":false,\\"inlineSourceMap\\":false,\\"inlineSources\\":true,\\"module\\":1,\\"noEmit\\":false,\\"outDir\\":\\"$$ts-jest$$\\",\\"removeComments\\":false,\\"sourceMap\\":true,\\"target\\":1}}"`,
     )
   })
 }) // cacheKey
@@ -479,13 +488,15 @@ describe('jsonValue', () => {
     const cs = createConfigSet({ tsJestConfig: { tsConfig: false } as any })
     const val = cs.jsonValue.valueOf()
     expect(cs.toJSON()).toEqual(val)
-    // it will change each time we upgrade and we tested those in the `version` block
+    // it will change each time we upgrade – we tested those in the `version` block
     expect(val.versions).toEqual(cs.versions)
     delete val.versions
 
+    // digest is mocked in src/__mocks__/index.ts
     expect(val).toMatchInlineSnapshot(`
 Object {
   "babel": undefined,
+  "digest": "a0d51ca854194df8191d0e65c0ca4730f510f332",
   "jest": Object {
     "__backported": true,
     "globals": Object {},
@@ -511,7 +522,16 @@ Object {
     "tsConfig": undefined,
   },
   "tsconfig": Object {
-    "compilerOptions": Object {},
+    "configFilePath": undefined,
+    "declaration": false,
+    "inlineSourceMap": false,
+    "inlineSources": true,
+    "module": 1,
+    "noEmit": false,
+    "outDir": "$$ts-jest$$",
+    "removeComments": false,
+    "sourceMap": true,
+    "target": 1,
   },
 }
 `)

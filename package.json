@@ -8,9 +8,10 @@
   "scripts": {
     "prebuild": "node scripts/clean-dist.js",
     "build": "tsc -p tsconfig.build.json",
+    "postbuild": "node scripts/post-build.js",
     "build:watch": "tsc -p tsconfig.build.json -w",
     "clean": "node scripts/clean.js",
-    "pretest": "run-s typecheck lint",
+    "pretest": "npm run lint",
     "test": "run-s -s test:e2e \"test:unit -- {@}\" --",
     "test:prepare": "npm run test:e2e -- --prepareOnly",
     "test:e2e": "node scripts/e2e.js",

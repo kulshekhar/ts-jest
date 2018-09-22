@@ -23,7 +23,7 @@ import {
   SourceFile,
 } from 'typescript'
 
-import { version as myVersion } from '..'
+import { digest as MY_DIGEST, version as MY_VERSION } from '..'
 import { createCompiler } from '../compiler'
 import { internals as internalAstTransformers } from '../transformers'
 import {
@@ -229,7 +229,7 @@ export class ConfigSet {
         map[name] = getPackageVersion(name) || '-'
         return map
       },
-      { 'ts-jest': myVersion } as Record<string, string>,
+      { 'ts-jest': MY_VERSION } as Record<string, string>,
     )
   }
 
@@ -438,10 +438,10 @@ export class ConfigSet {
         compiler: this.tsJest.compiler,
         compilerOptions: this.typescript.options,
         isolatedModules: this.tsJest.isolatedModules,
-        ignoreDiagnostics: this.tsJest.diagnostics.ignoreCodes,
+        diagnostics: this.tsJest.diagnostics,
       }),
     )
-    const res = join(this.jest.cacheDirectory, `ts-jest-${cacheSuffix}`)
+    const res = join(this.jest.cacheDirectory, 'ts-jest', cacheSuffix.substr(0, 2), cacheSuffix.substr(2))
     logger.debug({ cacheDirectory: res }, `will use file caching`)
     return res
   }
@@ -489,6 +489,11 @@ export class ConfigSet {
     return !!process.env.TS_JEST_DOCTOR
   }
 
+  @Memoize()
+  get tsJestDigest(): string {
+    return MY_DIGEST
+  }
+
   /**
    * @internal
    */
@@ -505,11 +510,12 @@ export class ConfigSet {
 
     return new JsonableValue({
       versions: this.versions,
+      digest: this.tsJestDigest,
       transformers: this.astTransformers.map(t => `${t.name}@${t.version}`),
       jest,
       tsJest: this.tsJest,
       babel: this.babel,
-      tsconfig: this.tsconfig,
+      tsconfig: this.typescript.options,
     })
   }
 

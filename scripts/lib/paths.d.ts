@@ -1,4 +1,5 @@
 declare const rootDir: string
+declare const pkgDigestFile: string
 declare const e2eSourceDir: string
 declare const e2eRootDir: string
 declare const e2eWorkDir: string
@@ -11,6 +12,7 @@ declare const e2eTestsDir: string
 
 export {
   rootDir,
+  pkgDigestFile,
   e2eSourceDir,
   e2eRootDir,
   e2eWorkDir,

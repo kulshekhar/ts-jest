@@ -8,7 +8,7 @@ const path = require('path')
 const Paths = require('./lib/paths')
 const { createHash } = require('crypto')
 const logger = require('./lib/logger')
-const { createBundle, packageDigest } = require('./lib/bundle')
+const { createBundle, readPackageDigest } = require('./lib/bundle')
 const npm = require('./lib/npm')
 
 const configFile = path.join(Paths.e2eRootDir, 'jest.config.js')
@@ -49,8 +49,7 @@ function setupE2e() {
   )
 
   // get the hash of the bundle (to know if we should install it again or not)
-  // we need to compute it ourselfs as the npm pack creates different tgz even tho content has not changed
-  const bundleHash = packageDigest(bundle)
+  const bundleHash = readPackageDigest()
   log('ts-jest digest:', bundleHash)
 
   // ensure directory exists before copying over

@@ -2,6 +2,7 @@ const path = require('path')
 const os = require('os')
 
 const rootDir = path.resolve(__dirname, '..', '..')
+const pkgDigestFile = path.join(rootDir, '.ts-jest-digest')
 const distDir = path.join(rootDir, 'dist')
 const testsRootDir = path.join(rootDir, 'tests')
 const e2eRootDir = path.join(rootDir, 'e2e')
@@ -15,6 +16,7 @@ const e2eWorkTemplatesDir = path.join(e2eWorkDir, '__templates__')
 const e2eWotkDirLink = path.join(e2eRootDir, '__workdir_synlink__')
 
 module.exports = {
+  pkgDigestFile,
   rootDir,
   e2eSourceDir,
   e2eRootDir,
