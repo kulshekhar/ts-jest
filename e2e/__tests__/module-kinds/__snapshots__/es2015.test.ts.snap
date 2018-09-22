@@ -11,7 +11,7 @@ exports[`run with options: {"module":"es2015","allowSyntheticDefaultImports":fal
   PASS ./import-legacy.spec.ts
   PASS ./import-star.spec.ts
   ts-jest[ts-compiler] (WARN) TypeScript diagnostics (customize using \`[jest-config].globals.ts-jest.diagnostics\` option):
-  import-default.spec.ts:1:8 - error TS1192: Module '"/private/var/folders/dr/dyg3_v313zjfpq82wd_4b0lr0000gn/T/--ts-jest-temp-e2e--/default/module-kinds-3440b1e.1/lib"' has no default export.
+  import-default.spec.ts:1:8 - error TS1192: Module '"<cwd>/lib"' has no default export.
   
   1 import lib from './lib'
            ~~~
