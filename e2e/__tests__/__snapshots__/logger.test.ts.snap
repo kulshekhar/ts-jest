@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`TS_JEST_LOG should pass and create log file when using tempalte "default" 1`] = `
+exports[`TS_JEST_LOG should pass and create log file when using template "default" 1`] = `
 Array [
   "[level:20] creating jest presets not handling JavaScript files",
   "[level:20] creating Importer singleton",
@@ -20,26 +20,24 @@ Array [
   "[level:20] normalized typescript config",
   "[level:20] processing <cwd>/Hello.spec.ts",
   "[level:20] creating typescript compiler (language service)",
-  "[level:20] will use file caching",
+  "[level:20] file caching disabled",
   "[level:20] creating language service",
-  "[level:20] readThrough(): cache miss",
+  "[level:20] readThrough(): no cache",
   "[level:20] getOutput(): compiling using language service",
   "[level:20] updateMemoryCache()",
   "[level:20] visitSourceFileNode(): hoisting",
   "[level:20] getOutput(): computing diagnostics",
-  "[level:20] readThrough(): writing caches",
   "[level:20] computing cache key for <cwd>/Hello.ts",
   "[level:20] processing <cwd>/Hello.ts",
-  "[level:20] readThrough(): cache miss",
+  "[level:20] readThrough(): no cache",
   "[level:20] getOutput(): compiling using language service",
   "[level:20] updateMemoryCache()",
   "[level:20] visitSourceFileNode(): hoisting",
   "[level:20] getOutput(): computing diagnostics",
-  "[level:20] readThrough(): writing caches",
 ]
 `;
 
-exports[`TS_JEST_LOG should pass and create log file when using tempalte "with-babel-6" 1`] = `
+exports[`TS_JEST_LOG should pass and create log file when using template "with-babel-6" 1`] = `
 Array [
   "[level:20] creating jest presets not handling JavaScript files",
   "[level:20] creating Importer singleton",
@@ -68,28 +66,26 @@ Array [
   "[level:20] patching babel-jest",
   "[level:20] checking version of babel-jest: OK",
   "[level:20] creating typescript compiler (language service)",
-  "[level:20] will use file caching",
+  "[level:20] file caching disabled",
   "[level:20] creating language service",
-  "[level:20] readThrough(): cache miss",
+  "[level:20] readThrough(): no cache",
   "[level:20] getOutput(): compiling using language service",
   "[level:20] updateMemoryCache()",
   "[level:20] visitSourceFileNode(): hoisting",
   "[level:20] getOutput(): computing diagnostics",
-  "[level:20] readThrough(): writing caches",
   "[level:20] calling babel-jest processor",
   "[level:20] computing cache key for <cwd>/Hello.ts",
   "[level:20] processing <cwd>/Hello.ts",
-  "[level:20] readThrough(): cache miss",
+  "[level:20] readThrough(): no cache",
   "[level:20] getOutput(): compiling using language service",
   "[level:20] updateMemoryCache()",
   "[level:20] visitSourceFileNode(): hoisting",
   "[level:20] getOutput(): computing diagnostics",
-  "[level:20] readThrough(): writing caches",
   "[level:20] calling babel-jest processor",
 ]
 `;
 
-exports[`TS_JEST_LOG should pass and create log file when using tempalte "with-babel-7" 1`] = `
+exports[`TS_JEST_LOG should pass and create log file when using template "with-babel-7" 1`] = `
 Array [
   "[level:20] creating jest presets not handling JavaScript files",
   "[level:20] creating Importer singleton",
@@ -117,28 +113,26 @@ Array [
   "[level:20] patching babel-jest",
   "[level:20] checking version of babel-jest: OK",
   "[level:20] creating typescript compiler (language service)",
-  "[level:20] will use file caching",
+  "[level:20] file caching disabled",
   "[level:20] creating language service",
-  "[level:20] readThrough(): cache miss",
+  "[level:20] readThrough(): no cache",
   "[level:20] getOutput(): compiling using language service",
   "[level:20] updateMemoryCache()",
   "[level:20] visitSourceFileNode(): hoisting",
   "[level:20] getOutput(): computing diagnostics",
-  "[level:20] readThrough(): writing caches",
   "[level:20] calling babel-jest processor",
   "[level:20] computing cache key for <cwd>/Hello.ts",
   "[level:20] processing <cwd>/Hello.ts",
-  "[level:20] readThrough(): cache miss",
+  "[level:20] readThrough(): no cache",
   "[level:20] getOutput(): compiling using language service",
   "[level:20] updateMemoryCache()",
   "[level:20] visitSourceFileNode(): hoisting",
   "[level:20] getOutput(): computing diagnostics",
-  "[level:20] readThrough(): writing caches",
   "[level:20] calling babel-jest processor",
 ]
 `;
 
-exports[`TS_JEST_LOG should pass and create log file when using tempalte "with-jest-22" 1`] = `
+exports[`TS_JEST_LOG should pass and create log file when using template "with-jest-22" 1`] = `
 Array [
   "[level:20] creating Importer singleton",
   "[level:20] creating jest presets not handling JavaScript files",
@@ -157,26 +151,24 @@ Array [
   "[level:20] normalized typescript config",
   "[level:20] processing <cwd>/Hello.spec.ts",
   "[level:20] creating typescript compiler (language service)",
-  "[level:20] will use file caching",
+  "[level:20] file caching disabled",
   "[level:20] creating language service",
-  "[level:20] readThrough(): cache miss",
+  "[level:20] readThrough(): no cache",
   "[level:20] getOutput(): compiling using language service",
   "[level:20] updateMemoryCache()",
   "[level:20] visitSourceFileNode(): hoisting",
   "[level:20] getOutput(): computing diagnostics",
-  "[level:20] readThrough(): writing caches",
   "[level:20] computing cache key for <cwd>/Hello.ts",
   "[level:20] processing <cwd>/Hello.ts",
-  "[level:20] readThrough(): cache miss",
+  "[level:20] readThrough(): no cache",
   "[level:20] getOutput(): compiling using language service",
   "[level:20] updateMemoryCache()",
   "[level:20] visitSourceFileNode(): hoisting",
   "[level:20] getOutput(): computing diagnostics",
-  "[level:20] readThrough(): writing caches",
 ]
 `;
 
-exports[`TS_JEST_LOG should pass and create log file when using tempalte "with-typescript-2-7" 1`] = `
+exports[`TS_JEST_LOG should pass and create log file when using template "with-typescript-2-7" 1`] = `
 Array [
   "[level:20] creating jest presets not handling JavaScript files",
   "[level:20] creating Importer singleton",
@@ -196,22 +188,20 @@ Array [
   "[level:20] normalized typescript config",
   "[level:20] processing <cwd>/Hello.spec.ts",
   "[level:20] creating typescript compiler (language service)",
-  "[level:20] will use file caching",
+  "[level:20] file caching disabled",
   "[level:20] creating language service",
-  "[level:20] readThrough(): cache miss",
+  "[level:20] readThrough(): no cache",
   "[level:20] getOutput(): compiling using language service",
   "[level:20] updateMemoryCache()",
   "[level:20] visitSourceFileNode(): hoisting",
   "[level:20] getOutput(): computing diagnostics",
-  "[level:20] readThrough(): writing caches",
   "[level:20] computing cache key for <cwd>/Hello.ts",
   "[level:20] processing <cwd>/Hello.ts",
-  "[level:20] readThrough(): cache miss",
+  "[level:20] readThrough(): no cache",
   "[level:20] getOutput(): compiling using language service",
   "[level:20] updateMemoryCache()",
   "[level:20] visitSourceFileNode(): hoisting",
   "[level:20] getOutput(): computing diagnostics",
-  "[level:20] readThrough(): writing caches",
 ]
 `;
 

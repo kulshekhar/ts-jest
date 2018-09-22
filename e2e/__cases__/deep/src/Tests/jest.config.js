@@ -20,5 +20,4 @@ module.exports = Object.assign({}, cfg, {
       tsConfig: "./tsconfig.json",
     },
   },
-  // testResultsProcessor: "jest-teamcity-reporter",
 })

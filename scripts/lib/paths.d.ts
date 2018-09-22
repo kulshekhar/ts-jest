@@ -1,4 +1,6 @@
 declare const rootDir: string
+declare const cacheDir: string
+declare const pkgDigestFile: string
 declare const e2eSourceDir: string
 declare const e2eRootDir: string
 declare const e2eWorkDir: string
@@ -11,6 +13,8 @@ declare const e2eTestsDir: string
 
 export {
   rootDir,
+  cacheDir,
+  pkgDigestFile,
   e2eSourceDir,
   e2eRootDir,
   e2eWorkDir,

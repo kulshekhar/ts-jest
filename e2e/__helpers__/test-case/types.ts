@@ -10,6 +10,8 @@ export interface RunTestOptions {
   writeIo?: boolean
   jestConfig?: jest.ProjectConfig | any
   tsJestConfig?: TsJestConfig | any
+  noCache?: boolean
+  jestConfigPath?: string
 }
 
 export type RunWithTemplatesIterator = (runtTest: () => RunResult, context: RunWithTemplateIteratorContext) => void

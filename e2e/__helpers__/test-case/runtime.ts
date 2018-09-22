@@ -16,7 +16,7 @@ import {
   writeFileSync,
 } from 'fs-extra'
 import merge from 'lodash.merge'
-import { join, relative, sep } from 'path'
+import { join, relative, resolve, sep } from 'path'
 
 import * as Paths from '../../../scripts/lib/paths'
 
@@ -49,19 +49,35 @@ function hooksSourceWith(vars: Record<string, any>): string {
 }
 
 export function run(name: string, options: RunTestOptions = {}): RunResult {
-  const { args = [], env = {}, template, inject, writeIo } = options
+  const {
+    args = [],
+    env = {},
+    template,
+    inject,
+    writeIo,
+    noCache,
+    jestConfigPath: configFile = 'jest.config.js',
+  } = options
   const { workdir: dir, sourceDir, hooksFile, ioDir } = prepareTest(
     name,
     template || templateNameForPath(join(Paths.e2eSourceDir, name)),
     options,
   )
-  const pkg = require(join(dir, 'package.json'))
+  const pkg = readJsonSync(join(dir, 'package.json'))
+
+  // grab base configuration
+  const jestConfigPath = resolve(dir, configFile)
+  let baseConfig: jest.InitialOptions = require(jestConfigPath)
+  if (configFile === 'package.json') baseConfig = (baseConfig as any).jest
+
+  const extraConfig = {} as jest.InitialOptions
 
   let shortCmd: string
   let cmdArgs: string[] = []
   if (inject) {
-    cmdArgs.push('--testPathPattern="/__eval\\\\.ts$"')
-  } // '--testRegex=""'
+    extraConfig.testMatch = undefined
+    extraConfig.testRegex = '/__eval\\.ts$'
+  }
   if (process.argv.find(v => ['--updateSnapshot', '-u'].includes(v))) {
     cmdArgs.push('-u')
   }
@@ -77,25 +93,42 @@ export function run(name: string, options: RunTestOptions = {}): RunResult {
     shortCmd = 'jest'
   }
 
-  // merge given config extend
-  if (options.jestConfig || options.tsJestConfig) {
-    let originalConfig: any = join(dir, 'jest.config.js')
-    if (existsSync(originalConfig)) {
-      originalConfig = require(originalConfig)
-    } else {
-      originalConfig = require(join(dir, 'package.json')).jest || {}
-    }
-    cmdArgs.push(
-      '--config',
-      JSON.stringify(
-        merge({}, originalConfig, options.jestConfig, {
-          globals: { 'ts-jest': options.tsJestConfig || {} },
-        }),
-      ),
-    )
+  // check/merge config
+  if (cmdArgs.includes('--config')) {
+    throw new Error(`Extend config using tsJestConfig and jestConfig options, not thru args.`)
+  }
+  if (cmdArgs.includes('--no-cache')) {
+    throw new Error(`Use the noCache option to disable cache, not thru args.`)
+  }
+  // extends config
+  if (options.jestConfig) {
+    merge(extraConfig, options.jestConfig)
+  }
+  if (options.tsJestConfig) {
+    const globalConfig: any = extraConfig.globals || (extraConfig.globals = {})
+    const tsJestConfig = globalConfig['ts-jest'] || (globalConfig['ts-jest'] = {})
+    merge(tsJestConfig, options.tsJestConfig)
   }
 
-  // run in band
+  if (noCache || writeIo) {
+    cmdArgs.push('--no-cache')
+  } else if (!(baseConfig.cacheDirectory || extraConfig.cacheDirectory)) {
+    // force the cache directory if not set
+    extraConfig.cacheDirectory = join(Paths.cacheDir, `e2e-${template}`)
+  }
+
+  // write final config
+  const finalConfig = merge({}, baseConfig, extraConfig)
+  if (Object.keys(extraConfig).length !== 0) {
+    if (configFile === 'package.json') {
+      pkg.jest = finalConfig
+      outputJsonSync(jestConfigPath, pkg)
+    } else {
+      outputFileSync(jestConfigPath, `module.exports = ${JSON.stringify(finalConfig, null, 2)}`, 'utf8')
+    }
+  }
+
+  // ensure we run in band
   if (!cmdArgs.includes('--runInBand')) {
     cmdArgs.push('--runInBand')
   }
@@ -142,6 +175,7 @@ export function run(name: string, options: RunTestOptions = {}): RunResult {
     args: cmdArgs,
     env: mergedEnv,
     ioDir: writeIo ? ioDir : undefined,
+    config: finalConfig,
   })
 }
 

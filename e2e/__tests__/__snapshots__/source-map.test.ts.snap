@@ -34,7 +34,7 @@ exports[`using template "default" should have the source maps comment 1`] = `
 `;
 
 exports[`using template "default" should report correct line numbers 1`] = `
-  × jest --config {"preset":"ts-jest","testEnvironment":"node","globals":{"ts-jest":{"tsConfig":{},"diagnostics":{"ignoreCodes":[5023,7027]}}}}
+  × jest --no-cache
   ↳ exit code: 1
   ===[ STDOUT ]===================================================================
   console.log main.ts:2
@@ -121,7 +121,7 @@ exports[`using template "with-babel-6" should have the source maps comment 1`] =
 `;
 
 exports[`using template "with-babel-6" should report correct line numbers 1`] = `
-  × jest --config {"preset":"ts-jest","testEnvironment":"node","globals":{"ts-jest":{"tsConfig":{},"babelConfig":true,"diagnostics":{"ignoreCodes":[5023,7027]}}}}
+  × jest --no-cache
   ↳ exit code: 1
   ===[ STDOUT ]===================================================================
   console.log main.ts:2
@@ -214,7 +214,7 @@ exports[`using template "with-babel-7" should have the source maps comment 1`] =
 `;
 
 exports[`using template "with-babel-7" should report correct line numbers 1`] = `
-  × jest --config {"preset":"ts-jest","testEnvironment":"node","globals":{"ts-jest":{"tsConfig":{},"babelConfig":true,"diagnostics":{"ignoreCodes":[5023,7027]}}}}
+  × jest --no-cache
   ↳ exit code: 1
   ===[ STDOUT ]===================================================================
   console.log main.ts:2
@@ -301,7 +301,7 @@ exports[`using template "with-jest-22" should have the source maps comment 1`] =
 `;
 
 exports[`using template "with-jest-22" should report correct line numbers 1`] = `
-  × jest --config {"transform":{"^.+\\\\.tsx?$":"ts-jest"},"testMatch":["**/__tests__/**/*.js?(x)","**/?(*.)+(spec|test).js?(x)","**/__tests__/**/*.ts?(x)","**/?(*.)+(spec|test).ts?(x)"],"moduleFileExtensions":["js","json","jsx","node","ts","tsx"],"testEnvironment":"node","globals":{"ts-jest":{"tsConfig":{},"diagnostics":{"ignoreCodes":[5023,7027]}}}}
+  × jest --no-cache
   ↳ exit code: 1
   ===[ STDOUT ]===================================================================
   console.log main.ts:2
@@ -386,7 +386,7 @@ exports[`using template "with-typescript-2-7" should have the source maps commen
 `;
 
 exports[`using template "with-typescript-2-7" should report correct line numbers 1`] = `
-  × jest --config {"preset":"ts-jest","testEnvironment":"node","globals":{"ts-jest":{"tsConfig":{},"diagnostics":{"ignoreCodes":[5023,7027]}}}}
+  × jest --no-cache
   ↳ exit code: 1
   ===[ STDOUT ]===================================================================
   console.log main.ts:2
