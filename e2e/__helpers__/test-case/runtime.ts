@@ -16,7 +16,7 @@ import {
   writeFileSync,
 } from 'fs-extra'
 import merge from 'lodash.merge'
-import { join, relative, sep } from 'path'
+import { join, relative, resolve, sep } from 'path'
 
 import * as Paths from '../../../scripts/lib/paths'
 
@@ -49,7 +49,7 @@ function hooksSourceWith(vars: Record<string, any>): string {
 }
 
 export function run(name: string, options: RunTestOptions = {}): RunResult {
-  const { args = [], env = {}, template, inject, writeIo } = options
+  const { args = [], env = {}, template, inject, writeIo, noCache } = options
   const { workdir: dir, sourceDir, hooksFile, ioDir } = prepareTest(
     name,
     template || templateNameForPath(join(Paths.e2eSourceDir, name)),
@@ -66,7 +66,9 @@ export function run(name: string, options: RunTestOptions = {}): RunResult {
     cmdArgs.push('-u')
   }
   cmdArgs.push(...args)
+  let isScriptWithConfig = false
   if (!inject && pkg.scripts && pkg.scripts.test) {
+    isScriptWithConfig = /['" ]\-\-config['" ]/.test(pkg.scripts.test)
     if (cmdArgs.length) {
       cmdArgs.unshift('--')
     }
@@ -77,14 +79,29 @@ export function run(name: string, options: RunTestOptions = {}): RunResult {
     shortCmd = 'jest'
   }
 
-  // merge given config extend
-  if (options.jestConfig || options.tsJestConfig) {
-    let originalConfig: any = join(dir, 'jest.config.js')
-    if (existsSync(originalConfig)) {
-      originalConfig = require(originalConfig)
+  // check/merge config
+  if (isScriptWithConfig) {
+    throw new Error(`Cannot extend config of a test case using a package script which has '--config' in command line.`)
+  }
+  let originalConfig: any = join(dir, 'jest.config.js')
+  if (cmdArgs.includes('--config')) {
+    const confArg = cmdArgs[cmdArgs.indexOf('--config') + 1]
+    if (confArg.startsWith('{')) {
+      originalConfig = JSON.parse(confArg)
     } else {
-      originalConfig = require(join(dir, 'package.json')).jest || {}
+      originalConfig = require(resolve(dir, confArg))
     }
+  } else if (existsSync(originalConfig)) {
+    originalConfig = require(originalConfig)
+  } else {
+    originalConfig = require(join(dir, 'package.json')).jest || {}
+  }
+  let finalConfig = originalConfig as jest.InitialOptions
+  // extends config
+  if (options.jestConfig || options.tsJestConfig) {
+    finalConfig = merge({}, originalConfig, options.jestConfig, {
+      globals: { 'ts-jest': options.tsJestConfig || {} },
+    })
     cmdArgs.push(
       '--config',
       JSON.stringify(
@@ -93,6 +110,16 @@ export function run(name: string, options: RunTestOptions = {}): RunResult {
         }),
       ),
     )
+  }
+
+  // verify that we have the cache directory set
+  let hasCaching = !(cmdArgs.includes('--no-cache') || finalConfig.cache === false)
+  if (hasCaching && (noCache || writeIo)) {
+    cmdArgs.push('--no-cache')
+    hasCaching = false
+  }
+  if (hasCaching && !finalConfig.cacheDirectory) {
+    throw new Error(`The cacheDirectory is not set in the config`)
   }
 
   // run in band

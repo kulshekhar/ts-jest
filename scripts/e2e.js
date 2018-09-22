@@ -165,8 +165,8 @@ setupE2e()
 log('templates are ready')
 
 if (!prepareOnly) {
-  log('clearing Jest cache')
-  spawnSync('jest', ['--clearCache'])
+  // log('clearing Jest cache')
+  // spawnSync('jest', ['--clearCache'])
 
   log('running tests')
   jest.run(['--config', configFile, ...parentArgs])

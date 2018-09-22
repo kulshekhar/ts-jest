@@ -20,5 +20,5 @@ module.exports = Object.assign({}, cfg, {
       tsConfig: "./tsconfig.json",
     },
   },
-  // testResultsProcessor: "jest-teamcity-reporter",
+  cacheDirectory: '../../node_modules/.cache',
 })

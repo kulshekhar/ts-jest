@@ -19,15 +19,16 @@ describe('With unsupported version test', () => {
 describe('TS_JEST_LOG', () => {
   const testCase = configureTestCase('simple', {
     env: { TS_JEST_LOG: 'ts-jest.log' },
+    noCache: true,
   })
 
   testCase.runWithTemplates(allValidPackageSets, 0, (runTest, { templateName }) => {
-    it(`should pass and create log file when using tempalte "${templateName}"`, () => {
+    it(`should pass and create log file when using template "${templateName}"`, () => {
       const result = runTest()
       expect(result.status).toBe(0)
       expect(existsSync(result.logFilePath))
       const filteredEntries = result.logFileEntries
-        // keep only debu and above
+        // keep only debug and above
         .filter(m => (m.context[LogContexts.logLevel] || 0) >= LogLevels.debug)
         // simplify entires
         .map(e => result.normalize(`[level:${e.context[LogContexts.logLevel]}] ${e.message}`))

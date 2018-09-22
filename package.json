@@ -4,7 +4,7 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "bin": "cli.js",
-  "description": "A preprocessor with sourcemap support to help use Typescript with Jest",
+  "description": "A preprocessor with source maps support to help use TypeScript with Jest",
   "scripts": {
     "prebuild": "node scripts/clean-dist.js",
     "build": "tsc -p tsconfig.build.json",

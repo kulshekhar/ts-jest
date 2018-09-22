@@ -116,7 +116,7 @@ exports[`With diagnostics, first throws should fail using template "with-typescr
 `;
 
 exports[`With diagnostics, warn only should pass using template "default" 1`] = `
-  √ jest --config {"preset":"ts-jest","testEnvironment":"node","globals":{"ts-jest":{"tsConfig":{},"diagnostics":{"warnOnly":true}}}}
+  √ jest --config {"preset":"ts-jest","testEnvironment":"node","globals":{"ts-jest":{"tsConfig":{},"diagnostics":{"warnOnly":true}}},"cacheDirectory":"./node_modules/.cache"} --no-cache
   ↳ exit code: 0
   ===[ STDOUT ]===================================================================
   
@@ -138,7 +138,7 @@ exports[`With diagnostics, warn only should pass using template "default" 1`] = 
 `;
 
 exports[`With diagnostics, warn only should pass using template "with-babel-6" 1`] = `
-  √ jest --config {"preset":"ts-jest","testEnvironment":"node","globals":{"ts-jest":{"tsConfig":{},"babelConfig":true,"diagnostics":{"warnOnly":true}}}}
+  √ jest --config {"preset":"ts-jest","testEnvironment":"node","globals":{"ts-jest":{"tsConfig":{},"babelConfig":true,"diagnostics":{"warnOnly":true}}},"cacheDirectory":"./node_modules/.cache"} --no-cache
   ↳ exit code: 0
   ===[ STDOUT ]===================================================================
   
@@ -160,7 +160,7 @@ exports[`With diagnostics, warn only should pass using template "with-babel-6" 1
 `;
 
 exports[`With diagnostics, warn only should pass using template "with-babel-7" 1`] = `
-  √ jest --config {"preset":"ts-jest","testEnvironment":"node","globals":{"ts-jest":{"tsConfig":{},"babelConfig":true,"diagnostics":{"warnOnly":true}}}}
+  √ jest --config {"preset":"ts-jest","testEnvironment":"node","globals":{"ts-jest":{"tsConfig":{},"babelConfig":true,"diagnostics":{"warnOnly":true}}},"cacheDirectory":"./node_modules/.cache"} --no-cache
   ↳ exit code: 0
   ===[ STDOUT ]===================================================================
   
@@ -182,7 +182,7 @@ exports[`With diagnostics, warn only should pass using template "with-babel-7" 1
 `;
 
 exports[`With diagnostics, warn only should pass using template "with-jest-22" 1`] = `
-  √ jest --config {"transform":{"^.+\\\\.tsx?$":"ts-jest"},"testMatch":["**/__tests__/**/*.js?(x)","**/?(*.)+(spec|test).js?(x)","**/__tests__/**/*.ts?(x)","**/?(*.)+(spec|test).ts?(x)"],"moduleFileExtensions":["js","json","jsx","node","ts","tsx"],"testEnvironment":"node","globals":{"ts-jest":{"tsConfig":{},"diagnostics":{"warnOnly":true}}}}
+  √ jest --config {"transform":{"^.+\\\\.tsx?$":"ts-jest"},"testMatch":["**/__tests__/**/*.js?(x)","**/?(*.)+(spec|test).js?(x)","**/__tests__/**/*.ts?(x)","**/?(*.)+(spec|test).ts?(x)"],"moduleFileExtensions":["js","json","jsx","node","ts","tsx"],"testEnvironment":"node","globals":{"ts-jest":{"tsConfig":{},"diagnostics":{"warnOnly":true}}},"cacheDirectory":"./node_modules/.cache"} --no-cache
   ↳ exit code: 0
   ===[ STDOUT ]===================================================================
   
@@ -204,7 +204,7 @@ exports[`With diagnostics, warn only should pass using template "with-jest-22" 1
 `;
 
 exports[`With diagnostics, warn only should pass using template "with-typescript-2-7" 1`] = `
-  √ jest --config {"preset":"ts-jest","testEnvironment":"node","globals":{"ts-jest":{"tsConfig":{},"diagnostics":{"ignoreCodes":[5023],"warnOnly":true}}}}
+  √ jest --config {"preset":"ts-jest","testEnvironment":"node","globals":{"ts-jest":{"tsConfig":{},"diagnostics":{"ignoreCodes":[5023],"warnOnly":true}}},"cacheDirectory":"./node_modules/.cache"} --no-cache
   ↳ exit code: 0
   ===[ STDOUT ]===================================================================
   
