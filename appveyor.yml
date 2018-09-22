@@ -24,6 +24,7 @@ install:
   # - set CI=true
   # Our E2E work dir
   - set TS_JEST_E2E_WORKDIR=%APPDATA%\ts-jest-e2e
+  - set TS_JEST_E2E_OPTIMIZATIONS=1
   - npm ci --ignore-scripts
   - npm run clean -- --when-ci-commit-message
 

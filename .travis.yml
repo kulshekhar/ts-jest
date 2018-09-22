@@ -2,6 +2,7 @@ language: node_js
 
 env:
   - TS_JEST_E2E_WORKDIR=/tmp/ts-jest-e2e-workdir
+  - TS_JEST_E2E_OPTIMIZATIONS=1
 
 cache:
   npm: true

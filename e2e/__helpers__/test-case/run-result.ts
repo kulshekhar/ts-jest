@@ -20,6 +20,7 @@ export default class RunResult {
       args: string[]
       env: { [key: string]: string }
       config: jest.InitialOptions
+      digest: string
     }>,
   ) {}
   get logFilePath() {
@@ -59,11 +60,14 @@ export default class RunResult {
     return normalizeJestOutput(this.stdout)
   }
   get cmdLine() {
-    return this.normalize(
-      [this.context.cmd, ...this.context.args]
-        .filter(a => !['-u', '--updateSnapshot', '--runInBand', '--'].includes(a))
-        .join(' '),
+    const args = [this.context.cmd, ...this.context.args].filter(
+      a => !['-u', '--updateSnapshot', '--runInBand', '--'].includes(a),
     )
+    const configIndex = args.indexOf('--config')
+    if (configIndex !== -1) {
+      args.splice(configIndex, 2)
+    }
+    return this.normalize(args.join(' '))
   }
 
   ioFor(relFilePath: string): ProcessedFileIo {
