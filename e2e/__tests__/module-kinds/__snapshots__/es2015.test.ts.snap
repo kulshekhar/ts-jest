@@ -1,0 +1,157 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`run with options: {"module":"es2015","allowSyntheticDefaultImports":false} 1`] = `
+  × jest --no-cache
+  ↳ exit code: 1
+  ===[ STDOUT ]===================================================================
+  
+  ===[ STDERR ]===================================================================
+  ts-jest[config] (WARN) TypeScript diagnostics (customize using \`[jest-config].globals.ts-jest.diagnostics\` option):
+  message TS151001: If you have issues related to imports, you should consider setting \`esModuleInterop\` to \`true\` in your TypeScript configuration file (usually \`tsconfig.json\`). See https://blogs.msdn.microsoft.com/typescript/2018/01/31/announcing-typescript-2-7/#easier-ecmascript-module-interoperability for more information.
+  PASS ./import-legacy.spec.ts
+  PASS ./import-star.spec.ts
+  ts-jest[ts-compiler] (WARN) TypeScript diagnostics (customize using \`[jest-config].globals.ts-jest.diagnostics\` option):
+  import-default.spec.ts:1:8 - error TS1192: Module '"/private/var/folders/dr/dyg3_v313zjfpq82wd_4b0lr0000gn/T/--ts-jest-temp-e2e--/default/module-kinds-3440b1e.1/lib"' has no default export.
+  
+  1 import lib from './lib'
+           ~~~
+  FAIL ./import-default.spec.ts
+    ● import default
+  
+      expect(received).toBe(expected) // Object.is equality
+  
+      Expected: "function"
+      Received: "undefined"
+  
+        2 | 
+        3 | test('import default', () => {
+      > 4 |   expect(typeof lib).toBe('function')
+          |                      ^
+        5 |   expect(lib()).toBe('foo')
+        6 |   expect(lib.bar).toBe('bar')
+        7 | })
+  
+        at Object.<anonymous> (import-default.spec.ts:4:22)
+  
+  Test Suites: 1 failed, 2 passed, 3 total
+  Tests:       1 failed, 2 passed, 3 total
+  Snapshots:   0 total
+  Time:        XXs
+  Ran all test suites.
+  ================================================================================
+`;
+
+exports[`run with options: {"module":"es2015","allowSyntheticDefaultImports":true} 1`] = `
+  × jest --no-cache
+  ↳ exit code: 1
+  ===[ STDOUT ]===================================================================
+  
+  ===[ STDERR ]===================================================================
+  PASS ./import-legacy.spec.ts
+  PASS ./import-star.spec.ts
+  FAIL ./import-default.spec.ts
+    ● import default
+  
+      expect(received).toBe(expected) // Object.is equality
+  
+      Expected: "function"
+      Received: "undefined"
+  
+        2 | 
+        3 | test('import default', () => {
+      > 4 |   expect(typeof lib).toBe('function')
+          |                      ^
+        5 |   expect(lib()).toBe('foo')
+        6 |   expect(lib.bar).toBe('bar')
+        7 | })
+  
+        at Object.<anonymous> (import-default.spec.ts:4:22)
+  
+  Test Suites: 1 failed, 2 passed, 3 total
+  Tests:       1 failed, 2 passed, 3 total
+  Snapshots:   0 total
+  Time:        XXs
+  Ran all test suites.
+  ================================================================================
+`;
+
+exports[`run with options: {"module":"es2015","esModuleInterop":true} 1`] = `
+  × jest --no-cache
+  ↳ exit code: 1
+  ===[ STDOUT ]===================================================================
+  
+  ===[ STDERR ]===================================================================
+  PASS ./import-legacy.spec.ts
+  ts-jest[ts-compiler] (WARN) TypeScript diagnostics (customize using \`[jest-config].globals.ts-jest.diagnostics\` option):
+  import-star.spec.ts:5:10 - error TS2349: Cannot invoke an expression whose type lacks a call signature. Type 'typeof lib' has no compatible call signatures.
+  
+  5   expect(lib()).toBe('foo')
+             ~~~~~
+  
+    import-star.spec.ts:1:1
+      1 import * as lib from './lib'
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      Type originates at this import. A namespace-style import cannot be called or constructed, and will cause a failure at runtime. Consider using a default import or import require here instead.
+  FAIL ./import-star.spec.ts
+    ● import default
+  
+      expect(received).toBe(expected) // Object.is equality
+  
+      Expected: "function"
+      Received: "object"
+  
+        2 | 
+        3 | test('import default', () => {
+      > 4 |   expect(typeof lib).toBe('function')
+          |                      ^
+        5 |   expect(lib()).toBe('foo')
+        6 |   expect(lib.bar).toBe('bar')
+        7 | })
+  
+        at Object.<anonymous> (import-star.spec.ts:4:22)
+  
+  PASS ./import-default.spec.ts
+  
+  Test Suites: 1 failed, 2 passed, 3 total
+  Tests:       1 failed, 2 passed, 3 total
+  Snapshots:   0 total
+  Time:        XXs
+  Ran all test suites.
+  ================================================================================
+`;
+
+exports[`run with options: {"module":"es2015"} 1`] = `
+  × jest --no-cache
+  ↳ exit code: 1
+  ===[ STDOUT ]===================================================================
+  
+  ===[ STDERR ]===================================================================
+  ts-jest[config] (WARN) TypeScript diagnostics (customize using \`[jest-config].globals.ts-jest.diagnostics\` option):
+  message TS151001: If you have issues related to imports, you should consider setting \`esModuleInterop\` to \`true\` in your TypeScript configuration file (usually \`tsconfig.json\`). See https://blogs.msdn.microsoft.com/typescript/2018/01/31/announcing-typescript-2-7/#easier-ecmascript-module-interoperability for more information.
+  PASS ./import-legacy.spec.ts
+  PASS ./import-star.spec.ts
+  FAIL ./import-default.spec.ts
+    ● import default
+  
+      expect(received).toBe(expected) // Object.is equality
+  
+      Expected: "function"
+      Received: "undefined"
+  
+        2 | 
+        3 | test('import default', () => {
+      > 4 |   expect(typeof lib).toBe('function')
+          |                      ^
+        5 |   expect(lib()).toBe('foo')
+        6 |   expect(lib.bar).toBe('bar')
+        7 | })
+  
+        at Object.<anonymous> (import-default.spec.ts:4:22)
+  
+  Test Suites: 1 failed, 2 passed, 3 total
+  Tests:       1 failed, 2 passed, 3 total
+  Snapshots:   0 total
+  Time:        XXs
+  Ran all test suites.
+  ================================================================================
+`;
