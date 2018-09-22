@@ -36,9 +36,9 @@ script:
   # only grab coverage data on node 10
   - |
       if [[ "$(node --version)" == v10.* ]]; then
-        npm run test -- --coverage;
+        npm run test -- --runInBand --coverage;
       else
-        npm run test;
+        npm run test -- --runInBand;
       fi
 
 after_success:

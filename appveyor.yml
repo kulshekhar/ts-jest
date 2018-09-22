@@ -21,7 +21,7 @@ install:
   - ps: Install-Product node 8 x64
   - npm install -g npm@^5
   # Typical npm stuff.
-  - set CI=true
+  # - set CI=true
   # Our E2E work dir
   - set TS_JEST_E2E_WORKDIR=%APPDATA%\ts-jest-e2e
   - npm ci --ignore-scripts
@@ -33,7 +33,7 @@ cache:
 
 # Post-install test scripts.
 test_script:
-  - cmd: npm run test
+  - cmd: npm run test -- --runInBand
 
 # skip_commits:
 #   files:
