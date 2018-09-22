@@ -45,16 +45,16 @@ export default class RunResult {
     return this.result.status
   }
   get output() {
-    return stripAnsiColors(this.result.output ? this.result.output.join('\n\n') : '')
+    return this.normalize(stripAnsiColors(this.result.output ? this.result.output.join('\n\n') : ''))
   }
   get stderr() {
-    return stripAnsiColors((this.result.stderr || '').toString())
+    return this.normalize(stripAnsiColors((this.result.stderr || '').toString()))
   }
   get normalizedStderr() {
     return normalizeJestOutput(this.stderr)
   }
   get stdout() {
-    return stripAnsiColors((this.result.stdout || '').toString())
+    return this.normalize(stripAnsiColors((this.result.stdout || '').toString()))
   }
   get normalizedStdout() {
     return normalizeJestOutput(this.stdout)
