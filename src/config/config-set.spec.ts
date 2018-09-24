@@ -1,6 +1,6 @@
 import { testing } from 'bs-logger'
 import { resolve } from 'path'
-import ts, { Diagnostic, ModuleKind, ScriptTarget } from 'typescript'
+import ts, { Diagnostic, DiagnosticCategory, ModuleKind, ScriptTarget } from 'typescript'
 
 import * as _myModule from '..'
 import * as fakers from '../__helpers__/fakers'
@@ -295,7 +295,7 @@ describe('typescript', () => {
     target.clear()
     const cs = createConfigSet({
       tsJestConfig: {
-        tsConfig: { module: 'ES6', esModuleInterop: false, allowSyntheticDefaultImports: false } as any,
+        tsConfig: { module: 'ES6', esModuleInterop: false } as any,
         diagnostics: { warnOnly: true, pretty: false },
       },
       resolve: null,
@@ -307,7 +307,7 @@ describe('typescript', () => {
     })
     expect(target.lines.warn.join()).toMatchInlineSnapshot(`
 "[level:40] TypeScript diagnostics (customize using \`[jest-config].globals.ts-jest.diagnostics\` option):
-warning TS151001: If you have issues related to imports, you should consider setting \`esModuleInterop\` to \`true\` in your TypeScript configuration file (usually \`tsconfig.json\`). See https://blogs.msdn.microsoft.com/typescript/2018/01/31/announcing-typescript-2-7/#easier-ecmascript-module-interoperability for more information.
+message TS151001: If you have issues related to imports, you should consider setting \`esModuleInterop\` to \`true\` in your TypeScript configuration file (usually \`tsconfig.json\`). See https://blogs.msdn.microsoft.com/typescript/2018/01/31/announcing-typescript-2-7/#easier-ecmascript-module-interoperability for more information.
 "
 `)
   })
@@ -540,15 +540,20 @@ Object {
 
 describe('raiseDiagnostics', () => {
   const createTsError = jest.fn(
-    (list: Diagnostic[]) => new Error(list.map(d => `[${d.code}] ${d.messageText}`).join('\n')),
+    (list: Diagnostic[]) => new Error(list.map(d => `[TS${d.code}] ${d.messageText}`).join('\n')),
   )
   const filterDiagnostics = jest.fn(list => list)
   const logger = testing.createLoggerMock()
-  const diagnostic: Diagnostic = { messageText: 'foo', code: 'TS9999' } as any
+  const makeDiagnostic = ({
+    messageText = 'foo',
+    code = 9999,
+    category = DiagnosticCategory.Warning,
+  }: Partial<Diagnostic> = {}): Diagnostic => ({ messageText, code, category } as any)
   it('should throw when warnOnly is false', () => {
     const { raiseDiagnostics } = createConfigSet({ createTsError, filterDiagnostics })
     expect(() => raiseDiagnostics([])).not.toThrow()
-    expect(() => raiseDiagnostics([diagnostic])).toThrowErrorMatchingInlineSnapshot(`"[TS9999] foo"`)
+    expect(() => raiseDiagnostics([makeDiagnostic()])).toThrowErrorMatchingInlineSnapshot(`"[TS9999] foo"`)
+    expect(() => raiseDiagnostics([makeDiagnostic({ category: DiagnosticCategory.Message })])).not.toThrow()
   })
   it('should not throw when warnOnly is true', () => {
     const { raiseDiagnostics } = createConfigSet({
@@ -559,7 +564,7 @@ describe('raiseDiagnostics', () => {
     })
     logger.target.clear()
     expect(() => raiseDiagnostics([])).not.toThrow()
-    expect(() => raiseDiagnostics([diagnostic])).not.toThrow()
+    expect(() => raiseDiagnostics([makeDiagnostic()])).not.toThrow()
     expect(logger.target.lines).toMatchInlineSnapshot(`
 Array [
   "[level:40] [TS9999] foo

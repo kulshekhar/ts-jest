@@ -23,8 +23,13 @@ if (parentArgs.includes('--coverage')) {
 if (!parentArgs.includes('--runInBand')) parentArgs.push('--runInBand')
 const prepareOnly = parentArgs.includes('--prepareOnly')
 
+// eslint-disable-next-line no-unused-vars
+function enableOptimizations() {
+  return !!process.env.TS_JEST_E2E_OPTIMIZATIONS
+}
+
 function getDirectories(rootDir) {
-  return fs.readdirSync(rootDir).filter(function(file) {
+  return fs.readdirSync(rootDir).filter(function (file) {
     return fs.statSync(path.join(rootDir, file)).isDirectory()
   })
 }
@@ -64,10 +69,18 @@ function setupE2e() {
     )
   }
 
+  // cleanup files related to old test run
+  getDirectories(Paths.e2eWorkDir).forEach(name => {
+    const dir = path.join(Paths.e2eWorkDir, name)
+    if (dir === Paths.e2eWorkTemplatesDir) return
+    log('cleaning old artifacts in', name)
+    fs.removeSync(dir)
+  })
+
   // install with `npm ci` in each template, this is the fastest but needs a package lock file,
   // that is why we end with the npm install of our bundle
   getDirectories(Paths.e2eTemplatesDir).forEach(name => {
-    log('checking template ', name)
+    log('checking template', name)
     const sourceDir = path.join(Paths.e2eTemplatesDir, name)
     const dir = path.join(Paths.e2eWorkTemplatesDir, name)
     const nodeModulesDir = path.join(dir, 'node_modules')

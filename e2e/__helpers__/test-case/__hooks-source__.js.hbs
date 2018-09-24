@@ -3,13 +3,13 @@
 const fs = require('fs')
 const path = require('path')
 const root = __dirname
-const writeProcessIoTo = {{writeProcessIoTo}}
+const writeProcessIoTo = path.resolve(root, {{writeProcessIoTo}})
 
 exports.afterProcess = function (args, result) {
   // const source = args[0]
   const filePath = args[1]
   const relPath = path.relative(root, filePath)
-  if (writeProcessIoTo && filePath.startsWith(`${root}${path.sep}`)) {
+  if (filePath.startsWith(`${root}${path.sep}`)) {
     const dest = `${path.join(writeProcessIoTo, relPath)}.json`
     const segments = relPath.split(path.sep)
     segments.pop()

@@ -2,7 +2,7 @@ import { allValidPackageSets } from '../__helpers__/templates'
 import { configureTestCase } from '../__helpers__/test-case'
 
 const testCase = configureTestCase('simple', {
-  args: ['--coverage'],
+  jestConfig: { collectCoverage: true },
 })
 
 testCase.runWithTemplates(allValidPackageSets, 0, (runTest, { templateName }) => {

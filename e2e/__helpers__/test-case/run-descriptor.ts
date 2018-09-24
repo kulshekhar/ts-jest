@@ -26,7 +26,10 @@ export default class RunDescriptor {
   }
 
   get sourcePackageJson() {
-    return this._sourcePackageJson || (this._sourcePackageJson = require(join(this.sourceDir, 'package.json')))
+    try {
+      return this._sourcePackageJson || (this._sourcePackageJson = require(join(this.sourceDir, 'package.json')))
+    } catch (err) {}
+    return {}
   }
 
   get templateName(): string {
@@ -45,8 +48,18 @@ export default class RunDescriptor {
     if (logUnlessStatus != null && logUnlessStatus !== result.status) {
       // tslint:disable-next-line:no-console
       console.log(
-        `Output of test run in "${this.name}" using template "${this.templateName}" (exit code: ${result.status}):\n\n`,
+        '='.repeat(70),
+        '\n',
+        `Test exited with unexpected status in "${this.name}" using template "${this.templateName}" (exit code: ${
+          result.status
+        }):\n`,
+        result.context.cmd,
+        result.context.args.join(' '),
+        '\n\n',
         result.output.trim(),
+        '\n',
+        '='.repeat(70),
+        '\n',
       )
     }
     return result
