@@ -405,6 +405,29 @@ Migrated Jest configuration:
 `)
     })
 
+    it('should reset testMatch if testRegex is used', async () => {
+      expect.assertions(1)
+      fs.existsSync.mockImplementation(() => true)
+      jest.mock(
+        pkgPaths.next,
+        () => ({
+          jest: {
+            testRegex: 'foo-pattern',
+          },
+        }),
+        { virtual: true },
+      )
+      const res = await runCli(...noOption, pkgPaths.current)
+      expect(res.stdout).toMatchInlineSnapshot(`
+"{
+  \\"testRegex\\": \\"foo-pattern\\",
+  \\"preset\\": \\"ts-jest\\",
+  \\"testMatch\\": null
+}
+"
+`)
+    })
+
     it('should normalize transform values', async () => {
       expect.assertions(1)
       fs.existsSync.mockImplementation(() => true)
@@ -434,6 +457,7 @@ Migrated Jest configuration:
 "
 `)
     })
+
     it('should output help', async () => {
       const res = await runCli('help', noOption[0])
       expect(res).toMatchInlineSnapshot(`

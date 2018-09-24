@@ -50,8 +50,12 @@ export const run: CliCommand = async (args: Arguments /*, logger: Logger*/) => {
       delete migratedConfig.moduleFileExtensions
     }
   }
+  // there is a testRegex, remove our testMatch
+  if (migratedConfig.testRegex && usesPreset) {
+    migratedConfig.testMatch = null as any
+  }
   // check the testMatch
-  if (migratedConfig.testMatch && migratedConfig.testMatch.length && usesPreset) {
+  else if (migratedConfig.testMatch && migratedConfig.testMatch.length && usesPreset) {
     const presetValue = dedupSort(presets.testMatch).join('::')
     const migratedValue = dedupSort(migratedConfig.testMatch).join('::')
     if (presetValue === migratedValue) {
