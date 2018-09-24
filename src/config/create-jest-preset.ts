@@ -12,18 +12,16 @@ const defaults = jestConfig.defaults || {
   moduleFileExtensions: ['js', 'json', 'jsx', 'node'],
 }
 
-export function createJestPreset(
-  { allowJs = false }: CreateJestPresetOptions = {},
-  from: jest.InitialOptions = defaults,
-) {
+export function createJestPreset({ allowJs = false }: CreateJestPresetOptions = {}, from?: jest.InitialOptions) {
   logger.debug({ allowJs }, 'creating jest presets', allowJs ? 'handling' : 'not handling', 'JavaScript files')
+  from = { ...defaults, ...from }
   return {
     transform: {
       ...from.transform,
       [allowJs ? '^.+\\.[tj]sx?$' : '^.+\\.tsx?$']: 'ts-jest',
     },
-    testMatch: dedup([...from.testMatch, '**/__tests__/**/*.ts?(x)', '**/?(*.)+(spec|test).ts?(x)']),
-    moduleFileExtensions: dedup([...from.moduleFileExtensions, 'ts', 'tsx']),
+    testMatch: dedup([...(from.testMatch || []), '**/__tests__/**/*.ts?(x)', '**/?(*.)+(spec|test).ts?(x)']),
+    moduleFileExtensions: dedup([...(from.moduleFileExtensions || []), 'ts', 'tsx']),
   }
 }
 
