@@ -1,9 +1,7 @@
-import { testing } from 'bs-logger'
 import * as _fs from 'fs'
 import { normalize, resolve } from 'path'
 
-import { mockObject, mockWriteStream, mocked } from '../__helpers__/mocks'
-import { rootLogger as _rootLogger } from '../util/logger'
+import { logTargetMock, mockObject, mockWriteStream, mocked } from '../__helpers__/mocks'
 
 import { processArgv } from '.'
 
@@ -11,7 +9,7 @@ import { processArgv } from '.'
 jest.mock('fs')
 
 const fs = mocked(_fs)
-const rootLogger = _rootLogger as testing.LoggerMock
+const logTarget = logTargetMock()
 let lastExitCode: number | undefined
 
 const runCli = async (
@@ -19,7 +17,7 @@ const runCli = async (
 ): Promise<{ stdout: string; stderr: string; exitCode: number | undefined; log: string }> => {
   mockedProcess.stderr.clear()
   mockedProcess.stdout.clear()
-  rootLogger.target.clear()
+  logTarget.clear()
   mockedProcess.argv.splice(2, mockedProcess.argv.length - 2, ...args)
   lastExitCode = undefined
   await processArgv()
@@ -27,7 +25,7 @@ const runCli = async (
     exitCode: lastExitCode,
     stdout: mockedProcess.stdout.written.join('\n'),
     stderr: mockedProcess.stderr.written.join('\n'),
-    log: rootLogger.target.lines.join('\n'),
+    log: logTarget.lines.join('\n'),
   }
 }
 
@@ -56,7 +54,7 @@ beforeEach(() => {
   fs.writeFileSync.mockClear()
   fs.existsSync.mockClear()
   fs.readFileSync.mockClear()
-  rootLogger.target.clear()
+  logTarget.clear()
 })
 afterEach(() => {
   mockedProcess.mockRestore()
@@ -274,11 +272,18 @@ Options:
   describe('migrate', async () => {
     const pkgPaths = {
       _id: 0,
+      _cfgId: 0,
       get next() {
         return `./foo/${++pkgPaths._id}/package.json`
       },
       get current() {
         return `./foo/${pkgPaths._id}/package.json`
+      },
+      get nextCfg() {
+        return `./foo/${pkgPaths._id}/jest.config.${++pkgPaths._cfgId}.js`
+      },
+      get currentCfg() {
+        return `./foo/${pkgPaths._id}/jest.config.${pkgPaths._cfgId}.js`
       },
     }
     const noOption = ['config:migrate']
@@ -315,12 +320,16 @@ Options:
       expect(res).toMatchInlineSnapshot(`
 Object {
   "exitCode": 0,
-  "log": "[level:20] creating jest presets not handling JavaScript files
-",
+  "log": "",
   "stderr": "
 Migrated Jest configuration:
+
+
+Detected preset 'default' as the best matching preset for your configuration.
+Visit https://kulshekhar.github.io/ts-jest/user/config/#jest-preset for more information about presets.
+
 ",
-  "stdout": "{
+  "stdout": "\\"jest\\": {
   \\"globals\\": {
     \\"ts-jest\\": {
       \\"tsConfig\\": {
@@ -350,12 +359,11 @@ Migrated Jest configuration:
       expect(res).toMatchInlineSnapshot(`
 Object {
   "exitCode": 0,
-  "log": "[level:20] creating jest presets handling JavaScript files
-",
+  "log": "",
   "stderr": "
 Migrated Jest configuration:
 ",
-  "stdout": "{
+  "stdout": "\\"jest\\": {
   \\"globals\\": {
     \\"ts-jest\\": {
       \\"tsConfig\\": {
@@ -391,7 +399,7 @@ Migrated Jest configuration:
       )
       const res = await runCli(...noOption, pkgPaths.current)
       expect(res.stdout).toMatchInlineSnapshot(`
-"{
+"\\"jest\\": {
   \\"globals\\": {
     \\"ts-jest\\": {
       \\"tsConfig\\": {
@@ -419,10 +427,76 @@ Migrated Jest configuration:
       )
       const res = await runCli(...noOption, pkgPaths.current)
       expect(res.stdout).toMatchInlineSnapshot(`
-"{
+"\\"jest\\": {
   \\"testRegex\\": \\"foo-pattern\\",
   \\"preset\\": \\"ts-jest\\",
   \\"testMatch\\": null
+}
+"
+`)
+    })
+
+    it('should detect best preset', async () => {
+      expect.assertions(5)
+      fs.existsSync.mockImplementation(() => true)
+      jest.mock(pkgPaths.next, () => ({}), { virtual: true })
+
+      // defaults
+      jest.doMock(pkgPaths.nextCfg, () => ({}), { virtual: true })
+      let res = await runCli(...noOption, pkgPaths.currentCfg)
+      expect(res.stdout).toMatchInlineSnapshot(`
+"module.exports = {
+  preset: 'ts-jest',
+}
+"
+`)
+
+      // js-with-ts from args
+      jest.doMock(pkgPaths.nextCfg, () => ({}), { virtual: true })
+      res = await runCli(...noOption, '--allow-js', pkgPaths.currentCfg)
+      expect(res.stdout).toMatchInlineSnapshot(`
+"module.exports = {
+  preset: 'ts-jest/presets/js-with-ts',
+}
+"
+`)
+
+      // js-with-ts from previous transform
+      jest.doMock(pkgPaths.nextCfg, () => ({ transform: { '^.+\\.[tj]sx?$': 'ts-jest' } }), { virtual: true })
+      res = await runCli(...noOption, pkgPaths.currentCfg)
+      expect(res.stdout).toMatchInlineSnapshot(`
+"module.exports = {
+  preset: 'ts-jest/presets/js-with-ts',
+}
+"
+`)
+
+      // js-with-babel from previous transform
+      jest.doMock(pkgPaths.nextCfg, () => ({ transform: { '^.+\\.jsx?$': 'babel-jest', '^.+\\.tsx?$': 'ts-jest' } }), {
+        virtual: true,
+      })
+      res = await runCli(...noOption, pkgPaths.currentCfg)
+      expect(res.stdout).toMatchInlineSnapshot(`
+"module.exports = {
+  preset: 'ts-jest/presets/js-with-babel',
+}
+"
+`)
+
+      // defaults when previous transform is ambiguous
+      jest.doMock(
+        pkgPaths.nextCfg,
+        () => ({ transform: { '^src/js/.+\\.jsx?$': 'babel-jest', '^src/ts/.+\\.tsx?$': 'ts-jest' } }),
+        { virtual: true },
+      )
+      res = await runCli(...noOption, pkgPaths.currentCfg)
+      expect(res.stdout).toMatchInlineSnapshot(`
+"module.exports = {
+  transform: {
+    '^src/js/.+\\\\\\\\.jsx?$': 'babel-jest',
+    '^src/ts/.+\\\\\\\\.tsx?$': 'ts-jest',
+  },
+  preset: 'ts-jest',
 }
 "
 `)
@@ -446,7 +520,7 @@ Migrated Jest configuration:
       )
       const res = await runCli(...noOption, pkgPaths.current)
       expect(res.stdout).toMatchInlineSnapshot(`
-"{
+"\\"jest\\": {
   \\"transform\\": {
     \\"<rootDir>/src/.+\\\\\\\\.[jt]s$\\": \\"ts-jest\\",
     \\"foo\\\\\\\\.ts\\": \\"ts-jest\\",
