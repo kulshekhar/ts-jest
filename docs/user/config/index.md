@@ -8,12 +8,12 @@ The later is preferred since it's more customizable, but it depends on your need
 
 ### The 3 presets
 
-`ts-jest` comes with 3 presets, allowing to cover most of project's base configuration:
+`ts-jest` comes with 3 presets, covering most of project's base configuration:
 
 | Preset name | Description |
 |---|---|
 | `ts-jest/presets/default`<br>or `ts-jest` | `ts-jest` will take care of `.ts` and `.tsx` files only, leaving JavaScript files as-is. |
-| `ts-jest/presets/js-with-ts` | TypeScript and JavaScript file (`.ts`, `.tsx`, `.js` and `.jsx`) will be handled by `ts-jest` (and so TypeScript).<br>You'll need to set `allowJs` to `true` in your `tsconfig.json` file. |
+| `ts-jest/presets/js-with-ts` | TypeScript and JavaScript file (`.ts`, `.tsx`, `.js` and `.jsx`) will be handled by `ts-jest`.<br>You'll need to set `allowJs` to `true` in your `tsconfig.json` file. |
 | `ts-jest/presets/js-with-babel` | TypeScript files will be handled by `ts-jest`, and JavaScript files will be handled by `babel-jest`. |
 
 ### Basic usage
@@ -48,12 +48,12 @@ module.exports = {
 
 </div></div>
 
-**Note:** presets are using `testMatch`, as Jest's does in its defaults. If you want to use `testRegex` instead in your configuration, you MUST set `testMatch` to `null` or Jest will bail.
+**Note:** presets use `testMatch`, like Jest does in its defaults. If you want to use `testRegex` instead in your configuration, you MUST set `testMatch` to `null` or Jest will bail.
 
 ### Advanced
 
 Any preset can also be used with other options.
-If you're already using another preset, you might want only some specific settings from the `ts-jest` chosen preset.
+If you're already using another preset, you might want only some specific settings from the chosen `ts-jest` preset.
 In this case you'll need to use the JavaScript version of Jest config:
 
 ```js
