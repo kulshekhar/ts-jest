@@ -1,6 +1,6 @@
 import * as jestConfig from 'jest-config'
 
-import { CreateJestPresetOptions } from '../types'
+import { CreateJestPresetOptions, TsJestPresets } from '../types'
 import { rootLogger } from '../util/logger'
 
 const logger = rootLogger.child({ namespace: 'jest-preset' })
@@ -12,7 +12,10 @@ const defaults = jestConfig.defaults || {
   moduleFileExtensions: ['js', 'json', 'jsx', 'node'],
 }
 
-export function createJestPreset({ allowJs = false }: CreateJestPresetOptions = {}, from?: jest.InitialOptions) {
+export function createJestPreset(
+  { allowJs = false }: CreateJestPresetOptions = {},
+  from?: jest.InitialOptions,
+): TsJestPresets {
   logger.debug({ allowJs }, 'creating jest presets', allowJs ? 'handling' : 'not handling', 'JavaScript files')
   from = { ...defaults, ...from }
   return {

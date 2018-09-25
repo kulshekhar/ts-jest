@@ -1,3 +1,1 @@
-const create = require('../create')
-
-module.exports = create()
+module.exports = require('..').defaults

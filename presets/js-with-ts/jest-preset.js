@@ -1,3 +1,1 @@
-const create = require('../create')
-
-module.exports = create({allowJs: true})
+module.exports = require('..').jsWithTs

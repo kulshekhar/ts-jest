@@ -69,6 +69,12 @@ export interface TsJestGlobalOptions {
   stringifyContentPathRegex?: string | RegExp
 }
 
+export interface TsJestPresets {
+  transform: Record<string, string>
+  testMatch: string[]
+  moduleFileExtensions: string[]
+}
+
 interface TsJestConfig$tsConfig$file {
   kind: 'file'
   value: string | undefined
