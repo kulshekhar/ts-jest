@@ -1,4 +1,4 @@
-const create = './create'
+const create = require('./create')
 
 module.exports = {
   get defaults() { return create() },
