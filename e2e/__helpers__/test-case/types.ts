@@ -5,7 +5,6 @@ import RunResult from './run-result'
 export interface RunTestOptions {
   template?: string
   env?: {}
-  args?: string[]
   inject?: (() => any) | string
   writeIo?: boolean
   jestConfig?: jest.ProjectConfig | any
@@ -30,6 +29,4 @@ export interface PreparedTest {
   workdir: string
   templateDir: string
   sourceDir: string
-  ioDir: string
-  hooksFile: string
 }

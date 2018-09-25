@@ -265,12 +265,17 @@ export class ConfigSet {
       tsJest: {
         diagnostics: { throws },
       },
+      compilerModule: { DiagnosticCategory },
     } = this
     return (diagnostics: Diagnostic[], filePath?: string, logger: Logger = this.logger): void | never => {
       const filteredDiagnostics = filterDiagnostics(diagnostics, filePath)
       if (filteredDiagnostics.length === 0) return
       const error = createTsError(filteredDiagnostics)
-      if (throws) throw error
+      // only throw if `warnOnly` and it is a warning or error
+      const importantCategories = [DiagnosticCategory.Warning, DiagnosticCategory.Error]
+      if (throws && filteredDiagnostics.some(d => importantCategories.includes(d.category))) {
+        throw error
+      }
       logger.warn({ error }, error.message)
     }
   }
@@ -621,10 +626,19 @@ export class ConfigSet {
       ? ts.ModuleKind.CommonJS
       : ts.ModuleKind.ESNext
     const moduleValue = finalOptions.module == null ? defaultModule : finalOptions.module
-    if (moduleValue !== forcedOptions.module && !finalOptions.esModuleInterop) {
-      result.errors.push(this.makeDiagnostic(DiagnosticCodes.ConfigModuleOption, Errors.ConfigNoModuleInterop))
-      // at least enable synthetic default imports
-      finalOptions.allowSyntheticDefaultImports = true
+    if (
+      moduleValue !== forcedOptions.module &&
+      !(finalOptions.esModuleInterop || finalOptions.allowSyntheticDefaultImports)
+    ) {
+      result.errors.push(
+        this.makeDiagnostic(DiagnosticCodes.ConfigModuleOption, Errors.ConfigNoModuleInterop, {
+          category: ts.DiagnosticCategory.Message,
+        }),
+      )
+      // at least enable synthetic default imports (except if it's set in the input config)
+      if (!('allowSyntheticDefaultImports' in config.compilerOptions)) {
+        finalOptions.allowSyntheticDefaultImports = true
+      }
     }
 
     // ensure undefined are removed and other values are overridden
