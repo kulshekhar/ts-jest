@@ -6,9 +6,19 @@ The later is preferred since it's more customizable, but it depends on your need
 
 ## Jest preset
 
+### The 3 presets
+
+`ts-jest` comes with 3 presets, allowing to cover most of project's base configuration:
+
+| Preset name | Description |
+|---|---|
+| `ts-jest/presets/default`<br>or `ts-jest` | `ts-jest` will take care of `.ts` and `.tsx` files only, leaving JavaScript files as-is. |
+| `ts-jest/presets/js-with-ts` | TypeScript and JavaScript file (`.ts`, `.tsx`, `.js` and `.jsx`) will be handled by `ts-jest` (and so TypeScript).<br>You'll need to set `allowJs` to `true` in your `tsconfig.json` file. |
+| `ts-jest/presets/js-with-babel` | TypeScript files will be handled by `ts-jest`, and JavaScript files will be handled by `babel-jest`. |
+
 ### Basic usage
 
-In most cases, simply adding `preset: 'ts-jest'` to your Jest config should be enough to start using TypeScript with Jest (assuming you did add `ts-jest` to your dev. dependencies of course):
+In most cases, simply setting the `preset` key to the desired preset name in your Jest config should be enough to start using TypeScript with Jest (assuming you did add `ts-jest` to your dev. dependencies of course):
 
 <div class="row"><div class="col-md-6" markdown="block">
 
@@ -16,6 +26,8 @@ In most cases, simply adding `preset: 'ts-jest'` to your Jest config should be e
 // jest.config.js
 module.exports = {
   // [...]
+  // Replace `ts-jest` with the preset you want to use
+  // from the above list
   preset: 'ts-jest'
 };
 ```
@@ -27,6 +39,8 @@ module.exports = {
 {
   // [...]
   "jest": {
+    // Replace `ts-jest` with the preset you want to use
+    // from the above list
     "preset": "ts-jest"
   }
 }
@@ -34,20 +48,26 @@ module.exports = {
 
 </div></div>
 
+**Note:** presets are using `testMatch`, as Jest's does in its defaults. If you want to use `testRegex` instead in your configuration, you MUST set `testMatch` to `null` or Jest will bail.
+
 ### Advanced
 
-The `ts-jest` preset can also be used with other options.
-If you're already using another preset, you might want only some specific settings from the `ts-jest` preset.
+Any preset can also be used with other options.
+If you're already using another preset, you might want only some specific settings from the `ts-jest` chosen preset.
 In this case you'll need to use the JavaScript version of Jest config:
 
 ```js
 // jest.config.js
-const { jestPreset: tsJestPreset } = require('ts-jest');
+const tsJestPresets = require('ts-jest/presets');
+
+const preset = tsJestPresets.defaults
+// const preset = tsJestPresets.jsWithTs
+// const preset = tsJestPresets.jsWithBabel
 
 module.exports = {
   // [...]
   transform: {
-    ...tsJestPreset.transform,
+    ...preset.transform,
     // [...]
   }
 }
