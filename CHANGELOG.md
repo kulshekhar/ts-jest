@@ -1,3 +1,25 @@
+<a name="23.10.2"></a>
+## [23.10.2](https://github.com/kulshekhar/ts-jest/compare/v23.10.1...v23.10.2) (2018-09-26)
+
+
+### Bug Fixes
+
+* **cache:** resolved tsconfig in cache key + pkg digest ([e891608](https://github.com/kulshekhar/ts-jest/commit/e891608)), closes [#749](https://github.com/kulshekhar/ts-jest/issues/749)
+* **cli:** resets testMatch if using testRegex option ([31ad0aa](https://github.com/kulshekhar/ts-jest/commit/31ad0aa)), closes [#756](https://github.com/kulshekhar/ts-jest/issues/756)
+* **diagnostics:** throws only for category warning and error ([bb28849](https://github.com/kulshekhar/ts-jest/commit/bb28849)), closes [#748](https://github.com/kulshekhar/ts-jest/issues/748)
+* **import:** wrong error message when a module exists but fails ([e0d6c57](https://github.com/kulshekhar/ts-jest/commit/e0d6c57))
+* **preset:** createJestPreset fails with base and no array ([3c325e8](https://github.com/kulshekhar/ts-jest/commit/3c325e8))
+
+
+### Features
+
+* **cli:** CLI 'config:migrate' now detects best preset ([febd8d3](https://github.com/kulshekhar/ts-jest/commit/febd8d3))
+* **preset:** adds 2 presets along the default one ([9f3d759](https://github.com/kulshekhar/ts-jest/commit/9f3d759))
+* **preset:** adds presets typings and export all presets ([f55d895](https://github.com/kulshekhar/ts-jest/commit/f55d895))
+* **typings:** emit declaration files, filtering out internals ([4f10f7e](https://github.com/kulshekhar/ts-jest/commit/4f10f7e)), closes [#745](https://github.com/kulshekhar/ts-jest/issues/745)
+
+
+
 <a name="23.10.1"></a>
 ## [23.10.1](https://github.com/kulshekhar/ts-jest/compare/v23.10.0...v23.10.1) (2018-09-20)
 
