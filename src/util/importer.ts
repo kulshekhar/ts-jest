@@ -1,4 +1,4 @@
-import { ModulePatcher, TBabelCore, TBabelJest, TTypeScript, TsJestImporter } from '../types'
+import { ModulePatcher, TBabelCore, TBabelJest, TTypeScript } from '../types'
 
 import * as hacks from './hacks'
 import { rootLogger } from './logger'
@@ -26,7 +26,7 @@ const passThru = (action: () => void) => (input: any) => {
 /**
  * @internal
  */
-export class Importer implements TsJestImporter {
+export class Importer {
   @Memoize()
   static get instance() {
     logger.debug('creating Importer singleton')
@@ -70,22 +70,51 @@ export class Importer implements TsJestImporter {
   }
 
   @Memoize((...args: string[]) => args.join(':'))
-  tryThese(moduleName: string, ...fallbacks: string[]): any {
+  tryThese(moduleName: string, ...fallbacks: string[]) {
     let name: string
-    let loaded: any
+    let loaded: RequireResult<true> | undefined
     const tries = [moduleName, ...fallbacks]
     // tslint:disable-next-line:no-conditional-assignment
     while ((name = tries.shift() as string) !== undefined) {
-      try {
-        loaded = requireModule(name)
-        logger.debug('loaded module', name)
+      const req = requireWrapper(name)
+
+      // remove exports from what we're going to log
+      const contextReq: any = { ...req }
+      delete contextReq.exports
+
+      if (req.exists) {
+        // module exists
+        loaded = req as RequireResult<true>
+        if (loaded.error) {
+          // require-ing it failed
+          logger.error({ requireResult: contextReq }, `failed loading module '${name}'`, loaded.error.message)
+        } else {
+          // it has been loaded, let's patch it
+          logger.debug({ requireResult: contextReq }, 'loaded module', name)
+          loaded.exports = this._patch(name, loaded.exports)
+        }
         break
-      } catch (err) {
-        logger.debug('fail loading module', name)
+      } else {
+        // module does not exists in the path
+        logger.debug({ requireResult: contextReq }, `module '${name}' not found`)
+        continue
       }
     }
 
-    return loaded && this._patch(name, loaded)
+    // return the loaded one, could be one that has been loaded, or one which has failed during load
+    // but not one which does not exists
+    return loaded
+  }
+
+  tryTheseOr<T>(moduleNames: [string, ...string[]] | string, missingResult: T, allowLoadError?: boolean): T
+  tryTheseOr<T>(moduleNames: [string, ...string[]] | string, missingResult?: T, allowLoadError?: boolean): T | undefined
+  tryTheseOr<T>(moduleNames: [string, ...string[]] | string, missingResult?: T, allowLoadError = false): T | undefined {
+    const args: [string, ...string[]] = Array.isArray(moduleNames) ? moduleNames : [moduleNames]
+    const result = this.tryThese(...args)
+    if (!result) return missingResult
+    if (!result.error) return result.exports as T
+    if (allowLoadError) return missingResult
+    throw result.error
   }
 
   @Memoize(name => name)
@@ -105,8 +134,10 @@ export class Importer implements TsJestImporter {
     // try to load any of the alternative after trying main one
     const res = this.tryThese(moduleName, ...alternatives)
     // if we could load one, return it
-    if (res) {
-      return res
+    if (res && res.exists) {
+      if (!res.error) return res.exports
+      // it could not load because of a failure while importing, but it exists
+      throw new Error(interpolate(Errors.LoadingModuleFailed, { module: res.given, error: res.error.message }))
     }
 
     // if it couldn't load, build a nice error message so the user can fix it by himself
@@ -136,11 +167,43 @@ export class Importer implements TsJestImporter {
  */
 export const importer = Importer.instance
 
+/**
+ * @internal
+ */
+export interface RequireResult<E = boolean> {
+  exists: E
+  given: string
+  path?: string
+  exports?: any
+  error?: Error
+}
+
+function requireWrapper(moduleName: string): RequireResult {
+  let path: string
+  let exists = false
+  try {
+    path = resolveModule(moduleName)
+    exists = true
+  } catch (error) {
+    return { error, exists, given: moduleName }
+  }
+  const result: RequireResult = { exists, path, given: moduleName }
+  try {
+    result.exports = requireModule(moduleName)
+  } catch (error) {
+    result.error = error
+  }
+  return result
+}
+
 let requireModule = (mod: string) => require(mod)
+let resolveModule = (mod: string) => require.resolve(mod)
+
 /**
  * @internal
  */
 // so that we can test easier
-export function __requireModule(localRequire: typeof requireModule) {
+export function __requireModule(localRequire: typeof requireModule, localResolve: typeof resolveModule) {
   requireModule = localRequire
+  resolveModule = localResolve
 }

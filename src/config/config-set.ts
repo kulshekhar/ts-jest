@@ -354,7 +354,7 @@ export class ConfigSet {
     let hooksFile = process.env.TS_JEST_HOOKS
     if (hooksFile) {
       hooksFile = resolve(this.cwd, hooksFile)
-      return importer.tryThese(hooksFile) || {}
+      return importer.tryTheseOr(hooksFile, {})
     }
     return {}
   }

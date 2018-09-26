@@ -127,13 +127,6 @@ export interface CreateJestPresetOptions {
 export type ModulePatcher<T = any> = (module: T) => T
 
 /**
- * @internal
- */
-export interface TsJestImporter {
-  tryThese(moduleName: string, ...fallbacks: string[]): any
-}
-
-/**
  * Common TypeScript interfaces between versions.
  */
 export interface TSCommon {
