@@ -136,15 +136,44 @@ The later is preferred since it’s more customizable, but it depends on your ne
 
 <h2 id="jest-preset">Jest preset</h2>
 
+<h3 id="the-3-presets">The 3 presets</h3>
+
+<p><code class="highlighter-rouge">ts-jest</code> comes with 3 presets, covering most of project’s base configuration:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Preset name</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="highlighter-rouge">ts-jest/presets/default</code><br />or <code class="highlighter-rouge">ts-jest</code></td>
+      <td><code class="highlighter-rouge">ts-jest</code> will take care of <code class="highlighter-rouge">.ts</code> and <code class="highlighter-rouge">.tsx</code> files only, leaving JavaScript files as-is.</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">ts-jest/presets/js-with-ts</code></td>
+      <td>TypeScript and JavaScript file (<code class="highlighter-rouge">.ts</code>, <code class="highlighter-rouge">.tsx</code>, <code class="highlighter-rouge">.js</code> and <code class="highlighter-rouge">.jsx</code>) will be handled by <code class="highlighter-rouge">ts-jest</code>.<br />You’ll need to set <code class="highlighter-rouge">allowJs</code> to <code class="highlighter-rouge">true</code> in your <code class="highlighter-rouge">tsconfig.json</code> file.</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">ts-jest/presets/js-with-babel</code></td>
+      <td>TypeScript files will be handled by <code class="highlighter-rouge">ts-jest</code>, and JavaScript files will be handled by <code class="highlighter-rouge">babel-jest</code>.</td>
+    </tr>
+  </tbody>
+</table>
+
 <h3 id="basic-usage">Basic usage</h3>
 
-<p>In most cases, simply adding <code class="highlighter-rouge">preset: 'ts-jest'</code> to your Jest config should be enough to start using TypeScript with Jest (assuming you did add <code class="highlighter-rouge">ts-jest</code> to your dev. dependencies of course):</p>
+<p>In most cases, simply setting the <code class="highlighter-rouge">preset</code> key to the desired preset name in your Jest config should be enough to start using TypeScript with Jest (assuming you did add <code class="highlighter-rouge">ts-jest</code> to your dev. dependencies of course):</p>
 
 <div class="row"><div class="col-md-6">
 
     <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// jest.config.js</span>
 <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
   <span class="c1">// [...]</span>
+  <span class="c1">// Replace `ts-jest` with the preset you want to use</span>
+  <span class="c1">// from the above list</span>
   <span class="na">preset</span><span class="p">:</span> <span class="s1">'ts-jest'</span>
 <span class="p">};</span>
 </code></pre></div>    </div>
@@ -155,6 +184,8 @@ The later is preferred since it’s more customizable, but it depends on your ne
 <span class="p">{</span>
   <span class="c1">// [...]</span>
   <span class="s2">"jest"</span><span class="p">:</span> <span class="p">{</span>
+    <span class="c1">// Replace `ts-jest` with the preset you want to use</span>
+    <span class="c1">// from the above list</span>
     <span class="s2">"preset"</span><span class="p">:</span> <span class="s2">"ts-jest"</span>
   <span class="p">}</span>
 <span class="p">}</span>
@@ -162,19 +193,25 @@ The later is preferred since it’s more customizable, but it depends on your ne
 
   </div></div>
 
+<p><strong>Note:</strong> presets use <code class="highlighter-rouge">testMatch</code>, like Jest does in its defaults. If you want to use <code class="highlighter-rouge">testRegex</code> instead in your configuration, you MUST set <code class="highlighter-rouge">testMatch</code> to <code class="highlighter-rouge">null</code> or Jest will bail.</p>
+
 <h3 id="advanced">Advanced</h3>
 
-<p>The <code class="highlighter-rouge">ts-jest</code> preset can also be used with other options.
-If you’re already using another preset, you might want only some specific settings from the <code class="highlighter-rouge">ts-jest</code> preset.
+<p>Any preset can also be used with other options.
+If you’re already using another preset, you might want only some specific settings from the chosen <code class="highlighter-rouge">ts-jest</code> preset.
 In this case you’ll need to use the JavaScript version of Jest config:</p>
 
 <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// jest.config.js</span>
-<span class="kd">const</span> <span class="p">{</span> <span class="na">jestPreset</span><span class="p">:</span> <span class="nx">tsJestPreset</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'ts-jest'</span><span class="p">);</span>
+<span class="kd">const</span> <span class="nx">tsJestPresets</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'ts-jest/presets'</span><span class="p">);</span>
+
+<span class="kd">const</span> <span class="nx">preset</span> <span class="o">=</span> <span class="nx">tsJestPresets</span><span class="p">.</span><span class="nx">defaults</span>
+<span class="c1">// const preset = tsJestPresets.jsWithTs</span>
+<span class="c1">// const preset = tsJestPresets.jsWithBabel</span>
 
 <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
   <span class="c1">// [...]</span>
   <span class="na">transform</span><span class="p">:</span> <span class="p">{</span>
-    <span class="p">...</span><span class="nx">tsJestPreset</span><span class="p">.</span><span class="nx">transform</span><span class="p">,</span>
+    <span class="p">...</span><span class="nx">preset</span><span class="p">.</span><span class="nx">transform</span><span class="p">,</span>
     <span class="c1">// [...]</span>
   <span class="p">}</span>
 <span class="p">}</span>
