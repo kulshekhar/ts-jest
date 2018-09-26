@@ -6,8 +6,10 @@ import { basename, resolve } from 'path'
 import { Arguments } from 'yargs'
 
 import { CliCommand } from '..'
-import { createJestPreset } from '../../config/create-jest-preset'
+import { TsJestPresets } from '../../types'
 import { backportJestConfig } from '../../util/backports'
+
+const DEFAULT_PRESET = 'ts-jest/presets/default'
 
 /**
  * @internal
@@ -16,6 +18,7 @@ export const run: CliCommand = async (args: Arguments /*, logger: Logger*/) => {
   const nullLogger = createLogger({ targets: [] })
   const file = args._[0]
   const filePath = resolve(process.cwd(), file)
+  const footNotes: string[] = []
   if (!existsSync(filePath)) {
     throw new Error(`Configuration file ${file} does not exists.`)
   }
@@ -33,25 +36,71 @@ export const run: CliCommand = async (args: Arguments /*, logger: Logger*/) => {
   // migrate
   // first we backport our options
   const migratedConfig = backportJestConfig(nullLogger, actualConfig)
+  let presetName: string | undefined
   // then we check if we can use `preset`
   if (!migratedConfig.preset && args.jestPreset) {
-    migratedConfig.preset = 'ts-jest'
-  } else if (!args.jestPreset && migratedConfig.preset === 'ts-jest') {
-    delete migratedConfig.preset
+    // find the best preset
+    if (args.allowJs) presetName = 'ts-jest/presets/js-with-ts'
+    else {
+      // try to detect what transformer the js extensions would target
+      const jsTransformers = Object.keys(migratedConfig.transform || {}).reduce(
+        (list, pattern) => {
+          if (RegExp(pattern.replace(/^<rootDir>\/?/, '/dummy-project/')).test('/dummy-project/src/foo.js')) {
+            let transformer: string = (migratedConfig.transform as any)[pattern]
+            if (/\bbabel-jest\b/.test(transformer)) transformer = 'babel-jest'
+            else if (/\ts-jest\b/.test(transformer)) transformer = 'ts-jest'
+            return [...list, transformer]
+          }
+          return list
+        },
+        [] as string[],
+      )
+      // depending on the transformer found, we use one or the other preset
+      const jsWithTs = jsTransformers.includes('ts-jest')
+      const jsWithBabel = jsTransformers.includes('babel-jest')
+      if (jsWithBabel && !jsWithTs) {
+        presetName = 'ts-jest/presets/js-with-babel'
+      } else if (jsWithTs && !jsWithBabel) {
+        presetName = 'ts-jest/presets/js-with-ts'
+      } else {
+        // sounds like js files are NOT handled, or handled with a unknown transformer, so we do not need to handle it
+        presetName = DEFAULT_PRESET
+      }
+    }
+    // ensure we are using a preset
+    presetName = presetName || DEFAULT_PRESET
+    migratedConfig.preset = presetName
+    footNotes.push(
+      `Detected preset '${presetName.replace(
+        /^ts-jest\/presets\//,
+        '',
+      )}' as the best matching preset for your configuration.\nVisit https://kulshekhar.github.io/ts-jest/user/config/#jest-preset for more information about presets.\n`,
+    )
+  } else if (migratedConfig.preset && migratedConfig.preset.startsWith('ts-jest')) {
+    if (args.jestPreset === false) {
+      delete migratedConfig.preset
+    } else {
+      presetName = migratedConfig.preset
+    }
   }
-  const usesPreset = migratedConfig.preset === 'ts-jest'
-  const presets = createJestPreset({ allowJs: args.allowJs })
+  const presets: TsJestPresets | undefined = presetName
+    ? require(`../../../${presetName.replace(/^ts-jest\//, '')}/jest-preset`)
+    : undefined
 
   // check the extensions
-  if (migratedConfig.moduleFileExtensions && migratedConfig.moduleFileExtensions.length && usesPreset) {
+  if (migratedConfig.moduleFileExtensions && migratedConfig.moduleFileExtensions.length && presets) {
     const presetValue = dedupSort(presets.moduleFileExtensions).join('::')
     const migratedValue = dedupSort(migratedConfig.moduleFileExtensions).join('::')
     if (presetValue === migratedValue) {
       delete migratedConfig.moduleFileExtensions
     }
   }
+  // there is a testRegex, remove our testMatch
+  if (migratedConfig.testRegex && presets) {
+    migratedConfig.testMatch = null as any
+  }
   // check the testMatch
-  if (migratedConfig.testMatch && migratedConfig.testMatch.length && usesPreset) {
+  else if (migratedConfig.testMatch && migratedConfig.testMatch.length && presets) {
     const presetValue = dedupSort(presets.testMatch).join('::')
     const migratedValue = dedupSort(migratedConfig.testMatch).join('::')
     if (presetValue === migratedValue) {
@@ -71,7 +120,7 @@ export const run: CliCommand = async (args: Arguments /*, logger: Logger*/) => {
   }
   // check if it's the same as the preset's one
   if (
-    usesPreset &&
+    presets &&
     migratedConfig.transform &&
     stringifyJson(migratedConfig.transform) === stringifyJson(presets.transform)
   ) {
@@ -91,7 +140,7 @@ No migration needed for given Jest configuration
   }
 
   const stringify = /\.json$/.test(file) ? JSON.stringify : stringifyJson5
-  const footNotes: string[] = []
+  const prefix = /\.json$/.test(file) ? '"jest": ' : 'module.exports = '
 
   // if we are using preset, inform the user that he might be able to remove some section(s)
   // we couldn't check for equality
@@ -105,7 +154,7 @@ No migration needed for given Jest configuration
   // If it is the case, you can safely remove the "testMatch" from what I've migrated.
   // `)
   //   }
-  if (usesPreset && migratedConfig.transform) {
+  if (presets && migratedConfig.transform) {
     footNotes.push(`
 I couldn't check if your "transform" value is the same as mine which is: ${stringify(
       presets.transform,
@@ -120,7 +169,7 @@ If it is the case, you can safely remove the "transform" from what I've migrated
   process.stderr.write(`
 Migrated Jest configuration:
 `)
-  process.stdout.write(`${stringify(migratedConfig, undefined, '  ')}\n`)
+  process.stdout.write(`${prefix}${stringify(migratedConfig, undefined, '  ')}\n`)
   if (footNotes.length) {
     process.stderr.write(`
 ${footNotes.join('\n')}
@@ -148,6 +197,7 @@ function cleanupConfig(config: jest.InitialOptions): void {
     config.testMatch = dedupSort(config.testMatch)
     if (config.testMatch.length === 0) delete config.testMatch
   }
+  if (config.preset === DEFAULT_PRESET) config.preset = 'ts-jest'
 }
 
 function dedupSort(arr: any[]) {
