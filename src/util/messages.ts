@@ -4,6 +4,7 @@
  * @internal
  */
 export enum Errors {
+  LoadingModuleFailed = 'Loading module {{module}} failed with error: {{error}}',
   UnableToLoadOneModule = 'Unable to load the module {{module}}. {{reason}} To fix it:\n{{fix}}',
   UnableToLoadAnyModule = 'Unable to load any of these modules: {{module}}. {{reason}}. To fix it:\n{{fix}}',
   TypesUnavailableWithoutTypeCheck = 'Type information is unavailable with "isolatedModules"',
