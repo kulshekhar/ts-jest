@@ -16,7 +16,7 @@ export type CliCommand = (argv: Arguments, logger: Logger) => Promise<void>
 async function cli(args: string[]): Promise<void> {
   const parsedArgv = yargsParser(args, {
     boolean: ['dry-run', 'jest-preset', 'allow-js', 'diff', 'babel', 'force', 'jsdom'],
-    string: ['tsconfig'],
+    string: ['tsconfig', 'js'],
     count: ['verbose'],
     alias: { verbose: ['v'] },
     default: { jestPreset: true, verbose: 0 },

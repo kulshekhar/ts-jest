@@ -1,4 +1,4 @@
-import { TsJestPresets } from '../../types'
+import { TsJestPresets } from '../../config/create-jest-preset'
 
 /** @internal */
 export enum JestPresetNames {
@@ -38,7 +38,7 @@ const definePreset = (fullName: string): TsJestPresetDescriptor => ({
     return require(`../../../${fullName.replace(/^ts-jest\//, '')}/jest-preset`)
   },
   jsImport(varName = 'tsjPreset') {
-    return `const { ${this.jsVarName}: ${varName} } = require('${this.fullName}')`
+    return `const ${varName} = require('${this.fullName}')`
   },
   get isDefault() {
     return fullName === JestPresetNames.default

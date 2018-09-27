@@ -3,7 +3,7 @@ import { resolve } from 'path'
 import ts, { Diagnostic, DiagnosticCategory, ModuleKind, ScriptTarget } from 'typescript'
 
 import * as _myModule from '..'
-import { mocked } from '../..'
+import { mocked } from '../../utils'
 import * as fakers from '../__helpers__/fakers'
 import { logTargetMock } from '../__helpers__/mocks'
 import { TsJestGlobalOptions } from '../types'
