@@ -10,7 +10,7 @@ import { basename, join } from 'path'
 import { Arguments } from 'yargs'
 
 import { CliCommand } from '..'
-import { createJestPreset } from '../../config/create-jest-preset'
+import { TsJestPresetDescriptor, defaults, jsWIthBabel, jsWithTs } from '../helpers/presets'
 
 /**
  * @internal
@@ -24,11 +24,27 @@ export const run: CliCommand = async (args: Arguments /* , logger: Logger */) =>
   const pkgFile = isPackage ? filePath : join(process.cwd(), 'package.json')
   const hasPackage = isPackage || existsSync(pkgFile)
   // read config
-  const { allowJs = false, jestPreset = true, tsconfig: askedTsconfig, babel = false, force, jsdom } = args
+  const { jestPreset = true, tsconfig: askedTsconfig, force, jsdom } = args
   const tsconfig = askedTsconfig === 'tsconfig.json' ? undefined : askedTsconfig
-  const hasPresetVar = allowJs || !jestPreset
   // read package
   const pkgJson = hasPackage ? JSON.parse(readFileSync(pkgFile, 'utf8')) : {}
+
+  // auto js/babel
+  let { js, babel } = args
+  if (js != null || babel != null) {
+    if (js == null) js = babel ? 'babel' : undefined
+    else if (babel == null) babel = js === 'babel'
+  }
+
+  // preset
+  let preset: TsJestPresetDescriptor | undefined
+  if (js === 'babel') {
+    preset = jsWIthBabel
+  } else if (js === 'ts') {
+    preset = jsWithTs
+  } else {
+    preset = defaults
+  }
 
   if (isPackage && !exists) {
     throw new Error(`File ${file} does not exists.`)
@@ -52,7 +68,7 @@ export const run: CliCommand = async (args: Arguments /* , logger: Logger */) =>
 
   if (isPackage) {
     // package.json config
-    const base: any = hasPresetVar ? createJestPreset({ allowJs }) : { preset: 'ts-jest' }
+    const base: any = jestPreset ? { preset: preset.name } : { ...preset.value }
     if (!jsdom) base.testEnvironment = 'node'
     if (tsconfig || babel) {
       const tsJestConf: any = {}
@@ -64,14 +80,14 @@ export const run: CliCommand = async (args: Arguments /* , logger: Logger */) =>
   } else {
     // js config
     const content = []
-    if (hasPresetVar) {
-      content.push(`const tsJest = require('ts-jest').createJestPreset({ allowJs: ${allowJs} });`, '')
+    if (!jestPreset) {
+      content.push(`${preset.jsImport('tsjPreset')};`, '')
     }
     content.push('module.exports = {')
-    if (hasPresetVar) {
-      content.push(`  ...tsJest,`)
+    if (jestPreset) {
+      content.push(`  preset: '${preset.name}',`)
     } else {
-      content.push(`  preset: 'ts-jest',`)
+      content.push(`  ...tsjPreset,`)
     }
     if (!jsdom) content.push(`  testEnvironment: 'node',`)
 
@@ -113,10 +129,11 @@ Arguments:
 
 Options:
   --force               Discard any existing Jest config
-  --allow-js            ts-jest will be used to process JS files as well
+  --js ts|babel         Process .js files with ts-jest if 'ts' or with
+                        babel-jest if 'babel'
   --no-jest-preset      Disable the use of Jest presets
   --tsconfig <file>     Path to the tsconfig.json file
-  --babel               Call BabelJest after ts-jest
+  --babel               Pipe babel-jest after ts-jest
   --jsdom               Use jsdom as test environment instead of node
 `)
 }
