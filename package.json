@@ -93,7 +93,7 @@
     "eslint": "*",
     "fs-extra": "*",
     "glob-gitignore": "*",
-    "husky": "*",
+    "husky": "0.x",
     "jest": "23.x",
     "js-yaml": "*",
     "lint-staged": "*",
