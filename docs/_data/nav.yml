@@ -5,6 +5,8 @@
       url: /user/install
     - title: Configuration
       url: /user/config
+    - title: Test helpers
+      url: /user/test-helpers
     - title: React Native
       url: /user/react-native
     - title: Babel7 or TypeScript
