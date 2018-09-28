@@ -312,6 +312,25 @@ message TS151001: If you have issues related to imports, you should consider set
 "
 `)
   })
+
+  it('should not warn neither set synth. default imports if using babel', () => {
+    const target = logTargetMock()
+    target.clear()
+    const cs = createConfigSet({
+      tsJestConfig: {
+        tsConfig: { module: 'amd', esModuleInterop: false } as any,
+        diagnostics: { warnOnly: true, pretty: false },
+        babelConfig: { babelrc: false },
+      },
+      resolve: null,
+    })
+    expect(cs.typescript.options).toMatchObject({
+      module: ModuleKind.AMD,
+      esModuleInterop: false,
+    })
+    expect(cs.typescript.options.allowSyntheticDefaultImports).toBeFalsy()
+    expect(target.lines.warn).toHaveLength(0)
+  })
 }) // typescript
 
 describe('resolvePath', () => {
