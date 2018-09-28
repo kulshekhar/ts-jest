@@ -453,7 +453,7 @@ export class ConfigSet {
 
   @Memoize()
   get overriddenCompilerOptions(): Partial<CompilerOptions> {
-    return {
+    const options: Partial<CompilerOptions> = {
       // we handle sourcemaps this way and not another
       sourceMap: true,
       inlineSourceMap: false,
@@ -462,8 +462,6 @@ export class ConfigSet {
       declaration: false,
       noEmit: false,
       outDir: '$$ts-jest$$',
-      // commonjs is required for jest
-      module: this.compilerModule.ModuleKind.CommonJS,
       // else istanbul related will be dropped
       removeComments: false,
       // to clear out else it's buggy
@@ -475,6 +473,12 @@ export class ConfigSet {
       emitDeclarationOnly: undefined,
       sourceRoot: undefined,
     }
+    // force the module kind if not piping babel-jest
+    if (!this.tsJest.babelConfig) {
+      // commonjs is required for jest
+      options.module = this.compilerModule.ModuleKind.CommonJS
+    }
+    return options
   }
 
   @Memoize()
@@ -627,6 +631,7 @@ export class ConfigSet {
       : ts.ModuleKind.ESNext
     const moduleValue = finalOptions.module == null ? defaultModule : finalOptions.module
     if (
+      'module' in forcedOptions &&
       moduleValue !== forcedOptions.module &&
       !(finalOptions.esModuleInterop || finalOptions.allowSyntheticDefaultImports)
     ) {
