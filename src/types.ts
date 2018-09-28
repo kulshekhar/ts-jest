@@ -204,8 +204,6 @@ type MockedObject<T> = { [K in MethodKeysOf<T>]: MockedFunction<T[K]> } & { [K i
 type MockedObjectDeep<T> = { [K in MethodKeysOf<T>]: MockedFunctionDeep<T[K]> } &
   { [K in PropertyKeysOf<T>]: MaybeMockedDeep<T[K]> }
 
-export type MockedDeep<T> = MockWithArgs<T> & { [K in MethodKeysOf<T>]: MockedDeep<T[K]> }
-export type Mocked<T> = MockWithArgs<T> & { [K in MethodKeysOf<T>]: Mocked<T[K]> }
 // tslint:disable-next-line:ban-types
 export type MaybeMockedDeep<T> = T extends Function ? MockedFunctionDeep<T> : T extends object ? MockedObjectDeep<T> : T
 // tslint:disable-next-line:ban-types
