@@ -1,7 +1,8 @@
 import * as _fs from 'fs'
 import { normalize, resolve } from 'path'
 
-import { logTargetMock, mockObject, mockWriteStream, mocked } from '../__helpers__/mocks'
+import { mocked } from '../..'
+import { logTargetMock, mockObject, mockWriteStream } from '../__helpers__/mocks'
 
 import { processArgv } from '.'
 

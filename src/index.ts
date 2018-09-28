@@ -7,6 +7,8 @@ import { TsJestTransformer } from './ts-jest-transformer'
 import { TsJestGlobalOptions } from './types'
 import { VersionCheckers } from './util/version-checkers'
 
+export * from './util/testing'
+
 // tslint:disable-next-line:no-var-requires
 export const version: string = require('../package.json').version
 export const digest: string = readFileSync(resolve(__dirname, '..', '.ts-jest-digest'), 'utf8')

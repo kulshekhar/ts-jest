@@ -1,5 +1,6 @@
 // tslint:disable:max-line-length
-import { logTargetMock, mocked } from '../__helpers__/mocks'
+import { mocked } from '../..'
+import { logTargetMock } from '../__helpers__/mocks'
 
 import * as _pv from './get-package-version'
 import { VersionChecker, VersionCheckers } from './version-checkers'

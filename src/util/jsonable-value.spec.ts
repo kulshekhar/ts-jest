@@ -1,4 +1,4 @@
-import { mocked } from '../__helpers__/mocks'
+import { mocked } from '../..'
 
 import * as _json from './json'
 import { JsonableValue } from './jsonable-value'
@@ -13,7 +13,7 @@ beforeEach(() => {
   jest.clearAllMocks()
 })
 
-it('should cache the seralized value', () => {
+it('should cache the serialized value', () => {
   const jv = new JsonableValue({ foo: 'bar' })
   expect(jv.serialized).toBe('{"foo":"bar"}')
   expect(stringify).toHaveBeenCalledTimes(1)
