@@ -197,8 +197,11 @@ const val: MyType = {} as any
 console.log(val.p1/* <== that */)
 `
   it('should get correct type info', () => {
-    expect(compiler.getTypeInfo(source, __filename, source.indexOf('/* <== that */') - 1)).toEqual({
-      comment: 'the prop 1! ',
+    const ti = compiler.getTypeInfo(source, __filename, source.indexOf('/* <== that */') - 1)
+    // before TS 3.1 the comment had an extra tailing space
+    ti.comment = ti.comment.trim()
+    expect(ti).toEqual({
+      comment: 'the prop 1!',
       name: '(property) p1: boolean',
     })
   })
