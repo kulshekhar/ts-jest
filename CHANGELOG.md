@@ -1,3 +1,18 @@
+<a name="23.10.3"></a>
+## [23.10.3](https://github.com/kulshekhar/ts-jest/compare/v23.10.2...v23.10.3) (2018-09-30)
+
+
+### Bug Fixes
+
+* **compiler:** do not force module kind if piping babel ([acebc8c](https://github.com/kulshekhar/ts-jest/commit/acebc8c)), closes [#767](https://github.com/kulshekhar/ts-jest/issues/767)
+
+
+### Features
+
+* **helpers:** adds a mocked test helper for mock typings ([f976135](https://github.com/kulshekhar/ts-jest/commit/f976135)), closes [#576](https://github.com/kulshekhar/ts-jest/issues/576)
+
+
+
 <a name="23.10.2"></a>
 ## [23.10.2](https://github.com/kulshekhar/ts-jest/compare/v23.10.1...v23.10.2) (2018-09-26)
 
