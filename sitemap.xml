@@ -13,7 +13,7 @@
 <loc>/ts-jest/user/config/diagnostics.html</loc>
 </url>
 <url>
-<loc>/ts-jest/</loc>
+<loc>/ts-jest/user/react-native/</loc>
 </url>
 <url>
 <loc>/ts-jest/user/config/</loc>
@@ -25,7 +25,7 @@
 <loc>/ts-jest/tech/process/</loc>
 </url>
 <url>
-<loc>/ts-jest/user/react-native/</loc>
+<loc>/ts-jest/</loc>
 </url>
 <url>
 <loc>/ts-jest/user/install.html</loc>
@@ -35,6 +35,9 @@
 </url>
 <url>
 <loc>/ts-jest/user/config/stringifyContentPathRegex.html</loc>
+</url>
+<url>
+<loc>/ts-jest/user/test-helpers.html</loc>
 </url>
 <url>
 <loc>/ts-jest/user/config/tsConfig.html</loc>
