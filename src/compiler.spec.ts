@@ -1,9 +1,10 @@
 // tslint:disable:max-line-length
 import { LogLevels } from 'bs-logger'
+import { removeSync, writeFileSync } from 'fs-extra'
 
 import * as fakers from './__helpers__/fakers'
 import { logTargetMock } from './__helpers__/mocks'
-import { relativeToRoot, tempDir } from './__helpers__/path'
+import { tempDir } from './__helpers__/path'
 import ProcessedSource from './__helpers__/processed-source'
 import { createCompiler } from './compiler'
 import { ConfigSet } from './config/config-set'
@@ -34,8 +35,8 @@ beforeEach(() => {
   logTarget.clear()
 })
 
-describe('isolatedModules', () => {
-  const compiler = makeCompiler()
+describe('typings', () => {
+  const compiler = makeCompiler({ tsJestConfig: { tsConfig: false } })
   it('should report diagnostics related to typings', () => {
     expect(() =>
       compiler.compile(
@@ -55,12 +56,13 @@ foo.ts(4,7): error TS2322: Type 'string' is not assignable to type 'boolean'."
 })
 
 describe('source-maps', () => {
-  const compiler = makeCompiler()
+  const compiler = makeCompiler({ tsJestConfig: { tsConfig: false } })
   it('should have correct source maps', () => {
     const source = 'const f = (v: number) => v\nconst t: number = f(5)'
     const compiled = compiler.compile(source, __filename)
     const processed = new ProcessedSource(compiled, __filename)
-    const expectedFileName = relativeToRoot(__filename)
+    // const expectedFileName = relativeToRoot(__filename)
+    const expectedFileName = __filename
     expect(processed.outputSourceMaps).toMatchObject({
       file: expectedFileName,
       sources: [expectedFileName],
@@ -73,6 +75,7 @@ describe('cache', () => {
   const tmp = tempDir('compiler')
   const compiler = makeCompiler({
     jestConfig: { cache: true, cacheDirectory: tmp },
+    tsJestConfig: { tsConfig: false },
   })
   const source = 'console.log("hello")'
 
@@ -106,16 +109,14 @@ Array [
 
     expect(new ProcessedSource(compiled1, __filename)).toMatchInlineSnapshot(`
   ===[ FILE: src/compiler.spec.ts ]===============================================
-  "use strict";
   console.log("hello");
-  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoic3JjL2NvbXBpbGVyLnNwZWMudHMiLCJtYXBwaW5ncyI6IjtBQUFBLE9BQU8sQ0FBQyxHQUFHLENBQUMsT0FBTyxDQUFDLENBQUEiLCJuYW1lcyI6W10sInNvdXJjZVJvb3QiOiI8Y3dkPi8iLCJzb3VyY2VzIjpbInNyYy9jb21waWxlci5zcGVjLnRzIl0sInNvdXJjZXNDb250ZW50IjpbImNvbnNvbGUubG9nKFwiaGVsbG9cIikiXSwidmVyc2lvbiI6M30=
+  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoiPGN3ZD4vc3JjL2NvbXBpbGVyLnNwZWMudHMiLCJtYXBwaW5ncyI6IkFBQUEsT0FBTyxDQUFDLEdBQUcsQ0FBQyxPQUFPLENBQUMsQ0FBQSIsIm5hbWVzIjpbXSwic291cmNlcyI6WyI8Y3dkPi9zcmMvY29tcGlsZXIuc3BlYy50cyJdLCJzb3VyY2VzQ29udGVudCI6WyJjb25zb2xlLmxvZyhcImhlbGxvXCIpIl0sInZlcnNpb24iOjN9
   ===[ INLINE SOURCE MAPS ]=======================================================
-  file: src/compiler.spec.ts
-  mappings: ';AAAA,OAAO,CAAC,GAAG,CAAC,OAAO,CAAC,CAAA'
+  file: <cwd>/src/compiler.spec.ts
+  mappings: 'AAAA,OAAO,CAAC,GAAG,CAAC,OAAO,CAAC,CAAA'
   names: []
-  sourceRoot: <cwd>/
   sources:
-    - src/compiler.spec.ts
+    - <cwd>/src/compiler.spec.ts
   sourcesContent:
     - console.log("hello")
   version: 3
@@ -138,14 +139,13 @@ describe('isolatedModules', () => {
   "use strict";
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.default = 42;
-  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoic3JjL2NvbXBpbGVyLnNwZWMudHMiLCJtYXBwaW5ncyI6Ijs7QUFBQSxrQkFBZSxFQUFFLENBQUEiLCJuYW1lcyI6W10sInNvdXJjZVJvb3QiOiI8Y3dkPi8iLCJzb3VyY2VzIjpbInNyYy9jb21waWxlci5zcGVjLnRzIl0sInNvdXJjZXNDb250ZW50IjpbImV4cG9ydCBkZWZhdWx0IDQyIl0sInZlcnNpb24iOjN9
+  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoiPGN3ZD4vc3JjL2NvbXBpbGVyLnNwZWMudHMiLCJtYXBwaW5ncyI6Ijs7QUFBQSxrQkFBZSxFQUFFLENBQUEiLCJuYW1lcyI6W10sInNvdXJjZXMiOlsiPGN3ZD4vc3JjL2NvbXBpbGVyLnNwZWMudHMiXSwic291cmNlc0NvbnRlbnQiOlsiZXhwb3J0IGRlZmF1bHQgNDIiXSwidmVyc2lvbiI6M30=
   ===[ INLINE SOURCE MAPS ]=======================================================
-  file: src/compiler.spec.ts
+  file: <cwd>/src/compiler.spec.ts
   mappings: ';;AAAA,kBAAe,EAAE,CAAA'
   names: []
-  sourceRoot: <cwd>/
   sources:
-    - src/compiler.spec.ts
+    - <cwd>/src/compiler.spec.ts
   sourcesContent:
     - export default 42
   version: 3
@@ -155,8 +155,39 @@ describe('isolatedModules', () => {
   })
 })
 
+describe('allowJs', () => {
+  const compiler = makeCompiler({ tsJestConfig: { tsConfig: { allowJs: true } } })
+  const fileName = `${__filename}.test.js`
+  afterAll(() => {
+    removeSync(fileName)
+  })
+  it('should compile js file', () => {
+    const source = 'export default 42'
+    writeFileSync(fileName, source, 'utf8')
+    const compiled = compiler.compile(source, fileName)
+    const processed = new ProcessedSource(compiled, fileName)
+    expect(processed).toMatchInlineSnapshot(`
+  ===[ FILE: src/compiler.spec.ts.test.js ]=======================================
+  "use strict";
+  Object.defineProperty(exports, "__esModule", { value: true });
+  exports.default = 42;
+  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoiPGN3ZD4vc3JjL2NvbXBpbGVyLnNwZWMudHMudGVzdC5qcyIsIm1hcHBpbmdzIjoiOztBQUFBLGtCQUFlLEVBQUUsQ0FBQSIsIm5hbWVzIjpbXSwic291cmNlcyI6WyI8Y3dkPi9zcmMvY29tcGlsZXIuc3BlYy50cy50ZXN0LmpzIl0sInNvdXJjZXNDb250ZW50IjpbImV4cG9ydCBkZWZhdWx0IDQyIl0sInZlcnNpb24iOjN9
+  ===[ INLINE SOURCE MAPS ]=======================================================
+  file: <cwd>/src/compiler.spec.ts.test.js
+  mappings: ';;AAAA,kBAAe,EAAE,CAAA'
+  names: []
+  sources:
+    - <cwd>/src/compiler.spec.ts.test.js
+  sourcesContent:
+    - export default 42
+  version: 3
+  ================================================================================
+`)
+  })
+})
+
 describe('getTypeInfo', () => {
-  const compiler = makeCompiler()
+  const compiler = makeCompiler({ tsJestConfig: { tsConfig: false } })
   const source = `
 type MyType {
   /** the prop 1! */
@@ -166,8 +197,11 @@ const val: MyType = {} as any
 console.log(val.p1/* <== that */)
 `
   it('should get correct type info', () => {
-    expect(compiler.getTypeInfo(source, __filename, source.indexOf('/* <== that */') - 1)).toEqual({
-      comment: 'the prop 1! ',
+    const ti = compiler.getTypeInfo(source, __filename, source.indexOf('/* <== that */') - 1)
+    // before TS 3.1 the comment had an extra tailing space
+    ti.comment = ti.comment.trim()
+    expect(ti).toEqual({
+      comment: 'the prop 1!',
       name: '(property) p1: boolean',
     })
   })

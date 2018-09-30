@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`using template "default" should report coverages 1`] = `
-  √ jest --coverage
+  √ jest
   ↳ exit code: 0
   ===[ STDOUT ]===================================================================
   ----------|----------|----------|----------|----------|-------------------|
@@ -24,7 +24,7 @@ exports[`using template "default" should report coverages 1`] = `
 `;
 
 exports[`using template "with-babel-6" should report coverages 1`] = `
-  √ jest --coverage
+  √ jest
   ↳ exit code: 0
   ===[ STDOUT ]===================================================================
   ----------|----------|----------|----------|----------|-------------------|
@@ -47,7 +47,7 @@ exports[`using template "with-babel-6" should report coverages 1`] = `
 `;
 
 exports[`using template "with-babel-7" should report coverages 1`] = `
-  √ jest --coverage
+  √ jest
   ↳ exit code: 0
   ===[ STDOUT ]===================================================================
   ----------|----------|----------|----------|----------|-------------------|
@@ -70,7 +70,7 @@ exports[`using template "with-babel-7" should report coverages 1`] = `
 `;
 
 exports[`using template "with-jest-22" should report coverages 1`] = `
-  √ jest --coverage
+  √ jest
   ↳ exit code: 0
   ===[ STDOUT ]===================================================================
   ----------|----------|----------|----------|----------|-------------------|
@@ -93,7 +93,7 @@ exports[`using template "with-jest-22" should report coverages 1`] = `
 `;
 
 exports[`using template "with-typescript-2-7" should report coverages 1`] = `
-  √ jest --coverage
+  √ jest
   ↳ exit code: 0
   ===[ STDOUT ]===================================================================
   ----------|----------|----------|----------|----------|-------------------|

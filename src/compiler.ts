@@ -45,6 +45,7 @@ const hasOwn = Object.prototype.hasOwnProperty
 
 /**
  * Register TypeScript compiler.
+ * @internal
  */
 export function createCompiler(configs: ConfigSet): TsCompiler {
   const logger = configs.logger.child({ namespace: 'ts-compiler' })
@@ -190,11 +191,13 @@ export function createCompiler(configs: ConfigSet): TsCompiler {
         configs.raiseDiagnostics(diagnostics, fileName, logger)
       }
 
+      /* istanbul ignore next (this should never happen but is kept for security) */
       if (output.emitSkipped) {
         throw new TypeError(`${relative(cwd, fileName)}: Emit skipped`)
       }
 
       // Throw an error when requiring `.d.ts` files.
+      /* istanbul ignore next (this should never happen but is kept for security) */
       if (output.outputFiles.length === 0) {
         throw new TypeError(
           interpolate(Errors.UnableToRequireDefinitionFile, {
@@ -300,12 +303,15 @@ function updateOutput(
 /**
  * Update the source map contents for improved output.
  */
-function updateSourceMap(sourceMapText: string, fileName: string, sourceRoot: string) {
+function updateSourceMap(sourceMapText: string, fileName: string, _sourceRoot: string) {
   const sourceMap = JSON.parse(sourceMapText)
-  const relativeFilePath = relative(sourceRoot, fileName)
-  sourceMap.file = relativeFilePath
-  sourceMap.sources = [relativeFilePath]
-  sourceMap.sourceRoot = sourceRoot
+  // const relativeFilePath = posix.normalize(relative(sourceRoot, fileName))
+  // sourceMap.file = relativeFilePath
+  // sourceMap.sources = [relativeFilePath]
+  // sourceMap.sourceRoot = normalize(sourceRoot)
+  sourceMap.file = fileName
+  sourceMap.sources = [fileName]
+  delete sourceMap.sourceRoot
   return stableStringify(sourceMap)
 }
 

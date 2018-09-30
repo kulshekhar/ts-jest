@@ -1,4 +1,6 @@
 import { sync as spawnSync } from 'cross-spawn'
+import { createHash } from 'crypto'
+import stringifyJson from 'fast-json-stable-stringify'
 import {
   copySync,
   ensureSymlinkSync,
@@ -11,18 +13,20 @@ import {
   readdirSync,
   realpathSync,
   removeSync,
+  renameSync,
   statSync,
   symlinkSync,
   writeFileSync,
 } from 'fs-extra'
+import { stringify as stringifyJson5 } from 'json5'
 import merge from 'lodash.merge'
-import { join, relative, sep } from 'path'
+import { join, relative, resolve, sep } from 'path'
 
 import * as Paths from '../../../scripts/lib/paths'
 
 import RunResult from './run-result'
 import { PreparedTest, RunTestOptions } from './types'
-import { templateNameForPath } from './utils'
+import { enableOptimizations, templateNameForPath } from './utils'
 
 const TEMPLATE_EXCLUDED_ITEMS = ['node_modules', 'package-lock.json']
 
@@ -49,99 +53,159 @@ function hooksSourceWith(vars: Record<string, any>): string {
 }
 
 export function run(name: string, options: RunTestOptions = {}): RunResult {
-  const { args = [], env = {}, template, inject, writeIo } = options
-  const { workdir: dir, sourceDir, hooksFile, ioDir } = prepareTest(
+  const { env = {}, template, inject, writeIo, noCache, jestConfigPath: configFile = 'jest.config.js' } = options
+  const { workdir: dir, sourceDir } = prepareTest(
     name,
     template || templateNameForPath(join(Paths.e2eSourceDir, name)),
     options,
   )
-  const pkg = require(join(dir, 'package.json'))
+  const pkg = readJsonSync(join(dir, 'package.json'))
+
+  const jestConfigPath = (path: string = dir) => resolve(path, configFile)
+
+  // grab base configuration
+  let baseConfig: jest.InitialOptions = require(jestConfigPath())
+  if (configFile === 'package.json') baseConfig = (baseConfig as any).jest
+
+  const extraConfig = {} as jest.InitialOptions
 
   let shortCmd: string
   let cmdArgs: string[] = []
   if (inject) {
-    cmdArgs.push('--testPathPattern="/__eval\\\\.ts$"')
-  } // '--testRegex=""'
+    extraConfig.testMatch = undefined
+    extraConfig.testRegex = '/__eval\\.ts$'
+  }
   if (process.argv.find(v => ['--updateSnapshot', '-u'].includes(v))) {
     cmdArgs.push('-u')
   }
-  cmdArgs.push(...args)
   if (!inject && pkg.scripts && pkg.scripts.test) {
-    if (cmdArgs.length) {
-      cmdArgs.unshift('--')
-    }
-    cmdArgs = ['npm', '-s', 'run', 'test', ...cmdArgs]
+    cmdArgs = ['npm', '-s', 'run', 'test', '--', ...cmdArgs]
     shortCmd = 'npm'
   } else {
-    cmdArgs.unshift(join(dir, 'node_modules', '.bin', 'jest'))
+    cmdArgs.unshift(join('node_modules', '.bin', 'jest'))
     shortCmd = 'jest'
   }
 
-  // merge given config extend
-  if (options.jestConfig || options.tsJestConfig) {
-    let originalConfig: any = join(dir, 'jest.config.js')
-    if (existsSync(originalConfig)) {
-      originalConfig = require(originalConfig)
-    } else {
-      originalConfig = require(join(dir, 'package.json')).jest || {}
-    }
-    cmdArgs.push(
-      '--config',
-      JSON.stringify(
-        merge({}, originalConfig, options.jestConfig, {
-          globals: { 'ts-jest': options.tsJestConfig || {} },
-        }),
-      ),
-    )
+  // extends config
+  if (options.jestConfig) {
+    merge(extraConfig, options.jestConfig)
+  }
+  if (options.tsJestConfig) {
+    const globalConfig: any = extraConfig.globals || (extraConfig.globals = {})
+    const tsJestConfig = globalConfig['ts-jest'] || (globalConfig['ts-jest'] = {})
+    merge(tsJestConfig, options.tsJestConfig)
   }
 
-  // run in band
+  // cache dir
+  if (noCache || writeIo) {
+    cmdArgs.push('--no-cache')
+    extraConfig.cacheDirectory = undefined
+  } else if (!(baseConfig.cacheDirectory || extraConfig.cacheDirectory)) {
+    // force the cache directory if not set
+    extraConfig.cacheDirectory = join(Paths.cacheDir, `e2e-${template}`)
+  }
+
+  // build final config and create dir suffix based on it
+  const finalConfig = merge({}, baseConfig, extraConfig)
+  const digest = createHash('sha1')
+    .update(stringifyJson(finalConfig))
+    .digest('hex')
+  // this must be in the same path hierarchy as dir
+  const nextDirPrefix = `${dir}-${digest.substr(0, 7)}.`
+  let index = 1
+  while (existsSync(`${nextDirPrefix}${index}`)) index++
+  const nextDir = `${nextDirPrefix}${index}`
+
+  // move the directory related to config digest
+  renameSync(dir, nextDir)
+
+  // write final config
+  // FIXME: sounds like the json fail to be encoded as an arg
+  if (false /* enableOptimizations() */) {
+    cmdArgs.push('--config', JSON.stringify(finalConfig))
+  } else if (Object.keys(extraConfig).length !== 0) {
+    if (configFile === 'package.json') {
+      pkg.jest = finalConfig
+      outputJsonSync(jestConfigPath(nextDir), pkg)
+    } else {
+      outputFileSync(jestConfigPath(nextDir), `module.exports = ${JSON.stringify(finalConfig, null, 2)}`, 'utf8')
+    }
+  }
+
+  // ensure we run in band
   if (!cmdArgs.includes('--runInBand')) {
     cmdArgs.push('--runInBand')
   }
 
   const cmd = cmdArgs.shift() as string
+  if (cmdArgs[cmdArgs.length - 1] === '--') cmdArgs.pop()
 
-  // Add both process.env which is the standard and custom env variables
-  const mergedEnv: any = {
-    ...process.env,
-    ...env,
-  }
+  // extend env
+  const localEnv: any = { ...env }
   if (inject) {
     const injected = typeof inject === 'function' ? `(${inject.toString()}).apply(this);` : inject
-    mergedEnv.__TS_JEST_EVAL = injected
+    localEnv.__TS_JEST_EVAL = injected
   }
   if (writeIo) {
-    mergedEnv.TS_JEST_HOOKS = hooksFile
+    localEnv.TS_JEST_HOOKS = defaultHooksFile('.')
   }
 
-  const result = spawnSync(cmd, cmdArgs, {
-    cwd: dir,
-    env: mergedEnv,
-  })
+  // arguments to give to spawn
+  const spawnOptions: { env: Record<string, string>; cwd: string } = { env: localEnv } as any
+
+  // create started script for debugging
+  if (!enableOptimizations()) {
+    outputFileSync(
+      join(nextDir, '__launch.js'),
+      `
+const { execFile } = require('child_process')
+const cmd = ${stringifyJson5(cmd, null, 2)}
+const args = ${stringifyJson5(cmdArgs, null, 2)}
+const options = ${stringifyJson5(spawnOptions, null, 2)}
+options.env = Object.assign({}, process.env, options.env)
+execFile(cmd, args, options)
+`,
+      'utf8',
+    )
+  }
+
+  // extend env with our env
+  spawnOptions.env = { ...process.env, ...localEnv }
+  spawnOptions.cwd = nextDir
+
+  // run jest
+  const result = spawnSync(cmd, cmdArgs, spawnOptions)
 
   // we need to copy each snapshot which does NOT exists in the source dir
-  readdirSync(dir).forEach(item => {
-    if (item === 'node_modules' || !statSync(join(dir, item)).isDirectory()) {
-      return
-    }
-    const srcDir = join(sourceDir, item)
-    const wrkDir = join(dir, item)
-    copySync(wrkDir, srcDir, {
-      overwrite: false,
-      filter: from => {
-        return relative(sourceDir, from)
-          .split(sep)
-          .includes('__snapshots__')
-      },
-    })
-  })
+  if (!enableOptimizations()) {
+    readdirSync(nextDir).forEach(item => {
+      if (item === 'node_modules' || !statSync(join(nextDir, item)).isDirectory()) {
+        return
+      }
+      const srcDir = join(sourceDir, item)
+      const wrkDir = join(nextDir, item)
 
-  return new RunResult(realpathSync(dir), result, {
+      // do not try to copy a linked root snapshots
+      if (item === '__snapshots__' && existsSync(srcDir)) return
+
+      copySync(wrkDir, srcDir, {
+        overwrite: false,
+        filter: from => {
+          return relative(sourceDir, from)
+            .split(sep)
+            .includes('__snapshots__')
+        },
+      })
+    })
+  }
+
+  return new RunResult(realpathSync(nextDir), result, {
     cmd: shortCmd,
     args: cmdArgs,
-    env: mergedEnv,
-    ioDir: writeIo ? ioDir : undefined,
+    env: localEnv,
+    ioDir: writeIo ? ioDirForPath(nextDir) : undefined,
+    config: finalConfig,
+    digest,
   })
 }
 
@@ -213,18 +277,19 @@ export function prepareTest(name: string, template: string, options: RunTestOpti
   // create the special files
   outputFileSync(join(caseWorkdir, '__eval.ts'), EVAL_SOURCE, 'utf8')
   let ioDir!: string
+  // hooks
   if (options.writeIo) {
-    ioDir = join(caseWorkdir, '__io__')
+    ioDir = ioDirForPath(caseWorkdir)
     mkdirpSync(ioDir)
+    const hooksFile = defaultHooksFile(caseWorkdir)
+    outputFileSync(
+      hooksFile,
+      hooksSourceWith({
+        writeProcessIoTo: ioDirForPath('.') || false,
+      }),
+      'utf8',
+    )
   }
-  const hooksFile = join(caseWorkdir, '__hooks.js')
-  outputFileSync(
-    hooksFile,
-    hooksSourceWith({
-      writeProcessIoTo: ioDir || false,
-    }),
-    'utf8',
-  )
 
   // create a package.json if it does not exists, and/or enforce the package name
   const pkgFile = join(caseWorkdir, 'package.json')
@@ -234,5 +299,13 @@ export function prepareTest(name: string, template: string, options: RunTestOpti
   pkg.version = `0.0.0-mock0`
   outputJsonSync(pkgFile, pkg, { spaces: 2 })
 
-  return { workdir: caseWorkdir, templateDir, sourceDir, hooksFile, ioDir }
+  return { workdir: caseWorkdir, templateDir, sourceDir }
+}
+
+function ioDirForPath(path: string) {
+  return join(path, '__io__')
+}
+
+function defaultHooksFile(path: string) {
+  return join(path, '__hooks.js')
 }

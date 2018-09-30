@@ -1,10 +1,16 @@
 import { createHash } from 'crypto'
 
+/**
+ * @internal
+ */
 // stores hashes made out of only one argument being a string
 export const cache: { [key: string]: string } = Object.create(null)
 
 type DataItem = string | Buffer
 
+/**
+ * @internal
+ */
 export function sha1(...data: DataItem[]): string {
   const canCache = data.length === 1 && typeof data[0] === 'string'
   // caching

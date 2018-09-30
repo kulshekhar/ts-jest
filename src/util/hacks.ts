@@ -7,6 +7,9 @@ import { Errors, interpolate } from './messages'
 
 const logger = rootLogger.child({ namespace: 'hacks' })
 
+/**
+ * @internal
+ */
 // tslint:disable-next-line:variable-name
 export const patchBabelCore_githubIssue6577: ModulePatcher<TBabelCore> = babel => {
   // There is an issue still open in Babel 6: https://github.com/babel/babel/issues/6577

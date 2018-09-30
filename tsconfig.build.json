@@ -5,6 +5,8 @@
     "inlineSources": false,
     "inlineSourceMap": false,
     "noEmit": false,
+    "declaration": true,
+    "stripInternal": true,
     "outDir": "dist",
     "rootDir": "src",
   },

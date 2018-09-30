@@ -5,11 +5,12 @@ import RunResult from './run-result'
 export interface RunTestOptions {
   template?: string
   env?: {}
-  args?: string[]
   inject?: (() => any) | string
   writeIo?: boolean
   jestConfig?: jest.ProjectConfig | any
   tsJestConfig?: TsJestConfig | any
+  noCache?: boolean
+  jestConfigPath?: string
 }
 
 export type RunWithTemplatesIterator = (runtTest: () => RunResult, context: RunWithTemplateIteratorContext) => void
@@ -28,6 +29,4 @@ export interface PreparedTest {
   workdir: string
   templateDir: string
   sourceDir: string
-  ioDir: string
-  hooksFile: string
 }

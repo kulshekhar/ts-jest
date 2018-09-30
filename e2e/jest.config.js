@@ -11,4 +11,5 @@ module.exports = {
     '<rootDir>/e2e/__serializers__/processed-source.ts',
   ],
   verbose: true,
+  cacheDirectory: '<rootDir>/.cache/e2e',
 }

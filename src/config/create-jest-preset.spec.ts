@@ -31,3 +31,46 @@ it('should return correct defaults when allowJs is true', () => {
     },
   })
 })
+
+it('should be able to use a base config', () => {
+  expect(createJestPreset(undefined, {})).toMatchInlineSnapshot(`
+Object {
+  "moduleFileExtensions": Array [
+    "js",
+    "json",
+    "jsx",
+    "node",
+    "ts",
+    "tsx",
+  ],
+  "testMatch": Array [
+    "**/__tests__/**/*.js?(x)",
+    "**/?(*.)+(spec|test).js?(x)",
+    "**/__tests__/**/*.ts?(x)",
+    "**/?(*.)+(spec|test).ts?(x)",
+  ],
+  "transform": Object {
+    "^.+\\\\.tsx?$": "ts-jest",
+  },
+}
+`)
+  expect(createJestPreset(undefined, { testMatch: ['foo'], moduleFileExtensions: ['bar'], transform: { foo: 'bar' } }))
+    .toMatchInlineSnapshot(`
+Object {
+  "moduleFileExtensions": Array [
+    "bar",
+    "ts",
+    "tsx",
+  ],
+  "testMatch": Array [
+    "foo",
+    "**/__tests__/**/*.ts?(x)",
+    "**/?(*.)+(spec|test).ts?(x)",
+  ],
+  "transform": Object {
+    "^.+\\\\.tsx?$": "ts-jest",
+    "foo": "bar",
+  },
+}
+`)
+})

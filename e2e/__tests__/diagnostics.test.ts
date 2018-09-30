@@ -14,7 +14,10 @@ describe('With diagnostics, first throws', () => {
 })
 
 describe('With diagnostics, warn only', () => {
-  const testCase = configureTestCase('diagnostics', { tsJestConfig: { diagnostics: { warnOnly: true } } })
+  const testCase = configureTestCase('diagnostics', {
+    tsJestConfig: { diagnostics: { warnOnly: true } },
+    noCache: true, // warnings shown only on first compilation
+  })
 
   testCase.runWithTemplates(allValidPackageSets, 0, (runTest, { testLabel }) => {
     it(testLabel, () => {

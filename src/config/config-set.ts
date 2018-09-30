@@ -11,11 +11,19 @@
 import { LogContexts, Logger } from 'bs-logger'
 import { existsSync, readFileSync } from 'fs'
 import json5 from 'json5'
-import { dirname, isAbsolute, join, resolve } from 'path'
+import { dirname, isAbsolute, join, normalize, resolve } from 'path'
 import semver from 'semver'
-import { CustomTransformers, Diagnostic, FormatDiagnosticsHost, ParsedCommandLine } from 'typescript'
+import {
+  CompilerOptions,
+  CustomTransformers,
+  Diagnostic,
+  DiagnosticCategory,
+  FormatDiagnosticsHost,
+  ParsedCommandLine,
+  SourceFile,
+} from 'typescript'
 
-import { version as myVersion } from '..'
+import { digest as MY_DIGEST, version as MY_VERSION } from '..'
 import { createCompiler } from '../compiler'
 import { internals as internalAstTransformers } from '../transformers'
 import {
@@ -49,40 +57,28 @@ interface ReadTsConfigResult {
   resolved: ParsedCommandLine
 }
 
+/**
+ * @internal
+ */
 // this regex MUST match nothing, it's the goal ;-)
 export const MATCH_NOTHING = /a^/
+/**
+ * @internal
+ */
 export const IGNORE_DIAGNOSTIC_CODES = [
   6059, // "'rootDir' is expected to contain all source files."
   18002, // "The 'files' list in config file is empty."
   18003, // "No inputs were found in config file."
 ]
 
-const DEFAULT_COMPILER_OPTIONS = {
-  inlineSourceMap: true,
-  inlineSources: true,
-}
-const FORCE_COMPILER_OPTIONS = {
-  // we handle sourcemaps this way and not another
-  sourceMap: true,
-  inlineSourceMap: false,
-  inlineSources: true,
-  // we don't want to create declaration files
-  declaration: false,
-  noEmit: false,
-  outDir: '$$ts-jest$$',
-  // commonjs + module interop should be compatible with every other setup
-  module: 'commonjs',
-  esModuleInterop: true,
-  // else istanbul related will be dropped
-  removeComments: false,
-  // to clear out else it's buggy
-  out: undefined,
-  outFile: undefined,
-  composite: undefined,
-  declarationDir: undefined,
-  declarationMap: undefined,
-  emitDeclarationOnly: undefined,
-  sourceRoot: undefined,
+/**
+ * @internal
+ */
+// WARNING: DO NOT CHANGE THE ORDER OF CODE NAMES!
+// ONLY APPEND IF YOU NEED TO ADD SOME
+export enum DiagnosticCodes {
+  TsJest = 151000,
+  ConfigModuleOption,
 }
 
 const normalizeRegex = (pattern: string | RegExp | undefined): string | undefined => {
@@ -116,16 +112,6 @@ const toDiagnosticCodeList = (items: any, into: number[] = []): number[] => {
 }
 
 export class ConfigSet {
-  readonly logger: Logger
-
-  constructor(
-    private readonly _jestConfig: jest.ProjectConfig,
-    readonly parentOptions?: TsJestGlobalOptions,
-    parentLogger?: Logger,
-  ) {
-    this.logger = parentLogger ? parentLogger.child({ [LogContexts.namespace]: 'config' }) : logger
-  }
-
   @Memoize()
   get jest(): jest.ProjectConfig {
     const config = backportJestConfig(this.logger, this._jestConfig)
@@ -243,10 +229,13 @@ export class ConfigSet {
         map[name] = getPackageVersion(name) || '-'
         return map
       },
-      { 'ts-jest': myVersion } as Record<string, string>,
+      { 'ts-jest': MY_VERSION } as Record<string, string>,
     )
   }
 
+  /**
+   * @internal
+   */
   @Memoize()
   private get _typescript(): ReadTsConfigResult {
     const {
@@ -265,6 +254,9 @@ export class ConfigSet {
     return result
   }
 
+  /**
+   * @internal
+   */
   @Memoize()
   get raiseDiagnostics() {
     const {
@@ -273,12 +265,17 @@ export class ConfigSet {
       tsJest: {
         diagnostics: { throws },
       },
+      compilerModule: { DiagnosticCategory },
     } = this
     return (diagnostics: Diagnostic[], filePath?: string, logger: Logger = this.logger): void | never => {
       const filteredDiagnostics = filterDiagnostics(diagnostics, filePath)
       if (filteredDiagnostics.length === 0) return
       const error = createTsError(filteredDiagnostics)
-      if (throws) throw error
+      // only throw if `warnOnly` and it is a warning or error
+      const importantCategories = [DiagnosticCategory.Warning, DiagnosticCategory.Error]
+      if (throws && filteredDiagnostics.some(d => importantCategories.includes(d.category))) {
+        throw error
+      }
       logger.warn({ error }, error.message)
     }
   }
@@ -357,11 +354,14 @@ export class ConfigSet {
     let hooksFile = process.env.TS_JEST_HOOKS
     if (hooksFile) {
       hooksFile = resolve(this.cwd, hooksFile)
-      return importer.tryThese(hooksFile) || {}
+      return importer.tryTheseOr(hooksFile, {})
     }
     return {}
   }
 
+  /**
+   * @internal
+   */
   @Memoize()
   get filterDiagnostics() {
     const {
@@ -405,6 +405,9 @@ export class ConfigSet {
     }
   }
 
+  /**
+   * @internal
+   */
   @Memoize()
   get createTsError() {
     const {
@@ -440,26 +443,127 @@ export class ConfigSet {
         compiler: this.tsJest.compiler,
         compilerOptions: this.typescript.options,
         isolatedModules: this.tsJest.isolatedModules,
-        ignoreDiagnostics: this.tsJest.diagnostics.ignoreCodes,
+        diagnostics: this.tsJest.diagnostics,
       }),
     )
-    const res = join(this.jest.cacheDirectory, `ts-jest-${cacheSuffix}`)
+    const res = join(this.jest.cacheDirectory, 'ts-jest', cacheSuffix.substr(0, 2), cacheSuffix.substr(2))
     logger.debug({ cacheDirectory: res }, `will use file caching`)
     return res
   }
 
+  @Memoize()
+  get overriddenCompilerOptions(): Partial<CompilerOptions> {
+    const options: Partial<CompilerOptions> = {
+      // we handle sourcemaps this way and not another
+      sourceMap: true,
+      inlineSourceMap: false,
+      inlineSources: true,
+      // we don't want to create declaration files
+      declaration: false,
+      noEmit: false,
+      outDir: '$$ts-jest$$',
+      // else istanbul related will be dropped
+      removeComments: false,
+      // to clear out else it's buggy
+      out: undefined,
+      outFile: undefined,
+      composite: undefined,
+      declarationDir: undefined,
+      declarationMap: undefined,
+      emitDeclarationOnly: undefined,
+      sourceRoot: undefined,
+    }
+    // force the module kind if not piping babel-jest
+    if (!this.tsJest.babelConfig) {
+      // commonjs is required for jest
+      options.module = this.compilerModule.ModuleKind.CommonJS
+    }
+    return options
+  }
+
+  @Memoize()
   get rootDir(): string {
-    return this.jest.rootDir || this.cwd
+    return normalize(this.jest.rootDir || this.cwd)
   }
 
+  @Memoize()
   get cwd(): string {
-    return this.jest.cwd || process.cwd()
+    return normalize(this.jest.cwd || process.cwd())
   }
 
+  /**
+   * @internal
+   */
   get isDoctoring() {
     return !!process.env.TS_JEST_DOCTOR
   }
 
+  @Memoize()
+  get tsJestDigest(): string {
+    return MY_DIGEST
+  }
+
+  /**
+   * @internal
+   */
+  @Memoize()
+  get jsonValue() {
+    const jest = { ...this.jest }
+    const globals = (jest.globals = { ...jest.globals } as any)
+    // we need to remove some stuff from jest config
+    // this which does not depend on config
+    delete jest.name
+    delete jest.cacheDirectory
+    // we do not need this since its normalized version is in tsJest
+    delete globals['ts-jest']
+
+    return new JsonableValue({
+      versions: this.versions,
+      digest: this.tsJestDigest,
+      transformers: this.astTransformers.map(t => `${t.name}@${t.version}`),
+      jest,
+      tsJest: this.tsJest,
+      babel: this.babel,
+      tsconfig: this.typescript.options,
+    })
+  }
+
+  get cacheKey(): string {
+    return this.jsonValue.serialized
+  }
+  readonly logger: Logger
+  /**
+   * @internal
+   */
+  private readonly _jestConfig: jest.ProjectConfig
+
+  constructor(jestConfig: jest.ProjectConfig, readonly parentOptions?: TsJestGlobalOptions, parentLogger?: Logger) {
+    this._jestConfig = jestConfig
+    this.logger = parentLogger ? parentLogger.child({ [LogContexts.namespace]: 'config' }) : logger
+  }
+
+  /**
+   * @internal
+   */
+  makeDiagnostic(
+    code: number,
+    messageText: string,
+    options: { category?: DiagnosticCategory; file?: SourceFile; start?: number; length?: number } = {},
+  ): Diagnostic {
+    const { category = this.compilerModule.DiagnosticCategory.Warning, file, start, length } = options
+    return {
+      code,
+      messageText,
+      category,
+      file,
+      start,
+      length,
+    }
+  }
+
+  /**
+   * @internal
+   */
   readTsConfig(
     compilerOptions?: object,
     resolvedConfigFile?: string | null,
@@ -504,23 +608,51 @@ export class ConfigSet {
 
     // Override default configuration options `ts-jest` requires.
     config.compilerOptions = {
-      ...DEFAULT_COMPILER_OPTIONS,
       ...config.compilerOptions,
       ...compilerOptions,
-      ...FORCE_COMPILER_OPTIONS,
     }
 
+    // parse json, merge config extending others, ...
     const result = ts.parseJsonConfigFileContent(config, ts.sys, basePath, undefined, configFileName)
 
+    const { overriddenCompilerOptions: forcedOptions } = this
+    const finalOptions = result.options
+
     // Target ES5 output by default (instead of ES3).
-    if (result.options.target === undefined) {
-      result.options.target = ts.ScriptTarget.ES5
+    if (finalOptions.target === undefined) {
+      finalOptions.target = ts.ScriptTarget.ES5
     }
 
-    // ensure undefined in FORCE_COMPILER_OPTIONS are removed
-    for (const key in FORCE_COMPILER_OPTIONS) {
-      if ((FORCE_COMPILER_OPTIONS as any)[key] === undefined) {
-        delete result.options[key]
+    // check the module interoperability
+    const target = finalOptions.target!
+    // compute the default if not set
+    const defaultModule = [ts.ScriptTarget.ES3, ts.ScriptTarget.ES5].includes(target)
+      ? ts.ModuleKind.CommonJS
+      : ts.ModuleKind.ESNext
+    const moduleValue = finalOptions.module == null ? defaultModule : finalOptions.module
+    if (
+      'module' in forcedOptions &&
+      moduleValue !== forcedOptions.module &&
+      !(finalOptions.esModuleInterop || finalOptions.allowSyntheticDefaultImports)
+    ) {
+      result.errors.push(
+        this.makeDiagnostic(DiagnosticCodes.ConfigModuleOption, Errors.ConfigNoModuleInterop, {
+          category: ts.DiagnosticCategory.Message,
+        }),
+      )
+      // at least enable synthetic default imports (except if it's set in the input config)
+      if (!('allowSyntheticDefaultImports' in config.compilerOptions)) {
+        finalOptions.allowSyntheticDefaultImports = true
+      }
+    }
+
+    // ensure undefined are removed and other values are overridden
+    for (const key of Object.keys(forcedOptions)) {
+      const val = forcedOptions[key]
+      if (val === undefined) {
+        delete finalOptions[key]
+      } else {
+        finalOptions[key] = val
       }
     }
 
@@ -559,31 +691,9 @@ export class ConfigSet {
     return path
   }
 
-  @Memoize()
-  get jsonValue() {
-    const jest = { ...this.jest }
-    const globals = (jest.globals = { ...jest.globals } as any)
-    // we need to remove some stuff from jest config
-    // this which does not depend on config
-    delete jest.name
-    delete jest.cacheDirectory
-    // we do not need this since its normalized version is in tsJest
-    delete globals['ts-jest']
-
-    return new JsonableValue({
-      versions: this.versions,
-      transformers: this.astTransformers.map(t => `${t.name}@${t.version}`),
-      jest,
-      tsJest: this.tsJest,
-      babel: this.babel,
-      tsconfig: this.tsconfig,
-    })
-  }
-
-  get cacheKey(): string {
-    return this.jsonValue.serialized
-  }
-
+  /**
+   * @internal
+   */
   toJSON() {
     return this.jsonValue.value
   }

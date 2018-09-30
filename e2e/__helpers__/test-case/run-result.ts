@@ -4,6 +4,8 @@ import { readFileSync, realpathSync } from 'fs'
 import { tmpdir } from 'os'
 import { resolve, sep } from 'path'
 
+import { cacheDir } from '../../../scripts/lib/paths'
+
 import ProcessedFileIo from './processed-file-io'
 import { escapeRegex, normalizeJestOutput, stripAnsiColors } from './utils'
 
@@ -17,6 +19,8 @@ export default class RunResult {
       cmd: string
       args: string[]
       env: { [key: string]: string }
+      config: jest.InitialOptions
+      digest: string
     }>,
   ) {}
   get logFilePath() {
@@ -41,24 +45,29 @@ export default class RunResult {
     return this.result.status
   }
   get output() {
-    return stripAnsiColors(this.result.output ? this.result.output.join('\n\n') : '')
+    return this.normalize(stripAnsiColors(this.result.output ? this.result.output.join('\n\n') : ''))
   }
   get stderr() {
-    return stripAnsiColors((this.result.stderr || '').toString())
+    return this.normalize(stripAnsiColors((this.result.stderr || '').toString()))
   }
   get normalizedStderr() {
     return normalizeJestOutput(this.stderr)
   }
   get stdout() {
-    return stripAnsiColors((this.result.stdout || '').toString())
+    return this.normalize(stripAnsiColors((this.result.stdout || '').toString()))
   }
   get normalizedStdout() {
     return normalizeJestOutput(this.stdout)
   }
   get cmdLine() {
-    return [this.context.cmd, ...this.context.args]
-      .filter(a => !['-u', '--updateSnapshot', '--runInBand'].includes(a))
-      .join(' ')
+    const args = [this.context.cmd, ...this.context.args].filter(
+      a => !['-u', '--updateSnapshot', '--runInBand', '--'].includes(a),
+    )
+    const configIndex = args.indexOf('--config')
+    if (configIndex !== -1) {
+      args.splice(configIndex, 2)
+    }
+    return this.normalize(args.join(' '))
   }
 
   ioFor(relFilePath: string): ProcessedFileIo {
@@ -80,7 +89,12 @@ export default class RunResult {
     const realCwd = realpathSync(cwd)
     const tmp = tmpdir()
     const realTmp = realpathSync(tmp)
-    const map = [{ from: cwd, to: '<cwd>' }, { from: tmp, to: '<tmp>' }, { from: /\b[a-f0-9]{40}\b/g, to: '<hex:40>' }]
+    const map = [
+      { from: cwd, to: '<cwd>' },
+      { from: tmp, to: '<tmp>' },
+      { from: /\b[a-f0-9]{40}\b/g, to: '<hex:40>' },
+      { from: cacheDir, to: '<ts-jest-cache>' },
+    ]
     if (cwd !== realCwd) map.push({ from: realCwd, to: '<cwd>' })
     if (tmp !== realTmp) map.push({ from: realTmp, to: '<tmp>' })
     if (sep === '\\') {

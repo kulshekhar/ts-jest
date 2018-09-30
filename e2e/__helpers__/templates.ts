@@ -14,3 +14,9 @@ export const allValidPackageSets = [
   PackageSets.jest22,
   PackageSets.typescript2_7,
 ]
+export const allPackageSetsWithPreset = [
+  PackageSets.default,
+  PackageSets.babel6,
+  PackageSets.babel7,
+  PackageSets.typescript2_7,
+]

@@ -1,8 +1,8 @@
 const npm = require('./npm')
 const logger = require('./logger')
-const { rootDir } = require('./paths')
+const { rootDir, pkgDigestFile } = require('./paths')
 const { join, resolve } = require('path')
-const { readFileSync, statSync } = require('fs')
+const { readFileSync, statSync, writeFileSync, existsSync } = require('fs-extra')
 const { createHash } = require('crypto')
 const { sync: globIgnore } = require('glob-gitignore')
 
@@ -19,7 +19,11 @@ function createBundle(log = logger.log.bind(logger)) {
   return join(rootDir, res.stdout.toString().trim())
 }
 
-function packageDigest() {
+function readPackageDigest() {
+  return existsSync(pkgDigestFile) ? readFileSync(pkgDigestFile, 'utf8') : undefined
+}
+
+function computePackageDigest(noWriteFile = false) {
   const files = globIgnore(join(rootDir, '**'), {
     ignore: readFileSync(join(rootDir, '.npmignore'))
       .toString('utf8')
@@ -28,14 +32,19 @@ function packageDigest() {
   })
   const hash = createHash('sha1')
   files.sort().forEach(file => {
-    if (statSync(file).isDirectory()) return
+    if (file === pkgDigestFile || statSync(file).isDirectory()) return
     hash.update(readFileSync(resolve(file)))
     hash.update('\x00')
   })
-  return hash.digest('hex')
+  const digest = hash.digest('hex')
+  if (!noWriteFile) {
+    writeFileSync(pkgDigestFile, digest, 'utf8')
+  }
+  return digest
 }
 
 module.exports = {
   createBundle,
-  packageDigest,
+  computePackageDigest,
+  readPackageDigest,
 }

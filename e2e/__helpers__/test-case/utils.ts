@@ -47,3 +47,7 @@ export function normalizeJestOutput(output: string): string {
 export function escapeRegex(s: string) {
   return s.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')
 }
+
+export function enableOptimizations() {
+  return !!process.env.TS_JEST_E2E_OPTIMIZATIONS
+}

@@ -3,22 +3,21 @@ import * as fakers from '../__helpers__/fakers'
 
 import { Importer, __requireModule } from './importer'
 
-const requireModule = jest.fn(
-  mod =>
-    mod in modules
-      ? modules[mod]()
-      : (() => {
-          const err: any = new Error(`Module not found: ${mod}.`)
-          err.code = 'MODULE_NOT_FOUND'
-          throw err
-        })(),
-)
-__requireModule(requireModule as any)
+const moduleNotFound = (mod: string) => {
+  const err: any = new Error(`Module not found: ${mod}.`)
+  err.code = 'MODULE_NOT_FOUND'
+  throw err
+}
+const fakeFullPath = (mod: string) => `/root/${mod}.js`
+const requireModule = jest.fn(mod => (mod in modules ? modules[mod]() : moduleNotFound(mod)))
+const resolveModule = jest.fn(mod => (mod in modules ? fakeFullPath(mod) : moduleNotFound(mod)))
+__requireModule(requireModule as any, resolveModule)
 
 let modules!: { [key: string]: () => any }
 beforeEach(() => {
   modules = {}
   requireModule.mockClear()
+  resolveModule.mockClear()
 })
 
 describe('instance', () => {
@@ -30,12 +29,60 @@ describe('instance', () => {
   })
 })
 
-describe('tryTheese', () => {
-  it('tries until it find one not failing', () => {
+describe('tryThese', () => {
+  it('should try until it finds one existing', () => {
     modules = {
-      success: () => 'success',
+      success: () => 'ok',
     }
-    expect(new Importer().tryThese('fail1', 'fail2', 'success')).toBe('success')
+    expect(new Importer().tryThese('missing1', 'missing2', 'success')).toMatchInlineSnapshot(`
+Object {
+  "exists": true,
+  "exports": "ok",
+  "given": "success",
+  "path": "/root/success.js",
+}
+`)
+  })
+  it('should return the error when one is failing', () => {
+    modules = {
+      fail1: () => {
+        throw new Error('foo')
+      },
+      success: () => 'ok',
+    }
+    const res = new Importer().tryThese('missing1', 'fail1', 'success')
+    expect(res).toMatchObject({
+      exists: true,
+      error: expect.any(Error),
+      given: 'fail1',
+      path: fakeFullPath('fail1'),
+    })
+    expect(res).not.toHaveProperty('exports')
+    expect((res as any).error.message).toMatch(/\bfoo\b/)
+  })
+})
+
+describe('tryTheseOr', () => {
+  it('should try until it find one not failing', () => {
+    expect(new Importer().tryTheseOr(['fail1', 'fail2', 'success'])).toBeUndefined()
+    expect(new Importer().tryTheseOr(['fail1', 'fail2', 'success'], 'foo')).toBe('foo')
+    modules = {
+      success: () => 'ok',
+    }
+    expect(new Importer().tryTheseOr(['fail1', 'fail2', 'success'])).toBe('ok')
+    modules.fail2 = () => {
+      throw new Error('foo')
+    }
+    expect(new Importer().tryTheseOr(['fail1', 'fail2', 'success'], 'bar', true)).toBe('bar')
+  })
+  it('should fail if one is throwing', () => {
+    modules = {
+      success: () => 'ok',
+      fail2: () => {
+        throw new Error('foo')
+      },
+    }
+    expect(() => new Importer().tryTheseOr(['fail1', 'fail2', 'success'], 'bar')).toThrow(/\bfoo\b/)
   })
 })
 
@@ -49,10 +96,10 @@ describe('patcher', () => {
       foo: () => ({ foo: true }),
       bar: () => ({ bar: true }),
     }
-    expect(imp.tryThese('foo')).toEqual({ foo: true, p1: true, p2: true })
-    expect(imp.tryThese('foo')).toEqual({ foo: true, p1: true, p2: true })
+    expect(imp.tryTheseOr('foo')).toEqual({ foo: true, p1: true, p2: true })
+    expect(imp.tryTheseOr('foo')).toEqual({ foo: true, p1: true, p2: true })
 
-    expect(imp.tryThese('bar')).toEqual({ bar: true })
+    expect(imp.tryTheseOr('bar')).toEqual({ bar: true })
 
     // ensure cache has been used
     expect(patch1).toHaveBeenCalledTimes(1)
