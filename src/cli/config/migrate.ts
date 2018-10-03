@@ -6,7 +6,7 @@ import { basename, resolve } from 'path'
 import { Arguments } from 'yargs'
 
 import { CliCommand } from '..'
-import { TsJestPresets } from '../../types'
+import { TsJestPresets } from '../../config/create-jest-preset'
 import { backportJestConfig } from '../../util/backports'
 
 const DEFAULT_PRESET = 'ts-jest/presets/default'

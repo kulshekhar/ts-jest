@@ -40,6 +40,7 @@ export enum Deprecateds {
   ConfigOption = '"[jest-config].{{oldPath}}" is deprecated, use "[jest-config].{{newPath}}" instead.',
   ConfigOptionWithNote = '"[jest-config].{{oldPath}}" is deprecated, use "[jest-config].{{newPath}}" instead.\n    ↳ {{note}}',
   ConfigOptionUseBabelRcNote = 'See `babel-jest` related issue: https://github.com/facebook/jest/issues/3845',
+  HelperMovedToUtils = "The `{{helper}}` helper has been moved to `ts-jest/utils`. Use `import { {{helper}} } from 'ts-jest/utils'` instead.",
 }
 
 /**
