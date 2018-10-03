@@ -38,7 +38,7 @@ const definePreset = (fullName: string): TsJestPresetDescriptor => ({
     return require(`../../../${fullName.replace(/^ts-jest\//, '')}/jest-preset`)
   },
   jsImport(varName = 'tsjPreset') {
-    return `const ${varName} = require('${this.fullName}')`
+    return `const { ${this.jsVarName}: ${varName} } = require('ts-jest/presets')`
   },
   get isDefault() {
     return fullName === JestPresetNames.default

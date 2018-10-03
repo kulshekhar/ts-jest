@@ -154,7 +154,7 @@ Jest configuration written to "${normalize('/foo/bar/jest.config.foo.js')}".
       expect(fs.writeFileSync.mock.calls).toEqual([
         [
           normalize('/foo/bar/jest.config.foo.js'),
-          `const tsjPreset = require('ts-jest/presets/js-with-ts');
+          `const { jsWithTs: tsjPreset } = require('ts-jest/presets');
 
 module.exports = {
   ...tsjPreset,
