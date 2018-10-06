@@ -1,13 +1,24 @@
+import { LogContexts, LogLevels } from 'bs-logger'
 import { readFileSync } from 'fs'
 import { resolve } from 'path'
 
-import { createJestPreset } from './config/create-jest-preset'
-import { pathsToModuleNameMapper } from './config/paths-to-module-name-mapper'
+import { createJestPreset as createJestPresetCore } from './config/create-jest-preset'
+import { pathsToModuleNameMapper as pathsToModuleNameMapperCore } from './config/paths-to-module-name-mapper'
 import { TsJestTransformer } from './ts-jest-transformer'
 import { TsJestGlobalOptions } from './types'
+import { rootLogger } from './util/logger'
+import { Deprecateds, interpolate } from './util/messages'
+import { mocked as mockedCore } from './util/testing'
 import { VersionCheckers } from './util/version-checkers'
 
-export * from './util/testing'
+// deprecate helpers
+const warn = rootLogger.child({ [LogContexts.logLevel]: LogLevels.warn })
+const helperMoved = <T extends (...args: any[]) => any>(name: string, helper: T) =>
+  warn.wrap(interpolate(Deprecateds.HelperMovedToUtils, { helper: name }), helper)
+
+export const mocked = helperMoved('mocked', mockedCore)
+export const createJestPreset = helperMoved('createJestPreset', createJestPresetCore)
+export const pathsToModuleNameMapper = helperMoved('pathsToModuleNameMapper', pathsToModuleNameMapperCore)
 
 // tslint:disable-next-line:no-var-requires
 export const version: string = require('../package.json').version
@@ -41,7 +52,7 @@ export function getCacheKey(...args: any[]): any {
 // we let jest doing the instrumentation, it does it well
 export const canInstrument = false
 
-const jestPreset = createJestPreset()
+const jestPreset = createJestPresetCore()
 
 /**
  * @internal
@@ -57,7 +68,5 @@ export const __resetModule = () => (transformer = undefined as any)
 
 export {
   // extra ==================
-  createJestPreset,
   jestPreset,
-  pathsToModuleNameMapper,
 }

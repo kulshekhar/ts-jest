@@ -54,20 +54,18 @@ module.exports = {
 
 Any preset can also be used with other options.
 If you're already using another preset, you might want only some specific settings from the chosen `ts-jest` preset.
-In this case you'll need to use the JavaScript version of Jest config:
+In this case you'll need to use the JavaScript version of Jest config (comment/uncomment according to your use-case):
 
 ```js
 // jest.config.js
-const tsJestPresets = require('ts-jest/presets');
-
-const preset = tsJestPresets.defaults
-// const preset = tsJestPresets.jsWithTs
-// const preset = tsJestPresets.jsWithBabel
+const { defaults: tsjPreset } = require('ts-jest/presets');
+// const { jsWithTs: tsjPreset } = require('ts-jest/presets');
+// const { jsWithBabel: tsjPreset } = require('ts-jest/presets');
 
 module.exports = {
   // [...]
   transform: {
-    ...preset.transform,
+    ...tsjPreset.transform,
     // [...]
   }
 }
@@ -133,7 +131,7 @@ module.exports = {
 
 ```js
 // jest.config.js
-const { pathsToModuleNameMapper } = require('ts-jest');
+const { pathsToModuleNameMapper } = require('ts-jest/utils');
 // In the following statement, replace `./tsconfig` with the path to your `tsconfig` file
 // which contains the path mapping (ie the `compilerOptions.paths` option):
 const { compilerOptions } = require('./tsconfig');

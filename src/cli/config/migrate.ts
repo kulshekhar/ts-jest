@@ -6,10 +6,8 @@ import { basename, resolve } from 'path'
 import { Arguments } from 'yargs'
 
 import { CliCommand } from '..'
-import { TsJestPresets } from '../../types'
 import { backportJestConfig } from '../../util/backports'
-
-const DEFAULT_PRESET = 'ts-jest/presets/default'
+import { JestPresetNames, TsJestPresetDescriptor, allPresets, defaults } from '../helpers/presets'
 
 /**
  * @internal
@@ -36,12 +34,14 @@ export const run: CliCommand = async (args: Arguments /*, logger: Logger*/) => {
   // migrate
   // first we backport our options
   const migratedConfig = backportJestConfig(nullLogger, actualConfig)
-  let presetName: string | undefined
+  let presetName: JestPresetNames | undefined
+  let preset: TsJestPresetDescriptor | undefined
   // then we check if we can use `preset`
   if (!migratedConfig.preset && args.jestPreset) {
     // find the best preset
-    if (args.allowJs) presetName = 'ts-jest/presets/js-with-ts'
-    else {
+    if (args.js) {
+      presetName = args.js === 'babel' ? JestPresetNames.jsWIthBabel : JestPresetNames.jsWithTs
+    } else {
       // try to detect what transformer the js extensions would target
       const jsTransformers = Object.keys(migratedConfig.transform || {}).reduce(
         (list, pattern) => {
@@ -59,49 +59,48 @@ export const run: CliCommand = async (args: Arguments /*, logger: Logger*/) => {
       const jsWithTs = jsTransformers.includes('ts-jest')
       const jsWithBabel = jsTransformers.includes('babel-jest')
       if (jsWithBabel && !jsWithTs) {
-        presetName = 'ts-jest/presets/js-with-babel'
+        presetName = JestPresetNames.jsWIthBabel
       } else if (jsWithTs && !jsWithBabel) {
-        presetName = 'ts-jest/presets/js-with-ts'
+        presetName = JestPresetNames.jsWithTs
       } else {
         // sounds like js files are NOT handled, or handled with a unknown transformer, so we do not need to handle it
-        presetName = DEFAULT_PRESET
+        presetName = JestPresetNames.default
       }
     }
     // ensure we are using a preset
-    presetName = presetName || DEFAULT_PRESET
-    migratedConfig.preset = presetName
+    presetName = presetName || JestPresetNames.default
+    preset = allPresets[presetName]
     footNotes.push(
-      `Detected preset '${presetName.replace(
-        /^ts-jest\/presets\//,
-        '',
-      )}' as the best matching preset for your configuration.\nVisit https://kulshekhar.github.io/ts-jest/user/config/#jest-preset for more information about presets.\n`,
+      `Detected preset '${preset.label}' as the best matching preset for your configuration.
+Visit https://kulshekhar.github.io/ts-jest/user/config/#jest-preset for more information about presets.
+`,
     )
   } else if (migratedConfig.preset && migratedConfig.preset.startsWith('ts-jest')) {
     if (args.jestPreset === false) {
       delete migratedConfig.preset
     } else {
-      presetName = migratedConfig.preset
+      preset = (allPresets as any)[migratedConfig.preset] || defaults
     }
   }
-  const presets: TsJestPresets | undefined = presetName
-    ? require(`../../../${presetName.replace(/^ts-jest\//, '')}/jest-preset`)
-    : undefined
+
+  // enforce the correct name
+  if (preset) migratedConfig.preset = preset.name
 
   // check the extensions
-  if (migratedConfig.moduleFileExtensions && migratedConfig.moduleFileExtensions.length && presets) {
-    const presetValue = dedupSort(presets.moduleFileExtensions).join('::')
+  if (migratedConfig.moduleFileExtensions && migratedConfig.moduleFileExtensions.length && preset) {
+    const presetValue = dedupSort(preset.value.moduleFileExtensions).join('::')
     const migratedValue = dedupSort(migratedConfig.moduleFileExtensions).join('::')
     if (presetValue === migratedValue) {
       delete migratedConfig.moduleFileExtensions
     }
   }
   // there is a testRegex, remove our testMatch
-  if (migratedConfig.testRegex && presets) {
+  if (migratedConfig.testRegex && preset) {
     migratedConfig.testMatch = null as any
   }
   // check the testMatch
-  else if (migratedConfig.testMatch && migratedConfig.testMatch.length && presets) {
-    const presetValue = dedupSort(presets.testMatch).join('::')
+  else if (migratedConfig.testMatch && migratedConfig.testMatch.length && preset) {
+    const presetValue = dedupSort(preset.value.testMatch).join('::')
     const migratedValue = dedupSort(migratedConfig.testMatch).join('::')
     if (presetValue === migratedValue) {
       delete migratedConfig.testMatch
@@ -120,9 +119,9 @@ export const run: CliCommand = async (args: Arguments /*, logger: Logger*/) => {
   }
   // check if it's the same as the preset's one
   if (
-    presets &&
+    preset &&
     migratedConfig.transform &&
-    stringifyJson(migratedConfig.transform) === stringifyJson(presets.transform)
+    stringifyJson(migratedConfig.transform) === stringifyJson(preset.value.transform)
   ) {
     delete migratedConfig.transform
   }
@@ -154,10 +153,10 @@ No migration needed for given Jest configuration
   // If it is the case, you can safely remove the "testMatch" from what I've migrated.
   // `)
   //   }
-  if (presets && migratedConfig.transform) {
+  if (preset && migratedConfig.transform) {
     footNotes.push(`
 I couldn't check if your "transform" value is the same as mine which is: ${stringify(
-      presets.transform,
+      preset.value.transform,
       undefined,
       '  ',
     )}
@@ -197,7 +196,7 @@ function cleanupConfig(config: jest.InitialOptions): void {
     config.testMatch = dedupSort(config.testMatch)
     if (config.testMatch.length === 0) delete config.testMatch
   }
-  if (config.preset === DEFAULT_PRESET) config.preset = 'ts-jest'
+  if (config.preset === JestPresetNames.default) config.preset = defaults.name
 }
 
 function dedupSort(arr: any[]) {
@@ -220,7 +219,8 @@ Arguments:
                         the "jest" property.
 
 Options:
-  --allow-js            ts-jest will be used to process JS files as well
+  --js ts|babel         Process .js files with ts-jest if 'ts' or with
+                        babel-jest if 'babel'
   --no-jest-preset      Disable the use of Jest presets
 `)
 }

@@ -18,16 +18,17 @@ In the `jest.config.js` version, you could do as in the `package.json` version o
 
 ```js
 // jest.config.js
-const { jestPreset } = require('ts-jest');
+// Here `defaults` can be replaced with any other preset
+const { defaults: tsjPreset } = require('ts-jest/presets');
 
 module.exports = {
   // [...]
   moduleFileExtensions: [
-    ...jestPreset.moduleFileExtensions,
+    ...tsjPreset.moduleFileExtensions,
     'html'
   ],
   transform: {
-    ...jestPreset.transform,
+    ...tsjPreset.transform,
     '\\.html$': 'ts-jest'
   }
   globals: {

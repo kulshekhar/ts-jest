@@ -1,7 +1,7 @@
 import * as _fs from 'fs'
 import { normalize, resolve } from 'path'
 
-import { mocked } from '../..'
+import { mocked } from '../../utils'
 import { logTargetMock, mockObject, mockWriteStream } from '../__helpers__/mocks'
 
 import { processArgv } from '.'
@@ -10,7 +10,6 @@ import { processArgv } from '.'
 jest.mock('fs')
 
 const fs = mocked(_fs)
-const logTarget = logTargetMock()
 let lastExitCode: number | undefined
 
 const runCli = async (
@@ -18,7 +17,7 @@ const runCli = async (
 ): Promise<{ stdout: string; stderr: string; exitCode: number | undefined; log: string }> => {
   mockedProcess.stderr.clear()
   mockedProcess.stdout.clear()
-  logTarget.clear()
+  logTargetMock().clear()
   mockedProcess.argv.splice(2, mockedProcess.argv.length - 2, ...args)
   lastExitCode = undefined
   await processArgv()
@@ -26,7 +25,7 @@ const runCli = async (
     exitCode: lastExitCode,
     stdout: mockedProcess.stdout.written.join('\n'),
     stderr: mockedProcess.stderr.written.join('\n'),
-    log: logTarget.lines.join('\n'),
+    log: logTargetMock().lines.join('\n'),
   }
 }
 
@@ -55,7 +54,7 @@ beforeEach(() => {
   fs.writeFileSync.mockClear()
   fs.existsSync.mockClear()
   fs.readFileSync.mockClear()
-  logTarget.clear()
+  logTargetMock().clear()
 })
 afterEach(() => {
   mockedProcess.mockRestore()
@@ -112,12 +111,13 @@ describe('config', async () => {
     const noOption = ['config:init']
     const fullOptions = [
       ...noOption,
-      '--babel',
       '--tsconfig',
       'tsconfig.test.json',
       '--jsdom',
       '--no-jest-preset',
-      '--allow-js',
+      '--js',
+      'ts',
+      '--babel',
     ]
     it('should create a jest.config.json (without options)', async () => {
       expect.assertions(2)
@@ -154,10 +154,10 @@ Jest configuration written to "${normalize('/foo/bar/jest.config.foo.js')}".
       expect(fs.writeFileSync.mock.calls).toEqual([
         [
           normalize('/foo/bar/jest.config.foo.js'),
-          `const tsJest = require('ts-jest').createJestPreset({ allowJs: true });
+          `const { jsWithTs: tsjPreset } = require('ts-jest/presets');
 
 module.exports = {
-  ...tsJest,
+  ...tsjPreset,
   globals: {
     'ts-jest': {
       tsconfig: 'tsconfig.test.json',
@@ -198,8 +198,7 @@ Jest configuration written to "${normalize('/foo/bar/package.json')}".
       const res = await runCli(...fullOptions, 'package.json')
       expect(res).toEqual({
         exitCode: 0,
-        log: `[level:20] creating jest presets handling JavaScript files
-`,
+        log: '',
         stderr: `
 Jest configuration written to "${normalize('/foo/bar/package.json')}".
 `,
@@ -259,10 +258,11 @@ Arguments:
 
 Options:
   --force               Discard any existing Jest config
-  --allow-js            ts-jest will be used to process JS files as well
+  --js ts|babel         Process .js files with ts-jest if 'ts' or with
+                        babel-jest if 'babel'
   --no-jest-preset      Disable the use of Jest presets
   --tsconfig <file>     Path to the tsconfig.json file
-  --babel               Call BabelJest after ts-jest
+  --babel               Pipe babel-jest after ts-jest
   --jsdom               Use jsdom as test environment instead of node
 ",
 }
@@ -550,7 +550,8 @@ Arguments:
                         the \\"jest\\" property.
 
 Options:
-  --allow-js            ts-jest will be used to process JS files as well
+  --js ts|babel         Process .js files with ts-jest if 'ts' or with
+                        babel-jest if 'babel'
   --no-jest-preset      Disable the use of Jest presets
 ",
 }

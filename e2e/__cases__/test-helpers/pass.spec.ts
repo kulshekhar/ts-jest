@@ -1,4 +1,4 @@
-import { mocked } from 'ts-jest'
+import { mocked } from 'ts-jest/utils'
 import { foo, bar } from './to-mock'
 jest.mock('./to-mock')
 

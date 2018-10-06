@@ -13,7 +13,7 @@ You can install `ts-jest` and dependencies all at once with the following comman
 Using `npm`:
 
 ```sh
-npm install --save-dev jest typescript ts-jest
+npm install --save-dev jest typescript ts-jest @types/jest
 ```
 
 </div><div class="col-md-6" markdown="block">
@@ -21,7 +21,7 @@ npm install --save-dev jest typescript ts-jest
 Using `yarn`:
 
 ```sh
-yarn add --dev jest typescript ts-jest
+yarn add --dev jest typescript ts-jest @types/jest
 ```
 
 </div></div>
@@ -55,7 +55,7 @@ yarn ts-jest config:init
 This will create a basic Jest configuration file which will make Jest know about your `.ts` files and handle them correctly.
 
 You can also use the `jest --init` command (prefixed with either `npx` or `yarn` depending on what you're using) to have more options related to Jest.
-However, answer `no` to the Jest question about whether or not to enable Typescript. Instead, add the line: `preset: "ts-jest"` to the the `jest.config.js` file afterwards.
+However, answer `no` to the Jest question about whether or not to enable Typescript. Instead, add the line: `preset: "ts-jest"` to the `jest.config.js` file afterwards.
 
 ### Customizing
 
