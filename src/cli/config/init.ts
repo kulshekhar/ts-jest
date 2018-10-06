@@ -30,17 +30,21 @@ export const run: CliCommand = async (args: Arguments /* , logger: Logger */) =>
   const pkgJson = hasPackage ? JSON.parse(readFileSync(pkgFile, 'utf8')) : {}
 
   // auto js/babel
-  let { js, babel } = args
-  if (js != null || babel != null) {
-    if (js == null) js = babel ? 'babel' : undefined
-    else if (babel == null) babel = js === 'babel'
+  let { js: jsFilesProcessor, babel: shouldPostProcessWithBabel } = args
+  // set defaults for missing options
+  if (jsFilesProcessor == null) {
+    // set default js files processor depending on whether the user wants to post-process with babel
+    jsFilesProcessor = shouldPostProcessWithBabel ? 'babel' : undefined
+  } else if (shouldPostProcessWithBabel == null) {
+    // auto enables babel post-processing if the user wants babel to process js files
+    shouldPostProcessWithBabel = jsFilesProcessor === 'babel'
   }
 
   // preset
   let preset: TsJestPresetDescriptor | undefined
-  if (js === 'babel') {
+  if (jsFilesProcessor === 'babel') {
     preset = jsWIthBabel
-  } else if (js === 'ts') {
+  } else if (jsFilesProcessor === 'ts') {
     preset = jsWithTs
   } else {
     preset = defaults
@@ -70,11 +74,11 @@ export const run: CliCommand = async (args: Arguments /* , logger: Logger */) =>
     // package.json config
     const base: any = jestPreset ? { preset: preset.name } : { ...preset.value }
     if (!jsdom) base.testEnvironment = 'node'
-    if (tsconfig || babel) {
+    if (tsconfig || shouldPostProcessWithBabel) {
       const tsJestConf: any = {}
       base.globals = { 'ts-jest': tsJestConf }
       if (tsconfig) tsJestConf.tsconfig = tsconfig
-      if (babel) tsJestConf.babelConfig = true
+      if (shouldPostProcessWithBabel) tsJestConf.babelConfig = true
     }
     body = JSON.stringify({ ...pkgJson, jest: base }, undefined, '  ')
   } else {
@@ -91,11 +95,11 @@ export const run: CliCommand = async (args: Arguments /* , logger: Logger */) =>
     }
     if (!jsdom) content.push(`  testEnvironment: 'node',`)
 
-    if (tsconfig || babel) {
+    if (tsconfig || shouldPostProcessWithBabel) {
       content.push(`  globals: {`)
       content.push(`    'ts-jest': {`)
       if (tsconfig) content.push(`      tsconfig: ${stringifyJson5(tsconfig)},`)
-      if (babel) content.push(`      babelConfig: true,`)
+      if (shouldPostProcessWithBabel) content.push(`      babelConfig: true,`)
       content.push(`    },`)
       content.push(`  },`)
     }
