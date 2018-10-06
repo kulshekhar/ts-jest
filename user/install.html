@@ -151,14 +151,14 @@
 <div class="row"><div class="col-md-6">
     <p>Using <code class="highlighter-rouge">npm</code>:</p>
 
-    <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm install <span class="nt">--save-dev</span> jest typescript ts-jest
+    <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm install <span class="nt">--save-dev</span> jest typescript ts-jest @types/jest
 </code></pre></div>    </div>
 
   </div><div class="col-md-6">
 
     <p>Using <code class="highlighter-rouge">yarn</code>:</p>
 
-    <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>yarn add <span class="nt">--dev</span> jest typescript ts-jest
+    <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>yarn add <span class="nt">--dev</span> jest typescript ts-jest @types/jest
 </code></pre></div>    </div>
 
   </div></div>
@@ -190,7 +190,7 @@ To make it transpile TypeScript with <code class="highlighter-rouge">ts-jest</co
 <p>This will create a basic Jest configuration file which will make Jest know about your <code class="highlighter-rouge">.ts</code> files and handle them correctly.</p>
 
 <p>You can also use the <code class="highlighter-rouge">jest --init</code> command (prefixed with either <code class="highlighter-rouge">npx</code> or <code class="highlighter-rouge">yarn</code> depending on what you’re using) to have more options related to Jest.
-However, answer <code class="highlighter-rouge">no</code> to the Jest question about whether or not to enable Typescript. Instead, add the line: <code class="highlighter-rouge">preset: "ts-jest"</code> to the the <code class="highlighter-rouge">jest.config.js</code> file afterwards.</p>
+However, answer <code class="highlighter-rouge">no</code> to the Jest question about whether or not to enable Typescript. Instead, add the line: <code class="highlighter-rouge">preset: "ts-jest"</code> to the <code class="highlighter-rouge">jest.config.js</code> file afterwards.</p>
 
 <h3 id="customizing">Customizing</h3>
 

@@ -206,19 +206,17 @@ The later is preferred since it’s more customizable, but it depends on your ne
 
 <p>Any preset can also be used with other options.
 If you’re already using another preset, you might want only some specific settings from the chosen <code class="highlighter-rouge">ts-jest</code> preset.
-In this case you’ll need to use the JavaScript version of Jest config:</p>
+In this case you’ll need to use the JavaScript version of Jest config (comment/uncomment according to your use-case):</p>
 
 <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// jest.config.js</span>
-<span class="kd">const</span> <span class="nx">tsJestPresets</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'ts-jest/presets'</span><span class="p">);</span>
-
-<span class="kd">const</span> <span class="nx">preset</span> <span class="o">=</span> <span class="nx">tsJestPresets</span><span class="p">.</span><span class="nx">defaults</span>
-<span class="c1">// const preset = tsJestPresets.jsWithTs</span>
-<span class="c1">// const preset = tsJestPresets.jsWithBabel</span>
+<span class="kd">const</span> <span class="p">{</span> <span class="na">defaults</span><span class="p">:</span> <span class="nx">tsjPreset</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'ts-jest/presets'</span><span class="p">);</span>
+<span class="c1">// const { jsWithTs: tsjPreset } = require('ts-jest/presets');</span>
+<span class="c1">// const { jsWithBabel: tsjPreset } = require('ts-jest/presets');</span>
 
 <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
   <span class="c1">// [...]</span>
   <span class="na">transform</span><span class="p">:</span> <span class="p">{</span>
-    <span class="p">...</span><span class="nx">preset</span><span class="p">.</span><span class="nx">transform</span><span class="p">,</span>
+    <span class="p">...</span><span class="nx">tsjPreset</span><span class="p">.</span><span class="nx">transform</span><span class="p">,</span>
     <span class="c1">// [...]</span>
   <span class="p">}</span>
 <span class="p">}</span>
@@ -280,7 +278,7 @@ In this case you’ll need to use the JavaScript version of Jest config:</p>
 <h4 id="jest-config-with-helper">Jest config (with helper)</h4>
 
 <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// jest.config.js</span>
-<span class="kd">const</span> <span class="p">{</span> <span class="nx">pathsToModuleNameMapper</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'ts-jest'</span><span class="p">);</span>
+<span class="kd">const</span> <span class="p">{</span> <span class="nx">pathsToModuleNameMapper</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'ts-jest/utils'</span><span class="p">);</span>
 <span class="c1">// In the following statement, replace `./tsconfig` with the path to your `tsconfig` file</span>
 <span class="c1">// which contains the path mapping (ie the `compilerOptions.paths` option):</span>
 <span class="kd">const</span> <span class="p">{</span> <span class="nx">compilerOptions</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'./tsconfig'</span><span class="p">);</span>

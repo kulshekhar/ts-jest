@@ -159,13 +159,13 @@
 <p>In the same way that you moved Babel config, move Jest config from <code class="highlighter-rouge">jest</code> key of <code class="highlighter-rouge">package.json</code> to <code class="highlighter-rouge">jest.config.js</code>. It should look like this:</p>
 
 <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// jest.config.js</span>
-<span class="kd">const</span> <span class="p">{</span> <span class="na">jestPreset</span><span class="p">:</span> <span class="nx">tsJest</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'ts-jest'</span><span class="p">);</span>
+<span class="kd">const</span> <span class="p">{</span> <span class="na">defaults</span><span class="p">:</span> <span class="nx">tsjPreset</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'ts-jest/presets'</span><span class="p">);</span>
 
 <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
-  <span class="p">...</span><span class="nx">tsJest</span><span class="p">,</span>
+  <span class="p">...</span><span class="nx">tsjPreset</span><span class="p">,</span>
   <span class="na">preset</span><span class="p">:</span> <span class="s1">'react-native'</span><span class="p">,</span>
   <span class="na">transform</span><span class="p">:</span> <span class="p">{</span>
-    <span class="p">...</span><span class="nx">tsJest</span><span class="p">.</span><span class="nx">transform</span><span class="p">,</span>
+    <span class="p">...</span><span class="nx">tsjPreset</span><span class="p">.</span><span class="nx">transform</span><span class="p">,</span>
     <span class="s1">'</span><span class="err">\\</span><span class="s1">.js$'</span><span class="p">:</span> <span class="s1">'&lt;rootDir&gt;/node_modules/react-native/jest/preprocessor.js'</span><span class="p">,</span>
   <span class="p">},</span>
   <span class="na">globals</span><span class="p">:</span> <span class="p">{</span>

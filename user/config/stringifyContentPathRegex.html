@@ -153,16 +153,17 @@ If it matches, the file will be exported as a module exporting its content.</p>
 <div class="row"><div class="col-md-6">
 
     <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// jest.config.js</span>
-<span class="kd">const</span> <span class="p">{</span> <span class="nx">jestPreset</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'ts-jest'</span><span class="p">);</span>
+<span class="c1">// Here `defaults` can be replaced with any other preset</span>
+<span class="kd">const</span> <span class="p">{</span> <span class="na">defaults</span><span class="p">:</span> <span class="nx">tsjPreset</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'ts-jest/presets'</span><span class="p">);</span>
 
 <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
   <span class="c1">// [...]</span>
   <span class="na">moduleFileExtensions</span><span class="p">:</span> <span class="p">[</span>
-    <span class="p">...</span><span class="nx">jestPreset</span><span class="p">.</span><span class="nx">moduleFileExtensions</span><span class="p">,</span>
+    <span class="p">...</span><span class="nx">tsjPreset</span><span class="p">.</span><span class="nx">moduleFileExtensions</span><span class="p">,</span>
     <span class="s1">'html'</span>
   <span class="p">],</span>
   <span class="na">transform</span><span class="p">:</span> <span class="p">{</span>
-    <span class="p">...</span><span class="nx">jestPreset</span><span class="p">.</span><span class="nx">transform</span><span class="p">,</span>
+    <span class="p">...</span><span class="nx">tsjPreset</span><span class="p">.</span><span class="nx">transform</span><span class="p">,</span>
     <span class="s1">'</span><span class="err">\\</span><span class="s1">.html$'</span><span class="p">:</span> <span class="s1">'ts-jest'</span>
   <span class="p">}</span>
   <span class="nl">globals</span><span class="p">:</span> <span class="p">{</span>
