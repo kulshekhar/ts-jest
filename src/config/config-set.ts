@@ -9,7 +9,7 @@
  * with the complete, object version of it.
  */
 import { LogContexts, Logger } from 'bs-logger'
-import { existsSync, readFileSync } from 'fs'
+import { existsSync, readFileSync, realpathSync } from 'fs'
 import json5 from 'json5'
 import { dirname, isAbsolute, join, normalize, resolve } from 'path'
 import semver from 'semver'
@@ -112,6 +112,41 @@ const toDiagnosticCodeList = (items: any, into: number[] = []): number[] => {
 }
 
 export class ConfigSet {
+  @Memoize()
+  get projectPackageJson(): Record<string, any> {
+    const tsJestRoot = resolve(__dirname, '..', '..')
+    let pkgPath = resolve(tsJestRoot, '..', '..', 'package.json')
+    let exists = existsSync(pkgPath)
+    if (!exists) {
+      if (realpathSync(this.rootDir) === realpathSync(tsJestRoot)) {
+        pkgPath = resolve(tsJestRoot, 'package.json')
+        exists = true
+      } else {
+        this.logger.warn(Errors.UnableToFindProjectRoot)
+      }
+    }
+    return exists ? require(pkgPath) : {}
+  }
+
+  @Memoize()
+  get projectDependencies(): Record<string, string> {
+    const { projectPackageJson: pkg } = this
+    const names = Object.keys({
+      ...pkg.optionalDependencies,
+      ...pkg.peerDependencies,
+      ...pkg.devDependencies,
+      ...pkg.dependencies,
+    })
+    return names.reduce(
+      (map, name) => {
+        const version = getPackageVersion(name)
+        if (version) map[name] = version
+        return map
+      },
+      {} as Record<string, string>,
+    )
+  }
+
   @Memoize()
   get jest(): jest.ProjectConfig {
     const config = backportJestConfig(this.logger, this._jestConfig)
@@ -440,6 +475,8 @@ export class ConfigSet {
     const cacheSuffix = sha1(
       stringify({
         version: this.compilerModule.version,
+        digest: this.tsJestDigest,
+        dependencies: this.projectDependencies,
         compiler: this.tsJest.compiler,
         compilerOptions: this.typescript.options,
         isolatedModules: this.tsJest.isolatedModules,
@@ -447,7 +484,7 @@ export class ConfigSet {
       }),
     )
     const res = join(this.jest.cacheDirectory, 'ts-jest', cacheSuffix.substr(0, 2), cacheSuffix.substr(2))
-    logger.debug({ cacheDirectory: res }, `will use file caching`)
+    logger.debug({ cacheDirectory: res }, 'will use file caching')
     return res
   }
 
@@ -519,6 +556,7 @@ export class ConfigSet {
 
     return new JsonableValue({
       versions: this.versions,
+      projectDepVersions: this.projectDependencies,
       digest: this.tsJestDigest,
       transformers: this.astTransformers.map(t => `${t.name}@${t.version}`),
       jest,
