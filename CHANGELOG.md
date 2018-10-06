@@ -1,3 +1,17 @@
+<a name="23.10.4"></a>
+## [23.10.4](https://github.com/kulshekhar/ts-jest/compare/v23.10.3...v23.10.4) (2018-10-06)
+
+
+### Bug Fixes
+
+* **cache:** adds project's dep versions to cache key ([6cacbea](https://github.com/kulshekhar/ts-jest/commit/6cacbea)), closes [#785](https://github.com/kulshekhar/ts-jest/issues/785)
+* **cli:** change options to better reflect the new presets ([68abcfb](https://github.com/kulshekhar/ts-jest/commit/68abcfb))
+* **helpers:** deprecate import from ts-jest, now ts-jest/utils ([33ff29f](https://github.com/kulshekhar/ts-jest/commit/33ff29f)), closes [#782](https://github.com/kulshekhar/ts-jest/issues/782)
+* **typings:** typo in presets definition file ([53767ab](https://github.com/kulshekhar/ts-jest/commit/53767ab))
+* **typings:** wrong import in preset typings + test ([94dc4e7](https://github.com/kulshekhar/ts-jest/commit/94dc4e7))
+
+
+
 <a name="23.10.3"></a>
 ## [23.10.3](https://github.com/kulshekhar/ts-jest/compare/v23.10.2...v23.10.3) (2018-09-30)
 
