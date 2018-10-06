@@ -128,7 +128,7 @@ Array [
 
 describe('isolatedModules', () => {
   const compiler = makeCompiler({ tsJestConfig: { isolatedModules: true, tsConfig: false } })
-  const spy: jest.SpyInstance = jest.spyOn(require('typescript'), 'transpileModule')
+  const spy = jest.spyOn(require('typescript'), 'transpileModule')
   afterAll(() => {
     spy.mockRestore()
   })

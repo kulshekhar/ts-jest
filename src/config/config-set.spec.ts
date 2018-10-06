@@ -361,9 +361,9 @@ describe('resolvePath', () => {
 }) // resolvePath
 
 describe('readTsConfig', () => {
-  let findConfig!: jest.SpyInstance<typeof ts.findConfigFile>
-  let readConfig!: jest.SpyInstance<typeof ts.readConfigFile>
-  let parseConfig!: jest.SpyInstance<typeof ts.parseJsonSourceFileConfigFileContent>
+  let findConfig!: jest.MockInstance<typeof ts.findConfigFile>
+  let readConfig!: jest.MockInstance<typeof ts.readConfigFile>
+  let parseConfig!: jest.MockInstance<typeof ts.parseJsonSourceFileConfigFileContent>
   let cs!: ConfigSet
   beforeAll(() => {
     findConfig = jest.spyOn(ts, 'findConfigFile')
