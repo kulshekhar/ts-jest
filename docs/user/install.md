@@ -13,7 +13,7 @@ You can install `ts-jest` and dependencies all at once with the following comman
 Using `npm`:
 
 ```sh
-npm install --save-dev jest typescript ts-jest
+npm install --save-dev jest typescript ts-jest @types/jest
 ```
 
 </div><div class="col-md-6" markdown="block">
@@ -21,7 +21,7 @@ npm install --save-dev jest typescript ts-jest
 Using `yarn`:
 
 ```sh
-yarn add --dev jest typescript ts-jest
+yarn add --dev jest typescript ts-jest @types/jest
 ```
 
 </div></div>
