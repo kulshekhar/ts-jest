@@ -8,6 +8,7 @@ exports[`run with options: {"module":"system","allowSyntheticDefaultImports":fal
   ===[ STDERR ]===================================================================
   ts-jest[config] (WARN) TypeScript diagnostics (customize using \`[jest-config].globals.ts-jest.diagnostics\` option):
   message TS151001: If you have issues related to imports, you should consider setting \`esModuleInterop\` to \`true\` in your TypeScript configuration file (usually \`tsconfig.json\`). See https://blogs.msdn.microsoft.com/typescript/2018/01/31/announcing-typescript-2-7/#easier-ecmascript-module-interoperability for more information.
+  PASS ./ts-jest-tools.spec.ts
   PASS ./import-legacy.spec.ts
   PASS ./import-star.spec.ts
   ts-jest[ts-compiler] (WARN) TypeScript diagnostics (customize using \`[jest-config].globals.ts-jest.diagnostics\` option):
@@ -33,8 +34,8 @@ exports[`run with options: {"module":"system","allowSyntheticDefaultImports":fal
   
         at Object.<anonymous> (import-default.spec.ts:4:22)
   
-  Test Suites: 1 failed, 2 passed, 3 total
-  Tests:       1 failed, 2 passed, 3 total
+  Test Suites: 1 failed, 3 passed, 4 total
+  Tests:       1 failed, 4 passed, 5 total
   Snapshots:   0 total
   Time:        XXs
   Ran all test suites.
@@ -47,6 +48,7 @@ exports[`run with options: {"module":"system","allowSyntheticDefaultImports":tru
   ===[ STDOUT ]===================================================================
   
   ===[ STDERR ]===================================================================
+  PASS ./ts-jest-tools.spec.ts
   PASS ./import-legacy.spec.ts
   PASS ./import-star.spec.ts
   FAIL ./import-default.spec.ts
@@ -67,8 +69,8 @@ exports[`run with options: {"module":"system","allowSyntheticDefaultImports":tru
   
         at Object.<anonymous> (import-default.spec.ts:4:22)
   
-  Test Suites: 1 failed, 2 passed, 3 total
-  Tests:       1 failed, 2 passed, 3 total
+  Test Suites: 1 failed, 3 passed, 4 total
+  Tests:       1 failed, 4 passed, 5 total
   Snapshots:   0 total
   Time:        XXs
   Ran all test suites.
@@ -81,6 +83,7 @@ exports[`run with options: {"module":"system","esModuleInterop":true} 1`] = `
   ===[ STDOUT ]===================================================================
   
   ===[ STDERR ]===================================================================
+  PASS ./ts-jest-tools.spec.ts
   PASS ./import-legacy.spec.ts
   ts-jest[ts-compiler] (WARN) TypeScript diagnostics (customize using \`[jest-config].globals.ts-jest.diagnostics\` option):
   import-star.spec.ts:5:10 - error TS2349: Cannot invoke an expression whose type lacks a call signature. Type 'typeof lib' has no compatible call signatures.
@@ -112,8 +115,8 @@ exports[`run with options: {"module":"system","esModuleInterop":true} 1`] = `
   
   PASS ./import-default.spec.ts
   
-  Test Suites: 1 failed, 2 passed, 3 total
-  Tests:       1 failed, 2 passed, 3 total
+  Test Suites: 1 failed, 3 passed, 4 total
+  Tests:       1 failed, 4 passed, 5 total
   Snapshots:   0 total
   Time:        XXs
   Ran all test suites.
@@ -128,6 +131,7 @@ exports[`run with options: {"module":"system"} 1`] = `
   ===[ STDERR ]===================================================================
   ts-jest[config] (WARN) TypeScript diagnostics (customize using \`[jest-config].globals.ts-jest.diagnostics\` option):
   message TS151001: If you have issues related to imports, you should consider setting \`esModuleInterop\` to \`true\` in your TypeScript configuration file (usually \`tsconfig.json\`). See https://blogs.msdn.microsoft.com/typescript/2018/01/31/announcing-typescript-2-7/#easier-ecmascript-module-interoperability for more information.
+  PASS ./ts-jest-tools.spec.ts
   PASS ./import-legacy.spec.ts
   PASS ./import-star.spec.ts
   FAIL ./import-default.spec.ts
@@ -148,8 +152,8 @@ exports[`run with options: {"module":"system"} 1`] = `
   
         at Object.<anonymous> (import-default.spec.ts:4:22)
   
-  Test Suites: 1 failed, 2 passed, 3 total
-  Tests:       1 failed, 2 passed, 3 total
+  Test Suites: 1 failed, 3 passed, 4 total
+  Tests:       1 failed, 4 passed, 5 total
   Snapshots:   0 total
   Time:        XXs
   Ran all test suites.

@@ -1,5 +1,5 @@
-import { TsJestPresets } from '../dist/types'
+import { TsJestPresets } from '../dist/config/create-jest-preset'
 
-export const defaults: TsJesPresets
-export const jsWithTs: TsJesPresets
-export const jsWithBabel: TsJesPresets
+export const defaults: TsJestPresets
+export const jsWithTs: TsJestPresets
+export const jsWithBabel: TsJestPresets
