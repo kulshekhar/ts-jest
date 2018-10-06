@@ -10,7 +10,7 @@ import { basename, join } from 'path'
 import { Arguments } from 'yargs'
 
 import { CliCommand } from '..'
-import { createJestPreset } from '../../config/create-jest-preset'
+import { TsJestPresetDescriptor, defaults, jsWIthBabel, jsWithTs } from '../helpers/presets'
 
 /**
  * @internal
@@ -24,11 +24,31 @@ export const run: CliCommand = async (args: Arguments /* , logger: Logger */) =>
   const pkgFile = isPackage ? filePath : join(process.cwd(), 'package.json')
   const hasPackage = isPackage || existsSync(pkgFile)
   // read config
-  const { allowJs = false, jestPreset = true, tsconfig: askedTsconfig, babel = false, force, jsdom } = args
+  const { jestPreset = true, tsconfig: askedTsconfig, force, jsdom } = args
   const tsconfig = askedTsconfig === 'tsconfig.json' ? undefined : askedTsconfig
-  const hasPresetVar = allowJs || !jestPreset
   // read package
   const pkgJson = hasPackage ? JSON.parse(readFileSync(pkgFile, 'utf8')) : {}
+
+  // auto js/babel
+  let { js: jsFilesProcessor, babel: shouldPostProcessWithBabel } = args
+  // set defaults for missing options
+  if (jsFilesProcessor == null) {
+    // set default js files processor depending on whether the user wants to post-process with babel
+    jsFilesProcessor = shouldPostProcessWithBabel ? 'babel' : undefined
+  } else if (shouldPostProcessWithBabel == null) {
+    // auto enables babel post-processing if the user wants babel to process js files
+    shouldPostProcessWithBabel = jsFilesProcessor === 'babel'
+  }
+
+  // preset
+  let preset: TsJestPresetDescriptor | undefined
+  if (jsFilesProcessor === 'babel') {
+    preset = jsWIthBabel
+  } else if (jsFilesProcessor === 'ts') {
+    preset = jsWithTs
+  } else {
+    preset = defaults
+  }
 
   if (isPackage && !exists) {
     throw new Error(`File ${file} does not exists.`)
@@ -52,34 +72,34 @@ export const run: CliCommand = async (args: Arguments /* , logger: Logger */) =>
 
   if (isPackage) {
     // package.json config
-    const base: any = hasPresetVar ? createJestPreset({ allowJs }) : { preset: 'ts-jest' }
+    const base: any = jestPreset ? { preset: preset.name } : { ...preset.value }
     if (!jsdom) base.testEnvironment = 'node'
-    if (tsconfig || babel) {
+    if (tsconfig || shouldPostProcessWithBabel) {
       const tsJestConf: any = {}
       base.globals = { 'ts-jest': tsJestConf }
       if (tsconfig) tsJestConf.tsconfig = tsconfig
-      if (babel) tsJestConf.babelConfig = true
+      if (shouldPostProcessWithBabel) tsJestConf.babelConfig = true
     }
     body = JSON.stringify({ ...pkgJson, jest: base }, undefined, '  ')
   } else {
     // js config
     const content = []
-    if (hasPresetVar) {
-      content.push(`const tsJest = require('ts-jest').createJestPreset({ allowJs: ${allowJs} });`, '')
+    if (!jestPreset) {
+      content.push(`${preset.jsImport('tsjPreset')};`, '')
     }
     content.push('module.exports = {')
-    if (hasPresetVar) {
-      content.push(`  ...tsJest,`)
+    if (jestPreset) {
+      content.push(`  preset: '${preset.name}',`)
     } else {
-      content.push(`  preset: 'ts-jest',`)
+      content.push(`  ...tsjPreset,`)
     }
     if (!jsdom) content.push(`  testEnvironment: 'node',`)
 
-    if (tsconfig || babel) {
+    if (tsconfig || shouldPostProcessWithBabel) {
       content.push(`  globals: {`)
       content.push(`    'ts-jest': {`)
       if (tsconfig) content.push(`      tsconfig: ${stringifyJson5(tsconfig)},`)
-      if (babel) content.push(`      babelConfig: true,`)
+      if (shouldPostProcessWithBabel) content.push(`      babelConfig: true,`)
       content.push(`    },`)
       content.push(`  },`)
     }
@@ -113,10 +133,11 @@ Arguments:
 
 Options:
   --force               Discard any existing Jest config
-  --allow-js            ts-jest will be used to process JS files as well
+  --js ts|babel         Process .js files with ts-jest if 'ts' or with
+                        babel-jest if 'babel'
   --no-jest-preset      Disable the use of Jest presets
   --tsconfig <file>     Path to the tsconfig.json file
-  --babel               Call BabelJest after ts-jest
+  --babel               Pipe babel-jest after ts-jest
   --jsdom               Use jsdom as test environment instead of node
 `)
 }

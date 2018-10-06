@@ -30,7 +30,7 @@ These instructions will get you setup to use `ts-jest` in your project. For more
 | | using npm | using yarn |
 |---:|---|---|
 | **Prerequisites** | `npm i -D jest typescript` | `yarn add --dev jest typescript` |
-| **Installing** | `npm i -D ts-jest` | `yarn add --dev ts-jest` |
+| **Installing** | `npm i -D ts-jest @types/jest` | `yarn add --dev ts-jest @types/jest` |
 | **Creating config** | `node_modules/.bin/ts-jest config:init` | `yarn ts-jest config:init` |
 | **Running tests** | `npm t` or `node_modules/.bin/jest` | `yarn test` or `yarn jest` |
 

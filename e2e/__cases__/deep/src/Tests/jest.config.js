@@ -1,7 +1,7 @@
 const cfg = {}
 
 if (require('jest/package.json').version.split('.').shift() === '22') {
-  Object.assign(cfg, require('ts-jest').jestPreset)
+  Object.assign(cfg, require('ts-jest/presets').defaults)
 } else {
   cfg.preset = 'ts-jest'
 }

@@ -3,7 +3,7 @@ import { resolve } from 'path'
 import ts, { Diagnostic, DiagnosticCategory, ModuleKind, ScriptTarget } from 'typescript'
 
 import * as _myModule from '..'
-import { mocked } from '../..'
+import { mocked } from '../../utils'
 import * as fakers from '../__helpers__/fakers'
 import { logTargetMock } from '../__helpers__/mocks'
 import { TsJestGlobalOptions } from '../types'
@@ -361,9 +361,9 @@ describe('resolvePath', () => {
 }) // resolvePath
 
 describe('readTsConfig', () => {
-  let findConfig!: jest.SpyInstance<typeof ts.findConfigFile>
-  let readConfig!: jest.SpyInstance<typeof ts.readConfigFile>
-  let parseConfig!: jest.SpyInstance<typeof ts.parseJsonSourceFileConfigFileContent>
+  let findConfig!: jest.MockInstance<typeof ts.findConfigFile>
+  let readConfig!: jest.MockInstance<typeof ts.readConfigFile>
+  let parseConfig!: jest.MockInstance<typeof ts.parseJsonSourceFileConfigFileContent>
   let cs!: ConfigSet
   beforeAll(() => {
     findConfig = jest.spyOn(ts, 'findConfigFile')
@@ -489,23 +489,63 @@ describe('babelJestTransformer', () => {
   })
 }) // babelJestTransformer
 
+describe('projectDependencies', () => {
+  const pkg = {
+    optionalDependencies: { opt: '1.2.3' },
+    peerDependencies: { peer: '1.2.4' },
+    devDependencies: { dev: '1.2.5' },
+    dependencies: { std: '1.2.6' },
+  }
+  const realVersions: any = {
+    peer: '0.1.0',
+    dev: '4.3.2',
+    std: '9.10.2',
+  }
+  it('should list all deps with their real version', () => {
+    jest.doMock('peer/package.json', () => ({ version: realVersions.peer }), { virtual: true })
+    jest.doMock('dev/package.json', () => ({ version: realVersions.dev }), { virtual: true })
+    jest.doMock('std/package.json', () => ({ version: realVersions.std }), { virtual: true })
+    const cs = createConfigSet({
+      tsJestConfig: { tsConfig: false } as any,
+      projectPackageJson: pkg,
+    })
+    expect(cs.projectDependencies).toEqual(realVersions)
+    jest.dontMock('peer/package.json')
+    jest.dontMock('dev/package.json')
+    jest.dontMock('std/package.json')
+  })
+}) // projectDependencies
+
 describe('cacheKey', () => {
   it('should be a string', () => {
-    const cs = createConfigSet({ tsJestConfig: { tsConfig: false } as any })
+    const cs = createConfigSet({
+      tsJestConfig: { tsConfig: false } as any,
+      projectDependencies: {
+        opt: '1.2.3',
+        peer: '1.2.4',
+        dev: '1.2.5',
+        std: '1.2.6',
+      },
+    })
     // we tested those and don't want the snapshot to change all the time we upgrade
     const val = cs.jsonValue.value
     delete val.versions
     cs.jsonValue.value = val
     // digest is mocked in src/__mocks__/index.ts
     expect(cs.cacheKey).toMatchInlineSnapshot(
-      `"{\\"digest\\":\\"a0d51ca854194df8191d0e65c0ca4730f510f332\\",\\"jest\\":{\\"__backported\\":true,\\"globals\\":{}},\\"transformers\\":[\\"hoisting-jest-mock@1\\"],\\"tsJest\\":{\\"compiler\\":\\"typescript\\",\\"diagnostics\\":{\\"ignoreCodes\\":[6059,18002,18003],\\"pretty\\":true,\\"throws\\":true},\\"isolatedModules\\":false,\\"transformers\\":[]},\\"tsconfig\\":{\\"declaration\\":false,\\"inlineSourceMap\\":false,\\"inlineSources\\":true,\\"module\\":1,\\"noEmit\\":false,\\"outDir\\":\\"$$ts-jest$$\\",\\"removeComments\\":false,\\"sourceMap\\":true,\\"target\\":1}}"`,
+      '"{\\"digest\\":\\"a0d51ca854194df8191d0e65c0ca4730f510f332\\",\\"jest\\":{\\"__backported\\":true,\\"globals\\":{}},\\"projectDepVersions\\":{\\"dev\\":\\"1.2.5\\",\\"opt\\":\\"1.2.3\\",\\"peer\\":\\"1.2.4\\",\\"std\\":\\"1.2.6\\"},\\"transformers\\":[\\"hoisting-jest-mock@1\\"],\\"tsJest\\":{\\"compiler\\":\\"typescript\\",\\"diagnostics\\":{\\"ignoreCodes\\":[6059,18002,18003],\\"pretty\\":true,\\"throws\\":true},\\"isolatedModules\\":false,\\"transformers\\":[]},\\"tsconfig\\":{\\"declaration\\":false,\\"inlineSourceMap\\":false,\\"inlineSources\\":true,\\"module\\":1,\\"noEmit\\":false,\\"outDir\\":\\"$$ts-jest$$\\",\\"removeComments\\":false,\\"sourceMap\\":true,\\"target\\":1}}"',
     )
   })
 }) // cacheKey
 
 describe('jsonValue', () => {
   it('should create jsonValue based on each config and version', () => {
-    const cs = createConfigSet({ tsJestConfig: { tsConfig: false } as any })
+    const cs = createConfigSet({
+      tsJestConfig: { tsConfig: false } as any,
+      projectDependencies: {
+        'some-module': '1.2.3',
+      },
+    })
     const val = cs.jsonValue.valueOf()
     expect(cs.toJSON()).toEqual(val)
     // it will change each time we upgrade – we tested those in the `version` block
@@ -520,6 +560,9 @@ Object {
   "jest": Object {
     "__backported": true,
     "globals": Object {},
+  },
+  "projectDepVersions": Object {
+    "some-module": "1.2.3",
   },
   "transformers": Array [
     "hoisting-jest-mock@1",

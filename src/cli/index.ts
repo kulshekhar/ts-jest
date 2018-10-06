@@ -16,11 +16,24 @@ export type CliCommand = (argv: Arguments, logger: Logger) => Promise<void>
 async function cli(args: string[]): Promise<void> {
   const parsedArgv = yargsParser(args, {
     boolean: ['dry-run', 'jest-preset', 'allow-js', 'diff', 'babel', 'force', 'jsdom'],
-    string: ['tsconfig'],
+    string: ['tsconfig', 'js'],
     count: ['verbose'],
     alias: { verbose: ['v'] },
     default: { jestPreset: true, verbose: 0 },
+    coerce: {
+      js(val: string) {
+        const res = val.trim().toLowerCase()
+        if (!['babel', 'ts'].includes(res)) throw new Error(`The 'js' option must be 'babel' or 'ts', given: '${val}'.`)
+        return res
+      },
+    },
   })
+
+  // deprecated
+  if (parsedArgv.allowJs != null) {
+    if (parsedArgv.js) throw new Error(`The 'allowJs' and 'js' options cannot be set together.`)
+    parsedArgv.js = parsedArgv.allowJs ? 'ts' : undefined
+  }
 
   let command = parsedArgv._.shift() as string
   const isHelp = command === 'help'

@@ -25,13 +25,13 @@ In the same way that you moved Babel config, move Jest config from `jest` key of
 
 ```js
 // jest.config.js
-const { jestPreset: tsJest } = require('ts-jest');
+const { defaults: tsjPreset } = require('ts-jest/presets');
 
 module.exports = {
-  ...tsJest,
+  ...tsjPreset,
   preset: 'react-native',
   transform: {
-    ...tsJest.transform,
+    ...tsjPreset.transform,
     '\\.js$': '<rootDir>/node_modules/react-native/jest/preprocessor.js',
   },
   globals: {
