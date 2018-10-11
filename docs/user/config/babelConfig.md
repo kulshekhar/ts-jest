@@ -46,7 +46,7 @@ module.exports = {
 
 </div></div>
 
-#### Path to a `balelrc` file
+#### Path to a `babelrc` file
 
 The path should be relative to the current working directory where you start Jest from. You can also use `\<rootDir>` in the path, or use an absolute path (this last one is strongly not recommended).
 
