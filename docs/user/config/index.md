@@ -1,24 +1,24 @@
 ---
 title: Configuration
 ---
-`ts-jest` configuration is done within Jest configuration object. This latest can be in `package.json` under the `jest` property, or in its own `jest.config.js` file.
-The later is preferred since it's more customizable, but it depends on your needs and preference.
+`ts-jest` configuration is done within the Jest configuration object. This can be in `package.json` under the `jest` property, or in its own `jest.config.js` file.
+The latter is preferred since it's more customizable, but it depends on your needs and preference.
 
 ## Jest preset
 
 ### The 3 presets
 
-`ts-jest` comes with 3 presets, covering most of project's base configuration:
+`ts-jest` comes with 3 presets, covering most of the project's base configuration:
 
 | Preset name | Description |
 |---|---|
 | `ts-jest/presets/default`<br>or `ts-jest` | `ts-jest` will take care of `.ts` and `.tsx` files only, leaving JavaScript files as-is. |
-| `ts-jest/presets/js-with-ts` | TypeScript and JavaScript file (`.ts`, `.tsx`, `.js` and `.jsx`) will be handled by `ts-jest`.<br>You'll need to set `allowJs` to `true` in your `tsconfig.json` file. |
+| `ts-jest/presets/js-with-ts` | TypeScript and JavaScript files (`.ts`, `.tsx`, `.js` and `.jsx`) will be handled by `ts-jest`.<br>You'll need to set `allowJs` to `true` in your `tsconfig.json` file. |
 | `ts-jest/presets/js-with-babel` | TypeScript files will be handled by `ts-jest`, and JavaScript files will be handled by `babel-jest`. |
 
 ### Basic usage
 
-In most cases, simply setting the `preset` key to the desired preset name in your Jest config should be enough to start using TypeScript with Jest (assuming you did add `ts-jest` to your dev. dependencies of course):
+In most cases, simply setting the `preset` key to the desired preset name in your Jest config should be enough to start using TypeScript with Jest (assuming you added `ts-jest` to your dev. dependencies of course):
 
 <div class="row"><div class="col-md-6" markdown="block">
 
