@@ -22,7 +22,7 @@ module.exports = {
   // [...]
   globals: {
     'ts-jest': {
-      tsConfig: 'tsconfig.test.json'
+      tsConfigFile: 'tsconfig.test.json'
     }
   }
 };
@@ -37,7 +37,7 @@ module.exports = {
   "jest": {
     "globals": {
       "ts-jest": {
-        "tsConfig": "tsconfig.test.json"
+        "tsConfigFile": "tsconfig.test.json"
       }
     }
   }
