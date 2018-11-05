@@ -35,7 +35,7 @@ module.exports = {
   "jest": {
     "globals": {
       "ts-jest": {
-        "isolatedModules": false
+        "isolatedModules": true
       }
     }
   }
