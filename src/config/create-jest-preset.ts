@@ -1,9 +1,12 @@
-import * as jestConfig from 'jest-config'
+import * as jestConfigType from 'jest-config'
 
 import { rootLogger } from '../util/logger'
 
+import { getJestConfig } from './jest-config-resolver'
+
 const logger = rootLogger.child({ namespace: 'jest-preset' })
 
+const jestConfig: typeof jestConfigType = getJestConfig(logger)
 // jest 22 doesn't have defaults
 const defaults = jestConfig.defaults || {
   transform: null,
