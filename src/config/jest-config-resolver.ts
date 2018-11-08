@@ -8,7 +8,7 @@ interface IPackageJson {
   main: string
 }
 
-export function getJestConfig<TJestConfig>(logger: Logger): TJestConfig {
+export function getJestConfigPkg<TJestConfig>(logger: Logger): TJestConfig {
   try {
     const jestPath: string = resolvePackagePath('jest', __dirname)
     const jestCliPath: string = resolvePackagePath('jest-cli', jestPath)
