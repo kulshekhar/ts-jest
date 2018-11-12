@@ -1,14 +1,14 @@
 import * as fs from 'fs'
+import * as TJestConfigPkg from 'jest-config'
 import * as path from 'path'
 import * as resolve from 'resolve'
 
 import { Logger } from 'bs-logger'
 
-interface IPackageJson {
-  main: string
-}
+import { IPackageJson } from '../types'
+import { Errors } from '../util/messages'
 
-export function getJestConfigPkg<TJestConfig>(logger: Logger): TJestConfig {
+export function getJestConfigPkg(logger: Logger): typeof TJestConfigPkg {
   try {
     const jestPath: string = resolvePackagePath('jest', __dirname)
     const jestCliPath: string = resolvePackagePath('jest-cli', jestPath)
@@ -17,9 +17,9 @@ export function getJestConfigPkg<TJestConfig>(logger: Logger): TJestConfig {
     const jestConfigPackageJson: IPackageJson = require(path.join(jestConfigPath, 'package.json'))
     const jestConfigMainPath: string = path.resolve(jestConfigPath, jestConfigPackageJson.main)
     return require(jestConfigMainPath)
-  } catch (e) {
-    logger.error('Unable to resolve jest-config. Ensure Jest is properly installed.')
-    return {} as TJestConfig
+  } catch (error) {
+    logger.error({ error }, Errors.UnableToResolveJestConfig)
+    return {} as typeof TJestConfigPkg
   }
 }
 
