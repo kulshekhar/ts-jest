@@ -1,5 +1,4 @@
 import * as fs from 'fs'
-import * as TJestConfigPkg from 'jest-config'
 import * as path from 'path'
 import * as resolve from 'resolve'
 
@@ -8,7 +7,7 @@ import { Logger } from 'bs-logger'
 import { IPackageJson } from '../types'
 import { Errors } from '../util/messages'
 
-export function getJestConfigPkg(logger: Logger): typeof TJestConfigPkg {
+export function getJestConfigPkg<TJestConfig>(logger: Logger): TJestConfig {
   try {
     const jestPath: string = resolvePackagePath('jest', __dirname)
     const jestCliPath: string = resolvePackagePath('jest-cli', jestPath)
@@ -19,7 +18,7 @@ export function getJestConfigPkg(logger: Logger): typeof TJestConfigPkg {
     return require(jestConfigMainPath)
   } catch (error) {
     logger.error({ error }, Errors.UnableToResolveJestConfig)
-    return {} as typeof TJestConfigPkg
+    return {} as TJestConfig
   }
 }
 
