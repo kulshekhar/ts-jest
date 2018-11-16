@@ -170,3 +170,7 @@ export interface AstTransformerDesc {
   version: number
   factory(cs: ConfigSet): TransformerFactory<SourceFile>
 }
+
+export interface IPackageJson {
+  main: string
+}

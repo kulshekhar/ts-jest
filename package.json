@@ -65,6 +65,7 @@
     "json5": "2.x",
     "make-error": "1.x",
     "mkdirp": "0.x",
+    "resolve": "1.x",
     "semver": "^5.5",
     "yargs-parser": "10.x"
   },
@@ -86,6 +87,7 @@
     "@types/lodash.set": "4.x",
     "@types/mkdirp": "latest",
     "@types/node": "10.x",
+    "@types/resolve": "latest",
     "@types/semver": "latest",
     "@types/yargs": "latest",
     "conventional-changelog-cli": "2.x",
