@@ -62,6 +62,7 @@
     "bs-logger": "0.x",
     "buffer-from": "1.x",
     "fast-json-stable-stringify": "2.x",
+    "jest-config": "^23.6.0",
     "json5": "2.x",
     "make-error": "1.x",
     "mkdirp": "0.x",
