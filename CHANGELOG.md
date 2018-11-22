@@ -1,3 +1,8 @@
+<a name="23.10.5"></a>
+## [23.10.5](https://github.com/kulshekhar/ts-jest/compare/v23.10.4...v23.10.5) (2018-11-22)
+
+
+
 <a name="23.10.4"></a>
 ## [23.10.4](https://github.com/kulshekhar/ts-jest/compare/v23.10.3...v23.10.4) (2018-10-06)
 
