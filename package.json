@@ -1,6 +1,6 @@
 {
   "name": "ts-jest",
-  "version": "23.10.4",
+  "version": "23.10.5",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "bin": "cli.js",
