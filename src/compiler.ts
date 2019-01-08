@@ -131,6 +131,7 @@ export function createCompiler(configs: ConfigSet): TsCompiler {
       ...serviceHostDebugCtx,
       [LogContexts.logLevel]: LogLevels.trace,
     }
+
     const serviceHost = {
       getScriptFileNames: () => Object.keys(memoryCache.versions),
       getScriptVersion: (fileName: string) => {
@@ -157,11 +158,11 @@ export function createCompiler(configs: ConfigSet): TsCompiler {
         }
         return ts.ScriptSnapshot.fromString(contents)
       },
-      fileExists: ts.sys.fileExists,
-      readFile: logger.wrap(serviceHostTraceCtx, 'readFile', ts.sys.readFile),
-      readDirectory: ts.sys.readDirectory,
-      getDirectories: ts.sys.getDirectories,
-      directoryExists: ts.sys.directoryExists,
+      fileExists: memoize(ts.sys.fileExists),
+      readFile: logger.wrap(serviceHostTraceCtx, 'readFile', memoize(ts.sys.readFile)),
+      readDirectory: memoize(ts.sys.readDirectory),
+      getDirectories: memoize(ts.sys.getDirectories),
+      directoryExists: memoize(ts.sys.directoryExists),
       getNewLine: () => '\n',
       getCurrentDirectory: () => cwd,
       getCompilationSettings: () => compilerOptions,
@@ -222,6 +223,22 @@ export function createCompiler(configs: ConfigSet): TsCompiler {
 
   const compile = readThrough(cachedir, memoryCache, getOutput, getExtension, cwd, logger)
   return { cwd, compile, getTypeInfo, extensions, cachedir, ts }
+}
+
+type AnyFn = (...args: any[]) => any
+function memoize<T extends AnyFn = AnyFn>(fn: T): T {
+  const cache = new Map()
+
+  return ((arg: string) => {
+    const entry = cache.get(arg)
+    if (entry !== undefined) {
+      return entry
+    }
+
+    const res = fn(arg)
+    cache.set(arg, res)
+    return res
+  }) as T
 }
 
 /**
