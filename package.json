@@ -70,7 +70,7 @@
     "yargs-parser": "10.x"
   },
   "peerDependencies": {
-    "jest": ">=22 <24"
+    "jest": ">=22"
   },
   "devDependencies": {
     "@commitlint/cli": "7.x",
@@ -96,7 +96,7 @@
     "fs-extra": "latest",
     "glob-gitignore": "latest",
     "husky": "0.x",
-    "jest": "23.x",
+    "jest": "24.x",
     "js-yaml": "latest",
     "lint-staged": "latest",
     "lodash.memoize": "4.x",
