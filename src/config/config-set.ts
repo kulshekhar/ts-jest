@@ -336,16 +336,16 @@ export class ConfigSet {
       base = { ...base, ...babelConfig.value }
     }
 
-    // loadOptions is from babel 7+, and OptionManager is backward compatible but deprecated 6 API
-    const { OptionManager, loadOptions, version } = importer.babelCore(ImportReasons.BabelJest)
+    // loadPartialConfig is from babel 7+, and OptionManager is backward compatible but deprecated 6 API
+    const { OptionManager, loadPartialConfig, version } = importer.babelCore(ImportReasons.BabelJest)
     // cwd is only supported from babel >= 7
     if (version && semver.satisfies(version, '>=6 <7')) {
       delete base.cwd
     }
     // call babel to load options
     let config: BabelConfig
-    if (typeof loadOptions === 'function') {
-      config = loadOptions(base) as BabelConfig
+    if (typeof loadPartialConfig === 'function') {
+      config = loadPartialConfig(base).options as BabelConfig
     } else {
       config = new OptionManager().init(base) as BabelConfig
     }
