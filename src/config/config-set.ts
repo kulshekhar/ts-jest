@@ -345,7 +345,8 @@ export class ConfigSet {
     // call babel to load options
     let config: BabelConfig
     if (typeof loadPartialConfig === 'function') {
-      config = loadPartialConfig(base).options as BabelConfig
+      const partialConfig = loadPartialConfig(base)
+      config = partialConfig && partialConfig.options as BabelConfig
     } else {
       config = new OptionManager().init(base) as BabelConfig
     }
