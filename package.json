@@ -12,7 +12,7 @@
     "build:watch": "tsc -p tsconfig.build.json -w",
     "clean": "node scripts/clean.js",
     "pretest": "npm run lint",
-    "test": "run-s -s test:e2e \"test:unit -- {@}\" --",
+    "test": "run-s -s \"test:unit -- {@}\" --",
     "test:prepare": "npm run test:e2e -- --prepareOnly",
     "test:e2e": "node scripts/e2e.js",
     "test:unit": "node_modules/.bin/jest",
@@ -70,7 +70,7 @@
     "yargs-parser": "10.x"
   },
   "peerDependencies": {
-    "jest": ">=22"
+    "jest": ">=24 <25"
   },
   "devDependencies": {
     "@commitlint/cli": "7.x",
@@ -79,7 +79,7 @@
     "@types/buffer-from": "latest",
     "@types/cross-spawn": "latest",
     "@types/fs-extra": "latest",
-    "@types/jest": "23.x",
+    "@types/jest": "24.x",
     "@types/js-yaml": "latest",
     "@types/json5": "latest",
     "@types/lodash.memoize": "4.x",

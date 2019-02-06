@@ -16,8 +16,6 @@ declare module 'jest-config' {
   export const defaults: jest.InitialOptions
 }
 
-declare module 'babel-core/lib/transformation/file'
-
 declare module 'yargs-parser' {
   import yargs from 'yargs'
   export = yargs.parse

@@ -1,8 +1,6 @@
 #!/usr/bin/env node
 'use strict'
 
-// Preload `cli` to avoid cyclical dependency. Remove when jest@24.0.1 is out
-require('jest-cli/build/cli')
 const jest = require('jest')
 const { spawnSync } = require('./lib/spawn-sync')
 const fs = require('fs-extra')

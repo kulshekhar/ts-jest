@@ -10,10 +10,9 @@ const logger = rootLogger.child({ namespace: 'versions' })
  * @internal
  */
 export enum ExpectedVersions {
-  Jest = '>=22 <24',
+  Jest = '>=24 <25',
   TypeScript = '>=2.7 <4',
-  BabelJest = '>=22 <24',
-  BabelCoreLegacy = '>=6 <7 || 7.0.0-bridge.0',
+  BabelJest = '>=24 <25',
   BabelCore = '>=7.0.0-beta.0 <8',
 }
 
@@ -34,7 +33,6 @@ export const VersionCheckers = {
   jest: createVersionChecker('jest', ExpectedVersions.Jest),
   typescript: createVersionChecker('typescript', ExpectedVersions.TypeScript),
   babelJest: createVersionChecker('babel-jest', ExpectedVersions.BabelJest),
-  babelCoreLegacy: createVersionChecker('babel-core', ExpectedVersions.BabelCoreLegacy),
   babelCore: createVersionChecker('@babel/core', ExpectedVersions.BabelCore),
 }
 

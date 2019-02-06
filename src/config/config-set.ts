@@ -257,7 +257,7 @@ export class ConfigSet {
   get versions(): Record<string, string> {
     const modules = ['jest', this.tsJest.compiler]
     if (this.tsJest.babelConfig) {
-      modules.push('@babel/core', 'babel-core', 'babel-jest')
+      modules.push('@babel/core', 'babel-jest')
     }
     return modules.reduce(
       (map, name) => {
