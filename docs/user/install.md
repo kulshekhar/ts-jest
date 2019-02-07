@@ -39,7 +39,7 @@ To make it transpile TypeScript with `ts-jest`, we will need to create a configu
 Using `npm`:
 
 ```sh
-npx ts-jest config:init
+npm ts-jest config:init
 ```
 
 </div><div class="col-md-6" markdown="block">
