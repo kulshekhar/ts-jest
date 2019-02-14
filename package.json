@@ -12,7 +12,7 @@
     "build:watch": "tsc -p tsconfig.build.json -w",
     "clean": "node scripts/clean.js",
     "pretest": "npm run lint",
-    "test": "run-s -s \"test:unit -- {@}\" --",
+    "test": "run-s -s test:e2e \"test:unit -- {@}\" --",
     "test:prepare": "npm run test:e2e -- --prepareOnly",
     "test:e2e": "node scripts/e2e.js",
     "test:unit": "node_modules/.bin/jest",
