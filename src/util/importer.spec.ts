@@ -116,8 +116,8 @@ describe('babelCore', () => {
   })
   it('should fail with correct error message', () => {
     expect(() => new Importer().babelCore(fakers.importReason())).toThrowErrorMatchingInlineSnapshot(`
-"Unable to load any of these modules: \\"@babel/core\\". [[BECAUSE]]. To fix it:
-    • for Babel 7: \`npm i -D babel-jest @babel/core\` (or \`yarn add --dev babel-jest @babel/core\`)"
+"Unable to load the module \\"@babel/core\\". [[BECAUSE]] To fix it:
+    ↳ install \\"@babel/core\\": \`npm i -D @babel/core\` (or \`yarn add --dev @babel/core\`)"
 `)
   })
 })

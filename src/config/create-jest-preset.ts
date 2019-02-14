@@ -12,8 +12,8 @@ const defaults = jestConfigPkg.defaults
 
 export interface TsJestPresets {
   transform: Record<string, string>
-  testMatch: string[]
-  moduleFileExtensions: string[]
+  testMatch: string[] | undefined
+  moduleFileExtensions: string[] | undefined
 }
 
 export interface CreateJestPresetOptions {
@@ -31,7 +31,7 @@ export function createJestPreset(
       ...from.transform,
       [allowJs ? '^.+\\.[tj]sx?$' : '^.+\\.tsx?$']: 'ts-jest',
     },
-    testMatch: from.testMatch || [],
-    moduleFileExtensions: from.moduleFileExtensions || [],
+    testMatch: from.testMatch || undefined,
+    moduleFileExtensions: from.moduleFileExtensions || undefined,
   }
 }

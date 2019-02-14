@@ -47,17 +47,7 @@ export class Importer {
   }
 
   babelCore(why: ImportReasons): TBabelCore {
-    // the bridge will choose correct babel version
-    return this._import(why, 'babel-core', {
-      alternatives: ['@babel/core'],
-      installTip: [
-        // as in https://github.com/facebook/jest/tree/master/packages/babel-jest
-        {
-          label: 'for Babel 7',
-          module: `babel-jest @babel/core`,
-        },
-      ],
-    })
+    return this._import(why, '@babel/core')
   }
 
   typescript(why: ImportReasons, which: string): TTypeScript {

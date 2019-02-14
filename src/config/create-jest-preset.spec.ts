@@ -25,18 +25,6 @@ it('should return correct defaults when allowJs is true', () => {
 it('should be able to use a base config', () => {
   expect(createJestPreset(undefined, {})).toMatchInlineSnapshot(`
 Object {
-  "moduleFileExtensions": Array [
-    "js",
-    "json",
-    "jsx",
-    "ts",
-    "tsx",
-    "node",
-  ],
-  "testMatch": Array [
-    "**/__tests__/**/*.[jt]s?(x)",
-    "**/?(*.)+(spec|test).[tj]s?(x)",
-  ],
   "transform": Object {
     "^.+\\\\.tsx?$": "ts-jest",
   },
