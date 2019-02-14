@@ -2,8 +2,6 @@ import { createJestPreset } from './create-jest-preset'
 
 it('should return correct defaults when allowJs is false or not set', () => {
   const withoutJs = {
-    moduleFileExtensions: ['js', 'json', 'jsx', 'ts', 'tsx', 'node'],
-    testMatch: ['**/__tests__/**/*.[jt]s?(x)', '**/?(*.)+(spec|test).[tj]s?(x)'],
     transform: {
       '^.+\\.tsx?$': 'ts-jest',
     },
@@ -14,8 +12,6 @@ it('should return correct defaults when allowJs is false or not set', () => {
 
 it('should return correct defaults when allowJs is true', () => {
   expect(createJestPreset({ allowJs: true })).toEqual({
-    moduleFileExtensions: ['js', 'json', 'jsx', 'ts', 'tsx', 'node'],
-    testMatch: ['**/__tests__/**/*.[jt]s?(x)', '**/?(*.)+(spec|test).[tj]s?(x)'],
     transform: {
       '^.+\\.[tj]sx?$': 'ts-jest',
     },
