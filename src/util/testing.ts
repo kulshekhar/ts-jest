@@ -1,4 +1,4 @@
-interface MockWithArgs<T> extends Function, jest.MockInstance<T, any> {
+interface MockWithArgs<T> extends Function, jest.MockInstance<T> {
   new (...args: ArgumentsOf<T>): T
   (...args: ArgumentsOf<T>): any
 }
@@ -8,7 +8,7 @@ type MethodKeysOf<T> = { [K in keyof T]: T[K] extends Function ? K : never }[key
 // tslint:disable-next-line:ban-types
 type PropertyKeysOf<T> = { [K in keyof T]: T[K] extends Function ? never : K }[keyof T]
 type ArgumentsOf<T> = T extends (...args: infer A) => any ? A : never
-interface MockWithArgs<T> extends Function, jest.MockInstance<T, any> {
+interface MockWithArgs<T> extends Function, jest.MockInstance<T> {
   new (...args: ArgumentsOf<T>): T
   (...args: ArgumentsOf<T>): any
 }
