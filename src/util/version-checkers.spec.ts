@@ -15,8 +15,8 @@ jest.mock('./get-package-version')
 
 const pv = mocked(_pv)
 
-describeChecker(VersionCheckers.jest, 'jest', ['22.1.3', '23.4.5'], [undefined, '21.0.0', '24.0.0'])
-describeChecker(VersionCheckers.babelJest, 'babel-jest', ['22.1.3', '23.4.5'], [undefined, '21.0.0', '24.0.0'])
+describeChecker(VersionCheckers.jest, 'jest', ['22.1.3', '23.4.5'], [undefined, '21.0.0', '25.0.0'])
+describeChecker(VersionCheckers.babelJest, 'babel-jest', ['22.1.3', '23.4.5'], [undefined, '21.0.0', '25.0.0'])
 describeChecker(
   VersionCheckers.babelCoreLegacy,
   'babel-core',
