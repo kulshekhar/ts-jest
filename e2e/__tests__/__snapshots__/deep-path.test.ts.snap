@@ -36,12 +36,7 @@ exports[`Deep paths test should pass using template "default": output 1`] = `
   √ npm -s run test
   ↳ exit code: 0
   ===[ STDOUT ]===================================================================
-  =============================== Coverage summary ===============================
-  Statements   : 100% ( 6/6 )
-  Branches     : 100% ( 0/0 )
-  Functions    : 100% ( 2/2 )
-  Lines        : 100% ( 6/6 )
-  ================================================================================
+  
   ===[ STDERR ]===================================================================
   PASS Button/click.test.ts
     √ button should click!
@@ -144,12 +139,7 @@ exports[`Deep paths test should pass using template "with-babel-7": output 1`] =
   √ npm -s run test
   ↳ exit code: 0
   ===[ STDOUT ]===================================================================
-  =============================== Coverage summary ===============================
-  Statements   : 100% ( 6/6 )
-  Branches     : 100% ( 0/0 )
-  Functions    : 100% ( 2/2 )
-  Lines        : 100% ( 6/6 )
-  ================================================================================
+  
   ===[ STDERR ]===================================================================
   PASS Button/click.test.ts
     √ button should click!
@@ -252,12 +242,7 @@ exports[`Deep paths test should pass using template "with-typescript-2-7": outpu
   √ npm -s run test
   ↳ exit code: 0
   ===[ STDOUT ]===================================================================
-  =============================== Coverage summary ===============================
-  Statements   : 100% ( 6/6 )
-  Branches     : 100% ( 0/0 )
-  Functions    : 100% ( 2/2 )
-  Lines        : 100% ( 6/6 )
-  ================================================================================
+  
   ===[ STDERR ]===================================================================
   PASS Button/click.test.ts
     √ button should click!
