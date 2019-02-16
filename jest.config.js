@@ -4,7 +4,7 @@ module.exports = {
   transform: {
     '\\.ts$': '<rootDir>/dist/index.js',
   },
-  testMatch: ['<rootDir>/src/**/?(*.)+(spec|test).ts?(x)'],
+  testMatch: ['<rootDir>/src/**/*.spec.ts'],
   collectCoverageFrom: [
     '<rootDir>/src/**/*.ts',
     '!<rootDir>/src/**/*.d.ts',
