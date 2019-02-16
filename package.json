@@ -32,9 +32,6 @@
     "changelog": "node_modules/.bin/conventional-changelog -p angular -i CHANGELOG.md -s -r 0",
     "prepare": "npm run build",
     "prepublishOnly": "npm run test",
-    "commitmsg": "node_modules/.bin/commitlint -E GIT_PARAMS",
-    "precommit": "node_modules/.bin/lint-staged",
-    "postcommit": "git reset",
     "preversion": "npm run test",
     "version": "npm run changelog && git add CHANGELOG.md"
   },
@@ -72,6 +69,13 @@
   "peerDependencies": {
     "jest": ">=24 <25"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
+      "post-commit": "git reset"
+    }
+  },
   "devDependencies": {
     "@commitlint/cli": "7.x",
     "@commitlint/config-conventional": "7.x",
@@ -95,7 +99,7 @@
     "eslint": "latest",
     "fs-extra": "latest",
     "glob-gitignore": "latest",
-    "husky": "0.x",
+    "husky": "1.x",
     "jest": "24.x",
     "js-yaml": "latest",
     "lint-staged": "latest",
