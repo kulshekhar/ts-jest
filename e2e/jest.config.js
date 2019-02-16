@@ -3,7 +3,7 @@ module.exports = {
   transform: {
     '\\.ts$': '<rootDir>/dist/index.js',
   },
-  testMatch: ['<rootDir>/e2e/__tests__/**/?(*.)+(spec|test).ts?(x)'],
+  testMatch: ['<rootDir>/e2e/__tests__/**/*.test.ts'],
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json'],
   testEnvironment: 'node',
   snapshotSerializers: [
