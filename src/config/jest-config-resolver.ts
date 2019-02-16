@@ -1,8 +1,7 @@
+import { Logger } from 'bs-logger'
 import { Stats, existsSync, readFileSync, realpathSync, statSync } from 'fs'
 import { dirname, join, resolve } from 'path'
 import { sync as resolveSync } from 'resolve'
-
-import { Logger } from 'bs-logger'
 
 import { IPackageJson } from '../types'
 import { Errors } from '../util/messages'
