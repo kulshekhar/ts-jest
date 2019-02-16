@@ -49,60 +49,6 @@ exports[`Deep paths test should pass using template "default": output 1`] = `
   ================================================================================
 `;
 
-exports[`Deep paths test should pass using template "with-babel-6": lcov 1`] = `
-"TN:
-SF:<cwd>/src/Button/click.ts
-FN:3,click
-FNF:1
-FNH:1
-FNDA:1,click
-DA:1,1
-DA:3,1
-DA:4,1
-LF:3
-LH:3
-BRF:0
-BRH:0
-end_of_record
-TN:
-SF:<cwd>/src/Tests/Button/click.test.ts
-FN:3,(anonymous_0)
-FNF:1
-FNH:1
-FNDA:1,(anonymous_0)
-DA:1,1
-DA:3,1
-DA:4,1
-LF:3
-LH:3
-BRF:0
-BRH:0
-end_of_record
-"
-`;
-
-exports[`Deep paths test should pass using template "with-babel-6": output 1`] = `
-  √ npm -s run test
-  ↳ exit code: 0
-  ===[ STDOUT ]===================================================================
-  =============================== Coverage summary ===============================
-  Statements   : 100% ( 6/6 )
-  Branches     : 100% ( 0/0 )
-  Functions    : 100% ( 2/2 )
-  Lines        : 100% ( 6/6 )
-  ================================================================================
-  ===[ STDERR ]===================================================================
-  PASS Button/click.test.ts
-    √ button should click!
-  
-  Test Suites: 1 passed, 1 total
-  Tests:       1 passed, 1 total
-  Snapshots:   0 total
-  Time:        XXs
-  Ran all test suites.
-  ================================================================================
-`;
-
 exports[`Deep paths test should pass using template "with-babel-7": lcov 1`] = `
 "TN:
 SF:<cwd>/src/Button/click.ts
@@ -140,60 +86,6 @@ exports[`Deep paths test should pass using template "with-babel-7": output 1`] =
   ↳ exit code: 0
   ===[ STDOUT ]===================================================================
   
-  ===[ STDERR ]===================================================================
-  PASS Button/click.test.ts
-    √ button should click!
-  
-  Test Suites: 1 passed, 1 total
-  Tests:       1 passed, 1 total
-  Snapshots:   0 total
-  Time:        XXs
-  Ran all test suites.
-  ================================================================================
-`;
-
-exports[`Deep paths test should pass using template "with-jest-22": lcov 1`] = `
-"TN:
-SF:<cwd>/src/Button/click.ts
-FN:3,click
-FNF:1
-FNH:1
-FNDA:1,click
-DA:1,1
-DA:3,1
-DA:4,1
-LF:3
-LH:3
-BRF:0
-BRH:0
-end_of_record
-TN:
-SF:<cwd>/src/Tests/Button/click.test.ts
-FN:3,(anonymous_0)
-FNF:1
-FNH:1
-FNDA:1,(anonymous_0)
-DA:1,1
-DA:3,1
-DA:4,1
-LF:3
-LH:3
-BRF:0
-BRH:0
-end_of_record
-"
-`;
-
-exports[`Deep paths test should pass using template "with-jest-22": output 1`] = `
-  √ npm -s run test
-  ↳ exit code: 0
-  ===[ STDOUT ]===================================================================
-  =============================== Coverage summary ===============================
-  Statements   : 100% ( 6/6 )
-  Branches     : 100% ( 0/0 )
-  Functions    : 100% ( 2/2 )
-  Lines        : 100% ( 6/6 )
-  ================================================================================
   ===[ STDERR ]===================================================================
   PASS Button/click.test.ts
     √ button should click!
