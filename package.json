@@ -59,13 +59,13 @@
   },
   "homepage": "https://kulshekhar.github.io/ts-jest",
   "dependencies": {
-    "bs-logger": "0.x",
+    "bs-logger": "^0.2.6",
     "buffer-from": "1.x",
     "fast-json-stable-stringify": "2.x",
     "json5": "2.x",
     "make-error": "1.x",
     "mkdirp": "0.x",
-    "resolve": "1.x",
+    "resolve": "^1.10.0",
     "semver": "^5.5",
     "yargs-parser": "10.x"
   },
@@ -73,8 +73,8 @@
     "jest": ">=22 <24"
   },
   "devDependencies": {
-    "@commitlint/cli": "7.x",
-    "@commitlint/config-conventional": "7.x",
+    "@commitlint/cli": "^7.5.2",
+    "@commitlint/config-conventional": "^7.5.0",
     "@types/babel__core": "^7.0.5",
     "@types/buffer-from": "latest",
     "@types/cross-spawn": "latest",
