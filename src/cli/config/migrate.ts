@@ -88,7 +88,7 @@ Visit https://kulshekhar.github.io/ts-jest/user/config/#jest-preset for more inf
 
   // check the extensions
   if (migratedConfig.moduleFileExtensions && migratedConfig.moduleFileExtensions.length && preset) {
-    const presetValue = dedupSort(preset.value.moduleFileExtensions).join('::')
+    const presetValue = dedupSort(preset.value.moduleFileExtensions || []).join('::')
     const migratedValue = dedupSort(migratedConfig.moduleFileExtensions).join('::')
     if (presetValue === migratedValue) {
       delete migratedConfig.moduleFileExtensions
@@ -100,7 +100,7 @@ Visit https://kulshekhar.github.io/ts-jest/user/config/#jest-preset for more inf
   }
   // check the testMatch
   else if (migratedConfig.testMatch && migratedConfig.testMatch.length && preset) {
-    const presetValue = dedupSort(preset.value.testMatch).join('::')
+    const presetValue = dedupSort(preset.value.testMatch || []).join('::')
     const migratedValue = dedupSort(migratedConfig.testMatch).join('::')
     if (presetValue === migratedValue) {
       delete migratedConfig.testMatch
