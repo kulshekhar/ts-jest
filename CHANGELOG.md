@@ -1,5 +1,21 @@
-<a name="23.10.5"></a>
-## [23.10.5](https://github.com/kulshekhar/ts-jest/compare/v23.10.4...v23.10.5) (2018-11-22)
+<a name="24.0.0"></a>
+# [24.0.0](https://github.com/kulshekhar/ts-jest/compare/v23.10.5...v24.0.0) (2019-02-18)
+
+
+### Bug Fixes
+
+* cli test ([1d67101](https://github.com/kulshekhar/ts-jest/commit/1d67101))
+* module tests and some snapshots ([999f889](https://github.com/kulshekhar/ts-jest/commit/999f889))
+* remove unused snapshots ([108b08b](https://github.com/kulshekhar/ts-jest/commit/108b08b))
+* some tests ([d0f2231](https://github.com/kulshekhar/ts-jest/commit/d0f2231))
+* test command ([8372b5e](https://github.com/kulshekhar/ts-jest/commit/8372b5e))
+* test path for windows (attempt 1) ([6824ac4](https://github.com/kulshekhar/ts-jest/commit/6824ac4))
+* test path for windows (attempt 2) ([eb2fc8a](https://github.com/kulshekhar/ts-jest/commit/eb2fc8a))
+
+
+### Features
+
+* **jest:** bump to 24 ([defcb77](https://github.com/kulshekhar/ts-jest/commit/defcb77))
 
 
 
