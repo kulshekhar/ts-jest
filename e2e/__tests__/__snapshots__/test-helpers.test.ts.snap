@@ -24,7 +24,7 @@ exports[`test-helpers 1`] = `
   PASS ./deprecated.spec.ts
   
   Test Suites: 1 failed, 2 passed, 3 total
-  Tests:       3 passed, 3 total
+  Tests:       4 passed, 4 total
   Snapshots:   0 total
   Time:        XXs
   Ran all test suites.
@@ -55,7 +55,7 @@ exports[`with esModuleInterop set to false 1`] = `
   PASS ./deprecated.spec.ts
   
   Test Suites: 1 failed, 2 passed, 3 total
-  Tests:       3 passed, 3 total
+  Tests:       4 passed, 4 total
   Snapshots:   0 total
   Time:        XXs
   Ran all test suites.

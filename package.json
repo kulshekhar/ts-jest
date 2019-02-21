@@ -83,7 +83,7 @@
     "@types/buffer-from": "latest",
     "@types/cross-spawn": "latest",
     "@types/fs-extra": "latest",
-    "@types/jest": "23.x",
+    "@types/jest": "24.x",
     "@types/js-yaml": "latest",
     "@types/json5": "latest",
     "@types/lodash.memoize": "4.x",
