@@ -415,8 +415,7 @@ describe('versions', () => {
   describe('with babel', () => {
     it('should return correct version map', () => {
       expect(createConfigSet({ tsJestConfig: { babelConfig: {} } }).versions).toEqual({
-        '@babel/core': '-',
-        'babel-core': pkgVersion('babel-core'),
+        '@babel/core': pkgVersion('@babel/core'),
         'babel-jest': pkgVersion('babel-jest'),
         jest: pkgVersion('jest'),
         'ts-jest': myModule.version,

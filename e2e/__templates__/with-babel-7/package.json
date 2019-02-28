@@ -6,15 +6,15 @@
     "@babel/core": "7.1.5",
     "@types/jest": "23.3.9",
     "@types/node": "10.12.5",
-    "babel-core": "7.0.0-bridge.0",
-    "jest": "23.6.0",
+    "babel-jest": "24.1.0",
+    "jest": "24.1.0",
     "typescript": "3.1.6"
   },
   "wantedDependencies": {
     "@babel/core": "7",
     "@types/jest": "latest",
     "@types/node": "latest",
-    "babel-core": "7.0.0-bridge.0",
+    "babel-jest": "latest",
     "jest": "latest",
     "typescript": "latest"
   }

@@ -228,7 +228,9 @@ export function prepareTest(name: string, template: string, options: RunTestOpti
 
   // link the node_modules dir if the template has one
   if (existsSync(tmplModulesDir)) {
-    symlinkSync(tmplModulesDir, caseModulesDir)
+    // It's important to mark this symlink as 'dir' or tests fail
+    // with permission issues on windows.
+    symlinkSync(tmplModulesDir, caseModulesDir, 'dir')
   }
 
   // copy files from the template to the case dir

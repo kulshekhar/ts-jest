@@ -214,20 +214,6 @@ Jest configuration written to "${normalize('/foo/bar/package.json')}".
     "transform": {
       "^.+\\\\.[tj]sx?$": "ts-jest"
     },
-    "testMatch": [
-      "**/__tests__/**/*.js?(x)",
-      "**/?(*.)+(spec|test).js?(x)",
-      "**/__tests__/**/*.ts?(x)",
-      "**/?(*.)+(spec|test).ts?(x)"
-    ],
-    "moduleFileExtensions": [
-      "js",
-      "json",
-      "jsx",
-      "node",
-      "ts",
-      "tsx"
-    ],
     "globals": {
       "ts-jest": {
         "tsconfig": "tsconfig.test.json",
@@ -387,7 +373,7 @@ Migrated Jest configuration:
         () => ({
           jest: {
             globals: { __TS_CONFIG__: { target: 'es6' } },
-            moduleFileExtensions: ['js', 'json', 'tsx', 'jsx', 'node', 'ts'],
+            moduleFileExtensions: ['ts', 'tsx', 'js'],
             testMatch: [
               '**/__tests__/**/*.js?(x)',
               '**/?(*.)+(spec|test).js?(x)',
@@ -408,6 +394,17 @@ Migrated Jest configuration:
       }
     }
   },
+  \\"moduleFileExtensions\\": [
+    \\"js\\",
+    \\"ts\\",
+    \\"tsx\\"
+  ],
+  \\"testMatch\\": [
+    \\"**/?(*.)+(spec|test).js?(x)\\",
+    \\"**/?(*.)+(spec|test).ts?(x)\\",
+    \\"**/__tests__/**/*.js?(x)\\",
+    \\"**/__tests__/**/*.ts?(x)\\"
+  ],
   \\"preset\\": \\"ts-jest\\"
 }
 "

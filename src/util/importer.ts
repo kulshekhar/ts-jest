@@ -1,6 +1,5 @@
 import { ModulePatcher, TBabelCore, TBabelJest, TTypeScript } from '../types'
 
-import * as hacks from './hacks'
 import { rootLogger } from './logger'
 import { Memoize } from './memoize'
 import { Errors, Helps, ImportReasons, interpolate } from './messages'
@@ -34,7 +33,6 @@ export class Importer {
     // it could be fixes that are not deployed, or
     // abstractions so that multiple versions work the same
     return new Importer({
-      'babel-core': [passThru(VersionCheckers.babelCoreLegacy.warn), hacks.patchBabelCore_githubIssue6577],
       '@babel/core': [passThru(VersionCheckers.babelCore.warn)],
       'babel-jest': [passThru(VersionCheckers.babelJest.warn)],
       typescript: [passThru(VersionCheckers.typescript.warn)],
@@ -45,24 +43,11 @@ export class Importer {
   constructor(protected _patches: { [moduleName: string]: ModulePatcher[] } = {}) {}
 
   babelJest(why: ImportReasons): TBabelJest {
-    // this is to ensure babel-core is patched
-    this.tryThese('babel-core')
     return this._import(why, 'babel-jest')
   }
 
   babelCore(why: ImportReasons): TBabelCore {
-    // the bridge will choose correct babel version
-    return this._import(why, 'babel-core', {
-      alternatives: ['@babel/core'],
-      installTip: [
-        // as in https://github.com/facebook/jest/tree/master/packages/babel-jest
-        {
-          label: 'for Babel 7',
-          module: `babel-jest 'babel-core@^7.0.0-0' @babel/core`,
-        },
-        { label: 'for Babel 6', module: 'babel-jest babel-core' },
-      ],
-    })
+    return this._import(why, '@babel/core')
   }
 
   typescript(why: ImportReasons, which: string): TTypeScript {

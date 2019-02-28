@@ -3,7 +3,7 @@ import * as presets from 'ts-jest/presets'
 import * as utils from 'ts-jest/utils'
 
 test('presets', () => {
-  const presetKeys = ['transform', 'testMatch', 'moduleFileExtensions']
+  const presetKeys = ['transform']
   expect(Object.keys(presets.defaults)).toEqual(presetKeys)
   expect(presets.defaults).toEqual(require('ts-jest/presets/default/jest-preset'))
   expect(presets.defaults).toEqual(require('ts-jest/jest-preset'))
