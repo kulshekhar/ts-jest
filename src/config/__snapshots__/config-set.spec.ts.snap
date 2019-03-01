@@ -32,6 +32,10 @@ Object {
     "throws": true,
   },
   "isolatedModules": false,
+  "packageJson": Object {
+    "kind": "file",
+    "value": undefined,
+  },
   "stringifyContentPathRegex": undefined,
   "transformers": Array [],
   "tsConfig": Object {

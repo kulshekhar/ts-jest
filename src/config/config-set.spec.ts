@@ -103,6 +103,34 @@ describe('tsJest', () => {
     })
   }) // tsconfig
 
+  describe('packageJson', () => {
+    it('should be correct for default value', () => {
+      const EXPECTED = {
+        kind: 'file',
+        value: undefined,
+      }
+      expect(get().packageJson).toEqual(EXPECTED)
+    })
+
+    it('should be correct for given file', () => {
+      const FILE = 'bar/tsconfig.foo.json'
+      const EXPECTED = {
+        kind: 'file',
+        value: defaultResolve(FILE),
+      }
+      expect(get({ packageJson: FILE }).packageJson).toEqual(EXPECTED)
+    })
+
+    it('should be correct for inline config', () => {
+      const CONFIG = { foo: 'bar' }
+      const EXPECTED = {
+        kind: 'inline',
+        value: CONFIG,
+      }
+      expect(get({ packageJson: CONFIG as any }).packageJson).toEqual(EXPECTED)
+    })
+  }) // packageJson
+
   describe('babelConfig', () => {
     it('should be correct for default value', () => {
       expect(get().babelConfig).toBeUndefined()
@@ -532,7 +560,7 @@ describe('cacheKey', () => {
     cs.jsonValue.value = val
     // digest is mocked in src/__mocks__/index.ts
     expect(cs.cacheKey).toMatchInlineSnapshot(
-      '"{\\"digest\\":\\"a0d51ca854194df8191d0e65c0ca4730f510f332\\",\\"jest\\":{\\"__backported\\":true,\\"globals\\":{}},\\"projectDepVersions\\":{\\"dev\\":\\"1.2.5\\",\\"opt\\":\\"1.2.3\\",\\"peer\\":\\"1.2.4\\",\\"std\\":\\"1.2.6\\"},\\"transformers\\":[\\"hoisting-jest-mock@1\\"],\\"tsJest\\":{\\"compiler\\":\\"typescript\\",\\"diagnostics\\":{\\"ignoreCodes\\":[6059,18002,18003],\\"pretty\\":true,\\"throws\\":true},\\"isolatedModules\\":false,\\"transformers\\":[]},\\"tsconfig\\":{\\"declaration\\":false,\\"inlineSourceMap\\":false,\\"inlineSources\\":true,\\"module\\":1,\\"noEmit\\":false,\\"outDir\\":\\"$$ts-jest$$\\",\\"removeComments\\":false,\\"sourceMap\\":true,\\"target\\":1}}"',
+      '"{\\"digest\\":\\"a0d51ca854194df8191d0e65c0ca4730f510f332\\",\\"jest\\":{\\"__backported\\":true,\\"globals\\":{}},\\"projectDepVersions\\":{\\"dev\\":\\"1.2.5\\",\\"opt\\":\\"1.2.3\\",\\"peer\\":\\"1.2.4\\",\\"std\\":\\"1.2.6\\"},\\"transformers\\":[\\"hoisting-jest-mock@1\\"],\\"tsJest\\":{\\"compiler\\":\\"typescript\\",\\"diagnostics\\":{\\"ignoreCodes\\":[6059,18002,18003],\\"pretty\\":true,\\"throws\\":true},\\"isolatedModules\\":false,\\"packageJson\\":{\\"kind\\":\\"file\\"},\\"transformers\\":[]},\\"tsconfig\\":{\\"declaration\\":false,\\"inlineSourceMap\\":false,\\"inlineSources\\":true,\\"module\\":1,\\"noEmit\\":false,\\"outDir\\":\\"$$ts-jest$$\\",\\"removeComments\\":false,\\"sourceMap\\":true,\\"target\\":1}}"',
     )
   })
 }) // cacheKey
@@ -579,6 +607,10 @@ Object {
       "throws": true,
     },
     "isolatedModules": false,
+    "packageJson": Object {
+      "kind": "file",
+      "value": undefined,
+    },
     "stringifyContentPathRegex": undefined,
     "transformers": Array [],
     "tsConfig": undefined,
