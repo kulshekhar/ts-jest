@@ -25,6 +25,7 @@ function readPackageDigest() {
 
 function computePackageDigest(noWriteFile = false) {
   const files = globIgnore(join(rootDir, '**'), {
+    absolute: true,
     ignore: readFileSync(join(rootDir, '.npmignore'))
       .toString('utf8')
       .split(/\n/g)
