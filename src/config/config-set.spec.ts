@@ -1,5 +1,5 @@
 import { testing } from 'bs-logger'
-import { resolve } from 'path'
+import { join, resolve } from 'path'
 import ts, { Diagnostic, DiagnosticCategory, ModuleKind, ScriptTarget } from 'typescript'
 
 import * as _myModule from '..'
@@ -401,6 +401,20 @@ describe('readTsConfig', () => {
     expect(parseConfig.mock.calls[0][4]).toBe('/foo/tsconfig.bar.json')
   })
 }) // readTsConfig
+
+describe('readPackageJson', () => {
+  it('should return inlined package definitiopn', () => {
+    const cs = createConfigSet({ tsJestConfig: { packageJson: { foo: 'bar' } } as any })
+    const packageJson = cs.projectPackageJson
+    expect(packageJson.foo).toEqual('bar')
+  })
+
+  it('should use given package.json path', () => {
+    const expected = require(join(__dirname, '..', '..', 'package.json'))
+    const cs = createConfigSet({ tsJestConfig: { packageJson: join(__dirname, '..', '..', 'package.json') } as any })
+    expect(cs.projectPackageJson).toEqual(expected)
+  })
+}) // readPackageJson
 
 describe('versions', () => {
   describe('without babel', () => {

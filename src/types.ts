@@ -22,6 +22,14 @@ export interface TsJestGlobalOptions {
   tsConfig?: boolean | string | CompilerOptions
 
   /**
+   * packageJson. It can be:
+   *     - `true` (or `undefined`, it's the default): use default package.json file
+   *     - `path/to/package.json`: path to a specific package.json file (<rootDir> can be used)
+   *     - `{...}`: contents of a package.json
+   */
+  packageJson?: boolean | string | object
+
+  /**
    * Whether to compile files as isolated modules (disables some features and type-checking, default to `false`):
    */
   isolatedModules?: boolean

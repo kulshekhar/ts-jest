@@ -114,18 +114,38 @@ const toDiagnosticCodeList = (items: any, into: number[] = []): number[] => {
 export class ConfigSet {
   @Memoize()
   get projectPackageJson(): Record<string, any> {
+    const parsedConfig = this.jest
+    const { globals = {} } = parsedConfig as any
+    const options: TsJestGlobalOptions = { ...globals['ts-jest'] }
+
+    if (options.packageJson && typeof options.packageJson === 'string') {
+      const path = this.resolvePath(options.packageJson)
+      if (existsSync(path)) {
+        return require(path)
+      }
+      this.logger.warn(Errors.UnableToFindProjectRoot)
+      return {}
+    }
+
+    if (options.packageJson && typeof options.packageJson === 'object') {
+      return options.packageJson
+    }
+
     const tsJestRoot = resolve(__dirname, '..', '..')
     let pkgPath = resolve(tsJestRoot, '..', '..', 'package.json')
-    let exists = existsSync(pkgPath)
-    if (!exists) {
-      if (realpathSync(this.rootDir) === realpathSync(tsJestRoot)) {
-        pkgPath = resolve(tsJestRoot, 'package.json')
-        exists = true
-      } else {
-        this.logger.warn(Errors.UnableToFindProjectRoot)
+    if (existsSync(pkgPath)) {
+      return require(pkgPath)
+    }
+
+    if (realpathSync(this.rootDir) === realpathSync(tsJestRoot)) {
+      pkgPath = resolve(tsJestRoot, 'package.json')
+      if (existsSync(pkgPath)) {
+        return require(pkgPath)
       }
     }
-    return exists ? require(pkgPath) : {}
+
+    this.logger.warn(Errors.UnableToFindProjectRoot)
+    return {}
   }
 
   @Memoize()
