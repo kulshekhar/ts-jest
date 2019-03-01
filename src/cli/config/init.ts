@@ -103,7 +103,6 @@ export const run: CliCommand = async (args: Arguments /* , logger: Logger */) =>
       content.push(`    },`)
       content.push(`  },`)
     }
-
     content.push('};')
 
     // join all together

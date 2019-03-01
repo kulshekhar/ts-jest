@@ -87,6 +87,7 @@ With the below config in your `tsconfig`:
 // tsconfig.json
 {
   "compilerOptions": {
+    "baseUrl": ".",
     "paths": {
       "@App/*": ["src/*"],
       "lib/*": ["common/*"]

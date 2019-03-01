@@ -1,10 +1,10 @@
 module.exports = {
   rootDir: '.',
-  setupTestFrameworkScriptFile: '<rootDir>/src/__helpers__/setup.ts',
+  setupFilesAfterEnv: ['<rootDir>/src/__helpers__/setup.ts'],
   transform: {
     '\\.ts$': '<rootDir>/dist/index.js',
   },
-  testMatch: ['<rootDir>/src/**/?(*.)+(spec|test).ts?(x)'],
+  testMatch: ['<rootDir>/src/**/*.spec.ts'],
   collectCoverageFrom: [
     '<rootDir>/src/**/*.ts',
     '!<rootDir>/src/**/*.d.ts',

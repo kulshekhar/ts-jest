@@ -108,14 +108,7 @@ describe('patcher', () => {
 })
 
 describe('babelCore', () => {
-  it('should prefer legacy/bridge', () => {
-    modules = {
-      '@babel/core': () => '@babel/core',
-      'babel-core': () => 'babel-core',
-    }
-    expect(new Importer().babelCore(fakers.importReason())).toBe('babel-core')
-  })
-  it('should fallback to 7 if legacy/bridge not found', () => {
+  it('should be @babel/core', () => {
     modules = {
       '@babel/core': () => '@babel/core',
     }
@@ -123,21 +116,8 @@ describe('babelCore', () => {
   })
   it('should fail with correct error message', () => {
     expect(() => new Importer().babelCore(fakers.importReason())).toThrowErrorMatchingInlineSnapshot(`
-"Unable to load any of these modules: \\"babel-core\\", \\"@babel/core\\". [[BECAUSE]]. To fix it:
-    • for Babel 7: \`npm i -D babel-jest 'babel-core@^7.0.0-0' @babel/core\` (or \`yarn add --dev babel-jest 'babel-core@^7.0.0-0' @babel/core\`)
-    • for Babel 6: \`npm i -D babel-jest babel-core\` (or \`yarn add --dev babel-jest babel-core\`)"
+"Unable to load the module \\"@babel/core\\". [[BECAUSE]] To fix it:
+    ↳ install \\"@babel/core\\": \`npm i -D @babel/core\` (or \`yarn add --dev @babel/core\`)"
 `)
-  })
-})
-
-describe('babelJest', () => {
-  it('should load babel-core', () => {
-    const importBabel = jest.fn(() => 'babel-core')
-    modules = {
-      'babel-core': importBabel,
-      'babel-jest': () => 'babel-jest',
-    }
-    expect(new Importer().babelJest(fakers.importReason())).toBe('babel-jest')
-    expect(importBabel).toHaveBeenCalledTimes(1)
   })
 })
