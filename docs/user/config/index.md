@@ -193,6 +193,7 @@ All options have default values which should fit most of the projects. Click on 
 | [**`diagnostics`**][diagnostics] | [Diagnostics related configuration.][diagnostics] | `boolean`\|`object` | `true` |
 | [**`babelConfig`**][babelConfig] | [Babel(Jest) related configuration.][babelConfig] | `boolean`\|`object` | _disabled_ |
 | [**`stringifyContentPathRegex`**][stringifyContentPathRegex] | [Files which will become modules returning self content.][stringifyContentPathRegex] | `string`\|`RegExp` | _disabled_ |
+| [**`packageJson`**][packageJson] | [Package metadata.][packageJson] | `string`\|`object`\|`boolean` | _auto_ |
 
 ### Upgrading
 
@@ -222,3 +223,4 @@ npx ts-jest config:migrate package.json
 [diagnostics]: diagnostics
 [babelConfig]: babelConfig
 [stringifyContentPathRegex]: stringifyContentPathRegex
+[packageJson]: packageJson
