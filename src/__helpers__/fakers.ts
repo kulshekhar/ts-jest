@@ -60,6 +60,7 @@ export function tsJestConfig(options?: Partial<TsJestConfig>): TsJestConfig {
     transformers: [],
     babelConfig: undefined,
     tsConfig: undefined,
+    packageJson: undefined,
     stringifyContentPathRegex: undefined,
     diagnostics: { ignoreCodes: [], pretty: false, throws: true },
     ...options,

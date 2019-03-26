@@ -114,18 +114,38 @@ const toDiagnosticCodeList = (items: any, into: number[] = []): number[] => {
 export class ConfigSet {
   @Memoize()
   get projectPackageJson(): Record<string, any> {
+    const {
+      tsJest: { packageJson },
+    } = this
+
+    if (packageJson && packageJson.kind === 'inline') {
+      return packageJson.value
+    }
+
+    if (packageJson && packageJson.kind === 'file' && packageJson.value) {
+      const path = this.resolvePath(packageJson.value)
+      if (existsSync(path)) {
+        return require(path)
+      }
+      this.logger.warn(Errors.UnableToFindProjectRoot)
+      return {}
+    }
+
     const tsJestRoot = resolve(__dirname, '..', '..')
     let pkgPath = resolve(tsJestRoot, '..', '..', 'package.json')
-    let exists = existsSync(pkgPath)
-    if (!exists) {
-      if (realpathSync(this.rootDir) === realpathSync(tsJestRoot)) {
-        pkgPath = resolve(tsJestRoot, 'package.json')
-        exists = true
-      } else {
-        this.logger.warn(Errors.UnableToFindProjectRoot)
+    if (existsSync(pkgPath)) {
+      return require(pkgPath)
+    }
+
+    if (realpathSync(this.rootDir) === realpathSync(tsJestRoot)) {
+      pkgPath = resolve(tsJestRoot, 'package.json')
+      if (existsSync(pkgPath)) {
+        return require(pkgPath)
       }
     }
-    return exists ? require(pkgPath) : {}
+
+    this.logger.warn(Errors.UnableToFindProjectRoot)
+    return {}
   }
 
   @Memoize()
@@ -183,6 +203,21 @@ export class ConfigSet {
       }
     }
 
+    // packageJson
+    const { packageJson: packageJsonOpt } = options
+    let packageJson: TsJestConfig['packageJson']
+    if (typeof packageJsonOpt === 'string' || packageJsonOpt == null || packageJsonOpt === true) {
+      packageJson = {
+        kind: 'file',
+        value: typeof packageJsonOpt === 'string' ? this.resolvePath(packageJsonOpt) : undefined,
+      }
+    } else if (typeof packageJsonOpt === 'object') {
+      packageJson = {
+        kind: 'inline',
+        value: packageJsonOpt,
+      }
+    }
+
     // transformers
     const transformers = (options.astTransformers || []).map(mod => this.resolvePath(mod, { nodeResolve: true }))
 
@@ -234,6 +269,7 @@ export class ConfigSet {
     // parsed options
     const res: TsJestConfig = {
       tsConfig,
+      packageJson,
       babelConfig,
       diagnostics,
       isolatedModules: !!options.isolatedModules,
@@ -315,6 +351,24 @@ export class ConfigSet {
     }
   }
 
+  private static loadConfig(base: BabelConfig): BabelConfig {
+    // loadPartialConfig is from babel 7+, and OptionManager is backward compatible but deprecated 6 API
+    const { OptionManager, loadPartialConfig, version } = importer.babelCore(ImportReasons.BabelJest)
+    // cwd is only supported from babel >= 7
+    if (version && semver.satisfies(version, '>=6 <7')) {
+      delete base.cwd
+    }
+    // call babel to load options
+    if (typeof loadPartialConfig === 'function') {
+      const partialConfig = loadPartialConfig(base)
+      if (partialConfig) {
+        return partialConfig.options as BabelConfig
+      }
+    }
+
+    return new OptionManager().init(base) as BabelConfig
+  }
+
   @Memoize()
   get babel(): BabelConfig | undefined {
     const {
@@ -336,19 +390,8 @@ export class ConfigSet {
       base = { ...base, ...babelConfig.value }
     }
 
-    // loadOptions is from babel 7+, and OptionManager is backward compatible but deprecated 6 API
-    const { OptionManager, loadOptions, version } = importer.babelCore(ImportReasons.BabelJest)
-    // cwd is only supported from babel >= 7
-    if (version && semver.satisfies(version, '>=6 <7')) {
-      delete base.cwd
-    }
     // call babel to load options
-    let config: BabelConfig
-    if (typeof loadOptions === 'function') {
-      config = loadOptions(base) as BabelConfig
-    } else {
-      config = new OptionManager().init(base) as BabelConfig
-    }
+    const config = ConfigSet.loadConfig(base)
 
     this.logger.debug({ babelConfig: config }, 'normalized babel config')
     return config
