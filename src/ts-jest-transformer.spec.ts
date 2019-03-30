@@ -3,6 +3,7 @@ import { sep } from 'path'
 import { ParsedCommandLine } from 'typescript'
 
 import { logTargetMock } from './__helpers__/mocks'
+import { ConfigSet } from './config/config-set'
 import { TsJestTransformer } from './ts-jest-transformer'
 
 describe('configFor', () => {
@@ -57,7 +58,7 @@ describe('process', () => {
     args = [INPUT, FILE, JEST_CONFIG, OPTIONS]
     jest
       .spyOn(tr, 'configsFor')
-      .mockImplementation(() => config)
+      .mockImplementation(() => (config as unknown) as ConfigSet)
       .mockClear()
     config.shouldStringifyContent.mockImplementation(() => false).mockClear()
     babel = null
@@ -236,7 +237,9 @@ Array [
 describe('getCacheKey', () => {
   it('should be different for each argument value', () => {
     const tr = new TsJestTransformer()
-    jest.spyOn(tr, 'configsFor').mockImplementation(jestConfigStr => ({ cacheKey: jestConfigStr }))
+    jest
+      .spyOn(tr, 'configsFor')
+      .mockImplementation(jestConfigStr => (({ cacheKey: jestConfigStr } as unknown) as ConfigSet))
     const input = {
       fileContent: 'export default "foo"',
       fileName: 'foo.ts',

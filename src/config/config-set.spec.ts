@@ -1,6 +1,6 @@
 import { testing } from 'bs-logger'
 import { resolve } from 'path'
-import ts, { Diagnostic, DiagnosticCategory, ModuleKind, ScriptTarget } from 'typescript'
+import ts, { Diagnostic, DiagnosticCategory, ModuleKind, ParsedCommandLine, ScriptTarget } from 'typescript'
 
 import * as _myModule from '..'
 import { mocked } from '../../utils'
@@ -389,9 +389,9 @@ describe('resolvePath', () => {
 }) // resolvePath
 
 describe('readTsConfig', () => {
-  let findConfig!: jest.MockInstance<typeof ts.findConfigFile>
-  let readConfig!: jest.MockInstance<typeof ts.readConfigFile>
-  let parseConfig!: jest.MockInstance<typeof ts.parseJsonSourceFileConfigFileContent>
+  let findConfig!: jest.SpyInstance<string | undefined>
+  let readConfig!: jest.SpyInstance<{ config?: any; error?: Diagnostic }>
+  let parseConfig!: jest.SpyInstance<ParsedCommandLine>
   let cs!: ConfigSet
   beforeAll(() => {
     findConfig = jest.spyOn(ts, 'findConfigFile')
@@ -400,7 +400,7 @@ describe('readTsConfig', () => {
     cs = createConfigSet({ jestConfig: { rootDir: '/root', cwd: '/cwd' } as any })
     findConfig.mockImplementation(p => `${p}/tsconfig.json`)
     readConfig.mockImplementation(p => ({ config: { path: p, compilerOptions: {} } }))
-    parseConfig.mockImplementation((conf: any) => ({ options: conf }))
+    parseConfig.mockImplementation((conf: any) => ({ options: conf, fileNames: [], errors: [] }))
   })
   beforeEach(() => {
     findConfig.mockClear()

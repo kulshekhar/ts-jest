@@ -1,28 +1,32 @@
-interface MockWithArgs<T> extends Function, jest.MockInstance<T> {
-  new (...args: ArgumentsOf<T>): T
-  (...args: ArgumentsOf<T>): any
-}
-
-// tslint:disable-next-line:ban-types
-type MethodKeysOf<T> = { [K in keyof T]: T[K] extends Function ? K : never }[keyof T]
-// tslint:disable-next-line:ban-types
-type PropertyKeysOf<T> = { [K in keyof T]: T[K] extends Function ? never : K }[keyof T]
+type MockableFunction = (...args: any[]) => any
+type MethodKeysOf<T> = { [K in keyof T]: T[K] extends MockableFunction ? K : never }[keyof T]
+type PropertyKeysOf<T> = { [K in keyof T]: T[K] extends MockableFunction ? never : K }[keyof T]
 type ArgumentsOf<T> = T extends (...args: infer A) => any ? A : never
-interface MockWithArgs<T> extends Function, jest.MockInstance<T> {
-  new (...args: ArgumentsOf<T>): T
-  (...args: ArgumentsOf<T>): any
+type ConstructorArgumentsOf<T> = T extends new (...args: infer A) => any ? A : never
+
+interface MockWithArgs<T extends MockableFunction> extends jest.MockInstance<ReturnType<T>, ArgumentsOf<T>> {
+  new (...args: ConstructorArgumentsOf<T>): T
+  (...args: ArgumentsOf<T>): ReturnType<T>
 }
 
-type MockedFunction<T> = MockWithArgs<T> & { [K in keyof T]: T[K] }
-type MockedFunctionDeep<T> = MockWithArgs<T> & MockedObjectDeep<T>
-type MockedObject<T> = { [K in MethodKeysOf<T>]: MockedFunction<T[K]> } & { [K in PropertyKeysOf<T>]: T[K] }
-type MockedObjectDeep<T> = { [K in MethodKeysOf<T>]: MockedFunctionDeep<T[K]> } &
+type MaybeMockedConstructor<T> = T extends new (...args: any[]) => infer R
+  ? jest.MockInstance<R, ConstructorArgumentsOf<T>>
+  : {}
+type MockedFunction<T extends MockableFunction> = MockWithArgs<T> & { [K in keyof T]: T[K] }
+type MockedFunctionDeep<T extends MockableFunction> = MockWithArgs<T> & MockedObjectDeep<T>
+type MockedObject<T> = MaybeMockedConstructor<T> &
+  { [K in MethodKeysOf<T>]: T[K] extends MockableFunction ? MockedFunction<T[K]> : T[K] } &
+  { [K in PropertyKeysOf<T>]: T[K] }
+type MockedObjectDeep<T> = MaybeMockedConstructor<T> &
+  { [K in MethodKeysOf<T>]: T[K] extends MockableFunction ? MockedFunctionDeep<T[K]> : T[K] } &
   { [K in PropertyKeysOf<T>]: MaybeMockedDeep<T[K]> }
 
-// tslint:disable-next-line:ban-types
-export type MaybeMockedDeep<T> = T extends Function ? MockedFunctionDeep<T> : T extends object ? MockedObjectDeep<T> : T
-// tslint:disable-next-line:ban-types
-export type MaybeMocked<T> = T extends Function ? MockedFunction<T> : T extends object ? MockedObject<T> : T
+export type MaybeMockedDeep<T> = T extends MockableFunction
+  ? MockedFunctionDeep<T>
+  : T extends object
+  ? MockedObjectDeep<T>
+  : T
+export type MaybeMocked<T> = T extends MockableFunction ? MockedFunction<T> : T extends object ? MockedObject<T> : T
 
 // the typings test helper
 export function mocked<T>(item: T, deep?: false): MaybeMocked<T>
