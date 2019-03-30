@@ -1,3 +1,18 @@
+<a name="24.0.1"></a>
+## [24.0.1](https://github.com/kulshekhar/ts-jest/compare/v24.0.0...v24.0.1) (2019-03-30)
+
+
+### Bug Fixes
+
+* update call to globIgnore ([#1002](https://github.com/kulshekhar/ts-jest/issues/1002)) ([#1003](https://github.com/kulshekhar/ts-jest/issues/1003)) ([05b63af](https://github.com/kulshekhar/ts-jest/commit/05b63af))
+
+
+### Features
+
+* **config:** specify package.json location ([#823](https://github.com/kulshekhar/ts-jest/issues/823)) ([#1013](https://github.com/kulshekhar/ts-jest/issues/1013)) ([fb7dd55](https://github.com/kulshekhar/ts-jest/commit/fb7dd55))
+
+
+
 <a name="24.0.0"></a>
 # [24.0.0](https://github.com/kulshekhar/ts-jest/compare/v23.10.5...v24.0.0) (2019-02-18)
 
