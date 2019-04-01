@@ -33,6 +33,7 @@ import { LogContexts, LogLevels, Logger } from 'bs-logger'
 import bufferFrom = require('buffer-from')
 import stableStringify = require('fast-json-stable-stringify')
 import { readFileSync, writeFileSync } from 'fs'
+import memoize = require('lodash.memoize')
 import mkdirp = require('mkdirp')
 import { basename, extname, join, relative } from 'path'
 
@@ -224,22 +225,6 @@ export function createCompiler(configs: ConfigSet): TsCompiler {
 
   const compile = readThrough(cachedir, memoryCache, getOutput, getExtension, cwd, logger)
   return { cwd, compile, getTypeInfo, extensions, cachedir, ts }
-}
-
-type AnyFn = (...args: any[]) => any
-function memoize<T extends AnyFn = AnyFn>(fn: T): T {
-  const cache = new Map()
-
-  return ((arg: string) => {
-    const entry = cache.get(arg)
-    if (entry !== undefined) {
-      return entry
-    }
-
-    const res = fn(arg)
-    cache.set(arg, res)
-    return res
-  }) as T
 }
 
 /**
