@@ -217,10 +217,10 @@ npx ts-jest config:migrate package.json
 
 </div></div>
 
-[compiler]: compiler
-[tsConfig]: tsConfig
-[isolatedModules]: isolatedModules
-[diagnostics]: diagnostics
-[babelConfig]: babelConfig
-[stringifyContentPathRegex]: stringifyContentPathRegex
-[packageJson]: packageJson
+[compiler]: compiler.md
+[tsConfig]: tsConfig.md
+[isolatedModules]: isolatedModules.md
+[diagnostics]: diagnostics.md
+[babelConfig]: babelConfig.md
+[stringifyContentPathRegex]: stringifyContentPathRegex.md
+[packageJson]: packageJson.md
