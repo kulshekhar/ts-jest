@@ -3,7 +3,7 @@
     "declaration": false,
     "noEmit": true,
     "downlevelIteration": true,
-    "esModuleInterop": true,
+    "esModuleInterop": false,
     "experimentalDecorators": true,
     "importHelpers": false,
     "inlineSourceMap": true,

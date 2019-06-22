@@ -10,9 +10,9 @@
  */
 import { LogContexts, Logger } from 'bs-logger'
 import { existsSync, readFileSync, realpathSync } from 'fs'
-import json5 from 'json5'
+import json5 = require('json5')
 import { dirname, isAbsolute, join, normalize, resolve } from 'path'
-import semver from 'semver'
+import semver = require('semver')
 import {
   CompilerOptions,
   CustomTransformers,
