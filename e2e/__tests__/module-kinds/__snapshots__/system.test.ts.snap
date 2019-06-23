@@ -77,6 +77,43 @@ exports[`run with options: {"module":"system","allowSyntheticDefaultImports":tru
   ================================================================================
 `;
 
+exports[`run with options: {"module":"system","esModuleInterop":false} 1`] = `
+  × jest --no-cache
+  ↳ exit code: 1
+  ===[ STDOUT ]===================================================================
+  
+  ===[ STDERR ]===================================================================
+  ts-jest[config] (WARN) TypeScript diagnostics (customize using \`[jest-config].globals.ts-jest.diagnostics\` option):
+  message TS151001: If you have issues related to imports, you should consider setting \`esModuleInterop\` to \`true\` in your TypeScript configuration file (usually \`tsconfig.json\`). See https://blogs.msdn.microsoft.com/typescript/2018/01/31/announcing-typescript-2-7/#easier-ecmascript-module-interoperability for more information.
+  PASS ./ts-jest-tools.spec.ts
+  PASS ./import-legacy.spec.ts
+  PASS ./import-star.spec.ts
+  FAIL ./import-default.spec.ts
+    ● import default
+  
+      expect(received).toBe(expected) // Object.is equality
+  
+      Expected: "function"
+      Received: "undefined"
+  
+        2 | 
+        3 | test('import default', () => {
+      > 4 |   expect(typeof lib).toBe('function')
+          |                      ^
+        5 |   expect(lib()).toBe('foo')
+        6 |   expect(lib.bar).toBe('bar')
+        7 | })
+  
+        at Object.<anonymous> (import-default.spec.ts:4:22)
+  
+  Test Suites: 1 failed, 3 passed, 4 total
+  Tests:       1 failed, 4 passed, 5 total
+  Snapshots:   0 total
+  Time:        XXs
+  Ran all test suites.
+  ================================================================================
+`;
+
 exports[`run with options: {"module":"system","esModuleInterop":true} 1`] = `
   × jest --no-cache
   ↳ exit code: 1
