@@ -1,4 +1,4 @@
-import stringify from 'fast-json-stable-stringify'
+import stringify = require('fast-json-stable-stringify')
 import { sep } from 'path'
 import { ParsedCommandLine } from 'typescript'
 

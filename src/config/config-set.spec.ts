@@ -1,6 +1,8 @@
 import { testing } from 'bs-logger'
 import { resolve } from 'path'
-import ts, { Diagnostic, DiagnosticCategory, ModuleKind, ParsedCommandLine, ScriptTarget } from 'typescript'
+import { Diagnostic, DiagnosticCategory, ModuleKind, ParsedCommandLine, ScriptTarget } from 'typescript'
+// tslint:disable-next-line:no-duplicate-imports
+import * as ts from 'typescript'
 
 import * as _myModule from '..'
 import { mocked } from '../../utils'
