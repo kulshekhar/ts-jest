@@ -70,6 +70,8 @@ tslint.json
 .npmrc
 .markdownlint.yaml
 .cache
+.gitattributes
+icon.png
 
 # Github Pages
 docs
