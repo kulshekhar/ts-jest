@@ -162,6 +162,7 @@ export function createCompiler(configs: ConfigSet): TsCompiler {
       readDirectory: ts.sys.readDirectory,
       getDirectories: ts.sys.getDirectories,
       directoryExists: ts.sys.directoryExists,
+      realpath: ts.sys.realpath,
       getNewLine: () => '\n',
       getCurrentDirectory: () => cwd,
       getCompilationSettings: () => compilerOptions,
