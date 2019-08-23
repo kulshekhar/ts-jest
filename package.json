@@ -115,16 +115,14 @@
     "typescript": "3.x"
   },
   "lint-staged": {
-    "linters": {
-      "*.{ts,tsx}": [
-        "tslint --fix",
-        "git add"
-      ],
-      "*.{js,jsx}": [
-        "eslint --fix",
-        "git add"
-      ]
-    }
+    "*.{ts,tsx}": [
+      "tslint --fix",
+      "git add"
+    ],
+    "*.{js,jsx}": [
+      "eslint --fix",
+      "git add"
+    ]
   },
   "engines": {
     "node": ">= 6"
