@@ -50,9 +50,7 @@ export default class RunDescriptor {
       console.log(
         '='.repeat(70),
         '\n',
-        `Test exited with unexpected status in "${this.name}" using template "${this.templateName}" (exit code: ${
-          result.status
-        }):\n`,
+        `Test exited with unexpected status in "${this.name}" using template "${this.templateName}" (exit code: ${result.status}):\n`,
         result.context.cmd,
         result.context.args.join(' '),
         '\n\n',
