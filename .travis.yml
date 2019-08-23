@@ -10,8 +10,7 @@ cache:
     - /tmp/ts-jest-e2e-workdir/__templates__
 
 node_js:
-  - "10"
-  - "6"
+  - '10'
 
 sudo: false
 
@@ -36,11 +35,11 @@ script:
   - npm run clean -- --when-ci-commit-message
   # only grab coverage data on node 10
   - |
-      if [[ "$(node --version)" == v10.* ]]; then
-        npm run test -- --runInBand --coverage;
-      else
-        npm run test -- --runInBand;
-      fi
+    if [[ "$(node --version)" == v10.* ]]; then
+      npm run test -- --runInBand --coverage;
+    else
+      npm run test -- --runInBand;
+    fi
 
 after_success:
   # report coverages to coveralls
