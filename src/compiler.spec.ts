@@ -107,21 +107,7 @@ describe('cache', () => {
       ]
     `)
 
-    expect(new ProcessedSource(compiled1, __filename)).toMatchInlineSnapshot(`
-        ===[ FILE: src/compiler.spec.ts ]===============================================
-        console.log("hello");
-        //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoiPGN3ZD4vc3JjL2NvbXBpbGVyLnNwZWMudHMiLCJtYXBwaW5ncyI6IkFBQUEsT0FBTyxDQUFDLEdBQUcsQ0FBQyxPQUFPLENBQUMsQ0FBQSIsIm5hbWVzIjpbXSwic291cmNlcyI6WyI8Y3dkPi9zcmMvY29tcGlsZXIuc3BlYy50cyJdLCJzb3VyY2VzQ29udGVudCI6WyJjb25zb2xlLmxvZyhcImhlbGxvXCIpIl0sInZlcnNpb24iOjN9
-        ===[ INLINE SOURCE MAPS ]=======================================================
-        file: <cwd>/src/compiler.spec.ts
-        mappings: 'AAAA,OAAO,CAAC,GAAG,CAAC,OAAO,CAAC,CAAA'
-        names: []
-        sources:
-          - <cwd>/src/compiler.spec.ts
-        sourcesContent:
-          - console.log("hello")
-        version: 3
-        ================================================================================
-    `)
+    expect(new ProcessedSource(compiled1, __filename)).toMatchSnapshot()
     expect(compiled2).toBe(compiled1)
   })
 })
@@ -134,23 +120,7 @@ describe('isolatedModules', () => {
   })
   it('should compile using transpileModule', () => {
     const compiled = compiler.compile('export default 42', __filename)
-    expect(new ProcessedSource(compiled, __filename)).toMatchInlineSnapshot(`
-        ===[ FILE: src/compiler.spec.ts ]===============================================
-        "use strict";
-        Object.defineProperty(exports, "__esModule", { value: true });
-        exports.default = 42;
-        //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoiPGN3ZD4vc3JjL2NvbXBpbGVyLnNwZWMudHMiLCJtYXBwaW5ncyI6Ijs7QUFBQSxrQkFBZSxFQUFFLENBQUEiLCJuYW1lcyI6W10sInNvdXJjZXMiOlsiPGN3ZD4vc3JjL2NvbXBpbGVyLnNwZWMudHMiXSwic291cmNlc0NvbnRlbnQiOlsiZXhwb3J0IGRlZmF1bHQgNDIiXSwidmVyc2lvbiI6M30=
-        ===[ INLINE SOURCE MAPS ]=======================================================
-        file: <cwd>/src/compiler.spec.ts
-        mappings: ';;AAAA,kBAAe,EAAE,CAAA'
-        names: []
-        sources:
-          - <cwd>/src/compiler.spec.ts
-        sourcesContent:
-          - export default 42
-        version: 3
-        ================================================================================
-    `)
+    expect(new ProcessedSource(compiled, __filename)).toMatchSnapshot()
     expect(spy).toHaveBeenCalled()
   })
 })
@@ -166,23 +136,7 @@ describe('allowJs', () => {
     writeFileSync(fileName, source, 'utf8')
     const compiled = compiler.compile(source, fileName)
     const processed = new ProcessedSource(compiled, fileName)
-    expect(processed).toMatchInlineSnapshot(`
-        ===[ FILE: src/compiler.spec.ts.test.js ]=======================================
-        "use strict";
-        Object.defineProperty(exports, "__esModule", { value: true });
-        exports.default = 42;
-        //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoiPGN3ZD4vc3JjL2NvbXBpbGVyLnNwZWMudHMudGVzdC5qcyIsIm1hcHBpbmdzIjoiOztBQUFBLGtCQUFlLEVBQUUsQ0FBQSIsIm5hbWVzIjpbXSwic291cmNlcyI6WyI8Y3dkPi9zcmMvY29tcGlsZXIuc3BlYy50cy50ZXN0LmpzIl0sInNvdXJjZXNDb250ZW50IjpbImV4cG9ydCBkZWZhdWx0IDQyIl0sInZlcnNpb24iOjN9
-        ===[ INLINE SOURCE MAPS ]=======================================================
-        file: <cwd>/src/compiler.spec.ts.test.js
-        mappings: ';;AAAA,kBAAe,EAAE,CAAA'
-        names: []
-        sources:
-          - <cwd>/src/compiler.spec.ts.test.js
-        sourcesContent:
-          - export default 42
-        version: 3
-        ================================================================================
-    `)
+    expect(processed).toMatchSnapshot()
   })
 })
 
