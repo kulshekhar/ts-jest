@@ -551,7 +551,9 @@ export class ConfigSet {
       declarationDir: undefined,
       declarationMap: undefined,
       emitDeclarationOnly: undefined,
+      incremental: undefined,
       sourceRoot: undefined,
+      tsBuildInfoFile: undefined,
     }
     // force the module kind if not piping babel-jest
     if (!this.tsJest.babelConfig) {
