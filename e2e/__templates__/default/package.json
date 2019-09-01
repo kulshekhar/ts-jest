@@ -6,7 +6,7 @@
     "@types/jest": "24.0.6",
     "@types/node": "10.12.5",
     "jest": "24.9.0",
-    "typescript": "3.1.6"
+    "typescript": "3.4.5"
   },
   "wantedDependencies": {
     "@types/jest": "latest",
