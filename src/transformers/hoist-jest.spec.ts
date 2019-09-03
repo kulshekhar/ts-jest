@@ -1,5 +1,5 @@
 import { testing } from 'bs-logger'
-import tsc from 'typescript'
+import * as tsc from 'typescript'
 
 import * as hoist from './hoist-jest'
 

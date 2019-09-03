@@ -1,5 +1,5 @@
 // WARNING: this file is shared between e2e and unit tests
-import bufferFrom from 'buffer-from'
+import bufferFrom = require('buffer-from')
 import stableStringify = require('fast-json-stable-stringify')
 import { realpathSync } from 'fs'
 import { isAbsolute, relative } from 'path'

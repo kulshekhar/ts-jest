@@ -1,5 +1,5 @@
 import { createLogger } from 'bs-logger'
-import stringifyJson from 'fast-json-stable-stringify'
+import * as stringifyJson from 'fast-json-stable-stringify'
 import { existsSync } from 'fs'
 import { stringify as stringifyJson5 } from 'json5'
 import { basename, resolve } from 'path'

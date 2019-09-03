@@ -75,6 +75,46 @@ exports[`run with options: {"module":"commonjs","allowSyntheticDefaultImports":t
   ================================================================================
 `;
 
+exports[`run with options: {"module":"commonjs","esModuleInterop":false} 1`] = `
+  × jest --no-cache
+  ↳ exit code: 1
+  ===[ STDOUT ]===================================================================
+  
+  ===[ STDERR ]===================================================================
+  PASS ./ts-jest-tools.spec.ts
+  PASS ./import-legacy.spec.ts
+  PASS ./import-star.spec.ts
+  ts-jest[ts-compiler] (WARN) TypeScript diagnostics (customize using \`[jest-config].globals.ts-jest.diagnostics\` option):
+  import-default.spec.ts:1:8 - error TS1192: Module '"<cwd>/lib"' has no default export.
+  
+  1 import lib from './lib'
+           ~~~
+  FAIL ./import-default.spec.ts
+    ● import default
+  
+      expect(received).toBe(expected) // Object.is equality
+  
+      Expected: "function"
+      Received: "undefined"
+  
+        2 | 
+        3 | test('import default', () => {
+      > 4 |   expect(typeof lib).toBe('function')
+          |                      ^
+        5 |   expect(lib()).toBe('foo')
+        6 |   expect(lib.bar).toBe('bar')
+        7 | })
+  
+        at Object.<anonymous> (import-default.spec.ts:4:22)
+  
+  Test Suites: 1 failed, 3 passed, 4 total
+  Tests:       1 failed, 4 passed, 5 total
+  Snapshots:   0 total
+  Time:        XXs
+  Ran all test suites.
+  ================================================================================
+`;
+
 exports[`run with options: {"module":"commonjs","esModuleInterop":true} 1`] = `
   × jest --no-cache
   ↳ exit code: 1

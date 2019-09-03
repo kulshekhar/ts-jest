@@ -1,5 +1,7 @@
 import * as _babel from 'babel__core'
-import _ts, { CompilerOptions, SourceFile, TransformerFactory } from 'typescript'
+import { CompilerOptions, SourceFile, TransformerFactory } from 'typescript'
+// tslint:disable-next-line:no-duplicate-imports
+import * as _ts from 'typescript'
 
 import { ConfigSet } from './config/config-set'
 

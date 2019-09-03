@@ -30,7 +30,7 @@
  */
 
 import { LogContexts, LogLevels, Logger } from 'bs-logger'
-import bufferFrom from 'buffer-from'
+import bufferFrom = require('buffer-from')
 import stableStringify = require('fast-json-stable-stringify')
 import { readFileSync, writeFileSync } from 'fs'
 import mkdirp = require('mkdirp')

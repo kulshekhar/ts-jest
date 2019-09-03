@@ -1,4 +1,4 @@
-import bufferFrom from 'buffer-from'
+import bufferFrom = require('buffer-from')
 
 import { sha1 } from './sha1'
 
