@@ -33,6 +33,7 @@ import { LogContexts, LogLevels, Logger } from 'bs-logger'
 import bufferFrom = require('buffer-from')
 import stableStringify = require('fast-json-stable-stringify')
 import { readFileSync, writeFileSync } from 'fs'
+import memoize = require('lodash.memoize')
 import mkdirp = require('mkdirp')
 import { basename, extname, join, relative } from 'path'
 
@@ -131,6 +132,7 @@ export function createCompiler(configs: ConfigSet): TsCompiler {
       ...serviceHostDebugCtx,
       [LogContexts.logLevel]: LogLevels.trace,
     }
+
     const serviceHost = {
       getScriptFileNames: () => Object.keys(memoryCache.versions),
       getScriptVersion: (fileName: string) => {
@@ -157,12 +159,12 @@ export function createCompiler(configs: ConfigSet): TsCompiler {
         }
         return ts.ScriptSnapshot.fromString(contents)
       },
-      fileExists: ts.sys.fileExists,
-      readFile: logger.wrap(serviceHostTraceCtx, 'readFile', ts.sys.readFile),
-      readDirectory: ts.sys.readDirectory,
-      getDirectories: ts.sys.getDirectories,
-      directoryExists: ts.sys.directoryExists,
-      realpath: ts.sys.realpath,
+      fileExists: memoize(ts.sys.fileExists),
+      readFile: logger.wrap(serviceHostTraceCtx, 'readFile', memoize(ts.sys.readFile)),
+      readDirectory: memoize(ts.sys.readDirectory),
+      getDirectories: memoize(ts.sys.getDirectories),
+      directoryExists: memoize(ts.sys.directoryExists),
+      realpath: memoize(ts.sys.realpath!),
       getNewLine: () => '\n',
       getCurrentDirectory: () => cwd,
       getCompilationSettings: () => compilerOptions,
