@@ -1,3 +1,21 @@
+<a name="24.1.0"></a>
+# [24.1.0](https://github.com/kulshekhar/ts-jest/compare/v24.0.2...v24.1.0) (2019-09-12)
+
+
+### Bug Fixes
+
+* [#825](https://github.com/kulshekhar/ts-jest/issues/825) handle symlinked modules (ala pnpm) correctly ([e190b23](https://github.com/kulshekhar/ts-jest/commit/e190b23))
+* handle tsBuildInfoFile option ([f9583e9](https://github.com/kulshekhar/ts-jest/commit/f9583e9)), closes [#1095](https://github.com/kulshekhar/ts-jest/issues/1095)
+* **perf:** add cache for fs calls ([#908](https://github.com/kulshekhar/ts-jest/issues/908)) ([3dada81](https://github.com/kulshekhar/ts-jest/commit/3dada81))
+* **types:** unforce esModuleInterop in tsconfig.json ([c2d39b6](https://github.com/kulshekhar/ts-jest/commit/c2d39b6))
+
+
+
+<a name="24.0.2"></a>
+## [24.0.2](https://github.com/kulshekhar/ts-jest/compare/v24.0.1...v24.0.2) (2019-04-05)
+
+
+
 <a name="24.0.1"></a>
 ## [24.0.1](https://github.com/kulshekhar/ts-jest/compare/v24.0.0...v24.0.1) (2019-03-30)
 
