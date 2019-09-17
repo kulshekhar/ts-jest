@@ -61,7 +61,7 @@ afterEach(() => {
   mockedProcess = undefined
 })
 
-describe('cli', async () => {
+describe('cli', () => {
   it('should output usage', async () => {
     expect.assertions(2)
     await expect(runCli()).resolves.toMatchInlineSnapshot(`
@@ -105,9 +105,9 @@ Example:
   })
 })
 
-describe('config', async () => {
+describe('config', () => {
   // briefly tested, see header comment in `config/init.ts`
-  describe('init', async () => {
+  describe('init', () => {
     const noOption = ['config:init']
     const fullOptions = [
       ...noOption,
@@ -256,7 +256,7 @@ Options:
     })
   }) // init
 
-  describe('migrate', async () => {
+  describe('migrate', () => {
     const pkgPaths = {
       _id: 0,
       _cfgId: 0,
