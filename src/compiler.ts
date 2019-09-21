@@ -35,7 +35,7 @@ import stableStringify = require('fast-json-stable-stringify')
 import { readFileSync, writeFileSync } from 'fs'
 import memoize = require('lodash.memoize')
 import mkdirp = require('mkdirp')
-import { basename, extname, join, relative } from 'path'
+import { basename, extname, join, normalize, relative } from 'path'
 
 import { ConfigSet } from './config/config-set'
 import { MemoryCache, TsCompiler, TypeInfo } from './types'
@@ -136,7 +136,8 @@ export function createCompiler(configs: ConfigSet): TsCompiler {
     const serviceHost = {
       getScriptFileNames: () => Object.keys(memoryCache.versions),
       getScriptVersion: (fileName: string) => {
-        const version = memoryCache.versions[fileName]
+        const normalizedFileName = normalize(fileName)
+        const version = memoryCache.versions[normalizedFileName]
 
         // We need to return `undefined` and not a string here because TypeScript will use
         // `getScriptVersion` and compare against their own version - which can be `undefined`.
@@ -146,14 +147,15 @@ export function createCompiler(configs: ConfigSet): TsCompiler {
         return version === undefined ? ((undefined as any) as string) : String(version)
       },
       getScriptSnapshot(fileName: string) {
-        const hit = hasOwn.call(memoryCache.contents, fileName)
-        logger.trace({ fileName, cacheHit: hit }, `getScriptSnapshot():`, 'cache', hit ? 'hit' : 'miss')
+        const normalizedFileName = normalize(fileName)
+        const hit = hasOwn.call(memoryCache.contents, normalizedFileName)
+        logger.trace({ normalizedFileName, cacheHit: hit }, `getScriptSnapshot():`, 'cache', hit ? 'hit' : 'miss')
         // Read contents from TypeScript memory cache.
         if (!hit) {
-          memoryCache.contents[fileName] = ts.sys.readFile(fileName)
+          memoryCache.contents[normalizedFileName] = ts.sys.readFile(normalizedFileName)
         }
 
-        const contents = memoryCache.contents[fileName]
+        const contents = memoryCache.contents[normalizedFileName]
         if (contents === undefined) {
           return
         }
