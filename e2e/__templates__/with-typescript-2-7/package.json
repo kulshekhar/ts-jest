@@ -5,13 +5,13 @@
   "devDependencies": {
     "@types/jest": "24.0.6",
     "@types/node": "10.12.5",
-    "jest": "24.9.0",
+    "jest": "25.0.0",
     "typescript": "2.7.2"
   },
   "wantedDependencies": {
     "@types/jest": "latest",
     "@types/node": "latest",
-    "jest": "latest",
+    "jest": "next",
     "typescript": "2.7"
   }
 }
