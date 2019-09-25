@@ -101,7 +101,7 @@
     "fs-extra": "latest",
     "glob-gitignore": "latest",
     "husky": "1.x",
-    "jest": "24.x",
+    "jest": "25.x",
     "js-yaml": "latest",
     "lint-staged": "latest",
     "lodash.merge": "4.x",
