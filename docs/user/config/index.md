@@ -129,17 +129,18 @@ module.exports = {
 </div></div>
 
 #### Jest config (with helper)
+install the [tsconfig](https://www.npmjs.com/package/tsconfig) package to find, load and parse yor tsconfig.json file: `npm install -D tsconfig`
 
 ```js
 // jest.config.js
 const { pathsToModuleNameMapper } = require('ts-jest/utils');
-// In the following statement, replace `./tsconfig` with the path to your `tsconfig` file
-// which contains the path mapping (ie the `compilerOptions.paths` option):
-const { compilerOptions } = require('./tsconfig');
+// load tsconfig.json
+const tsconfig = require("tsconfig");
+const { config } = tsconfig.loadSync(__dirname); // replace Dirname with the CWD to search from, see tsconfig documentation for more info
 
 module.exports = {
   // [...]
-  moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths /*, { prefix: '<rootDir>/' } */ )
+  moduleNameMapper: pathsToModuleNameMapper(config.compilerOptions.paths /*, { prefix: '<rootDir>/' } */ )
 };
 ```
 
