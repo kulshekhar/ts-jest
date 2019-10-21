@@ -17,7 +17,7 @@ import { ConfigSet } from '../config/config-set'
 /**
  * What methods of `jest` should we hoist
  */
-const HOIST_METHODS = ['mock', 'unmock']
+const HOIST_METHODS = ['mock', 'unmock', 'enableAutomock', 'disableAutomock']
 
 /**
  * @internal

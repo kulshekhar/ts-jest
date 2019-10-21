@@ -6,6 +6,8 @@ import * as hoist from './hoist-jest'
 const CODE_WITH_HOISTING = `
 const foo = 'foo'
 console.log(foo)
+jest.enableAutomock()
+jest.disableAutomock()
 jest.mock('./foo')
 jest.mock('./foo/bar', () => 'bar')
 const func = () => {
@@ -42,27 +44,29 @@ describe('hoisting', () => {
   it('should hoist jest mock() and unmock() statements', () => {
     const out = transpile(CODE_WITH_HOISTING)
     expect(out.outputText).toMatchInlineSnapshot(`
-"jest.mock('./foo');
-jest.mock('./foo/bar', function () { return 'bar'; });
-var foo = 'foo';
-console.log(foo);
-var func = function () {
-    jest.unmock('./foo');
-    jest.mock('./bar');
-    jest.mock('./bar/foo', function () { return 'foo'; });
-    jest.unmock('./foo/bar');
-    var bar = 'bar';
-    console.log(bar);
-};
-var func2 = function () {
-    jest.mock('./bar');
-    jest.unmock('./foo/bar');
-    jest.mock('./bar/foo', function () { return 'foo'; });
-    jest.unmock('./foo');
-    var bar = 'bar';
-    console.log(bar);
-};
-"
-`)
+      "jest.enableAutomock();
+      jest.disableAutomock();
+      jest.mock('./foo');
+      jest.mock('./foo/bar', function () { return 'bar'; });
+      var foo = 'foo';
+      console.log(foo);
+      var func = function () {
+          jest.unmock('./foo');
+          jest.mock('./bar');
+          jest.mock('./bar/foo', function () { return 'foo'; });
+          jest.unmock('./foo/bar');
+          var bar = 'bar';
+          console.log(bar);
+      };
+      var func2 = function () {
+          jest.mock('./bar');
+          jest.unmock('./foo/bar');
+          jest.mock('./bar/foo', function () { return 'foo'; });
+          jest.unmock('./foo');
+          var bar = 'bar';
+          console.log(bar);
+      };
+      "
+    `)
   })
 })
