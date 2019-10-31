@@ -51,6 +51,10 @@ Please make sure to pin your version of `ts-jest` to a specific version if this 
 
 See also the list of [contributors](https://github.com/kulshekhar/ts-jest/contributors) who participated in this project.
 
+## Supporters
+
+- [JetBrains](https://www.jetbrains.com/?from=ts-jest) has been kind enough to support ts-jest with an [open source license](https://www.jetbrains.com/community/opensource/?from=ts-jest).
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE.md](https:/github.com/kulshekhar/ts-jest/LICENSE.md) file for details
