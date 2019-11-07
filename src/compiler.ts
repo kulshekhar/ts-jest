@@ -324,7 +324,7 @@ function updateSourceMap(sourceMapText: string, fileName: string, _sourceRoot: s
  * Get the file name for the cache entry.
  */
 function getCacheName(sourceCode: string, fileName: string) {
-  return sha1(extname(fileName), '\x00', sourceCode)
+  return sha1(fileName, '\x00', sourceCode)
 }
 
 /**
