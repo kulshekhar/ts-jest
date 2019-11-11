@@ -12,10 +12,15 @@ exports[`run with options: {"module":"umd","allowSyntheticDefaultImports":false}
   PASS ./import-legacy.spec.ts
   PASS ./import-star.spec.ts
   ts-jest[ts-compiler] (WARN) TypeScript diagnostics (customize using \`[jest-config].globals.ts-jest.diagnostics\` option):
-  import-default.spec.ts:1:8 - error TS1192: Module '"<cwd>/lib"' has no default export.
+  import-default.spec.ts:1:8 - error TS1259: Module '"<cwd>/lib"' can only be default-imported using the 'esModuleInterop' flag
   
   1 import lib from './lib'
            ~~~
+  
+    lib.d.ts:5:1
+      5 export = lib
+        ~~~~~~~~~~~~
+      This module is declared with using 'export =', and can only be used with a default import when using the 'esModuleInterop' flag.
   FAIL ./import-default.spec.ts
     ● import default
   
@@ -123,10 +128,11 @@ exports[`run with options: {"module":"umd","esModuleInterop":true} 1`] = `
   PASS ./ts-jest-tools.spec.ts
   PASS ./import-legacy.spec.ts
   ts-jest[ts-compiler] (WARN) TypeScript diagnostics (customize using \`[jest-config].globals.ts-jest.diagnostics\` option):
-  import-star.spec.ts:5:10 - error TS2349: Cannot invoke an expression whose type lacks a call signature. Type 'typeof lib' has no compatible call signatures.
+  import-star.spec.ts:5:10 - error TS2349: This expression is not callable.
+    Type 'typeof lib' has no call signatures.
   
   5   expect(lib()).toBe('foo')
-             ~~~~~
+             ~~~
   
     import-star.spec.ts:1:1
       1 import * as lib from './lib'
