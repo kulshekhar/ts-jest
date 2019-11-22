@@ -43,18 +43,15 @@ export const run: CliCommand = async (args: Arguments /*, logger: Logger*/) => {
       presetName = args.js === 'babel' ? JestPresetNames.jsWIthBabel : JestPresetNames.jsWithTs
     } else {
       // try to detect what transformer the js extensions would target
-      const jsTransformers = Object.keys(migratedConfig.transform || {}).reduce(
-        (list, pattern) => {
-          if (RegExp(pattern.replace(/^<rootDir>\/?/, '/dummy-project/')).test('/dummy-project/src/foo.js')) {
-            let transformer: string = (migratedConfig.transform as any)[pattern]
-            if (/\bbabel-jest\b/.test(transformer)) transformer = 'babel-jest'
-            else if (/\ts-jest\b/.test(transformer)) transformer = 'ts-jest'
-            return [...list, transformer]
-          }
-          return list
-        },
-        [] as string[],
-      )
+      const jsTransformers = Object.keys(migratedConfig.transform || {}).reduce((list, pattern) => {
+        if (RegExp(pattern.replace(/^<rootDir>\/?/, '/dummy-project/')).test('/dummy-project/src/foo.js')) {
+          let transformer: string = (migratedConfig.transform as any)[pattern]
+          if (/\bbabel-jest\b/.test(transformer)) transformer = 'babel-jest'
+          else if (/\ts-jest\b/.test(transformer)) transformer = 'ts-jest'
+          return [...list, transformer]
+        }
+        return list
+      }, [] as string[])
       // depending on the transformer found, we use one or the other preset
       const jsWithTs = jsTransformers.includes('ts-jest')
       const jsWithBabel = jsTransformers.includes('babel-jest')

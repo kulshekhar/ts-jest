@@ -75,24 +75,21 @@ export default class RunDescriptor {
     if (!templates.every((t, i) => templates.indexOf(t, i + 1) === -1)) {
       throw new Error(`Each template must be unique. Given ${templates.join(', ')}`)
     }
-    return templates.reduce(
-      (map, template) => {
-        const desc = new RunDescriptor(this.name, {
-          ...this._options,
-          template,
-        })
-        const runTest = () => {
-          return (map[template] = desc.run(expectedStatus))
-        }
-        if (iterator) {
-          iterator(runTest, createIteratorContext(template, expectedStatus))
-        } else {
-          runTest()
-        }
-        return map
-      },
-      {} as TestRunResultsMap<T>,
-    )
+    return templates.reduce((map, template) => {
+      const desc = new RunDescriptor(this.name, {
+        ...this._options,
+        template,
+      })
+      const runTest = () => {
+        return (map[template] = desc.run(expectedStatus))
+      }
+      if (iterator) {
+        iterator(runTest, createIteratorContext(template, expectedStatus))
+      } else {
+        runTest()
+      }
+      return map
+    }, {} as TestRunResultsMap<T>)
   }
 }
 
