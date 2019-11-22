@@ -157,14 +157,11 @@ export class ConfigSet {
       ...pkg.devDependencies,
       ...pkg.dependencies,
     })
-    return names.reduce(
-      (map, name) => {
-        const version = getPackageVersion(name)
-        if (version) map[name] = version
-        return map
-      },
-      {} as Record<string, string>,
-    )
+    return names.reduce((map, name) => {
+      const version = getPackageVersion(name)
+      if (version) map[name] = version
+      return map
+    }, {} as Record<string, string>)
   }
 
   @Memoize()
