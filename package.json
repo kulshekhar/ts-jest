@@ -33,6 +33,7 @@
     "prepare": "npm run build",
     "prepublishOnly": "npm run test",
     "preversion": "npm run test",
+    "update:e2e": "node scripts/update-e2e-templates.js",
     "version": "npm run changelog && git add CHANGELOG.md"
   },
   "repository": {
