@@ -11,7 +11,7 @@
 import { LogContexts, Logger } from 'bs-logger'
 import { existsSync, readFileSync, realpathSync } from 'fs'
 import json5 = require('json5')
-import { dirname, isAbsolute, join, normalize, resolve } from 'path'
+import { dirname, extname, isAbsolute, join, normalize, resolve } from 'path'
 import semver = require('semver')
 import {
   CompilerOptions,
@@ -224,7 +224,7 @@ export class ConfigSet {
     if (typeof babelConfigOpt === 'string' || babelConfigOpt === true) {
       babelConfig = {
         kind: 'file',
-        value: babelConfigOpt === true ? undefined : this.resolvePath(babelConfigOpt as string),
+        value: typeof babelConfigOpt === 'string' ? this.resolvePath(babelConfigOpt) : undefined,
       }
     } else if (babelConfigOpt) {
       babelConfig = {
@@ -378,9 +378,16 @@ export class ConfigSet {
     let base: BabelConfig = { cwd: this.cwd }
     if (babelConfig.kind === 'file') {
       if (babelConfig.value) {
-        base = {
-          ...base,
-          ...json5.parse(readFileSync(babelConfig.value, 'utf8')),
+        if (extname(babelConfig.value) === '.js') {
+          base = {
+            ...base,
+            ...require(babelConfig.value),
+          }
+        } else {
+          base = {
+            ...base,
+            ...json5.parse(readFileSync(babelConfig.value, 'utf8')),
+          }
         }
       }
     } else if (babelConfig.kind === 'inline') {
