@@ -378,11 +378,16 @@ export class ConfigSet {
     let base: BabelConfig = { cwd: this.cwd }
     if (babelConfig.kind === 'file') {
       if (babelConfig.value) {
-        base = {
-          ...base,
-          ...(extname(babelConfig.value) === '.js'
-            ? babelConfig.value
-            : json5.parse(readFileSync(babelConfig.value, 'utf8'))),
+        if (extname(babelConfig.value) === '.js') {
+          base = {
+            ...base,
+            ...require(babelConfig.value),
+          }
+        } else {
+          base = {
+            ...base,
+            ...json5.parse(readFileSync(babelConfig.value, 'utf8')),
+          }
         }
       }
     } else if (babelConfig.kind === 'inline') {
