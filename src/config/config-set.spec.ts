@@ -156,7 +156,7 @@ describe('tsJest', () => {
         resolve: null,
       })
       expect(cs.tsJest.babelConfig!.kind).toEqual('file')
-      expect(cs.tsJest.babelConfig!.value).toContain(FILE)
+      expect(cs.tsJest.babelConfig!.value).toContain('.babelrc-foo')
       expect(cs.babel?.plugins).toEqual([])
       expect(cs.babel?.presets).toEqual([])
     })
@@ -170,7 +170,7 @@ describe('tsJest', () => {
         resolve: null,
       })
       expect(cs.tsJest.babelConfig!.kind).toEqual('file')
-      expect(cs.tsJest.babelConfig!.value).toContain(FILE)
+      expect(cs.tsJest.babelConfig!.value).toContain('babel-foo.config.js')
       expect(cs.babel?.plugins).toEqual([])
       expect(cs.babel?.presets).toEqual([])
     })
@@ -185,7 +185,7 @@ describe('tsJest', () => {
         resolve: null,
       })
       expect(cs.tsJest.babelConfig!.kind).toEqual('file')
-      expect(cs.tsJest.babelConfig!.value).toContain(FILE)
+      expect(cs.tsJest.babelConfig!.value).toContain('babel-foo.config.js')
       expect(cs.babel?.plugins).toEqual([])
       expect(cs.babel?.presets).toEqual([])
     })
