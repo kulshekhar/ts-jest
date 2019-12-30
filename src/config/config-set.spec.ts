@@ -157,7 +157,8 @@ describe('tsJest', () => {
       })
       expect(cs.tsJest.babelConfig!.kind).toEqual('file')
       expect(cs.tsJest.babelConfig!.value).toContain(FILE)
-      expect(cs.babel).toMatchSnapshot()
+      expect(cs.babel?.plugins).toEqual([])
+      expect(cs.babel?.presets).toEqual([])
     })
 
     it('should be correct for given javascript file path', () => {
@@ -170,7 +171,8 @@ describe('tsJest', () => {
       })
       expect(cs.tsJest.babelConfig!.kind).toEqual('file')
       expect(cs.tsJest.babelConfig!.value).toContain(FILE)
-      expect(cs.babel).toMatchSnapshot()
+      expect(cs.babel?.plugins).toEqual([])
+      expect(cs.babel?.presets).toEqual([])
     })
 
     it('should be correct for imported javascript file', () => {
@@ -184,7 +186,8 @@ describe('tsJest', () => {
       })
       expect(cs.tsJest.babelConfig!.kind).toEqual('file')
       expect(cs.tsJest.babelConfig!.value).toContain(FILE)
-      expect(cs.babel).toMatchSnapshot()
+      expect(cs.babel?.plugins).toEqual([])
+      expect(cs.babel?.presets).toEqual([])
     })
 
     it('should be correct for inline config', () => {
