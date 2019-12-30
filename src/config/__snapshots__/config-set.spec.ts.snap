@@ -18,6 +18,48 @@ Object {
 }
 `;
 
+exports[`tsJest babelConfig should be correct for given javascript file path 1`] = `
+Object {
+  "babelrc": false,
+  "configFile": false,
+  "cwd": "/Users/ahn/ts-jest",
+  "envName": "test",
+  "filename": undefined,
+  "passPerPreset": false,
+  "plugins": Array [],
+  "presets": Array [],
+  "root": "/Users/ahn/ts-jest",
+}
+`;
+
+exports[`tsJest babelConfig should be correct for given non javascript file path 1`] = `
+Object {
+  "babelrc": false,
+  "configFile": false,
+  "cwd": "/Users/ahn/ts-jest",
+  "envName": "test",
+  "filename": undefined,
+  "passPerPreset": false,
+  "plugins": Array [],
+  "presets": Array [],
+  "root": "/Users/ahn/ts-jest",
+}
+`;
+
+exports[`tsJest babelConfig should be correct for imported javascript file 1`] = `
+Object {
+  "babelrc": false,
+  "configFile": false,
+  "cwd": "/Users/ahn/ts-jest/src",
+  "envName": "test",
+  "filename": undefined,
+  "passPerPreset": false,
+  "plugins": Array [],
+  "presets": Array [],
+  "root": "/Users/ahn/ts-jest/src",
+}
+`;
+
 exports[`tsJest should return correct defaults 1`] = `
 Object {
   "babelConfig": undefined,
