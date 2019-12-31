@@ -176,16 +176,14 @@ describe('tsJest', () => {
     })
 
     it('should be correct for imported javascript file', () => {
-      const FILE = '__mocks__/babel-foo.config.js'
       const cs = createConfigSet({
         jestConfig: { rootDir: 'src', cwd: 'src' } as any,
         tsJestConfig: {
-          babelConfig: FILE,
+          babelConfig: require('../__mocks__/babel-foo.config'),
         },
         resolve: null,
       })
-      expect(cs.tsJest.babelConfig!.kind).toEqual('file')
-      expect(cs.tsJest.babelConfig!.value).toContain('babel-foo.config.js')
+      expect(cs.tsJest.babelConfig!.kind).toEqual('inline')
       expect(cs.babel?.plugins).toEqual([])
       expect(cs.babel?.presets).toEqual([])
     })
