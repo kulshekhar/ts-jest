@@ -7,7 +7,7 @@ title: Babel Config option
 The option is `babelConfig` and it works pretty much as the `tsConfig` option, except that it is disabled by default. Here is the possible values it can take:
 
 - `false`: the default, disables the use of Babel
-- `true`: enables Babel processing. `ts-jest` will try to find a `.babelrc`, `.babelrc.js` file or a `babel` section in the `package.json` file of your project and use it as the config to pass to `babel-jest` processor.
+- `true`: enables Babel processing. `ts-jest` will try to find a `.babelrc`, `.babelrc.js`, `babel.config.js` file or a `babel` section in the `package.json` file of your project and use it as the config to pass to `babel-jest` processor.
 - `{ ... }`: inline [Babel options](https://babeljs.io/docs/en/next/options). You can also set this to an empty object (`{}`) so that the default Babel config file is not used.
 
 ### Examples
@@ -30,7 +30,7 @@ module.exports = {
 
 </div><div class="col-md-6" markdown="block">
 
-```js
+```json5
 // OR package.json
 {
   // [...]
@@ -63,10 +63,20 @@ module.exports = {
   }
 };
 ```
-
+```js
+// OR jest.config.js with require for babelrc
+module.exports = {
+  // [...]
+  globals: {
+    'ts-jest': {
+      babelConfig: require('./babelrc.test.js'),
+    }
+  }
+};
+```
 </div><div class="col-md-6" markdown="block">
 
-```js
+```json5
 // OR package.json
 {
   // [...]
@@ -105,7 +115,7 @@ module.exports = {
 
 </div><div class="col-md-6" markdown="block">
 
-```js
+```json5
 // OR package.json
 {
   // [...]

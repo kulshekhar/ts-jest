@@ -138,6 +138,7 @@ describe('tsJest', () => {
       expect(get().babelConfig).toBeUndefined()
       expect(get({ babelConfig: false }).babelConfig).toBeUndefined()
     })
+
     it('should be correct for true', () => {
       const EXPECTED = {
         kind: 'file',
@@ -146,13 +147,47 @@ describe('tsJest', () => {
       expect(get({ babelConfig: true }).babelConfig).toEqual(EXPECTED)
     })
 
-    it('should be correct for given file', () => {
-      const FILE = 'bar/.babelrc-foo'
-      const EXPECTED = {
-        kind: 'file',
-        value: defaultResolve(FILE),
-      }
-      expect(get({ babelConfig: FILE }).babelConfig).toEqual(EXPECTED)
+    it('should be correct for given non javascript file path', () => {
+      const FILE = 'src/__mocks__/.babelrc-foo'
+      const cs = createConfigSet({
+        tsJestConfig: {
+          babelConfig: FILE,
+        },
+        resolve: null,
+      })
+      expect(cs.tsJest.babelConfig!.kind).toEqual('file')
+      expect(cs.tsJest.babelConfig!.value).toContain('.babelrc-foo')
+      expect(cs.babel?.plugins).toEqual([])
+      expect(cs.babel?.presets).toEqual([])
+    })
+
+    it('should be correct for given javascript file path', () => {
+      const FILE = 'src/__mocks__/babel-foo.config.js'
+      const cs = createConfigSet({
+        tsJestConfig: {
+          babelConfig: FILE,
+        },
+        resolve: null,
+      })
+      expect(cs.tsJest.babelConfig!.kind).toEqual('file')
+      expect(cs.tsJest.babelConfig!.value).toContain('babel-foo.config.js')
+      expect(cs.babel?.plugins).toEqual([])
+      expect(cs.babel?.presets).toEqual([])
+    })
+
+    it('should be correct for imported javascript file', () => {
+      const FILE = '__mocks__/babel-foo.config.js'
+      const cs = createConfigSet({
+        jestConfig: { rootDir: 'src', cwd: 'src' } as any,
+        tsJestConfig: {
+          babelConfig: FILE,
+        },
+        resolve: null,
+      })
+      expect(cs.tsJest.babelConfig!.kind).toEqual('file')
+      expect(cs.tsJest.babelConfig!.value).toContain('babel-foo.config.js')
+      expect(cs.babel?.plugins).toEqual([])
+      expect(cs.babel?.presets).toEqual([])
     })
 
     it('should be correct for inline config', () => {

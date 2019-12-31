@@ -46,6 +46,29 @@ exports[`With diagnostics, first throws should fail using template "with-babel-7
   ================================================================================
 `;
 
+exports[`With diagnostics, first throws should fail using template "with-babel-7-string-config" 1`] = `
+  × jest
+  ↳ exit code: 1
+  ===[ STDOUT ]===================================================================
+  
+  ===[ STDERR ]===================================================================
+  FAIL ./main.spec.ts
+    ● Test suite failed to run
+  
+      TypeScript diagnostics (customize using \`[jest-config].globals.ts-jest.diagnostics\` option):
+      main.ts:2:3 - error TS2322: Type 'string' is not assignable to type 'number'.
+  
+      2   return input
+          ~~~~~~~~~~~~
+  
+  Test Suites: 1 failed, 1 total
+  Tests:       0 total
+  Snapshots:   0 total
+  Time:        XXs
+  Ran all test suites.
+  ================================================================================
+`;
+
 exports[`With diagnostics, first throws should fail using template "with-typescript-2-7" 1`] = `
   × jest
   ↳ exit code: 1
@@ -92,6 +115,28 @@ exports[`With diagnostics, warn only should pass using template "default" 1`] = 
 `;
 
 exports[`With diagnostics, warn only should pass using template "with-babel-7" 1`] = `
+  √ jest --no-cache
+  ↳ exit code: 0
+  ===[ STDOUT ]===================================================================
+  
+  ===[ STDERR ]===================================================================
+  ts-jest[ts-compiler] (WARN) TypeScript diagnostics (customize using \`[jest-config].globals.ts-jest.diagnostics\` option):
+  main.ts:2:3 - error TS2322: Type 'string' is not assignable to type 'number'.
+  
+  2   return input
+      ~~~~~~~~~~~~
+  PASS ./main.spec.ts
+    √ should pass
+  
+  Test Suites: 1 passed, 1 total
+  Tests:       1 passed, 1 total
+  Snapshots:   0 total
+  Time:        XXs
+  Ran all test suites.
+  ================================================================================
+`;
+
+exports[`With diagnostics, warn only should pass using template "with-babel-7-string-config" 1`] = `
   √ jest --no-cache
   ↳ exit code: 0
   ===[ STDOUT ]===================================================================
