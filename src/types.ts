@@ -56,7 +56,7 @@ export interface TsJestGlobalOptions {
     | boolean
     | {
         pretty?: boolean
-        ignoreCodes?: number | string | Array<number | string>
+        ignoreCodes?: number | string | (number | string)[]
         pathRegex?: RegExp | string
         warnOnly?: boolean
       }
