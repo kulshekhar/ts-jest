@@ -15,6 +15,7 @@
     "test": "run-s -s test:e2e \"test:unit -- {@}\" --",
     "test:prepare": "npm run test:e2e -- --prepareOnly",
     "test:e2e": "node scripts/e2e.js",
+    "test:e2e:update-snaphots": "node scripts/e2e.js --updateSnapshot",
     "test:unit": "node_modules/.bin/jest",
     "test:external": "node scripts/test-external-project.js",
     "lint": "run-s lint:ts lint:js",
