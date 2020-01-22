@@ -1,6 +1,6 @@
 {
   "name": "ts-jest",
-  "version": "24.1.0",
+  "version": "24.3.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "bin": "cli.js",
@@ -33,6 +33,7 @@
     "prepare": "npm run build",
     "prepublishOnly": "npm run test",
     "preversion": "npm run test",
+    "update:e2e": "node scripts/update-e2e-templates.js",
     "version": "npm run changelog && git add CHANGELOG.md"
   },
   "repository": {

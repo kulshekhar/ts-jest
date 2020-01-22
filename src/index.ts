@@ -16,8 +16,11 @@ const warn = rootLogger.child({ [LogContexts.logLevel]: LogLevels.warn })
 const helperMoved = <T extends (...args: any[]) => any>(name: string, helper: T) =>
   warn.wrap(interpolate(Deprecateds.HelperMovedToUtils, { helper: name }), helper)
 
+/** @deprecated */
 export const mocked = helperMoved('mocked', mockedCore)
+/** @deprecated */
 export const createJestPreset = helperMoved('createJestPreset', createJestPresetCore)
+/** @deprecated */
 export const pathsToModuleNameMapper = helperMoved('pathsToModuleNameMapper', pathsToModuleNameMapperCore)
 
 // tslint:disable-next-line:no-var-requires

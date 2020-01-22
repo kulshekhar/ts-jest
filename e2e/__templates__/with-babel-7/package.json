@@ -3,19 +3,19 @@
   "version": "0.0.0-tmpl.0",
   "private": true,
   "devDependencies": {
-    "@babel/core": "7.1.5",
-    "@types/jest": "24.0.6",
-    "@types/node": "10.12.5",
+    "@babel/core": "7.7.7",
+    "@types/jest": "24.0.25",
+    "@types/node": "10.17.13",
     "babel-jest": "25.0.0",
     "jest": "25.0.0",
-    "typescript": "3.1.6"
+    "typescript": "3.7.4"
   },
   "wantedDependencies": {
     "@babel/core": "7",
     "@types/jest": "latest",
     "@types/node": "latest",
-    "babel-jest": "next",
-    "jest": "next",
+    "babel-jest": "latest",
+    "jest": "latest",
     "typescript": "latest"
   }
 }

@@ -1,17 +1,21 @@
 {
-  "name": "ts-jest-e2e-tmpl-with-unsupported-version",
+  "name": "ts-jest-e2e-tmpl-with-babel-7-string-config",
   "version": "0.0.0-tmpl.0",
   "private": true,
   "devDependencies": {
+    "@babel/core": "7.7.7",
     "@types/jest": "24.0.25",
     "@types/node": "10.17.13",
-    "jest": "25.0.0",
-    "typescript": "2.5.3"
+    "babel-jest": "24.9.0",
+    "jest": "24.9.0",
+    "typescript": "3.7.4"
   },
   "wantedDependencies": {
+    "@babel/core": "7",
     "@types/jest": "latest",
     "@types/node": "latest",
+    "babel-jest": "latest",
     "jest": "latest",
-    "typescript": "2.5"
+    "typescript": "latest"
   }
 }

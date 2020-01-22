@@ -1,3 +1,25 @@
+<a name="24.3.0"></a>
+# [24.3.0](https://github.com/kulshekhar/ts-jest/compare/v24.2.0...v24.3.0) (2020-01-07)
+
+
+### Bug Fixes
+
+* **config:** support babel config file path as string ([#1332](https://github.com/kulshekhar/ts-jest/issues/1332)) ([78a53c2](https://github.com/kulshekhar/ts-jest/commit/78a53c2))
+
+
+
+<a name="24.2.0"></a>
+# [24.2.0](https://github.com/kulshekhar/ts-jest/compare/v24.1.0...v24.2.0) (2019-11-22)
+
+
+### Bug Fixes
+
+* typescript serviceHost cache miss on Windows operating systems ([26ee731](https://github.com/kulshekhar/ts-jest/commit/26ee731))
+* **compiler:** pass filename to sha function instead of file extension ([ac1ac97](https://github.com/kulshekhar/ts-jest/commit/ac1ac97))
+* **transformers:** hoist jest.enableAutomock and jest.disableAutomock ([ac50bc3](https://github.com/kulshekhar/ts-jest/commit/ac50bc3))
+
+
+
 <a name="24.1.0"></a>
 # [24.1.0](https://github.com/kulshekhar/ts-jest/compare/v24.0.2...v24.1.0) (2019-09-12)
 
@@ -218,26 +240,29 @@
 
 ### Bug Fixes
 
-* typos + node 6 compat ([0ed1587](https://github.com/kulshekhar/ts-jest/commit/0ed1587))
-* **ci:** can't use runInBand for e2e: cache collision ([db650f4](https://github.com/kulshekhar/ts-jest/commit/db650f4))
+* babel-config + adds test ([12146c3](https://github.com/kulshekhar/ts-jest/commit/12146c3))
+* fixes js style to be node < 10 compatible ([83d7517](https://github.com/kulshekhar/ts-jest/commit/83d7517))
+* hoisting per level + memoize fix ([31847b0](https://github.com/kulshekhar/ts-jest/commit/31847b0))
 * jest 22 did not have default config ([cbaddc3](https://github.com/kulshekhar/ts-jest/commit/cbaddc3))
+* makes node 6 happy ([f6f82b8](https://github.com/kulshekhar/ts-jest/commit/f6f82b8))
+* makes node6 happy ([f170285](https://github.com/kulshekhar/ts-jest/commit/f170285))
+* makes window happy ([36fbebe](https://github.com/kulshekhar/ts-jest/commit/36fbebe))
+* **ci:** can't use runInBand for e2e: cache collision ([db650f4](https://github.com/kulshekhar/ts-jest/commit/db650f4))
 * **ci:** do not run e2e sub-tests in band ([18ad865](https://github.com/kulshekhar/ts-jest/commit/18ad865))
 * **ci:** ensure npm is present with ci ([edb6eda](https://github.com/kulshekhar/ts-jest/commit/edb6eda))
 * **logger:** removes cyclic imports ([5ef980f](https://github.com/kulshekhar/ts-jest/commit/5ef980f))
-* babel-config + adds test ([12146c3](https://github.com/kulshekhar/ts-jest/commit/12146c3))
-* **tests:** CI fixes ([34a41ea](https://github.com/kulshekhar/ts-jest/commit/34a41ea))
-* fixes js style to be node < 10 compatible ([83d7517](https://github.com/kulshekhar/ts-jest/commit/83d7517))
-* hoisting per level + memoize fix ([31847b0](https://github.com/kulshekhar/ts-jest/commit/31847b0))
-* makes node6 happy ([f170285](https://github.com/kulshekhar/ts-jest/commit/f170285))
+* **tests:** detect npm version to use or not ci ([683a1e5](https://github.com/kulshekhar/ts-jest/commit/683a1e5))
 * node 6 unhappy again... ([703ad0b](https://github.com/kulshekhar/ts-jest/commit/703ad0b))
+* **tests:** CI fixes ([34a41ea](https://github.com/kulshekhar/ts-jest/commit/34a41ea))
+* **tests:** do not use babel in our tests + new API for simple ([3e4de3e](https://github.com/kulshekhar/ts-jest/commit/3e4de3e))
 * normalizes bundle hash on any node version ([ce7afaf](https://github.com/kulshekhar/ts-jest/commit/ce7afaf))
+* npm coming with node 6 doesn't talk `ci` ([b87198d](https://github.com/kulshekhar/ts-jest/commit/b87198d))
 * source maps ([89a30c9](https://github.com/kulshekhar/ts-jest/commit/89a30c9))
+* typos + node 6 compat ([0ed1587](https://github.com/kulshekhar/ts-jest/commit/0ed1587))
+* **tests:** more sanitizing for windows compat ([faae274](https://github.com/kulshekhar/ts-jest/commit/faae274))
 * updates templates ([f2e1da2](https://github.com/kulshekhar/ts-jest/commit/f2e1da2))
 * uses cross-platform spawn + fix pkg versions ([ac1599c](https://github.com/kulshekhar/ts-jest/commit/ac1599c))
 * we are not writing files, use normalized EOL ([47fff43](https://github.com/kulshekhar/ts-jest/commit/47fff43))
-* **tests:** detect npm version to use or not ci ([683a1e5](https://github.com/kulshekhar/ts-jest/commit/683a1e5))
-* **tests:** do not use babel in our tests + new API for simple ([3e4de3e](https://github.com/kulshekhar/ts-jest/commit/3e4de3e))
-* **tests:** more sanitizing for windows compat ([faae274](https://github.com/kulshekhar/ts-jest/commit/faae274))
 
 
 ### Features
@@ -264,6 +289,7 @@
 * **babel:** uses babel-jest cache key as part of ours ([f51c4a7](https://github.com/kulshekhar/ts-jest/commit/f51c4a7))
 * do not type check if fileName doesn't match ([cc45adc](https://github.com/kulshekhar/ts-jest/commit/cc45adc))
 * faster tests ([37a0187](https://github.com/kulshekhar/ts-jest/commit/37a0187))
+* improves speed of local test after 1st run ([cc04021](https://github.com/kulshekhar/ts-jest/commit/cc04021))
 * more cleaning ([c48f7b8](https://github.com/kulshekhar/ts-jest/commit/c48f7b8))
 * trying to improve travis-ci conf ([e4b4d95](https://github.com/kulshekhar/ts-jest/commit/e4b4d95))
 * **cache:** share config-sets for parallel test running ([090ca7b](https://github.com/kulshekhar/ts-jest/commit/090ca7b))
@@ -280,27 +306,23 @@
 * **html:** correctly transforms html source when needed ([9a2d74f](https://github.com/kulshekhar/ts-jest/commit/9a2d74f))
 * **lint:** fixes tslint script & lint issues ([60ab36e](https://github.com/kulshekhar/ts-jest/commit/60ab36e))
 * **package:** update fs-extra to version 6.0.1 ([7e73536](https://github.com/kulshekhar/ts-jest/commit/7e73536))
-* **package:** update pkg-dir to version 3.0.0 ([3fb8f9f](https://github.com/kulshekhar/ts-jest/commit/3fb8f9f))
-* **package:** update yargs to version 12.0.1 ([390ffcd](https://github.com/kulshekhar/ts-jest/commit/390ffcd))
-* **source-maps:** fix source maps options/calls ([76e27c1](https://github.com/kulshekhar/ts-jest/commit/76e27c1))
 * allow (but deprecate) use of old preprocessor.js ([a65079f](https://github.com/kulshekhar/ts-jest/commit/a65079f))
 * big refactor + fixes (mainly cache key + coverage) ([e46caae](https://github.com/kulshekhar/ts-jest/commit/e46caae))
 * fixes coverage and tests ([09500c2](https://github.com/kulshekhar/ts-jest/commit/09500c2))
 * gracefully load [@babel](https://github.com/babel)/core or babel-core ([98b2410](https://github.com/kulshekhar/ts-jest/commit/98b2410))
 * hack for babel < 6 so that breakpoints do work ([90c74ef](https://github.com/kulshekhar/ts-jest/commit/90c74ef)), closes [#627](https://github.com/kulshekhar/ts-jest/issues/627)
-* makes node 6 happy ([f6f82b8](https://github.com/kulshekhar/ts-jest/commit/f6f82b8))
-* makes window happy ([36fbebe](https://github.com/kulshekhar/ts-jest/commit/36fbebe))
-* npm coming with node 6 doesn't talk `ci` ([b87198d](https://github.com/kulshekhar/ts-jest/commit/b87198d))
+* **package:** update pkg-dir to version 3.0.0 ([3fb8f9f](https://github.com/kulshekhar/ts-jest/commit/3fb8f9f))
+* **package:** update yargs to version 12.0.1 ([390ffcd](https://github.com/kulshekhar/ts-jest/commit/390ffcd))
 * resolves correctly config file path (fix [#636](https://github.com/kulshekhar/ts-jest/issues/636)) ([5ab100c](https://github.com/kulshekhar/ts-jest/commit/5ab100c))
 * test rootDir to handle preset-angular ([8a6a8f7](https://github.com/kulshekhar/ts-jest/commit/8a6a8f7))
 * Typo in utils.ts ([#534](https://github.com/kulshekhar/ts-jest/issues/534)) ([a650260](https://github.com/kulshekhar/ts-jest/commit/a650260))
+* **source-maps:** fix source maps options/calls ([76e27c1](https://github.com/kulshekhar/ts-jest/commit/76e27c1))
 * wrong error message ([c955083](https://github.com/kulshekhar/ts-jest/commit/c955083))
 
 
 ### Performance Improvements
 
 * do not hash cache key, jest does it underneath ([fbe4f1f](https://github.com/kulshekhar/ts-jest/commit/fbe4f1f))
-* improves speed of local test after 1st run ([cc04021](https://github.com/kulshekhar/ts-jest/commit/cc04021))
 
 
 

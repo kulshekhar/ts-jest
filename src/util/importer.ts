@@ -14,7 +14,7 @@ const logger = rootLogger.child({ namespace: 'Importer' })
 
 interface ImportOptions {
   alternatives?: string[]
-  installTip?: string | Array<{ module: string; label: string }>
+  installTip?: string | { module: string; label: string }[]
 }
 
 const passThru = (action: () => void) => (input: any) => {
