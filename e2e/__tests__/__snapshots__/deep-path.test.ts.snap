@@ -16,7 +16,7 @@ BRF:0
 BRH:0
 end_of_record
 TN:
-SF:<cwd>/src/Tests/Button/click.test.ts
+SF:Button/click.test.ts
 FN:3,(anonymous_0)
 FNF:1
 FNH:1
@@ -65,7 +65,7 @@ BRF:0
 BRH:0
 end_of_record
 TN:
-SF:<cwd>/src/Tests/Button/click.test.ts
+SF:Button/click.test.ts
 FN:3,(anonymous_0)
 FNF:1
 FNH:1
@@ -114,7 +114,7 @@ BRF:0
 BRH:0
 end_of_record
 TN:
-SF:<cwd>/src/Tests/Button/click.test.ts
+SF:Button/click.test.ts
 FN:3,(anonymous_0)
 FNF:1
 FNH:1
@@ -163,7 +163,7 @@ BRF:0
 BRH:0
 end_of_record
 TN:
-SF:<cwd>/src/Tests/Button/click.test.ts
+SF:Button/click.test.ts
 FN:3,(anonymous_0)
 FNF:1
 FNH:1

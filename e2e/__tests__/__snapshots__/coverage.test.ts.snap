@@ -13,7 +13,7 @@ exports[`using template "default" should report coverages 1`] = `
   ===[ STDERR ]===================================================================
   PASS ./Hello.spec.ts
     Hello Class
-      √ should create a new Hello
+     √ should create a new Hello
   
   Test Suites: 1 passed, 1 total
   Tests:       1 passed, 1 total
@@ -36,7 +36,7 @@ exports[`using template "with-babel-7" should report coverages 1`] = `
   ===[ STDERR ]===================================================================
   PASS ./Hello.spec.ts
     Hello Class
-      √ should create a new Hello
+     √ should create a new Hello
   
   Test Suites: 1 passed, 1 total
   Tests:       1 passed, 1 total
@@ -59,7 +59,7 @@ exports[`using template "with-babel-7-string-config" should report coverages 1`]
   ===[ STDERR ]===================================================================
   PASS ./Hello.spec.ts
     Hello Class
-      √ should create a new Hello
+     √ should create a new Hello
   
   Test Suites: 1 passed, 1 total
   Tests:       1 passed, 1 total
@@ -82,7 +82,7 @@ exports[`using template "with-typescript-2-7" should report coverages 1`] = `
   ===[ STDERR ]===================================================================
   PASS ./Hello.spec.ts
     Hello Class
-      √ should create a new Hello
+     √ should create a new Hello
   
   Test Suites: 1 passed, 1 total
   Tests:       1 passed, 1 total
