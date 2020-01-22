@@ -70,7 +70,7 @@
     "yargs-parser": "10.x"
   },
   "peerDependencies": {
-    "jest": ">=24 <26"
+    "jest": ">=25 <26"
   },
   "husky": {
     "hooks": {
