@@ -21,7 +21,6 @@ describeChecker(VersionCheckers.babelCore, '@babel/core', ['7.1.3', '7.0.0-beta.
 describeChecker(VersionCheckers.typescript, 'typescript', ['2.7.0', '3.0.1'], [undefined, '2.6.99', '4.0.1'])
 
 function describeChecker(
-function describeChecker(
   checker: VersionChecker,
   moduleName: string,
   supportedVersions: string[],
