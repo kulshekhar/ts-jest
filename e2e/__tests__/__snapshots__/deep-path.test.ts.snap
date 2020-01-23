@@ -2,7 +2,7 @@
 
 exports[`Deep paths test should pass using template "default": lcov 1`] = `
 "TN:
-SF:<cwd>/src/Button/click.ts
+SF:../Button/click.ts
 FN:3,click
 FNF:1
 FNH:1
@@ -16,7 +16,7 @@ BRF:0
 BRH:0
 end_of_record
 TN:
-SF:<cwd>/src/Tests/Button/click.test.ts
+SF:Button/click.test.ts
 FN:3,(anonymous_0)
 FNF:1
 FNH:1
@@ -51,7 +51,7 @@ exports[`Deep paths test should pass using template "default": output 1`] = `
 
 exports[`Deep paths test should pass using template "with-babel-7": lcov 1`] = `
 "TN:
-SF:<cwd>/src/Button/click.ts
+SF:../Button/click.ts
 FN:3,click
 FNF:1
 FNH:1
@@ -65,7 +65,7 @@ BRF:0
 BRH:0
 end_of_record
 TN:
-SF:<cwd>/src/Tests/Button/click.test.ts
+SF:Button/click.test.ts
 FN:3,(anonymous_0)
 FNF:1
 FNH:1
@@ -100,7 +100,7 @@ exports[`Deep paths test should pass using template "with-babel-7": output 1`] =
 
 exports[`Deep paths test should pass using template "with-babel-7-string-config": lcov 1`] = `
 "TN:
-SF:<cwd>/src/Button/click.ts
+SF:../Button/click.ts
 FN:3,click
 FNF:1
 FNH:1
@@ -114,7 +114,7 @@ BRF:0
 BRH:0
 end_of_record
 TN:
-SF:<cwd>/src/Tests/Button/click.test.ts
+SF:Button/click.test.ts
 FN:3,(anonymous_0)
 FNF:1
 FNH:1
@@ -149,7 +149,7 @@ exports[`Deep paths test should pass using template "with-babel-7-string-config"
 
 exports[`Deep paths test should pass using template "with-typescript-2-7": lcov 1`] = `
 "TN:
-SF:<cwd>/src/Button/click.ts
+SF:../Button/click.ts
 FN:3,click
 FNF:1
 FNH:1
@@ -163,7 +163,7 @@ BRF:0
 BRH:0
 end_of_record
 TN:
-SF:<cwd>/src/Tests/Button/click.test.ts
+SF:Button/click.test.ts
 FN:3,(anonymous_0)
 FNF:1
 FNH:1

@@ -15,6 +15,7 @@
     "test": "run-s -s test:e2e \"test:unit -- {@}\" --",
     "test:prepare": "npm run test:e2e -- --prepareOnly",
     "test:e2e": "node scripts/e2e.js",
+    "test:e2e:update-snaphots": "node scripts/e2e.js --updateSnapshot",
     "test:unit": "node_modules/.bin/jest",
     "test:external": "node scripts/test-external-project.js",
     "lint": "run-s lint:ts lint:js",
@@ -69,7 +70,7 @@
     "yargs-parser": "10.x"
   },
   "peerDependencies": {
-    "jest": ">=24 <25"
+    "jest": ">=25 <26"
   },
   "husky": {
     "hooks": {
@@ -102,7 +103,7 @@
     "fs-extra": "latest",
     "glob-gitignore": "latest",
     "husky": "1.x",
-    "jest": "24.x",
+    "jest": "25.x",
     "js-yaml": "latest",
     "lint-staged": "latest",
     "lodash.merge": "4.x",
