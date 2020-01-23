@@ -1,3 +1,20 @@
+<a name="25.0.0"></a>
+# [25.0.0](https://github.com/kulshekhar/ts-jest/compare/v24.3.0...v25.0.0) (2020-01-23)
+
+
+### Bug Fixes
+
+* Fix tests for version checks v2 ([154f1d6](https://github.com/kulshekhar/ts-jest/commit/154f1d6))
+* Try to fix snapshots ([ea0ea50](https://github.com/kulshekhar/ts-jest/commit/ea0ea50))
+* Try to fix snapshots v2 ([82445bb](https://github.com/kulshekhar/ts-jest/commit/82445bb))
+
+
+### Features
+
+* support Jest 25 ([ffc2cfe](https://github.com/kulshekhar/ts-jest/commit/ffc2cfe))
+
+
+
 <a name="24.3.0"></a>
 # [24.3.0](https://github.com/kulshekhar/ts-jest/compare/v24.2.0...v24.3.0) (2020-01-07)
 
