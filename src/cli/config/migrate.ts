@@ -1,3 +1,4 @@
+import { Config } from '@jest/types'
 import { createLogger } from 'bs-logger'
 import * as stringifyJson from 'fast-json-stable-stringify'
 import { existsSync } from 'fs'
@@ -25,7 +26,7 @@ export const run: CliCommand = async (args: Arguments /*, logger: Logger*/) => {
   if (!/\.(js|json)$/.test(name)) {
     throw new TypeError(`Configuration file ${file} must be a JavaScript or JSON file.`)
   }
-  let actualConfig: jest.InitialOptions = require(filePath)
+  let actualConfig: Config.InitialOptions = require(filePath)
   if (isPackage) {
     actualConfig = (actualConfig as any).jest
   }
@@ -173,7 +174,7 @@ ${footNotes.join('\n')}
   }
 }
 
-function cleanupConfig(config: jest.InitialOptions): void {
+function cleanupConfig(config: Config.InitialOptions): void {
   if (config.globals) {
     if ((config as any).globals['ts-jest'] && Object.keys((config as any).globals['ts-jest']).length === 0) {
       delete (config as any).globals['ts-jest']

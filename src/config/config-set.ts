@@ -8,6 +8,7 @@
  * version of the `jest.ProjectConfig`, and then later it calls `process()`
  * with the complete, object version of it.
  */
+import { Config } from '@jest/types'
 import { LogContexts, Logger } from 'bs-logger'
 import { existsSync, readFileSync, realpathSync } from 'fs'
 import json5 = require('json5')
@@ -165,7 +166,7 @@ export class ConfigSet {
   }
 
   @Memoize()
-  get jest(): jest.ProjectConfig {
+  get jest(): Config.ProjectConfig {
     const config = backportJestConfig(this.logger, this._jestConfig)
     if (this.parentOptions) {
       const globals: any = config.globals || (config.globals = {})
@@ -622,9 +623,9 @@ export class ConfigSet {
   /**
    * @internal
    */
-  private readonly _jestConfig: jest.ProjectConfig
+  private readonly _jestConfig: Config.ProjectConfig
 
-  constructor(jestConfig: jest.ProjectConfig, readonly parentOptions?: TsJestGlobalOptions, parentLogger?: Logger) {
+  constructor(jestConfig: Config.ProjectConfig, readonly parentOptions?: TsJestGlobalOptions, parentLogger?: Logger) {
     this._jestConfig = jestConfig
     this.logger = parentLogger ? parentLogger.child({ [LogContexts.namespace]: 'config' }) : logger
   }

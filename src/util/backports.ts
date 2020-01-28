@@ -1,3 +1,4 @@
+import { Config } from '@jest/types'
 import { LogContexts, Logger } from 'bs-logger'
 
 import { Deprecateds, Helps, interpolate } from './messages'
@@ -7,7 +8,7 @@ const context = { [LogContexts.namespace]: 'backports' }
 /**
  * @internal
  */
-export const backportJestConfig = <T extends jest.InitialOptions | jest.ProjectConfig>(
+export const backportJestConfig = <T extends Config.InitialOptions | Config.ProjectConfig>(
   logger: Logger,
   config: T,
 ): T => {

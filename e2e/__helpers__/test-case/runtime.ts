@@ -1,3 +1,4 @@
+import { Config } from '@jest/types'
 import { sync as spawnSync } from 'cross-spawn'
 import { createHash } from 'crypto'
 import stringifyJson = require('fast-json-stable-stringify')
@@ -64,10 +65,10 @@ export function run(name: string, options: RunTestOptions = {}): RunResult {
   const jestConfigPath = (path: string = dir) => resolve(path, configFile)
 
   // grab base configuration
-  let baseConfig: jest.InitialOptions = require(jestConfigPath())
+  let baseConfig: Config.InitialOptions = require(jestConfigPath())
   if (configFile === 'package.json') baseConfig = (baseConfig as any).jest
 
-  const extraConfig = {} as jest.InitialOptions
+  const extraConfig = {} as Config.InitialOptions
 
   let shortCmd: string
   let cmdArgs: string[] = []

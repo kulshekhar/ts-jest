@@ -1,3 +1,4 @@
+import { Config } from '@jest/types'
 import { resolve } from 'path'
 
 import { BabelConfig, TsJestConfig, TsJestGlobalOptions } from '../types'
@@ -67,8 +68,8 @@ export function tsJestConfig(options?: Partial<TsJestConfig>): TsJestConfig {
   }
 }
 
-export function jestConfig<T extends jest.ProjectConfig>(
-  options?: Partial<jest.InitialOptions | jest.ProjectConfig>,
+export function jestConfig<T extends Config.ProjectConfig>(
+  options?: Partial<Config.InitialOptions | Config.ProjectConfig>,
   tsJestOptions?: TsJestGlobalOptions,
 ): T {
   const res = {

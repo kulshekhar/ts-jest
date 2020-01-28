@@ -1,3 +1,4 @@
+import { Config } from '@jest/types'
 import stringify = require('fast-json-stable-stringify')
 import { sep } from 'path'
 import { ParsedCommandLine } from 'typescript'
@@ -50,7 +51,7 @@ describe('process', () => {
   }
   const INPUT = 'export default "foo"'
   const FILE = '/foo/bar.ts'
-  const JEST_CONFIG = {} as jest.ProjectConfig
+  const JEST_CONFIG = {} as Config.ProjectConfig
   const OPTIONS = { instrument: false }
   const process = () => tr.process(...args)
   beforeEach(() => {

@@ -1,3 +1,5 @@
+import { Transformer } from '@jest/transform/build/types'
+import { Config } from '@jest/types'
 import { testing } from 'bs-logger'
 import { resolve } from 'path'
 import { Diagnostic, DiagnosticCategory, ModuleKind, ParsedCommandLine, ScriptTarget } from 'typescript'
@@ -35,7 +37,7 @@ function createConfigSet({
   resolve = defaultResolve,
   ...others
 }: {
-  jestConfig?: jest.ProjectConfig
+  jestConfig?: Config.ProjectConfig
   tsJestConfig?: TsJestGlobalOptions
   parentConfig?: TsJestGlobalOptions
   resolve?: ((path: string) => string) | null
@@ -543,7 +545,7 @@ describe('babelJestTransformer', () => {
     let cs = createConfigSet({ tsJestConfig: { tsConfig: false } as any })
     expect(cs.babelJestTransformer).toBeUndefined()
     cs = createConfigSet({ tsJestConfig: { tsConfig: false, babelConfig: {} } as any })
-    const babelJest = cs.babelJestTransformer as jest.Transformer
+    const babelJest = cs.babelJestTransformer as Transformer
     expect(babelJest.canInstrument).toBe(true)
     expect(babelJest.createTransformer).toBeUndefined()
     expect(typeof babelJest.getCacheKey).toBe('function')
