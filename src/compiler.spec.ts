@@ -1,4 +1,5 @@
 // tslint:disable:max-line-length
+import { Config } from '@jest/types'
 import { LogLevels } from 'bs-logger'
 import { removeSync, writeFileSync } from 'fs-extra'
 
@@ -18,7 +19,7 @@ function makeCompiler({
   tsJestConfig,
   parentConfig,
 }: {
-  jestConfig?: Partial<jest.ProjectConfig>
+  jestConfig?: Partial<Config.ProjectConfig>
   tsJestConfig?: TsJestGlobalOptions
   parentConfig?: TsJestGlobalOptions
 } = {}) {

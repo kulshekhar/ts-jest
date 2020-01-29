@@ -1,3 +1,4 @@
+import { Config } from '@jest/types'
 import { LogContexts } from 'bs-logger'
 import { CompilerOptions } from 'typescript'
 
@@ -5,7 +6,7 @@ import { rootLogger } from '../util/logger'
 import { Errors, interpolate } from '../util/messages'
 
 type TsPathMapping = Exclude<CompilerOptions['paths'], undefined>
-type JestPathMapping = jest.InitialOptions['moduleNameMapper']
+type JestPathMapping = Config.InitialOptions['moduleNameMapper']
 
 // we don't need to escape all chars, so commented out is the real one
 // const escapeRegex = (str: string) => str.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')

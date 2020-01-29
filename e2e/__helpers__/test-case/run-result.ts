@@ -1,3 +1,4 @@
+import { Config } from '@jest/types'
 import { LogMessage } from 'bs-logger'
 import { SpawnSyncReturns } from 'child_process'
 import { readFileSync, realpathSync } from 'fs'
@@ -19,7 +20,7 @@ export default class RunResult {
       cmd: string
       args: string[]
       env: { [key: string]: string }
-      config: jest.InitialOptions
+      config: Config.InitialOptions
       digest: string
     }>,
   ) {}

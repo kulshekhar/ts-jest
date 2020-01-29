@@ -1,3 +1,5 @@
+import { TransformOptions, TransformedSource, Transformer } from '@jest/transform/build/types'
+import { Config } from '@jest/types'
 import { Logger } from 'bs-logger'
 import { inspect } from 'util'
 
@@ -16,10 +18,10 @@ export const INSPECT_CUSTOM = inspect.custom || 'inspect'
 
 interface ConfigSetIndexItem {
   configSet: ConfigSet
-  jestConfig: JsonableValue<jest.ProjectConfig>
+  jestConfig: JsonableValue<Config.ProjectConfig>
 }
 
-export class TsJestTransformer implements jest.Transformer {
+export class TsJestTransformer implements Transformer {
   /**
    * @internal
    */
@@ -60,9 +62,9 @@ export class TsJestTransformer implements jest.Transformer {
     return `[object TsJestTransformer<#${this.id}>]`
   }
 
-  configsFor(jestConfig: jest.ProjectConfig | string) {
+  configsFor(jestConfig: Config.ProjectConfig | string) {
     let csi: ConfigSetIndexItem | undefined
-    let jestConfigObj: jest.ProjectConfig
+    let jestConfigObj: Config.ProjectConfig
     if (typeof jestConfig === 'string') {
       csi = TsJestTransformer._configSetsIndex.find(cs => cs.jestConfig.serialized === jestConfig)
       if (csi) return csi.configSet
@@ -95,12 +97,12 @@ export class TsJestTransformer implements jest.Transformer {
 
   process(
     input: string,
-    filePath: jest.Path,
-    jestConfig: jest.ProjectConfig,
-    transformOptions?: jest.TransformOptions,
-  ): jest.TransformedSource | string {
+    filePath: Config.Path,
+    jestConfig: Config.ProjectConfig,
+    transformOptions?: TransformOptions,
+  ): TransformedSource | string {
     this.logger.debug({ fileName: filePath, transformOptions }, 'processing', filePath)
-    let result: string | jest.TransformedSource
+    let result: string | TransformedSource
     const source: string = input
 
     const configs = this.configsFor(jestConfig)

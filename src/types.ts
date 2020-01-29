@@ -1,3 +1,4 @@
+import { TransformedSource, Transformer } from '@jest/transform/build/types'
 import * as _babel from 'babel__core'
 import { CompilerOptions, SourceFile, TransformerFactory } from 'typescript'
 // tslint:disable-next-line:no-duplicate-imports
@@ -7,9 +8,9 @@ import { ConfigSet } from './config/config-set'
 
 export type TBabelCore = typeof _babel
 export type TTypeScript = typeof _ts
-export type TBabelJest = Required<jest.Transformer>
+export type TBabelJest = Required<Transformer>
 export type BabelJestTransformer = {
-  [K in Exclude<keyof jest.Transformer, 'createTransformer'>]: Exclude<jest.Transformer[K], undefined>
+  [K in Exclude<keyof Transformer, 'createTransformer'>]: Exclude<Transformer[K], undefined>
 }
 export type BabelConfig = _babel.TransformOptions
 
@@ -128,7 +129,7 @@ export interface TsJestConfig {
 }
 
 export interface TsJestHooksMap {
-  afterProcess?(args: any[], result: string | jest.TransformedSource): string | jest.TransformedSource | void
+  afterProcess?(args: any[], result: string | TransformedSource): string | TransformedSource | void
 }
 
 /**
