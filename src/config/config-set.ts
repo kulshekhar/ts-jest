@@ -394,12 +394,9 @@ export class ConfigSet {
     } else if (babelConfig.kind === 'inline') {
       base = { ...base, ...babelConfig.value }
     }
+    this.logger.debug({ babelConfig: base }, 'normalized babel config via ts-jest option')
 
-    // call babel to load options
-    const config = ConfigSet.loadConfig(base)
-
-    this.logger.debug({ babelConfig: config }, 'normalized babel config')
-    return config
+    return base
   }
 
   @Memoize()
