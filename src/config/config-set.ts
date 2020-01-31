@@ -13,7 +13,6 @@ import { LogContexts, Logger } from 'bs-logger'
 import { existsSync, readFileSync, realpathSync } from 'fs'
 import json5 = require('json5')
 import { dirname, extname, isAbsolute, join, normalize, resolve } from 'path'
-import semver = require('semver')
 import {
   CompilerOptions,
   CustomTransformers,
