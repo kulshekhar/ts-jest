@@ -13,7 +13,6 @@ import { LogContexts, Logger } from 'bs-logger'
 import { existsSync, readFileSync, realpathSync } from 'fs'
 import json5 = require('json5')
 import { dirname, extname, isAbsolute, join, normalize, resolve } from 'path'
-import semver = require('semver')
 import {
   CompilerOptions,
   CustomTransformers,
@@ -349,24 +348,6 @@ export class ConfigSet {
     }
   }
 
-  private static loadConfig(base: BabelConfig): BabelConfig {
-    // loadPartialConfig is from babel 7+, and OptionManager is backward compatible but deprecated 6 API
-    const { OptionManager, loadPartialConfig, version } = importer.babelCore(ImportReasons.BabelJest)
-    // cwd is only supported from babel >= 7
-    if (version && semver.satisfies(version, '>=6 <7')) {
-      delete base.cwd
-    }
-    // call babel to load options
-    if (typeof loadPartialConfig === 'function') {
-      const partialConfig = loadPartialConfig(base)
-      if (partialConfig) {
-        return partialConfig.options as BabelConfig
-      }
-    }
-
-    return new OptionManager().init(base) as BabelConfig
-  }
-
   @Memoize()
   get babel(): BabelConfig | undefined {
     const {
@@ -394,12 +375,9 @@ export class ConfigSet {
     } else if (babelConfig.kind === 'inline') {
       base = { ...base, ...babelConfig.value }
     }
+    this.logger.debug({ babelConfig: base }, 'normalized babel config via ts-jest option')
 
-    // call babel to load options
-    const config = ConfigSet.loadConfig(base)
-
-    this.logger.debug({ babelConfig: config }, 'normalized babel config')
-    return config
+    return base
   }
 
   @Memoize()
