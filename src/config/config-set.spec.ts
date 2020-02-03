@@ -1,6 +1,8 @@
 import { Transformer } from '@jest/transform/build/types'
 import { Config } from '@jest/types'
 import { testing } from 'bs-logger'
+import { readFileSync } from 'fs'
+import json5 = require('json5')
 import { resolve } from 'path'
 import { Diagnostic, DiagnosticCategory, ModuleKind, ParsedCommandLine, ScriptTarget } from 'typescript'
 // tslint:disable-next-line:no-duplicate-imports
@@ -84,6 +86,7 @@ describe('tsJest', () => {
       expect(get().tsConfig).toEqual(EXPECTED)
       expect(get({ tsConfig: true }).tsConfig).toEqual(EXPECTED)
     })
+
     it('should be correct for false', () => {
       expect(get({ tsConfig: false }).tsConfig).toBeUndefined()
     })
@@ -159,35 +162,32 @@ describe('tsJest', () => {
       })
       expect(cs.tsJest.babelConfig!.kind).toEqual('file')
       expect(cs.tsJest.babelConfig!.value).toContain('.babelrc-foo')
-      expect(cs.babel?.plugins).toEqual([])
-      expect(cs.babel?.presets).toEqual([])
+      expect(cs.babel).toEqual(expect.objectContaining(json5.parse(readFileSync(FILE, 'utf8'))))
     })
 
     it('should be correct for given javascript file path', () => {
-      const FILE = 'src/__mocks__/babel-foo.config.js'
       const cs = createConfigSet({
         tsJestConfig: {
-          babelConfig: FILE,
+          babelConfig: 'src/__mocks__/babel-foo.config.js',
         },
         resolve: null,
       })
       expect(cs.tsJest.babelConfig!.kind).toEqual('file')
       expect(cs.tsJest.babelConfig!.value).toContain('babel-foo.config.js')
-      expect(cs.babel?.plugins).toEqual([])
-      expect(cs.babel?.presets).toEqual([])
+      expect(cs.babel).toEqual(expect.objectContaining(require('../__mocks__/babel-foo.config')))
     })
 
     it('should be correct for imported javascript file', () => {
+      const babelConfig = require('../__mocks__/babel-foo.config')
       const cs = createConfigSet({
         jestConfig: { rootDir: 'src', cwd: 'src' } as any,
         tsJestConfig: {
-          babelConfig: require('../__mocks__/babel-foo.config'),
+          babelConfig,
         },
         resolve: null,
       })
       expect(cs.tsJest.babelConfig!.kind).toEqual('inline')
-      expect(cs.babel?.plugins).toEqual([])
-      expect(cs.babel?.presets).toEqual([])
+      expect(cs.babel).toEqual(expect.objectContaining(babelConfig))
     })
 
     it('should be correct for inline config', () => {
