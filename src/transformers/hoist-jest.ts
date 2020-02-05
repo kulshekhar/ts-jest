@@ -17,7 +17,7 @@ import { ConfigSet } from '../config/config-set'
 /**
  * What methods of `jest` should we hoist
  */
-const HOIST_METHODS = ['mock', 'unmock', 'enableAutomock', 'disableAutomock']
+const HOIST_METHODS = ['mock', 'unmock', 'enableAutomock', 'disableAutomock', 'deepUnmock']
 
 /**
  * @internal
@@ -41,20 +41,22 @@ export function factory(cs: ConfigSet) {
    */
   const ts = cs.compilerModule
 
+  function shouldHoistExpression(expression: Node): boolean {
+    return (
+      ts.isCallExpression(expression) &&
+      ts.isPropertyAccessExpression(expression.expression) &&
+      HOIST_METHODS.includes(expression.expression.name.text) &&
+      ((ts.isIdentifier(expression.expression.expression) && expression.expression.expression.text === 'jest') ||
+        shouldHoistExpression(expression.expression.expression))
+    )
+  }
+
   /**
    * Checks whether given node is a statement that we need to hoist
    * @param node The node to test
    */
   function shouldHoistNode(node: Node): node is ExpressionStatement {
-    return (
-      ts.isExpressionStatement(node) &&
-      ts.isCallExpression(node.expression) &&
-      ts.isPropertyAccessExpression(node.expression.expression) &&
-      ts.isIdentifier(node.expression.expression.expression) &&
-      node.expression.expression.expression.text === 'jest' &&
-      ts.isIdentifier(node.expression.expression.name) &&
-      HOIST_METHODS.includes(node.expression.expression.name.text)
-    )
+    return ts.isExpressionStatement(node) && shouldHoistExpression(node.expression)
   }
 
   /**

@@ -1,71 +1,47 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Hoisting jest.mock() & jest.unmock() should pass using template "default": io 1`] = `
-  ===[ FILE: hello.spec.ts ]======================================================
+exports[`Hoisting jest.disableAutomock() should pass using template "default": io-disableAutomock 1`] = `
+  ===[ FILE: disable-automock.spec.ts ]===========================================
   "use strict";
   Object.defineProperty(exports, "__esModule", { value: true });
-  jest.mock('./hello');
-  var hello_1 = require("./hello");
-  afterAll(function () {
-      jest.unmock('./hello');
-      // this should go after
-      var zz = 20;
+  jest.disableAutomock();
+  var disable_automock_1 = require("./disable-automock");
+  test('original implementation', function () {
+      // now we have the original implementation,
+      // even if we set the automocking in a jest configuration
+      expect(disable_automock_1.default()).toBe('hi!');
   });
-  describe('hello', function () {
-      var original = require.requireActual('./hello').default;
-      it('should have been mocked', function () {
-          jest.mock('foo', function () { return 'bar'; }, { virtual: true });
-          var msg = hello_1.default();
-          expect(hello_1.default).not.toBe(original);
-          expect(msg).toBeUndefined();
-          expect(hello_1.default).toHaveProperty('mock');
-          expect(require('foo')).toBe('bar');
-      });
-  });
-  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoiPGN3ZD4vaGVsbG8uc3BlYy50cyIsIm1hcHBpbmdzIjoiOztBQVFBLElBQUksQ0FBQyxJQUFJLENBQUMsU0FBUyxDQUFDLENBQUM7QUFSckIsaUNBQTRCO0FBRTVCLFFBQVEsQ0FBQztJQUdQLElBQUksQ0FBQyxNQUFNLENBQUMsU0FBUyxDQUFDLENBQUM7SUFGdkIsdUJBQXVCO0lBQ3ZCLElBQU0sRUFBRSxHQUFHLEVBQUUsQ0FBQztDQUVmLENBQUMsQ0FBQTtBQUlGLFFBQVEsQ0FBQyxPQUFPLEVBQUU7SUFDaEIsSUFBTSxRQUFRLEdBQUcsT0FBTyxDQUFDLGFBQWEsQ0FBQyxTQUFTLENBQUMsQ0FBQyxPQUFPLENBQUM7SUFDMUQsRUFBRSxDQUFDLHlCQUF5QixFQUFFO1FBTTVCLElBQUksQ0FBQyxJQUFJLENBQUMsS0FBSyxFQUFFLGNBQU0sT0FBQSxLQUFLLEVBQUwsQ0FBSyxFQUFFLEVBQUUsT0FBTyxFQUFFLElBQUksRUFBRSxDQUFDLENBQUM7UUFMakQsSUFBTSxHQUFHLEdBQUcsZUFBSyxFQUFFLENBQUM7UUFDcEIsTUFBTSxDQUFDLGVBQUssQ0FBQyxDQUFDLEdBQUcsQ0FBQyxJQUFJLENBQUMsUUFBUSxDQUFDLENBQUM7UUFDakMsTUFBTSxDQUFDLEdBQUcsQ0FBQyxDQUFDLGFBQWEsRUFBRSxDQUFDO1FBQzVCLE1BQU0sQ0FBQyxlQUFLLENBQUMsQ0FBQyxjQUFjLENBQUMsTUFBTSxDQUFDLENBQUM7UUFDckMsTUFBTSxDQUFDLE9BQU8sQ0FBQyxLQUFLLENBQUMsQ0FBQyxDQUFDLElBQUksQ0FBQyxLQUFLLENBQUMsQ0FBQztLQUVwQyxDQUFDLENBQUM7QUFDTCxDQUFDLENBQUMsQ0FBQyIsIm5hbWVzIjpbXSwic291cmNlcyI6WyI8Y3dkPi9oZWxsby5zcGVjLnRzIl0sInNvdXJjZXNDb250ZW50IjpbImltcG9ydCBoZWxsbyBmcm9tICcuL2hlbGxvJztcblxuYWZ0ZXJBbGwoKCkgPT4ge1xuICAvLyB0aGlzIHNob3VsZCBnbyBhZnRlclxuICBjb25zdCB6eiA9IDIwO1xuICBqZXN0LnVubW9jaygnLi9oZWxsbycpO1xufSlcblxuamVzdC5tb2NrKCcuL2hlbGxvJyk7XG5cbmRlc2NyaWJlKCdoZWxsbycsICgpID0+IHtcbiAgY29uc3Qgb3JpZ2luYWwgPSByZXF1aXJlLnJlcXVpcmVBY3R1YWwoJy4vaGVsbG8nKS5kZWZhdWx0O1xuICBpdCgnc2hvdWxkIGhhdmUgYmVlbiBtb2NrZWQnLCAoKSA9PiB7XG4gICAgY29uc3QgbXNnID0gaGVsbG8oKTtcbiAgICBleHBlY3QoaGVsbG8pLm5vdC50b0JlKG9yaWdpbmFsKTtcbiAgICBleHBlY3QobXNnKS50b0JlVW5kZWZpbmVkKCk7XG4gICAgZXhwZWN0KGhlbGxvKS50b0hhdmVQcm9wZXJ0eSgnbW9jaycpO1xuICAgIGV4cGVjdChyZXF1aXJlKCdmb28nKSkudG9CZSgnYmFyJyk7XG4gICAgamVzdC5tb2NrKCdmb28nLCAoKSA9PiAnYmFyJywgeyB2aXJ0dWFsOiB0cnVlIH0pO1xuICB9KTtcbn0pO1xuIl0sInZlcnNpb24iOjN9
+  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoiPGN3ZD4vZGlzYWJsZS1hdXRvbW9jay5zcGVjLnRzIiwibWFwcGluZ3MiOiI7O0FBRUEsSUFBSSxDQUFDLGVBQWUsRUFBRSxDQUFBO0FBRnRCLHVEQUFzQztBQUl0QyxJQUFJLENBQUMseUJBQXlCLEVBQUU7SUFDOUIsMkNBQTJDO0lBQzNDLHlEQUF5RDtJQUN6RCxNQUFNLENBQUMsMEJBQUssRUFBRSxDQUFDLENBQUMsSUFBSSxDQUFDLEtBQUssQ0FBQyxDQUFBO0FBQzdCLENBQUMsQ0FBQyxDQUFBIiwibmFtZXMiOltdLCJzb3VyY2VzIjpbIjxjd2Q+L2Rpc2FibGUtYXV0b21vY2suc3BlYy50cyJdLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgaGVsbG8gZnJvbSAnLi9kaXNhYmxlLWF1dG9tb2NrJ1xuXG5qZXN0LmRpc2FibGVBdXRvbW9jaygpXG5cbnRlc3QoJ29yaWdpbmFsIGltcGxlbWVudGF0aW9uJywgKCkgPT4ge1xuICAvLyBub3cgd2UgaGF2ZSB0aGUgb3JpZ2luYWwgaW1wbGVtZW50YXRpb24sXG4gIC8vIGV2ZW4gaWYgd2Ugc2V0IHRoZSBhdXRvbW9ja2luZyBpbiBhIGplc3QgY29uZmlndXJhdGlvblxuICBleHBlY3QoaGVsbG8oKSkudG9CZSgnaGkhJylcbn0pXG4iXSwidmVyc2lvbiI6M30=
   ===[ INLINE SOURCE MAPS ]=======================================================
-  file: <cwd>/hello.spec.ts
+  file: <cwd>/disable-automock.spec.ts
   mappings: >-
-    ;;AAQA,IAAI,CAAC,IAAI,CAAC,SAAS,CAAC,CAAC;AARrB,iCAA4B;AAE5B,QAAQ,CAAC;IAGP,IAAI,CAAC,MAAM,CAAC,SAAS,CAAC,CAAC;IAFvB,uBAAuB;IACvB,IAAM,EAAE,GAAG,EAAE,CAAC;CAEf,CAAC,CAAA;AAIF,QAAQ,CAAC,OAAO,EAAE;IAChB,IAAM,QAAQ,GAAG,OAAO,CAAC,aAAa,CAAC,SAAS,CAAC,CAAC,OAAO,CAAC;IAC1D,EAAE,CAAC,yBAAyB,EAAE;QAM5B,IAAI,CAAC,IAAI,CAAC,KAAK,EAAE,cAAM,OAAA,KAAK,EAAL,CAAK,EAAE,EAAE,OAAO,EAAE,IAAI,EAAE,CAAC,CAAC;QALjD,IAAM,GAAG,GAAG,eAAK,EAAE,CAAC;QACpB,MAAM,CAAC,eAAK,CAAC,CAAC,GAAG,CAAC,IAAI,CAAC,QAAQ,CAAC,CAAC;QACjC,MAAM,CAAC,GAAG,CAAC,CAAC,aAAa,EAAE,CAAC;QAC5B,MAAM,CAAC,eAAK,CAAC,CAAC,cAAc,CAAC,MAAM,CAAC,CAAC;QACrC,MAAM,CAAC,OAAO,CAAC,KAAK,CAAC,CAAC,CAAC,IAAI,CAAC,KAAK,CAAC,CAAC;KAEpC,CAAC,CAAC;AACL,CAAC,CAAC,CAAC
+    ;;AAEA,IAAI,CAAC,eAAe,EAAE,CAAA;AAFtB,uDAAsC;AAItC,IAAI,CAAC,yBAAyB,EAAE;IAC9B,2CAA2C;IAC3C,yDAAyD;IACzD,MAAM,CAAC,0BAAK,EAAE,CAAC,CAAC,IAAI,CAAC,KAAK,CAAC,CAAA;AAC7B,CAAC,CAAC,CAAA
   names: []
   sources:
-    - <cwd>/hello.spec.ts
+    - <cwd>/disable-automock.spec.ts
   sourcesContent:
     - |
-      import hello from './hello';
+      import hello from './disable-automock'
   
-      afterAll(() => {
-        // this should go after
-        const zz = 20;
-        jest.unmock('./hello');
+      jest.disableAutomock()
+  
+      test('original implementation', () => {
+        // now we have the original implementation,
+        // even if we set the automocking in a jest configuration
+        expect(hello()).toBe('hi!')
       })
-  
-      jest.mock('./hello');
-  
-      describe('hello', () => {
-        const original = require.requireActual('./hello').default;
-        it('should have been mocked', () => {
-          const msg = hello();
-          expect(hello).not.toBe(original);
-          expect(msg).toBeUndefined();
-          expect(hello).toHaveProperty('mock');
-          expect(require('foo')).toBe('bar');
-          jest.mock('foo', () => 'bar', { virtual: true });
-        });
-      });
   version: 3
   ================================================================================
 `;
 
-exports[`Hoisting jest.mock() & jest.unmock() should pass using template "default": output 1`] = `
+exports[`Hoisting jest.disableAutomock() should pass using template "default": output-disableAutomock 1`] = `
   √ jest --no-cache
   ↳ exit code: 0
   ===[ STDOUT ]===================================================================
   
   ===[ STDERR ]===================================================================
-  PASS ./hello.spec.ts
-    hello
-      √ should have been mocked
+  PASS ./disable-automock.spec.ts
+    √ original implementation
   
   Test Suites: 1 passed, 1 total
   Tests:       1 passed, 1 total
@@ -75,81 +51,52 @@ exports[`Hoisting jest.mock() & jest.unmock() should pass using template "defaul
   ================================================================================
 `;
 
-exports[`Hoisting jest.mock() & jest.unmock() should pass using template "with-babel-7": io 1`] = `
-  ===[ FILE: hello.spec.ts ]======================================================
+exports[`Hoisting jest.disableAutomock() should pass using template "with-babel-7": io-disableAutomock 1`] = `
+  ===[ FILE: disable-automock.spec.ts ]===========================================
   "use strict";
   
-  jest.mock('./hello');
+  jest.disableAutomock();
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
   
-  var hello_1 = require("./hello");
+  var disable_automock_1 = require("./disable-automock");
   
-  afterAll(function () {
-    jest.unmock('./hello'); // this should go after
-  
-    var zz = 20;
+  test('original implementation', function () {
+    // now we have the original implementation,
+    // even if we set the automocking in a jest configuration
+    expect(disable_automock_1.default()).toBe('hi!');
   });
-  describe('hello', function () {
-    var original = require.requireActual('./hello').default;
-  
-    it('should have been mocked', function () {
-      jest.mock('foo', function () {
-        return 'bar';
-      }, {
-        virtual: true
-      });
-      var msg = hello_1.default();
-      expect(hello_1.default).not.toBe(original);
-      expect(msg).toBeUndefined();
-      expect(hello_1.default).toHaveProperty('mock');
-      expect(require('foo')).toBe('bar');
-    });
-  });
-  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJtYXBwaW5ncyI6Ijs7QUFRQSxJQUFJLENBQUMsSUFBTCxDQUFVLFNBQVY7Ozs7O0FBUkEsSUFBQSxPQUFBLEdBQUEsT0FBQSxDQUFBLFNBQUEsQ0FBQTs7QUFFQSxRQUFRLENBQUMsWUFBQTtBQUdQLEVBQUEsSUFBSSxDQUFDLE1BQUwsQ0FBWSxTQUFaLEVBSE8sQ0FDUDs7QUFDQSxNQUFNLEVBQUUsR0FBRyxFQUFYO0FBRUQsQ0FKTyxDQUFSO0FBUUEsUUFBUSxDQUFDLE9BQUQsRUFBVSxZQUFBO0FBQ2hCLE1BQU0sUUFBUSxHQUFHLE9BQU8sQ0FBQyxhQUFSLENBQXNCLFNBQXRCLEVBQWlDLE9BQWxEOztBQUNBLEVBQUEsRUFBRSxDQUFDLHlCQUFELEVBQTRCLFlBQUE7QUFNNUIsSUFBQSxJQUFJLENBQUMsSUFBTCxDQUFVLEtBQVYsRUFBaUIsWUFBQTtBQUFNLGFBQUEsS0FBQTtBQUFLLEtBQTVCLEVBQThCO0FBQUUsTUFBQSxPQUFPLEVBQUU7QUFBWCxLQUE5QjtBQUxBLFFBQU0sR0FBRyxHQUFHLE9BQUEsQ0FBQSxPQUFBLEVBQVo7QUFDQSxJQUFBLE1BQU0sQ0FBQyxPQUFBLENBQUEsT0FBRCxDQUFOLENBQWMsR0FBZCxDQUFrQixJQUFsQixDQUF1QixRQUF2QjtBQUNBLElBQUEsTUFBTSxDQUFDLEdBQUQsQ0FBTixDQUFZLGFBQVo7QUFDQSxJQUFBLE1BQU0sQ0FBQyxPQUFBLENBQUEsT0FBRCxDQUFOLENBQWMsY0FBZCxDQUE2QixNQUE3QjtBQUNBLElBQUEsTUFBTSxDQUFDLE9BQU8sQ0FBQyxLQUFELENBQVIsQ0FBTixDQUF1QixJQUF2QixDQUE0QixLQUE1QjtBQUVELEdBUEMsQ0FBRjtBQVFELENBVk8sQ0FBUiIsIm5hbWVzIjpbXSwic291cmNlcyI6WyI8Y3dkPi9oZWxsby5zcGVjLnRzIl0sInNvdXJjZXNDb250ZW50IjpbImltcG9ydCBoZWxsbyBmcm9tICcuL2hlbGxvJztcblxuYWZ0ZXJBbGwoKCkgPT4ge1xuICAvLyB0aGlzIHNob3VsZCBnbyBhZnRlclxuICBjb25zdCB6eiA9IDIwO1xuICBqZXN0LnVubW9jaygnLi9oZWxsbycpO1xufSlcblxuamVzdC5tb2NrKCcuL2hlbGxvJyk7XG5cbmRlc2NyaWJlKCdoZWxsbycsICgpID0+IHtcbiAgY29uc3Qgb3JpZ2luYWwgPSByZXF1aXJlLnJlcXVpcmVBY3R1YWwoJy4vaGVsbG8nKS5kZWZhdWx0O1xuICBpdCgnc2hvdWxkIGhhdmUgYmVlbiBtb2NrZWQnLCAoKSA9PiB7XG4gICAgY29uc3QgbXNnID0gaGVsbG8oKTtcbiAgICBleHBlY3QoaGVsbG8pLm5vdC50b0JlKG9yaWdpbmFsKTtcbiAgICBleHBlY3QobXNnKS50b0JlVW5kZWZpbmVkKCk7XG4gICAgZXhwZWN0KGhlbGxvKS50b0hhdmVQcm9wZXJ0eSgnbW9jaycpO1xuICAgIGV4cGVjdChyZXF1aXJlKCdmb28nKSkudG9CZSgnYmFyJyk7XG4gICAgamVzdC5tb2NrKCdmb28nLCAoKSA9PiAnYmFyJywgeyB2aXJ0dWFsOiB0cnVlIH0pO1xuICB9KTtcbn0pO1xuIl0sInZlcnNpb24iOjN9
+  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJtYXBwaW5ncyI6Ijs7QUFFQSxJQUFJLENBQUMsZUFBTDs7Ozs7QUFGQSxJQUFBLGtCQUFBLEdBQUEsT0FBQSxDQUFBLG9CQUFBLENBQUE7O0FBSUEsSUFBSSxDQUFDLHlCQUFELEVBQTRCLFlBQUE7QUFDOUI7QUFDQTtBQUNBLEVBQUEsTUFBTSxDQUFDLGtCQUFBLENBQUEsT0FBQSxFQUFELENBQU4sQ0FBZ0IsSUFBaEIsQ0FBcUIsS0FBckI7QUFDRCxDQUpHLENBQUoiLCJuYW1lcyI6W10sInNvdXJjZXMiOlsiPGN3ZD4vZGlzYWJsZS1hdXRvbW9jay5zcGVjLnRzIl0sInNvdXJjZXNDb250ZW50IjpbImltcG9ydCBoZWxsbyBmcm9tICcuL2Rpc2FibGUtYXV0b21vY2snXG5cbmplc3QuZGlzYWJsZUF1dG9tb2NrKClcblxudGVzdCgnb3JpZ2luYWwgaW1wbGVtZW50YXRpb24nLCAoKSA9PiB7XG4gIC8vIG5vdyB3ZSBoYXZlIHRoZSBvcmlnaW5hbCBpbXBsZW1lbnRhdGlvbixcbiAgLy8gZXZlbiBpZiB3ZSBzZXQgdGhlIGF1dG9tb2NraW5nIGluIGEgamVzdCBjb25maWd1cmF0aW9uXG4gIGV4cGVjdChoZWxsbygpKS50b0JlKCdoaSEnKVxufSlcbiJdLCJ2ZXJzaW9uIjozfQ==
   ===[ INLINE SOURCE MAPS ]=======================================================
   mappings: >-
-    ;;AAQA,IAAI,CAAC,IAAL,CAAU,SAAV;;;;;AARA,IAAA,OAAA,GAAA,OAAA,CAAA,SAAA,CAAA;;AAEA,QAAQ,CAAC,YAAA;AAGP,EAAA,IAAI,CAAC,MAAL,CAAY,SAAZ,EAHO,CACP;;AACA,MAAM,EAAE,GAAG,EAAX;AAED,CAJO,CAAR;AAQA,QAAQ,CAAC,OAAD,EAAU,YAAA;AAChB,MAAM,QAAQ,GAAG,OAAO,CAAC,aAAR,CAAsB,SAAtB,EAAiC,OAAlD;;AACA,EAAA,EAAE,CAAC,yBAAD,EAA4B,YAAA;AAM5B,IAAA,IAAI,CAAC,IAAL,CAAU,KAAV,EAAiB,YAAA;AAAM,aAAA,KAAA;AAAK,KAA5B,EAA8B;AAAE,MAAA,OAAO,EAAE;AAAX,KAA9B;AALA,QAAM,GAAG,GAAG,OAAA,CAAA,OAAA,EAAZ;AACA,IAAA,MAAM,CAAC,OAAA,CAAA,OAAD,CAAN,CAAc,GAAd,CAAkB,IAAlB,CAAuB,QAAvB;AACA,IAAA,MAAM,CAAC,GAAD,CAAN,CAAY,aAAZ;AACA,IAAA,MAAM,CAAC,OAAA,CAAA,OAAD,CAAN,CAAc,cAAd,CAA6B,MAA7B;AACA,IAAA,MAAM,CAAC,OAAO,CAAC,KAAD,CAAR,CAAN,CAAuB,IAAvB,CAA4B,KAA5B;AAED,GAPC,CAAF;AAQD,CAVO,CAAR
+    ;;AAEA,IAAI,CAAC,eAAL;;;;;AAFA,IAAA,kBAAA,GAAA,OAAA,CAAA,oBAAA,CAAA;;AAIA,IAAI,CAAC,yBAAD,EAA4B,YAAA;AAC9B;AACA;AACA,EAAA,MAAM,CAAC,kBAAA,CAAA,OAAA,EAAD,CAAN,CAAgB,IAAhB,CAAqB,KAArB;AACD,CAJG,CAAJ
   names: []
   sources:
-    - <cwd>/hello.spec.ts
+    - <cwd>/disable-automock.spec.ts
   sourcesContent:
     - |
-      import hello from './hello';
+      import hello from './disable-automock'
   
-      afterAll(() => {
-        // this should go after
-        const zz = 20;
-        jest.unmock('./hello');
+      jest.disableAutomock()
+  
+      test('original implementation', () => {
+        // now we have the original implementation,
+        // even if we set the automocking in a jest configuration
+        expect(hello()).toBe('hi!')
       })
-  
-      jest.mock('./hello');
-  
-      describe('hello', () => {
-        const original = require.requireActual('./hello').default;
-        it('should have been mocked', () => {
-          const msg = hello();
-          expect(hello).not.toBe(original);
-          expect(msg).toBeUndefined();
-          expect(hello).toHaveProperty('mock');
-          expect(require('foo')).toBe('bar');
-          jest.mock('foo', () => 'bar', { virtual: true });
-        });
-      });
   version: 3
   ================================================================================
 `;
 
-exports[`Hoisting jest.mock() & jest.unmock() should pass using template "with-babel-7": output 1`] = `
+exports[`Hoisting jest.disableAutomock() should pass using template "with-babel-7": output-disableAutomock 1`] = `
   √ jest --no-cache
   ↳ exit code: 0
   ===[ STDOUT ]===================================================================
   
   ===[ STDERR ]===================================================================
-  PASS ./hello.spec.ts
-    hello
-      √ should have been mocked
+  PASS ./disable-automock.spec.ts
+    √ original implementation
   
   Test Suites: 1 passed, 1 total
   Tests:       1 passed, 1 total
@@ -159,81 +106,52 @@ exports[`Hoisting jest.mock() & jest.unmock() should pass using template "with-b
   ================================================================================
 `;
 
-exports[`Hoisting jest.mock() & jest.unmock() should pass using template "with-babel-7-string-config": io 1`] = `
-  ===[ FILE: hello.spec.ts ]======================================================
+exports[`Hoisting jest.disableAutomock() should pass using template "with-babel-7-string-config": io-disableAutomock 1`] = `
+  ===[ FILE: disable-automock.spec.ts ]===========================================
   "use strict";
   
-  jest.mock('./hello');
+  jest.disableAutomock();
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
   
-  var hello_1 = require("./hello");
+  var disable_automock_1 = require("./disable-automock");
   
-  afterAll(function () {
-    jest.unmock('./hello'); // this should go after
-  
-    var zz = 20;
+  test('original implementation', function () {
+    // now we have the original implementation,
+    // even if we set the automocking in a jest configuration
+    expect(disable_automock_1.default()).toBe('hi!');
   });
-  describe('hello', function () {
-    var original = require.requireActual('./hello').default;
-  
-    it('should have been mocked', function () {
-      jest.mock('foo', function () {
-        return 'bar';
-      }, {
-        virtual: true
-      });
-      var msg = hello_1.default();
-      expect(hello_1.default).not.toBe(original);
-      expect(msg).toBeUndefined();
-      expect(hello_1.default).toHaveProperty('mock');
-      expect(require('foo')).toBe('bar');
-    });
-  });
-  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJtYXBwaW5ncyI6Ijs7QUFRQSxJQUFJLENBQUMsSUFBTCxDQUFVLFNBQVY7Ozs7O0FBUkEsSUFBQSxPQUFBLEdBQUEsT0FBQSxDQUFBLFNBQUEsQ0FBQTs7QUFFQSxRQUFRLENBQUMsWUFBQTtBQUdQLEVBQUEsSUFBSSxDQUFDLE1BQUwsQ0FBWSxTQUFaLEVBSE8sQ0FDUDs7QUFDQSxNQUFNLEVBQUUsR0FBRyxFQUFYO0FBRUQsQ0FKTyxDQUFSO0FBUUEsUUFBUSxDQUFDLE9BQUQsRUFBVSxZQUFBO0FBQ2hCLE1BQU0sUUFBUSxHQUFHLE9BQU8sQ0FBQyxhQUFSLENBQXNCLFNBQXRCLEVBQWlDLE9BQWxEOztBQUNBLEVBQUEsRUFBRSxDQUFDLHlCQUFELEVBQTRCLFlBQUE7QUFNNUIsSUFBQSxJQUFJLENBQUMsSUFBTCxDQUFVLEtBQVYsRUFBaUIsWUFBQTtBQUFNLGFBQUEsS0FBQTtBQUFLLEtBQTVCLEVBQThCO0FBQUUsTUFBQSxPQUFPLEVBQUU7QUFBWCxLQUE5QjtBQUxBLFFBQU0sR0FBRyxHQUFHLE9BQUEsQ0FBQSxPQUFBLEVBQVo7QUFDQSxJQUFBLE1BQU0sQ0FBQyxPQUFBLENBQUEsT0FBRCxDQUFOLENBQWMsR0FBZCxDQUFrQixJQUFsQixDQUF1QixRQUF2QjtBQUNBLElBQUEsTUFBTSxDQUFDLEdBQUQsQ0FBTixDQUFZLGFBQVo7QUFDQSxJQUFBLE1BQU0sQ0FBQyxPQUFBLENBQUEsT0FBRCxDQUFOLENBQWMsY0FBZCxDQUE2QixNQUE3QjtBQUNBLElBQUEsTUFBTSxDQUFDLE9BQU8sQ0FBQyxLQUFELENBQVIsQ0FBTixDQUF1QixJQUF2QixDQUE0QixLQUE1QjtBQUVELEdBUEMsQ0FBRjtBQVFELENBVk8sQ0FBUiIsIm5hbWVzIjpbXSwic291cmNlcyI6WyI8Y3dkPi9oZWxsby5zcGVjLnRzIl0sInNvdXJjZXNDb250ZW50IjpbImltcG9ydCBoZWxsbyBmcm9tICcuL2hlbGxvJztcblxuYWZ0ZXJBbGwoKCkgPT4ge1xuICAvLyB0aGlzIHNob3VsZCBnbyBhZnRlclxuICBjb25zdCB6eiA9IDIwO1xuICBqZXN0LnVubW9jaygnLi9oZWxsbycpO1xufSlcblxuamVzdC5tb2NrKCcuL2hlbGxvJyk7XG5cbmRlc2NyaWJlKCdoZWxsbycsICgpID0+IHtcbiAgY29uc3Qgb3JpZ2luYWwgPSByZXF1aXJlLnJlcXVpcmVBY3R1YWwoJy4vaGVsbG8nKS5kZWZhdWx0O1xuICBpdCgnc2hvdWxkIGhhdmUgYmVlbiBtb2NrZWQnLCAoKSA9PiB7XG4gICAgY29uc3QgbXNnID0gaGVsbG8oKTtcbiAgICBleHBlY3QoaGVsbG8pLm5vdC50b0JlKG9yaWdpbmFsKTtcbiAgICBleHBlY3QobXNnKS50b0JlVW5kZWZpbmVkKCk7XG4gICAgZXhwZWN0KGhlbGxvKS50b0hhdmVQcm9wZXJ0eSgnbW9jaycpO1xuICAgIGV4cGVjdChyZXF1aXJlKCdmb28nKSkudG9CZSgnYmFyJyk7XG4gICAgamVzdC5tb2NrKCdmb28nLCAoKSA9PiAnYmFyJywgeyB2aXJ0dWFsOiB0cnVlIH0pO1xuICB9KTtcbn0pO1xuIl0sInZlcnNpb24iOjN9
+  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJtYXBwaW5ncyI6Ijs7QUFFQSxJQUFJLENBQUMsZUFBTDs7Ozs7QUFGQSxJQUFBLGtCQUFBLEdBQUEsT0FBQSxDQUFBLG9CQUFBLENBQUE7O0FBSUEsSUFBSSxDQUFDLHlCQUFELEVBQTRCLFlBQUE7QUFDOUI7QUFDQTtBQUNBLEVBQUEsTUFBTSxDQUFDLGtCQUFBLENBQUEsT0FBQSxFQUFELENBQU4sQ0FBZ0IsSUFBaEIsQ0FBcUIsS0FBckI7QUFDRCxDQUpHLENBQUoiLCJuYW1lcyI6W10sInNvdXJjZXMiOlsiPGN3ZD4vZGlzYWJsZS1hdXRvbW9jay5zcGVjLnRzIl0sInNvdXJjZXNDb250ZW50IjpbImltcG9ydCBoZWxsbyBmcm9tICcuL2Rpc2FibGUtYXV0b21vY2snXG5cbmplc3QuZGlzYWJsZUF1dG9tb2NrKClcblxudGVzdCgnb3JpZ2luYWwgaW1wbGVtZW50YXRpb24nLCAoKSA9PiB7XG4gIC8vIG5vdyB3ZSBoYXZlIHRoZSBvcmlnaW5hbCBpbXBsZW1lbnRhdGlvbixcbiAgLy8gZXZlbiBpZiB3ZSBzZXQgdGhlIGF1dG9tb2NraW5nIGluIGEgamVzdCBjb25maWd1cmF0aW9uXG4gIGV4cGVjdChoZWxsbygpKS50b0JlKCdoaSEnKVxufSlcbiJdLCJ2ZXJzaW9uIjozfQ==
   ===[ INLINE SOURCE MAPS ]=======================================================
   mappings: >-
-    ;;AAQA,IAAI,CAAC,IAAL,CAAU,SAAV;;;;;AARA,IAAA,OAAA,GAAA,OAAA,CAAA,SAAA,CAAA;;AAEA,QAAQ,CAAC,YAAA;AAGP,EAAA,IAAI,CAAC,MAAL,CAAY,SAAZ,EAHO,CACP;;AACA,MAAM,EAAE,GAAG,EAAX;AAED,CAJO,CAAR;AAQA,QAAQ,CAAC,OAAD,EAAU,YAAA;AAChB,MAAM,QAAQ,GAAG,OAAO,CAAC,aAAR,CAAsB,SAAtB,EAAiC,OAAlD;;AACA,EAAA,EAAE,CAAC,yBAAD,EAA4B,YAAA;AAM5B,IAAA,IAAI,CAAC,IAAL,CAAU,KAAV,EAAiB,YAAA;AAAM,aAAA,KAAA;AAAK,KAA5B,EAA8B;AAAE,MAAA,OAAO,EAAE;AAAX,KAA9B;AALA,QAAM,GAAG,GAAG,OAAA,CAAA,OAAA,EAAZ;AACA,IAAA,MAAM,CAAC,OAAA,CAAA,OAAD,CAAN,CAAc,GAAd,CAAkB,IAAlB,CAAuB,QAAvB;AACA,IAAA,MAAM,CAAC,GAAD,CAAN,CAAY,aAAZ;AACA,IAAA,MAAM,CAAC,OAAA,CAAA,OAAD,CAAN,CAAc,cAAd,CAA6B,MAA7B;AACA,IAAA,MAAM,CAAC,OAAO,CAAC,KAAD,CAAR,CAAN,CAAuB,IAAvB,CAA4B,KAA5B;AAED,GAPC,CAAF;AAQD,CAVO,CAAR
+    ;;AAEA,IAAI,CAAC,eAAL;;;;;AAFA,IAAA,kBAAA,GAAA,OAAA,CAAA,oBAAA,CAAA;;AAIA,IAAI,CAAC,yBAAD,EAA4B,YAAA;AAC9B;AACA;AACA,EAAA,MAAM,CAAC,kBAAA,CAAA,OAAA,EAAD,CAAN,CAAgB,IAAhB,CAAqB,KAArB;AACD,CAJG,CAAJ
   names: []
   sources:
-    - <cwd>/hello.spec.ts
+    - <cwd>/disable-automock.spec.ts
   sourcesContent:
     - |
-      import hello from './hello';
+      import hello from './disable-automock'
   
-      afterAll(() => {
-        // this should go after
-        const zz = 20;
-        jest.unmock('./hello');
+      jest.disableAutomock()
+  
+      test('original implementation', () => {
+        // now we have the original implementation,
+        // even if we set the automocking in a jest configuration
+        expect(hello()).toBe('hi!')
       })
-  
-      jest.mock('./hello');
-  
-      describe('hello', () => {
-        const original = require.requireActual('./hello').default;
-        it('should have been mocked', () => {
-          const msg = hello();
-          expect(hello).not.toBe(original);
-          expect(msg).toBeUndefined();
-          expect(hello).toHaveProperty('mock');
-          expect(require('foo')).toBe('bar');
-          jest.mock('foo', () => 'bar', { virtual: true });
-        });
-      });
   version: 3
   ================================================================================
 `;
 
-exports[`Hoisting jest.mock() & jest.unmock() should pass using template "with-babel-7-string-config": output 1`] = `
+exports[`Hoisting jest.disableAutomock() should pass using template "with-babel-7-string-config": output-disableAutomock 1`] = `
   √ jest --no-cache
   ↳ exit code: 0
   ===[ STDOUT ]===================================================================
   
   ===[ STDERR ]===================================================================
-  PASS ./hello.spec.ts
-    hello
-      √ should have been mocked
+  PASS ./disable-automock.spec.ts
+    √ original implementation
   
   Test Suites: 1 passed, 1 total
   Tests:       1 passed, 1 total
@@ -243,72 +161,512 @@ exports[`Hoisting jest.mock() & jest.unmock() should pass using template "with-b
   ================================================================================
 `;
 
-exports[`Hoisting jest.mock() & jest.unmock() should pass using template "with-typescript-2-7": io 1`] = `
-  ===[ FILE: hello.spec.ts ]======================================================
+exports[`Hoisting jest.disableAutomock() should pass using template "with-typescript-2-7": io-disableAutomock 1`] = `
+  ===[ FILE: disable-automock.spec.ts ]===========================================
   "use strict";
   Object.defineProperty(exports, "__esModule", { value: true });
-  jest.mock('./hello');
-  var hello_1 = require("./hello");
-  afterAll(function () {
-      jest.unmock('./hello');
-      // this should go after
-      var zz = 20;
+  jest.disableAutomock();
+  var disable_automock_1 = require("./disable-automock");
+  test('original implementation', function () {
+      // now we have the original implementation,
+      // even if we set the automocking in a jest configuration
+      expect(disable_automock_1.default()).toBe('hi!');
   });
-  describe('hello', function () {
-      var original = require.requireActual('./hello').default;
-      it('should have been mocked', function () {
-          jest.mock('foo', function () { return 'bar'; }, { virtual: true });
-          var msg = hello_1.default();
-          expect(hello_1.default).not.toBe(original);
-          expect(msg).toBeUndefined();
-          expect(hello_1.default).toHaveProperty('mock');
-          expect(require('foo')).toBe('bar');
-      });
-  });
-  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoiPGN3ZD4vaGVsbG8uc3BlYy50cyIsIm1hcHBpbmdzIjoiOztBQVFBLElBQUksQ0FBQyxJQUFJLENBQUMsU0FBUyxDQUFDLENBQUM7QUFSckIsaUNBQTRCO0FBRTVCLFFBQVEsQ0FBQztJQUdQLElBQUksQ0FBQyxNQUFNLENBQUMsU0FBUyxDQUFDLENBQUM7SUFGdkIsdUJBQXVCO0lBQ3ZCLElBQU0sRUFBRSxHQUFHLEVBQUUsQ0FBQztDQUVmLENBQUMsQ0FBQTtBQUlGLFFBQVEsQ0FBQyxPQUFPLEVBQUU7SUFDaEIsSUFBTSxRQUFRLEdBQUcsT0FBTyxDQUFDLGFBQWEsQ0FBQyxTQUFTLENBQUMsQ0FBQyxPQUFPLENBQUM7SUFDMUQsRUFBRSxDQUFDLHlCQUF5QixFQUFFO1FBTTVCLElBQUksQ0FBQyxJQUFJLENBQUMsS0FBSyxFQUFFLGNBQU0sT0FBQSxLQUFLLEVBQUwsQ0FBSyxFQUFFLEVBQUUsT0FBTyxFQUFFLElBQUksRUFBRSxDQUFDLENBQUM7UUFMakQsSUFBTSxHQUFHLEdBQUcsZUFBSyxFQUFFLENBQUM7UUFDcEIsTUFBTSxDQUFDLGVBQUssQ0FBQyxDQUFDLEdBQUcsQ0FBQyxJQUFJLENBQUMsUUFBUSxDQUFDLENBQUM7UUFDakMsTUFBTSxDQUFDLEdBQUcsQ0FBQyxDQUFDLGFBQWEsRUFBRSxDQUFDO1FBQzVCLE1BQU0sQ0FBQyxlQUFLLENBQUMsQ0FBQyxjQUFjLENBQUMsTUFBTSxDQUFDLENBQUM7UUFDckMsTUFBTSxDQUFDLE9BQU8sQ0FBQyxLQUFLLENBQUMsQ0FBQyxDQUFDLElBQUksQ0FBQyxLQUFLLENBQUMsQ0FBQztLQUVwQyxDQUFDLENBQUM7QUFDTCxDQUFDLENBQUMsQ0FBQyIsIm5hbWVzIjpbXSwic291cmNlcyI6WyI8Y3dkPi9oZWxsby5zcGVjLnRzIl0sInNvdXJjZXNDb250ZW50IjpbImltcG9ydCBoZWxsbyBmcm9tICcuL2hlbGxvJztcblxuYWZ0ZXJBbGwoKCkgPT4ge1xuICAvLyB0aGlzIHNob3VsZCBnbyBhZnRlclxuICBjb25zdCB6eiA9IDIwO1xuICBqZXN0LnVubW9jaygnLi9oZWxsbycpO1xufSlcblxuamVzdC5tb2NrKCcuL2hlbGxvJyk7XG5cbmRlc2NyaWJlKCdoZWxsbycsICgpID0+IHtcbiAgY29uc3Qgb3JpZ2luYWwgPSByZXF1aXJlLnJlcXVpcmVBY3R1YWwoJy4vaGVsbG8nKS5kZWZhdWx0O1xuICBpdCgnc2hvdWxkIGhhdmUgYmVlbiBtb2NrZWQnLCAoKSA9PiB7XG4gICAgY29uc3QgbXNnID0gaGVsbG8oKTtcbiAgICBleHBlY3QoaGVsbG8pLm5vdC50b0JlKG9yaWdpbmFsKTtcbiAgICBleHBlY3QobXNnKS50b0JlVW5kZWZpbmVkKCk7XG4gICAgZXhwZWN0KGhlbGxvKS50b0hhdmVQcm9wZXJ0eSgnbW9jaycpO1xuICAgIGV4cGVjdChyZXF1aXJlKCdmb28nKSkudG9CZSgnYmFyJyk7XG4gICAgamVzdC5tb2NrKCdmb28nLCAoKSA9PiAnYmFyJywgeyB2aXJ0dWFsOiB0cnVlIH0pO1xuICB9KTtcbn0pO1xuIl0sInZlcnNpb24iOjN9
+  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoiPGN3ZD4vZGlzYWJsZS1hdXRvbW9jay5zcGVjLnRzIiwibWFwcGluZ3MiOiI7O0FBRUEsSUFBSSxDQUFDLGVBQWUsRUFBRSxDQUFBO0FBRnRCLHVEQUFzQztBQUl0QyxJQUFJLENBQUMseUJBQXlCLEVBQUU7SUFDOUIsMkNBQTJDO0lBQzNDLHlEQUF5RDtJQUN6RCxNQUFNLENBQUMsMEJBQUssRUFBRSxDQUFDLENBQUMsSUFBSSxDQUFDLEtBQUssQ0FBQyxDQUFBO0FBQzdCLENBQUMsQ0FBQyxDQUFBIiwibmFtZXMiOltdLCJzb3VyY2VzIjpbIjxjd2Q+L2Rpc2FibGUtYXV0b21vY2suc3BlYy50cyJdLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgaGVsbG8gZnJvbSAnLi9kaXNhYmxlLWF1dG9tb2NrJ1xuXG5qZXN0LmRpc2FibGVBdXRvbW9jaygpXG5cbnRlc3QoJ29yaWdpbmFsIGltcGxlbWVudGF0aW9uJywgKCkgPT4ge1xuICAvLyBub3cgd2UgaGF2ZSB0aGUgb3JpZ2luYWwgaW1wbGVtZW50YXRpb24sXG4gIC8vIGV2ZW4gaWYgd2Ugc2V0IHRoZSBhdXRvbW9ja2luZyBpbiBhIGplc3QgY29uZmlndXJhdGlvblxuICBleHBlY3QoaGVsbG8oKSkudG9CZSgnaGkhJylcbn0pXG4iXSwidmVyc2lvbiI6M30=
   ===[ INLINE SOURCE MAPS ]=======================================================
-  file: <cwd>/hello.spec.ts
+  file: <cwd>/disable-automock.spec.ts
   mappings: >-
-    ;;AAQA,IAAI,CAAC,IAAI,CAAC,SAAS,CAAC,CAAC;AARrB,iCAA4B;AAE5B,QAAQ,CAAC;IAGP,IAAI,CAAC,MAAM,CAAC,SAAS,CAAC,CAAC;IAFvB,uBAAuB;IACvB,IAAM,EAAE,GAAG,EAAE,CAAC;CAEf,CAAC,CAAA;AAIF,QAAQ,CAAC,OAAO,EAAE;IAChB,IAAM,QAAQ,GAAG,OAAO,CAAC,aAAa,CAAC,SAAS,CAAC,CAAC,OAAO,CAAC;IAC1D,EAAE,CAAC,yBAAyB,EAAE;QAM5B,IAAI,CAAC,IAAI,CAAC,KAAK,EAAE,cAAM,OAAA,KAAK,EAAL,CAAK,EAAE,EAAE,OAAO,EAAE,IAAI,EAAE,CAAC,CAAC;QALjD,IAAM,GAAG,GAAG,eAAK,EAAE,CAAC;QACpB,MAAM,CAAC,eAAK,CAAC,CAAC,GAAG,CAAC,IAAI,CAAC,QAAQ,CAAC,CAAC;QACjC,MAAM,CAAC,GAAG,CAAC,CAAC,aAAa,EAAE,CAAC;QAC5B,MAAM,CAAC,eAAK,CAAC,CAAC,cAAc,CAAC,MAAM,CAAC,CAAC;QACrC,MAAM,CAAC,OAAO,CAAC,KAAK,CAAC,CAAC,CAAC,IAAI,CAAC,KAAK,CAAC,CAAC;KAEpC,CAAC,CAAC;AACL,CAAC,CAAC,CAAC
+    ;;AAEA,IAAI,CAAC,eAAe,EAAE,CAAA;AAFtB,uDAAsC;AAItC,IAAI,CAAC,yBAAyB,EAAE;IAC9B,2CAA2C;IAC3C,yDAAyD;IACzD,MAAM,CAAC,0BAAK,EAAE,CAAC,CAAC,IAAI,CAAC,KAAK,CAAC,CAAA;AAC7B,CAAC,CAAC,CAAA
   names: []
   sources:
-    - <cwd>/hello.spec.ts
+    - <cwd>/disable-automock.spec.ts
   sourcesContent:
     - |
-      import hello from './hello';
+      import hello from './disable-automock'
   
-      afterAll(() => {
-        // this should go after
-        const zz = 20;
-        jest.unmock('./hello');
+      jest.disableAutomock()
+  
+      test('original implementation', () => {
+        // now we have the original implementation,
+        // even if we set the automocking in a jest configuration
+        expect(hello()).toBe('hi!')
       })
-  
-      jest.mock('./hello');
-  
-      describe('hello', () => {
-        const original = require.requireActual('./hello').default;
-        it('should have been mocked', () => {
-          const msg = hello();
-          expect(hello).not.toBe(original);
-          expect(msg).toBeUndefined();
-          expect(hello).toHaveProperty('mock');
-          expect(require('foo')).toBe('bar');
-          jest.mock('foo', () => 'bar', { virtual: true });
-        });
-      });
   version: 3
   ================================================================================
 `;
 
-exports[`Hoisting jest.mock() & jest.unmock() should pass using template "with-typescript-2-7": output 1`] = `
+exports[`Hoisting jest.disableAutomock() should pass using template "with-typescript-2-7": output-disableAutomock 1`] = `
   √ jest --no-cache
   ↳ exit code: 0
   ===[ STDOUT ]===================================================================
   
   ===[ STDERR ]===================================================================
-  PASS ./hello.spec.ts
-    hello
-      √ should have been mocked
+  PASS ./disable-automock.spec.ts
+    √ original implementation
+  
+  Test Suites: 1 passed, 1 total
+  Tests:       1 passed, 1 total
+  Snapshots:   0 total
+  Time:        XXs
+  Ran all test suites.
+  ================================================================================
+`;
+
+exports[`Hoisting jest.enableAutomock() should pass using template "default": io-enableAutomock 1`] = `
+  ===[ FILE: enable-automock.spec.ts ]============================================
+  "use strict";
+  Object.defineProperty(exports, "__esModule", { value: true });
+  jest.enableAutomock();
+  var enable_automock_1 = require("./enable-automock");
+  test('original implementation', function () {
+      // now we have the mocked implementation,
+      // @ts-ignore
+      expect(enable_automock_1.default._isMockFunction).toBeTruthy();
+  });
+  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoiPGN3ZD4vZW5hYmxlLWF1dG9tb2NrLnNwZWMudHMiLCJtYXBwaW5ncyI6Ijs7QUFBQSxJQUFJLENBQUMsY0FBYyxFQUFFLENBQUE7QUFFckIscURBQXFDO0FBRXJDLElBQUksQ0FBQyx5QkFBeUIsRUFBRTtJQUM5Qix5Q0FBeUM7SUFDekMsYUFBYTtJQUNiLE1BQU0sQ0FBQyx5QkFBSyxDQUFDLGVBQWUsQ0FBQyxDQUFDLFVBQVUsRUFBRSxDQUFBO0FBQzVDLENBQUMsQ0FBQyxDQUFBIiwibmFtZXMiOltdLCJzb3VyY2VzIjpbIjxjd2Q+L2VuYWJsZS1hdXRvbW9jay5zcGVjLnRzIl0sInNvdXJjZXNDb250ZW50IjpbImplc3QuZW5hYmxlQXV0b21vY2soKVxuXG5pbXBvcnQgaGVsbG8gZnJvbSAnLi9lbmFibGUtYXV0b21vY2snXG5cbnRlc3QoJ29yaWdpbmFsIGltcGxlbWVudGF0aW9uJywgKCkgPT4ge1xuICAvLyBub3cgd2UgaGF2ZSB0aGUgbW9ja2VkIGltcGxlbWVudGF0aW9uLFxuICAvLyBAdHMtaWdub3JlXG4gIGV4cGVjdChoZWxsby5faXNNb2NrRnVuY3Rpb24pLnRvQmVUcnV0aHkoKVxufSlcbiJdLCJ2ZXJzaW9uIjozfQ==
+  ===[ INLINE SOURCE MAPS ]=======================================================
+  file: <cwd>/enable-automock.spec.ts
+  mappings: >-
+    ;;AAAA,IAAI,CAAC,cAAc,EAAE,CAAA;AAErB,qDAAqC;AAErC,IAAI,CAAC,yBAAyB,EAAE;IAC9B,yCAAyC;IACzC,aAAa;IACb,MAAM,CAAC,yBAAK,CAAC,eAAe,CAAC,CAAC,UAAU,EAAE,CAAA;AAC5C,CAAC,CAAC,CAAA
+  names: []
+  sources:
+    - <cwd>/enable-automock.spec.ts
+  sourcesContent:
+    - |
+      jest.enableAutomock()
+  
+      import hello from './enable-automock'
+  
+      test('original implementation', () => {
+        // now we have the mocked implementation,
+        // @ts-ignore
+        expect(hello._isMockFunction).toBeTruthy()
+      })
+  version: 3
+  ================================================================================
+`;
+
+exports[`Hoisting jest.enableAutomock() should pass using template "default": output-enableAutomock 1`] = `
+  √ jest --no-cache
+  ↳ exit code: 0
+  ===[ STDOUT ]===================================================================
+  
+  ===[ STDERR ]===================================================================
+  PASS ./enable-automock.spec.ts
+    √ original implementation
+  
+  Test Suites: 1 passed, 1 total
+  Tests:       1 passed, 1 total
+  Snapshots:   0 total
+  Time:        XXs
+  Ran all test suites.
+  ================================================================================
+`;
+
+exports[`Hoisting jest.enableAutomock() should pass using template "with-babel-7": io-enableAutomock 1`] = `
+  ===[ FILE: enable-automock.spec.ts ]============================================
+  "use strict";
+  
+  jest.enableAutomock();
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  
+  var enable_automock_1 = require("./enable-automock");
+  
+  test('original implementation', function () {
+    // now we have the mocked implementation,
+    // @ts-ignore
+    expect(enable_automock_1.default._isMockFunction).toBeTruthy();
+  });
+  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJtYXBwaW5ncyI6Ijs7QUFBQSxJQUFJLENBQUMsY0FBTDs7Ozs7QUFFQSxJQUFBLGlCQUFBLEdBQUEsT0FBQSxDQUFBLG1CQUFBLENBQUE7O0FBRUEsSUFBSSxDQUFDLHlCQUFELEVBQTRCLFlBQUE7QUFDOUI7QUFDQTtBQUNBLEVBQUEsTUFBTSxDQUFDLGlCQUFBLENBQUEsT0FBQSxDQUFNLGVBQVAsQ0FBTixDQUE4QixVQUE5QjtBQUNELENBSkcsQ0FBSiIsIm5hbWVzIjpbXSwic291cmNlcyI6WyI8Y3dkPi9lbmFibGUtYXV0b21vY2suc3BlYy50cyJdLCJzb3VyY2VzQ29udGVudCI6WyJqZXN0LmVuYWJsZUF1dG9tb2NrKClcblxuaW1wb3J0IGhlbGxvIGZyb20gJy4vZW5hYmxlLWF1dG9tb2NrJ1xuXG50ZXN0KCdvcmlnaW5hbCBpbXBsZW1lbnRhdGlvbicsICgpID0+IHtcbiAgLy8gbm93IHdlIGhhdmUgdGhlIG1vY2tlZCBpbXBsZW1lbnRhdGlvbixcbiAgLy8gQHRzLWlnbm9yZVxuICBleHBlY3QoaGVsbG8uX2lzTW9ja0Z1bmN0aW9uKS50b0JlVHJ1dGh5KClcbn0pXG4iXSwidmVyc2lvbiI6M30=
+  ===[ INLINE SOURCE MAPS ]=======================================================
+  mappings: >-
+    ;;AAAA,IAAI,CAAC,cAAL;;;;;AAEA,IAAA,iBAAA,GAAA,OAAA,CAAA,mBAAA,CAAA;;AAEA,IAAI,CAAC,yBAAD,EAA4B,YAAA;AAC9B;AACA;AACA,EAAA,MAAM,CAAC,iBAAA,CAAA,OAAA,CAAM,eAAP,CAAN,CAA8B,UAA9B;AACD,CAJG,CAAJ
+  names: []
+  sources:
+    - <cwd>/enable-automock.spec.ts
+  sourcesContent:
+    - |
+      jest.enableAutomock()
+  
+      import hello from './enable-automock'
+  
+      test('original implementation', () => {
+        // now we have the mocked implementation,
+        // @ts-ignore
+        expect(hello._isMockFunction).toBeTruthy()
+      })
+  version: 3
+  ================================================================================
+`;
+
+exports[`Hoisting jest.enableAutomock() should pass using template "with-babel-7": output-enableAutomock 1`] = `
+  √ jest --no-cache
+  ↳ exit code: 0
+  ===[ STDOUT ]===================================================================
+  
+  ===[ STDERR ]===================================================================
+  PASS ./enable-automock.spec.ts
+    √ original implementation
+  
+  Test Suites: 1 passed, 1 total
+  Tests:       1 passed, 1 total
+  Snapshots:   0 total
+  Time:        XXs
+  Ran all test suites.
+  ================================================================================
+`;
+
+exports[`Hoisting jest.enableAutomock() should pass using template "with-babel-7-string-config": io-enableAutomock 1`] = `
+  ===[ FILE: enable-automock.spec.ts ]============================================
+  "use strict";
+  
+  jest.enableAutomock();
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  
+  var enable_automock_1 = require("./enable-automock");
+  
+  test('original implementation', function () {
+    // now we have the mocked implementation,
+    // @ts-ignore
+    expect(enable_automock_1.default._isMockFunction).toBeTruthy();
+  });
+  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJtYXBwaW5ncyI6Ijs7QUFBQSxJQUFJLENBQUMsY0FBTDs7Ozs7QUFFQSxJQUFBLGlCQUFBLEdBQUEsT0FBQSxDQUFBLG1CQUFBLENBQUE7O0FBRUEsSUFBSSxDQUFDLHlCQUFELEVBQTRCLFlBQUE7QUFDOUI7QUFDQTtBQUNBLEVBQUEsTUFBTSxDQUFDLGlCQUFBLENBQUEsT0FBQSxDQUFNLGVBQVAsQ0FBTixDQUE4QixVQUE5QjtBQUNELENBSkcsQ0FBSiIsIm5hbWVzIjpbXSwic291cmNlcyI6WyI8Y3dkPi9lbmFibGUtYXV0b21vY2suc3BlYy50cyJdLCJzb3VyY2VzQ29udGVudCI6WyJqZXN0LmVuYWJsZUF1dG9tb2NrKClcblxuaW1wb3J0IGhlbGxvIGZyb20gJy4vZW5hYmxlLWF1dG9tb2NrJ1xuXG50ZXN0KCdvcmlnaW5hbCBpbXBsZW1lbnRhdGlvbicsICgpID0+IHtcbiAgLy8gbm93IHdlIGhhdmUgdGhlIG1vY2tlZCBpbXBsZW1lbnRhdGlvbixcbiAgLy8gQHRzLWlnbm9yZVxuICBleHBlY3QoaGVsbG8uX2lzTW9ja0Z1bmN0aW9uKS50b0JlVHJ1dGh5KClcbn0pXG4iXSwidmVyc2lvbiI6M30=
+  ===[ INLINE SOURCE MAPS ]=======================================================
+  mappings: >-
+    ;;AAAA,IAAI,CAAC,cAAL;;;;;AAEA,IAAA,iBAAA,GAAA,OAAA,CAAA,mBAAA,CAAA;;AAEA,IAAI,CAAC,yBAAD,EAA4B,YAAA;AAC9B;AACA;AACA,EAAA,MAAM,CAAC,iBAAA,CAAA,OAAA,CAAM,eAAP,CAAN,CAA8B,UAA9B;AACD,CAJG,CAAJ
+  names: []
+  sources:
+    - <cwd>/enable-automock.spec.ts
+  sourcesContent:
+    - |
+      jest.enableAutomock()
+  
+      import hello from './enable-automock'
+  
+      test('original implementation', () => {
+        // now we have the mocked implementation,
+        // @ts-ignore
+        expect(hello._isMockFunction).toBeTruthy()
+      })
+  version: 3
+  ================================================================================
+`;
+
+exports[`Hoisting jest.enableAutomock() should pass using template "with-babel-7-string-config": output-enableAutomock 1`] = `
+  √ jest --no-cache
+  ↳ exit code: 0
+  ===[ STDOUT ]===================================================================
+  
+  ===[ STDERR ]===================================================================
+  PASS ./enable-automock.spec.ts
+    √ original implementation
+  
+  Test Suites: 1 passed, 1 total
+  Tests:       1 passed, 1 total
+  Snapshots:   0 total
+  Time:        XXs
+  Ran all test suites.
+  ================================================================================
+`;
+
+exports[`Hoisting jest.enableAutomock() should pass using template "with-typescript-2-7": io-enableAutomock 1`] = `
+  ===[ FILE: enable-automock.spec.ts ]============================================
+  "use strict";
+  Object.defineProperty(exports, "__esModule", { value: true });
+  jest.enableAutomock();
+  var enable_automock_1 = require("./enable-automock");
+  test('original implementation', function () {
+      // now we have the mocked implementation,
+      // @ts-ignore
+      expect(enable_automock_1.default._isMockFunction).toBeTruthy();
+  });
+  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoiPGN3ZD4vZW5hYmxlLWF1dG9tb2NrLnNwZWMudHMiLCJtYXBwaW5ncyI6Ijs7QUFBQSxJQUFJLENBQUMsY0FBYyxFQUFFLENBQUE7QUFFckIscURBQXFDO0FBRXJDLElBQUksQ0FBQyx5QkFBeUIsRUFBRTtJQUM5Qix5Q0FBeUM7SUFDekMsYUFBYTtJQUNiLE1BQU0sQ0FBQyx5QkFBSyxDQUFDLGVBQWUsQ0FBQyxDQUFDLFVBQVUsRUFBRSxDQUFBO0FBQzVDLENBQUMsQ0FBQyxDQUFBIiwibmFtZXMiOltdLCJzb3VyY2VzIjpbIjxjd2Q+L2VuYWJsZS1hdXRvbW9jay5zcGVjLnRzIl0sInNvdXJjZXNDb250ZW50IjpbImplc3QuZW5hYmxlQXV0b21vY2soKVxuXG5pbXBvcnQgaGVsbG8gZnJvbSAnLi9lbmFibGUtYXV0b21vY2snXG5cbnRlc3QoJ29yaWdpbmFsIGltcGxlbWVudGF0aW9uJywgKCkgPT4ge1xuICAvLyBub3cgd2UgaGF2ZSB0aGUgbW9ja2VkIGltcGxlbWVudGF0aW9uLFxuICAvLyBAdHMtaWdub3JlXG4gIGV4cGVjdChoZWxsby5faXNNb2NrRnVuY3Rpb24pLnRvQmVUcnV0aHkoKVxufSlcbiJdLCJ2ZXJzaW9uIjozfQ==
+  ===[ INLINE SOURCE MAPS ]=======================================================
+  file: <cwd>/enable-automock.spec.ts
+  mappings: >-
+    ;;AAAA,IAAI,CAAC,cAAc,EAAE,CAAA;AAErB,qDAAqC;AAErC,IAAI,CAAC,yBAAyB,EAAE;IAC9B,yCAAyC;IACzC,aAAa;IACb,MAAM,CAAC,yBAAK,CAAC,eAAe,CAAC,CAAC,UAAU,EAAE,CAAA;AAC5C,CAAC,CAAC,CAAA
+  names: []
+  sources:
+    - <cwd>/enable-automock.spec.ts
+  sourcesContent:
+    - |
+      jest.enableAutomock()
+  
+      import hello from './enable-automock'
+  
+      test('original implementation', () => {
+        // now we have the mocked implementation,
+        // @ts-ignore
+        expect(hello._isMockFunction).toBeTruthy()
+      })
+  version: 3
+  ================================================================================
+`;
+
+exports[`Hoisting jest.enableAutomock() should pass using template "with-typescript-2-7": output-enableAutomock 1`] = `
+  √ jest --no-cache
+  ↳ exit code: 0
+  ===[ STDOUT ]===================================================================
+  
+  ===[ STDERR ]===================================================================
+  PASS ./enable-automock.spec.ts
+    √ original implementation
+  
+  Test Suites: 1 passed, 1 total
+  Tests:       1 passed, 1 total
+  Snapshots:   0 total
+  Time:        XXs
+  Ran all test suites.
+  ================================================================================
+`;
+
+exports[`Hoisting jest.mock() & jest.unmock() should pass using template "default": io-mockUnmock 1`] = `
+  ===[ FILE: mock-unmock.spec.ts ]================================================
+  "use strict";
+  Object.defineProperty(exports, "__esModule", { value: true });
+  jest.mock('./mock-unmock');
+  var mock_unmock_1 = require("./mock-unmock");
+  var original = jest.requireActual('./mock-unmock').default;
+  it('should have been mocked', function () {
+      jest.mock('foo', function () { return 'bar'; }, { virtual: true });
+      var msg = mock_unmock_1.default();
+      expect(mock_unmock_1.default).not.toBe(original);
+      expect(msg).toBeUndefined();
+      expect(mock_unmock_1.default).toHaveProperty('mock');
+      expect(require('foo')).toBe('bar');
+  });
+  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoiPGN3ZD4vbW9jay11bm1vY2suc3BlYy50cyIsIm1hcHBpbmdzIjoiOztBQUVBLElBQUksQ0FBQyxJQUFJLENBQUMsZUFBZSxDQUFDLENBQUE7QUFGMUIsNkNBQWlDO0FBSWpDLElBQU0sUUFBUSxHQUFHLElBQUksQ0FBQyxhQUFhLENBQUMsZUFBZSxDQUFDLENBQUMsT0FBTyxDQUFBO0FBQzVELEVBQUUsQ0FBQyx5QkFBeUIsRUFBRTtJQU01QixJQUFJLENBQUMsSUFBSSxDQUFDLEtBQUssRUFBRSxjQUFNLE9BQUEsS0FBSyxFQUFMLENBQUssRUFBRSxFQUFFLE9BQU8sRUFBRSxJQUFJLEVBQUUsQ0FBQyxDQUFBO0lBTGhELElBQU0sR0FBRyxHQUFHLHFCQUFLLEVBQUUsQ0FBQTtJQUNuQixNQUFNLENBQUMscUJBQUssQ0FBQyxDQUFDLEdBQUcsQ0FBQyxJQUFJLENBQUMsUUFBUSxDQUFDLENBQUE7SUFDaEMsTUFBTSxDQUFDLEdBQUcsQ0FBQyxDQUFDLGFBQWEsRUFBRSxDQUFBO0lBQzNCLE1BQU0sQ0FBQyxxQkFBSyxDQUFDLENBQUMsY0FBYyxDQUFDLE1BQU0sQ0FBQyxDQUFBO0lBQ3BDLE1BQU0sQ0FBQyxPQUFPLENBQUMsS0FBSyxDQUFDLENBQUMsQ0FBQyxJQUFJLENBQUMsS0FBSyxDQUFDLENBQUE7Q0FFbkMsQ0FBQyxDQUFBIiwibmFtZXMiOltdLCJzb3VyY2VzIjpbIjxjd2Q+L21vY2stdW5tb2NrLnNwZWMudHMiXSwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IGhlbGxvIGZyb20gJy4vbW9jay11bm1vY2snXG5cbmplc3QubW9jaygnLi9tb2NrLXVubW9jaycpXG5cbmNvbnN0IG9yaWdpbmFsID0gamVzdC5yZXF1aXJlQWN0dWFsKCcuL21vY2stdW5tb2NrJykuZGVmYXVsdFxuaXQoJ3Nob3VsZCBoYXZlIGJlZW4gbW9ja2VkJywgKCkgPT4ge1xuICBjb25zdCBtc2cgPSBoZWxsbygpXG4gIGV4cGVjdChoZWxsbykubm90LnRvQmUob3JpZ2luYWwpXG4gIGV4cGVjdChtc2cpLnRvQmVVbmRlZmluZWQoKVxuICBleHBlY3QoaGVsbG8pLnRvSGF2ZVByb3BlcnR5KCdtb2NrJylcbiAgZXhwZWN0KHJlcXVpcmUoJ2ZvbycpKS50b0JlKCdiYXInKVxuICBqZXN0Lm1vY2soJ2ZvbycsICgpID0+ICdiYXInLCB7IHZpcnR1YWw6IHRydWUgfSlcbn0pXG4iXSwidmVyc2lvbiI6M30=
+  ===[ INLINE SOURCE MAPS ]=======================================================
+  file: <cwd>/mock-unmock.spec.ts
+  mappings: >-
+    ;;AAEA,IAAI,CAAC,IAAI,CAAC,eAAe,CAAC,CAAA;AAF1B,6CAAiC;AAIjC,IAAM,QAAQ,GAAG,IAAI,CAAC,aAAa,CAAC,eAAe,CAAC,CAAC,OAAO,CAAA;AAC5D,EAAE,CAAC,yBAAyB,EAAE;IAM5B,IAAI,CAAC,IAAI,CAAC,KAAK,EAAE,cAAM,OAAA,KAAK,EAAL,CAAK,EAAE,EAAE,OAAO,EAAE,IAAI,EAAE,CAAC,CAAA;IALhD,IAAM,GAAG,GAAG,qBAAK,EAAE,CAAA;IACnB,MAAM,CAAC,qBAAK,CAAC,CAAC,GAAG,CAAC,IAAI,CAAC,QAAQ,CAAC,CAAA;IAChC,MAAM,CAAC,GAAG,CAAC,CAAC,aAAa,EAAE,CAAA;IAC3B,MAAM,CAAC,qBAAK,CAAC,CAAC,cAAc,CAAC,MAAM,CAAC,CAAA;IACpC,MAAM,CAAC,OAAO,CAAC,KAAK,CAAC,CAAC,CAAC,IAAI,CAAC,KAAK,CAAC,CAAA;CAEnC,CAAC,CAAA
+  names: []
+  sources:
+    - <cwd>/mock-unmock.spec.ts
+  sourcesContent:
+    - |
+      import hello from './mock-unmock'
+  
+      jest.mock('./mock-unmock')
+  
+      const original = jest.requireActual('./mock-unmock').default
+      it('should have been mocked', () => {
+        const msg = hello()
+        expect(hello).not.toBe(original)
+        expect(msg).toBeUndefined()
+        expect(hello).toHaveProperty('mock')
+        expect(require('foo')).toBe('bar')
+        jest.mock('foo', () => 'bar', { virtual: true })
+      })
+  version: 3
+  ================================================================================
+`;
+
+exports[`Hoisting jest.mock() & jest.unmock() should pass using template "default": output-mockUnmock 1`] = `
+  √ jest --no-cache
+  ↳ exit code: 0
+  ===[ STDOUT ]===================================================================
+  
+  ===[ STDERR ]===================================================================
+  PASS ./mock-unmock.spec.ts
+    √ should have been mocked
+  
+  Test Suites: 1 passed, 1 total
+  Tests:       1 passed, 1 total
+  Snapshots:   0 total
+  Time:        XXs
+  Ran all test suites.
+  ================================================================================
+`;
+
+exports[`Hoisting jest.mock() & jest.unmock() should pass using template "with-babel-7": io-mockUnmock 1`] = `
+  ===[ FILE: mock-unmock.spec.ts ]================================================
+  "use strict";
+  
+  jest.mock('./mock-unmock');
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  
+  var mock_unmock_1 = require("./mock-unmock");
+  
+  var original = jest.requireActual('./mock-unmock').default;
+  it('should have been mocked', function () {
+    jest.mock('foo', function () {
+      return 'bar';
+    }, {
+      virtual: true
+    });
+    var msg = mock_unmock_1.default();
+    expect(mock_unmock_1.default).not.toBe(original);
+    expect(msg).toBeUndefined();
+    expect(mock_unmock_1.default).toHaveProperty('mock');
+    expect(require('foo')).toBe('bar');
+  });
+  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJtYXBwaW5ncyI6Ijs7QUFFQSxJQUFJLENBQUMsSUFBTCxDQUFVLGVBQVY7Ozs7O0FBRkEsSUFBQSxhQUFBLEdBQUEsT0FBQSxDQUFBLGVBQUEsQ0FBQTs7QUFJQSxJQUFNLFFBQVEsR0FBRyxJQUFJLENBQUMsYUFBTCxDQUFtQixlQUFuQixFQUFvQyxPQUFyRDtBQUNBLEVBQUUsQ0FBQyx5QkFBRCxFQUE0QixZQUFBO0FBTTVCLEVBQUEsSUFBSSxDQUFDLElBQUwsQ0FBVSxLQUFWLEVBQWlCLFlBQUE7QUFBTSxXQUFBLEtBQUE7QUFBSyxHQUE1QixFQUE4QjtBQUFFLElBQUEsT0FBTyxFQUFFO0FBQVgsR0FBOUI7QUFMQSxNQUFNLEdBQUcsR0FBRyxhQUFBLENBQUEsT0FBQSxFQUFaO0FBQ0EsRUFBQSxNQUFNLENBQUMsYUFBQSxDQUFBLE9BQUQsQ0FBTixDQUFjLEdBQWQsQ0FBa0IsSUFBbEIsQ0FBdUIsUUFBdkI7QUFDQSxFQUFBLE1BQU0sQ0FBQyxHQUFELENBQU4sQ0FBWSxhQUFaO0FBQ0EsRUFBQSxNQUFNLENBQUMsYUFBQSxDQUFBLE9BQUQsQ0FBTixDQUFjLGNBQWQsQ0FBNkIsTUFBN0I7QUFDQSxFQUFBLE1BQU0sQ0FBQyxPQUFPLENBQUMsS0FBRCxDQUFSLENBQU4sQ0FBdUIsSUFBdkIsQ0FBNEIsS0FBNUI7QUFFRCxDQVBDLENBQUYiLCJuYW1lcyI6W10sInNvdXJjZXMiOlsiPGN3ZD4vbW9jay11bm1vY2suc3BlYy50cyJdLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgaGVsbG8gZnJvbSAnLi9tb2NrLXVubW9jaydcblxuamVzdC5tb2NrKCcuL21vY2stdW5tb2NrJylcblxuY29uc3Qgb3JpZ2luYWwgPSBqZXN0LnJlcXVpcmVBY3R1YWwoJy4vbW9jay11bm1vY2snKS5kZWZhdWx0XG5pdCgnc2hvdWxkIGhhdmUgYmVlbiBtb2NrZWQnLCAoKSA9PiB7XG4gIGNvbnN0IG1zZyA9IGhlbGxvKClcbiAgZXhwZWN0KGhlbGxvKS5ub3QudG9CZShvcmlnaW5hbClcbiAgZXhwZWN0KG1zZykudG9CZVVuZGVmaW5lZCgpXG4gIGV4cGVjdChoZWxsbykudG9IYXZlUHJvcGVydHkoJ21vY2snKVxuICBleHBlY3QocmVxdWlyZSgnZm9vJykpLnRvQmUoJ2JhcicpXG4gIGplc3QubW9jaygnZm9vJywgKCkgPT4gJ2JhcicsIHsgdmlydHVhbDogdHJ1ZSB9KVxufSlcbiJdLCJ2ZXJzaW9uIjozfQ==
+  ===[ INLINE SOURCE MAPS ]=======================================================
+  mappings: >-
+    ;;AAEA,IAAI,CAAC,IAAL,CAAU,eAAV;;;;;AAFA,IAAA,aAAA,GAAA,OAAA,CAAA,eAAA,CAAA;;AAIA,IAAM,QAAQ,GAAG,IAAI,CAAC,aAAL,CAAmB,eAAnB,EAAoC,OAArD;AACA,EAAE,CAAC,yBAAD,EAA4B,YAAA;AAM5B,EAAA,IAAI,CAAC,IAAL,CAAU,KAAV,EAAiB,YAAA;AAAM,WAAA,KAAA;AAAK,GAA5B,EAA8B;AAAE,IAAA,OAAO,EAAE;AAAX,GAA9B;AALA,MAAM,GAAG,GAAG,aAAA,CAAA,OAAA,EAAZ;AACA,EAAA,MAAM,CAAC,aAAA,CAAA,OAAD,CAAN,CAAc,GAAd,CAAkB,IAAlB,CAAuB,QAAvB;AACA,EAAA,MAAM,CAAC,GAAD,CAAN,CAAY,aAAZ;AACA,EAAA,MAAM,CAAC,aAAA,CAAA,OAAD,CAAN,CAAc,cAAd,CAA6B,MAA7B;AACA,EAAA,MAAM,CAAC,OAAO,CAAC,KAAD,CAAR,CAAN,CAAuB,IAAvB,CAA4B,KAA5B;AAED,CAPC,CAAF
+  names: []
+  sources:
+    - <cwd>/mock-unmock.spec.ts
+  sourcesContent:
+    - |
+      import hello from './mock-unmock'
+  
+      jest.mock('./mock-unmock')
+  
+      const original = jest.requireActual('./mock-unmock').default
+      it('should have been mocked', () => {
+        const msg = hello()
+        expect(hello).not.toBe(original)
+        expect(msg).toBeUndefined()
+        expect(hello).toHaveProperty('mock')
+        expect(require('foo')).toBe('bar')
+        jest.mock('foo', () => 'bar', { virtual: true })
+      })
+  version: 3
+  ================================================================================
+`;
+
+exports[`Hoisting jest.mock() & jest.unmock() should pass using template "with-babel-7": output-mockUnmock 1`] = `
+  √ jest --no-cache
+  ↳ exit code: 0
+  ===[ STDOUT ]===================================================================
+  
+  ===[ STDERR ]===================================================================
+  PASS ./mock-unmock.spec.ts
+    √ should have been mocked
+  
+  Test Suites: 1 passed, 1 total
+  Tests:       1 passed, 1 total
+  Snapshots:   0 total
+  Time:        XXs
+  Ran all test suites.
+  ================================================================================
+`;
+
+exports[`Hoisting jest.mock() & jest.unmock() should pass using template "with-babel-7-string-config": io-mockUnmock 1`] = `
+  ===[ FILE: mock-unmock.spec.ts ]================================================
+  "use strict";
+  
+  jest.mock('./mock-unmock');
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  
+  var mock_unmock_1 = require("./mock-unmock");
+  
+  var original = jest.requireActual('./mock-unmock').default;
+  it('should have been mocked', function () {
+    jest.mock('foo', function () {
+      return 'bar';
+    }, {
+      virtual: true
+    });
+    var msg = mock_unmock_1.default();
+    expect(mock_unmock_1.default).not.toBe(original);
+    expect(msg).toBeUndefined();
+    expect(mock_unmock_1.default).toHaveProperty('mock');
+    expect(require('foo')).toBe('bar');
+  });
+  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJtYXBwaW5ncyI6Ijs7QUFFQSxJQUFJLENBQUMsSUFBTCxDQUFVLGVBQVY7Ozs7O0FBRkEsSUFBQSxhQUFBLEdBQUEsT0FBQSxDQUFBLGVBQUEsQ0FBQTs7QUFJQSxJQUFNLFFBQVEsR0FBRyxJQUFJLENBQUMsYUFBTCxDQUFtQixlQUFuQixFQUFvQyxPQUFyRDtBQUNBLEVBQUUsQ0FBQyx5QkFBRCxFQUE0QixZQUFBO0FBTTVCLEVBQUEsSUFBSSxDQUFDLElBQUwsQ0FBVSxLQUFWLEVBQWlCLFlBQUE7QUFBTSxXQUFBLEtBQUE7QUFBSyxHQUE1QixFQUE4QjtBQUFFLElBQUEsT0FBTyxFQUFFO0FBQVgsR0FBOUI7QUFMQSxNQUFNLEdBQUcsR0FBRyxhQUFBLENBQUEsT0FBQSxFQUFaO0FBQ0EsRUFBQSxNQUFNLENBQUMsYUFBQSxDQUFBLE9BQUQsQ0FBTixDQUFjLEdBQWQsQ0FBa0IsSUFBbEIsQ0FBdUIsUUFBdkI7QUFDQSxFQUFBLE1BQU0sQ0FBQyxHQUFELENBQU4sQ0FBWSxhQUFaO0FBQ0EsRUFBQSxNQUFNLENBQUMsYUFBQSxDQUFBLE9BQUQsQ0FBTixDQUFjLGNBQWQsQ0FBNkIsTUFBN0I7QUFDQSxFQUFBLE1BQU0sQ0FBQyxPQUFPLENBQUMsS0FBRCxDQUFSLENBQU4sQ0FBdUIsSUFBdkIsQ0FBNEIsS0FBNUI7QUFFRCxDQVBDLENBQUYiLCJuYW1lcyI6W10sInNvdXJjZXMiOlsiPGN3ZD4vbW9jay11bm1vY2suc3BlYy50cyJdLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgaGVsbG8gZnJvbSAnLi9tb2NrLXVubW9jaydcblxuamVzdC5tb2NrKCcuL21vY2stdW5tb2NrJylcblxuY29uc3Qgb3JpZ2luYWwgPSBqZXN0LnJlcXVpcmVBY3R1YWwoJy4vbW9jay11bm1vY2snKS5kZWZhdWx0XG5pdCgnc2hvdWxkIGhhdmUgYmVlbiBtb2NrZWQnLCAoKSA9PiB7XG4gIGNvbnN0IG1zZyA9IGhlbGxvKClcbiAgZXhwZWN0KGhlbGxvKS5ub3QudG9CZShvcmlnaW5hbClcbiAgZXhwZWN0KG1zZykudG9CZVVuZGVmaW5lZCgpXG4gIGV4cGVjdChoZWxsbykudG9IYXZlUHJvcGVydHkoJ21vY2snKVxuICBleHBlY3QocmVxdWlyZSgnZm9vJykpLnRvQmUoJ2JhcicpXG4gIGplc3QubW9jaygnZm9vJywgKCkgPT4gJ2JhcicsIHsgdmlydHVhbDogdHJ1ZSB9KVxufSlcbiJdLCJ2ZXJzaW9uIjozfQ==
+  ===[ INLINE SOURCE MAPS ]=======================================================
+  mappings: >-
+    ;;AAEA,IAAI,CAAC,IAAL,CAAU,eAAV;;;;;AAFA,IAAA,aAAA,GAAA,OAAA,CAAA,eAAA,CAAA;;AAIA,IAAM,QAAQ,GAAG,IAAI,CAAC,aAAL,CAAmB,eAAnB,EAAoC,OAArD;AACA,EAAE,CAAC,yBAAD,EAA4B,YAAA;AAM5B,EAAA,IAAI,CAAC,IAAL,CAAU,KAAV,EAAiB,YAAA;AAAM,WAAA,KAAA;AAAK,GAA5B,EAA8B;AAAE,IAAA,OAAO,EAAE;AAAX,GAA9B;AALA,MAAM,GAAG,GAAG,aAAA,CAAA,OAAA,EAAZ;AACA,EAAA,MAAM,CAAC,aAAA,CAAA,OAAD,CAAN,CAAc,GAAd,CAAkB,IAAlB,CAAuB,QAAvB;AACA,EAAA,MAAM,CAAC,GAAD,CAAN,CAAY,aAAZ;AACA,EAAA,MAAM,CAAC,aAAA,CAAA,OAAD,CAAN,CAAc,cAAd,CAA6B,MAA7B;AACA,EAAA,MAAM,CAAC,OAAO,CAAC,KAAD,CAAR,CAAN,CAAuB,IAAvB,CAA4B,KAA5B;AAED,CAPC,CAAF
+  names: []
+  sources:
+    - <cwd>/mock-unmock.spec.ts
+  sourcesContent:
+    - |
+      import hello from './mock-unmock'
+  
+      jest.mock('./mock-unmock')
+  
+      const original = jest.requireActual('./mock-unmock').default
+      it('should have been mocked', () => {
+        const msg = hello()
+        expect(hello).not.toBe(original)
+        expect(msg).toBeUndefined()
+        expect(hello).toHaveProperty('mock')
+        expect(require('foo')).toBe('bar')
+        jest.mock('foo', () => 'bar', { virtual: true })
+      })
+  version: 3
+  ================================================================================
+`;
+
+exports[`Hoisting jest.mock() & jest.unmock() should pass using template "with-babel-7-string-config": output-mockUnmock 1`] = `
+  √ jest --no-cache
+  ↳ exit code: 0
+  ===[ STDOUT ]===================================================================
+  
+  ===[ STDERR ]===================================================================
+  PASS ./mock-unmock.spec.ts
+    √ should have been mocked
+  
+  Test Suites: 1 passed, 1 total
+  Tests:       1 passed, 1 total
+  Snapshots:   0 total
+  Time:        XXs
+  Ran all test suites.
+  ================================================================================
+`;
+
+exports[`Hoisting jest.mock() & jest.unmock() should pass using template "with-typescript-2-7": io-mockUnmock 1`] = `
+  ===[ FILE: mock-unmock.spec.ts ]================================================
+  "use strict";
+  Object.defineProperty(exports, "__esModule", { value: true });
+  jest.mock('./mock-unmock');
+  var mock_unmock_1 = require("./mock-unmock");
+  var original = jest.requireActual('./mock-unmock').default;
+  it('should have been mocked', function () {
+      jest.mock('foo', function () { return 'bar'; }, { virtual: true });
+      var msg = mock_unmock_1.default();
+      expect(mock_unmock_1.default).not.toBe(original);
+      expect(msg).toBeUndefined();
+      expect(mock_unmock_1.default).toHaveProperty('mock');
+      expect(require('foo')).toBe('bar');
+  });
+  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoiPGN3ZD4vbW9jay11bm1vY2suc3BlYy50cyIsIm1hcHBpbmdzIjoiOztBQUVBLElBQUksQ0FBQyxJQUFJLENBQUMsZUFBZSxDQUFDLENBQUE7QUFGMUIsNkNBQWlDO0FBSWpDLElBQU0sUUFBUSxHQUFHLElBQUksQ0FBQyxhQUFhLENBQUMsZUFBZSxDQUFDLENBQUMsT0FBTyxDQUFBO0FBQzVELEVBQUUsQ0FBQyx5QkFBeUIsRUFBRTtJQU01QixJQUFJLENBQUMsSUFBSSxDQUFDLEtBQUssRUFBRSxjQUFNLE9BQUEsS0FBSyxFQUFMLENBQUssRUFBRSxFQUFFLE9BQU8sRUFBRSxJQUFJLEVBQUUsQ0FBQyxDQUFBO0lBTGhELElBQU0sR0FBRyxHQUFHLHFCQUFLLEVBQUUsQ0FBQTtJQUNuQixNQUFNLENBQUMscUJBQUssQ0FBQyxDQUFDLEdBQUcsQ0FBQyxJQUFJLENBQUMsUUFBUSxDQUFDLENBQUE7SUFDaEMsTUFBTSxDQUFDLEdBQUcsQ0FBQyxDQUFDLGFBQWEsRUFBRSxDQUFBO0lBQzNCLE1BQU0sQ0FBQyxxQkFBSyxDQUFDLENBQUMsY0FBYyxDQUFDLE1BQU0sQ0FBQyxDQUFBO0lBQ3BDLE1BQU0sQ0FBQyxPQUFPLENBQUMsS0FBSyxDQUFDLENBQUMsQ0FBQyxJQUFJLENBQUMsS0FBSyxDQUFDLENBQUE7Q0FFbkMsQ0FBQyxDQUFBIiwibmFtZXMiOltdLCJzb3VyY2VzIjpbIjxjd2Q+L21vY2stdW5tb2NrLnNwZWMudHMiXSwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IGhlbGxvIGZyb20gJy4vbW9jay11bm1vY2snXG5cbmplc3QubW9jaygnLi9tb2NrLXVubW9jaycpXG5cbmNvbnN0IG9yaWdpbmFsID0gamVzdC5yZXF1aXJlQWN0dWFsKCcuL21vY2stdW5tb2NrJykuZGVmYXVsdFxuaXQoJ3Nob3VsZCBoYXZlIGJlZW4gbW9ja2VkJywgKCkgPT4ge1xuICBjb25zdCBtc2cgPSBoZWxsbygpXG4gIGV4cGVjdChoZWxsbykubm90LnRvQmUob3JpZ2luYWwpXG4gIGV4cGVjdChtc2cpLnRvQmVVbmRlZmluZWQoKVxuICBleHBlY3QoaGVsbG8pLnRvSGF2ZVByb3BlcnR5KCdtb2NrJylcbiAgZXhwZWN0KHJlcXVpcmUoJ2ZvbycpKS50b0JlKCdiYXInKVxuICBqZXN0Lm1vY2soJ2ZvbycsICgpID0+ICdiYXInLCB7IHZpcnR1YWw6IHRydWUgfSlcbn0pXG4iXSwidmVyc2lvbiI6M30=
+  ===[ INLINE SOURCE MAPS ]=======================================================
+  file: <cwd>/mock-unmock.spec.ts
+  mappings: >-
+    ;;AAEA,IAAI,CAAC,IAAI,CAAC,eAAe,CAAC,CAAA;AAF1B,6CAAiC;AAIjC,IAAM,QAAQ,GAAG,IAAI,CAAC,aAAa,CAAC,eAAe,CAAC,CAAC,OAAO,CAAA;AAC5D,EAAE,CAAC,yBAAyB,EAAE;IAM5B,IAAI,CAAC,IAAI,CAAC,KAAK,EAAE,cAAM,OAAA,KAAK,EAAL,CAAK,EAAE,EAAE,OAAO,EAAE,IAAI,EAAE,CAAC,CAAA;IALhD,IAAM,GAAG,GAAG,qBAAK,EAAE,CAAA;IACnB,MAAM,CAAC,qBAAK,CAAC,CAAC,GAAG,CAAC,IAAI,CAAC,QAAQ,CAAC,CAAA;IAChC,MAAM,CAAC,GAAG,CAAC,CAAC,aAAa,EAAE,CAAA;IAC3B,MAAM,CAAC,qBAAK,CAAC,CAAC,cAAc,CAAC,MAAM,CAAC,CAAA;IACpC,MAAM,CAAC,OAAO,CAAC,KAAK,CAAC,CAAC,CAAC,IAAI,CAAC,KAAK,CAAC,CAAA;CAEnC,CAAC,CAAA
+  names: []
+  sources:
+    - <cwd>/mock-unmock.spec.ts
+  sourcesContent:
+    - |
+      import hello from './mock-unmock'
+  
+      jest.mock('./mock-unmock')
+  
+      const original = jest.requireActual('./mock-unmock').default
+      it('should have been mocked', () => {
+        const msg = hello()
+        expect(hello).not.toBe(original)
+        expect(msg).toBeUndefined()
+        expect(hello).toHaveProperty('mock')
+        expect(require('foo')).toBe('bar')
+        jest.mock('foo', () => 'bar', { virtual: true })
+      })
+  version: 3
+  ================================================================================
+`;
+
+exports[`Hoisting jest.mock() & jest.unmock() should pass using template "with-typescript-2-7": output-mockUnmock 1`] = `
+  √ jest --no-cache
+  ↳ exit code: 0
+  ===[ STDOUT ]===================================================================
+  
+  ===[ STDERR ]===================================================================
+  PASS ./mock-unmock.spec.ts
+    √ should have been mocked
   
   Test Suites: 1 passed, 1 total
   Tests:       1 passed, 1 total
