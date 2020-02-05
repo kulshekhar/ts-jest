@@ -15,8 +15,3 @@ declare module 'jest-config' {
   import 'jest'
   export const defaults: jest.InitialOptions
 }
-
-declare module 'yargs-parser' {
-  import yargs from 'yargs'
-  export = yargs.parse
-}
