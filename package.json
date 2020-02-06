@@ -61,13 +61,13 @@
     "bs-logger": "0.x",
     "buffer-from": "1.x",
     "fast-json-stable-stringify": "2.x",
-    "lodash.memoize": "4.x",
     "json5": "2.x",
+    "lodash.memoize": "4.x",
     "make-error": "1.x",
     "mkdirp": "0.x",
     "resolve": "1.x",
     "semver": "^5.5",
-    "yargs-parser": "10.x"
+    "yargs-parser": "^16.1.0"
   },
   "peerDependencies": {
     "jest": ">=25 <26"
@@ -99,6 +99,7 @@
     "@types/resolve": "latest",
     "@types/semver": "latest",
     "@types/yargs": "latest",
+    "@types/yargs-parser": "^15.0.0",
     "conventional-changelog-cli": "2.x",
     "cross-spawn": "latest",
     "eslint": "latest",
