@@ -176,7 +176,11 @@ function requireWrapper(moduleName: string): RequireResult {
   try {
     result.exports = requireModule(path)
   } catch (error) {
-    result.error = error
+    try {
+      result.exports = requireModule(moduleName)
+    } catch (error) {
+      result.error = error
+    }
   }
   return result
 }
