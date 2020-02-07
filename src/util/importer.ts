@@ -1,3 +1,5 @@
+import * as resolve from 'resolve'
+
 import { ModulePatcher, TBabelCore, TBabelJest, TTypeScript } from '../types'
 
 import { rootLogger } from './logger'
@@ -174,7 +176,7 @@ function requireWrapper(moduleName: string): RequireResult {
   }
   const result: RequireResult = { exists, path, given: moduleName }
   try {
-    result.exports = requireModule(moduleName)
+    result.exports = requireModule(path)
   } catch (error) {
     result.error = error
   }
@@ -182,7 +184,7 @@ function requireWrapper(moduleName: string): RequireResult {
 }
 
 let requireModule = (mod: string) => require(mod)
-let resolveModule = (mod: string) => require.resolve(mod)
+let resolveModule = (mod: string) => resolve.sync(mod, { basedir: process.cwd() })
 
 /**
  * @internal
