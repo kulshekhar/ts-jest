@@ -136,3 +136,12 @@ describe('babelJest', () => {
 `)
   })
 })
+
+describe('typescript', () => {
+  it('should be typescript', () => {
+    modules = {
+      typescript: () => 'typescript',
+    }
+    expect(new Importer().typescript(fakers.importReason(), 'typescript')).toBe('typescript')
+  })
+})
