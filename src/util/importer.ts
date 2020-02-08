@@ -174,15 +174,19 @@ function requireWrapper(moduleName: string): RequireResult {
   }
   const result: RequireResult = { exists, path, given: moduleName }
   try {
-    result.exports = requireModule(moduleName)
+    result.exports = requireModule(path)
   } catch (error) {
-    result.error = error
+    try {
+      result.exports = requireModule(moduleName)
+    } catch (error) {
+      result.error = error
+    }
   }
   return result
 }
 
 let requireModule = (mod: string) => require(mod)
-let resolveModule = (mod: string) => require.resolve(mod)
+let resolveModule = (mod: string) => require.resolve(mod, { paths: [process.cwd(), __dirname] })
 
 /**
  * @internal
