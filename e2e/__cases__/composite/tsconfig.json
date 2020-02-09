@@ -1,6 +1,16 @@
 {
   "compilerOptions": {
-    "composite": true,
-    "tsBuildInfoFile": ".tsbuildinfo"
+    "target": "es2018",
+    "module": "commonjs",
+    "esModuleInterop": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "strict": true,
+    "noImplicitAny": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUnusedLocals": true,
+    "lib": [
+      "dom", "es2018"
+    ]
   }
 }

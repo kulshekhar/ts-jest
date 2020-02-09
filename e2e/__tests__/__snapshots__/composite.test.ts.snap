@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`with composite project should pass using template "default" 1`] = `
+  √ jest --no-cache
+  ↳ exit code: 0
+  ===[ STDOUT ]===================================================================
+  
+  ===[ STDERR ]===================================================================
+  PASS  my-library/index.test.ts
+  PASS  my-app/main.test.ts
+  
+  Test Suites: 2 passed, 2 total
+  Tests:       2 passed, 2 total
+  Snapshots:   0 total
+  Time:        XXs
+  Ran all test suites.
+  ================================================================================
+`;

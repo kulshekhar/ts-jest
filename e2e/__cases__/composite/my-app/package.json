@@ -1,0 +1,8 @@
+{
+  "name": "@ts-jest/my-app",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "@ts-jest/my-app": "*"
+  }
+}
