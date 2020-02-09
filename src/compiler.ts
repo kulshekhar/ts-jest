@@ -36,11 +36,19 @@ import { readFileSync, writeFileSync } from 'fs'
 import memoize = require('lodash.memoize')
 import mkdirp = require('mkdirp')
 import { basename, extname, join, normalize, relative } from 'path'
-import { LanguageServiceHost } from 'typescript'
+import {
+  Diagnostic,
+  EmitOutput,
+  EmitResult,
+  LanguageService,
+  LanguageServiceHost,
+  OutputFile,
+  Program,
+} from 'typescript'
 
 import { ConfigSet } from './config/config-set'
 import { MemoryCache, TsCompiler, TypeInfo } from './types'
-import { Errors, interpolate } from './util/messages'
+import { Errors } from './util/messages'
 import { sha1 } from './util/sha1'
 
 const hasOwn = Object.prototype.hasOwnProperty
@@ -176,43 +184,67 @@ export function createCompiler(configs: ConfigSet): TsCompiler {
     }
 
     logger.debug('creating language service')
-    const service = ts.createLanguageService(serviceHost)
-
+    const service: LanguageService = ts.createLanguageService(serviceHost)
     getOutput = (code: string, fileName: string /*, lineOffset = 0 */) => {
       logger.debug({ fileName }, 'getOutput(): compiling using language service')
       // Must set memory cache before attempting to read file.
       updateMemoryCache(code, fileName)
-
-      const output = service.getEmitOutput(fileName)
-
+      // get compiled js, source map, diagnostics information, etc...
+      let emitOutput: EmitOutput = service.getEmitOutput(fileName)
+      let emitResult: EmitResult
+      /**
+       * Fallback to Program when language service cannot compile. This is a workaround for the issue with composite
+       * project. Perhaps we should switch to use Program instead of language service
+       */
+      if (!emitOutput.outputFiles.length) {
+        logger.debug({ fileName }, 'getOutput(): creating Program as fallback for language service')
+        // Create a Program with an in-memory emit
+        const createdFiles: OutputFile[] = []
+        const host = ts.createCompilerHost(compilerOptions)
+        host.writeFile = (compiledFileName: string, contents: string, writeByteOrderMark: boolean) => {
+          createdFiles.push({
+            name: compiledFileName,
+            text: contents,
+            writeByteOrderMark,
+          })
+        }
+        // Prepare and emit the d.ts files
+        const program: Program = ts.createProgram({
+          rootNames: [fileName],
+          host,
+          projectReferences: configs.tsconfig.references,
+          options: compilerOptions,
+        })
+        logger.debug({ fileName }, 'getOutput(): compiling using Program')
+        emitResult = program.emit(undefined, undefined, undefined, false, configs.tsCustomTransformers)
+        emitOutput = {
+          ...emitOutput,
+          outputFiles: createdFiles,
+        }
+      }
       if (configs.shouldReportDiagnostic(fileName)) {
-        logger.debug({ fileName }, 'getOutput(): computing diagnostics')
         // Get the relevant diagnostics - this is 3x faster than `getPreEmitDiagnostics`.
-        const diagnostics = service
-          .getCompilerOptionsDiagnostics()
-          .concat(service.getSyntacticDiagnostics(fileName))
-          .concat(service.getSemanticDiagnostics(fileName))
-
+        let diagnostics: Diagnostic[]
+        // @ts-ignore
+        if (emitResult) {
+          logger.debug({ fileName }, 'getOutput(): computing diagnostics from Program emit result')
+          diagnostics = [...emitResult.diagnostics]
+        } else {
+          logger.debug({ fileName }, 'getOutput(): computing diagnostics from language service')
+          diagnostics = service
+            .getCompilerOptionsDiagnostics()
+            .concat(service.getSyntacticDiagnostics(fileName))
+            .concat(service.getSemanticDiagnostics(fileName))
+        }
         // will raise or just warn diagnostics depending on config
         configs.raiseDiagnostics(diagnostics, fileName, logger)
       }
-
       /* istanbul ignore next (this should never happen but is kept for security) */
-      if (output.emitSkipped) {
+      if (emitOutput.emitSkipped) {
         throw new TypeError(`${relative(cwd, fileName)}: Emit skipped`)
       }
 
-      // Throw an error when requiring `.d.ts` files.
-      /* istanbul ignore next (this should never happen but is kept for security) */
-      if (output.outputFiles.length === 0) {
-        throw new TypeError(
-          interpolate(Errors.UnableToRequireDefinitionFile, {
-            file: basename(fileName),
-          }),
-        )
-      }
-
-      return [output.outputFiles[1].text, output.outputFiles[0].text]
+      return [emitOutput.outputFiles[1].text, emitOutput.outputFiles[0].text]
     }
 
     getTypeInfo = (code: string, fileName: string, position: number) => {

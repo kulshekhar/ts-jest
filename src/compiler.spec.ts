@@ -83,21 +83,21 @@ describe('cache', () => {
   it('should use the cache', () => {
     const compiled1 = compiler.compile(source, __filename)
     expect(logTarget.filteredLines(LogLevels.debug, Infinity)).toMatchInlineSnapshot(`
-Array [
-  "[level:20] readThrough(): cache miss
-",
-  "[level:20] getOutput(): compiling using language service
-",
-  "[level:20] updateMemoryCache()
-",
-  "[level:20] visitSourceFileNode(): hoisting
-",
-  "[level:20] getOutput(): computing diagnostics
-",
-  "[level:20] readThrough(): writing caches
-",
-]
-`)
+      Array [
+        "[level:20] readThrough(): cache miss
+      ",
+        "[level:20] getOutput(): compiling using language service
+      ",
+        "[level:20] updateMemoryCache()
+      ",
+        "[level:20] visitSourceFileNode(): hoisting
+      ",
+        "[level:20] getOutput(): computing diagnostics from language service
+      ",
+        "[level:20] readThrough(): writing caches
+      ",
+      ]
+    `)
 
     logTarget.clear()
     const compiled2 = compiler.compile(source, __filename)
