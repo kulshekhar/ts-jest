@@ -1,0 +1,5 @@
+{
+  "name": "@ts-jest/my-library",
+  "version": "1.0.0",
+  "private": true
+}
