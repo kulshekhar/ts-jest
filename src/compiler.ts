@@ -48,7 +48,7 @@ import {
 
 import { ConfigSet } from './config/config-set'
 import { MemoryCache, TsCompiler, TypeInfo } from './types'
-import { Errors } from './util/messages'
+import { Errors, interpolate } from './util/messages'
 import { sha1 } from './util/sha1'
 
 const hasOwn = Object.prototype.hasOwnProperty
@@ -242,6 +242,15 @@ export function createCompiler(configs: ConfigSet): TsCompiler {
       /* istanbul ignore next (this should never happen but is kept for security) */
       if (emitOutput.emitSkipped) {
         throw new TypeError(`${relative(cwd, fileName)}: Emit skipped`)
+      }
+      // Throw an error when requiring `.d.ts` files.
+      /* istanbul ignore next (this should never happen but is kept for security) */
+      if (!emitOutput.outputFiles.length) {
+        throw new TypeError(
+          interpolate(Errors.UnableToRequireDefinitionFile, {
+            file: basename(fileName),
+          }),
+        )
       }
 
       return [emitOutput.outputFiles[1].text, emitOutput.outputFiles[0].text]

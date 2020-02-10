@@ -1,5 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Program should compile using Program as fallback: compile-error 1`] = `
+"Unable to require \`.d.ts\` file.
+This is usually the result of a faulty configuration or import. Make sure there is a \`.js\`, \`.json\` or another executable extension available alongside \`test.ts\`."
+`;
+
 exports[`allowJs should compile js file 1`] = `
   ===[ FILE: src/compiler.spec.ts.test.js ]=======================================
   "use strict";

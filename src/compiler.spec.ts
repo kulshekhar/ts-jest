@@ -2,6 +2,7 @@
 import { Config } from '@jest/types'
 import { LogLevels } from 'bs-logger'
 import { removeSync, writeFileSync } from 'fs-extra'
+import { LanguageService, ModuleKind, ScriptTarget } from 'typescript'
 
 import * as fakers from './__helpers__/fakers'
 import { logTargetMock } from './__helpers__/mocks'
@@ -14,7 +15,7 @@ import { TsJestGlobalOptions } from './types'
 const logTarget = logTargetMock()
 
 // not really unit-testing here, but it's hard to mock all those values :-D
-function makeCompiler({
+export function makeCompiler({
   jestConfig,
   tsJestConfig,
   parentConfig,
@@ -29,7 +30,41 @@ function makeCompiler({
     pretty: false,
   }
   const cs = new ConfigSet(fakers.jestConfig(jestConfig, tsJestConfig), parentConfig)
+
   return createCompiler(cs)
+}
+
+function makeFallbackCompiler({
+  jestConfig,
+  tsJestConfig,
+  parentConfig,
+}: {
+  jestConfig?: Partial<Config.ProjectConfig>
+  tsJestConfig?: TsJestGlobalOptions
+  parentConfig?: TsJestGlobalOptions
+} = {}) {
+  const compiler = makeCompiler({ jestConfig, tsJestConfig, parentConfig })
+  const languageService: LanguageService = compiler.ts.createLanguageService({
+    getScriptFileNames: jest.fn(),
+    getScriptVersion: jest.fn(),
+    getScriptSnapshot: jest.fn(),
+    getCurrentDirectory: () => '.',
+    getDefaultLibFileName: jest.fn(),
+    getCompilationSettings: () => {
+      return {
+        target: ScriptTarget.ES2018,
+        module: ModuleKind.CommonJS,
+        lib: ['dom', 'es2018'],
+      }
+    },
+  })
+  compiler.ts.createLanguageService = jest.fn().mockReturnValue(languageService)
+  languageService.getEmitOutput = jest.fn().mockReturnValue({
+    outputFiles: [],
+    emitSkipped: false,
+  })
+
+  return compiler
 }
 
 beforeEach(() => {
@@ -159,5 +194,53 @@ console.log(val.p1/* <== that */)
       comment: 'the prop 1!',
       name: '(property) p1: boolean',
     })
+  })
+})
+
+describe('Program', () => {
+  // These preparation steps are needed to make the test work correctly
+  const tmp = tempDir('compiler')
+  let compiler = makeFallbackCompiler({
+    jestConfig: { cache: true, cacheDirectory: tmp },
+    tsJestConfig: { tsConfig: false },
+  })
+  const source = 'console.log("hello")'
+  it('should compile using Program as fallback', () => {
+    try {
+      compiler = makeFallbackCompiler({ tsJestConfig: { tsConfig: false } })
+      compiler.compile(source, 'test.ts')
+    } catch (e) {
+      expect(e.message).toMatchSnapshot('compile-error')
+      expect(logTarget.filteredLines(LogLevels.debug, Infinity)).toMatchInlineSnapshot(`
+        Array [
+          "[level:20] backporting config
+        ",
+          "[level:20] normalized jest config
+        ",
+          "[level:20] normalized ts-jest config
+        ",
+          "[level:20] creating typescript compiler (language service)
+        ",
+          "[level:20] file caching disabled
+        ",
+          "[level:20] normalized typescript config
+        ",
+          "[level:20] creating language service
+        ",
+          "[level:20] readThrough(): no cache
+        ",
+          "[level:20] getOutput(): compiling using language service
+        ",
+          "[level:20] updateMemoryCache()
+        ",
+          "[level:20] getOutput(): creating Program as fallback for language service
+        ",
+          "[level:20] getOutput(): compiling using Program
+        ",
+          "[level:20] getOutput(): computing diagnostics from Program emit result
+        ",
+        ]
+      `)
+    }
   })
 })
