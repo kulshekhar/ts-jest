@@ -6,8 +6,8 @@ exports[`with composite project should pass using template "composite" 1`] = `
   ===[ STDOUT ]===================================================================
   
   ===[ STDERR ]===================================================================
-  PASS my-library packages/my-library/index.test.ts
-  PASS my-app packages/my-app/main.test.ts
+  PASS my-library src/my-library/index.test.ts
+  PASS my-app src/my-app/main.test.ts
   
   Test Suites: 2 passed, 2 total
   Tests:       2 passed, 2 total
