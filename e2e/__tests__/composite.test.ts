@@ -3,10 +3,10 @@ import { configureTestCase } from '../__helpers__/test-case'
 
 describe('with composite project', () => {
   const testCase = configureTestCase('composite', {
-    writeIo: true,
+    noCache: true,
   })
 
-  testCase.runWithTemplates([PackageSets.default], 0, (runTest, { testLabel }) => {
+  testCase.runWithTemplates([PackageSets.composite], 0, (runTest, { testLabel }) => {
     it(testLabel, () => {
       const result = runTest()
       expect(result.status).toBe(0)

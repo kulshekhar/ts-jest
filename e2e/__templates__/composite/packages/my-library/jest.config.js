@@ -1,6 +1,6 @@
 module.exports = {
-  name: 'my-app',
-  displayName: 'my-app',
+  name: 'my-library',
+  displayName: 'my-library',
   testEnvironment: 'node',
   preset: 'ts-jest',
-};
+}

@@ -40,7 +40,7 @@
   "exclude": [
     "e2e/__cases__",
     "e2e/__templates__",
-    "e2e/__workdir_synlink__",
+    "e2e/__workdir_symlink__",
     "node_modules"
   ]
 }

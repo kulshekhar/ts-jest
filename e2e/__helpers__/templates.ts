@@ -1,4 +1,5 @@
 export enum PackageSets {
+  composite = 'composite',
   default = 'default',
   babel7 = 'with-babel-7',
   babel7StringConfig = 'with-babel-7-string-config',

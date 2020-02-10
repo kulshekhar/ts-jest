@@ -1,0 +1,20 @@
+{
+  "name": "ts-jest-e2e-tmpl-composite",
+  "version": "0.0.0-tmpl.0",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "devDependencies": {
+    "@types/jest": "25.1.1",
+    "@types/node": "12.12.26",
+    "jest": "25.1.0",
+    "typescript": "3.7.5"
+  },
+  "wantedDependencies": {
+    "@types/jest": "latest",
+    "@types/node": "12",
+    "jest": "latest",
+    "typescript": "latest"
+  }
+}

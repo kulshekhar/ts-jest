@@ -3,4 +3,4 @@ module.exports = {
   displayName: 'my-app',
   testEnvironment: 'node',
   preset: 'ts-jest',
-};
+}

@@ -14,7 +14,7 @@ const e2eWorkDir = process.env.TS_JEST_E2E_WORKDIR
   ? process.env.TS_JEST_E2E_WORKDIR
   : path.join(os.tmpdir(), '--ts-jest-temp-e2e--')
 const e2eWorkTemplatesDir = path.join(e2eWorkDir, '__templates__')
-const e2eWotkDirLink = path.join(e2eRootDir, '__workdir_synlink__')
+const e2eWotkDirLink = path.join(e2eRootDir, '__workdir_symlink__')
 
 module.exports = {
   pkgDigestFile,
