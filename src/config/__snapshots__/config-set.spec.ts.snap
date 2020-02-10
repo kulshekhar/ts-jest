@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`jest should merge parent config if any 1`] = `
+exports[`jest should merge parent config if any with globals is an empty object 1`] = `
 Object {
   "__backported": true,
   "globals": Object {
@@ -11,11 +11,70 @@ Object {
 }
 `;
 
+exports[`jest should merge parent config if any with globals is undefined 1`] = `
+Object {
+  "__backported": true,
+  "globals": undefined,
+}
+`;
+
 exports[`jest should returns correct config and go thru backports 1`] = `
 Object {
   "__backported": true,
   "globals": Object {},
 }
+`;
+
+exports[`readTsConfig resolve configFileName normally module in tsConfig is not the same as forced module and allowSyntheticDefaultImports is false in tsConfig should use correct paths when searching 1`] = `
+Array [
+  Object {
+    "category": 3,
+    "code": 151001,
+    "file": undefined,
+    "length": undefined,
+    "messageText": "If you have issues related to imports, you should consider setting \`esModuleInterop\` to \`true\` in your TypeScript configuration file (usually \`tsconfig.json\`). See https://blogs.msdn.microsoft.com/typescript/2018/01/31/announcing-typescript-2-7/#easier-ecmascript-module-interoperability for more information.",
+    "start": undefined,
+  },
+]
+`;
+
+exports[`readTsConfig resolve configFileName normally module in tsConfig is not the same as forced module and allowSyntheticDefaultImports is false in tsConfig should use given tsconfig path 1`] = `
+Array [
+  Object {
+    "category": 3,
+    "code": 151001,
+    "file": undefined,
+    "length": undefined,
+    "messageText": "If you have issues related to imports, you should consider setting \`esModuleInterop\` to \`true\` in your TypeScript configuration file (usually \`tsconfig.json\`). See https://blogs.msdn.microsoft.com/typescript/2018/01/31/announcing-typescript-2-7/#easier-ecmascript-module-interoperability for more information.",
+    "start": undefined,
+  },
+]
+`;
+
+exports[`readTsConfig resolve configFileName normally module in tsConfig is not the same as forced module and esModuleInterop is not in tsConfig should use correct paths when searching 1`] = `
+Array [
+  Object {
+    "category": 3,
+    "code": 151001,
+    "file": undefined,
+    "length": undefined,
+    "messageText": "If you have issues related to imports, you should consider setting \`esModuleInterop\` to \`true\` in your TypeScript configuration file (usually \`tsconfig.json\`). See https://blogs.msdn.microsoft.com/typescript/2018/01/31/announcing-typescript-2-7/#easier-ecmascript-module-interoperability for more information.",
+    "start": undefined,
+  },
+]
+`;
+
+exports[`readTsConfig resolve configFileName normally module in tsConfig is not the same as forced module and esModuleInterop is not in tsConfig should use given tsconfig path 1`] = `
+Array [
+  Object {
+    "category": 3,
+    "code": 151001,
+    "file": undefined,
+    "length": undefined,
+    "messageText": "If you have issues related to imports, you should consider setting \`esModuleInterop\` to \`true\` in your TypeScript configuration file (usually \`tsconfig.json\`). See https://blogs.msdn.microsoft.com/typescript/2018/01/31/announcing-typescript-2-7/#easier-ecmascript-module-interoperability for more information.",
+    "start": undefined,
+  },
+]
 `;
 
 exports[`tsJest should return correct defaults 1`] = `
