@@ -18,6 +18,7 @@
     "test:e2e:update-snaphots": "node scripts/e2e.js --updateSnapshot",
     "test:unit": "node_modules/.bin/jest",
     "test:external": "node scripts/test-external-project.js",
+    "test:monorepo": "npm run test:external monorepo",
     "lint": "run-s lint:ts lint:js",
     "lint:js": "node_modules/.bin/eslint . -f stylish",
     "lint:ts": "node_modules/.bin/tslint -t stylish --project .",

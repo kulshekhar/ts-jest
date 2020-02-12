@@ -1,0 +1,48 @@
+{
+  "name": "with-dependency",
+  "version": "0.0.1",
+  "scripts": {
+    "test": "jest '/test/index.spec.ts' --no-cache"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "transformIgnorePatterns": [
+      "<rootDir>/node_modules/(?!(dependency))"
+    ],
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "testRegex": "/test/index.spec.ts$",
+    "moduleDirectories": [
+      "<rootDir>/node_modules",
+      "node_modules"
+    ],
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "json",
+      "node"
+    ],
+    "moduleNameMapper": {
+      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/mocks/fileMock.js",
+      "\\.(s?css|sass)$": "<rootDir>/mocks/styleMock.js"
+    },
+    "globals": {
+      "ts-jest": {
+        "diagnostics": true,
+        "tsConfig": "<rootDir>/tsconfig.json"
+      }
+    }
+  },
+  "devDependencies": {
+    "typescript": "^3.7.5"
+  },
+  "dependencies": {
+    "@types/jest": "^25.1.2",
+    "dependency": "file:../dependency",
+    "jest": "^25.1.0",
+    "ts-jest": "^25.0.0"
+  },
+  "main": "./index.ts"
+}
