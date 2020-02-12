@@ -25,6 +25,56 @@ Object {
 }
 `;
 
+exports[`jsonValue should create jsonValue based on each config and version 1`] = `
+Object {
+  "babel": undefined,
+  "digest": "a0d51ca854194df8191d0e65c0ca4730f510f332",
+  "jest": Object {
+    "__backported": true,
+    "globals": Object {},
+  },
+  "projectDepVersions": Object {
+    "some-module": "1.2.3",
+  },
+  "transformers": Array [
+    "hoisting-jest-mock@1",
+  ],
+  "tsJest": Object {
+    "babelConfig": undefined,
+    "compiler": "typescript",
+    "diagnostics": Object {
+      "ignoreCodes": Array [
+        6059,
+        18002,
+        18003,
+      ],
+      "pretty": true,
+      "throws": true,
+    },
+    "isolatedModules": false,
+    "packageJson": Object {
+      "kind": "file",
+      "value": undefined,
+    },
+    "stringifyContentPathRegex": undefined,
+    "transformers": Array [],
+    "tsConfig": undefined,
+  },
+  "tsconfig": Object {
+    "configFilePath": undefined,
+    "declaration": false,
+    "inlineSourceMap": false,
+    "inlineSources": true,
+    "module": 1,
+    "noEmit": false,
+    "outDir": "$$ts-jest$$",
+    "removeComments": false,
+    "sourceMap": true,
+    "target": 1,
+  },
+}
+`;
+
 exports[`readTsConfig resolve configFileName normally module in tsConfig is not the same as forced module and allowSyntheticDefaultImports is false in tsConfig should use correct paths when searching 1`] = `
 Array [
   Object {

@@ -18,7 +18,6 @@
     "test:e2e:update-snaphots": "node scripts/e2e.js --updateSnapshot",
     "test:unit": "node_modules/.bin/jest",
     "test:external": "node scripts/test-external-project.js",
-    "test:monorepo": "npm run test:external monorepo",
     "lint": "run-s lint:ts lint:js",
     "lint:js": "node_modules/.bin/eslint . -f stylish",
     "lint:ts": "node_modules/.bin/tslint -t stylish --project .",
@@ -51,7 +50,9 @@
   ],
   "author": "Kulshekhar Kabra <kulshekhar@users.noreply.github.com> (https://github.com/kulshekhar)",
   "contributors": [
-    "Huafu Gandon <huafu.gandon@gmail.com> (https://github.com/huafu)"
+    "Huafu Gandon <huafu.gandon@gmail.com> (https://github.com/huafu)",
+    "Anh Pham <anhpnnd@gmail.com> (https://github.com/ahnpnl)",
+    "Gustav Wengel <gustavwengel@gmail.com> (https://github.com/GeeWee)"
   ],
   "license": "MIT",
   "bugs": {
@@ -106,7 +107,7 @@
     "eslint": "latest",
     "fs-extra": "latest",
     "glob-gitignore": "latest",
-    "husky": "1.x",
+    "husky": "4.x",
     "jest": "25.x",
     "js-yaml": "latest",
     "lint-staged": "latest",

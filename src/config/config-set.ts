@@ -336,9 +336,10 @@ export class ConfigSet {
       },
       compilerModule: { DiagnosticCategory },
     } = this
+
     return (diagnostics: Diagnostic[], filePath?: string, logger: Logger = this.logger): void | never => {
       const filteredDiagnostics = filterDiagnostics(diagnostics, filePath)
-      if (filteredDiagnostics.length === 0) return
+      if (!filteredDiagnostics.length) return
       const error = createTsError(filteredDiagnostics)
       // only throw if `warnOnly` and it is a warning or error
       const importantCategories = [DiagnosticCategory.Warning, DiagnosticCategory.Error]
@@ -433,12 +434,15 @@ export class ConfigSet {
       },
       shouldReportDiagnostic,
     } = this
+
     return (diagnostics: Diagnostic[], filePath?: string): Diagnostic[] => {
       if (filePath && !shouldReportDiagnostic(filePath)) return []
+
       return diagnostics.filter(diagnostic => {
-        if (diagnostic.file && diagnostic.file.fileName && !shouldReportDiagnostic(diagnostic.file.fileName)) {
+        if (diagnostic.file?.fileName && !shouldReportDiagnostic(diagnostic.file.fileName)) {
           return false
         }
+
         return ignoreCodes.indexOf(diagnostic.code) === -1
       })
     }
