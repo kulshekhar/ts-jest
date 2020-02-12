@@ -8,12 +8,12 @@
     "declaration": true,
     "stripInternal": true,
     "outDir": "dist",
-    "rootDir": "src",
+    "rootDir": "src"
   },
   "include": ["src"],
   "exclude": [
     "**/*.spec.ts",
     "**/*.test.ts",
-    "**/__*__",
+    "**/__*__"
   ]
 }
