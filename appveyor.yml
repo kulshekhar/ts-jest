@@ -36,7 +36,6 @@ cache:
 # Post-install test scripts.
 test_script:
   - cmd: npm run test -- --runInBand
-  - cmd: npm run test:monorepo
 
 # skip_commits:
 #   files:
