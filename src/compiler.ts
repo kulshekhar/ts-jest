@@ -36,6 +36,7 @@ import { readFileSync, writeFileSync } from 'fs'
 import memoize = require('lodash.memoize')
 import mkdirp = require('mkdirp')
 import { basename, extname, join, normalize, relative } from 'path'
+import { LanguageServiceHost } from 'typescript'
 
 import { ConfigSet } from './config/config-set'
 import { MemoryCache, TsCompiler, TypeInfo } from './types'
@@ -133,7 +134,7 @@ export function createCompiler(configs: ConfigSet): TsCompiler {
       [LogContexts.logLevel]: LogLevels.trace,
     }
 
-    const serviceHost = {
+    const serviceHost: LanguageServiceHost = {
       getScriptFileNames: () => Object.keys(memoryCache.versions),
       getScriptVersion: (fileName: string) => {
         const normalizedFileName = normalize(fileName)

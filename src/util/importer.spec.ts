@@ -121,3 +121,27 @@ describe('babelCore', () => {
 `)
   })
 })
+
+describe('babelJest', () => {
+  it('should be babel-jest', () => {
+    modules = {
+      'babel-jest': () => 'babel-jest',
+    }
+    expect(new Importer().babelJest(fakers.importReason())).toBe('babel-jest')
+  })
+  it('should fail with correct error message', () => {
+    expect(() => new Importer().babelJest(fakers.importReason())).toThrowErrorMatchingInlineSnapshot(`
+"Unable to load the module \\"babel-jest\\". [[BECAUSE]] To fix it:
+    ↳ install \\"babel-jest\\": \`npm i -D babel-jest\` (or \`yarn add --dev babel-jest\`)"
+`)
+  })
+})
+
+describe('typescript', () => {
+  it('should be typescript', () => {
+    modules = {
+      typescript: () => 'typescript',
+    }
+    expect(new Importer().typescript(fakers.importReason(), 'typescript')).toBe('typescript')
+  })
+})
