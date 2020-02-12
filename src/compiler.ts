@@ -34,6 +34,7 @@ import bufferFrom = require('buffer-from')
 import stableStringify = require('fast-json-stable-stringify')
 import { readFileSync, writeFileSync } from 'fs'
 import { replaceRootDirInPath } from 'jest-config/build'
+import JestDefaults from 'jest-config/build/defaults'
 import memoize = require('lodash.memoize')
 import mkdirp = require('mkdirp')
 import { basename, extname, join, normalize, relative } from 'path'
@@ -135,13 +136,10 @@ export function createCompiler(configs: ConfigSet): TsCompiler {
       [LogContexts.logLevel]: LogLevels.trace,
     }
 
-    const transformIgnoreRegExps = (configs.jest.transformIgnorePatterns || [])
+    const transformIgnorePattern = (configs.jest.transformIgnorePatterns || JestDefaults.transformIgnorePatterns)
       .map(pattern => replaceRootDirInPath(configs.rootDir, pattern))
-      .map(pattern => new RegExp(pattern))
-
-    const isFileIgnoredFromTransforms = (fileName: string): boolean => {
-      return transformIgnoreRegExps.some(regexp => regexp.test(fileName))
-    }
+      .join('|')
+    const transformIgnoreRegExp = new RegExp(transformIgnorePattern)
 
     const serviceHost: LanguageServiceHost = {
       getScriptFileNames: () => Object.keys(memoryCache.versions),
@@ -218,7 +216,7 @@ export function createCompiler(configs: ConfigSet): TsCompiler {
       //
       // @see https://github.com/Microsoft/TypeScript/issues/12358
       // @see https://github.com/microsoft/TypeScript/issues/11946
-      if (output.outputFiles.length === 0 && !isFileIgnoredFromTransforms(fileName)) {
+      if (output.outputFiles.length === 0 && !transformIgnoreRegExp.test(fileName)) {
         const normalizedFileName = normalize(fileName)
 
         // our implementation of getScriptFileNames() depends on the keys
