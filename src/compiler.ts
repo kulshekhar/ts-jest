@@ -33,8 +33,7 @@ import { LogContexts, LogLevels, Logger } from 'bs-logger'
 import bufferFrom = require('buffer-from')
 import stableStringify = require('fast-json-stable-stringify')
 import { readFileSync, writeFileSync } from 'fs'
-import { replaceRootDirInPath } from 'jest-config/build'
-import JestDefaults from 'jest-config/build/defaults'
+import { defaults as JestDefaults, replaceRootDirInPath } from 'jest-config/build'
 import memoize = require('lodash.memoize')
 import mkdirp = require('mkdirp')
 import { basename, extname, join, normalize, relative } from 'path'
