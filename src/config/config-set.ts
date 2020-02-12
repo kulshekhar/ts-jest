@@ -416,6 +416,7 @@ export class ConfigSet {
     let hooksFile = process.env.TS_JEST_HOOKS
     if (hooksFile) {
       hooksFile = resolve(this.cwd, hooksFile)
+
       return importer.tryTheseOr(hooksFile, {})
     }
     return {}
@@ -556,13 +557,6 @@ export class ConfigSet {
   @Memoize()
   get cwd(): string {
     return normalize(this.jest.cwd || process.cwd())
-  }
-
-  /**
-   * @internal
-   */
-  get isDoctoring() {
-    return !!process.env.TS_JEST_DOCTOR
   }
 
   @Memoize()

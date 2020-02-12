@@ -804,10 +804,15 @@ describe('tsconfig', () => {
 }) // tsconfig
 
 describe('shouldStringifyContent', () => {
-  it('should return correct value', () => {
+  it('should return correct value is defined', () => {
     const cs = createConfigSet({ tsJestConfig: { tsConfig: false, stringifyContentPathRegex: '\\.str$' } as any })
     expect(cs.shouldStringifyContent('/foo/bar.ts')).toBe(false)
     expect(cs.shouldStringifyContent('/foo/bar.str')).toBe(true)
+  })
+
+  it('should return correct value when stringifyContentPathRegex is undefined', () => {
+    const cs = createConfigSet({ tsJestConfig: { tsConfig: false } as any })
+    expect(cs.shouldStringifyContent('/foo/bar.ts')).toBe(false)
   })
 }) // shouldStringifyContent
 
@@ -839,6 +844,17 @@ Array [
     expect(typeof compiler.getTypeInfo).toBe('function')
   })
 }) // tsCompiler
+
+describe('hooks', () => {
+  it('should return empty object when environment variable TS_JEST_HOOKS is undefined', () => {
+    expect(createConfigSet().hooks).toEqual({})
+  })
+
+  it('should return value when environment variable TS_JEST_HOOKS is defined', () => {
+    process.env.TS_JEST_HOOKS = './foo'
+    expect(createConfigSet().hooks).toBeDefined()
+  })
+})
 
 describe('babelJestTransformer', () => {
   it('should return a babel-jest transformer', () => {
