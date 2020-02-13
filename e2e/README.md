@@ -4,6 +4,7 @@
 ## Directory structure
 
 - `__cases__`: each scenario/minimal repo is in a sub-folder of this one
+- `__monorepos__`: each minimal monorepo is in a sub-folder of this one
 - `__templates__`: contains the package dependency templates for test cases
 - `__templates__/default`: is the default template
 - `__tests__`: contains the actual tests
@@ -54,7 +55,23 @@ expect(testCase.run().status).toBe(0);
 You can find more information on how to create and use templates [there](./__templates__/README.md).
 
 
-## Running
+## Running tests on monorepos
+
+You run the monorepo tests with `yarn test:monorepo` (or `npm run test:monorepo)`. In `scripts/test-external-project.js`,
+`PROJECTS_TO_RUN` must be modified if a new project is added to `e2e/__monorepos__`.
+
+What will happen in order is as follow:
+
+1. A bundle (we'll call it `[bundle]`) will be created for `ts-jest` using `npm pack` (`yarn pack` is buggy).
+
+    The `prepublish` script will be run, so `clean` and `build` (that is why e2e tests are launched before the others, since it's building as part of the process)
+ 
+2. a sub-folder is created in the main temp dir of the OS, let's refer to it as `[e2e-temp]`
+3. `npm ci` and `npm install --save-dev [bundle]` will be run in each monorepo directory in `e2e/__monorepos__` directory.
+4. each test suite in each monorepo project are run according to `jest` config of that project.
+
+
+## Running unit tests and e2e tests
 
 You run the E2E tests with `yarn test:e2e` (or `npm run test:e2e`). What will happen in order is as follow (directories are related to `[ts-jest]/e2e` path):
 

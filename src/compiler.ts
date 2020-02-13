@@ -33,6 +33,7 @@ import { LogContexts, LogLevels, Logger } from 'bs-logger'
 import bufferFrom = require('buffer-from')
 import stableStringify = require('fast-json-stable-stringify')
 import { readFileSync, writeFileSync } from 'fs'
+import { defaults as JestDefaults, replaceRootDirInPath } from 'jest-config/build'
 import memoize = require('lodash.memoize')
 import mkdirp = require('mkdirp')
 import { basename, extname, join, normalize, relative } from 'path'
@@ -134,6 +135,11 @@ export function createCompiler(configs: ConfigSet): TsCompiler {
       [LogContexts.logLevel]: LogLevels.trace,
     }
 
+    const transformIgnorePattern = (configs.jest.transformIgnorePatterns || JestDefaults.transformIgnorePatterns)
+      .map(pattern => replaceRootDirInPath(configs.rootDir, pattern))
+      .join('|')
+    const transformIgnoreRegExp = new RegExp(transformIgnorePattern)
+
     const serviceHost: LanguageServiceHost = {
       getScriptFileNames: () => Object.keys(memoryCache.versions),
       getScriptVersion: (fileName: string) => {
@@ -183,7 +189,7 @@ export function createCompiler(configs: ConfigSet): TsCompiler {
       // Must set memory cache before attempting to read file.
       updateMemoryCache(code, fileName)
 
-      const output = service.getEmitOutput(fileName)
+      let output = service.getEmitOutput(fileName)
 
       if (configs.shouldReportDiagnostic(fileName)) {
         logger.debug({ fileName }, 'getOutput(): computing diagnostics')
@@ -200,6 +206,26 @@ export function createCompiler(configs: ConfigSet): TsCompiler {
       /* istanbul ignore next (this should never happen but is kept for security) */
       if (output.emitSkipped) {
         throw new TypeError(`${relative(cwd, fileName)}: Emit skipped`)
+      }
+
+      // if this block executes we have attempted to compile a resolved dependency
+      // that typescript ignored, likely because the file was located in node_modules.
+      // we can force the compiler to retry by invalidating its internal module
+      // resolution cache.
+      //
+      // @see https://github.com/Microsoft/TypeScript/issues/12358
+      // @see https://github.com/microsoft/TypeScript/issues/11946
+      if (output.outputFiles.length === 0 && !transformIgnoreRegExp.test(fileName)) {
+        const normalizedFileName = normalize(fileName)
+
+        // our implementation of getScriptFileNames() depends on the keys
+        // of memoryCache.versions so we must make sure that the file is
+        // in there.
+        if (!hasOwn.call(memoryCache.versions, normalizedFileName)) {
+          memoryCache.versions[normalizedFileName] = 0
+        }
+
+        output = service.getEmitOutput(fileName)
       }
 
       // Throw an error when requiring `.d.ts` files.

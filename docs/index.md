@@ -31,7 +31,7 @@ Refer to the [installation](user/install) and [configuration](user/config) instr
 
 * [TypeScript](https://www.typescriptlang.org/) - JavaScript that scales
 * [Jest](https://jestjs.io/) - Delightful JavaScript Testing
-* [`ts-jest`](https:/github.com/kulshekhar/ts-jest) - Jest processor for TypeScript _(yes, `ts-jest` uses itself for its tests)_
+* [`ts-jest`](https://github.com/kulshekhar/ts-jest) - Jest processor for TypeScript _(yes, `ts-jest` uses itself for its tests)_
 
 ## Contributing
 
