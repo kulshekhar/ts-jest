@@ -2,7 +2,7 @@
   "name": "with-dependency",
   "version": "0.0.1",
   "scripts": {
-    "test": "jest '/test/index.spec.ts' --no-cache"
+    "test": "jest --no-cache"
   },
   "jest": {
     "preset": "ts-jest",
@@ -41,8 +41,7 @@
   "dependencies": {
     "@types/jest": "^25.1.2",
     "dependency": "file:../dependency",
-    "jest": "^25.1.0",
-    "ts-jest": "^25.0.0"
+    "jest": "^25.1.0"
   },
   "main": "./index.ts"
 }

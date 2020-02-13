@@ -1,0 +1,16 @@
+{
+  "name": "ts-jest-yarn-workspace-composite",
+  "license": "MIT",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "test": "jest --no-cache"
+  },
+  "devDependencies": {
+    "@types/jest": "^25.1.2",
+    "jest": "^25.1.0",
+    "typescript": "~3.7.5"
+  }
+}
