@@ -108,7 +108,7 @@
     "eslint": "latest",
     "fs-extra": "latest",
     "glob-gitignore": "latest",
-    "husky": "4.x",
+    "husky": "3.x",
     "jest": "25.x",
     "js-yaml": "latest",
     "lint-staged": "latest",
