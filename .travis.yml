@@ -4,28 +4,19 @@ jobs:
   include:
     - os: windows
       node_js: 8
-      env: TS_JEST_E2E_WORKDIR=\%APPDATA%\ts-jest-e2e-workdir TS_JEST_E2E_OPTIMIZATIONS=1
+      env: TS_JEST_E2E_WORKDIR=$TRAVIS_BUILD_DIR/ts-jest-e2e-workdir TS_JEST_E2E_OPTIMIZATIONS=1
       cache:
         npm: true
         directories:
           - .cache
-          - \%APPDATA%\ts-jest-e2e-workdir\__templates__
-      script:
-        - npm run clean -- --when-ci-commit-message
-        - npm run test:unit -- --runInBand
-    - os: windows
-      node_js: 12
-      env: TS_JEST_E2E_WORKDIR=\%APPDATA%\ts-jest-e2e-workdir TS_JEST_E2E_OPTIMIZATIONS=1
-      cache:
-        npm: true
-        directories:
-          - .cache
-          - \%APPDATA%\ts-jest-e2e-workdir\__templates__
+          - $TRAVIS_BUILD_DIR/ts-jest-e2e-workdir/__templates__
       before_install:
         - npm i -g yarn
       script:
         - npm run clean -- --when-ci-commit-message
+        # monorepo test has to run before e2e test otherwise Travis will hang
         - npm run test:monorepo
+        - npm run test -- --runInBand
     - os: linux
       node_js: 10
       env: TS_JEST_E2E_WORKDIR=/tmp/ts-jest-e2e-workdir TS_JEST_E2E_OPTIMIZATIONS=1
@@ -37,7 +28,7 @@ jobs:
         #     # fail loudly when force-pushed, that is why there is the `|| 'dummy.js'` part
         #     MODIFIED_FILES=$(git diff --name-only $TRAVIS_COMMIT_RANGE || echo 'dummy.js')
         #     # waiting for native solution https://github.com/travis-ci/travis-ci/issues/6301
-        #     if ! echo ${MODIFIED_FILES} | grep -qvE '^docs/|^\.gitignore|^\.gitattributes|\.md$|^appveyor\.yml$|^icon\.png$|^commitlint\.config\.js$'; then
+        #     if ! echo ${MODIFIED_FILES} | grep -qvE '^docs/|^\.gitignore|^\.gitattributes|\.md$|^icon\.png$|^commitlint\.config\.js$'; then
         #       echo "Only docs were updated, stopping build process."
         #       exit
         #     fi
