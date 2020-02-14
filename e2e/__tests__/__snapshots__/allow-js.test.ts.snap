@@ -6,8 +6,8 @@ exports[`using babel-jest for js files should pass using template "default" 1`] 
   ===[ STDOUT ]===================================================================
   
   ===[ STDERR ]===================================================================
-  PASS ./bar.spec.ts
   PASS ./foo.spec.js
+  PASS ./bar.spec.ts
   
   Test Suites: 2 passed, 2 total
   Tests:       4 passed, 4 total
@@ -23,8 +23,8 @@ exports[`using babel-jest for js files should pass using template "with-babel-7"
   ===[ STDOUT ]===================================================================
   
   ===[ STDERR ]===================================================================
-  PASS ./bar.spec.ts
   PASS ./foo.spec.js
+  PASS ./bar.spec.ts
   
   Test Suites: 2 passed, 2 total
   Tests:       4 passed, 4 total
@@ -40,8 +40,8 @@ exports[`using babel-jest for js files should pass using template "with-babel-7-
   ===[ STDOUT ]===================================================================
   
   ===[ STDERR ]===================================================================
-  PASS ./bar.spec.ts
   PASS ./foo.spec.js
+  PASS ./bar.spec.ts
   
   Test Suites: 2 passed, 2 total
   Tests:       4 passed, 4 total
@@ -57,8 +57,8 @@ exports[`using babel-jest for js files should pass using template "with-typescri
   ===[ STDOUT ]===================================================================
   
   ===[ STDERR ]===================================================================
-  PASS ./bar.spec.ts
   PASS ./foo.spec.js
+  PASS ./bar.spec.ts
   
   Test Suites: 2 passed, 2 total
   Tests:       4 passed, 4 total

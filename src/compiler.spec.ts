@@ -28,7 +28,7 @@ function makeCompiler({
     ...(tsJestConfig.diagnostics as any),
     pretty: false,
   }
-  const cs = new ConfigSet(fakers.jestConfig(jestConfig, tsJestConfig), parentConfig)
+  const cs = new ConfigSet(fakers.getJestConfig(jestConfig, tsJestConfig), parentConfig)
   return createCompiler(cs)
 }
 
@@ -127,7 +127,7 @@ describe('isolatedModules', () => {
 })
 
 describe('allowJs', () => {
-  const compiler = makeCompiler({ tsJestConfig: { tsConfig: { allowJs: true } } })
+  const compiler = makeCompiler({ tsJestConfig: { tsConfig: { allowJs: true, outDir: '$$ts-jest$$' } } })
   const fileName = `${__filename}.test.js`
   afterAll(() => {
     removeSync(fileName)

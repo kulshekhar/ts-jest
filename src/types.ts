@@ -38,6 +38,20 @@ export interface TsJestGlobalOptions {
   isolatedModules?: boolean
 
   /**
+   * Use TypeScript's compiler host API.
+   *
+   * @default false
+   */
+  compilerHost?: boolean
+
+  /**
+   * Emit compiled files into `.ts-jest` directory
+   *
+   * @default false
+   */
+  emit?: boolean
+
+  /**
    * Compiler to use (default to 'typescript'):
    */
   compiler?: string
@@ -57,8 +71,16 @@ export interface TsJestGlobalOptions {
     | boolean
     | {
         pretty?: boolean
+        /**
+         * Ignore TypeScript warnings by diagnostic code.
+         */
         ignoreCodes?: number | string | (number | string)[]
         pathRegex?: RegExp | string
+        /**
+         * Logs TypeScript errors to stderr instead of throwing exceptions.
+         *
+         * @default false
+         */
         warnOnly?: boolean
       }
 
@@ -78,6 +100,13 @@ export interface TsJestGlobalOptions {
    * exporting the content of the file as a string
    */
   stringifyContentPathRegex?: string | RegExp
+
+  /**
+   * Try out experimental features
+   *
+   * @default false
+   */
+  experimental?: boolean
 }
 
 interface TsJestConfig$tsConfig$file {
@@ -119,13 +148,15 @@ export interface TsJestConfig {
   tsConfig: TsJestConfig$tsConfig
   packageJson: TsJestConfig$packageJson
   isolatedModules: boolean
+  compilerHost: boolean
+  emit: boolean
   compiler: string
   diagnostics: TsJestConfig$diagnostics
   babelConfig: TsJestConfig$babelConfig
   transformers: string[]
-
   // to deprecate / deprecated === === ===
   stringifyContentPathRegex: TsJestConfig$stringifyContentPathRegex
+  experimental: boolean
 }
 
 export interface TsJestHooksMap {

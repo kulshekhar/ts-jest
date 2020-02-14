@@ -1,5 +1,5 @@
 /**
- * This code is heavilly inspired from
+ * This code is heavily inspired from
  * https://github.com/JsCommunity/make-error/blob/v1.3.4/index.js
  * ...but more modified than expected :-D
  * Below is the original license anyway:
@@ -99,6 +99,7 @@ export function createCompiler(configs: ConfigSet): TsCompiler {
     logger.debug({ fileName }, 'getOutput(): compiling as isolated module')
     const result = ts.transpileModule(code, {
       fileName,
+      // @ts-ignore
       transformers,
       compilerOptions,
       reportDiagnostics: configs.shouldReportDiagnostic(fileName),
@@ -178,6 +179,7 @@ export function createCompiler(configs: ConfigSet): TsCompiler {
       getCurrentDirectory: () => cwd,
       getCompilationSettings: () => compilerOptions,
       getDefaultLibFileName: () => ts.getDefaultLibFilePath(compilerOptions),
+      // @ts-ignore
       getCustomTransformers: () => transformers,
     }
 

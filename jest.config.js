@@ -11,6 +11,7 @@ module.exports = {
     '!<rootDir>/src/**/*.spec.ts',
     '!<rootDir>/src/**/*.test.ts',
     '!<rootDir>/src/**/__*__/*',
+    '!<rootDir>/src/compiler/*.ts',
   ],
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json'],
   testEnvironment: 'node',

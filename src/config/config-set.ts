@@ -20,11 +20,13 @@ import {
   DiagnosticCategory,
   FormatDiagnosticsHost,
   ParsedCommandLine,
+  Program,
   SourceFile,
 } from 'typescript'
 
 import { digest as MY_DIGEST, version as MY_VERSION } from '..'
 import { createCompiler } from '../compiler'
+import { createCompilerV2 } from '../compiler/instance'
 import { internals as internalAstTransformers } from '../transformers'
 import {
   AstTransformerDesc,
@@ -262,18 +264,25 @@ export class ConfigSet {
     // stringifyContentPathRegex option
     const stringifyContentPathRegex = normalizeRegex(options.stringifyContentPathRegex)
 
+    // turn on experimental features
+    const experimental = options.experimental === true
+
     // parsed options
     const res: TsJestConfig = {
       tsConfig,
+      compilerHost: experimental ? options.compilerHost === true : false, // compilerHost option
+      emit: experimental ? options.emit === true : false, // compilerHost option
       packageJson,
       babelConfig,
       diagnostics,
       isolatedModules: !!options.isolatedModules,
-      compiler: options.compiler || 'typescript',
+      compiler: options.compiler ?? 'typescript',
       transformers,
       stringifyContentPathRegex,
+      experimental,
     }
     this.logger.debug({ tsJestConfig: res }, 'normalized ts-jest config')
+
     return res
   }
 
@@ -401,12 +410,17 @@ export class ConfigSet {
   }
 
   @Memoize()
+  get tsCompilerV2(): TsCompiler {
+    return createCompilerV2(this)
+  }
+
+  @Memoize()
   get astTransformers(): AstTransformerDesc[] {
     return [...internalAstTransformers, ...this.tsJest.transformers.map(m => require(m))]
   }
 
   @Memoize()
-  get tsCustomTransformers(): CustomTransformers {
+  get tsCustomTransformers(): CustomTransformers | ((p: Program) => CustomTransformers) {
     return {
       before: this.astTransformers.map(t => t.factory(this)),
     }
@@ -530,17 +544,15 @@ export class ConfigSet {
       // we don't want to create declaration files
       declaration: false,
       noEmit: false,
-      outDir: '$$ts-jest$$',
       // else istanbul related will be dropped
       removeComments: false,
       // to clear out else it's buggy
       out: undefined,
       outFile: undefined,
-      composite: undefined,
+      composite: undefined, // see https://github.com/TypeStrong/ts-node/pull/657/files
       declarationDir: undefined,
       declarationMap: undefined,
       emitDeclarationOnly: undefined,
-      incremental: undefined,
       sourceRoot: undefined,
       tsBuildInfoFile: undefined,
     }
@@ -628,6 +640,8 @@ export class ConfigSet {
   }
 
   /**
+   * Load TypeScript configuration. Returns the parsed TypeScript config and
+   * any `tsConfig` options specified in ts-jest tsConfig
    * @internal
    */
   readTsConfig(
