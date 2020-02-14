@@ -11,7 +11,7 @@ module.exports = {
   rules: {
     'no-console': ['error', { allow: ['warn', 'error', 'log'] }],
     indent: ['error', 2],
-    'linebreak-style': ['error', 'unix'],
+    'linebreak-style': 0, // make windows and unix work the same for CI
     quotes: ['error', 'single'],
     semi: ['error', 'never'],
     'comma-dangle': [

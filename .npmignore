@@ -59,7 +59,6 @@ old
 jest.config.js
 .vscode
 .github
-appveyor.yml
 .editorconfig
 .prettierignore
 tsconfig.json
