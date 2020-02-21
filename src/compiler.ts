@@ -179,7 +179,6 @@ export function createCompiler(configs: ConfigSet): TsCompiler {
       getCurrentDirectory: () => cwd,
       getCompilationSettings: () => compilerOptions,
       getDefaultLibFileName: () => ts.getDefaultLibFilePath(compilerOptions),
-      // @ts-ignore
       getCustomTransformers: () => transformers,
     }
 

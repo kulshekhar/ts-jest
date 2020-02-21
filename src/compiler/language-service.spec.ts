@@ -62,7 +62,7 @@ describe('language service', () => {
   })
 
   it('should compile js file for allowJs true', () => {
-    const fileName = `${__filename}.test.js`,
+    const fileName = `foo.test.js`,
       compiler = makeCompiler({
         tsJestConfig: { ...baseTsJestConfig, tsConfig: { allowJs: true, outDir: '$$ts-jest$$' } },
       }),
@@ -89,73 +89,63 @@ describe('language service', () => {
 
     const ti = compiler.getTypeInfo(source, __filename, source.indexOf('/* <== that */') - 1)
 
-    // before TS 3.1 the comment had an extra tailing space
+    // before TS 3.1 the comment had an extra trailing space
     ti.comment = ti.comment.trim()
     expect(ti).toEqual({
       comment: 'the prop 1!',
       name: '(property) p1: boolean',
     })
+
+    const ti2 = compiler.getTypeInfo(source, __filename, source.indexOf('/* foo */') - 1)
+    ti.comment = ti.comment.trim()
+    expect(ti2).toEqual({
+      comment: '',
+      name: '',
+    })
   })
 
   it('should have correct source maps', () => {
     const compiler = makeCompiler({ tsJestConfig: { ...baseTsJestConfig, tsConfig: false } }),
-      source = 'const f = (v: number) => v\nconst t: number = f(5)'
+      source = 'const g = (v: number) => v\nconst h: number = g(5)'
 
-    const compiled = compiler.compile(source, __filename)
+    const compiled = compiler.compile(source, 'foo.ts')
 
-    expect(new ProcessedSource(compiled, __filename).outputSourceMaps).toMatchObject({
-      file: __filename,
-      sources: [__filename],
+    expect(new ProcessedSource(compiled, 'foo.ts').outputSourceMaps).toMatchObject({
+      file: 'foo.ts',
+      sources: ['foo.ts'],
       sourcesContent: [source],
     })
   })
 
-  it('should report diagnostics related to typings', () => {
-    const compiler = makeCompiler({ tsJestConfig: { ...baseTsJestConfig, tsConfig: false } })
-
-    expect(() =>
-      compiler.compile(
-        `
-const f = (v: number) => v
-const t: string = f(5)
-const v: boolean = t
+  it('should report diagnostics related to typings with pathRegex config matches file name', () => {
+    const fileName = 'foo.ts',
+      source = `
+const g = (v: number) => v
+const x: string = g(5)
 `,
-        'foo.ts',
-      ),
-    ).toThrowErrorMatchingSnapshot()
+      compiler = makeCompiler({
+        tsJestConfig: { ...baseTsJestConfig, tsConfig: false, diagnostics: { pathRegex: 'foo.ts' } },
+      })
+    writeFileSync(fileName, source, 'utf8')
+
+    expect(() => compiler.compile(source, fileName)).toThrowErrorMatchingSnapshot()
+
+    removeSync(fileName)
   })
 
-  it('should report diagnostics with pathRegex config matches file name', () => {
-    const compiler = makeCompiler({
-      tsJestConfig: { ...baseTsJestConfig, tsConfig: false, diagnostics: { pathRegex: 'foo.ts' } },
-    })
-
-    expect(() =>
-      compiler.compile(
-        `
+  it('should not report diagnostics related to typings with pathRegex config does not match file name', () => {
+    const fileName = 'foo.ts',
+      source = `
 const f = (v: number) => v
 const t: string = f(5)
-const v: boolean = t
 `,
-        'foo.ts',
-      ),
-    ).toThrowErrorMatchingSnapshot()
-  })
+      compiler = makeCompiler({
+        tsJestConfig: { ...baseTsJestConfig, tsConfig: false, diagnostics: { pathRegex: 'bar.ts' } },
+      })
+    writeFileSync(fileName, source, 'utf8')
 
-  it('should report diagnostics with pathRegex config does not match file name', () => {
-    const compiler = makeCompiler({
-      tsJestConfig: { ...baseTsJestConfig, tsConfig: false, diagnostics: { pathRegex: '/bar.ts/' } },
-    })
+    expect(() => compiler.compile(source, fileName)).not.toThrowError()
 
-    expect(() =>
-      compiler.compile(
-        `
-const f = (v: number) => v
-const t: string = f(5)
-const v: boolean = t
-`,
-        'foo.ts',
-      ),
-    ).not.toThrowError()
+    removeSync(fileName)
   })
 })

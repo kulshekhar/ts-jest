@@ -19,20 +19,19 @@ export const compileUsingLanguageService = (
 ): CompileResult => {
   logger.debug('compileUsingLanguageService()')
 
-  const ts = configs.compilerModule
-  const cwd = configs.cwd
-  const customTransformers = configs.tsCustomTransformers
-  const { options, fileNames } = configs.typescript
-  // Create the compiler host for type checking.
-  const serviceHostDebugCtx = {
-    [LogContexts.logLevel]: LogLevels.debug,
-    namespace: 'ts:serviceHost',
-    call: null,
-  }
-  const serviceHostTraceCtx = {
-    ...serviceHostDebugCtx,
-    [LogContexts.logLevel]: LogLevels.trace,
-  }
+  const ts = configs.compilerModule,
+    cwd = configs.cwd,
+    { options, fileNames } = configs.typescript,
+    // Create the compiler host for type checking.
+    serviceHostDebugCtx = {
+      [LogContexts.logLevel]: LogLevels.debug,
+      namespace: 'ts:serviceHost',
+      call: null,
+    },
+    serviceHostTraceCtx = {
+      ...serviceHostDebugCtx,
+      [LogContexts.logLevel]: LogLevels.trace,
+    }
   let projectVersion = 1
   const serviceHost: _ts.LanguageServiceHost = {
     getProjectVersion: () => `${projectVersion}`,
@@ -73,42 +72,34 @@ export const compileUsingLanguageService = (
     getCurrentDirectory: () => cwd,
     getCompilationSettings: () => options,
     getDefaultLibFileName: () => ts.getDefaultLibFilePath(options),
-    getCustomTransformers: () => {
-      if (typeof customTransformers === 'function') {
-        const program = service.getProgram()
-
-        return program ? customTransformers(program) : undefined
-      }
-
-      return customTransformers
-    },
+    getCustomTransformers: () => configs.tsCustomTransformers,
   }
 
   logger.debug('compileUsingLanguageService(): creating language service')
 
-  const service: _ts.LanguageService = ts.createLanguageService(serviceHost)
-  const updateMemoryCache = (contents: string, normalizedFileName: string): void => {
-    let shouldIncrementProjectVersion = false
-    logger.debug({ normalizedFileName }, `updateMemoryCache() for language service`)
+  const service: _ts.LanguageService = ts.createLanguageService(serviceHost),
+    updateMemoryCache = (contents: string, normalizedFileName: string): void => {
+      let shouldIncrementProjectVersion = false
+      logger.debug({ normalizedFileName }, `updateMemoryCache() for language service`)
 
-    const fileVersion = memoryCache.versions.get(normalizedFileName) ?? 0
-    const isFileInCache = fileVersion !== 0
-    if (!isFileInCache) {
-      fileNames.push(normalizedFileName)
-      // Modifying rootFileNames means a project change
-      shouldIncrementProjectVersion = true
-    }
-    if (memoryCache.contents.get(normalizedFileName) !== contents) {
-      memoryCache.versions.set(normalizedFileName, fileVersion + 1)
-      memoryCache.contents.set(normalizedFileName, contents)
-      // Only bump project version when file is modified in cache, not when discovered for the first time
-      if (isFileInCache) {
+      const fileVersion = memoryCache.versions.get(normalizedFileName) ?? 0,
+        isFileInCache = fileVersion !== 0
+      if (!isFileInCache) {
+        fileNames.push(normalizedFileName)
+        // Modifying rootFileNames means a project change
         shouldIncrementProjectVersion = true
       }
-    }
+      if (memoryCache.contents.get(normalizedFileName) !== contents) {
+        memoryCache.versions.set(normalizedFileName, fileVersion + 1)
+        memoryCache.contents.set(normalizedFileName, contents)
+        // Only bump project version when file is modified in cache, not when discovered for the first time
+        if (isFileInCache) {
+          shouldIncrementProjectVersion = true
+        }
+      }
 
-    if (shouldIncrementProjectVersion) projectVersion++
-  }
+      if (shouldIncrementProjectVersion) projectVersion++
+    }
   let previousProgram: _ts.Program | undefined
 
   return {
@@ -147,7 +138,6 @@ export const compileUsingLanguageService = (
       )
 
       previousProgram = programAfter
-
       // Throw an error when requiring `.d.ts` files.
       /* istanbul ignore next (this should never happen but is kept for security) */
       if (!output.outputFiles.length) {
@@ -164,10 +154,11 @@ export const compileUsingLanguageService = (
       const normalizedFileName = normalize(fileName)
       updateMemoryCache(code, normalizedFileName)
       const info = service.getQuickInfoAtPosition(normalizedFileName, position)
-      const name = ts.displayPartsToString(info ? info.displayParts : [])
-      const comment = ts.displayPartsToString(info ? info.documentation : [])
 
-      return { name, comment }
+      return {
+        name: ts.displayPartsToString(info ? info.displayParts : []),
+        comment: ts.displayPartsToString(info ? info.documentation : []),
+      }
     },
   }
 }

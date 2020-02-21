@@ -20,7 +20,6 @@ export const compileUsingTranspileModule = (configs: ConfigSet, logger: Logger):
       const normalizedFileName = normalize(fileName)
       const result = configs.compilerModule.transpileModule(code, {
         fileName: normalizedFileName,
-        // @ts-ignore
         transformers: configs.tsCustomTransformers,
         compilerOptions: configs.typescript.options,
         reportDiagnostics: configs.shouldReportDiagnostic(normalizedFileName),

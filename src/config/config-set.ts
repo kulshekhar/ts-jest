@@ -20,7 +20,6 @@ import {
   DiagnosticCategory,
   FormatDiagnosticsHost,
   ParsedCommandLine,
-  Program,
   SourceFile,
 } from 'typescript'
 
@@ -420,7 +419,7 @@ export class ConfigSet {
   }
 
   @Memoize()
-  get tsCustomTransformers(): CustomTransformers | ((p: Program) => CustomTransformers) {
+  get tsCustomTransformers(): CustomTransformers {
     return {
       before: this.astTransformers.map(t => t.factory(this)),
     }
