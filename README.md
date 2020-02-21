@@ -13,7 +13,7 @@ It supports all features of TypeScript including type-checking. [Read more about
 
 [<img src="./docs/assets/img/documentation.png" align="left" height="24"> View the online documentation (usage & technical)](https://kulshekhar.github.io/ts-jest)
 
-[<img src="./docs/assets/img/slack.png" align="left" height="24"> Ask for some help in the `ts-jest` community of Slack](https://join.slack.com/t/ts-jest/shared_invite/enQtNDE1ODQ0OTEzMTczLWI5NTQ4ZmEzOTYxYzM2NjhiZDM2ZTI3MGYyYjA2Y2E1YTMxMjUyYTcxNTlmNjAyZTc2Nzk4YTRmZmRhYmZmYTg)
+[<img src="./docs/assets/img/slack.png" align="left" height="24"> Ask for some help in the `ts-jest` community of Slack](https://bit.ly/3bRHFPQ)
 
 <!--
 [<img src="./docs/assets/img/troubleshooting.png" align="left" height="24"> Before reporting any issue, be sure to check the troubleshooting page](https://kulshekhar.github.io/ts-jest/user/troubleshooting)

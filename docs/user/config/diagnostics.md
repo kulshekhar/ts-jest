@@ -2,7 +2,7 @@
 title: Diagnostics option
 ---
 
-The `diagnostics` option allows to configure error reporting.
+The `diagnostics` option configures error reporting.
 It can both be enabled/disabled entirely or limited to a specific type of errors and/or files.
 
 If a diagnostic is not filtered out, `ts-jest` will fail the compilation and your test.
@@ -15,7 +15,7 @@ This might lead to slightly better performance, especially if you're not using J
 
 ### Advanced configuration
 
-The option's value can also accept an object for more advanced configuration. Each config. key is optional:
+The `diagnostics` option's value can also accept an object for more advanced configuration. Each config. key is optional:
 
 - **`warnOnly`**: If specified and `true`, diagnostics will be reported but won't stop compilation (default: _disabled_).
 - **`ignoreCodes`**: List of TypeScript error codes to ignore. Complete list can be found [there](https://github.com/Microsoft/TypeScript/blob/master/src/compiler/diagnosticMessages.json). By default here are the ones ignored:
