@@ -9,10 +9,6 @@ import ProcessedSource from '../__helpers__/processed-source'
 const logTarget = logTargetMock()
 
 describe('language service', () => {
-  const baseTsJestConfig = {
-    experimental: true,
-  }
-
   beforeEach(() => {
     logTarget.clear()
   })
@@ -21,7 +17,7 @@ describe('language service', () => {
     const tmp = tempDir('compiler'),
       compiler = makeCompiler({
         jestConfig: { cache: true, cacheDirectory: tmp },
-        tsJestConfig: { ...baseTsJestConfig, tsConfig: false },
+        tsJestConfig: { tsConfig: false },
       }),
       source = 'console.log("hello")'
 
@@ -64,7 +60,7 @@ describe('language service', () => {
   it('should compile js file for allowJs true', () => {
     const fileName = `foo.test.js`,
       compiler = makeCompiler({
-        tsJestConfig: { ...baseTsJestConfig, tsConfig: { allowJs: true, outDir: '$$ts-jest$$' } },
+        tsJestConfig: { tsConfig: { allowJs: true, outDir: '$$ts-jest$$' } },
       }),
       source = 'export default 42'
 
@@ -76,36 +72,8 @@ describe('language service', () => {
     removeSync(fileName)
   })
 
-  it('should get correct type info', () => {
-    const compiler = makeCompiler({ tsJestConfig: { ...baseTsJestConfig, tsConfig: false } }),
-      source = `
-        type MyType {
-          /** the prop 1! */
-          p1: boolean
-        }
-        const val: MyType = {} as any
-        console.log(val.p1/* <== that */)
-        `
-
-    const ti = compiler.getTypeInfo(source, __filename, source.indexOf('/* <== that */') - 1)
-
-    // before TS 3.1 the comment had an extra trailing space
-    ti.comment = ti.comment.trim()
-    expect(ti).toEqual({
-      comment: 'the prop 1!',
-      name: '(property) p1: boolean',
-    })
-
-    const ti2 = compiler.getTypeInfo(source, __filename, source.indexOf('/* foo */') - 1)
-    ti.comment = ti.comment.trim()
-    expect(ti2).toEqual({
-      comment: '',
-      name: '',
-    })
-  })
-
   it('should have correct source maps', () => {
-    const compiler = makeCompiler({ tsJestConfig: { ...baseTsJestConfig, tsConfig: false } }),
+    const compiler = makeCompiler({ tsJestConfig: { tsConfig: false } }),
       source = 'const g = (v: number) => v\nconst h: number = g(5)'
 
     const compiled = compiler.compile(source, 'foo.ts')
@@ -124,7 +92,7 @@ const g = (v: number) => v
 const x: string = g(5)
 `,
       compiler = makeCompiler({
-        tsJestConfig: { ...baseTsJestConfig, tsConfig: false, diagnostics: { pathRegex: 'foo.ts' } },
+        tsJestConfig: { tsConfig: false, diagnostics: { pathRegex: 'foo.ts' } },
       })
     writeFileSync(fileName, source, 'utf8')
 
@@ -140,7 +108,7 @@ const f = (v: number) => v
 const t: string = f(5)
 `,
       compiler = makeCompiler({
-        tsJestConfig: { ...baseTsJestConfig, tsConfig: false, diagnostics: { pathRegex: 'bar.ts' } },
+        tsJestConfig: { tsConfig: false, diagnostics: { pathRegex: 'bar.ts' } },
       })
     writeFileSync(fileName, source, 'utf8')
 

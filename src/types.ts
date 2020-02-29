@@ -100,13 +100,6 @@ export interface TsJestGlobalOptions {
    * exporting the content of the file as a string
    */
   stringifyContentPathRegex?: string | RegExp
-
-  /**
-   * Try out experimental features
-   *
-   * @default false
-   */
-  experimental?: boolean
 }
 
 interface TsJestConfig$tsConfig$file {
@@ -156,7 +149,6 @@ export interface TsJestConfig {
   transformers: string[]
   // to deprecate / deprecated === === ===
   stringifyContentPathRegex: TsJestConfig$stringifyContentPathRegex
-  experimental: boolean
 }
 
 export interface TsJestHooksMap {
@@ -190,31 +182,31 @@ export interface TSCommon {
   formatDiagnosticsWithColorAndContext: typeof _ts.formatDiagnosticsWithColorAndContext
 }
 
-/**
- * Track the project information.
- * @internal
- */
-export interface MemoryCache {
-  contents: { [path: string]: string | undefined }
-  versions: { [path: string]: number | undefined }
-  outputs: { [path: string]: string }
-}
-
-/**
- * Information retrieved from type info check.
- */
-export interface TypeInfo {
-  name: string
-  comment: string
-}
-
 export interface TsCompiler {
   cwd: string
   extensions: string[]
   cachedir: string | undefined
   ts: TSCommon
   compile(code: string, fileName: string, lineOffset?: number): string
-  getTypeInfo(code: string, fileName: string, position: number): TypeInfo
+}
+
+/**
+ * Internal source output.
+ */
+export type SourceOutput = [string, string]
+
+/**
+ * Track the project information.
+ * @internal
+ */
+export interface MemoryCache {
+  contents: Map<string, string | undefined>
+  versions: Map<string, number>
+  outputs: Map<string, string>
+}
+
+export interface CompileResult {
+  getOutput: (code: string, fileName: string) => SourceOutput
 }
 
 export interface AstTransformerDesc {

@@ -24,8 +24,7 @@ import {
 } from 'typescript'
 
 import { digest as MY_DIGEST, version as MY_VERSION } from '..'
-import { createCompiler } from '../compiler'
-import { createCompilerV2 } from '../compiler/instance'
+import { createCompiler } from '../compiler/instance'
 import { internals as internalAstTransformers } from '../transformers'
 import {
   AstTransformerDesc,
@@ -263,14 +262,11 @@ export class ConfigSet {
     // stringifyContentPathRegex option
     const stringifyContentPathRegex = normalizeRegex(options.stringifyContentPathRegex)
 
-    // turn on experimental features
-    const experimental = options.experimental === true
-
     // parsed options
     const res: TsJestConfig = {
       tsConfig,
-      compilerHost: experimental ? options.compilerHost === true : false, // compilerHost option
-      emit: experimental ? options.emit === true : false, // compilerHost option
+      compilerHost: options.compilerHost ?? false,
+      emit: options.emit ?? false,
       packageJson,
       babelConfig,
       diagnostics,
@@ -278,7 +274,6 @@ export class ConfigSet {
       compiler: options.compiler ?? 'typescript',
       transformers,
       stringifyContentPathRegex,
-      experimental,
     }
     this.logger.debug({ tsJestConfig: res }, 'normalized ts-jest config')
 
@@ -406,11 +401,6 @@ export class ConfigSet {
   @Memoize()
   get tsCompiler(): TsCompiler {
     return createCompiler(this)
-  }
-
-  @Memoize()
-  get tsCompilerV2(): TsCompiler {
-    return createCompilerV2(this)
   }
 
   @Memoize()

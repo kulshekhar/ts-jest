@@ -1,57 +1,39 @@
-import { Logger } from 'bs-logger'
+import { LogContexts, LogLevels, Logger } from 'bs-logger'
 import memoize = require('lodash.memoize')
 import { basename, normalize, relative } from 'path'
 import * as _ts from 'typescript'
 
 import { ConfigSet } from '../config/config-set'
-import { TypeInfo } from '../types'
+import { CompileResult, MemoryCache, SourceOutput } from '../types'
 import { Errors, interpolate } from '../util/messages'
-
-import { CompileResult, MemoryCacheV2, SourceOutput } from './compiler-types'
-
-/**
- * Get token at file position.
- *
- * Reference: https://github.com/microsoft/TypeScript/blob/fcd9334f57d85b73dd66ad2d21c02e84822f4841/src/services/utilities.ts#L705-L731
- */
-const getTokenAtPosition = (sourceFile: _ts.SourceFile, position: number): _ts.Node => {
-  let current: _ts.Node = sourceFile
-
-  outer: while (true) {
-    for (const child of current.getChildren(sourceFile)) {
-      const start = child.getFullStart()
-      if (start > position) break
-
-      const end = child.getEnd()
-      if (position <= end) {
-        current = child
-        continue outer
-      }
-    }
-
-    return current
-  }
-}
 
 /**
  * @internal
  */
-export const compileUsingProgram = (configs: ConfigSet, logger: Logger, memoryCache: MemoryCacheV2): CompileResult => {
-  logger.debug('compileUsingProgram()')
+export const compileUsingProgram = (configs: ConfigSet, logger: Logger, memoryCache: MemoryCache): CompileResult => {
+  logger.debug('compileUsingProgram(): create typescript compiler')
 
   const ts = configs.compilerModule,
     cwd = configs.cwd,
     { options, fileNames, projectReferences, errors } = configs.typescript,
-    sys: _ts.System = {
+    compilerHostTraceCtx = {
+      namespace: 'ts:compilerHost',
+      call: null,
+      [LogContexts.logLevel]: LogLevels.trace,
+    },
+    sys = {
       ...ts.sys,
-      readFile: memoize(ts.sys.readFile),
-      readDirectory: memoize(ts.sys.readDirectory),
-      getDirectories: memoize(ts.sys.getDirectories),
-      fileExists: memoize(ts.sys.fileExists),
-      directoryExists: memoize(ts.sys.directoryExists),
-      resolvePath: memoize(ts.sys.resolvePath),
-      realpath: ts.sys.realpath ? memoize(ts.sys.realpath) : undefined,
+      readFile: logger.wrap(compilerHostTraceCtx, 'readFile', memoize(ts.sys.readFile)),
+      readDirectory: logger.wrap(compilerHostTraceCtx, 'readDirectory', memoize(ts.sys.readDirectory)),
+      getDirectories: logger.wrap(compilerHostTraceCtx, 'getDirectories', memoize(ts.sys.getDirectories)),
+      fileExists: logger.wrap(compilerHostTraceCtx, 'fileExists', memoize(ts.sys.fileExists)),
+      directoryExists: logger.wrap(compilerHostTraceCtx, 'directoryExists', memoize(ts.sys.directoryExists)),
+      resolvePath: logger.wrap(compilerHostTraceCtx, 'resolvePath', memoize(ts.sys.resolvePath)),
+      realpath: ts.sys.realpath ? logger.wrap(compilerHostTraceCtx, 'realpath', memoize(ts.sys.realpath)) : undefined,
       getCurrentDirectory: () => cwd,
+      getNewLine: () => '\n',
+      getCanonicalFileName: (fileName: string) =>
+        ts.sys.useCaseSensitiveFileNames ? fileName : fileName.toLowerCase(),
     }
   let builderProgram: _ts.EmitAndSemanticDiagnosticsBuilderProgram, program: _ts.Program, host: _ts.CompilerHost
   // Fallback for older TypeScript releases without incremental API.
@@ -68,28 +50,15 @@ export const compileUsingProgram = (configs: ConfigSet, logger: Logger, memoryCa
   } else {
     host = {
       ...sys,
-      getSourceFile: (fileName: string, languageVersion: _ts.ScriptTarget) => {
-        const normalizedFileName = normalize(fileName)
-        const hit = memoryCache.contents.has(normalizedFileName)
+      getSourceFile: (fileName, languageVersion) => {
+        const contents = ts.sys.readFile(fileName)
 
-        logger.trace({ normalizedFileName, cacheHit: hit }, `getSourceFile():`, 'cache', hit ? 'hit' : 'miss')
-
-        // Read contents from TypeScript memory cache.
-        if (!hit) {
-          memoryCache.contents.set(normalizedFileName, ts.sys.readFile(normalizedFileName))
-        }
-        const contents = memoryCache.contents.get(normalizedFileName)
-        if (contents === undefined) {
-          return
-        }
+        if (contents === undefined) return
 
         return ts.createSourceFile(fileName, contents, languageVersion)
       },
       getDefaultLibFileName: () => ts.getDefaultLibFilePath(options),
-      getCanonicalFileName: (fileName: string) =>
-        ts.sys.useCaseSensitiveFileNames ? fileName : fileName.toLowerCase(),
       useCaseSensitiveFileNames: () => sys.useCaseSensitiveFileNames,
-      getNewLine: () => '\n',
     }
     program = ts.createProgram({
       rootNames: fileNames.slice(),
@@ -206,34 +175,6 @@ export const compileUsingProgram = (configs: ConfigSet, logger: Logger, memoryCa
       }
 
       return output
-    },
-    getTypeInfo: (code: string, fileName: string, position: number): TypeInfo => {
-      const normalizedFileName = normalize(fileName)
-      updateMemoryCache(code, normalizedFileName)
-
-      const sourceFile = options.incremental
-        ? builderProgram.getSourceFile(normalizedFileName)
-        : program.getSourceFile(normalizedFileName)
-
-      if (!sourceFile) throw new TypeError(`Unable to read file: ${fileName}`)
-
-      const node = getTokenAtPosition(sourceFile, position),
-        checker: _ts.TypeChecker = options.incremental
-          ? builderProgram.getProgram().getTypeChecker()
-          : program.getTypeChecker(),
-        symbol: _ts.Symbol | undefined = checker.getSymbolAtLocation(node)
-
-      if (!symbol) return { name: '', comment: '' }
-
-      const type: _ts.Type = checker.getTypeOfSymbolAtLocation(symbol, node),
-        signatures = [...type.getConstructSignatures(), ...type.getCallSignatures()]
-
-      return {
-        name: signatures.length
-          ? signatures.map(x => checker.signatureToString(x)).join('\n')
-          : checker.typeToString(type),
-        comment: ts.displayPartsToString(symbol ? symbol.getDocumentationComment(checker) : []),
-      }
     },
   }
 }

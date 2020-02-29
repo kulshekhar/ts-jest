@@ -2,16 +2,13 @@ import { Logger } from 'bs-logger'
 import { normalize } from 'path'
 
 import { ConfigSet } from '../config/config-set'
-import { TypeInfo } from '../types'
-import { Errors } from '../util/messages'
-
-import { CompileResult, SourceOutput } from './compiler-types'
+import { CompileResult, SourceOutput } from '../types'
 
 /**
  * @internal
  */
 export const compileUsingTranspileModule = (configs: ConfigSet, logger: Logger): CompileResult => {
-  logger.debug('compileUsingTranspileModule()')
+  logger.debug('compileUsingTranspileModule(): create typescript compiler')
 
   return {
     getOutput: (code: string, fileName: string): SourceOutput => {
@@ -30,9 +27,6 @@ export const compileUsingTranspileModule = (configs: ConfigSet, logger: Logger):
       }
 
       return [result.outputText, result.sourceMapText!]
-    },
-    getTypeInfo: (_code: string, _fileName: string, _position: number): TypeInfo => {
-      throw new TypeError(Errors.TypesUnavailableWithoutTypeCheck)
     },
   }
 }

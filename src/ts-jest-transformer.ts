@@ -129,9 +129,7 @@ export class TsJestTransformer implements Transformer {
     } else if (isJsFile || isTsFile) {
       // transpile TS code (source maps are included)
       /* istanbul ignore if */
-      result = configs.tsJest?.experimental
-        ? configs.tsCompilerV2.compile(source, filePath)
-        : configs.tsCompiler.compile(source, filePath)
+      result = configs.tsCompiler.compile(source, filePath)
     } else {
       // we should not get called for files with other extension than js[x], ts[x] and d.ts,
       // TypeScript will bail if we try to compile, and if it was to call babel, users can

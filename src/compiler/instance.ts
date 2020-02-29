@@ -35,10 +35,9 @@ import mkdirp = require('mkdirp')
 import { basename, extname, join, normalize } from 'path'
 
 import { ConfigSet } from '../config/config-set'
-import { TsCompiler } from '../types'
+import { CompileResult, MemoryCache, SourceOutput, TsCompiler } from '../types'
 import { sha1 } from '../util/sha1'
 
-import { CompileResult, MemoryCacheV2, SourceOutput } from './compiler-types'
 import { compileUsingLanguageService } from './language-service'
 import { compileUsingProgram } from './program'
 import { compileUsingTranspileModule } from './transpile-module'
@@ -93,7 +92,7 @@ const isValidCacheContent = (contents: string): boolean => {
  */
 const readThrough = (
   cachedir: string | undefined,
-  memoryCache: MemoryCacheV2,
+  memoryCache: MemoryCache,
   compile: (code: string, fileName: string, lineOffset?: number) => SourceOutput,
   getExtension: (fileName: string) => string,
   logger: Logger,
@@ -145,18 +144,17 @@ const readThrough = (
  * Register TypeScript compiler.
  * @internal
  */
-export const createCompilerV2 = (configs: ConfigSet): TsCompiler => {
+export const createCompiler = (configs: ConfigSet): TsCompiler => {
   const logger = configs.logger.child({ namespace: 'ts-compiler' })
   const {
     typescript: { options: compilerOptions, fileNames },
     tsJest,
   } = configs
-  logger.debug('creating typescript compiler', tsJest.isolatedModules ? '(isolated modules)' : '(language service)')
 
   const cachedir = configs.tsCacheDir,
     ts = configs.compilerModule, // Require the TypeScript compiler and configuration.
     extensions = ['.ts', '.tsx'],
-    memoryCache: MemoryCacheV2 = {
+    memoryCache: MemoryCache = {
       contents: new Map<string, string | undefined>(),
       versions: new Map<string, number>(),
       outputs: new Map<string, string>(),
@@ -176,6 +174,9 @@ export const createCompilerV2 = (configs: ConfigSet): TsCompiler => {
       ? (path: string) => (/\.[tj]sx$/.test(path) ? '.jsx' : '.js')
       : (_: string) => '.js'
   let compileResult: CompileResult
+
+  logger.debug('createCompiler(): create typescript compiler')
+
   if (!tsJest.isolatedModules) {
     // Use language services by default
     if (!tsJest.compilerHost) {
@@ -188,5 +189,5 @@ export const createCompilerV2 = (configs: ConfigSet): TsCompiler => {
   }
   const compile = readThrough(cachedir, memoryCache, compileResult.getOutput, getExtension, logger)
 
-  return { cwd: configs.cwd, compile, getTypeInfo: compileResult.getTypeInfo, extensions, cachedir, ts }
+  return { cwd: configs.cwd, compile, extensions, cachedir, ts }
 }

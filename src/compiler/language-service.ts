@@ -4,10 +4,8 @@ import { basename, normalize, relative } from 'path'
 import * as _ts from 'typescript'
 
 import { ConfigSet } from '../config/config-set'
-import { TypeInfo } from '../types'
+import { CompileResult, MemoryCache, SourceOutput } from '../types'
 import { Errors, interpolate } from '../util/messages'
-
-import { CompileResult, MemoryCacheV2, SourceOutput } from './compiler-types'
 
 /**
  * @internal
@@ -15,37 +13,25 @@ import { CompileResult, MemoryCacheV2, SourceOutput } from './compiler-types'
 export const compileUsingLanguageService = (
   configs: ConfigSet,
   logger: Logger,
-  memoryCache: MemoryCacheV2,
+  memoryCache: MemoryCache,
 ): CompileResult => {
-  logger.debug('compileUsingLanguageService()')
-
   const ts = configs.compilerModule,
     cwd = configs.cwd,
     { options, fileNames } = configs.typescript,
-    // Create the compiler host for type checking.
-    serviceHostDebugCtx = {
-      [LogContexts.logLevel]: LogLevels.debug,
+    serviceHostTraceCtx = {
       namespace: 'ts:serviceHost',
       call: null,
-    },
-    serviceHostTraceCtx = {
-      ...serviceHostDebugCtx,
       [LogContexts.logLevel]: LogLevels.trace,
     }
   let projectVersion = 1
   const serviceHost: _ts.LanguageServiceHost = {
-    getProjectVersion: () => `${projectVersion}`,
+    getProjectVersion: () => String(projectVersion),
     getScriptFileNames: () => fileNames,
     getScriptVersion: (fileName: string) => {
       const normalizedFileName = normalize(fileName)
       const version = memoryCache.versions.get(normalizedFileName)
 
-      // We need to return `undefined` and not a string here because TypeScript will use
-      // `getScriptVersion` and compare against their own version - which can be `undefined`.
-      // If we don't return `undefined` it results in `undefined === "undefined"` and run
-      // `createProgram` again (which is very slow). Using a `string` assertion here to avoid
-      // TypeScript errors from the function signature (expects `(x: string) => string`).
-      return version === undefined ? ((undefined as any) as string) : String(version)
+      return version === undefined ? '' : version.toString()
     },
     getScriptSnapshot(fileName: string) {
       const normalizedFileName = normalize(fileName)
@@ -77,29 +63,29 @@ export const compileUsingLanguageService = (
 
   logger.debug('compileUsingLanguageService(): creating language service')
 
-  const service: _ts.LanguageService = ts.createLanguageService(serviceHost),
-    updateMemoryCache = (contents: string, normalizedFileName: string): void => {
-      let shouldIncrementProjectVersion = false
-      logger.debug({ normalizedFileName }, `updateMemoryCache() for language service`)
+  const service: _ts.LanguageService = ts.createLanguageService(
+    serviceHost,
+    ts.createDocumentRegistry(ts.sys.useCaseSensitiveFileNames, cwd),
+  )
+  const updateMemoryCache = (contents: string, normalizedFileName: string): void => {
+    logger.debug({ normalizedFileName }, `updateMemoryCache() for language service`)
 
-      const fileVersion = memoryCache.versions.get(normalizedFileName) ?? 0,
-        isFileInCache = fileVersion !== 0
-      if (!isFileInCache) {
-        fileNames.push(normalizedFileName)
-        // Modifying rootFileNames means a project change
-        shouldIncrementProjectVersion = true
-      }
-      if (memoryCache.contents.get(normalizedFileName) !== contents) {
-        memoryCache.versions.set(normalizedFileName, fileVersion + 1)
-        memoryCache.contents.set(normalizedFileName, contents)
-        // Only bump project version when file is modified in cache, not when discovered for the first time
-        if (isFileInCache) {
-          shouldIncrementProjectVersion = true
-        }
-      }
-
-      if (shouldIncrementProjectVersion) projectVersion++
+    const fileVersion = memoryCache.versions.get(normalizedFileName) ?? 0,
+      isFileInCache = fileVersion !== 0
+    if (!isFileInCache) {
+      fileNames.push(normalizedFileName)
+      // Modifying rootFileNames means a project change
+      projectVersion++
     }
+    if (memoryCache.contents.get(normalizedFileName) !== contents) {
+      memoryCache.versions.set(normalizedFileName, fileVersion + 1)
+      memoryCache.contents.set(normalizedFileName, contents)
+      // Only bump project version when file is modified in cache, not when discovered for the first time
+      if (isFileInCache) {
+        projectVersion++
+      }
+    }
+  }
   let previousProgram: _ts.Program | undefined
 
   return {
@@ -149,16 +135,6 @@ export const compileUsingLanguageService = (
       }
 
       return [output.outputFiles[1].text, output.outputFiles[0].text]
-    },
-    getTypeInfo: (code: string, fileName: string, position: number): TypeInfo => {
-      const normalizedFileName = normalize(fileName)
-      updateMemoryCache(code, normalizedFileName)
-      const info = service.getQuickInfoAtPosition(normalizedFileName, position)
-
-      return {
-        name: ts.displayPartsToString(info ? info.displayParts : []),
-        comment: ts.displayPartsToString(info ? info.documentation : []),
-      }
     },
   }
 }

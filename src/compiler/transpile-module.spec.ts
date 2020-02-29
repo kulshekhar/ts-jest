@@ -10,7 +10,6 @@ const logTarget = logTargetMock()
 describe('transpile module with isolatedModule: true', () => {
   const baseTsJestConfig = {
     isolatedModules: true,
-    experimental: true,
   }
 
   beforeEach(() => {
@@ -53,24 +52,6 @@ describe('transpile module with isolatedModule: true', () => {
     expect(new ProcessedSource(compiled, fileName)).toMatchSnapshot()
 
     removeSync(fileName)
-  })
-
-  it('should throw error because type info is not available', () => {
-    const compiler = makeCompiler({ tsJestConfig: { ...baseTsJestConfig, tsConfig: false } }),
-      source = `
-        type MyType {
-          /** the prop 1! */
-          p1: boolean
-        }
-        const val: MyType = {} as any
-        console.log(val.p1/* <== that */)
-        `
-
-    try {
-      compiler.getTypeInfo(source, __filename, source.indexOf('/* <== that */') - 1)
-    } catch (e) {
-      expect(e).toMatchInlineSnapshot(`[TypeError: Type information is unavailable with "isolatedModules"]`)
-    }
   })
 
   it('should have correct source maps', () => {
