@@ -205,9 +205,7 @@ export interface MemoryCache {
   outputs: Map<string, string>
 }
 
-export interface CompileResult {
-  getOutput: (code: string, fileName: string) => SourceOutput
-}
+export type CompileResult = (code: string, fileName: string, lineOffset?: number) => SourceOutput
 
 export interface AstTransformerDesc {
   name: string

@@ -15,8 +15,8 @@ export const compileUsingProgram = (configs: ConfigSet, logger: Logger, memoryCa
 
   const ts = configs.compilerModule,
     cwd = configs.cwd,
-    { options, fileNames, projectReferences, errors } = configs.typescript,
-    compilerHostTraceCtx = {
+    { options, fileNames, projectReferences, errors } = configs.typescript
+  const compilerHostTraceCtx = {
       namespace: 'ts:compilerHost',
       call: null,
       [LogContexts.logLevel]: LogLevels.trace,
@@ -109,72 +109,70 @@ export const compileUsingProgram = (configs: ConfigSet, logger: Logger, memoryCa
       }
     }
 
-  return {
-    getOutput: (code: string, fileName: string): SourceOutput => {
-      const normalizedFileName = normalize(fileName),
-        output: [string, string] = ['', '']
-      // Must set memory cache before attempting to read file.
-      updateMemoryCache(code, normalizedFileName)
-      const sourceFile = options.incremental
-        ? builderProgram.getSourceFile(normalizedFileName)
-        : program.getSourceFile(normalizedFileName)
+  return (code: string, fileName: string): SourceOutput => {
+    const normalizedFileName = normalize(fileName),
+      output: [string, string] = ['', '']
+    // Must set memory cache before attempting to read file.
+    updateMemoryCache(code, normalizedFileName)
+    const sourceFile = options.incremental
+      ? builderProgram.getSourceFile(normalizedFileName)
+      : program.getSourceFile(normalizedFileName)
 
-      if (!sourceFile) throw new TypeError(`Unable to read file: ${fileName}`)
+    if (!sourceFile) throw new TypeError(`Unable to read file: ${fileName}`)
 
-      const result: _ts.EmitResult = options.incremental
-        ? builderProgram.emit(
-            sourceFile,
-            (path, file, _writeByteOrderMark) => {
-              output[path.endsWith('.map') ? 1 : 0] = file
-            },
-            undefined,
-            undefined,
-            customTransformers,
-          )
-        : program.emit(
-            sourceFile,
-            (path, file, _writeByteOrderMark) => {
-              output[path.endsWith('.map') ? 1 : 0] = file
-            },
-            undefined,
-            undefined,
-            customTransformers,
-          )
-      if (configs.shouldReportDiagnostic(normalizedFileName)) {
-        logger.debug(
-          { normalizedFileName },
-          `getOutput(): computing diagnostics for ${options.incremental ? 'incremental program' : 'program'}`,
+    const result: _ts.EmitResult = options.incremental
+      ? builderProgram.emit(
+          sourceFile,
+          (path, file, _writeByteOrderMark) => {
+            output[path.endsWith('.map') ? 1 : 0] = file
+          },
+          undefined,
+          undefined,
+          customTransformers,
         )
-        const diagnostics = ts.getPreEmitDiagnostics(program, sourceFile).slice()
-        // will raise or just warn diagnostics depending on config
-        configs.raiseDiagnostics(diagnostics, normalizedFileName, logger)
-      }
-
-      if (result.emitSkipped) {
-        throw new TypeError(`${relative(cwd, fileName)}: Emit skipped`)
-      }
-
-      // Throw an error when requiring files that cannot be compiled.
-      if (output[0] === '') {
-        if (program.isSourceFileFromExternalLibrary(sourceFile)) {
-          throw new TypeError(`Unable to compile file from external library: ${relative(cwd, fileName)}`)
-        }
-
-        throw new TypeError(
-          interpolate(Errors.UnableToRequireDefinitionFile, {
-            file: basename(normalizedFileName),
-          }),
+      : program.emit(
+          sourceFile,
+          (path, file, _writeByteOrderMark) => {
+            output[path.endsWith('.map') ? 1 : 0] = file
+          },
+          undefined,
+          undefined,
+          customTransformers,
         )
-      }
-      if (configs.tsJest.emit && options.incremental) {
-        process.on('exit', () => {
-          // Emits `.tsbuildinfo` to filesystem.
-          // @ts-ignore
-          program.emitBuildInfo()
-        })
+    if (configs.shouldReportDiagnostic(normalizedFileName)) {
+      logger.debug(
+        { normalizedFileName },
+        `getOutput(): computing diagnostics for ${options.incremental ? 'incremental program' : 'program'}`,
+      )
+      const diagnostics = ts.getPreEmitDiagnostics(program, sourceFile).slice()
+      // will raise or just warn diagnostics depending on config
+      configs.raiseDiagnostics(diagnostics, normalizedFileName, logger)
+    }
+
+    if (result.emitSkipped) {
+      throw new TypeError(`${relative(cwd, fileName)}: Emit skipped`)
+    }
+
+    // Throw an error when requiring files that cannot be compiled.
+    if (output[0] === '') {
+      if (program.isSourceFileFromExternalLibrary(sourceFile)) {
+        throw new TypeError(`Unable to compile file from external library: ${relative(cwd, fileName)}`)
       }
 
-      return output
-    },
+      throw new TypeError(
+        interpolate(Errors.UnableToRequireDefinitionFile, {
+          file: basename(normalizedFileName),
+        }),
+      )
+    }
+    if (configs.tsJest.emit && options.incremental) {
+      process.on('exit', () => {
+        // Emits `.tsbuildinfo` to filesystem.
+        // @ts-ignore
+        program.emitBuildInfo()
+      })
+    }
+
+    return output
   }
 }

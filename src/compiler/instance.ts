@@ -35,7 +35,7 @@ import mkdirp = require('mkdirp')
 import { basename, extname, join, normalize } from 'path'
 
 import { ConfigSet } from '../config/config-set'
-import { CompileResult, MemoryCache, SourceOutput, TsCompiler } from '../types'
+import { CompileResult, MemoryCache, TsCompiler } from '../types'
 import { sha1 } from '../util/sha1'
 
 import { compileUsingLanguageService } from './language-service'
@@ -93,7 +93,7 @@ const isValidCacheContent = (contents: string): boolean => {
 const readThrough = (
   cachedir: string | undefined,
   memoryCache: MemoryCache,
-  compile: (code: string, fileName: string, lineOffset?: number) => SourceOutput,
+  compile: CompileResult,
   getExtension: (fileName: string) => string,
   logger: Logger,
 ) => {
@@ -150,7 +150,6 @@ export const createCompiler = (configs: ConfigSet): TsCompiler => {
     typescript: { options: compilerOptions, fileNames },
     tsJest,
   } = configs
-
   const cachedir = configs.tsCacheDir,
     ts = configs.compilerModule, // Require the TypeScript compiler and configuration.
     extensions = ['.ts', '.tsx'],
@@ -174,9 +173,6 @@ export const createCompiler = (configs: ConfigSet): TsCompiler => {
       ? (path: string) => (/\.[tj]sx$/.test(path) ? '.jsx' : '.js')
       : (_: string) => '.js'
   let compileResult: CompileResult
-
-  logger.debug('createCompiler(): create typescript compiler')
-
   if (!tsJest.isolatedModules) {
     // Use language services by default
     if (!tsJest.compilerHost) {
@@ -187,7 +183,7 @@ export const createCompiler = (configs: ConfigSet): TsCompiler => {
   } else {
     compileResult = compileUsingTranspileModule(configs, logger)
   }
-  const compile = readThrough(cachedir, memoryCache, compileResult.getOutput, getExtension, logger)
+  const compile = readThrough(cachedir, memoryCache, compileResult, getExtension, logger)
 
   return { cwd: configs.cwd, compile, extensions, cachedir, ts }
 }
