@@ -1,6 +1,8 @@
 import { Config } from '@jest/types'
 import { resolve } from 'path'
 
+import { createCompiler } from '../compiler/instance'
+import { ConfigSet } from '../config/config-set'
 import { BabelConfig, TsJestConfig, TsJestGlobalOptions } from '../types'
 import { ImportReasons } from '../util/messages'
 
@@ -10,52 +12,10 @@ export function filePath(relPath: string): string {
 
 export const rootDir = filePath('')
 
-export function transpiledTsSource() {
-  return `
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-var upper_1 = __importDefault(require("./upper"));
-var lower_1 = __importDefault(require("./lower"));
-jest.mock('./upper', function () { return function (s) { return s.toUpperCase(); }; });
-describe('hello', function () {
-    test('my test', function () {
-        expect(upper_1.default('hello')).toBe('HELLO');
-        expect(lower_1.default('HELLO')).toBe('hello');
-        jest.mock('./lower', function () { return function (s) { return s.toLowerCase(); }; });
-    });
-});
-`
-}
-
-export function htmlSource() {
-  return `
-<div>
-  <span>some text with \`backtick\`</span>
-</div>
-`
-}
-
-export function typescriptSource() {
-  return `
-import upper from './upper';
-import lower from './lower';
-
-jest.mock('./upper', () => (s) => s.toUpperCase());
-
-describe('hello', () => {
-  test('my test', () => {
-    expect(upper('hello')).toBe('HELLO');
-    expect(lower('HELLO')).toBe('hello');
-    jest.mock('./lower', () => (s) => s.toLowerCase());
-  });
-});
-`
-}
-
 export function tsJestConfig(options?: Partial<TsJestConfig>): TsJestConfig {
   return {
+    compilerHost: false,
+    emit: false,
     isolatedModules: false,
     compiler: 'typescript',
     transformers: [],
@@ -68,7 +28,7 @@ export function tsJestConfig(options?: Partial<TsJestConfig>): TsJestConfig {
   }
 }
 
-export function jestConfig<T extends Config.ProjectConfig>(
+export function getJestConfig<T extends Config.ProjectConfig>(
   options?: Partial<Config.InitialOptions | Config.ProjectConfig>,
   tsJestOptions?: TsJestGlobalOptions,
 ): T {
@@ -92,4 +52,24 @@ export function babelConfig<T extends BabelConfig>(options?: BabelConfig): T {
 
 export function importReason(text = '[[BECAUSE]]'): ImportReasons {
   return text as any
+}
+
+// not really unit-testing here, but it's hard to mock all those values :-D
+export function makeCompiler({
+  jestConfig,
+  tsJestConfig,
+  parentConfig,
+}: {
+  jestConfig?: Partial<Config.ProjectConfig>
+  tsJestConfig?: TsJestGlobalOptions
+  parentConfig?: TsJestGlobalOptions
+} = {}) {
+  tsJestConfig = { ...tsJestConfig }
+  tsJestConfig.diagnostics = {
+    ...(tsJestConfig.diagnostics as any),
+    pretty: false,
+  }
+  const cs = new ConfigSet(getJestConfig(jestConfig, tsJestConfig), parentConfig)
+
+  return createCompiler(cs)
 }

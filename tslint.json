@@ -47,6 +47,7 @@
     "no-string-throw": true,
     "no-var-keyword": true,
     "object-literal-sort-keys": false,
+    "one-variable-per-declaration": false,
     "ordered-imports": [
       true,
       {

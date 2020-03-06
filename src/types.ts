@@ -38,6 +38,20 @@ export interface TsJestGlobalOptions {
   isolatedModules?: boolean
 
   /**
+   * Use TypeScript's compiler host API.
+   *
+   * @default false
+   */
+  compilerHost?: boolean
+
+  /**
+   * Emit compiled files into `.ts-jest` directory
+   *
+   * @default false
+   */
+  emit?: boolean
+
+  /**
    * Compiler to use (default to 'typescript'):
    */
   compiler?: string
@@ -57,8 +71,16 @@ export interface TsJestGlobalOptions {
     | boolean
     | {
         pretty?: boolean
+        /**
+         * Ignore TypeScript warnings by diagnostic code.
+         */
         ignoreCodes?: number | string | (number | string)[]
         pathRegex?: RegExp | string
+        /**
+         * Logs TypeScript errors to stderr instead of throwing exceptions.
+         *
+         * @default false
+         */
         warnOnly?: boolean
       }
 
@@ -119,11 +141,12 @@ export interface TsJestConfig {
   tsConfig: TsJestConfig$tsConfig
   packageJson: TsJestConfig$packageJson
   isolatedModules: boolean
+  compilerHost: boolean
+  emit: boolean
   compiler: string
   diagnostics: TsJestConfig$diagnostics
   babelConfig: TsJestConfig$babelConfig
   transformers: string[]
-
   // to deprecate / deprecated === === ===
   stringifyContentPathRegex: TsJestConfig$stringifyContentPathRegex
 }
@@ -159,32 +182,30 @@ export interface TSCommon {
   formatDiagnosticsWithColorAndContext: typeof _ts.formatDiagnosticsWithColorAndContext
 }
 
-/**
- * Track the project information.
- * @internal
- */
-export interface MemoryCache {
-  contents: { [path: string]: string | undefined }
-  versions: { [path: string]: number | undefined }
-  outputs: { [path: string]: string }
-}
-
-/**
- * Information retrieved from type info check.
- */
-export interface TypeInfo {
-  name: string
-  comment: string
-}
-
 export interface TsCompiler {
   cwd: string
   extensions: string[]
   cachedir: string | undefined
   ts: TSCommon
   compile(code: string, fileName: string, lineOffset?: number): string
-  getTypeInfo(code: string, fileName: string, position: number): TypeInfo
 }
+
+/**
+ * Internal source output.
+ */
+export type SourceOutput = [string, string]
+
+/**
+ * Track the project information.
+ * @internal
+ */
+export interface MemoryCache {
+  contents: Map<string, string | undefined>
+  versions: Map<string, number>
+  outputs: Map<string, string>
+}
+
+export type CompileResult = (code: string, fileName: string, lineOffset?: number) => SourceOutput
 
 export interface AstTransformerDesc {
   name: string

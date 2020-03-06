@@ -24,7 +24,7 @@ import {
 } from 'typescript'
 
 import { digest as MY_DIGEST, version as MY_VERSION } from '..'
-import { createCompiler } from '../compiler'
+import { createCompiler } from '../compiler/instance'
 import { internals as internalAstTransformers } from '../transformers'
 import {
   AstTransformerDesc,
@@ -265,15 +265,18 @@ export class ConfigSet {
     // parsed options
     const res: TsJestConfig = {
       tsConfig,
+      compilerHost: options.compilerHost ?? false,
+      emit: options.emit ?? false,
       packageJson,
       babelConfig,
       diagnostics,
       isolatedModules: !!options.isolatedModules,
-      compiler: options.compiler || 'typescript',
+      compiler: options.compiler ?? 'typescript',
       transformers,
       stringifyContentPathRegex,
     }
     this.logger.debug({ tsJestConfig: res }, 'normalized ts-jest config')
+
     return res
   }
 
@@ -530,17 +533,15 @@ export class ConfigSet {
       // we don't want to create declaration files
       declaration: false,
       noEmit: false,
-      outDir: '$$ts-jest$$',
       // else istanbul related will be dropped
       removeComments: false,
       // to clear out else it's buggy
       out: undefined,
       outFile: undefined,
-      composite: undefined,
+      composite: undefined, // see https://github.com/TypeStrong/ts-node/pull/657/files
       declarationDir: undefined,
       declarationMap: undefined,
       emitDeclarationOnly: undefined,
-      incremental: undefined,
       sourceRoot: undefined,
       tsBuildInfoFile: undefined,
     }
@@ -628,6 +629,8 @@ export class ConfigSet {
   }
 
   /**
+   * Load TypeScript configuration. Returns the parsed TypeScript config and
+   * any `tsConfig` options specified in ts-jest tsConfig
    * @internal
    */
   readTsConfig(

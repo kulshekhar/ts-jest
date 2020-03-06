@@ -92,6 +92,7 @@ export class TsJestTransformer implements Transformer {
       jestConfig: new JsonableValue(jestConfigObj),
       configSet,
     })
+
     return configSet
   }
 
@@ -127,6 +128,7 @@ export class TsJestTransformer implements Transformer {
       result = source
     } else if (isJsFile || isTsFile) {
       // transpile TS code (source maps are included)
+      /* istanbul ignore if */
       result = configs.tsCompiler.compile(source, filePath)
     } else {
       // we should not get called for files with other extension than js[x], ts[x] and d.ts,
@@ -163,6 +165,7 @@ export class TsJestTransformer implements Transformer {
    * @param fileContent The content of the file
    * @param filePath The full path to the file
    * @param jestConfigStr The JSON-encoded version of jest config
+   * @param transformOptions
    * @param transformOptions.instrument Whether the content will be instrumented by our transformer (always false)
    * @param transformOptions.rootDir Jest current rootDir
    */
@@ -176,6 +179,7 @@ export class TsJestTransformer implements Transformer {
     const configs = this.configsFor(jestConfigStr)
     // we do not instrument, ensure it is false all the time
     const { instrument = false, rootDir = configs.rootDir } = transformOptions
+
     return sha1(
       configs.cacheKey,
       '\x00',

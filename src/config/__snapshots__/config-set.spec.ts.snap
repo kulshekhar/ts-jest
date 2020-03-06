@@ -42,6 +42,7 @@ Object {
   "tsJest": Object {
     "babelConfig": undefined,
     "compiler": "typescript",
+    "compilerHost": false,
     "diagnostics": Object {
       "ignoreCodes": Array [
         6059,
@@ -51,6 +52,7 @@ Object {
       "pretty": true,
       "throws": true,
     },
+    "emit": false,
     "isolatedModules": false,
     "packageJson": Object {
       "kind": "file",
@@ -67,7 +69,6 @@ Object {
     "inlineSources": true,
     "module": 1,
     "noEmit": false,
-    "outDir": "$$ts-jest$$",
     "removeComments": false,
     "sourceMap": true,
     "target": 1,
@@ -131,6 +132,7 @@ exports[`tsJest should return correct defaults 1`] = `
 Object {
   "babelConfig": undefined,
   "compiler": "typescript",
+  "compilerHost": false,
   "diagnostics": Object {
     "ignoreCodes": Array [
       6059,
@@ -140,6 +142,7 @@ Object {
     "pretty": true,
     "throws": true,
   },
+  "emit": false,
   "isolatedModules": false,
   "packageJson": Object {
     "kind": "file",
