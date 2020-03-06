@@ -1,38 +1,66 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`language service should compile js file for allowJs true 1`] = `
-  ===[ FILE: foo.test.js ]========================================================
+  ===[ FILE: test-allow-js.js ]===================================================
   "use strict";
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.default = 42;
-  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoiZm9vLnRlc3QuanMiLCJtYXBwaW5ncyI6Ijs7QUFBQSxrQkFBZSxFQUFFLENBQUEiLCJuYW1lcyI6W10sInNvdXJjZXMiOlsiZm9vLnRlc3QuanMiXSwic291cmNlc0NvbnRlbnQiOlsiZXhwb3J0IGRlZmF1bHQgNDIiXSwidmVyc2lvbiI6M30=
+  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoidGVzdC1hbGxvdy1qcy5qcyIsIm1hcHBpbmdzIjoiOztBQUFBLGtCQUFlLEVBQUUsQ0FBQSIsIm5hbWVzIjpbXSwic291cmNlcyI6WyJ0ZXN0LWFsbG93LWpzLmpzIl0sInNvdXJjZXNDb250ZW50IjpbImV4cG9ydCBkZWZhdWx0IDQyIl0sInZlcnNpb24iOjN9
   ===[ INLINE SOURCE MAPS ]=======================================================
-  file: foo.test.js
+  file: test-allow-js.js
   mappings: ';;AAAA,kBAAe,EAAE,CAAA'
   names: []
   sources:
-    - foo.test.js
+    - test-allow-js.js
   sourcesContent:
     - export default 42
   version: 3
   ================================================================================
 `;
 
+exports[`language service should compile tsx file for jsx preserve 1`] = `
+  ===[ FILE: test-jsx-preserve.tsx ]==============================================
+  var App = function () {
+      return <>Test</>;
+  };
+  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoidGVzdC1qc3gtcHJlc2VydmUudHN4IiwibWFwcGluZ3MiOiJBQUNRLElBQU0sR0FBRyxHQUFHO0lBQ1YsT0FBTyxFQUFFLElBQUksR0FBRyxDQUFBO0FBQ2xCLENBQUMsQ0FBQSIsIm5hbWVzIjpbXSwic291cmNlcyI6WyJ0ZXN0LWpzeC1wcmVzZXJ2ZS50c3giXSwic291cmNlc0NvbnRlbnQiOlsiXG4gICAgICAgIGNvbnN0IEFwcCA9ICgpID0+IHtcbiAgICAgICAgICByZXR1cm4gPD5UZXN0PC8+XG4gICAgICAgIH1cbiAgICAgICJdLCJ2ZXJzaW9uIjozfQ==
+  ===[ INLINE SOURCE MAPS ]=======================================================
+  file: test-jsx-preserve.tsx
+  mappings: 'AACQ,IAAM,GAAG,GAAG;IACV,OAAO,EAAE,IAAI,GAAG,CAAA;AAClB,CAAC,CAAA'
+  names: []
+  sources:
+    - test-jsx-preserve.tsx
+  sourcesContent:
+    - |2-
+  
+              const App = () => {
+                return <>Test</>
+              }
+            
+  version: 3
+  ================================================================================
+`;
+
 exports[`language service should report diagnostics related to typings with pathRegex config matches file name 1`] = `
 "TypeScript diagnostics (customize using \`[jest-config].globals.ts-jest.diagnostics\` option):
-foo.ts(3,7): error TS2322: Type 'number' is not assignable to type 'string'."
+test-match-regex-diagnostics.ts(3,7): error TS2322: Type 'number' is not assignable to type 'string'."
+`;
+
+exports[`language service should throw error when cannot compile 1`] = `
+"Unable to require \`.d.ts\` file for file: test-cannot-compile.d.ts.
+This is usually the result of a faulty configuration or import. Make sure there is a \`.js\`, \`.json\` or another executable extension available alongside \`test-cannot-compile.d.ts\`."
 `;
 
 exports[`language service should use the cache 3`] = `
-  ===[ FILE: src/compiler/language-service.spec.ts ]==============================
+  ===[ FILE: test-cache.ts ]======================================================
   console.log("hello");
-  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoiPGN3ZD4vc3JjL2NvbXBpbGVyL2xhbmd1YWdlLXNlcnZpY2Uuc3BlYy50cyIsIm1hcHBpbmdzIjoiQUFBQSxPQUFPLENBQUMsR0FBRyxDQUFDLE9BQU8sQ0FBQyxDQUFBIiwibmFtZXMiOltdLCJzb3VyY2VzIjpbIjxjd2Q+L3NyYy9jb21waWxlci9sYW5ndWFnZS1zZXJ2aWNlLnNwZWMudHMiXSwic291cmNlc0NvbnRlbnQiOlsiY29uc29sZS5sb2coXCJoZWxsb1wiKSJdLCJ2ZXJzaW9uIjozfQ==
+  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoidGVzdC1jYWNoZS50cyIsIm1hcHBpbmdzIjoiQUFBQSxPQUFPLENBQUMsR0FBRyxDQUFDLE9BQU8sQ0FBQyxDQUFBIiwibmFtZXMiOltdLCJzb3VyY2VzIjpbInRlc3QtY2FjaGUudHMiXSwic291cmNlc0NvbnRlbnQiOlsiY29uc29sZS5sb2coXCJoZWxsb1wiKSJdLCJ2ZXJzaW9uIjozfQ==
   ===[ INLINE SOURCE MAPS ]=======================================================
-  file: <cwd>/src/compiler/language-service.spec.ts
+  file: test-cache.ts
   mappings: 'AAAA,OAAO,CAAC,GAAG,CAAC,OAAO,CAAC,CAAA'
   names: []
   sources:
-    - <cwd>/src/compiler/language-service.spec.ts
+    - test-cache.ts
   sourcesContent:
     - console.log("hello")
   version: 3

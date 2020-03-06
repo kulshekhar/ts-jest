@@ -62,7 +62,7 @@ export class TsJestTransformer implements Transformer {
     return `[object TsJestTransformer<#${this.id}>]`
   }
 
-  configsFor(jestConfig: Config.ProjectConfig | string) {
+  configsFor(jestConfig: Config.ProjectConfig | string): ConfigSet {
     let csi: ConfigSetIndexItem | undefined
     let jestConfigObj: Config.ProjectConfig
     if (typeof jestConfig === 'string') {

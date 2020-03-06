@@ -7,6 +7,9 @@ module.exports = {
     ecmaVersion: 2020,
     sourceType: 'module',
     impliedStrict: true,
+    ecmaFeatures: {
+      jsx: true,
+    },
   },
   rules: {
     'no-console': ['error', { allow: ['warn', 'error', 'log'] }],

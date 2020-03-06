@@ -36,6 +36,62 @@ exports[`allowJs should compile js file for allowJs true with normal program 1`]
   ================================================================================
 `;
 
+exports[`cannot compile should throw error with incremental program 1`] = `
+"Unable to require \`.d.ts\` file for file: test-cannot-compile.d.ts.
+This is usually the result of a faulty configuration or import. Make sure there is a \`.js\`, \`.json\` or another executable extension available alongside \`test-cannot-compile.d.ts\`."
+`;
+
+exports[`cannot compile should throw error with normal program 1`] = `
+"Unable to require \`.d.ts\` file for file: test-cannot-compile.d.ts.
+This is usually the result of a faulty configuration or import. Make sure there is a \`.js\`, \`.json\` or another executable extension available alongside \`test-cannot-compile.d.ts\`."
+`;
+
+exports[`jsx preserve should compile tsx file for jsx preserve with incremental program 1`] = `
+  ===[ FILE: test-jsx-preserve.tsx ]==============================================
+  var App = function () {
+      return <>Test</>;
+  };
+  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoidGVzdC1qc3gtcHJlc2VydmUudHN4IiwibWFwcGluZ3MiOiJBQUNNLElBQU0sR0FBRyxHQUFHO0lBQ1YsT0FBTyxFQUFFLElBQUksR0FBRyxDQUFBO0FBQ2xCLENBQUMsQ0FBQSIsIm5hbWVzIjpbXSwic291cmNlcyI6WyJ0ZXN0LWpzeC1wcmVzZXJ2ZS50c3giXSwic291cmNlc0NvbnRlbnQiOlsiXG4gICAgICBjb25zdCBBcHAgPSAoKSA9PiB7XG4gICAgICAgIHJldHVybiA8PlRlc3Q8Lz5cbiAgICAgIH1cbiAgICAiXSwidmVyc2lvbiI6M30=
+  ===[ INLINE SOURCE MAPS ]=======================================================
+  file: test-jsx-preserve.tsx
+  mappings: 'AACM,IAAM,GAAG,GAAG;IACV,OAAO,EAAE,IAAI,GAAG,CAAA;AAClB,CAAC,CAAA'
+  names: []
+  sources:
+    - test-jsx-preserve.tsx
+  sourcesContent:
+    - |2-
+  
+            const App = () => {
+              return <>Test</>
+            }
+          
+  version: 3
+  ================================================================================
+`;
+
+exports[`jsx preserve should compile tsx file for jsx preserve with program 1`] = `
+  ===[ FILE: test-jsx-preserve.tsx ]==============================================
+  var App = function () {
+      return <>Test</>;
+  };
+  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoidGVzdC1qc3gtcHJlc2VydmUudHN4IiwibWFwcGluZ3MiOiJBQUNNLElBQU0sR0FBRyxHQUFHO0lBQ1YsT0FBTyxFQUFFLElBQUksR0FBRyxDQUFBO0FBQ2xCLENBQUMsQ0FBQSIsIm5hbWVzIjpbXSwic291cmNlcyI6WyJ0ZXN0LWpzeC1wcmVzZXJ2ZS50c3giXSwic291cmNlc0NvbnRlbnQiOlsiXG4gICAgICBjb25zdCBBcHAgPSAoKSA9PiB7XG4gICAgICAgIHJldHVybiA8PlRlc3Q8Lz5cbiAgICAgIH1cbiAgICAiXSwidmVyc2lvbiI6M30=
+  ===[ INLINE SOURCE MAPS ]=======================================================
+  file: test-jsx-preserve.tsx
+  mappings: 'AACM,IAAM,GAAG,GAAG;IACV,OAAO,EAAE,IAAI,GAAG,CAAA;AAClB,CAAC,CAAA'
+  names: []
+  sources:
+    - test-jsx-preserve.tsx
+  sourcesContent:
+    - |2-
+  
+            const App = () => {
+              return <>Test</>
+            }
+          
+  version: 3
+  ================================================================================
+`;
+
 exports[`typings incremental program should report diagnostics with pathRegex config matches file name 1`] = `"test-typings.ts: Emit skipped"`;
 
 exports[`typings normal program should report diagnostics with pathRegex config matches file name 1`] = `

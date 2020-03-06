@@ -19,10 +19,13 @@ describe('language service', () => {
         jestConfig: { cache: true, cacheDirectory: tmp },
         tsJestConfig: { tsConfig: false },
       }),
-      source = 'console.log("hello")'
+      source = 'console.log("hello")',
+      fileName = 'test-cache.ts'
+
+    writeFileSync(fileName, source, 'utf8')
 
     logTarget.clear()
-    const compiled1 = compiler.compile(source, __filename)
+    const compiled1 = compiler.compile(source, fileName)
 
     expect(logTarget.filteredLines(LogLevels.debug, Infinity)).toMatchInlineSnapshot(`
       Array [
@@ -44,7 +47,7 @@ describe('language service', () => {
     `)
 
     logTarget.clear()
-    const compiled2 = compiler.compile(source, __filename)
+    const compiled2 = compiler.compile(source, fileName)
 
     expect(logTarget.lines).toMatchInlineSnapshot(`
       Array [
@@ -53,12 +56,14 @@ describe('language service', () => {
       ]
     `)
 
-    expect(new ProcessedSource(compiled1, __filename)).toMatchSnapshot()
+    expect(new ProcessedSource(compiled1, fileName)).toMatchSnapshot()
     expect(compiled2).toBe(compiled1)
+
+    removeSync(fileName)
   })
 
   it('should compile js file for allowJs true', () => {
-    const fileName = `foo.test.js`,
+    const fileName = `test-allow-js.js`,
       compiler = makeCompiler({
         tsJestConfig: { tsConfig: { allowJs: true, outDir: '$$ts-jest$$' } },
       }),
@@ -72,27 +77,49 @@ describe('language service', () => {
     removeSync(fileName)
   })
 
+  it('should compile tsx file for jsx preserve', () => {
+    const fileName = 'test-jsx-preserve.tsx',
+      compiler = makeCompiler({
+        tsJestConfig: { tsConfig: 'src/__mocks__/tsconfig.json' },
+      }),
+      source = `
+        const App = () => {
+          return <>Test</>
+        }
+      `
+    writeFileSync(fileName, source, 'utf8')
+    const compiled = compiler.compile(source, fileName)
+
+    expect(new ProcessedSource(compiled, fileName)).toMatchSnapshot()
+
+    removeSync(fileName)
+  })
+
   it('should have correct source maps', () => {
     const compiler = makeCompiler({ tsJestConfig: { tsConfig: false } }),
-      source = 'const g = (v: number) => v\nconst h: number = g(5)'
+      source = 'const gsm = (v: number) => v\nconst h: number = gsm(5)',
+      fileName = 'test-source-map.ts'
+    writeFileSync(fileName, source, 'utf8')
 
-    const compiled = compiler.compile(source, 'foo.ts')
+    const compiled = compiler.compile(source, fileName)
 
-    expect(new ProcessedSource(compiled, 'foo.ts').outputSourceMaps).toMatchObject({
-      file: 'foo.ts',
-      sources: ['foo.ts'],
+    expect(new ProcessedSource(compiled, fileName).outputSourceMaps).toMatchObject({
+      file: fileName,
+      sources: [fileName],
       sourcesContent: [source],
     })
+
+    removeSync(fileName)
   })
 
   it('should report diagnostics related to typings with pathRegex config matches file name', () => {
-    const fileName = 'foo.ts',
+    const fileName = 'test-match-regex-diagnostics.ts',
       source = `
 const g = (v: number) => v
 const x: string = g(5)
 `,
       compiler = makeCompiler({
-        tsJestConfig: { tsConfig: false, diagnostics: { pathRegex: 'foo.ts' } },
+        tsJestConfig: { tsConfig: false, diagnostics: { pathRegex: fileName } },
       })
     writeFileSync(fileName, source, 'utf8')
 
@@ -102,7 +129,7 @@ const x: string = g(5)
   })
 
   it('should not report diagnostics related to typings with pathRegex config does not match file name', () => {
-    const fileName = 'foo.ts',
+    const fileName = 'test-non-match-regex-diagnostics.ts',
       source = `
 const f = (v: number) => v
 const t: string = f(5)
@@ -113,6 +140,23 @@ const t: string = f(5)
     writeFileSync(fileName, source, 'utf8')
 
     expect(() => compiler.compile(source, fileName)).not.toThrowError()
+
+    removeSync(fileName)
+  })
+
+  it('should throw error when cannot compile', () => {
+    const fileName = 'test-cannot-compile.d.ts',
+      source = `
+        interface Foo {
+          a: string
+        }
+      `,
+      compiler = makeCompiler({
+        tsJestConfig: { tsConfig: false },
+      })
+    writeFileSync(fileName, source, 'utf8')
+
+    expect(() => compiler.compile(source, fileName)).toThrowErrorMatchingSnapshot()
 
     removeSync(fileName)
   })
