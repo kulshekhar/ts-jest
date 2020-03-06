@@ -36,8 +36,9 @@ export const compileUsingProgram = (configs: ConfigSet, logger: Logger, memoryCa
         ts.sys.useCaseSensitiveFileNames ? fileName : fileName.toLowerCase(),
     }
   let builderProgram: _ts.EmitAndSemanticDiagnosticsBuilderProgram, program: _ts.Program, host: _ts.CompilerHost
-  // Fallback for older TypeScript releases without incremental API.
-  if (options.incremental) {
+  if (configs.tsJest.incremental) {
+    // TODO: Find a way to trigger typescript to build project when there are project references.
+    // At the moment this Incremental Program doesn't work with project references
     host = ts.createIncrementalCompilerHost(options, sys)
     builderProgram = ts.createIncrementalProgram({
       rootNames: fileNames.slice(),
@@ -48,6 +49,7 @@ export const compileUsingProgram = (configs: ConfigSet, logger: Logger, memoryCa
     })
     program = builderProgram.getProgram()
   } else {
+    // Fallback for older TypeScript releases without incremental API.
     host = {
       ...sys,
       getSourceFile: (fileName, languageVersion) => {

@@ -33,7 +33,7 @@ const t: string = f(5)
       const compiler = makeCompiler({
         tsJestConfig: {
           ...baseTsJestConfig,
-          tsConfig: { incremental: false },
+          incremental: false,
           diagnostics: { pathRegex: fileName },
         },
       })
@@ -45,7 +45,7 @@ const t: string = f(5)
       const compiler = makeCompiler({
         tsJestConfig: {
           ...baseTsJestConfig,
-          tsConfig: { incremental: false },
+          incremental: false,
           diagnostics: { pathRegex: 'foo.ts' },
         },
       })
@@ -63,7 +63,7 @@ const t: string = f(5)
       const compiler = makeCompiler({
         tsJestConfig: {
           ...baseTsJestConfig,
-          tsConfig: { incremental: true },
+          incremental: true,
           diagnostics: { pathRegex: 'typings-error.ts' },
         },
       })
@@ -75,7 +75,7 @@ const t: string = f(5)
       const compiler = makeCompiler({
         tsJestConfig: {
           ...baseTsJestConfig,
-          tsConfig: { incremental: true },
+          incremental: true,
           diagnostics: { pathRegex: 'foo.ts' },
         },
       })
@@ -105,7 +105,7 @@ describe('source-maps', () => {
     const compiler = makeCompiler({
       tsJestConfig: {
         ...baseTsJestConfig,
-        tsConfig: { incremental: false },
+        incremental: false,
       },
     })
 
@@ -122,7 +122,7 @@ describe('source-maps', () => {
     const compiler = makeCompiler({
       tsJestConfig: {
         ...baseTsJestConfig,
-        tsConfig: { incremental: true },
+        incremental: true,
       },
     })
 
@@ -154,7 +154,7 @@ describe('cache', () => {
       jestConfig: { cache: true, cacheDirectory: tmp },
       tsJestConfig: {
         ...baseTsJestConfig,
-        tsConfig: { incremental: false },
+        incremental: false,
       },
     })
 
@@ -187,12 +187,12 @@ describe('cache', () => {
     expect(compiled2).toBe(compiled1)
   })
 
-  it('should use the cache with normal program', () => {
+  it('should use the cache with incremental program', () => {
     const compiler = makeCompiler({
       jestConfig: { cache: true, cacheDirectory: tmp },
       tsJestConfig: {
         ...baseTsJestConfig,
-        tsConfig: { incremental: true },
+        incremental: true,
       },
     })
 
@@ -240,7 +240,7 @@ describe('allowJs', () => {
 
   it('should compile js file for allowJs true with normal program', () => {
     const compiler = makeCompiler({
-      tsJestConfig: { ...baseTsJestConfig, tsConfig: { allowJs: true, outDir: '$$ts-jest$$', incremental: false } },
+      tsJestConfig: { ...baseTsJestConfig, incremental: false, tsConfig: { allowJs: true, outDir: '$$ts-jest$$' } },
     })
 
     const compiled = compiler.compile(source, fileName)
@@ -250,7 +250,7 @@ describe('allowJs', () => {
 
   it('should compile js file for allowJs true with incremental program', () => {
     const compiler = makeCompiler({
-      tsJestConfig: { ...baseTsJestConfig, tsConfig: { allowJs: true, outDir: '$$ts-jest$$', incremental: true } },
+      tsJestConfig: { ...baseTsJestConfig, incremental: true, tsConfig: { allowJs: true, outDir: '$$ts-jest$$' } },
     })
 
     const compiled = compiler.compile(source, fileName)

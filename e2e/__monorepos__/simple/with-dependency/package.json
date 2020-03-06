@@ -32,7 +32,8 @@
       "ts-jest": {
         "diagnostics": true,
         "tsConfig": "<rootDir>/tsconfig.json",
-        "compilerHost": true
+        "compilerHost": true,
+        "incremental": true
       }
     }
   },

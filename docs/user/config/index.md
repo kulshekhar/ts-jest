@@ -220,6 +220,7 @@ npx ts-jest config:migrate package.json
 [compiler]: compiler
 [tsConfig]: tsConfig
 [isolatedModules]: isolatedModules
+[compilerHost]: compilerHost
 [diagnostics]: diagnostics
 [babelConfig]: babelConfig
 [stringifyContentPathRegex]: stringifyContentPathRegex

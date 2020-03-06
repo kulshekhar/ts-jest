@@ -13,8 +13,7 @@
     "downlevelIteration": true,
     "strict": true,
     "moduleResolution": "node",
-    "esModuleInterop": true,
-    "incremental": true
+    "esModuleInterop": true
   },
   "include": [
     "./src"

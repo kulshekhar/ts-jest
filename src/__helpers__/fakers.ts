@@ -16,6 +16,7 @@ export function tsJestConfig(options?: Partial<TsJestConfig>): TsJestConfig {
   return {
     compilerHost: false,
     emit: false,
+    incremental: false,
     isolatedModules: false,
     compiler: 'typescript',
     transformers: [],
