@@ -129,14 +129,14 @@ module.exports = {
 </div></div>
 
 #### Jest config (with helper)
-install the [tsconfig](https://www.npmjs.com/package/tsconfig) package to find, load and parse yor tsconfig.json file: `npm install -D tsconfig`
+install the [tsconfig](https://www.npmjs.com/package/tsconfig) package to find, load and parse yor tsconfig.json file: `npm install -D tsconfig` or `yarn add -D tsconfig`
 
 ```js
 // jest.config.js
 const { pathsToModuleNameMapper } = require('ts-jest/utils');
 // load tsconfig.json
 const tsconfig = require("tsconfig");
-const { config } = tsconfig.loadSync(__dirname); // replace Dirname with the CWD to search from, see tsconfig documentation for more info
+const { config } = tsconfig.loadSync(__dirname); // replace __dirname with the CWD to search from, see tsconfig documentation for more info
 
 module.exports = {
   // [...]
