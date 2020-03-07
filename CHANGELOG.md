@@ -1,5 +1,5 @@
 <a name="25.2.1"></a>
-# [25.2.1](https://github.com/kulshekhar/ts-jest/compare/25.2.1...25.2.0) (2020-02-21)
+# [25.2.1](https://github.com/kulshekhar/ts-jest/compare/25.2.0...25.2.1) (2020-02-21)
 
 
 ### Bug Fixes
