@@ -9,15 +9,54 @@ That's what the `compilerHost` option (which defaults to `false`) does.
 There are 2 types of TypeScript `Program`, one is `Incremental Program` which is only available from TypeScript 3.4 
 and the other one is normal `Program`.
 
-By default `ts-jest` uses `Program` if `compilerHost` is enabled. The priority of using TypeScript APIs in `ts-jest`
+By default `ts-jest` uses `Incremental Program` if `compilerHost` is enabled. The priority of using TypeScript APIs in `ts-jest`
 as below:
 - Default TypeScript API is `LanguageService`.
 - `compilerHost` is enabled:
-    - `incremental` is enabled: use TypeScript `IncrementalProgram`.
-    - `incremental` is disabled (**default**): use TypeScript `Program`.
+    - `incremental` is enabled (**default**): use TypeScript `Incremental Program`.
+    - `incremental` is disabled: use TypeScript `Program`.
 - `isolatedModules` is enabled, use TypeScript transpile modules.
 
 Here is how to enable `ts-jest` to compile using TypeScript `Program`
+
+### Example
+
+<div class="row"><div class="col-md-6" markdown="block">
+
+```js
+// jest.config.js
+module.exports = {
+  // [...]
+  globals: {
+    'ts-jest': {
+      compilerHost: true,
+      incremental: false,
+    }
+  }
+};
+```
+
+</div><div class="col-md-6" markdown="block">
+
+```js
+// OR package.json
+{
+  // [...]
+  "jest": {
+    "globals": {
+      "ts-jest": {
+        "compilerHost": true,
+        "incremental": false
+      }
+    }
+  }
+}
+```
+
+</div></div>
+
+
+Here is how to enable `ts-jest` to compile using TypeScript `IncrementalProgram`
 
 ### Example
 
@@ -45,45 +84,6 @@ module.exports = {
     "globals": {
       "ts-jest": {
         "compilerHost": true
-      }
-    }
-  }
-}
-```
-
-</div></div>
-
-
-Here is how to enable `ts-jest` to compile using TypeScript `IncrementalProgram`
-
-### Example
-
-<div class="row"><div class="col-md-6" markdown="block">
-
-```js
-// jest.config.js
-module.exports = {
-  // [...]
-  globals: {
-    'ts-jest': {
-      compilerHost: true,
-      incremental: true,
-    }
-  }
-};
-```
-
-</div><div class="col-md-6" markdown="block">
-
-```js
-// OR package.json
-{
-  // [...]
-  "jest": {
-    "globals": {
-      "ts-jest": {
-        "compilerHost": true,
-        "incremental": true
       }
     }
   }
