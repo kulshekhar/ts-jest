@@ -124,7 +124,6 @@ export const compileUsingLanguageService = (
 
     previousProgram = programAfter
     // Throw an error when requiring `.d.ts` files.
-    /* istanbul ignore next (this should never happen but is kept for security) */
     if (!output.outputFiles.length) {
       throw new TypeError(
         interpolate(Errors.UnableToRequireDefinitionFile, {

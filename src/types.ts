@@ -45,6 +45,13 @@ export interface TsJestGlobalOptions {
   compilerHost?: boolean
 
   /**
+   * Use TypeScript's Incremental Program. This option only works when `compilerHost` is `true`
+   * TODO: Remove this flag when we can make project references working with our Incremental Program
+   * @default false
+   */
+  incremental?: boolean
+
+  /**
    * Emit compiled files into `.ts-jest` directory
    *
    * @default false
@@ -142,6 +149,7 @@ export interface TsJestConfig {
   packageJson: TsJestConfig$packageJson
   isolatedModules: boolean
   compilerHost: boolean
+  incremental: boolean // TODO: Remove this flag when we can make project references working with our Incremental Program
   emit: boolean
   compiler: string
   diagnostics: TsJestConfig$diagnostics

@@ -175,11 +175,9 @@ export const createCompiler = (configs: ConfigSet): TsCompiler => {
   let compileResult: CompileResult
   if (!tsJest.isolatedModules) {
     // Use language services by default
-    if (!tsJest.compilerHost) {
-      compileResult = compileUsingLanguageService(configs, logger, memoryCache)
-    } else {
-      compileResult = compileUsingProgram(configs, logger, memoryCache)
-    }
+    compileResult = !tsJest.compilerHost
+      ? compileUsingLanguageService(configs, logger, memoryCache)
+      : compileUsingProgram(configs, logger, memoryCache)
   } else {
     compileResult = compileUsingTranspileModule(configs, logger)
   }

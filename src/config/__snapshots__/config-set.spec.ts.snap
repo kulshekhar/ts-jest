@@ -53,6 +53,7 @@ Object {
       "throws": true,
     },
     "emit": false,
+    "incremental": true,
     "isolatedModules": false,
     "packageJson": Object {
       "kind": "file",
@@ -143,6 +144,7 @@ Object {
     "throws": true,
   },
   "emit": false,
+  "incremental": true,
   "isolatedModules": false,
   "packageJson": Object {
     "kind": "file",

@@ -8,7 +8,15 @@ import { ConfigSet } from './config/config-set'
 import { TsJestTransformer } from './ts-jest-transformer'
 
 describe('configFor', () => {
-  it('should return the same config-set for same values', () => {
+  it('should return the same config-set for same values with jest config string is not in configSetsIndex', () => {
+    const obj1 = { cwd: '/foo/.', rootDir: '/bar//dummy/..', globals: {} }
+    const str = stringify(obj1)
+    const cs3 = new TsJestTransformer().configsFor(str)
+    expect(cs3.cwd).toBe(`${sep}foo`)
+    expect(cs3.rootDir).toBe(`${sep}bar`)
+  })
+
+  it('should return the same config-set for same values with jest config string in configSetsIndex', () => {
     const obj1 = { cwd: '/foo/.', rootDir: '/bar//dummy/..', globals: {} }
     const obj2 = { ...obj1 }
     const str = stringify(obj1)
@@ -70,12 +78,12 @@ describe('process', () => {
   it('should process ts input without babel', () => {
     expect(process()).toBe(`ts:${INPUT}`)
     expect(config.shouldStringifyContent.mock.calls).toMatchInlineSnapshot(`
-Array [
-  Array [
-    "/foo/bar.ts",
-  ],
-]
-`)
+      Array [
+        Array [
+          "/foo/bar.ts",
+        ],
+      ]
+    `)
     expect(config.tsCompiler.compile.mock.calls).toMatchInlineSnapshot(`
 Array [
   Array [
@@ -192,6 +200,11 @@ Array [
 ",
 ]
 `)
+  })
+
+  it('should return empty string when trying to process definition file types', () => {
+    args[1] = '/foo/bar.d.ts'
+    expect(process()).toBe('')
   })
 
   it('should warn when trying to process unknown file types', () => {

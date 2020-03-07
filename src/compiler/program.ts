@@ -15,7 +15,8 @@ export const compileUsingProgram = (configs: ConfigSet, logger: Logger, memoryCa
 
   const ts = configs.compilerModule,
     cwd = configs.cwd,
-    { options, fileNames, projectReferences, errors } = configs.typescript
+    { options, fileNames, projectReferences, errors } = configs.typescript,
+    incremental = configs.tsJest.incremental
   const compilerHostTraceCtx = {
       namespace: 'ts:compilerHost',
       call: null,
@@ -36,8 +37,9 @@ export const compileUsingProgram = (configs: ConfigSet, logger: Logger, memoryCa
         ts.sys.useCaseSensitiveFileNames ? fileName : fileName.toLowerCase(),
     }
   let builderProgram: _ts.EmitAndSemanticDiagnosticsBuilderProgram, program: _ts.Program, host: _ts.CompilerHost
-  // Fallback for older TypeScript releases without incremental API.
-  if (options.incremental) {
+  if (incremental) {
+    // TODO: Find a way to trigger typescript to build project when there are project references.
+    // At the moment this Incremental Program doesn't work with project references
     host = ts.createIncrementalCompilerHost(options, sys)
     builderProgram = ts.createIncrementalProgram({
       rootNames: fileNames.slice(),
@@ -48,6 +50,7 @@ export const compileUsingProgram = (configs: ConfigSet, logger: Logger, memoryCa
     })
     program = builderProgram.getProgram()
   } else {
+    // Fallback for older TypeScript releases without incremental API.
     host = {
       ...sys,
       getSourceFile: (fileName, languageVersion) => {
@@ -71,7 +74,7 @@ export const compileUsingProgram = (configs: ConfigSet, logger: Logger, memoryCa
   // Read and cache custom transformers.
   const customTransformers = configs.tsCustomTransformers,
     updateMemoryCache = (contents: string, normalizedFileName: string): void => {
-      logger.debug({ normalizedFileName }, `updateMemoryCache() for program`)
+      logger.debug({ normalizedFileName }, `updateMemoryCache() for ${incremental ? 'incremental program' : 'program'}`)
 
       const fileVersion = memoryCache.versions.get(normalizedFileName) ?? 0,
         isFileInCache = fileVersion !== 0
@@ -84,7 +87,7 @@ export const compileUsingProgram = (configs: ConfigSet, logger: Logger, memoryCa
         memoryCache.versions.set(normalizedFileName, fileVersion + 1)
         memoryCache.contents.set(normalizedFileName, contents)
       }
-      const sourceFile = options.incremental
+      const sourceFile = incremental
         ? builderProgram.getSourceFile(normalizedFileName)
         : program.getSourceFile(normalizedFileName)
       // Update program when file changes.
@@ -100,7 +103,7 @@ export const compileUsingProgram = (configs: ConfigSet, logger: Logger, memoryCa
           configFileParsingDiagnostics: errors,
           projectReferences,
         }
-        if (options.incremental) {
+        if (incremental) {
           builderProgram = ts.createIncrementalProgram(programOptions)
           program = builderProgram.getProgram()
         } else {
@@ -114,13 +117,13 @@ export const compileUsingProgram = (configs: ConfigSet, logger: Logger, memoryCa
       output: [string, string] = ['', '']
     // Must set memory cache before attempting to read file.
     updateMemoryCache(code, normalizedFileName)
-    const sourceFile = options.incremental
+    const sourceFile = incremental
       ? builderProgram.getSourceFile(normalizedFileName)
       : program.getSourceFile(normalizedFileName)
 
     if (!sourceFile) throw new TypeError(`Unable to read file: ${fileName}`)
 
-    const result: _ts.EmitResult = options.incremental
+    const result: _ts.EmitResult = incremental
       ? builderProgram.emit(
           sourceFile,
           (path, file, _writeByteOrderMark) => {
@@ -142,7 +145,7 @@ export const compileUsingProgram = (configs: ConfigSet, logger: Logger, memoryCa
     if (configs.shouldReportDiagnostic(normalizedFileName)) {
       logger.debug(
         { normalizedFileName },
-        `getOutput(): computing diagnostics for ${options.incremental ? 'incremental program' : 'program'}`,
+        `getOutput(): computing diagnostics for ${incremental ? 'incremental program' : 'program'}`,
       )
       const diagnostics = ts.getPreEmitDiagnostics(program, sourceFile).slice()
       // will raise or just warn diagnostics depending on config
@@ -165,7 +168,7 @@ export const compileUsingProgram = (configs: ConfigSet, logger: Logger, memoryCa
         }),
       )
     }
-    if (configs.tsJest.emit && options.incremental) {
+    if (configs.tsJest.emit && incremental) {
       process.on('exit', () => {
         // Emits `.tsbuildinfo` to filesystem.
         // @ts-ignore
