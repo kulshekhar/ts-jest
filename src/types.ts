@@ -1,3 +1,4 @@
+import { TransformedSource, Transformer } from '@jest/transform/build/types'
 import * as _babel from 'babel__core'
 import { CompilerOptions, SourceFile, TransformerFactory } from 'typescript'
 // tslint:disable-next-line:no-duplicate-imports
@@ -7,9 +8,9 @@ import { ConfigSet } from './config/config-set'
 
 export type TBabelCore = typeof _babel
 export type TTypeScript = typeof _ts
-export type TBabelJest = Required<jest.Transformer>
+export type TBabelJest = Required<Transformer>
 export type BabelJestTransformer = {
-  [K in Exclude<keyof jest.Transformer, 'createTransformer'>]: Exclude<jest.Transformer[K], undefined>
+  [K in Exclude<keyof Transformer, 'createTransformer'>]: Exclude<Transformer[K], undefined>
 }
 export type BabelConfig = _babel.TransformOptions
 
@@ -37,6 +38,20 @@ export interface TsJestGlobalOptions {
   isolatedModules?: boolean
 
   /**
+   * Use TypeScript's compiler host API.
+   *
+   * @default false
+   */
+  compilerHost?: boolean
+
+  /**
+   * Emit compiled files into `.ts-jest` directory
+   *
+   * @default false
+   */
+  emit?: boolean
+
+  /**
    * Compiler to use (default to 'typescript'):
    */
   compiler?: string
@@ -56,8 +71,16 @@ export interface TsJestGlobalOptions {
     | boolean
     | {
         pretty?: boolean
-        ignoreCodes?: number | string | Array<number | string>
+        /**
+         * Ignore TypeScript warnings by diagnostic code.
+         */
+        ignoreCodes?: number | string | (number | string)[]
         pathRegex?: RegExp | string
+        /**
+         * Logs TypeScript errors to stderr instead of throwing exceptions.
+         *
+         * @default false
+         */
         warnOnly?: boolean
       }
 
@@ -118,17 +141,18 @@ export interface TsJestConfig {
   tsConfig: TsJestConfig$tsConfig
   packageJson: TsJestConfig$packageJson
   isolatedModules: boolean
+  compilerHost: boolean
+  emit: boolean
   compiler: string
   diagnostics: TsJestConfig$diagnostics
   babelConfig: TsJestConfig$babelConfig
   transformers: string[]
-
   // to deprecate / deprecated === === ===
   stringifyContentPathRegex: TsJestConfig$stringifyContentPathRegex
 }
 
 export interface TsJestHooksMap {
-  afterProcess?(args: any[], result: string | jest.TransformedSource): string | jest.TransformedSource | void
+  afterProcess?(args: any[], result: string | TransformedSource): string | TransformedSource | void
 }
 
 /**
@@ -158,39 +182,33 @@ export interface TSCommon {
   formatDiagnosticsWithColorAndContext: typeof _ts.formatDiagnosticsWithColorAndContext
 }
 
-/**
- * Track the project information.
- * @internal
- */
-export interface MemoryCache {
-  contents: { [path: string]: string | undefined }
-  versions: { [path: string]: number | undefined }
-  outputs: { [path: string]: string }
-}
-
-/**
- * Information retrieved from type info check.
- */
-export interface TypeInfo {
-  name: string
-  comment: string
-}
-
 export interface TsCompiler {
   cwd: string
   extensions: string[]
   cachedir: string | undefined
   ts: TSCommon
   compile(code: string, fileName: string, lineOffset?: number): string
-  getTypeInfo(code: string, fileName: string, position: number): TypeInfo
 }
+
+/**
+ * Internal source output.
+ */
+export type SourceOutput = [string, string]
+
+/**
+ * Track the project information.
+ * @internal
+ */
+export interface MemoryCache {
+  contents: Map<string, string | undefined>
+  versions: Map<string, number>
+  outputs: Map<string, string>
+}
+
+export type CompileResult = (code: string, fileName: string, lineOffset?: number) => SourceOutput
 
 export interface AstTransformerDesc {
   name: string
   version: number
   factory(cs: ConfigSet): TransformerFactory<SourceFile>
-}
-
-export interface IPackageJson {
-  main: string
 }

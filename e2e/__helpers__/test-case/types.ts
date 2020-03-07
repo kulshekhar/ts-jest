@@ -1,3 +1,5 @@
+import { Config } from '@jest/types'
+
 import { TsJestConfig } from '../../../src/types'
 
 import RunResult from './run-result'
@@ -7,7 +9,7 @@ export interface RunTestOptions {
   env?: {}
   inject?: (() => any) | string
   writeIo?: boolean
-  jestConfig?: jest.ProjectConfig | any
+  jestConfig?: Config.ProjectConfig | any
   tsJestConfig?: TsJestConfig | any
   noCache?: boolean
   jestConfigPath?: string

@@ -1,0 +1,40 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`language service should compile js file for allowJs true 1`] = `
+  ===[ FILE: foo.test.js ]========================================================
+  "use strict";
+  Object.defineProperty(exports, "__esModule", { value: true });
+  exports.default = 42;
+  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoiZm9vLnRlc3QuanMiLCJtYXBwaW5ncyI6Ijs7QUFBQSxrQkFBZSxFQUFFLENBQUEiLCJuYW1lcyI6W10sInNvdXJjZXMiOlsiZm9vLnRlc3QuanMiXSwic291cmNlc0NvbnRlbnQiOlsiZXhwb3J0IGRlZmF1bHQgNDIiXSwidmVyc2lvbiI6M30=
+  ===[ INLINE SOURCE MAPS ]=======================================================
+  file: foo.test.js
+  mappings: ';;AAAA,kBAAe,EAAE,CAAA'
+  names: []
+  sources:
+    - foo.test.js
+  sourcesContent:
+    - export default 42
+  version: 3
+  ================================================================================
+`;
+
+exports[`language service should report diagnostics related to typings with pathRegex config matches file name 1`] = `
+"TypeScript diagnostics (customize using \`[jest-config].globals.ts-jest.diagnostics\` option):
+foo.ts(3,7): error TS2322: Type 'number' is not assignable to type 'string'."
+`;
+
+exports[`language service should use the cache 3`] = `
+  ===[ FILE: src/compiler/language-service.spec.ts ]==============================
+  console.log("hello");
+  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoiPGN3ZD4vc3JjL2NvbXBpbGVyL2xhbmd1YWdlLXNlcnZpY2Uuc3BlYy50cyIsIm1hcHBpbmdzIjoiQUFBQSxPQUFPLENBQUMsR0FBRyxDQUFDLE9BQU8sQ0FBQyxDQUFBIiwibmFtZXMiOltdLCJzb3VyY2VzIjpbIjxjd2Q+L3NyYy9jb21waWxlci9sYW5ndWFnZS1zZXJ2aWNlLnNwZWMudHMiXSwic291cmNlc0NvbnRlbnQiOlsiY29uc29sZS5sb2coXCJoZWxsb1wiKSJdLCJ2ZXJzaW9uIjozfQ==
+  ===[ INLINE SOURCE MAPS ]=======================================================
+  file: <cwd>/src/compiler/language-service.spec.ts
+  mappings: 'AAAA,OAAO,CAAC,GAAG,CAAC,OAAO,CAAC,CAAA'
+  names: []
+  sources:
+    - <cwd>/src/compiler/language-service.spec.ts
+  sourcesContent:
+    - console.log("hello")
+  version: 3
+  ================================================================================
+`;

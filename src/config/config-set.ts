@@ -8,11 +8,11 @@
  * version of the `jest.ProjectConfig`, and then later it calls `process()`
  * with the complete, object version of it.
  */
+import { Config } from '@jest/types'
 import { LogContexts, Logger } from 'bs-logger'
 import { existsSync, readFileSync, realpathSync } from 'fs'
 import json5 = require('json5')
-import { dirname, isAbsolute, join, normalize, resolve } from 'path'
-import semver = require('semver')
+import { dirname, extname, isAbsolute, join, normalize, resolve } from 'path'
 import {
   CompilerOptions,
   CustomTransformers,
@@ -24,7 +24,7 @@ import {
 } from 'typescript'
 
 import { digest as MY_DIGEST, version as MY_VERSION } from '..'
-import { createCompiler } from '../compiler'
+import { createCompiler } from '../compiler/instance'
 import { internals as internalAstTransformers } from '../transformers'
 import {
   AstTransformerDesc,
@@ -117,34 +117,31 @@ export class ConfigSet {
     const {
       tsJest: { packageJson },
     } = this
-
     if (packageJson && packageJson.kind === 'inline') {
       return packageJson.value
     }
-
     if (packageJson && packageJson.kind === 'file' && packageJson.value) {
       const path = this.resolvePath(packageJson.value)
       if (existsSync(path)) {
         return require(path)
       }
       this.logger.warn(Errors.UnableToFindProjectRoot)
+
       return {}
     }
-
     const tsJestRoot = resolve(__dirname, '..', '..')
     let pkgPath = resolve(tsJestRoot, '..', '..', 'package.json')
     if (existsSync(pkgPath)) {
       return require(pkgPath)
     }
-
     if (realpathSync(this.rootDir) === realpathSync(tsJestRoot)) {
       pkgPath = resolve(tsJestRoot, 'package.json')
       if (existsSync(pkgPath)) {
         return require(pkgPath)
       }
     }
-
     this.logger.warn(Errors.UnableToFindProjectRoot)
+
     return {}
   }
 
@@ -157,21 +154,19 @@ export class ConfigSet {
       ...pkg.devDependencies,
       ...pkg.dependencies,
     })
-    return names.reduce(
-      (map, name) => {
-        const version = getPackageVersion(name)
-        if (version) map[name] = version
-        return map
-      },
-      {} as Record<string, string>,
-    )
+    return names.reduce((map, name) => {
+      const version = getPackageVersion(name)
+      if (version) map[name] = version
+
+      return map
+    }, {} as Record<string, string>)
   }
 
   @Memoize()
-  get jest(): jest.ProjectConfig {
+  get jest(): Config.ProjectConfig {
     const config = backportJestConfig(this.logger, this._jestConfig)
     if (this.parentOptions) {
-      const globals: any = config.globals || (config.globals = {})
+      const globals: any = config.globals ?? {}
       // TODO: implement correct deep merging instead
       globals['ts-jest'] = {
         ...this.parentOptions,
@@ -179,6 +174,7 @@ export class ConfigSet {
       }
     }
     this.logger.debug({ jestConfig: config }, 'normalized jest config')
+
     return config
   }
 
@@ -269,15 +265,18 @@ export class ConfigSet {
     // parsed options
     const res: TsJestConfig = {
       tsConfig,
+      compilerHost: options.compilerHost ?? false,
+      emit: options.emit ?? false,
       packageJson,
       babelConfig,
       diagnostics,
       isolatedModules: !!options.isolatedModules,
-      compiler: options.compiler || 'typescript',
+      compiler: options.compiler ?? 'typescript',
       transformers,
       stringifyContentPathRegex,
     }
     this.logger.debug({ tsJestConfig: res }, 'normalized ts-jest config')
+
     return res
   }
 
@@ -295,9 +294,11 @@ export class ConfigSet {
     if (this.tsJest.babelConfig) {
       modules.push('@babel/core', 'babel-jest')
     }
+
     return modules.reduce(
       (map, name) => {
-        map[name] = getPackageVersion(name) || '-'
+        map[name] = getPackageVersion(name) ?? '-'
+
         return map
       },
       { 'ts-jest': MY_VERSION } as Record<string, string>,
@@ -338,9 +339,10 @@ export class ConfigSet {
       },
       compilerModule: { DiagnosticCategory },
     } = this
+
     return (diagnostics: Diagnostic[], filePath?: string, logger: Logger = this.logger): void | never => {
       const filteredDiagnostics = filterDiagnostics(diagnostics, filePath)
-      if (filteredDiagnostics.length === 0) return
+      if (!filteredDiagnostics.length) return
       const error = createTsError(filteredDiagnostics)
       // only throw if `warnOnly` and it is a warning or error
       const importantCategories = [DiagnosticCategory.Warning, DiagnosticCategory.Error]
@@ -349,24 +351,6 @@ export class ConfigSet {
       }
       logger.warn({ error }, error.message)
     }
-  }
-
-  private static loadConfig(base: BabelConfig): BabelConfig {
-    // loadPartialConfig is from babel 7+, and OptionManager is backward compatible but deprecated 6 API
-    const { OptionManager, loadPartialConfig, version } = importer.babelCore(ImportReasons.BabelJest)
-    // cwd is only supported from babel >= 7
-    if (version && semver.satisfies(version, '>=6 <7')) {
-      delete base.cwd
-    }
-    // call babel to load options
-    if (typeof loadPartialConfig === 'function') {
-      const partialConfig = loadPartialConfig(base)
-      if (partialConfig) {
-        return partialConfig.options as BabelConfig
-      }
-    }
-
-    return new OptionManager().init(base) as BabelConfig
   }
 
   @Memoize()
@@ -381,20 +365,24 @@ export class ConfigSet {
     let base: BabelConfig = { cwd: this.cwd }
     if (babelConfig.kind === 'file') {
       if (babelConfig.value) {
-        base = {
-          ...base,
-          ...json5.parse(readFileSync(babelConfig.value, 'utf8')),
+        if (extname(babelConfig.value) === '.js') {
+          base = {
+            ...base,
+            ...require(babelConfig.value),
+          }
+        } else {
+          base = {
+            ...base,
+            ...json5.parse(readFileSync(babelConfig.value, 'utf8')),
+          }
         }
       }
     } else if (babelConfig.kind === 'inline') {
       base = { ...base, ...babelConfig.value }
     }
+    this.logger.debug({ babelConfig: base }, 'normalized babel config via ts-jest option')
 
-    // call babel to load options
-    const config = ConfigSet.loadConfig(base)
-
-    this.logger.debug({ babelConfig: config }, 'normalized babel config')
-    return config
+    return base
   }
 
   @Memoize()
@@ -432,6 +420,7 @@ export class ConfigSet {
     let hooksFile = process.env.TS_JEST_HOOKS
     if (hooksFile) {
       hooksFile = resolve(this.cwd, hooksFile)
+
       return importer.tryTheseOr(hooksFile, {})
     }
     return {}
@@ -448,12 +437,15 @@ export class ConfigSet {
       },
       shouldReportDiagnostic,
     } = this
+
     return (diagnostics: Diagnostic[], filePath?: string): Diagnostic[] => {
       if (filePath && !shouldReportDiagnostic(filePath)) return []
+
       return diagnostics.filter(diagnostic => {
-        if (diagnostic.file && diagnostic.file.fileName && !shouldReportDiagnostic(diagnostic.file.fileName)) {
+        if (diagnostic.file?.fileName && !shouldReportDiagnostic(diagnostic.file.fileName)) {
           return false
         }
+
         return ignoreCodes.indexOf(diagnostic.code) === -1
       })
     }
@@ -541,17 +533,15 @@ export class ConfigSet {
       // we don't want to create declaration files
       declaration: false,
       noEmit: false,
-      outDir: '$$ts-jest$$',
       // else istanbul related will be dropped
       removeComments: false,
       // to clear out else it's buggy
       out: undefined,
       outFile: undefined,
-      composite: undefined,
+      composite: undefined, // see https://github.com/TypeStrong/ts-node/pull/657/files
       declarationDir: undefined,
       declarationMap: undefined,
       emitDeclarationOnly: undefined,
-      incremental: undefined,
       sourceRoot: undefined,
       tsBuildInfoFile: undefined,
     }
@@ -560,6 +550,7 @@ export class ConfigSet {
       // commonjs is required for jest
       options.module = this.compilerModule.ModuleKind.CommonJS
     }
+
     return options
   }
 
@@ -571,13 +562,6 @@ export class ConfigSet {
   @Memoize()
   get cwd(): string {
     return normalize(this.jest.cwd || process.cwd())
-  }
-
-  /**
-   * @internal
-   */
-  get isDoctoring() {
-    return !!process.env.TS_JEST_DOCTOR
   }
 
   @Memoize()
@@ -618,9 +602,9 @@ export class ConfigSet {
   /**
    * @internal
    */
-  private readonly _jestConfig: jest.ProjectConfig
+  private readonly _jestConfig: Config.ProjectConfig
 
-  constructor(jestConfig: jest.ProjectConfig, readonly parentOptions?: TsJestGlobalOptions, parentLogger?: Logger) {
+  constructor(jestConfig: Config.ProjectConfig, readonly parentOptions?: TsJestGlobalOptions, parentLogger?: Logger) {
     this._jestConfig = jestConfig
     this.logger = parentLogger ? parentLogger.child({ [LogContexts.namespace]: 'config' }) : logger
   }
@@ -645,6 +629,8 @@ export class ConfigSet {
   }
 
   /**
+   * Load TypeScript configuration. Returns the parsed TypeScript config and
+   * any `tsConfig` options specified in ts-jest tsConfig
    * @internal
    */
   readTsConfig(

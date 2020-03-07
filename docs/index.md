@@ -13,7 +13,7 @@ It supports all features of TypeScript including type-checking. [Read more about
 
 ---
 
-<img src="assets/img/slack.png" align="left" height="24"> [Ask for some help in the `ts-jest` community of Slack](https://bit.ly/ts-jest-slack)
+<img src="assets/img/slack.png" align="left" height="24"> [Ask for some help in the `ts-jest` community of Slack](https://bit.ly/3bRHFPQ)
 
 <!--
 <img src="assets/img/troubleshooting.png" align="left" height="24"> [Before reporting any issue, be sure to check the troubleshooting page](user/troubleshooting)
@@ -31,7 +31,7 @@ Refer to the [installation](user/install) and [configuration](user/config) instr
 
 * [TypeScript](https://www.typescriptlang.org/) - JavaScript that scales
 * [Jest](https://jestjs.io/) - Delightful JavaScript Testing
-* [`ts-jest`](https:/github.com/kulshekhar/ts-jest) - Jest processor for TypeScript _(yes, `ts-jest` uses itself for its tests)_
+* [`ts-jest`](https://github.com/kulshekhar/ts-jest) - Jest processor for TypeScript _(yes, `ts-jest` uses itself for its tests)_
 
 ## Contributing
 
@@ -50,6 +50,10 @@ Please make sure to pin your version of `ts-jest` to a specific version if this 
 * **Huafu Gandon** - [huafu](https://github.com/huafu)
 
 See also the list of [contributors](https://github.com/kulshekhar/ts-jest/contributors) who participated in this project.
+
+## Supporters
+
+- [JetBrains](https://www.jetbrains.com/?from=ts-jest) has been kind enough to support ts-jest with an [open source license](https://www.jetbrains.com/community/opensource/?from=ts-jest).
 
 ## License
 

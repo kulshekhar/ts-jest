@@ -6,8 +6,13 @@ import * as hoist from './hoist-jest'
 const CODE_WITH_HOISTING = `
 const foo = 'foo'
 console.log(foo)
+jest.enableAutomock()
+jest.disableAutomock()
 jest.mock('./foo')
 jest.mock('./foo/bar', () => 'bar')
+jest.unmock('./bar/foo').dontMock('./bar/bar')
+jest.deepUnmock('./foo')
+jest.mock('./foo').mock('./bar')
 const func = () => {
   const bar = 'bar'
   console.log(bar)
@@ -15,6 +20,9 @@ const func = () => {
   jest.mock('./bar')
   jest.mock('./bar/foo', () => 'foo')
   jest.unmock('./foo/bar')
+  jest.unmock('./bar/foo').dontMock('./bar/bar')
+  jest.deepUnmock('./bar')
+  jest.mock('./foo').mock('./bar')
 }
 const func2 = () => {
   const bar = 'bar'
@@ -23,6 +31,9 @@ const func2 = () => {
   jest.unmock('./foo/bar')
   jest.mock('./bar/foo', () => 'foo')
   jest.unmock('./foo')
+  jest.unmock('./bar/foo').dontMock('./bar/bar')
+  jest.deepUnmock('./bar')
+  jest.mock('./foo').mock('./bar')
 }
 `
 const logger = testing.createLoggerMock()
@@ -39,30 +50,41 @@ describe('hoisting', () => {
     expect(typeof hoist.factory).toBe('function')
   })
 
-  it('should hoist jest mock() and unmock() statements', () => {
+  it('should hoist jest.mock(), unmock(), disableAutomock() and enableAutomock()', () => {
     const out = transpile(CODE_WITH_HOISTING)
     expect(out.outputText).toMatchInlineSnapshot(`
-"jest.mock('./foo');
-jest.mock('./foo/bar', function () { return 'bar'; });
-var foo = 'foo';
-console.log(foo);
-var func = function () {
-    jest.unmock('./foo');
-    jest.mock('./bar');
-    jest.mock('./bar/foo', function () { return 'foo'; });
-    jest.unmock('./foo/bar');
-    var bar = 'bar';
-    console.log(bar);
-};
-var func2 = function () {
-    jest.mock('./bar');
-    jest.unmock('./foo/bar');
-    jest.mock('./bar/foo', function () { return 'foo'; });
-    jest.unmock('./foo');
-    var bar = 'bar';
-    console.log(bar);
-};
-"
-`)
+      "jest.enableAutomock();
+      jest.disableAutomock();
+      jest.mock('./foo');
+      jest.mock('./foo/bar', function () { return 'bar'; });
+      jest.deepUnmock('./foo');
+      jest.mock('./foo').mock('./bar');
+      var foo = 'foo';
+      console.log(foo);
+      jest.unmock('./bar/foo').dontMock('./bar/bar');
+      var func = function () {
+          jest.unmock('./foo');
+          jest.mock('./bar');
+          jest.mock('./bar/foo', function () { return 'foo'; });
+          jest.unmock('./foo/bar');
+          jest.deepUnmock('./bar');
+          jest.mock('./foo').mock('./bar');
+          var bar = 'bar';
+          console.log(bar);
+          jest.unmock('./bar/foo').dontMock('./bar/bar');
+      };
+      var func2 = function () {
+          jest.mock('./bar');
+          jest.unmock('./foo/bar');
+          jest.mock('./bar/foo', function () { return 'foo'; });
+          jest.unmock('./foo');
+          jest.deepUnmock('./bar');
+          jest.mock('./foo').mock('./bar');
+          var bar = 'bar';
+          console.log(bar);
+          jest.unmock('./bar/foo').dontMock('./bar/bar');
+      };
+      "
+    `)
   })
 })

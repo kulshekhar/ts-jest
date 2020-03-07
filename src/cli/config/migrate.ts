@@ -1,3 +1,4 @@
+import { Config } from '@jest/types'
 import { createLogger } from 'bs-logger'
 import * as stringifyJson from 'fast-json-stable-stringify'
 import { existsSync } from 'fs'
@@ -25,7 +26,7 @@ export const run: CliCommand = async (args: Arguments /*, logger: Logger*/) => {
   if (!/\.(js|json)$/.test(name)) {
     throw new TypeError(`Configuration file ${file} must be a JavaScript or JSON file.`)
   }
-  let actualConfig: jest.InitialOptions = require(filePath)
+  let actualConfig: Config.InitialOptions = require(filePath)
   if (isPackage) {
     actualConfig = (actualConfig as any).jest
   }
@@ -43,18 +44,15 @@ export const run: CliCommand = async (args: Arguments /*, logger: Logger*/) => {
       presetName = args.js === 'babel' ? JestPresetNames.jsWIthBabel : JestPresetNames.jsWithTs
     } else {
       // try to detect what transformer the js extensions would target
-      const jsTransformers = Object.keys(migratedConfig.transform || {}).reduce(
-        (list, pattern) => {
-          if (RegExp(pattern.replace(/^<rootDir>\/?/, '/dummy-project/')).test('/dummy-project/src/foo.js')) {
-            let transformer: string = (migratedConfig.transform as any)[pattern]
-            if (/\bbabel-jest\b/.test(transformer)) transformer = 'babel-jest'
-            else if (/\ts-jest\b/.test(transformer)) transformer = 'ts-jest'
-            return [...list, transformer]
-          }
-          return list
-        },
-        [] as string[],
-      )
+      const jsTransformers = Object.keys(migratedConfig.transform || {}).reduce((list, pattern) => {
+        if (RegExp(pattern.replace(/^<rootDir>\/?/, '/dummy-project/')).test('/dummy-project/src/foo.js')) {
+          let transformer: string = (migratedConfig.transform as any)[pattern]
+          if (/\bbabel-jest\b/.test(transformer)) transformer = 'babel-jest'
+          else if (/\ts-jest\b/.test(transformer)) transformer = 'ts-jest'
+          return [...list, transformer]
+        }
+        return list
+      }, [] as string[])
       // depending on the transformer found, we use one or the other preset
       const jsWithTs = jsTransformers.includes('ts-jest')
       const jsWithBabel = jsTransformers.includes('babel-jest')
@@ -176,7 +174,7 @@ ${footNotes.join('\n')}
   }
 }
 
-function cleanupConfig(config: jest.InitialOptions): void {
+function cleanupConfig(config: Config.InitialOptions): void {
   if (config.globals) {
     if ((config as any).globals['ts-jest'] && Object.keys((config as any).globals['ts-jest']).length === 0) {
       delete (config as any).globals['ts-jest']

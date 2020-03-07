@@ -1,3 +1,5 @@
+import { TransformOptions, TransformedSource, Transformer } from '@jest/transform/build/types'
+import { Config } from '@jest/types'
 import { Logger } from 'bs-logger'
 import { inspect } from 'util'
 
@@ -16,10 +18,10 @@ export const INSPECT_CUSTOM = inspect.custom || 'inspect'
 
 interface ConfigSetIndexItem {
   configSet: ConfigSet
-  jestConfig: JsonableValue<jest.ProjectConfig>
+  jestConfig: JsonableValue<Config.ProjectConfig>
 }
 
-export class TsJestTransformer implements jest.Transformer {
+export class TsJestTransformer implements Transformer {
   /**
    * @internal
    */
@@ -60,9 +62,9 @@ export class TsJestTransformer implements jest.Transformer {
     return `[object TsJestTransformer<#${this.id}>]`
   }
 
-  configsFor(jestConfig: jest.ProjectConfig | string) {
+  configsFor(jestConfig: Config.ProjectConfig | string) {
     let csi: ConfigSetIndexItem | undefined
-    let jestConfigObj: jest.ProjectConfig
+    let jestConfigObj: Config.ProjectConfig
     if (typeof jestConfig === 'string') {
       csi = TsJestTransformer._configSetsIndex.find(cs => cs.jestConfig.serialized === jestConfig)
       if (csi) return csi.configSet
@@ -90,17 +92,18 @@ export class TsJestTransformer implements jest.Transformer {
       jestConfig: new JsonableValue(jestConfigObj),
       configSet,
     })
+
     return configSet
   }
 
   process(
     input: string,
-    filePath: jest.Path,
-    jestConfig: jest.ProjectConfig,
-    transformOptions?: jest.TransformOptions,
-  ): jest.TransformedSource | string {
+    filePath: Config.Path,
+    jestConfig: Config.ProjectConfig,
+    transformOptions?: TransformOptions,
+  ): TransformedSource | string {
     this.logger.debug({ fileName: filePath, transformOptions }, 'processing', filePath)
-    let result: string | jest.TransformedSource
+    let result: string | TransformedSource
     const source: string = input
 
     const configs = this.configsFor(jestConfig)
@@ -125,6 +128,7 @@ export class TsJestTransformer implements jest.Transformer {
       result = source
     } else if (isJsFile || isTsFile) {
       // transpile TS code (source maps are included)
+      /* istanbul ignore if */
       result = configs.tsCompiler.compile(source, filePath)
     } else {
       // we should not get called for files with other extension than js[x], ts[x] and d.ts,
@@ -161,6 +165,7 @@ export class TsJestTransformer implements jest.Transformer {
    * @param fileContent The content of the file
    * @param filePath The full path to the file
    * @param jestConfigStr The JSON-encoded version of jest config
+   * @param transformOptions
    * @param transformOptions.instrument Whether the content will be instrumented by our transformer (always false)
    * @param transformOptions.rootDir Jest current rootDir
    */
@@ -174,6 +179,7 @@ export class TsJestTransformer implements jest.Transformer {
     const configs = this.configsFor(jestConfigStr)
     // we do not instrument, ensure it is false all the time
     const { instrument = false, rootDir = configs.rootDir } = transformOptions
+
     return sha1(
       configs.cacheKey,
       '\x00',

@@ -1,0 +1,21 @@
+{
+  "name": "ts-jest-e2e-tmpl-with-babel-7-string-config",
+  "version": "0.0.0-tmpl.0",
+  "private": true,
+  "devDependencies": {
+    "@babel/core": "7.8.4",
+    "@types/jest": "25.1.1",
+    "@types/node": "12.12.26",
+    "babel-jest": "25.1.0",
+    "jest": "25.1.0",
+    "typescript": "3.7.5"
+  },
+  "wantedDependencies": {
+    "@babel/core": "7",
+    "@types/jest": "latest",
+    "@types/node": "12",
+    "babel-jest": "latest",
+    "jest": "latest",
+    "typescript": "latest"
+  }
+}
