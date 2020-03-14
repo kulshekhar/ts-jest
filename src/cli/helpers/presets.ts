@@ -1,7 +1,7 @@
 import { TsJestPresets } from '../../config/create-jest-preset'
 
 /** @internal */
-export enum JestPresetNames {
+export const enum JestPresetNames {
   default = 'ts-jest/presets/default',
   jsWithTs = 'ts-jest/presets/js-with-ts',
   jsWIthBabel = 'ts-jest/presets/js-with-babel',
