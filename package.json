@@ -64,13 +64,12 @@
     "bs-logger": "0.x",
     "buffer-from": "1.x",
     "fast-json-stable-stringify": "2.x",
-    "jest-config": "25.x",
     "json5": "2.x",
     "lodash.memoize": "4.x",
     "make-error": "1.x",
-    "mkdirp": "0.x",
+    "mkdirp": "1.x",
     "resolve": "1.x",
-    "semver": "^5.5",
+    "semver": "7.x",
     "yargs-parser": "^16.1.0"
   },
   "peerDependencies": {
