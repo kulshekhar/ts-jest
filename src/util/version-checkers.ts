@@ -9,7 +9,7 @@ const logger = rootLogger.child({ namespace: 'versions' })
 /**
  * @internal
  */
-export enum ExpectedVersions {
+export const enum ExpectedVersions {
   Jest = '>=25 <26',
   TypeScript = '>=2.7 <4',
   BabelJest = '>=25 <26',

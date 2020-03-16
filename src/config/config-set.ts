@@ -76,7 +76,7 @@ export const IGNORE_DIAGNOSTIC_CODES = [
  */
 // WARNING: DO NOT CHANGE THE ORDER OF CODE NAMES!
 // ONLY APPEND IF YOU NEED TO ADD SOME
-export enum DiagnosticCodes {
+const enum DiagnosticCodes {
   TsJest = 151000,
   ConfigModuleOption,
 }
