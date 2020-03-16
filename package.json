@@ -68,7 +68,7 @@
     "json5": "2.x",
     "lodash.memoize": "4.x",
     "make-error": "1.x",
-    "mkdirp": "0.x",
+    "mkdirp": "1.0.0",
     "resolve": "1.x",
     "semver": "^5.5",
     "yargs-parser": "^16.1.0"
