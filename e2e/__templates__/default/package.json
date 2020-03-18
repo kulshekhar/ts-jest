@@ -13,5 +13,8 @@
     "@types/node": "12",
     "jest": "latest",
     "typescript": "latest"
+  },
+  "resolutions": {
+    "minimist": ">=1.2.2"
   }
 }
