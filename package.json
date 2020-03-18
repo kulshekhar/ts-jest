@@ -67,7 +67,6 @@
     "json5": "^2.x",
     "lodash.memoize": "^4.x",
     "make-error": "^1.x",
-    "mkdirp": "^1.x",
     "resolve": "^1.x",
     "semver": "^7.x",
     "yargs-parser": "^18.1.1"
@@ -97,7 +96,6 @@
     "@types/lodash.memoize": "4.x",
     "@types/lodash.merge": "4.x",
     "@types/lodash.set": "4.x",
-    "@types/mkdirp": "latest",
     "@types/node": "10.x",
     "@types/resolve": "latest",
     "@types/semver": "latest",

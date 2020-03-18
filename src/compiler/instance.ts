@@ -30,8 +30,7 @@
  */
 
 import { Logger } from 'bs-logger'
-import { readFileSync, writeFileSync } from 'fs'
-import mkdirp = require('mkdirp')
+import { mkdirSync, readFileSync, writeFileSync } from 'fs'
 import { basename, extname, join, normalize } from 'path'
 
 import { ConfigSet } from '../config/config-set'
@@ -110,7 +109,7 @@ const readThrough = (
   }
 
   // Make sure the cache directory exists before continuing.
-  mkdirp.sync(cachedir)
+  mkdirSync(cachedir, { recursive: true })
 
   return (code: string, fileName: string, lineOffset?: number) => {
     const normalizedFileName = normalize(fileName)
