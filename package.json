@@ -99,6 +99,7 @@
     "@types/lodash.set": "4.x",
     "@types/mkdirp": "latest",
     "@types/node": "10.x",
+    "@types/react": "^16.x",
     "@types/resolve": "latest",
     "@types/semver": "latest",
     "@types/yargs": "latest",

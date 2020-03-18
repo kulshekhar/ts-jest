@@ -27,7 +27,8 @@
     "target": "es5",
     "types": [
       "jest",
-      "node"
+      "node",
+      "react"
     ]
   },
   "include": [

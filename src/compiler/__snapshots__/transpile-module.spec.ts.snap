@@ -20,13 +20,38 @@ exports[`transpile module with isolatedModule: true should compile js file for a
 
 exports[`transpile module with isolatedModule: true should compile tsx file for jsx preserve 1`] = `
   ===[ FILE: foo.tsx ]============================================================
+  "use strict";
   var App = function () {
       return <>Test</>;
   };
-  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoiZm9vLnRzeCIsIm1hcHBpbmdzIjoiQUFDUSxJQUFNLEdBQUcsR0FBRztJQUNWLE9BQU8sRUFBRSxJQUFJLEdBQUcsQ0FBQTtBQUNsQixDQUFDLENBQUEiLCJuYW1lcyI6W10sInNvdXJjZXMiOlsiZm9vLnRzeCJdLCJzb3VyY2VzQ29udGVudCI6WyJcbiAgICAgICAgY29uc3QgQXBwID0gKCkgPT4ge1xuICAgICAgICAgIHJldHVybiA8PlRlc3Q8Lz5cbiAgICAgICAgfVxuICAgICAgIl0sInZlcnNpb24iOjN9
+  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoiZm9vLnRzeCIsIm1hcHBpbmdzIjoiO0FBQ1EsSUFBTSxHQUFHLEdBQUc7SUFDVixPQUFPLEVBQUUsSUFBSSxHQUFHLENBQUE7QUFDbEIsQ0FBQyxDQUFBIiwibmFtZXMiOltdLCJzb3VyY2VzIjpbImZvby50c3giXSwic291cmNlc0NvbnRlbnQiOlsiXG4gICAgICAgIGNvbnN0IEFwcCA9ICgpID0+IHtcbiAgICAgICAgICByZXR1cm4gPD5UZXN0PC8+XG4gICAgICAgIH1cbiAgICAgICJdLCJ2ZXJzaW9uIjozfQ==
   ===[ INLINE SOURCE MAPS ]=======================================================
   file: foo.tsx
-  mappings: 'AACQ,IAAM,GAAG,GAAG;IACV,OAAO,EAAE,IAAI,GAAG,CAAA;AAClB,CAAC,CAAA'
+  mappings: ';AACQ,IAAM,GAAG,GAAG;IACV,OAAO,EAAE,IAAI,GAAG,CAAA;AAClB,CAAC,CAAA'
+  names: []
+  sources:
+    - foo.tsx
+  sourcesContent:
+    - |2-
+  
+              const App = () => {
+                return <>Test</>
+              }
+            
+  version: 3
+  ================================================================================
+`;
+
+exports[`transpile module with isolatedModule: true should compile tsx file for other jsx options 1`] = `
+  ===[ FILE: foo.tsx ]============================================================
+  "use strict";
+  var App = function () {
+      return React.createElement(React.Fragment, null, "Test");
+  };
+  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoiZm9vLnRzeCIsIm1hcHBpbmdzIjoiO0FBQ1EsSUFBTSxHQUFHLEdBQUc7SUFDVixPQUFPLGlEQUFTLENBQUE7QUFDbEIsQ0FBQyxDQUFBIiwibmFtZXMiOltdLCJzb3VyY2VzIjpbImZvby50c3giXSwic291cmNlc0NvbnRlbnQiOlsiXG4gICAgICAgIGNvbnN0IEFwcCA9ICgpID0+IHtcbiAgICAgICAgICByZXR1cm4gPD5UZXN0PC8+XG4gICAgICAgIH1cbiAgICAgICJdLCJ2ZXJzaW9uIjozfQ==
+  ===[ INLINE SOURCE MAPS ]=======================================================
+  file: foo.tsx
+  mappings: ';AACQ,IAAM,GAAG,GAAG;IACV,OAAO,iDAAS,CAAA;AAClB,CAAC,CAAA'
   names: []
   sources:
     - foo.tsx
