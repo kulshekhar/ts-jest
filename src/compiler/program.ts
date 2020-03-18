@@ -159,16 +159,13 @@ export const compileUsingProgram = (configs: ConfigSet, logger: Logger, memoryCa
 
       // Throw an error when requiring files that cannot be compiled.
       if (output[0] === '') {
-        if (program.isSourceFileFromExternalLibrary(sourceFile)) {
-          throw new TypeError(`Unable to compile file from external library: ${relative(cwd, fileName)}`)
-        }
-
         throw new TypeError(
           interpolate(Errors.UnableToRequireDefinitionFile, {
             file: basename(normalizedFileName),
           }),
         )
       }
+      /* istanbul ignore next */
       if (configs.tsJest.emit && incremental) {
         process.on('exit', () => {
           // Emits `.tsbuildinfo` to filesystem.
