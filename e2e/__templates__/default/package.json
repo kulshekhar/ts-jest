@@ -15,6 +15,7 @@
     "typescript": "latest"
   },
   "resolutions": {
-    "minimist": ">=1.2.2"
+    "minimist": ">=1.2.2",
+    "mkdirp": "^0.5.2"
   }
 }
