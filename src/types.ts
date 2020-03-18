@@ -196,6 +196,7 @@ export interface TsCompiler {
   cachedir: string | undefined
   ts: TSCommon
   compile(code: string, fileName: string, lineOffset?: number): string
+  program: _ts.Program | undefined
 }
 
 /**
@@ -213,7 +214,12 @@ export interface MemoryCache {
   outputs: Map<string, string>
 }
 
-export type CompileResult = (code: string, fileName: string, lineOffset?: number) => SourceOutput
+export type CompileFn = (code: string, fileName: string, lineOffset?: number) => SourceOutput
+
+export interface CompileResult {
+  compileFn: CompileFn
+  program?: _ts.Program
+}
 
 export interface AstTransformerDesc {
   name: string

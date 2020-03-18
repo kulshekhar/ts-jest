@@ -38,6 +38,7 @@ export function factory(cs: ConfigSet) {
   const logger = cs.logger.child({ namespace: 'ts-hoisting' })
   /**
    * Our compiler (typescript, or a module with typescript-like interface)
+   * To access Program or TypeChecker, do: cs.tsCompiler.program or cs.tsCompiler.program.getTypeChecker()
    */
   const ts = cs.compilerModule
 
