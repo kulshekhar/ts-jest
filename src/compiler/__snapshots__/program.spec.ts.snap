@@ -41,20 +41,25 @@ exports[`cannot compile should throw error with incremental program 1`] = `
 This is usually the result of a faulty configuration or import. Make sure there is a \`.js\`, \`.json\` or another executable extension available alongside \`test-cannot-compile.d.ts\`."
 `;
 
+exports[`cannot compile should throw error with incremental program 2`] = `"Unable to read file: test-cannot-compile.jsx"`;
+
 exports[`cannot compile should throw error with normal program 1`] = `
 "Unable to require \`.d.ts\` file for file: test-cannot-compile.d.ts.
 This is usually the result of a faulty configuration or import. Make sure there is a \`.js\`, \`.json\` or another executable extension available alongside \`test-cannot-compile.d.ts\`."
 `;
 
-exports[`jsx preserve should compile tsx file for jsx preserve with incremental program 1`] = `
+exports[`cannot compile should throw error with normal program 2`] = `"Unable to read file: test-cannot-compile.jsx"`;
+
+exports[`jsx preserve should compile tsx file for with incremental program 1`] = `
   ===[ FILE: test-jsx-preserve.tsx ]==============================================
+  "use strict";
   var App = function () {
       return <>Test</>;
   };
-  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoidGVzdC1qc3gtcHJlc2VydmUudHN4IiwibWFwcGluZ3MiOiJBQUNNLElBQU0sR0FBRyxHQUFHO0lBQ1YsT0FBTyxFQUFFLElBQUksR0FBRyxDQUFBO0FBQ2xCLENBQUMsQ0FBQSIsIm5hbWVzIjpbXSwic291cmNlcyI6WyJ0ZXN0LWpzeC1wcmVzZXJ2ZS50c3giXSwic291cmNlc0NvbnRlbnQiOlsiXG4gICAgICBjb25zdCBBcHAgPSAoKSA9PiB7XG4gICAgICAgIHJldHVybiA8PlRlc3Q8Lz5cbiAgICAgIH1cbiAgICAiXSwidmVyc2lvbiI6M30=
+  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoidGVzdC1qc3gtcHJlc2VydmUudHN4IiwibWFwcGluZ3MiOiI7QUFDTSxJQUFNLEdBQUcsR0FBRztJQUNWLE9BQU8sRUFBRSxJQUFJLEdBQUcsQ0FBQTtBQUNsQixDQUFDLENBQUEiLCJuYW1lcyI6W10sInNvdXJjZXMiOlsidGVzdC1qc3gtcHJlc2VydmUudHN4Il0sInNvdXJjZXNDb250ZW50IjpbIlxuICAgICAgY29uc3QgQXBwID0gKCkgPT4ge1xuICAgICAgICByZXR1cm4gPD5UZXN0PC8+XG4gICAgICB9XG4gICAgIl0sInZlcnNpb24iOjN9
   ===[ INLINE SOURCE MAPS ]=======================================================
   file: test-jsx-preserve.tsx
-  mappings: 'AACM,IAAM,GAAG,GAAG;IACV,OAAO,EAAE,IAAI,GAAG,CAAA;AAClB,CAAC,CAAA'
+  mappings: ';AACM,IAAM,GAAG,GAAG;IACV,OAAO,EAAE,IAAI,GAAG,CAAA;AAClB,CAAC,CAAA'
   names: []
   sources:
     - test-jsx-preserve.tsx
@@ -69,18 +74,67 @@ exports[`jsx preserve should compile tsx file for jsx preserve with incremental 
   ================================================================================
 `;
 
-exports[`jsx preserve should compile tsx file for jsx preserve with program 1`] = `
+exports[`jsx preserve should compile tsx file with program 1`] = `
   ===[ FILE: test-jsx-preserve.tsx ]==============================================
+  "use strict";
   var App = function () {
       return <>Test</>;
   };
-  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoidGVzdC1qc3gtcHJlc2VydmUudHN4IiwibWFwcGluZ3MiOiJBQUNNLElBQU0sR0FBRyxHQUFHO0lBQ1YsT0FBTyxFQUFFLElBQUksR0FBRyxDQUFBO0FBQ2xCLENBQUMsQ0FBQSIsIm5hbWVzIjpbXSwic291cmNlcyI6WyJ0ZXN0LWpzeC1wcmVzZXJ2ZS50c3giXSwic291cmNlc0NvbnRlbnQiOlsiXG4gICAgICBjb25zdCBBcHAgPSAoKSA9PiB7XG4gICAgICAgIHJldHVybiA8PlRlc3Q8Lz5cbiAgICAgIH1cbiAgICAiXSwidmVyc2lvbiI6M30=
+  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoidGVzdC1qc3gtcHJlc2VydmUudHN4IiwibWFwcGluZ3MiOiI7QUFDTSxJQUFNLEdBQUcsR0FBRztJQUNWLE9BQU8sRUFBRSxJQUFJLEdBQUcsQ0FBQTtBQUNsQixDQUFDLENBQUEiLCJuYW1lcyI6W10sInNvdXJjZXMiOlsidGVzdC1qc3gtcHJlc2VydmUudHN4Il0sInNvdXJjZXNDb250ZW50IjpbIlxuICAgICAgY29uc3QgQXBwID0gKCkgPT4ge1xuICAgICAgICByZXR1cm4gPD5UZXN0PC8+XG4gICAgICB9XG4gICAgIl0sInZlcnNpb24iOjN9
   ===[ INLINE SOURCE MAPS ]=======================================================
   file: test-jsx-preserve.tsx
-  mappings: 'AACM,IAAM,GAAG,GAAG;IACV,OAAO,EAAE,IAAI,GAAG,CAAA;AAClB,CAAC,CAAA'
+  mappings: ';AACM,IAAM,GAAG,GAAG;IACV,OAAO,EAAE,IAAI,GAAG,CAAA;AAClB,CAAC,CAAA'
   names: []
   sources:
     - test-jsx-preserve.tsx
+  sourcesContent:
+    - |2-
+  
+            const App = () => {
+              return <>Test</>
+            }
+          
+  version: 3
+  ================================================================================
+`;
+
+exports[`other jsx options should compile tsx file for with incremental program 1`] = `
+  ===[ FILE: test-jsx-options.tsx ]===============================================
+  "use strict";
+  var App = function () {
+      return React.createElement(React.Fragment, null, "Test");
+  };
+  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoidGVzdC1qc3gtb3B0aW9ucy50c3giLCJtYXBwaW5ncyI6IjtBQUNNLElBQU0sR0FBRyxHQUFHO0lBQ1YsT0FBTyxpREFBUyxDQUFBO0FBQ2xCLENBQUMsQ0FBQSIsIm5hbWVzIjpbXSwic291cmNlcyI6WyJ0ZXN0LWpzeC1vcHRpb25zLnRzeCJdLCJzb3VyY2VzQ29udGVudCI6WyJcbiAgICAgIGNvbnN0IEFwcCA9ICgpID0+IHtcbiAgICAgICAgcmV0dXJuIDw+VGVzdDwvPlxuICAgICAgfVxuICAgICJdLCJ2ZXJzaW9uIjozfQ==
+  ===[ INLINE SOURCE MAPS ]=======================================================
+  file: test-jsx-options.tsx
+  mappings: ';AACM,IAAM,GAAG,GAAG;IACV,OAAO,iDAAS,CAAA;AAClB,CAAC,CAAA'
+  names: []
+  sources:
+    - test-jsx-options.tsx
+  sourcesContent:
+    - |2-
+  
+            const App = () => {
+              return <>Test</>
+            }
+          
+  version: 3
+  ================================================================================
+`;
+
+exports[`other jsx options should compile tsx file for with program 1`] = `
+  ===[ FILE: test-jsx-options.tsx ]===============================================
+  "use strict";
+  var App = function () {
+      return React.createElement(React.Fragment, null, "Test");
+  };
+  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoidGVzdC1qc3gtb3B0aW9ucy50c3giLCJtYXBwaW5ncyI6IjtBQUNNLElBQU0sR0FBRyxHQUFHO0lBQ1YsT0FBTyxpREFBUyxDQUFBO0FBQ2xCLENBQUMsQ0FBQSIsIm5hbWVzIjpbXSwic291cmNlcyI6WyJ0ZXN0LWpzeC1vcHRpb25zLnRzeCJdLCJzb3VyY2VzQ29udGVudCI6WyJcbiAgICAgIGNvbnN0IEFwcCA9ICgpID0+IHtcbiAgICAgICAgcmV0dXJuIDw+VGVzdDwvPlxuICAgICAgfVxuICAgICJdLCJ2ZXJzaW9uIjozfQ==
+  ===[ INLINE SOURCE MAPS ]=======================================================
+  file: test-jsx-options.tsx
+  mappings: ';AACM,IAAM,GAAG,GAAG;IACV,OAAO,iDAAS,CAAA;AAClB,CAAC,CAAA'
+  names: []
+  sources:
+    - test-jsx-options.tsx
   sourcesContent:
     - |2-
   

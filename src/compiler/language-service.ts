@@ -88,50 +88,53 @@ export const compileUsingLanguageService = (
   }
   let previousProgram: _ts.Program | undefined
 
-  return (code: string, fileName: string): SourceOutput => {
-    const normalizedFileName = normalize(fileName)
-    // Must set memory cache before attempting to read file.
-    updateMemoryCache(code, normalizedFileName)
-    const programBefore = service.getProgram()
+  return {
+    compileFn: (code: string, fileName: string): SourceOutput => {
+      const normalizedFileName = normalize(fileName)
+      // Must set memory cache before attempting to read file.
+      updateMemoryCache(code, normalizedFileName)
+      const programBefore = service.getProgram()
 
-    if (programBefore !== previousProgram) {
-      logger.debug({ normalizedFileName }, `compiler rebuilt Program instance when getting output`)
-    }
+      if (programBefore !== previousProgram) {
+        logger.debug({ normalizedFileName }, `compiler rebuilt Program instance when getting output`)
+      }
 
-    const output: _ts.EmitOutput = service.getEmitOutput(normalizedFileName)
-    if (configs.shouldReportDiagnostic(normalizedFileName)) {
-      logger.debug({ normalizedFileName }, 'getOutput(): computing diagnostics for language service')
-      // Get the relevant diagnostics - this is 3x faster than `getPreEmitDiagnostics`.
-      const diagnostics = service
-        .getCompilerOptionsDiagnostics()
-        .concat(service.getSyntacticDiagnostics(normalizedFileName))
-        .concat(service.getSemanticDiagnostics(normalizedFileName))
-      // will raise or just warn diagnostics depending on config
-      configs.raiseDiagnostics(diagnostics, normalizedFileName, logger)
-    }
+      const output: _ts.EmitOutput = service.getEmitOutput(normalizedFileName)
+      if (configs.shouldReportDiagnostic(normalizedFileName)) {
+        logger.debug({ normalizedFileName }, 'getOutput(): computing diagnostics for language service')
+        // Get the relevant diagnostics - this is 3x faster than `getPreEmitDiagnostics`.
+        const diagnostics = service
+          .getCompilerOptionsDiagnostics()
+          .concat(service.getSyntacticDiagnostics(normalizedFileName))
+          .concat(service.getSemanticDiagnostics(normalizedFileName))
+        // will raise or just warn diagnostics depending on config
+        configs.raiseDiagnostics(diagnostics, normalizedFileName, logger)
+      }
 
-    /* istanbul ignore next (this should never happen but is kept for security) */
-    if (output.emitSkipped) {
-      throw new TypeError(`${relative(cwd, normalizedFileName)}: Emit skipped for language service`)
-    }
+      /* istanbul ignore next (this should never happen but is kept for security) */
+      if (output.emitSkipped) {
+        throw new TypeError(`${relative(cwd, normalizedFileName)}: Emit skipped for language service`)
+      }
 
-    const programAfter = service.getProgram()
+      const programAfter = service.getProgram()
 
-    logger.debug(
-      'invariant: Is service.getProject() identical before and after getting emit output and diagnostics? (should always be true) ',
-      programBefore === programAfter,
-    )
-
-    previousProgram = programAfter
-    // Throw an error when requiring `.d.ts` files.
-    if (!output.outputFiles.length) {
-      throw new TypeError(
-        interpolate(Errors.UnableToRequireDefinitionFile, {
-          file: basename(normalizedFileName),
-        }),
+      logger.debug(
+        'invariant: Is service.getProject() identical before and after getting emit output and diagnostics? (should always be true) ',
+        programBefore === programAfter,
       )
-    }
 
-    return [output.outputFiles[1].text, output.outputFiles[0].text]
+      previousProgram = programAfter
+      // Throw an error when requiring `.d.ts` files.
+      if (!output.outputFiles.length) {
+        throw new TypeError(
+          interpolate(Errors.UnableToRequireDefinitionFile, {
+            file: basename(normalizedFileName),
+          }),
+        )
+      }
+
+      return [output.outputFiles[1].text, output.outputFiles[0].text]
+    },
+    program: service.getProgram(),
   }
 }

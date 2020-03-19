@@ -35,7 +35,7 @@ import mkdirp = require('mkdirp')
 import { basename, extname, join, normalize } from 'path'
 
 import { ConfigSet } from '../config/config-set'
-import { CompileResult, MemoryCache, TsCompiler } from '../types'
+import { CompileFn, CompileResult, MemoryCache, TsCompiler } from '../types'
 import { sha1 } from '../util/sha1'
 
 import { compileUsingLanguageService } from './language-service'
@@ -93,7 +93,7 @@ const isValidCacheContent = (contents: string): boolean => {
 const readThrough = (
   cachedir: string | undefined,
   memoryCache: MemoryCache,
-  compile: CompileResult,
+  compileFn: CompileFn,
   getExtension: (fileName: string) => string,
   logger: Logger,
 ) => {
@@ -101,7 +101,7 @@ const readThrough = (
     return (code: string, fileName: string, lineOffset?: number) => {
       const normalizedFileName = normalize(fileName)
       logger.debug({ normalizedFileName }, 'readThrough(): no cache')
-      const [value, sourceMap] = compile(code, normalizedFileName, lineOffset)
+      const [value, sourceMap] = compileFn(code, normalizedFileName, lineOffset)
       const output = updateOutput(value, fileName, sourceMap, getExtension)
       memoryCache.outputs.set(normalizedFileName, output)
 
@@ -129,7 +129,7 @@ const readThrough = (
     } catch (err) {}
 
     logger.debug({ fileName }, 'readThrough(): cache miss')
-    const [value, sourceMap] = compile(code, normalizedFileName, lineOffset)
+    const [value, sourceMap] = compileFn(code, normalizedFileName, lineOffset)
     const output = updateOutput(value, normalizedFileName, sourceMap, getExtension)
 
     logger.debug({ normalizedFileName, outputPath }, 'readThrough(): writing caches')
@@ -181,7 +181,7 @@ export const createCompiler = (configs: ConfigSet): TsCompiler => {
   } else {
     compileResult = compileUsingTranspileModule(configs, logger)
   }
-  const compile = readThrough(cachedir, memoryCache, compileResult, getExtension, logger)
+  const compile = readThrough(cachedir, memoryCache, compileResult.compileFn, getExtension, logger)
 
-  return { cwd: configs.cwd, compile, extensions, cachedir, ts }
+  return { cwd: configs.cwd, compile, extensions, cachedir, ts, program: compileResult.program }
 }

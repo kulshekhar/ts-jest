@@ -80,7 +80,33 @@ describe('language service', () => {
   it('should compile tsx file for jsx preserve', () => {
     const fileName = 'test-jsx-preserve.tsx',
       compiler = makeCompiler({
-        tsJestConfig: { tsConfig: 'src/__mocks__/tsconfig.json' },
+        tsJestConfig: {
+          tsConfig: {
+            jsx: 'preserve' as any,
+          },
+        },
+      }),
+      source = `
+        const App = () => {
+          return <>Test</>
+        }
+      `
+    writeFileSync(fileName, source, 'utf8')
+    const compiled = compiler.compile(source, fileName)
+
+    expect(new ProcessedSource(compiled, fileName)).toMatchSnapshot()
+
+    removeSync(fileName)
+  })
+
+  it('should compile tsx file for other jsx options', () => {
+    const fileName = 'test-jsx-options.tsx',
+      compiler = makeCompiler({
+        tsJestConfig: {
+          tsConfig: {
+            jsx: 'react' as any,
+          },
+        },
       }),
       source = `
         const App = () => {

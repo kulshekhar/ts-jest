@@ -268,7 +268,9 @@ describe('jsx preserve', () => {
         return <>Test</>
       }
     `,
-    tsConfig = 'src/__mocks__/tsconfig.json'
+    tsConfig = {
+      jsx: 'preserve' as any,
+    }
 
   beforeAll(() => {
     writeFileSync(fileName, source, 'utf8')
@@ -278,7 +280,7 @@ describe('jsx preserve', () => {
     removeSync(fileName)
   })
 
-  it('should compile tsx file for jsx preserve with program', () => {
+  it('should compile tsx file with program', () => {
     const compiler = makeCompiler({
       tsJestConfig: { ...baseTsJestConfig, incremental: false, tsConfig },
     })
@@ -288,7 +290,47 @@ describe('jsx preserve', () => {
     expect(new ProcessedSource(compiled, fileName)).toMatchSnapshot()
   })
 
-  it('should compile tsx file for jsx preserve with incremental program', () => {
+  it('should compile tsx file for with incremental program', () => {
+    const compiler = makeCompiler({
+      tsJestConfig: { ...baseTsJestConfig, incremental: true, tsConfig },
+    })
+
+    const compiled = compiler.compile(source, fileName)
+
+    expect(new ProcessedSource(compiled, fileName)).toMatchSnapshot()
+  })
+})
+
+describe('other jsx options', () => {
+  const fileName = 'test-jsx-options.tsx',
+    source = `
+      const App = () => {
+        return <>Test</>
+      }
+    `,
+    tsConfig = {
+      jsx: 'react' as any,
+    }
+
+  beforeAll(() => {
+    writeFileSync(fileName, source, 'utf8')
+  })
+
+  afterAll(() => {
+    removeSync(fileName)
+  })
+
+  it('should compile tsx file for with program', () => {
+    const compiler = makeCompiler({
+      tsJestConfig: { ...baseTsJestConfig, incremental: false, tsConfig },
+    })
+
+    const compiled = compiler.compile(source, fileName)
+
+    expect(new ProcessedSource(compiled, fileName)).toMatchSnapshot()
+  })
+
+  it('should compile tsx file for with incremental program', () => {
     const compiler = makeCompiler({
       tsJestConfig: { ...baseTsJestConfig, incremental: true, tsConfig },
     })
@@ -300,7 +342,8 @@ describe('jsx preserve', () => {
 })
 
 describe('cannot compile', () => {
-  const fileName = 'test-cannot-compile.d.ts',
+  const fileName1 = 'test-cannot-compile.d.ts',
+    fileName2 = 'test-cannot-compile.jsx',
     source = `
       interface Foo {
         a: string
@@ -308,11 +351,13 @@ describe('cannot compile', () => {
     `
 
   beforeAll(() => {
-    writeFileSync(fileName, source, 'utf8')
+    writeFileSync(fileName1, source, 'utf8')
+    writeFileSync(fileName2, source, 'utf8')
   })
 
   afterAll(() => {
-    removeSync(fileName)
+    removeSync(fileName1)
+    removeSync(fileName2)
   })
 
   it('should throw error with normal program', () => {
@@ -320,7 +365,8 @@ describe('cannot compile', () => {
       tsJestConfig: { ...baseTsJestConfig, incremental: false, tsConfig: false },
     })
 
-    expect(() => compiler.compile(source, fileName)).toThrowErrorMatchingSnapshot()
+    expect(() => compiler.compile(source, fileName1)).toThrowErrorMatchingSnapshot()
+    expect(() => compiler.compile(source, fileName2)).toThrowErrorMatchingSnapshot()
   })
 
   it('should throw error with incremental program', () => {
@@ -328,6 +374,7 @@ describe('cannot compile', () => {
       tsJestConfig: { ...baseTsJestConfig, incremental: true, tsConfig: false },
     })
 
-    expect(() => compiler.compile(source, fileName)).toThrowErrorMatchingSnapshot()
+    expect(() => compiler.compile(source, fileName1)).toThrowErrorMatchingSnapshot()
+    expect(() => compiler.compile(source, fileName2)).toThrowErrorMatchingSnapshot()
   })
 })

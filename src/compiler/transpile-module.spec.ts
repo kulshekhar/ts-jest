@@ -57,7 +57,36 @@ describe('transpile module with isolatedModule: true', () => {
   it('should compile tsx file for jsx preserve', () => {
     const fileName = `foo.tsx`,
       compiler = makeCompiler({
-        tsJestConfig: { ...baseTsJestConfig, tsConfig: 'src/__mocks__/tsconfig.json' },
+        tsJestConfig: {
+          ...baseTsJestConfig,
+          tsConfig: {
+            jsx: 'preserve' as any,
+          },
+        },
+      }),
+      source = `
+        const App = () => {
+          return <>Test</>
+        }
+      `
+
+    writeFileSync(fileName, source, 'utf8')
+    const compiled = compiler.compile(source, fileName)
+
+    expect(new ProcessedSource(compiled, fileName)).toMatchSnapshot()
+
+    removeSync(fileName)
+  })
+
+  it('should compile tsx file for other jsx options', () => {
+    const fileName = `foo.tsx`,
+      compiler = makeCompiler({
+        tsJestConfig: {
+          ...baseTsJestConfig,
+          tsConfig: {
+            jsx: 'react' as any,
+          },
+        },
       }),
       source = `
         const App = () => {

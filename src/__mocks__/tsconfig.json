@@ -1,6 +1,0 @@
-{
-  "compilerOptions": {
-    "jsx": "preserve",
-    "outDir": "$$ts-jest$$"
-  }
-}

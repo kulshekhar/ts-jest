@@ -20,16 +20,41 @@ exports[`language service should compile js file for allowJs true 1`] = `
 
 exports[`language service should compile tsx file for jsx preserve 1`] = `
   ===[ FILE: test-jsx-preserve.tsx ]==============================================
+  "use strict";
   var App = function () {
       return <>Test</>;
   };
-  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoidGVzdC1qc3gtcHJlc2VydmUudHN4IiwibWFwcGluZ3MiOiJBQUNRLElBQU0sR0FBRyxHQUFHO0lBQ1YsT0FBTyxFQUFFLElBQUksR0FBRyxDQUFBO0FBQ2xCLENBQUMsQ0FBQSIsIm5hbWVzIjpbXSwic291cmNlcyI6WyJ0ZXN0LWpzeC1wcmVzZXJ2ZS50c3giXSwic291cmNlc0NvbnRlbnQiOlsiXG4gICAgICAgIGNvbnN0IEFwcCA9ICgpID0+IHtcbiAgICAgICAgICByZXR1cm4gPD5UZXN0PC8+XG4gICAgICAgIH1cbiAgICAgICJdLCJ2ZXJzaW9uIjozfQ==
+  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoidGVzdC1qc3gtcHJlc2VydmUudHN4IiwibWFwcGluZ3MiOiI7QUFDUSxJQUFNLEdBQUcsR0FBRztJQUNWLE9BQU8sRUFBRSxJQUFJLEdBQUcsQ0FBQTtBQUNsQixDQUFDLENBQUEiLCJuYW1lcyI6W10sInNvdXJjZXMiOlsidGVzdC1qc3gtcHJlc2VydmUudHN4Il0sInNvdXJjZXNDb250ZW50IjpbIlxuICAgICAgICBjb25zdCBBcHAgPSAoKSA9PiB7XG4gICAgICAgICAgcmV0dXJuIDw+VGVzdDwvPlxuICAgICAgICB9XG4gICAgICAiXSwidmVyc2lvbiI6M30=
   ===[ INLINE SOURCE MAPS ]=======================================================
   file: test-jsx-preserve.tsx
-  mappings: 'AACQ,IAAM,GAAG,GAAG;IACV,OAAO,EAAE,IAAI,GAAG,CAAA;AAClB,CAAC,CAAA'
+  mappings: ';AACQ,IAAM,GAAG,GAAG;IACV,OAAO,EAAE,IAAI,GAAG,CAAA;AAClB,CAAC,CAAA'
   names: []
   sources:
     - test-jsx-preserve.tsx
+  sourcesContent:
+    - |2-
+  
+              const App = () => {
+                return <>Test</>
+              }
+            
+  version: 3
+  ================================================================================
+`;
+
+exports[`language service should compile tsx file for other jsx options 1`] = `
+  ===[ FILE: test-jsx-options.tsx ]===============================================
+  "use strict";
+  var App = function () {
+      return React.createElement(React.Fragment, null, "Test");
+  };
+  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoidGVzdC1qc3gtb3B0aW9ucy50c3giLCJtYXBwaW5ncyI6IjtBQUNRLElBQU0sR0FBRyxHQUFHO0lBQ1YsT0FBTyxpREFBUyxDQUFBO0FBQ2xCLENBQUMsQ0FBQSIsIm5hbWVzIjpbXSwic291cmNlcyI6WyJ0ZXN0LWpzeC1vcHRpb25zLnRzeCJdLCJzb3VyY2VzQ29udGVudCI6WyJcbiAgICAgICAgY29uc3QgQXBwID0gKCkgPT4ge1xuICAgICAgICAgIHJldHVybiA8PlRlc3Q8Lz5cbiAgICAgICAgfVxuICAgICAgIl0sInZlcnNpb24iOjN9
+  ===[ INLINE SOURCE MAPS ]=======================================================
+  file: test-jsx-options.tsx
+  mappings: ';AACQ,IAAM,GAAG,GAAG;IACV,OAAO,iDAAS,CAAA;AAClB,CAAC,CAAA'
+  names: []
+  sources:
+    - test-jsx-options.tsx
   sourcesContent:
     - |2-
   

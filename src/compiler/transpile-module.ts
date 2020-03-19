@@ -10,21 +10,23 @@ import { CompileResult, SourceOutput } from '../types'
 export const compileUsingTranspileModule = (configs: ConfigSet, logger: Logger): CompileResult => {
   logger.debug('compileUsingTranspileModule(): create typescript compiler')
 
-  return (code: string, fileName: string): SourceOutput => {
-    logger.debug({ fileName }, 'getOutput(): compiling as isolated module')
+  return {
+    compileFn: (code: string, fileName: string): SourceOutput => {
+      logger.debug({ fileName }, 'getOutput(): compiling as isolated module')
 
-    const normalizedFileName = normalize(fileName)
-    const result = configs.compilerModule.transpileModule(code, {
-      fileName: normalizedFileName,
-      transformers: configs.tsCustomTransformers,
-      compilerOptions: configs.typescript.options,
-      reportDiagnostics: configs.shouldReportDiagnostic(normalizedFileName),
-    })
+      const normalizedFileName = normalize(fileName)
+      const result = configs.compilerModule.transpileModule(code, {
+        fileName: normalizedFileName,
+        transformers: configs.tsCustomTransformers,
+        compilerOptions: configs.typescript.options,
+        reportDiagnostics: configs.shouldReportDiagnostic(normalizedFileName),
+      })
 
-    if (result.diagnostics && configs.shouldReportDiagnostic(normalizedFileName)) {
-      configs.raiseDiagnostics(result.diagnostics, normalizedFileName, logger)
-    }
+      if (result.diagnostics && configs.shouldReportDiagnostic(normalizedFileName)) {
+        configs.raiseDiagnostics(result.diagnostics, normalizedFileName, logger)
+      }
 
-    return [result.outputText, result.sourceMapText!]
+      return [result.outputText, result.sourceMapText!]
+    },
   }
 }
