@@ -15,7 +15,7 @@ export const compileUsingProgram = (configs: ConfigSet, logger: Logger, memoryCa
 
   const ts = configs.compilerModule,
     cwd = configs.cwd,
-    { options, fileNames, projectReferences, errors } = configs.typescript,
+    { options, projectReferences, errors } = configs.typescript,
     incremental = configs.tsJest.incremental
   const compilerHostTraceCtx = {
       namespace: 'ts:compilerHost',
@@ -25,12 +25,12 @@ export const compileUsingProgram = (configs: ConfigSet, logger: Logger, memoryCa
     sys = {
       ...ts.sys,
       readFile: logger.wrap(compilerHostTraceCtx, 'readFile', memoize(ts.sys.readFile)),
-      readDirectory: logger.wrap(compilerHostTraceCtx, 'readDirectory', memoize(ts.sys.readDirectory)),
-      getDirectories: logger.wrap(compilerHostTraceCtx, 'getDirectories', memoize(ts.sys.getDirectories)),
-      fileExists: logger.wrap(compilerHostTraceCtx, 'fileExists', memoize(ts.sys.fileExists)),
-      directoryExists: logger.wrap(compilerHostTraceCtx, 'directoryExists', memoize(ts.sys.directoryExists)),
-      resolvePath: logger.wrap(compilerHostTraceCtx, 'resolvePath', memoize(ts.sys.resolvePath)),
-      realpath: ts.sys.realpath ? logger.wrap(compilerHostTraceCtx, 'realpath', memoize(ts.sys.realpath)) : undefined,
+      readDirectory: memoize(ts.sys.readDirectory),
+      getDirectories: memoize(ts.sys.getDirectories),
+      fileExists: memoize(ts.sys.fileExists),
+      directoryExists: memoize(ts.sys.directoryExists),
+      resolvePath: memoize(ts.sys.resolvePath),
+      realpath: memoize(ts.sys.realpath!),
       getCurrentDirectory: () => cwd,
       getNewLine: () => '\n',
       getCanonicalFileName: (fileName: string) =>
@@ -42,7 +42,7 @@ export const compileUsingProgram = (configs: ConfigSet, logger: Logger, memoryCa
     // At the moment this Incremental Program doesn't work with project references
     host = ts.createIncrementalCompilerHost(options, sys)
     builderProgram = ts.createIncrementalProgram({
-      rootNames: fileNames.slice(),
+      rootNames: Object.keys(memoryCache.versions).slice(),
       options,
       host,
       configFileParsingDiagnostics: errors,
@@ -64,7 +64,7 @@ export const compileUsingProgram = (configs: ConfigSet, logger: Logger, memoryCa
       useCaseSensitiveFileNames: () => sys.useCaseSensitiveFileNames,
     }
     program = ts.createProgram({
-      rootNames: fileNames.slice(),
+      rootNames: Object.keys(memoryCache.versions).slice(),
       options,
       host,
       configFileParsingDiagnostics: errors,
@@ -73,31 +73,23 @@ export const compileUsingProgram = (configs: ConfigSet, logger: Logger, memoryCa
   }
   // Read and cache custom transformers.
   const customTransformers = configs.tsCustomTransformers,
-    updateMemoryCache = (contents: string, normalizedFileName: string): void => {
-      logger.debug({ normalizedFileName }, `updateMemoryCache() for ${incremental ? 'incremental program' : 'program'}`)
+    updateMemoryCache = (code: string, fileName: string): void => {
+      logger.debug({ fileName }, `updateMemoryCache(): update memory cache`)
 
-      const fileVersion = memoryCache.versions.get(normalizedFileName) ?? 0,
-        isFileInCache = fileVersion !== 0
-      // Add to `rootFiles` when discovered for the first time.
+      const fileVersion = memoryCache.versions[fileName] ?? 0,
+        isFileInCache = fileVersion !== 0,
+        sourceFile = incremental ? builderProgram.getSourceFile(fileName) : program.getSourceFile(fileName)
       if (!isFileInCache) {
-        fileNames.push(normalizedFileName)
+        memoryCache.versions[fileName] = 1
       }
-      // Avoid incrementing cache when nothing has changed.
-      if (memoryCache.contents.get(normalizedFileName) !== contents) {
-        memoryCache.versions.set(normalizedFileName, fileVersion + 1)
-        memoryCache.contents.set(normalizedFileName, contents)
+      if (memoryCache.contents[fileName] !== code) {
+        memoryCache.contents[fileName] = code
+        memoryCache.versions[fileName] = (memoryCache.versions[fileName] || 0) + 1
       }
-      const sourceFile = incremental
-        ? builderProgram.getSourceFile(normalizedFileName)
-        : program.getSourceFile(normalizedFileName)
       // Update program when file changes.
-      if (
-        sourceFile === undefined ||
-        sourceFile.text !== contents ||
-        program.isSourceFileFromExternalLibrary(sourceFile)
-      ) {
+      if (sourceFile === undefined || sourceFile.text !== code || program.isSourceFileFromExternalLibrary(sourceFile)) {
         const programOptions = {
-          rootNames: fileNames.slice(),
+          rootNames: Object.keys(memoryCache.versions).slice(),
           options,
           host,
           configFileParsingDiagnostics: errors,
@@ -116,6 +108,11 @@ export const compileUsingProgram = (configs: ConfigSet, logger: Logger, memoryCa
     compileFn: (code: string, fileName: string): SourceOutput => {
       const normalizedFileName = normalize(fileName),
         output: [string, string] = ['', '']
+
+      logger.debug(
+        { normalizedFileName },
+        `compileFn(): compiling using ${incremental ? 'incremental program' : 'program'}`,
+      )
       // Must set memory cache before attempting to read file.
       updateMemoryCache(code, normalizedFileName)
       const sourceFile = incremental
@@ -146,8 +143,9 @@ export const compileUsingProgram = (configs: ConfigSet, logger: Logger, memoryCa
       if (configs.shouldReportDiagnostic(normalizedFileName)) {
         logger.debug(
           { normalizedFileName },
-          `getOutput(): computing diagnostics for ${incremental ? 'incremental program' : 'program'}`,
+          `compileFn(): computing diagnostics for ${incremental ? 'incremental program' : 'program'}`,
         )
+
         const diagnostics = ts.getPreEmitDiagnostics(program, sourceFile).slice()
         // will raise or just warn diagnostics depending on config
         configs.raiseDiagnostics(diagnostics, normalizedFileName, logger)
@@ -164,14 +162,6 @@ export const compileUsingProgram = (configs: ConfigSet, logger: Logger, memoryCa
             file: basename(normalizedFileName),
           }),
         )
-      }
-      /* istanbul ignore next */
-      if (configs.tsJest.emit && incremental) {
-        process.on('exit', () => {
-          // Emits `.tsbuildinfo` to filesystem.
-          // @ts-ignore
-          program.emitBuildInfo()
-        })
       }
 
       return output

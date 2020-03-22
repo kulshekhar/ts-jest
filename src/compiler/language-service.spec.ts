@@ -31,15 +31,13 @@ describe('language service', () => {
       Array [
         "[level:20] readThrough(): cache miss
       ",
-        "[level:20] updateMemoryCache() for language service
+        "[level:20] compileFn(): compiling using language service
       ",
-        "[level:20] compiler rebuilt Program instance when getting output
+        "[level:20] updateMemoryCache(): update memory cache
       ",
         "[level:20] visitSourceFileNode(): hoisting
       ",
-        "[level:20] getOutput(): computing diagnostics for language service
-      ",
-        "[level:20] invariant: Is service.getProject() identical before and after getting emit output and diagnostics? (should always be true)  true
+        "[level:20] compileFn(): computing diagnostics for language service
       ",
         "[level:20] readThrough(): writing caches
       ",
