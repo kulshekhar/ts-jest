@@ -209,9 +209,9 @@ export type SourceOutput = [string, string]
  * @internal
  */
 export interface MemoryCache {
-  contents: Map<string, string | undefined>
-  versions: Map<string, number>
-  outputs: Map<string, string>
+  contents: { [filePath: string]: string | undefined }
+  versions: { [filePath: string]: number }
+  outputs: { [filePath: string]: string }
 }
 
 export type CompileFn = (code: string, fileName: string, lineOffset?: number) => SourceOutput

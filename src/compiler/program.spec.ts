@@ -164,11 +164,13 @@ describe('cache', () => {
       Array [
         "[level:20] readThrough(): cache miss
       ",
-        "[level:20] updateMemoryCache() for program
+        "[level:20] compileFn(): compiling using program
+      ",
+        "[level:20] updateMemoryCache(): update memory cache
       ",
         "[level:20] visitSourceFileNode(): hoisting
       ",
-        "[level:20] getOutput(): computing diagnostics for program
+        "[level:20] compileFn(): computing diagnostics for program
       ",
         "[level:20] readThrough(): writing caches
       ",
@@ -203,11 +205,13 @@ describe('cache', () => {
 Array [
   "[level:20] readThrough(): cache miss
 ",
-  "[level:20] updateMemoryCache() for incremental program
+  "[level:20] compileFn(): compiling using incremental program
+",
+  "[level:20] updateMemoryCache(): update memory cache
 ",
   "[level:20] visitSourceFileNode(): hoisting
 ",
-  "[level:20] getOutput(): computing diagnostics for incremental program
+  "[level:20] compileFn(): computing diagnostics for incremental program
 ",
   "[level:20] readThrough(): writing caches
 ",

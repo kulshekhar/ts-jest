@@ -103,7 +103,7 @@ const readThrough = (
       logger.debug({ normalizedFileName }, 'readThrough(): no cache')
       const [value, sourceMap] = compileFn(code, normalizedFileName, lineOffset)
       const output = updateOutput(value, fileName, sourceMap, getExtension)
-      memoryCache.outputs.set(normalizedFileName, output)
+      memoryCache.outputs[normalizedFileName] = output
 
       return output
     }
@@ -122,7 +122,7 @@ const readThrough = (
       const output = readFileSync(outputPath, 'utf8')
       if (isValidCacheContent(output)) {
         logger.debug({ normalizedFileName }, 'readThrough(): cache hit')
-        memoryCache.outputs.set(normalizedFileName, output)
+        memoryCache.outputs[normalizedFileName] = output
 
         return output
       }
@@ -133,7 +133,7 @@ const readThrough = (
     const output = updateOutput(value, normalizedFileName, sourceMap, getExtension)
 
     logger.debug({ normalizedFileName, outputPath }, 'readThrough(): writing caches')
-    memoryCache.outputs.set(normalizedFileName, output)
+    memoryCache.outputs[normalizedFileName] = output
     writeFileSync(outputPath, output)
 
     return output
@@ -154,9 +154,9 @@ export const createCompiler = (configs: ConfigSet): TsCompiler => {
     ts = configs.compilerModule, // Require the TypeScript compiler and configuration.
     extensions = ['.ts', '.tsx'],
     memoryCache: MemoryCache = {
-      contents: new Map<string, string | undefined>(),
-      versions: new Map<string, number>(),
-      outputs: new Map<string, string>(),
+      contents: Object.create(null),
+      versions: Object.create(null),
+      outputs: Object.create(null),
     }
   // Enable `allowJs` when flag is set.
   if (compilerOptions.allowJs) {
@@ -164,7 +164,7 @@ export const createCompiler = (configs: ConfigSet): TsCompiler => {
     extensions.push('.jsx')
   }
   // Initialize files from TypeScript into project.
-  for (const path of fileNames) memoryCache.versions.set(normalize(path), 1)
+  for (const path of fileNames) memoryCache.versions[normalize(path)] = 1
   /**
    * Get the extension for a transpiled file.
    */
