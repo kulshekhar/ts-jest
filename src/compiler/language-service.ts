@@ -29,7 +29,7 @@ export const compileUsingLanguageService = (
     }
   // Set the file contents into cache.
   const updateMemoryCache = (code: string, fileName: string) => {
-    logger.debug({ fileName }, `updateMemoryCache(): update memory cache`)
+    logger.debug({ fileName }, `updateMemoryCache(): update memory cache for language service`)
 
     const fileVersion = memoryCache.versions[fileName] ?? 0,
       isFileInCache = fileVersion !== 0
@@ -85,7 +85,7 @@ export const compileUsingLanguageService = (
   }
 
   logger.debug('compileUsingLanguageService(): creating language service')
-  const service = ts.createLanguageService(serviceHost)
+  const service: _ts.LanguageService = ts.createLanguageService(serviceHost)
 
   return {
     compileFn: (code: string, fileName: string): SourceOutput => {
@@ -103,7 +103,6 @@ export const compileUsingLanguageService = (
           .getCompilerOptionsDiagnostics()
           .concat(service.getSyntacticDiagnostics(normalizedFileName))
           .concat(service.getSemanticDiagnostics(normalizedFileName))
-
         // will raise or just warn diagnostics depending on config
         configs.raiseDiagnostics(diagnostics, normalizedFileName, logger)
       }

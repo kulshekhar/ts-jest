@@ -7,6 +7,8 @@ import { ConfigSet } from '../config/config-set'
 import { CompileResult, MemoryCache, SourceOutput } from '../types'
 import { Errors, interpolate } from '../util/messages'
 
+const hasOwn = Object.prototype.hasOwnProperty
+
 /**
  * @internal
  */
@@ -38,11 +40,9 @@ export const compileUsingProgram = (configs: ConfigSet, logger: Logger, memoryCa
     }
   let builderProgram: _ts.EmitAndSemanticDiagnosticsBuilderProgram, program: _ts.Program, host: _ts.CompilerHost
   if (incremental) {
-    // TODO: Find a way to trigger typescript to build project when there are project references.
-    // At the moment this Incremental Program doesn't work with project references
     host = ts.createIncrementalCompilerHost(options, sys)
     builderProgram = ts.createIncrementalProgram({
-      rootNames: Object.keys(memoryCache.versions).slice(),
+      rootNames: Object.keys(memoryCache.versions),
       options,
       host,
       configFileParsingDiagnostics: errors,
@@ -64,7 +64,7 @@ export const compileUsingProgram = (configs: ConfigSet, logger: Logger, memoryCa
       useCaseSensitiveFileNames: () => sys.useCaseSensitiveFileNames,
     }
     program = ts.createProgram({
-      rootNames: Object.keys(memoryCache.versions).slice(),
+      rootNames: Object.keys(memoryCache.versions),
       options,
       host,
       configFileParsingDiagnostics: errors,
@@ -74,12 +74,13 @@ export const compileUsingProgram = (configs: ConfigSet, logger: Logger, memoryCa
   // Read and cache custom transformers.
   const customTransformers = configs.tsCustomTransformers,
     updateMemoryCache = (code: string, fileName: string): void => {
-      logger.debug({ fileName }, `updateMemoryCache(): update memory cache`)
+      logger.debug(
+        { fileName },
+        `updateMemoryCache(): update memory cache for ${incremental ? 'incremental program' : 'program'}`,
+      )
 
-      const fileVersion = memoryCache.versions[fileName] ?? 0,
-        isFileInCache = fileVersion !== 0,
-        sourceFile = incremental ? builderProgram.getSourceFile(fileName) : program.getSourceFile(fileName)
-      if (!isFileInCache) {
+      const sourceFile = incremental ? builderProgram.getSourceFile(fileName) : program.getSourceFile(fileName)
+      if (!hasOwn.call(memoryCache.versions, fileName)) {
         memoryCache.versions[fileName] = 1
       }
       if (memoryCache.contents[fileName] !== code) {
@@ -89,7 +90,7 @@ export const compileUsingProgram = (configs: ConfigSet, logger: Logger, memoryCa
       // Update program when file changes.
       if (sourceFile === undefined || sourceFile.text !== code || program.isSourceFileFromExternalLibrary(sourceFile)) {
         const programOptions = {
-          rootNames: Object.keys(memoryCache.versions).slice(),
+          rootNames: Object.keys(memoryCache.versions),
           options,
           host,
           configFileParsingDiagnostics: errors,
@@ -99,7 +100,10 @@ export const compileUsingProgram = (configs: ConfigSet, logger: Logger, memoryCa
           builderProgram = ts.createIncrementalProgram(programOptions)
           program = builderProgram.getProgram()
         } else {
-          program = ts.createProgram(programOptions)
+          program = ts.createProgram({
+            ...programOptions,
+            oldProgram: program,
+          })
         }
       }
     }
@@ -146,7 +150,9 @@ export const compileUsingProgram = (configs: ConfigSet, logger: Logger, memoryCa
           `compileFn(): computing diagnostics for ${incremental ? 'incremental program' : 'program'}`,
         )
 
-        const diagnostics = ts.getPreEmitDiagnostics(program, sourceFile).slice()
+        const diagnostics = program
+          .getSemanticDiagnostics(sourceFile)
+          .concat(program.getSyntacticDiagnostics(sourceFile))
         // will raise or just warn diagnostics depending on config
         configs.raiseDiagnostics(diagnostics, normalizedFileName, logger)
       }

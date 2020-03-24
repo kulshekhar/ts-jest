@@ -52,7 +52,6 @@ Object {
       "pretty": true,
       "throws": true,
     },
-    "emit": false,
     "incremental": true,
     "isolatedModules": false,
     "packageJson": Object {
@@ -143,7 +142,6 @@ Object {
     "pretty": true,
     "throws": true,
   },
-  "emit": false,
   "incremental": true,
   "isolatedModules": false,
   "packageJson": Object {
