@@ -46,17 +46,9 @@ export interface TsJestGlobalOptions {
 
   /**
    * Use TypeScript's Incremental Program. This option only works when `compilerHost` is `true`
-   * TODO: Remove this flag when we can make project references working with our Incremental Program
    * @default false
    */
   incremental?: boolean
-
-  /**
-   * Emit compiled files into `.ts-jest` directory
-   *
-   * @default false
-   */
-  emit?: boolean
 
   /**
    * Compiler to use (default to 'typescript'):
@@ -150,7 +142,6 @@ export interface TsJestConfig {
   isolatedModules: boolean
   compilerHost: boolean
   incremental: boolean // TODO: Remove this flag when we can make project references working with our Incremental Program
-  emit: boolean
   compiler: string
   diagnostics: TsJestConfig$diagnostics
   babelConfig: TsJestConfig$babelConfig
@@ -168,33 +159,8 @@ export interface TsJestHooksMap {
  */
 export type ModulePatcher<T = any> = (module: T) => T
 
-/**
- * Common TypeScript interfaces between versions.
- */
-export interface TSCommon {
-  version: typeof _ts.version
-  sys: typeof _ts.sys
-  ScriptSnapshot: typeof _ts.ScriptSnapshot
-  displayPartsToString: typeof _ts.displayPartsToString
-  createLanguageService: typeof _ts.createLanguageService
-  getDefaultLibFilePath: typeof _ts.getDefaultLibFilePath
-  getPreEmitDiagnostics: typeof _ts.getPreEmitDiagnostics
-  flattenDiagnosticMessageText: typeof _ts.flattenDiagnosticMessageText
-  transpileModule: typeof _ts.transpileModule
-  ModuleKind: typeof _ts.ModuleKind
-  ScriptTarget: typeof _ts.ScriptTarget
-  findConfigFile: typeof _ts.findConfigFile
-  readConfigFile: typeof _ts.readConfigFile
-  parseJsonConfigFileContent: typeof _ts.parseJsonConfigFileContent
-  formatDiagnostics: typeof _ts.formatDiagnostics
-  formatDiagnosticsWithColorAndContext: typeof _ts.formatDiagnosticsWithColorAndContext
-}
-
 export interface TsCompiler {
   cwd: string
-  extensions: string[]
-  cachedir: string | undefined
-  ts: TSCommon
   compile(code: string, fileName: string, lineOffset?: number): string
   program: _ts.Program | undefined
 }

@@ -166,7 +166,7 @@ describe('cache', () => {
       ",
         "[level:20] compileFn(): compiling using program
       ",
-        "[level:20] updateMemoryCache(): update memory cache
+        "[level:20] updateMemoryCache(): update memory cache for program
       ",
         "[level:20] visitSourceFileNode(): hoisting
       ",
@@ -207,7 +207,7 @@ Array [
 ",
   "[level:20] compileFn(): compiling using incremental program
 ",
-  "[level:20] updateMemoryCache(): update memory cache
+  "[level:20] updateMemoryCache(): update memory cache for incremental program
 ",
   "[level:20] visitSourceFileNode(): hoisting
 ",

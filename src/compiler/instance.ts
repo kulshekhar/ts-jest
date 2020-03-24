@@ -183,5 +183,5 @@ export const createCompiler = (configs: ConfigSet): TsCompiler => {
   }
   const compile = readThrough(cachedir, memoryCache, compileResult.compileFn, getExtension, logger)
 
-  return { cwd: configs.cwd, compile, extensions, cachedir, ts, program: compileResult.program }
+  return { cwd: configs.cwd, compile, program: compileResult.program }
 }

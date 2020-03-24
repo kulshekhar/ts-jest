@@ -33,7 +33,7 @@ describe('language service', () => {
       ",
         "[level:20] compileFn(): compiling using language service
       ",
-        "[level:20] updateMemoryCache(): update memory cache
+        "[level:20] updateMemoryCache(): update memory cache for language service
       ",
         "[level:20] visitSourceFileNode(): hoisting
       ",
