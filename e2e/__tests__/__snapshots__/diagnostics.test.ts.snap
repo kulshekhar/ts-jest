@@ -9,7 +9,6 @@ exports[`With diagnostics, first throws should fail using template "default" 1`]
   FAIL ./main.spec.ts
     ● Test suite failed to run
   
-      TypeScript diagnostics (customize using \`[jest-config].globals.ts-jest.diagnostics\` option):
       main.ts:2:3 - error TS2322: Type 'string' is not assignable to type 'number'.
   
       2   return input
@@ -32,7 +31,6 @@ exports[`With diagnostics, first throws should fail using template "with-babel-7
   FAIL ./main.spec.ts
     ● Test suite failed to run
   
-      TypeScript diagnostics (customize using \`[jest-config].globals.ts-jest.diagnostics\` option):
       main.ts:2:3 - error TS2322: Type 'string' is not assignable to type 'number'.
   
       2   return input
@@ -55,7 +53,6 @@ exports[`With diagnostics, first throws should fail using template "with-babel-7
   FAIL ./main.spec.ts
     ● Test suite failed to run
   
-      TypeScript diagnostics (customize using \`[jest-config].globals.ts-jest.diagnostics\` option):
       main.ts:2:3 - error TS2322: Type 'string' is not assignable to type 'number'.
   
       2   return input
@@ -78,7 +75,6 @@ exports[`With diagnostics, first throws should fail using template "with-typescr
   FAIL ./main.spec.ts
     ● Test suite failed to run
   
-      TypeScript diagnostics (customize using \`[jest-config].globals.ts-jest.diagnostics\` option):
       main.ts:2:3 - error TS2322: Type 'string' is not assignable to type 'number'.
   
       2   return input
@@ -98,8 +94,7 @@ exports[`With diagnostics, warn only should pass using template "default" 1`] = 
   ===[ STDOUT ]===================================================================
   
   ===[ STDERR ]===================================================================
-  ts-jest[ts-compiler] (WARN) TypeScript diagnostics (customize using \`[jest-config].globals.ts-jest.diagnostics\` option):
-  main.ts:2:3 - error TS2322: Type 'string' is not assignable to type 'number'.
+  ts-jest[ts-compiler] (WARN) main.ts:2:3 - error TS2322: Type 'string' is not assignable to type 'number'.
   
   2   return input
       ~~~~~~~~~~~~
@@ -120,8 +115,7 @@ exports[`With diagnostics, warn only should pass using template "with-babel-7" 1
   ===[ STDOUT ]===================================================================
   
   ===[ STDERR ]===================================================================
-  ts-jest[ts-compiler] (WARN) TypeScript diagnostics (customize using \`[jest-config].globals.ts-jest.diagnostics\` option):
-  main.ts:2:3 - error TS2322: Type 'string' is not assignable to type 'number'.
+  ts-jest[ts-compiler] (WARN) main.ts:2:3 - error TS2322: Type 'string' is not assignable to type 'number'.
   
   2   return input
       ~~~~~~~~~~~~
@@ -142,8 +136,7 @@ exports[`With diagnostics, warn only should pass using template "with-babel-7-st
   ===[ STDOUT ]===================================================================
   
   ===[ STDERR ]===================================================================
-  ts-jest[ts-compiler] (WARN) TypeScript diagnostics (customize using \`[jest-config].globals.ts-jest.diagnostics\` option):
-  main.ts:2:3 - error TS2322: Type 'string' is not assignable to type 'number'.
+  ts-jest[ts-compiler] (WARN) main.ts:2:3 - error TS2322: Type 'string' is not assignable to type 'number'.
   
   2   return input
       ~~~~~~~~~~~~
@@ -164,8 +157,7 @@ exports[`With diagnostics, warn only should pass using template "with-typescript
   ===[ STDOUT ]===================================================================
   
   ===[ STDERR ]===================================================================
-  ts-jest[ts-compiler] (WARN) TypeScript diagnostics (customize using \`[jest-config].globals.ts-jest.diagnostics\` option):
-  main.ts:2:3 - error TS2322: Type 'string' is not assignable to type 'number'.
+  ts-jest[ts-compiler] (WARN) main.ts:2:3 - error TS2322: Type 'string' is not assignable to type 'number'.
   
   2   return input
       ~~~~~~~~~~~~

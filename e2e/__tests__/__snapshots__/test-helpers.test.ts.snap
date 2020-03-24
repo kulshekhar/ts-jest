@@ -10,7 +10,6 @@ exports[`test-helpers 1`] = `
   FAIL ./fail.spec.ts
     ● Test suite failed to run
   
-      TypeScript diagnostics (customize using \`[jest-config].globals.ts-jest.diagnostics\` option):
       fail.spec.ts:7:22 - error TS2554: Expected 0 arguments, but got 1.
   
       7   expect(mocked(foo)('hello')).toBeUndefined()
@@ -41,7 +40,6 @@ exports[`with esModuleInterop set to false 1`] = `
   FAIL ./fail.spec.ts
     ● Test suite failed to run
   
-      TypeScript diagnostics (customize using \`[jest-config].globals.ts-jest.diagnostics\` option):
       fail.spec.ts:7:22 - error TS2554: Expected 0 arguments, but got 1.
   
       7   expect(mocked(foo)('hello')).toBeUndefined()
