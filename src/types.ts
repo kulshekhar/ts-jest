@@ -162,6 +162,7 @@ export type ModulePatcher<T = any> = (module: T) => T
 export interface TsCompiler {
   cwd: string
   compile(code: string, fileName: string, lineOffset?: number): string
+  diagnose: DiagnoseFn | undefined
   program: _ts.Program | undefined
 }
 
@@ -181,9 +182,11 @@ export interface MemoryCache {
 }
 
 export type CompileFn = (code: string, fileName: string, lineOffset?: number) => SourceOutput
+export type DiagnoseFn = (filePath: string) => void
 
-export interface CompileResult {
+export interface CompilerInstance {
   compileFn: CompileFn
+  diagnoseFn?: DiagnoseFn
   program?: _ts.Program
 }
 

@@ -179,6 +179,9 @@ export class TsJestTransformer implements Transformer {
     const configs = this.configsFor(jestConfigStr)
     // we do not instrument, ensure it is false all the time
     const { instrument = false, rootDir = configs.rootDir } = transformOptions
+    if (configs.tsCompiler.diagnose) {
+      configs.tsCompiler.diagnose(filePath)
+    }
 
     return sha1(
       configs.cacheKey,

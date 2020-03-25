@@ -249,11 +249,20 @@ Array [
 })
 
 describe('getCacheKey', () => {
+  let tr: TsJestTransformer
+
+  beforeEach(() => {
+    tr = new TsJestTransformer()
+  })
+
   it('should be different for each argument value', () => {
-    const tr = new TsJestTransformer()
-    jest
-      .spyOn(tr, 'configsFor')
-      .mockImplementation(jestConfigStr => (({ cacheKey: jestConfigStr } as unknown) as ConfigSet))
+    jest.spyOn(tr, 'configsFor').mockImplementation(
+      jestConfigStr =>
+        (({
+          cacheKey: jestConfigStr,
+          tsCompiler: {},
+        } as unknown) as ConfigSet),
+    )
     const input = {
       fileContent: 'export default "foo"',
       fileName: 'foo.ts',
@@ -273,5 +282,25 @@ describe('getCacheKey', () => {
     }
     // unique array should have same length
     expect(keys.filter((k, i, all) => all.indexOf(k) === i)).toHaveLength(keys.length)
+  })
+
+  it('should call diagnosticsFn to do type checking for test file', () => {
+    const tsCompilerStub = { diagnose: jest.fn() }
+    jest.spyOn(tr, 'configsFor').mockImplementation(
+      jestConfigStr =>
+        (({
+          cacheKey: jestConfigStr,
+          tsCompiler: tsCompilerStub,
+        } as unknown) as ConfigSet),
+    )
+    const input = {
+      fileContent: 'export default "foo"',
+      fileName: 'foo.ts',
+      jestConfigStr: '{"foo": "bar"}',
+      options: { instrument: false, rootDir: '/foo' },
+    }
+    tr.getCacheKey(input.fileContent, input.fileName, input.jestConfigStr, input.options)
+
+    expect(tsCompilerStub.diagnose).toHaveBeenCalledWith(input.fileName)
   })
 })

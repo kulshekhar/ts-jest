@@ -37,8 +37,6 @@ describe('language service', () => {
       ",
         "[level:20] visitSourceFileNode(): hoisting
       ",
-        "[level:20] compileFn(): computing diagnostics for language service
-      ",
         "[level:20] readThrough(): writing caches
       ",
       ]
@@ -146,8 +144,9 @@ const x: string = g(5)
         tsJestConfig: { tsConfig: false, diagnostics: { pathRegex: fileName } },
       })
     writeFileSync(fileName, source, 'utf8')
+    compiler.compile(source, fileName)
 
-    expect(() => compiler.compile(source, fileName)).toThrowErrorMatchingSnapshot()
+    expect(() => compiler.diagnose!(fileName)).toThrowErrorMatchingSnapshot()
 
     removeSync(fileName)
   })
@@ -162,8 +161,9 @@ const t: string = f(5)
         tsJestConfig: { tsConfig: false, diagnostics: { pathRegex: 'bar.ts' } },
       })
     writeFileSync(fileName, source, 'utf8')
+    compiler.compile(source, fileName)
 
-    expect(() => compiler.compile(source, fileName)).not.toThrowError()
+    expect(() => compiler.diagnose!(fileName)).not.toThrowError()
 
     removeSync(fileName)
   })

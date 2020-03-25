@@ -4,7 +4,7 @@ import { basename, normalize, relative } from 'path'
 import * as _ts from 'typescript'
 
 import { ConfigSet } from '../config/config-set'
-import { CompileResult, MemoryCache, SourceOutput } from '../types'
+import { CompilerInstance, MemoryCache, SourceOutput } from '../types'
 import { Errors, interpolate } from '../util/messages'
 
 const hasOwn = Object.prototype.hasOwnProperty
@@ -12,7 +12,7 @@ const hasOwn = Object.prototype.hasOwnProperty
 /**
  * @internal
  */
-export const compileUsingProgram = (configs: ConfigSet, logger: Logger, memoryCache: MemoryCache): CompileResult => {
+export const compileUsingProgram = (configs: ConfigSet, logger: Logger, memoryCache: MemoryCache): CompilerInstance => {
   logger.debug('compileUsingProgram(): create typescript compiler')
 
   const ts = configs.compilerModule,
@@ -144,18 +144,6 @@ export const compileUsingProgram = (configs: ConfigSet, logger: Logger, memoryCa
             undefined,
             customTransformers,
           )
-      if (configs.shouldReportDiagnostic(normalizedFileName)) {
-        logger.debug(
-          { normalizedFileName },
-          `compileFn(): computing diagnostics for ${incremental ? 'incremental program' : 'program'}`,
-        )
-
-        const diagnostics = program
-          .getSemanticDiagnostics(sourceFile)
-          .concat(program.getSyntacticDiagnostics(sourceFile))
-        // will raise or just warn diagnostics depending on config
-        configs.raiseDiagnostics(diagnostics, normalizedFileName, logger)
-      }
 
       if (result.emitSkipped) {
         throw new TypeError(`${relative(cwd, fileName)}: Emit skipped`)
@@ -171,6 +159,20 @@ export const compileUsingProgram = (configs: ConfigSet, logger: Logger, memoryCa
       }
 
       return output
+    },
+    diagnoseFn: (filePath: string) => {
+      const normalizedFileName = normalize(filePath)
+      if (configs.shouldReportDiagnostic(normalizedFileName)) {
+        logger.debug(
+          { normalizedFileName },
+          `compileFn(): computing diagnostics for ${incremental ? 'incremental program' : 'program'}`,
+        )
+
+        const sourceFile = program.getSourceFile(normalizedFileName),
+          diagnostics = program.getSemanticDiagnostics(sourceFile).concat(program.getSyntacticDiagnostics(sourceFile))
+        // will raise or just warn diagnostics depending on config
+        configs.raiseDiagnostics(diagnostics, normalizedFileName, logger)
+      }
     },
     program,
   }

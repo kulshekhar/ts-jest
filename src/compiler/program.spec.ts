@@ -13,74 +13,6 @@ const baseTsJestConfig = {
   compilerHost: true,
 }
 
-describe('typings', () => {
-  const fileName = 'test-typings.ts',
-    source = `
-const f = (v: number) => v
-const t: string = f(5)
-`
-
-  beforeAll(() => {
-    writeFileSync(fileName, source, 'utf8')
-  })
-
-  afterAll(() => {
-    removeSync(fileName)
-  })
-
-  describe('normal program', () => {
-    it('should report diagnostics with pathRegex config matches file name', () => {
-      const compiler = makeCompiler({
-        tsJestConfig: {
-          ...baseTsJestConfig,
-          incremental: false,
-          diagnostics: { pathRegex: fileName },
-        },
-      })
-
-      expect(() => compiler.compile(source, fileName)).toThrowErrorMatchingSnapshot()
-    })
-
-    it('should not report diagnostics with pathRegex config matches file name', () => {
-      const compiler = makeCompiler({
-        tsJestConfig: {
-          ...baseTsJestConfig,
-          incremental: false,
-          diagnostics: { pathRegex: 'foo.ts' },
-        },
-      })
-
-      expect(() => compiler.compile(source, fileName)).toThrowErrorMatchingSnapshot()
-    })
-  })
-
-  describe('incremental program', () => {
-    it('should report diagnostics with pathRegex config matches file name', () => {
-      const compiler = makeCompiler({
-        tsJestConfig: {
-          ...baseTsJestConfig,
-          incremental: true,
-          diagnostics: { pathRegex: 'typings-error.ts' },
-        },
-      })
-
-      expect(() => compiler.compile(source, fileName)).toThrowErrorMatchingSnapshot()
-    })
-
-    it('should not report diagnostics with pathRegex config does not match file name', () => {
-      const compiler = makeCompiler({
-        tsJestConfig: {
-          ...baseTsJestConfig,
-          incremental: true,
-          diagnostics: { pathRegex: 'foo.ts' },
-        },
-      })
-
-      expect(() => compiler.compile(source, fileName)).toThrowErrorMatchingSnapshot()
-    })
-  })
-})
-
 describe('source-maps', () => {
   const fileName = 'source-maps-test.ts',
     source = 'console.log("hello")'
@@ -162,8 +94,6 @@ describe('cache', () => {
       ",
         "[level:20] visitSourceFileNode(): hoisting
       ",
-        "[level:20] compileFn(): computing diagnostics for program
-      ",
         "[level:20] readThrough(): writing caches
       ",
       ]
@@ -202,8 +132,6 @@ Array [
   "[level:20] updateMemoryCache(): update memory cache for incremental program
 ",
   "[level:20] visitSourceFileNode(): hoisting
-",
-  "[level:20] compileFn(): computing diagnostics for incremental program
 ",
   "[level:20] readThrough(): writing caches
 ",

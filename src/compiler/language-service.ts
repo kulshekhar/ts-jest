@@ -4,7 +4,7 @@ import { basename, normalize, relative } from 'path'
 import * as _ts from 'typescript'
 
 import { ConfigSet } from '../config/config-set'
-import { CompileResult, MemoryCache, SourceOutput } from '../types'
+import { CompilerInstance, MemoryCache, SourceOutput } from '../types'
 import { Errors, interpolate } from '../util/messages'
 
 const hasOwn = Object.prototype.hasOwnProperty
@@ -16,7 +16,7 @@ export const compileUsingLanguageService = (
   configs: ConfigSet,
   logger: Logger,
   memoryCache: MemoryCache,
-): CompileResult => {
+): CompilerInstance => {
   logger.debug('compileUsingLanguageService(): create typescript compiler')
 
   const ts = configs.compilerModule,
@@ -95,17 +95,6 @@ export const compileUsingLanguageService = (
       // Must set memory cache before attempting to read file.
       updateMemoryCache(code, normalizedFileName)
       const output: _ts.EmitOutput = service.getEmitOutput(normalizedFileName)
-      if (configs.shouldReportDiagnostic(normalizedFileName)) {
-        logger.debug({ normalizedFileName }, 'compileFn(): computing diagnostics for language service')
-
-        // Get the relevant diagnostics - this is 3x faster than `getPreEmitDiagnostics`.
-        const diagnostics = service
-          .getCompilerOptionsDiagnostics()
-          .concat(service.getSyntacticDiagnostics(normalizedFileName))
-          .concat(service.getSemanticDiagnostics(normalizedFileName))
-        // will raise or just warn diagnostics depending on config
-        configs.raiseDiagnostics(diagnostics, normalizedFileName, logger)
-      }
 
       /* istanbul ignore next (this should never happen but is kept for security) */
       if (output.emitSkipped) {
@@ -122,6 +111,23 @@ export const compileUsingLanguageService = (
       }
 
       return [output.outputFiles[1].text, output.outputFiles[0].text]
+    },
+    diagnoseFn: (filePath: string) => {
+      const normalizedFileName = normalize(filePath)
+      if (configs.shouldReportDiagnostic(normalizedFileName)) {
+        logger.debug({ normalizedFileName }, 'compileFn(): computing diagnostics for language service')
+
+        // Not sure why e2e tests not working without this if. In reality, this if is not needed
+        if (service.getProgram()!.getSourceFile(filePath)) {
+          // Get the relevant diagnostics - this is 3x faster than `getPreEmitDiagnostics`.
+          const diagnostics = service
+            .getCompilerOptionsDiagnostics()
+            .concat(service.getSyntacticDiagnostics(normalizedFileName))
+            .concat(service.getSemanticDiagnostics(normalizedFileName))
+          // will raise or just warn diagnostics depending on config
+          configs.raiseDiagnostics(diagnostics, normalizedFileName, logger)
+        }
+      }
     },
     program: service.getProgram(),
   }
