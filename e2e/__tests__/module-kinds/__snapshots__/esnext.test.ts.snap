@@ -6,13 +6,11 @@ exports[`run with options: {"module":"esnext","allowSyntheticDefaultImports":fal
   ===[ STDOUT ]===================================================================
   
   ===[ STDERR ]===================================================================
-  ts-jest[config] (WARN) TypeScript diagnostics (customize using \`[jest-config].globals.ts-jest.diagnostics\` option):
-  message TS151001: If you have issues related to imports, you should consider setting \`esModuleInterop\` to \`true\` in your TypeScript configuration file (usually \`tsconfig.json\`). See https://blogs.msdn.microsoft.com/typescript/2018/01/31/announcing-typescript-2-7/#easier-ecmascript-module-interoperability for more information.
+  ts-jest[config] (WARN) message TS151001: If you have issues related to imports, you should consider setting \`esModuleInterop\` to \`true\` in your TypeScript configuration file (usually \`tsconfig.json\`). See https://blogs.msdn.microsoft.com/typescript/2018/01/31/announcing-typescript-2-7/#easier-ecmascript-module-interoperability for more information.
   PASS ./ts-jest-tools.spec.ts
   PASS ./import-legacy.spec.ts
   PASS ./import-star.spec.ts
-  ts-jest[ts-compiler] (WARN) TypeScript diagnostics (customize using \`[jest-config].globals.ts-jest.diagnostics\` option):
-  import-default.spec.ts:1:8 - error TS1259: Module '"<cwd>/lib"' can only be default-imported using the 'esModuleInterop' flag
+  ts-jest[ts-compiler] (WARN) import-default.spec.ts:1:8 - error TS1259: Module '"<cwd>/lib"' can only be default-imported using the 'esModuleInterop' flag
   
   1 import lib from './lib'
            ~~~
@@ -88,8 +86,7 @@ exports[`run with options: {"module":"esnext","esModuleInterop":false} 1`] = `
   ===[ STDOUT ]===================================================================
   
   ===[ STDERR ]===================================================================
-  ts-jest[config] (WARN) TypeScript diagnostics (customize using \`[jest-config].globals.ts-jest.diagnostics\` option):
-  message TS151001: If you have issues related to imports, you should consider setting \`esModuleInterop\` to \`true\` in your TypeScript configuration file (usually \`tsconfig.json\`). See https://blogs.msdn.microsoft.com/typescript/2018/01/31/announcing-typescript-2-7/#easier-ecmascript-module-interoperability for more information.
+  ts-jest[config] (WARN) message TS151001: If you have issues related to imports, you should consider setting \`esModuleInterop\` to \`true\` in your TypeScript configuration file (usually \`tsconfig.json\`). See https://blogs.msdn.microsoft.com/typescript/2018/01/31/announcing-typescript-2-7/#easier-ecmascript-module-interoperability for more information.
   PASS ./ts-jest-tools.spec.ts
   PASS ./import-legacy.spec.ts
   PASS ./import-star.spec.ts
@@ -127,8 +124,7 @@ exports[`run with options: {"module":"esnext","esModuleInterop":true} 1`] = `
   ===[ STDERR ]===================================================================
   PASS ./ts-jest-tools.spec.ts
   PASS ./import-legacy.spec.ts
-  ts-jest[ts-compiler] (WARN) TypeScript diagnostics (customize using \`[jest-config].globals.ts-jest.diagnostics\` option):
-  import-star.spec.ts:5:10 - error TS2349: This expression is not callable.
+  ts-jest[ts-compiler] (WARN) import-star.spec.ts:5:10 - error TS2349: This expression is not callable.
     Type 'typeof lib' has no call signatures.
   
   5   expect(lib()).toBe('foo')
@@ -172,8 +168,7 @@ exports[`run with options: {"module":"esnext"} 1`] = `
   ===[ STDOUT ]===================================================================
   
   ===[ STDERR ]===================================================================
-  ts-jest[config] (WARN) TypeScript diagnostics (customize using \`[jest-config].globals.ts-jest.diagnostics\` option):
-  message TS151001: If you have issues related to imports, you should consider setting \`esModuleInterop\` to \`true\` in your TypeScript configuration file (usually \`tsconfig.json\`). See https://blogs.msdn.microsoft.com/typescript/2018/01/31/announcing-typescript-2-7/#easier-ecmascript-module-interoperability for more information.
+  ts-jest[config] (WARN) message TS151001: If you have issues related to imports, you should consider setting \`esModuleInterop\` to \`true\` in your TypeScript configuration file (usually \`tsconfig.json\`). See https://blogs.msdn.microsoft.com/typescript/2018/01/31/announcing-typescript-2-7/#easier-ecmascript-module-interoperability for more information.
   PASS ./ts-jest-tools.spec.ts
   PASS ./import-legacy.spec.ts
   PASS ./import-star.spec.ts

@@ -84,12 +84,6 @@ exports[`transpile module with isolatedModule: true should compile using transpi
   ================================================================================
 `;
 
-exports[`transpile module with isolatedModule: true should report diagnostics related to codes with pathRegex config is undefined 1`] = `
-"TypeScript diagnostics (customize using \`[jest-config].globals.ts-jest.diagnostics\` option):
-foo.ts(2,23): error TS1005: '=>' expected."
-`;
+exports[`transpile module with isolatedModule: true should report diagnostics related to codes with pathRegex config is undefined 1`] = `"foo.ts(2,23): error TS1005: '=>' expected."`;
 
-exports[`transpile module with isolatedModule: true should report diagnostics related to codes with pathRegex config matches file name 1`] = `
-"TypeScript diagnostics (customize using \`[jest-config].globals.ts-jest.diagnostics\` option):
-foo.ts(2,23): error TS1005: '=>' expected."
-`;
+exports[`transpile module with isolatedModule: true should report diagnostics related to codes with pathRegex config matches file name 1`] = `"foo.ts(2,23): error TS1005: '=>' expected."`;

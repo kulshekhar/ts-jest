@@ -66,10 +66,7 @@ exports[`language service should compile tsx file for other jsx options 1`] = `
   ================================================================================
 `;
 
-exports[`language service should report diagnostics related to typings with pathRegex config matches file name 1`] = `
-"TypeScript diagnostics (customize using \`[jest-config].globals.ts-jest.diagnostics\` option):
-test-match-regex-diagnostics.ts(3,7): error TS2322: Type 'number' is not assignable to type 'string'."
-`;
+exports[`language service should report diagnostics related to typings with pathRegex config matches file name 1`] = `"test-match-regex-diagnostics.ts(3,7): error TS2322: Type 'number' is not assignable to type 'string'."`;
 
 exports[`language service should throw error when cannot compile 1`] = `
 "Unable to require \`.d.ts\` file for file: test-cannot-compile.d.ts.

@@ -9,8 +9,7 @@ exports[`run with options: {"module":"commonjs","allowSyntheticDefaultImports":f
   PASS ./ts-jest-tools.spec.ts
   PASS ./import-legacy.spec.ts
   PASS ./import-star.spec.ts
-  ts-jest[ts-compiler] (WARN) TypeScript diagnostics (customize using \`[jest-config].globals.ts-jest.diagnostics\` option):
-  import-default.spec.ts:1:8 - error TS1259: Module '"<cwd>/lib"' can only be default-imported using the 'esModuleInterop' flag
+  ts-jest[ts-compiler] (WARN) import-default.spec.ts:1:8 - error TS1259: Module '"<cwd>/lib"' can only be default-imported using the 'esModuleInterop' flag
   
   1 import lib from './lib'
            ~~~
@@ -89,8 +88,7 @@ exports[`run with options: {"module":"commonjs","esModuleInterop":false} 1`] = `
   PASS ./ts-jest-tools.spec.ts
   PASS ./import-legacy.spec.ts
   PASS ./import-star.spec.ts
-  ts-jest[ts-compiler] (WARN) TypeScript diagnostics (customize using \`[jest-config].globals.ts-jest.diagnostics\` option):
-  import-default.spec.ts:1:8 - error TS1259: Module '"<cwd>/lib"' can only be default-imported using the 'esModuleInterop' flag
+  ts-jest[ts-compiler] (WARN) import-default.spec.ts:1:8 - error TS1259: Module '"<cwd>/lib"' can only be default-imported using the 'esModuleInterop' flag
   
   1 import lib from './lib'
            ~~~
@@ -133,8 +131,7 @@ exports[`run with options: {"module":"commonjs","esModuleInterop":true} 1`] = `
   ===[ STDERR ]===================================================================
   PASS ./ts-jest-tools.spec.ts
   PASS ./import-legacy.spec.ts
-  ts-jest[ts-compiler] (WARN) TypeScript diagnostics (customize using \`[jest-config].globals.ts-jest.diagnostics\` option):
-  import-star.spec.ts:5:10 - error TS2349: This expression is not callable.
+  ts-jest[ts-compiler] (WARN) import-star.spec.ts:5:10 - error TS2349: This expression is not callable.
     Type 'typeof lib' has no call signatures.
   
   5   expect(lib()).toBe('foo')
@@ -181,8 +178,7 @@ exports[`run with options: {"module":"commonjs"} 1`] = `
   PASS ./ts-jest-tools.spec.ts
   PASS ./import-legacy.spec.ts
   PASS ./import-star.spec.ts
-  ts-jest[ts-compiler] (WARN) TypeScript diagnostics (customize using \`[jest-config].globals.ts-jest.diagnostics\` option):
-  import-default.spec.ts:1:8 - error TS1259: Module '"<cwd>/lib"' can only be default-imported using the 'esModuleInterop' flag
+  ts-jest[ts-compiler] (WARN) import-default.spec.ts:1:8 - error TS1259: Module '"<cwd>/lib"' can only be default-imported using the 'esModuleInterop' flag
   
   1 import lib from './lib'
            ~~~

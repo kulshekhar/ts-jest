@@ -146,9 +146,10 @@ exports[`other jsx options should compile tsx file for with program 1`] = `
   ================================================================================
 `;
 
+exports[`typings incremental program should not report diagnostics with pathRegex config does not match file name 1`] = `"test-typings.ts: Emit skipped"`;
+
 exports[`typings incremental program should report diagnostics with pathRegex config matches file name 1`] = `"test-typings.ts: Emit skipped"`;
 
-exports[`typings normal program should report diagnostics with pathRegex config matches file name 1`] = `
-"TypeScript diagnostics (customize using \`[jest-config].globals.ts-jest.diagnostics\` option):
-test-typings.ts(3,7): error TS2322: Type 'number' is not assignable to type 'string'."
-`;
+exports[`typings normal program should not report diagnostics with pathRegex config matches file name 1`] = `"test-typings.ts: Emit skipped"`;
+
+exports[`typings normal program should report diagnostics with pathRegex config matches file name 1`] = `"test-typings.ts(3,7): error TS2322: Type 'number' is not assignable to type 'string'."`;

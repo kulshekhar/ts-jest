@@ -50,11 +50,7 @@ const t: string = f(5)
         },
       })
 
-      try {
-        compiler.compile(source, fileName)
-      } catch (e) {
-        expect(e).not.toContain('TypeScript diagnostics')
-      }
+      expect(() => compiler.compile(source, fileName)).toThrowErrorMatchingSnapshot()
     })
   })
 
@@ -80,11 +76,7 @@ const t: string = f(5)
         },
       })
 
-      try {
-        compiler.compile(source, fileName)
-      } catch (e) {
-        expect(e).not.toContain('TypeScript diagnostics')
-      }
+      expect(() => compiler.compile(source, fileName)).toThrowErrorMatchingSnapshot()
     })
   })
 })

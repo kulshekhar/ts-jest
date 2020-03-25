@@ -2,7 +2,7 @@ import { BaseError } from 'make-error'
 import { inspect } from 'util'
 
 import { rootLogger } from './logger'
-import { Errors, Helps, interpolate } from './messages'
+import { Errors, interpolate } from './messages'
 
 const logger = rootLogger.child({ namespace: 'TSError' })
 
@@ -22,7 +22,6 @@ export class TSError extends BaseError {
     super(
       interpolate(Errors.UnableToCompileTypeScript, {
         diagnostics: diagnosticText.trim(),
-        help: Helps.IgnoreDiagnosticCode,
       }),
     )
     logger.debug({ diagnosticCodes, diagnosticText }, 'created new TSError')
