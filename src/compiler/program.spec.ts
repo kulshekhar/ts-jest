@@ -38,7 +38,11 @@ const t: string = f(5)
         },
       })
 
-      expect(() => compiler.compile(source, fileName)).toThrowErrorMatchingSnapshot()
+      try {
+        compiler.compile(source, fileName)
+      } catch (e) {}
+
+      expect(() => compiler.diagnose!(fileName)).toThrowErrorMatchingSnapshot()
     })
 
     it('should not report diagnostics with pathRegex config matches file name', () => {
@@ -50,7 +54,11 @@ const t: string = f(5)
         },
       })
 
-      expect(() => compiler.compile(source, fileName)).toThrowErrorMatchingSnapshot()
+      try {
+        compiler.compile(source, fileName)
+      } catch (e) {}
+
+      expect(() => compiler.diagnose!(fileName)).not.toThrowError()
     })
   })
 
@@ -60,11 +68,15 @@ const t: string = f(5)
         tsJestConfig: {
           ...baseTsJestConfig,
           incremental: true,
-          diagnostics: { pathRegex: 'typings-error.ts' },
+          diagnostics: { pathRegex: fileName },
         },
       })
 
-      expect(() => compiler.compile(source, fileName)).toThrowErrorMatchingSnapshot()
+      try {
+        compiler.compile(source, fileName)
+      } catch (e) {}
+
+      expect(() => compiler.diagnose!(fileName)).toThrowErrorMatchingSnapshot()
     })
 
     it('should not report diagnostics with pathRegex config does not match file name', () => {
@@ -76,7 +88,11 @@ const t: string = f(5)
         },
       })
 
-      expect(() => compiler.compile(source, fileName)).toThrowErrorMatchingSnapshot()
+      try {
+        compiler.compile(source, fileName)
+      } catch (e) {}
+
+      expect(() => compiler.diagnose!(fileName)).not.toThrowError()
     })
   })
 })
@@ -162,8 +178,6 @@ describe('cache', () => {
       ",
         "[level:20] visitSourceFileNode(): hoisting
       ",
-        "[level:20] compileFn(): computing diagnostics for program
-      ",
         "[level:20] readThrough(): writing caches
       ",
       ]
@@ -202,8 +216,6 @@ Array [
   "[level:20] updateMemoryCache(): update memory cache for incremental program
 ",
   "[level:20] visitSourceFileNode(): hoisting
-",
-  "[level:20] compileFn(): computing diagnostics for incremental program
 ",
   "[level:20] readThrough(): writing caches
 ",

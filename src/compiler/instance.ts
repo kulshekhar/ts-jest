@@ -35,7 +35,7 @@ import mkdirp = require('mkdirp')
 import { basename, extname, join, normalize } from 'path'
 
 import { ConfigSet } from '../config/config-set'
-import { CompileFn, CompileResult, MemoryCache, TsCompiler } from '../types'
+import { CompileFn, CompilerInstance, MemoryCache, TsCompiler } from '../types'
 import { sha1 } from '../util/sha1'
 
 import { compileUsingLanguageService } from './language-service'
@@ -113,11 +113,10 @@ const readThrough = (
   mkdirp.sync(cachedir)
 
   return (code: string, fileName: string, lineOffset?: number) => {
-    const normalizedFileName = normalize(fileName)
-    const cachePath = join(cachedir, getCacheName(code, normalizedFileName))
-    const extension = getExtension(normalizedFileName)
-    const outputPath = `${cachePath}${extension}`
-
+    const normalizedFileName = normalize(fileName),
+      cachePath = join(cachedir, getCacheName(code, normalizedFileName)),
+      extension = getExtension(normalizedFileName),
+      outputPath = `${cachePath}${extension}`
     try {
       const output = readFileSync(outputPath, 'utf8')
       if (isValidCacheContent(output)) {
@@ -129,10 +128,12 @@ const readThrough = (
     } catch (err) {}
 
     logger.debug({ fileName }, 'readThrough(): cache miss')
-    const [value, sourceMap] = compileFn(code, normalizedFileName, lineOffset)
-    const output = updateOutput(value, normalizedFileName, sourceMap, getExtension)
+
+    const [value, sourceMap] = compileFn(code, normalizedFileName, lineOffset),
+      output = updateOutput(value, normalizedFileName, sourceMap, getExtension)
 
     logger.debug({ normalizedFileName, outputPath }, 'readThrough(): writing caches')
+
     memoryCache.outputs[normalizedFileName] = output
     writeFileSync(outputPath, output)
 
@@ -172,16 +173,16 @@ export const createCompiler = (configs: ConfigSet): TsCompiler => {
     compilerOptions.jsx === ts.JsxEmit.Preserve
       ? (path: string) => (/\.[tj]sx$/.test(path) ? '.jsx' : '.js')
       : (_: string) => '.js'
-  let compileResult: CompileResult
+  let compilerInstance: CompilerInstance
   if (!tsJest.isolatedModules) {
     // Use language services by default
-    compileResult = !tsJest.compilerHost
+    compilerInstance = !tsJest.compilerHost
       ? compileUsingLanguageService(configs, logger, memoryCache)
       : compileUsingProgram(configs, logger, memoryCache)
   } else {
-    compileResult = compileUsingTranspileModule(configs, logger)
+    compilerInstance = compileUsingTranspileModule(configs, logger)
   }
-  const compile = readThrough(cachedir, memoryCache, compileResult.compileFn, getExtension, logger)
+  const compile = readThrough(cachedir, memoryCache, compilerInstance.compileFn, getExtension, logger)
 
-  return { cwd: configs.cwd, compile, program: compileResult.program }
+  return { cwd: configs.cwd, compile, program: compilerInstance.program, diagnose: compilerInstance.diagnoseFn }
 }
