@@ -13,6 +13,90 @@ const baseTsJestConfig = {
   compilerHost: true,
 }
 
+describe('typings', () => {
+  const fileName = 'test-typings.ts',
+    source = `
+const f = (v: number) => v
+const t: string = f(5)
+`
+
+  beforeAll(() => {
+    writeFileSync(fileName, source, 'utf8')
+  })
+
+  afterAll(() => {
+    removeSync(fileName)
+  })
+
+  describe('normal program', () => {
+    it('should report diagnostics with pathRegex config matches file name', () => {
+      const compiler = makeCompiler({
+        tsJestConfig: {
+          ...baseTsJestConfig,
+          incremental: false,
+          diagnostics: { pathRegex: fileName },
+        },
+      })
+
+      try {
+        compiler.compile(source, fileName)
+      } catch (e) {}
+
+      expect(() => compiler.diagnose!(fileName)).toThrowErrorMatchingSnapshot()
+    })
+
+    it('should not report diagnostics with pathRegex config matches file name', () => {
+      const compiler = makeCompiler({
+        tsJestConfig: {
+          ...baseTsJestConfig,
+          incremental: false,
+          diagnostics: { pathRegex: 'foo.ts' },
+        },
+      })
+
+      try {
+        compiler.compile(source, fileName)
+      } catch (e) {}
+
+      expect(() => compiler.diagnose!(fileName)).not.toThrowError()
+    })
+  })
+
+  describe('incremental program', () => {
+    it('should report diagnostics with pathRegex config matches file name', () => {
+      const compiler = makeCompiler({
+        tsJestConfig: {
+          ...baseTsJestConfig,
+          incremental: true,
+          diagnostics: { pathRegex: fileName },
+        },
+      })
+
+      try {
+        compiler.compile(source, fileName)
+      } catch (e) {}
+
+      expect(() => compiler.diagnose!(fileName)).toThrowErrorMatchingSnapshot()
+    })
+
+    it('should not report diagnostics with pathRegex config does not match file name', () => {
+      const compiler = makeCompiler({
+        tsJestConfig: {
+          ...baseTsJestConfig,
+          incremental: true,
+          diagnostics: { pathRegex: 'foo.ts' },
+        },
+      })
+
+      try {
+        compiler.compile(source, fileName)
+      } catch (e) {}
+
+      expect(() => compiler.diagnose!(fileName)).not.toThrowError()
+    })
+  })
+})
+
 describe('source-maps', () => {
   const fileName = 'source-maps-test.ts',
     source = 'console.log("hello")'
