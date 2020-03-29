@@ -42,7 +42,7 @@ const t: string = f(5)
         compiler.compile(source, fileName)
       } catch (e) {}
 
-      expect(() => compiler.diagnose!(fileName)).toThrowErrorMatchingSnapshot()
+      expect(() => compiler.diagnose!(source, fileName)).toThrowErrorMatchingSnapshot()
     })
 
     it('should not report diagnostics with pathRegex config matches file name', () => {
@@ -58,7 +58,7 @@ const t: string = f(5)
         compiler.compile(source, fileName)
       } catch (e) {}
 
-      expect(() => compiler.diagnose!(fileName)).not.toThrowError()
+      expect(() => compiler.diagnose!(source, fileName)).not.toThrowError()
     })
   })
 
@@ -76,7 +76,7 @@ const t: string = f(5)
         compiler.compile(source, fileName)
       } catch (e) {}
 
-      expect(() => compiler.diagnose!(fileName)).toThrowErrorMatchingSnapshot()
+      expect(() => compiler.diagnose!(source, fileName)).toThrowErrorMatchingSnapshot()
     })
 
     it('should not report diagnostics with pathRegex config does not match file name', () => {
@@ -92,7 +92,7 @@ const t: string = f(5)
         compiler.compile(source, fileName)
       } catch (e) {}
 
-      expect(() => compiler.diagnose!(fileName)).not.toThrowError()
+      expect(() => compiler.diagnose!(source, fileName)).not.toThrowError()
     })
   })
 })

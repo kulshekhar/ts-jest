@@ -6,12 +6,27 @@ import * as _ts from 'typescript'
 
 import { ConfigSet } from './config/config-set'
 
+/**
+ * @internal
+ */
 export type TBabelCore = typeof _babel
+/**
+ * @internal
+ */
 export type TTypeScript = typeof _ts
+/**
+ * @internal
+ */
 export type TBabelJest = Required<Transformer>
+/**
+ * @internal
+ */
 export type BabelJestTransformer = {
   [K in Exclude<keyof Transformer, 'createTransformer'>]: Exclude<Transformer[K], undefined>
 }
+/**
+ * @internal
+ */
 export type BabelConfig = _babel.TransformOptions
 
 export interface TsJestGlobalOptions {
@@ -141,7 +156,7 @@ export interface TsJestConfig {
   packageJson: TsJestConfig$packageJson
   isolatedModules: boolean
   compilerHost: boolean
-  incremental: boolean // TODO: Remove this flag when we can make project references working with our Incremental Program
+  incremental: boolean
   compiler: string
   diagnostics: TsJestConfig$diagnostics
   babelConfig: TsJestConfig$babelConfig
@@ -149,7 +164,9 @@ export interface TsJestConfig {
   // to deprecate / deprecated === === ===
   stringifyContentPathRegex: TsJestConfig$stringifyContentPathRegex
 }
-
+/**
+ * @internal
+ */
 export interface TsJestHooksMap {
   afterProcess?(args: any[], result: string | TransformedSource): string | TransformedSource | void
 }
@@ -160,14 +177,24 @@ export interface TsJestHooksMap {
 export type ModulePatcher<T = any> = (module: T) => T
 
 export interface TsCompiler {
+  /**
+   * @internal
+   */
   cwd: string
+  /**
+   * @internal
+   */
   compile(code: string, fileName: string, lineOffset?: number): string
+  /**
+   * @internal
+   */
   diagnose: DiagnoseFn | undefined
   program: _ts.Program | undefined
 }
 
 /**
  * Internal source output.
+ * @internal
  */
 export type SourceOutput = [string, string]
 
@@ -180,10 +207,17 @@ export interface MemoryCache {
   versions: { [filePath: string]: number }
   outputs: { [filePath: string]: string }
 }
-
+/**
+ * @internal
+ */
 export type CompileFn = (code: string, fileName: string, lineOffset?: number) => SourceOutput
-export type DiagnoseFn = (filePath: string) => void
-
+/**
+ * @internal
+ */
+export type DiagnoseFn = (code: string, filePath: string) => void
+/**
+ * @internal
+ */
 export interface CompilerInstance {
   compileFn: CompileFn
   diagnoseFn?: DiagnoseFn

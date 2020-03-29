@@ -160,8 +160,9 @@ export const compileUsingProgram = (configs: ConfigSet, logger: Logger, memoryCa
 
       return output
     },
-    diagnoseFn: (filePath: string) => {
+    diagnoseFn: (code: string, filePath: string) => {
       const normalizedFileName = normalize(filePath)
+      updateMemoryCache(code, normalizedFileName)
       if (configs.shouldReportDiagnostic(normalizedFileName)) {
         logger.debug(
           { normalizedFileName },
