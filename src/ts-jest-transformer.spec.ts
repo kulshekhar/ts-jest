@@ -30,17 +30,6 @@ describe('configFor', () => {
   })
 })
 
-describe('lastTransformerId', () => {
-  it('should increment for each instance', () => {
-    const start = TsJestTransformer.lastTransformerId
-    const id1 = new TsJestTransformer()
-    const id2 = new TsJestTransformer()
-    expect(id1).not.toBe(start)
-    expect(id2).not.toBe(start)
-    expect(id2).not.toBe(id1)
-  })
-})
-
 describe('process', () => {
   let tr: TsJestTransformer
   let babel: any

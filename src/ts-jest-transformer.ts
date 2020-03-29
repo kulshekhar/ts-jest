@@ -11,10 +11,7 @@ import { rootLogger } from './util/logger'
 import { Errors, interpolate } from './util/messages'
 import { sha1 } from './util/sha1'
 
-/**
- * @internal
- */
-export const INSPECT_CUSTOM = inspect.custom || 'inspect'
+const INSPECT_CUSTOM = inspect.custom || 'inspect'
 
 interface ConfigSetIndexItem {
   configSet: ConfigSet
@@ -42,19 +39,15 @@ export class TsJestTransformer implements Transformer {
    * @internal
    */
   private static _lastTransformerId = 0
-  static get lastTransformerId() {
-    return TsJestTransformer._lastTransformerId
-  }
   /**
    * @internal
    */
   private static get _nextTransformerId() {
     return ++TsJestTransformer._lastTransformerId
   }
-
-  readonly logger: Logger
-  readonly id: number
-  readonly options: TsJestGlobalOptions
+  private readonly logger: Logger
+  private readonly id: number
+  private readonly options: TsJestGlobalOptions
 
   constructor(baseOptions: TsJestGlobalOptions = {}) {
     this.options = { ...baseOptions }
