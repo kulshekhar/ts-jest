@@ -27,6 +27,7 @@ export const compileUsingLanguageService = (
       call: null,
       [LogContexts.logLevel]: LogLevels.trace,
     }
+  let projectVersion = 1
   // Set the file contents into cache.
   const updateMemoryCache = (code: string, fileName: string) => {
     logger.debug({ fileName }, `updateMemoryCache(): update memory cache for language service`)
@@ -38,10 +39,13 @@ export const compileUsingLanguageService = (
     }
     if (memoryCache.contents[fileName] !== code) {
       memoryCache.contents[fileName] = code
-      memoryCache.versions[fileName] = (memoryCache.versions[fileName] || 0) + 1
+      memoryCache.versions[fileName] = fileVersion + 1
+      // Increment project version for every file change.
+      projectVersion++
     }
   }
   const serviceHost: _ts.LanguageServiceHost = {
+    getProjectVersion: () => String(projectVersion),
     getScriptFileNames: () => Object.keys(memoryCache.versions),
     getScriptVersion: (fileName: string) => {
       const normalizedFileName = normalize(fileName),
