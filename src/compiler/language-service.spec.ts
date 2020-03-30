@@ -146,7 +146,7 @@ const x: string = g(5)
     writeFileSync(fileName, source, 'utf8')
     compiler.compile(source, fileName)
 
-    expect(() => compiler.diagnose!(fileName)).toThrowErrorMatchingSnapshot()
+    expect(() => compiler.diagnose!(source, fileName)).toThrowErrorMatchingSnapshot()
 
     removeSync(fileName)
   })
@@ -163,7 +163,7 @@ const t: string = f(5)
     writeFileSync(fileName, source, 'utf8')
     compiler.compile(source, fileName)
 
-    expect(() => compiler.diagnose!(fileName)).not.toThrowError()
+    expect(() => compiler.diagnose!(source, fileName)).not.toThrowError()
 
     removeSync(fileName)
   })

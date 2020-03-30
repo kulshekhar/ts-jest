@@ -11,14 +11,23 @@ import { rootLogger } from './util/logger'
 import { Errors, interpolate } from './util/messages'
 import { sha1 } from './util/sha1'
 
-/**
- * @internal
- */
-export const INSPECT_CUSTOM = inspect.custom || 'inspect'
+const INSPECT_CUSTOM = inspect.custom || 'inspect'
 
 interface ConfigSetIndexItem {
   configSet: ConfigSet
   jestConfig: JsonableValue<Config.ProjectConfig>
+}
+
+function checkDefinitionFile(filePath: string): boolean {
+  return filePath.endsWith('.d.ts')
+}
+
+function checkJsFile(filePath: string): boolean {
+  return !checkDefinitionFile(filePath) && /\.jsx?$/.test(filePath)
+}
+
+function checkTsFile(filePath: string): boolean {
+  return !checkDefinitionFile(filePath) && /\.tsx?$/.test(filePath)
 }
 
 export class TsJestTransformer implements Transformer {
@@ -30,19 +39,15 @@ export class TsJestTransformer implements Transformer {
    * @internal
    */
   private static _lastTransformerId = 0
-  static get lastTransformerId() {
-    return TsJestTransformer._lastTransformerId
-  }
   /**
    * @internal
    */
   private static get _nextTransformerId() {
     return ++TsJestTransformer._lastTransformerId
   }
-
-  readonly logger: Logger
-  readonly id: number
-  readonly options: TsJestGlobalOptions
+  private readonly logger: Logger
+  private readonly id: number
+  private readonly options: TsJestGlobalOptions
 
   constructor(baseOptions: TsJestGlobalOptions = {}) {
     this.options = { ...baseOptions }
@@ -87,6 +92,7 @@ export class TsJestTransformer implements Transformer {
 
     // create the new record in the index
     this.logger.info(`no matching config-set found, creating a new one`)
+
     const configSet = new ConfigSet(jestConfigObj, this.options, this.logger)
     TsJestTransformer._configSetsIndex.push({
       jestConfig: new JsonableValue(jestConfigObj),
@@ -103,19 +109,16 @@ export class TsJestTransformer implements Transformer {
     transformOptions?: TransformOptions,
   ): TransformedSource | string {
     this.logger.debug({ fileName: filePath, transformOptions }, 'processing', filePath)
+
     let result: string | TransformedSource
-    const source: string = input
-
-    const configs = this.configsFor(jestConfig)
-    const { hooks } = configs
-
-    const stringify = configs.shouldStringifyContent(filePath)
-    const babelJest = stringify ? undefined : configs.babelJestTransformer
-
-    const isDefinitionFile = filePath.endsWith('.d.ts')
-    const isJsFile = !isDefinitionFile && /\.jsx?$/.test(filePath)
-    const isTsFile = isDefinitionFile || /\.tsx?$/.test(filePath)
-
+    const source: string = input,
+      configs = this.configsFor(jestConfig),
+      { hooks } = configs,
+      stringify = configs.shouldStringifyContent(filePath),
+      babelJest = stringify ? undefined : configs.babelJestTransformer,
+      isDefinitionFile = checkDefinitionFile(filePath),
+      isJsFile = checkJsFile(filePath),
+      isTsFile = checkTsFile(filePath)
     if (stringify) {
       // handles here what we should simply stringify
       result = `module.exports=${JSON.stringify(source)}`
@@ -125,6 +128,7 @@ export class TsJestTransformer implements Transformer {
     } else if (!configs.typescript.options.allowJs && isJsFile) {
       // we've got a '.js' but the compiler option `allowJs` is not set or set to false
       this.logger.warn({ fileName: filePath }, interpolate(Errors.GotJsFileButAllowJsFalse, { path: filePath }))
+
       result = source
     } else if (isJsFile || isTsFile) {
       // transpile TS code (source maps are included)
@@ -135,20 +139,22 @@ export class TsJestTransformer implements Transformer {
       // TypeScript will bail if we try to compile, and if it was to call babel, users can
       // define the transform value with `babel-jest` for this extension instead
       const message = babelJest ? Errors.GotUnknownFileTypeWithBabel : Errors.GotUnknownFileTypeWithoutBabel
+
       this.logger.warn({ fileName: filePath }, interpolate(message, { path: filePath }))
+
       result = source
     }
-
     // calling babel-jest transformer
     if (babelJest) {
       this.logger.debug({ fileName: filePath }, 'calling babel-jest processor')
+
       // do not instrument here, jest will do it anyway afterwards
       result = babelJest.process(result, filePath, jestConfig, { ...transformOptions, instrument: false })
     }
-
     // allows hooks (useful for testing)
     if (hooks.afterProcess) {
       this.logger.debug({ fileName: filePath, hookName: 'afterProcess' }, 'calling afterProcess hook')
+
       const newResult = hooks.afterProcess([input, filePath, jestConfig, transformOptions], result)
       if (newResult !== undefined) {
         return newResult
@@ -176,11 +182,12 @@ export class TsJestTransformer implements Transformer {
     transformOptions: { instrument?: boolean; rootDir?: string } = {},
   ): string {
     this.logger.debug({ fileName: filePath, transformOptions }, 'computing cache key for', filePath)
+
     const configs = this.configsFor(jestConfigStr)
     // we do not instrument, ensure it is false all the time
     const { instrument = false, rootDir = configs.rootDir } = transformOptions
-    if (configs.tsCompiler.diagnose) {
-      configs.tsCompiler.diagnose(filePath)
+    if (configs.tsCompiler.diagnose && (checkJsFile(filePath) || checkTsFile(filePath))) {
+      configs.tsCompiler.diagnose(fileContent, filePath)
     }
 
     return sha1(

@@ -116,21 +116,19 @@ export const compileUsingLanguageService = (
 
       return [output.outputFiles[1].text, output.outputFiles[0].text]
     },
-    diagnoseFn: (filePath: string) => {
+    diagnoseFn: (code: string, filePath: string) => {
       const normalizedFileName = normalize(filePath)
+      updateMemoryCache(code, normalizedFileName)
       if (configs.shouldReportDiagnostic(normalizedFileName)) {
         logger.debug({ normalizedFileName }, 'compileFn(): computing diagnostics for language service')
 
-        // Not sure why e2e tests not working without this if. In reality, this if is not needed
-        if (service.getProgram()!.getSourceFile(filePath)) {
-          // Get the relevant diagnostics - this is 3x faster than `getPreEmitDiagnostics`.
-          const diagnostics = service
-            .getCompilerOptionsDiagnostics()
-            .concat(service.getSyntacticDiagnostics(normalizedFileName))
-            .concat(service.getSemanticDiagnostics(normalizedFileName))
-          // will raise or just warn diagnostics depending on config
-          configs.raiseDiagnostics(diagnostics, normalizedFileName, logger)
-        }
+        // Get the relevant diagnostics - this is 3x faster than `getPreEmitDiagnostics`.
+        const diagnostics = service
+          .getCompilerOptionsDiagnostics()
+          .concat(service.getSyntacticDiagnostics(normalizedFileName))
+          .concat(service.getSemanticDiagnostics(normalizedFileName))
+        // will raise or just warn diagnostics depending on config
+        configs.raiseDiagnostics(diagnostics, normalizedFileName, logger)
       }
     },
     program: service.getProgram(),
