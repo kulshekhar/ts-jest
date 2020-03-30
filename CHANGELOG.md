@@ -1,5 +1,33 @@
+<a name="25.3.0"></a>
+# [25.3.0](https://github.com/kulshekhar/ts-jest/compare/25.2.1...25.3.0) (2020-03-30)
+
+
+### Bug Fixes
+
+* add jest-config to dependencies list ([6d9e0d8](https://github.com/kulshekhar/ts-jest/commit/6d9e0d8))
+* always do type check for all files provided to ts-jest transformer ([#1450](https://github.com/kulshekhar/ts-jest/issues/1450)) ([107e062](https://github.com/kulshekhar/ts-jest/commit/107e062))
+* **docs:** correct changelog, correct version in package.json ([#1406](https://github.com/kulshekhar/ts-jest/issues/1406)) ([542e181](https://github.com/kulshekhar/ts-jest/commit/542e181))
+
+
+### Chores
+
+* **config:** improve diagnostics message ([#1444](https://github.com/kulshekhar/ts-jest/issues/1444)) ([96cd9b3](https://github.com/kulshekhar/ts-jest/commit/96cd9b3))
+
+
+### Features
+
+* **compiler:** expose internal ts `Program` via ConfigSet `TsCompiler` ([#1433](https://github.com/kulshekhar/ts-jest/issues/1433)) ([7153246](https://github.com/kulshekhar/ts-jest/commit/7153246))
+* **config:** add incremental option ([#1418](https://github.com/kulshekhar/ts-jest/issues/1418)) ([5a69bce](https://github.com/kulshekhar/ts-jest/commit/5a69bce))
+
+
+### BREAKING CHANGES
+
+* **config:** This will affect to any snapshots or assertion against diagnostics messages
+
+
+
 <a name="25.2.1"></a>
-# [25.2.1](https://github.com/kulshekhar/ts-jest/compare/25.2.0...25.2.1) (2020-02-21)
+## [25.2.1](https://github.com/kulshekhar/ts-jest/compare/v25.2.0...25.2.1) (2020-02-21)
 
 
 ### Bug Fixes
@@ -17,7 +45,12 @@
 
 ### Bug Fixes
 
-* **config:** let babel-jest handle loading babel config ([#1370](https://github.com/kulshekhar/ts-jest/issues/1370))
+* **config:** comment out unused codes ([dff1332](https://github.com/kulshekhar/ts-jest/commit/dff1332))
+* **config:** pass plain config object to babel-jest transformer ([e0895da](https://github.com/kulshekhar/ts-jest/commit/e0895da))
+* **config:** remove unused codes ([7aa3928](https://github.com/kulshekhar/ts-jest/commit/7aa3928))
+* **config:** remove unused import ([81897e1](https://github.com/kulshekhar/ts-jest/commit/81897e1))
+* **test:** improve unit tests for babel config ([ebd9380](https://github.com/kulshekhar/ts-jest/commit/ebd9380))
+* **test:** update snapshot ([0e1190d](https://github.com/kulshekhar/ts-jest/commit/0e1190d))
 
 
 
@@ -27,7 +60,7 @@
 
 ### Bug Fixes
 
-* jest 25 type definitions ([#1363](https://github.com/kulshekhar/ts-jest/issues/1363)) ([ba82a9e](https://github.com/kulshekhar/ts-jest/commit/ba82a9e))
+* jest 25 type definitions ([ba82a9e](https://github.com/kulshekhar/ts-jest/commit/ba82a9e))
 
 
 
@@ -35,9 +68,16 @@
 # [25.0.0](https://github.com/kulshekhar/ts-jest/compare/v24.3.0...v25.0.0) (2020-01-23)
 
 
+### Bug Fixes
+
+* Fix tests for version checks v2 ([154f1d6](https://github.com/kulshekhar/ts-jest/commit/154f1d6))
+* Try to fix snapshots ([ea0ea50](https://github.com/kulshekhar/ts-jest/commit/ea0ea50))
+* Try to fix snapshots v2 ([82445bb](https://github.com/kulshekhar/ts-jest/commit/82445bb))
+
+
 ### Features
 
-* support Jest 25 ([#1355](https://github.com/kulshekhar/ts-jest/issues/1355))
+* support Jest 25 ([ffc2cfe](https://github.com/kulshekhar/ts-jest/commit/ffc2cfe))
 
 
 
