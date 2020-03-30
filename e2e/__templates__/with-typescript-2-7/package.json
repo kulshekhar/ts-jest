@@ -5,7 +5,7 @@
   "devDependencies": {
     "@types/jest": "25.1.4",
     "@types/node": "12.12.32",
-    "jest": "25.2.3",
+    "jest": "25.2.4",
     "typescript": "2.7.2"
   },
   "wantedDependencies": {
