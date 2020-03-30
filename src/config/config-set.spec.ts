@@ -495,6 +495,10 @@ describe('typescript', () => {
     })
   })
 
+  it('should include default outDir $$ts-jest$$ when allowJs is enabled and no outDir from config', () => {
+    expect(get(void 0, { tsConfig: { allowJs: true } }).options.outDir).toBe('$$ts-jest$$')
+  })
+
   it('should be able to read extends', () => {
     const cs = createConfigSet({
       tsJestConfig: { tsConfig: 'tsconfig.build.json' },
