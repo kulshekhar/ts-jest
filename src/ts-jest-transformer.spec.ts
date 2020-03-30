@@ -30,17 +30,6 @@ describe('configFor', () => {
   })
 })
 
-describe('lastTransformerId', () => {
-  it('should increment for each instance', () => {
-    const start = TsJestTransformer.lastTransformerId
-    const id1 = new TsJestTransformer()
-    const id2 = new TsJestTransformer()
-    expect(id1).not.toBe(start)
-    expect(id2).not.toBe(start)
-    expect(id2).not.toBe(id1)
-  })
-})
-
 describe('process', () => {
   let tr: TsJestTransformer
   let babel: any
@@ -284,8 +273,13 @@ describe('getCacheKey', () => {
     expect(keys.filter((k, i, all) => all.indexOf(k) === i)).toHaveLength(keys.length)
   })
 
-  it('should call diagnosticsFn to do type checking for test file', () => {
-    const tsCompilerStub = { diagnose: jest.fn() }
+  it('should call diagnose() to do type checking for js/jsx/ts/tsx file but not d.ts file', () => {
+    const tsCompilerStub = { diagnose: jest.fn() },
+      baseInput = {
+        fileContent: 'export default "foo"',
+        jestConfigStr: '{"foo": "bar"}',
+        options: { instrument: false, rootDir: '/foo' },
+      }
     jest.spyOn(tr, 'configsFor').mockImplementation(
       jestConfigStr =>
         (({
@@ -293,14 +287,37 @@ describe('getCacheKey', () => {
           tsCompiler: tsCompilerStub,
         } as unknown) as ConfigSet),
     )
-    const input = {
-      fileContent: 'export default "foo"',
-      fileName: 'foo.ts',
-      jestConfigStr: '{"foo": "bar"}',
-      options: { instrument: false, rootDir: '/foo' },
-    }
-    tr.getCacheKey(input.fileContent, input.fileName, input.jestConfigStr, input.options)
+    const jsInput = {
+        ...baseInput,
+        fileName: 'foo.js',
+      },
+      jsxInput = {
+        ...baseInput,
+        fileName: 'foo.jsx',
+      },
+      tsInput = {
+        ...baseInput,
+        fileName: 'foo.ts',
+      },
+      tsxInput = {
+        ...baseInput,
+        fileName: 'foo.tsx',
+      },
+      dtsInput = {
+        ...baseInput,
+        fileContent: 'type Foo = (code: string) => void',
+        fileName: 'foo.d.ts',
+      }
+    tr.getCacheKey(jsInput.fileContent, jsInput.fileName, jsInput.jestConfigStr, jsInput.options)
+    tr.getCacheKey(jsxInput.fileContent, jsxInput.fileName, jsxInput.jestConfigStr, jsxInput.options)
+    tr.getCacheKey(tsInput.fileContent, tsInput.fileName, tsInput.jestConfigStr, tsInput.options)
+    tr.getCacheKey(tsxInput.fileContent, tsxInput.fileName, tsxInput.jestConfigStr, tsxInput.options)
+    tr.getCacheKey(dtsInput.fileContent, dtsInput.fileName, dtsInput.jestConfigStr, dtsInput.options)
 
-    expect(tsCompilerStub.diagnose).toHaveBeenCalledWith(input.fileName)
+    expect(tsCompilerStub.diagnose).toHaveBeenCalledTimes(4)
+    expect(tsCompilerStub.diagnose).toHaveBeenNthCalledWith(1, jsInput.fileContent, jsInput.fileName)
+    expect(tsCompilerStub.diagnose).toHaveBeenNthCalledWith(2, jsxInput.fileContent, jsxInput.fileName)
+    expect(tsCompilerStub.diagnose).toHaveBeenNthCalledWith(3, tsInput.fileContent, tsInput.fileName)
+    expect(tsCompilerStub.diagnose).toHaveBeenNthCalledWith(4, tsxInput.fileContent, tsxInput.fileName)
   })
 })
