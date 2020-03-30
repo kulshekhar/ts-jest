@@ -714,6 +714,10 @@ export class ConfigSet {
         finalOptions.allowSyntheticDefaultImports = true
       }
     }
+    // Make sure when allowJs is enabled, outDir is set otherwise we run into error: Cannot write file ... because it would overwrite input
+    if (finalOptions.allowJs && !finalOptions.outDir) {
+      finalOptions.outDir = '$$ts-jest$$'
+    }
 
     // ensure undefined are removed and other values are overridden
     for (const key of Object.keys(forcedOptions)) {
