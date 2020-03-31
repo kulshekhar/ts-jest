@@ -159,39 +159,6 @@ describe('tsJest', () => {
     expect(getTsJest()).toMatchSnapshot()
   })
 
-  describe('tsconfig', () => {
-    it('should be correct for default value', () => {
-      const EXPECTED = {
-        kind: 'file',
-        value: undefined,
-      }
-      expect(getTsJest().tsConfig).toEqual(EXPECTED)
-      expect(getTsJest({ tsConfig: true }).tsConfig).toEqual(EXPECTED)
-    })
-
-    it('should be correct for false', () => {
-      expect(getTsJest({ tsConfig: false }).tsConfig).toBeUndefined()
-    })
-
-    it('should be correct for given file', () => {
-      const FILE = 'bar/tsconfig.foo.json'
-      const EXPECTED = {
-        kind: 'file',
-        value: defaultResolve(FILE),
-      }
-      expect(getTsJest({ tsConfig: FILE }).tsConfig).toEqual(EXPECTED)
-    })
-
-    it('should be correct for inline config', () => {
-      const CONFIG = { foo: 'bar' }
-      const EXPECTED = {
-        kind: 'inline',
-        value: CONFIG,
-      }
-      expect(getTsJest({ tsConfig: CONFIG as any }).tsConfig).toEqual(EXPECTED)
-    })
-  }) // tsconfig
-
   describe('packageJson', () => {
     it('should be correct when packageJson is true', () => {
       const EXPECTED = {
@@ -850,13 +817,6 @@ describe('tsJestDigest', () => {
     expect(createConfigSet().tsJestDigest).toBe(myModule.digest)
   })
 }) // tsJestDigest
-
-describe('tsconfig', () => {
-  it('should return input tsconfig', () => {
-    const cs = createConfigSet({ tsJestConfig: { tsConfig: { target: 'ES6' } } as any })
-    expect(cs.tsconfig.compilerOptions.target).toBe('ES6')
-  })
-}) // tsconfig
 
 describe('shouldStringifyContent', () => {
   it('should return correct value is defined', () => {
