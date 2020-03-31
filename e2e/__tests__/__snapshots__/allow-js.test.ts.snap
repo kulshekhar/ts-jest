@@ -6,11 +6,13 @@ exports[`using babel-jest for js files should pass using template "default" 1`] 
   ===[ STDOUT ]===================================================================
   
   ===[ STDERR ]===================================================================
-  PASS ./bar.spec.ts
-  PASS ./foo.spec.js
+  PASS  without-outDir/bar.spec.ts
+  PASS  with-outDir/bar.spec.ts
+  PASS  with-outDir/foo.spec.js
+  PASS  without-outDir/foo.spec.js
   
-  Test Suites: 2 passed, 2 total
-  Tests:       4 passed, 4 total
+  Test Suites: 4 passed, 4 total
+  Tests:       8 passed, 8 total
   Snapshots:   0 total
   Time:        XXs
   Ran all test suites.
@@ -23,11 +25,13 @@ exports[`using babel-jest for js files should pass using template "with-babel-7"
   ===[ STDOUT ]===================================================================
   
   ===[ STDERR ]===================================================================
-  PASS ./bar.spec.ts
-  PASS ./foo.spec.js
+  PASS  without-outDir/bar.spec.ts
+  PASS  with-outDir/bar.spec.ts
+  PASS  with-outDir/foo.spec.js
+  PASS  without-outDir/foo.spec.js
   
-  Test Suites: 2 passed, 2 total
-  Tests:       4 passed, 4 total
+  Test Suites: 4 passed, 4 total
+  Tests:       8 passed, 8 total
   Snapshots:   0 total
   Time:        XXs
   Ran all test suites.
@@ -40,11 +44,13 @@ exports[`using babel-jest for js files should pass using template "with-babel-7-
   ===[ STDOUT ]===================================================================
   
   ===[ STDERR ]===================================================================
-  PASS ./bar.spec.ts
-  PASS ./foo.spec.js
+  PASS  without-outDir/bar.spec.ts
+  PASS  with-outDir/bar.spec.ts
+  PASS  without-outDir/foo.spec.js
+  PASS  with-outDir/foo.spec.js
   
-  Test Suites: 2 passed, 2 total
-  Tests:       4 passed, 4 total
+  Test Suites: 4 passed, 4 total
+  Tests:       8 passed, 8 total
   Snapshots:   0 total
   Time:        XXs
   Ran all test suites.
@@ -57,11 +63,13 @@ exports[`using babel-jest for js files should pass using template "with-typescri
   ===[ STDOUT ]===================================================================
   
   ===[ STDERR ]===================================================================
-  PASS ./bar.spec.ts
-  PASS ./foo.spec.js
+  PASS  without-outDir/bar.spec.ts
+  PASS  with-outDir/bar.spec.ts
+  PASS  without-outDir/foo.spec.js
+  PASS  with-outDir/foo.spec.js
   
-  Test Suites: 2 passed, 2 total
-  Tests:       4 passed, 4 total
+  Test Suites: 4 passed, 4 total
+  Tests:       8 passed, 8 total
   Snapshots:   0 total
   Time:        XXs
   Ran all test suites.

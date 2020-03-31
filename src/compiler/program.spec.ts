@@ -38,11 +38,7 @@ const t: string = f(5)
         },
       })
 
-      try {
-        compiler.compile(source, fileName)
-      } catch (e) {}
-
-      expect(() => compiler.diagnose!(source, fileName)).toThrowErrorMatchingSnapshot()
+      expect(() => compiler.compile(source, fileName)).toThrowErrorMatchingSnapshot()
     })
 
     it('should not report diagnostics with pathRegex config matches file name', () => {
@@ -56,9 +52,9 @@ const t: string = f(5)
 
       try {
         compiler.compile(source, fileName)
-      } catch (e) {}
-
-      expect(() => compiler.diagnose!(source, fileName)).not.toThrowError()
+      } catch (e) {
+        expect(e).not.toContain('TypeScript diagnostics')
+      }
     })
   })
 
@@ -72,11 +68,7 @@ const t: string = f(5)
         },
       })
 
-      try {
-        compiler.compile(source, fileName)
-      } catch (e) {}
-
-      expect(() => compiler.diagnose!(source, fileName)).toThrowErrorMatchingSnapshot()
+      expect(() => compiler.compile(source, fileName)).toThrowErrorMatchingSnapshot()
     })
 
     it('should not report diagnostics with pathRegex config does not match file name', () => {
@@ -90,9 +82,9 @@ const t: string = f(5)
 
       try {
         compiler.compile(source, fileName)
-      } catch (e) {}
-
-      expect(() => compiler.diagnose!(source, fileName)).not.toThrowError()
+      } catch (e) {
+        expect(e).not.toContain('TypeScript diagnostics')
+      }
     })
   })
 })
@@ -172,11 +164,13 @@ describe('cache', () => {
       Array [
         "[level:20] readThrough(): cache miss
       ",
-        "[level:20] compileFn(): compiling using program
-      ",
         "[level:20] updateMemoryCache(): update memory cache for program
       ",
+        "[level:20] compileFn(): compiling using program
+      ",
         "[level:20] visitSourceFileNode(): hoisting
+      ",
+        "[level:20] diagnoseFn(): computing diagnostics for test file that imports test-cache.ts using program
       ",
         "[level:20] readThrough(): writing caches
       ",
@@ -208,19 +202,21 @@ describe('cache', () => {
     logTarget.clear()
     const compiled1 = compiler.compile(source, fileName)
     expect(logTarget.filteredLines(LogLevels.debug, Infinity)).toMatchInlineSnapshot(`
-Array [
-  "[level:20] readThrough(): cache miss
-",
-  "[level:20] compileFn(): compiling using incremental program
-",
-  "[level:20] updateMemoryCache(): update memory cache for incremental program
-",
-  "[level:20] visitSourceFileNode(): hoisting
-",
-  "[level:20] readThrough(): writing caches
-",
-]
-`)
+      Array [
+        "[level:20] readThrough(): cache miss
+      ",
+        "[level:20] updateMemoryCache(): update memory cache for incremental program
+      ",
+        "[level:20] compileFn(): compiling using incremental program
+      ",
+        "[level:20] visitSourceFileNode(): hoisting
+      ",
+        "[level:20] diagnoseFn(): computing diagnostics for test file that imports test-cache.ts using incremental program
+      ",
+        "[level:20] readThrough(): writing caches
+      ",
+      ]
+    `)
 
     logTarget.clear()
     const compiled2 = compiler.compile(source, fileName)

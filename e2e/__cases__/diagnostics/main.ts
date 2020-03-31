@@ -1,3 +1,4 @@
-export function strInNumOut(input: string): number {
-  return input
+export type Thing = {
+  a: number;
+  // b: number;
 }

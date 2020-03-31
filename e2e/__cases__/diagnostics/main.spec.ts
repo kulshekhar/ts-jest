@@ -1,5 +1,13 @@
-import { strInNumOut } from './main'
+import { Thing } from "./main";
 
-it('should pass', () => {
-  expect(strInNumOut('1')).toBe('1')
-})
+// See the Thing definition.  Changing the type definition should result in a compile failure here.
+export const thing: Thing = { a: 1 };
+function doTheThing() {
+  return 1 + 2;
+}
+
+describe("Thing", () => {
+  it("should do the thing", () => {
+    expect(doTheThing()).toEqual(3);
+  });
+});

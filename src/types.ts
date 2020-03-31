@@ -185,10 +185,6 @@ export interface TsCompiler {
    * @internal
    */
   compile(code: string, fileName: string, lineOffset?: number): string
-  /**
-   * @internal
-   */
-  diagnose: DiagnoseFn | undefined
   program: _ts.Program | undefined
 }
 
@@ -206,6 +202,7 @@ export interface MemoryCache {
   contents: { [filePath: string]: string | undefined }
   versions: { [filePath: string]: number }
   outputs: { [filePath: string]: string }
+  resolvedModules: { [testFilePath: string]: string[] }
 }
 /**
  * @internal

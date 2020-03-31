@@ -38,6 +38,7 @@ import { ConfigSet } from '../config/config-set'
 import { CompileFn, CompilerInstance, MemoryCache, TsCompiler } from '../types'
 import { sha1 } from '../util/sha1'
 
+import { getResolvedModulesCache } from './compiler-utils'
 import { compileUsingLanguageService } from './language-service'
 import { compileUsingProgram } from './program'
 import { compileUsingTranspileModule } from './transpile-module'
@@ -100,9 +101,11 @@ const readThrough = (
   if (!cachedir) {
     return (code: string, fileName: string, lineOffset?: number) => {
       const normalizedFileName = normalize(fileName)
+
       logger.debug({ normalizedFileName }, 'readThrough(): no cache')
-      const [value, sourceMap] = compileFn(code, normalizedFileName, lineOffset)
-      const output = updateOutput(value, fileName, sourceMap, getExtension)
+
+      const [value, sourceMap] = compileFn(code, normalizedFileName, lineOffset),
+        output = updateOutput(value, fileName, sourceMap, getExtension)
       memoryCache.outputs[normalizedFileName] = output
 
       return output
@@ -111,6 +114,10 @@ const readThrough = (
 
   // Make sure the cache directory exists before continuing.
   mkdirp.sync(cachedir)
+  try {
+    const resolvedModulesCache = readFileSync(getResolvedModulesCache(cachedir), 'utf-8')
+    memoryCache.resolvedModules = JSON.parse(resolvedModulesCache)
+  } catch (e) {}
 
   return (code: string, fileName: string, lineOffset?: number) => {
     const normalizedFileName = normalize(fileName),
@@ -158,6 +165,7 @@ export const createCompiler = (configs: ConfigSet): TsCompiler => {
       contents: Object.create(null),
       versions: Object.create(null),
       outputs: Object.create(null),
+      resolvedModules: Object.create(null),
     }
   // Enable `allowJs` when flag is set.
   if (compilerOptions.allowJs) {
@@ -184,5 +192,5 @@ export const createCompiler = (configs: ConfigSet): TsCompiler => {
   }
   const compile = readThrough(cachedir, memoryCache, compilerInstance.compileFn, getExtension, logger)
 
-  return { cwd: configs.cwd, compile, program: compilerInstance.program, diagnose: compilerInstance.diagnoseFn }
+  return { cwd: configs.cwd, compile, program: compilerInstance.program }
 }

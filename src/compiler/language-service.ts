@@ -1,5 +1,6 @@
 import { LogContexts, LogLevels, Logger } from 'bs-logger'
 import memoize = require('lodash.memoize')
+import micromatch = require('micromatch')
 import { basename, normalize, relative } from 'path'
 import * as _ts from 'typescript'
 
@@ -7,7 +8,16 @@ import { ConfigSet } from '../config/config-set'
 import { CompilerInstance, MemoryCache, SourceOutput } from '../types'
 import { Errors, interpolate } from '../util/messages'
 
-const hasOwn = Object.prototype.hasOwnProperty
+import { cacheResolvedModules, hasOwn } from './compiler-utils'
+
+function doTypeChecking(configs: ConfigSet, fileName: string, service: _ts.LanguageService, logger: Logger) {
+  if (configs.shouldReportDiagnostic(fileName)) {
+    // Get the relevant diagnostics - this is 3x faster than `getPreEmitDiagnostics`.
+    const diagnostics = service.getSemanticDiagnostics(fileName).concat(service.getSyntacticDiagnostics(fileName))
+    // will raise or just warn diagnostics depending on config
+    configs.raiseDiagnostics(diagnostics, fileName, logger)
+  }
+}
 
 /**
  * @internal
@@ -99,12 +109,25 @@ export const compileUsingLanguageService = (
       // Must set memory cache before attempting to read file.
       updateMemoryCache(code, normalizedFileName)
       const output: _ts.EmitOutput = service.getEmitOutput(normalizedFileName)
+      // Do type checking by getting TypeScript diagnostics
+      doTypeChecking(configs, normalizedFileName, service, logger)
+      if (micromatch.isMatch(normalizedFileName, configs.testMatchPatterns)) {
+        cacheResolvedModules(normalizedFileName, memoryCache, service.getProgram()!, configs.tsCacheDir, logger)
+      } else {
+        logger.debug(
+          `diagnoseFn(): computing diagnostics for test file that imports ${normalizedFileName} using language service`,
+        )
 
+        Object.entries(memoryCache.resolvedModules)
+          .filter(entry => entry[1].find(modulePath => modulePath === normalizedFileName))
+          .forEach(entry => {
+            doTypeChecking(configs, entry[0], service, logger)
+          })
+      }
       /* istanbul ignore next (this should never happen but is kept for security) */
       if (output.emitSkipped) {
         throw new TypeError(`${relative(cwd, normalizedFileName)}: Emit skipped for language service`)
       }
-
       // Throw an error when requiring `.d.ts` files.
       if (!output.outputFiles.length) {
         throw new TypeError(

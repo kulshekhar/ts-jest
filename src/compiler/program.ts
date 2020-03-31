@@ -1,5 +1,6 @@
 import { LogContexts, LogLevels, Logger } from 'bs-logger'
 import memoize = require('lodash.memoize')
+import micromatch = require('micromatch')
 import { basename, normalize, relative } from 'path'
 import * as _ts from 'typescript'
 
@@ -7,7 +8,16 @@ import { ConfigSet } from '../config/config-set'
 import { CompilerInstance, MemoryCache, SourceOutput } from '../types'
 import { Errors, interpolate } from '../util/messages'
 
-const hasOwn = Object.prototype.hasOwnProperty
+import { cacheResolvedModules, hasOwn } from './compiler-utils'
+
+function doTypeChecking(configs: ConfigSet, fileName: string, program: _ts.Program, logger: Logger) {
+  if (configs.shouldReportDiagnostic(fileName)) {
+    const sourceFile = program.getSourceFile(fileName),
+      diagnostics = program.getSemanticDiagnostics(sourceFile).concat(program.getSyntacticDiagnostics(sourceFile))
+    // will raise or just warn diagnostics depending on config
+    configs.raiseDiagnostics(diagnostics, fileName, logger)
+  }
+}
 
 /**
  * @internal
@@ -18,7 +28,8 @@ export const compileUsingProgram = (configs: ConfigSet, logger: Logger, memoryCa
   const ts = configs.compilerModule,
     cwd = configs.cwd,
     { options, projectReferences, errors } = configs.typescript,
-    incremental = configs.tsJest.incremental
+    incremental = configs.tsJest.incremental,
+    programDebugText = `${incremental ? 'incremental program' : 'program'}`
   const compilerHostTraceCtx = {
       namespace: 'ts:compilerHost',
       call: null,
@@ -74,10 +85,7 @@ export const compileUsingProgram = (configs: ConfigSet, logger: Logger, memoryCa
   // Read and cache custom transformers.
   const customTransformers = configs.tsCustomTransformers,
     updateMemoryCache = (code: string, fileName: string): void => {
-      logger.debug(
-        { fileName },
-        `updateMemoryCache(): update memory cache for ${incremental ? 'incremental program' : 'program'}`,
-      )
+      logger.debug({ fileName }, `updateMemoryCache(): update memory cache for ${programDebugText}`)
 
       const sourceFile = incremental ? builderProgram.getSourceFile(fileName) : program.getSourceFile(fileName)
       if (!hasOwn.call(memoryCache.versions, fileName)) {
@@ -112,11 +120,6 @@ export const compileUsingProgram = (configs: ConfigSet, logger: Logger, memoryCa
     compileFn: (code: string, fileName: string): SourceOutput => {
       const normalizedFileName = normalize(fileName),
         output: [string, string] = ['', '']
-
-      logger.debug(
-        { normalizedFileName },
-        `compileFn(): compiling using ${incremental ? 'incremental program' : 'program'}`,
-      )
       // Must set memory cache before attempting to read file.
       updateMemoryCache(code, normalizedFileName)
       const sourceFile = incremental
@@ -124,6 +127,8 @@ export const compileUsingProgram = (configs: ConfigSet, logger: Logger, memoryCa
         : program.getSourceFile(normalizedFileName)
 
       if (!sourceFile) throw new TypeError(`Unable to read file: ${fileName}`)
+
+      logger.debug({ normalizedFileName }, `compileFn(): compiling using ${programDebugText}`)
 
       const result: _ts.EmitResult = incremental
         ? builderProgram.emit(
@@ -144,7 +149,21 @@ export const compileUsingProgram = (configs: ConfigSet, logger: Logger, memoryCa
             undefined,
             customTransformers,
           )
+      // Do type checking by getting TypeScript diagnostics
+      doTypeChecking(configs, normalizedFileName, program, logger)
+      if (micromatch.isMatch(normalizedFileName, configs.testMatchPatterns)) {
+        cacheResolvedModules(normalizedFileName, memoryCache, program, configs.tsCacheDir, logger)
+      } else {
+        logger.debug(
+          `diagnoseFn(): computing diagnostics for test file that imports ${normalizedFileName} using ${programDebugText}`,
+        )
 
+        Object.entries(memoryCache.resolvedModules)
+          .filter(entry => entry[1].find(modulePath => modulePath === normalizedFileName))
+          .forEach(entry => {
+            doTypeChecking(configs, entry[0], program, logger)
+          })
+      }
       if (result.emitSkipped) {
         throw new TypeError(`${relative(cwd, fileName)}: Emit skipped`)
       }
@@ -159,21 +178,6 @@ export const compileUsingProgram = (configs: ConfigSet, logger: Logger, memoryCa
       }
 
       return output
-    },
-    diagnoseFn: (code: string, filePath: string) => {
-      const normalizedFileName = normalize(filePath)
-      updateMemoryCache(code, normalizedFileName)
-      if (configs.shouldReportDiagnostic(normalizedFileName)) {
-        logger.debug(
-          { normalizedFileName },
-          `compileFn(): computing diagnostics for ${incremental ? 'incremental program' : 'program'}`,
-        )
-
-        const sourceFile = program.getSourceFile(normalizedFileName),
-          diagnostics = program.getSemanticDiagnostics(sourceFile).concat(program.getSyntacticDiagnostics(sourceFile))
-        // will raise or just warn diagnostics depending on config
-        configs.raiseDiagnostics(diagnostics, normalizedFileName, logger)
-      }
     },
     program,
   }

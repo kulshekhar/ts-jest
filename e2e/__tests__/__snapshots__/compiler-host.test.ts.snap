@@ -53,6 +53,10 @@ exports[`With compilerHost enabled and incremental disabled should pass using te
   
   4   const x: string = g(5)
             ~
+  ts-jest[ts-compiler] (WARN) main.spec.ts:4:9 - error TS2322: Type 'number' is not assignable to type 'string'.
+  
+  4   const x: string = g(5)
+            ~
   PASS ./main.spec.ts
     √ should pass
   
@@ -74,6 +78,10 @@ exports[`With compilerHost enabled and incremental disabled should pass using te
   
   4   const x: string = g(5)
             ~
+  ts-jest[ts-compiler] (WARN) main.spec.ts:4:9 - error TS2322: Type 'number' is not assignable to type 'string'.
+  
+  4   const x: string = g(5)
+            ~
   PASS ./main.spec.ts
     √ should pass
   
@@ -91,6 +99,10 @@ exports[`With compilerHost enabled and incremental disabled should pass using te
   ===[ STDOUT ]===================================================================
   
   ===[ STDERR ]===================================================================
+  ts-jest[ts-compiler] (WARN) main.spec.ts:4:9 - error TS2322: Type 'number' is not assignable to type 'string'.
+  
+  4   const x: string = g(5)
+            ~
   ts-jest[ts-compiler] (WARN) main.spec.ts:4:9 - error TS2322: Type 'number' is not assignable to type 'string'.
   
   4   const x: string = g(5)
@@ -159,6 +171,10 @@ exports[`With compilerHost enabled and incremental enabled should pass using tem
   
   4   const x: string = g(5)
             ~
+  ts-jest[ts-compiler] (WARN) main.spec.ts:4:9 - error TS2322: Type 'number' is not assignable to type 'string'.
+  
+  4   const x: string = g(5)
+            ~
   PASS ./main.spec.ts
     √ should pass
   
@@ -180,6 +196,10 @@ exports[`With compilerHost enabled and incremental enabled should pass using tem
   
   4   const x: string = g(5)
             ~
+  ts-jest[ts-compiler] (WARN) main.spec.ts:4:9 - error TS2322: Type 'number' is not assignable to type 'string'.
+  
+  4   const x: string = g(5)
+            ~
   PASS ./main.spec.ts
     √ should pass
   
@@ -197,6 +217,10 @@ exports[`With compilerHost enabled and incremental enabled should pass using tem
   ===[ STDOUT ]===================================================================
   
   ===[ STDERR ]===================================================================
+  ts-jest[ts-compiler] (WARN) main.spec.ts:4:9 - error TS2322: Type 'number' is not assignable to type 'string'.
+  
+  4   const x: string = g(5)
+            ~
   ts-jest[ts-compiler] (WARN) main.spec.ts:4:9 - error TS2322: Type 'number' is not assignable to type 'string'.
   
   4   const x: string = g(5)
