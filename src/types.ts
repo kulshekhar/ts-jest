@@ -223,7 +223,9 @@ export interface CompilerInstance {
   diagnoseFn?: DiagnoseFn
   program?: _ts.Program
 }
-
+/**
+ * @internal
+ */
 export interface AstTransformerDesc {
   name: string
   version: number

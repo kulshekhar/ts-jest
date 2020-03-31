@@ -112,6 +112,9 @@ const toDiagnosticCodeList = (items: any, into: number[] = []): number[] => {
 }
 
 export class ConfigSet {
+  /**
+   * @internal
+   */
   @Memoize()
   get projectPackageJson(): Record<string, any> {
     const {
@@ -145,6 +148,9 @@ export class ConfigSet {
     return {}
   }
 
+  /**
+   * @internal
+   */
   @Memoize()
   get projectDependencies(): Record<string, string> {
     const { projectPackageJson: pkg } = this
@@ -162,6 +168,9 @@ export class ConfigSet {
     }, {} as Record<string, string>)
   }
 
+  /**
+   * @internal
+   */
   @Memoize()
   get jest(): Config.ProjectConfig {
     const config = backportJestConfig(this.logger, this._jestConfig)
@@ -178,6 +187,9 @@ export class ConfigSet {
     return config
   }
 
+  /**
+   * @internal
+   */
   @Memoize()
   get tsJest(): TsJestConfig {
     const parsedConfig = this.jest
@@ -280,14 +292,16 @@ export class ConfigSet {
     return res
   }
 
+  /**
+   * @internal
+   */
   get typescript(): ParsedCommandLine {
     return this._typescript.resolved
   }
 
-  get tsconfig(): any {
-    return this._typescript.input
-  }
-
+  /**
+   * Use by e2e, don't mark as internal
+   */
   @Memoize()
   get versions(): Record<string, string> {
     const modules = ['jest', this.tsJest.compiler]
@@ -330,7 +344,7 @@ export class ConfigSet {
    * @internal
    */
   @Memoize()
-  get raiseDiagnostics() {
+  get raiseDiagnostics(): (diagnostics: Diagnostic[], filePath?: string, logger?: Logger) => void | never {
     const {
       createTsError,
       filterDiagnostics,
@@ -353,6 +367,9 @@ export class ConfigSet {
     }
   }
 
+  /**
+   * @internal
+   */
   @Memoize()
   get babel(): BabelConfig | undefined {
     const {
@@ -385,11 +402,17 @@ export class ConfigSet {
     return base
   }
 
+  /**
+   * @internal
+   */
   @Memoize()
   get compilerModule(): TTypeScript {
     return importer.typescript(ImportReasons.TsJest, this.tsJest.compiler)
   }
 
+  /**
+   * @internal
+   */
   @Memoize()
   get babelJestTransformer(): BabelJestTransformer | undefined {
     const { babel } = this
@@ -403,11 +426,17 @@ export class ConfigSet {
     return createCompiler(this)
   }
 
+  /**
+   * @internal
+   */
   @Memoize()
-  get astTransformers(): AstTransformerDesc[] {
+  private get astTransformers(): AstTransformerDesc[] {
     return [...internalAstTransformers, ...this.tsJest.transformers.map(m => require(m))]
   }
 
+  /**
+   * @internal
+   */
   @Memoize()
   get tsCustomTransformers(): CustomTransformers {
     return {
@@ -415,6 +444,9 @@ export class ConfigSet {
     }
   }
 
+  /**
+   * @internal
+   */
   @Memoize()
   get hooks(): TsJestHooksMap {
     let hooksFile = process.env.TS_JEST_HOOKS
@@ -430,7 +462,7 @@ export class ConfigSet {
    * @internal
    */
   @Memoize()
-  get filterDiagnostics() {
+  get filterDiagnostics(): (diagnostics: Diagnostic[], filePath?: string) => Diagnostic[] {
     const {
       tsJest: {
         diagnostics: { ignoreCodes },
@@ -451,6 +483,9 @@ export class ConfigSet {
     }
   }
 
+  /**
+   * @internal
+   */
   @Memoize()
   get shouldReportDiagnostic(): (filePath: string) => boolean {
     const {
@@ -464,6 +499,9 @@ export class ConfigSet {
     }
   }
 
+  /**
+   * @internal
+   */
   @Memoize()
   get shouldStringifyContent(): (filePath: string) => boolean {
     const { stringifyContentPathRegex } = this.tsJest
@@ -479,7 +517,7 @@ export class ConfigSet {
    * @internal
    */
   @Memoize()
-  get createTsError() {
+  get createTsError(): (diagnostics: ReadonlyArray<Diagnostic>) => TSError {
     const {
       diagnostics: { pretty },
     } = this.tsJest
@@ -501,6 +539,9 @@ export class ConfigSet {
     }
   }
 
+  /**
+   * @internal
+   */
   @Memoize()
   get tsCacheDir(): string | undefined {
     if (!this.jest.cache) {
@@ -523,8 +564,11 @@ export class ConfigSet {
     return res
   }
 
+  /**
+   * @internal
+   */
   @Memoize()
-  get overriddenCompilerOptions(): Partial<CompilerOptions> {
+  private get overriddenCompilerOptions(): Partial<CompilerOptions> {
     const options: Partial<CompilerOptions> = {
       // we handle sourcemaps this way and not another
       sourceMap: true,
@@ -554,16 +598,25 @@ export class ConfigSet {
     return options
   }
 
+  /**
+   * @internal
+   */
   @Memoize()
   get rootDir(): string {
     return normalize(this.jest.rootDir || this.cwd)
   }
 
+  /**
+   * @internal
+   */
   @Memoize()
   get cwd(): string {
     return normalize(this.jest.cwd || process.cwd())
   }
 
+  /**
+   * Use by e2e, don't mark as internal
+   */
   @Memoize()
   get tsJestDigest(): string {
     return MY_DIGEST
@@ -595,6 +648,9 @@ export class ConfigSet {
     })
   }
 
+  /**
+   * @internal
+   */
   get cacheKey(): string {
     return this.jsonValue.serialized
   }
@@ -732,6 +788,9 @@ export class ConfigSet {
     return { input, resolved: result }
   }
 
+  /**
+   * @internal
+   */
   resolvePath(
     inputPath: string,
     { throwIfMissing = true, nodeResolve = false }: { throwIfMissing?: boolean; nodeResolve?: boolean } = {},

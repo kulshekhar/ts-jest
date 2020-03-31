@@ -23,7 +23,7 @@ function checkDefinitionFile(filePath: string): boolean {
 }
 
 function checkJsFile(filePath: string): boolean {
-  return !checkDefinitionFile(filePath) && /\.jsx?$/.test(filePath)
+  return /\.jsx?$/.test(filePath)
 }
 
 function checkTsFile(filePath: string): boolean {
@@ -67,6 +67,9 @@ export class TsJestTransformer implements Transformer {
     return `[object TsJestTransformer<#${this.id}>]`
   }
 
+  /**
+   * Use by e2e, don't mark as internal
+   */
   configsFor(jestConfig: Config.ProjectConfig | string): ConfigSet {
     let csi: ConfigSetIndexItem | undefined
     let jestConfigObj: Config.ProjectConfig
