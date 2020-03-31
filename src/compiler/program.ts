@@ -150,7 +150,10 @@ export const compileUsingProgram = (configs: ConfigSet, logger: Logger, memoryCa
             customTransformers,
           )
       // Do type checking by getting TypeScript diagnostics
+      logger.debug(`diagnoseFn(): computing diagnostics for ${normalizedFileName} using ${programDebugText}`)
+
       doTypeChecking(configs, normalizedFileName, program, logger)
+      /* istanbul ignore next (covered by e2e) */
       if (micromatch.isMatch(normalizedFileName, configs.testMatchPatterns)) {
         cacheResolvedModules(normalizedFileName, memoryCache, program, configs.tsCacheDir, logger)
       } else {
@@ -158,6 +161,7 @@ export const compileUsingProgram = (configs: ConfigSet, logger: Logger, memoryCa
           `diagnoseFn(): computing diagnostics for test file that imports ${normalizedFileName} using ${programDebugText}`,
         )
 
+        /* istanbul ignore next (covered by e2e) */
         Object.entries(memoryCache.resolvedModules)
           .filter(entry => entry[1].find(modulePath => modulePath === normalizedFileName))
           .forEach(entry => {

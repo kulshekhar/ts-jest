@@ -170,6 +170,8 @@ describe('cache', () => {
       ",
         "[level:20] visitSourceFileNode(): hoisting
       ",
+        "[level:20] diagnoseFn(): computing diagnostics for test-cache.ts using program
+      ",
         "[level:20] diagnoseFn(): computing diagnostics for test file that imports test-cache.ts using program
       ",
         "[level:20] readThrough(): writing caches
@@ -210,6 +212,8 @@ describe('cache', () => {
         "[level:20] compileFn(): compiling using incremental program
       ",
         "[level:20] visitSourceFileNode(): hoisting
+      ",
+        "[level:20] diagnoseFn(): computing diagnostics for test-cache.ts using incremental program
       ",
         "[level:20] diagnoseFn(): computing diagnostics for test file that imports test-cache.ts using incremental program
       ",

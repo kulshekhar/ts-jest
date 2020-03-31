@@ -37,6 +37,8 @@ describe('language service', () => {
       ",
         "[level:20] visitSourceFileNode(): hoisting
       ",
+        "[level:20] diagnoseFn(): computing diagnostics for test-cache.ts using language service
+      ",
         "[level:20] diagnoseFn(): computing diagnostics for test file that imports test-cache.ts using language service
       ",
         "[level:20] readThrough(): writing caches

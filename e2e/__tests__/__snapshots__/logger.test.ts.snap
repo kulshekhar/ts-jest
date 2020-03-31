@@ -26,6 +26,7 @@ Array [
   "[level:20] compileFn(): compiling using language service",
   "[level:20] updateMemoryCache(): update memory cache for language service",
   "[level:20] visitSourceFileNode(): hoisting",
+  "[level:20] diagnoseFn(): computing diagnostics for <cwd>/Hello.spec.ts using language service",
   "[level:20] cacheResolvedModules(): get resolved modules of test file <cwd>/Hello.spec.ts",
   "[level:20] computing cache key for <cwd>/Hello.ts",
   "[level:20] processing <cwd>/Hello.ts",
@@ -33,6 +34,7 @@ Array [
   "[level:20] compileFn(): compiling using language service",
   "[level:20] updateMemoryCache(): update memory cache for language service",
   "[level:20] visitSourceFileNode(): hoisting",
+  "[level:20] diagnoseFn(): computing diagnostics for <cwd>/Hello.ts using language service",
   "[level:20] diagnoseFn(): computing diagnostics for test file that imports <cwd>/Hello.ts using language service",
 ]
 `;
@@ -67,6 +69,7 @@ Array [
   "[level:20] compileFn(): compiling using language service",
   "[level:20] updateMemoryCache(): update memory cache for language service",
   "[level:20] visitSourceFileNode(): hoisting",
+  "[level:20] diagnoseFn(): computing diagnostics for <cwd>/Hello.spec.ts using language service",
   "[level:20] cacheResolvedModules(): get resolved modules of test file <cwd>/Hello.spec.ts",
   "[level:20] calling babel-jest processor",
   "[level:20] computing cache key for <cwd>/Hello.ts",
@@ -75,6 +78,7 @@ Array [
   "[level:20] compileFn(): compiling using language service",
   "[level:20] updateMemoryCache(): update memory cache for language service",
   "[level:20] visitSourceFileNode(): hoisting",
+  "[level:20] diagnoseFn(): computing diagnostics for <cwd>/Hello.ts using language service",
   "[level:20] diagnoseFn(): computing diagnostics for test file that imports <cwd>/Hello.ts using language service",
   "[level:20] calling babel-jest processor",
 ]
@@ -111,6 +115,7 @@ Array [
   "[level:20] compileFn(): compiling using language service",
   "[level:20] updateMemoryCache(): update memory cache for language service",
   "[level:20] visitSourceFileNode(): hoisting",
+  "[level:20] diagnoseFn(): computing diagnostics for <cwd>/Hello.spec.ts using language service",
   "[level:20] cacheResolvedModules(): get resolved modules of test file <cwd>/Hello.spec.ts",
   "[level:20] calling babel-jest processor",
   "[level:20] computing cache key for <cwd>/Hello.ts",
@@ -119,6 +124,7 @@ Array [
   "[level:20] compileFn(): compiling using language service",
   "[level:20] updateMemoryCache(): update memory cache for language service",
   "[level:20] visitSourceFileNode(): hoisting",
+  "[level:20] diagnoseFn(): computing diagnostics for <cwd>/Hello.ts using language service",
   "[level:20] diagnoseFn(): computing diagnostics for test file that imports <cwd>/Hello.ts using language service",
   "[level:20] calling babel-jest processor",
 ]
@@ -150,6 +156,7 @@ Array [
   "[level:20] compileFn(): compiling using language service",
   "[level:20] updateMemoryCache(): update memory cache for language service",
   "[level:20] visitSourceFileNode(): hoisting",
+  "[level:20] diagnoseFn(): computing diagnostics for <cwd>/Hello.spec.ts using language service",
   "[level:20] cacheResolvedModules(): get resolved modules of test file <cwd>/Hello.spec.ts",
   "[level:20] computing cache key for <cwd>/Hello.ts",
   "[level:20] processing <cwd>/Hello.ts",
@@ -157,6 +164,7 @@ Array [
   "[level:20] compileFn(): compiling using language service",
   "[level:20] updateMemoryCache(): update memory cache for language service",
   "[level:20] visitSourceFileNode(): hoisting",
+  "[level:20] diagnoseFn(): computing diagnostics for <cwd>/Hello.ts using language service",
   "[level:20] diagnoseFn(): computing diagnostics for test file that imports <cwd>/Hello.ts using language service",
 ]
 `;

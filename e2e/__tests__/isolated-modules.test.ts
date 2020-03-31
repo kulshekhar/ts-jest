@@ -2,7 +2,7 @@ import { allValidPackageSets } from '../__helpers__/templates'
 import { configureTestCase } from '../__helpers__/test-case'
 
 describe('With isolatedModules enabled', () => {
-  const testCase = configureTestCase('diagnostics', {
+  const testCase = configureTestCase('isolated-modules', {
     tsJestConfig: { isolatedModules: true },
   })
 

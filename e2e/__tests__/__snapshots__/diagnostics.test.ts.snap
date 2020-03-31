@@ -1,78 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`With diagnostics, should reevaluate with cached content first successful should pass using template "default" 1`] = `
-  √ jest
-  ↳ exit code: 0
-  ===[ STDOUT ]===================================================================
-  
-  ===[ STDERR ]===================================================================
-  PASS ./main.spec.ts
-    Thing
-      √ should do the thing
-  
-  Test Suites: 1 passed, 1 total
-  Tests:       1 passed, 1 total
-  Snapshots:   0 total
-  Time:        XXs
-  Ran all test suites.
-  ================================================================================
-`;
-
-exports[`With diagnostics, should reevaluate with cached content first successful should pass using template "with-babel-7" 1`] = `
-  √ jest
-  ↳ exit code: 0
-  ===[ STDOUT ]===================================================================
-  
-  ===[ STDERR ]===================================================================
-  PASS ./main.spec.ts
-    Thing
-      √ should do the thing
-  
-  Test Suites: 1 passed, 1 total
-  Tests:       1 passed, 1 total
-  Snapshots:   0 total
-  Time:        XXs
-  Ran all test suites.
-  ================================================================================
-`;
-
-exports[`With diagnostics, should reevaluate with cached content first successful should pass using template "with-babel-7-string-config" 1`] = `
-  √ jest
-  ↳ exit code: 0
-  ===[ STDOUT ]===================================================================
-  
-  ===[ STDERR ]===================================================================
-  PASS ./main.spec.ts
-    Thing
-      √ should do the thing
-  
-  Test Suites: 1 passed, 1 total
-  Tests:       1 passed, 1 total
-  Snapshots:   0 total
-  Time:        XXs
-  Ran all test suites.
-  ================================================================================
-`;
-
-exports[`With diagnostics, should reevaluate with cached content first successful should pass using template "with-typescript-2-7" 1`] = `
-  √ jest
-  ↳ exit code: 0
-  ===[ STDOUT ]===================================================================
-  
-  ===[ STDERR ]===================================================================
-  PASS ./main.spec.ts
-    Thing
-      √ should do the thing
-  
-  Test Suites: 1 passed, 1 total
-  Tests:       1 passed, 1 total
-  Snapshots:   0 total
-  Time:        XXs
-  Ran all test suites.
-  ================================================================================
-`;
-
-exports[`With diagnostics, should reevaluate with cached content then throw when content has changed should fail using template "default" 1`] = `
+exports[`With diagnostics throw, should reevaluate with cached content first throw should fail using template "default" 1`] = `
   × jest
   ↳ exit code: 1
   ===[ STDOUT ]===================================================================
@@ -81,9 +9,9 @@ exports[`With diagnostics, should reevaluate with cached content then throw when
   FAIL ./main.spec.ts
     ● Test suite failed to run
   
-      main.spec.ts:4:14 - error TS2741: Property 'b' is missing in type '{ a: number; }' but required in type 'Thing'.
+      main.spec.ts:3:14 - error TS2741: Property 'b' is missing in type '{ a: number; }' but required in type 'Thing'.
   
-      4 export const thing: Thing = { a: 1 };
+      3 export const thing: Thing = { a: 1 };
                      ~~~~~
   
         main.ts:1:34
@@ -99,7 +27,7 @@ exports[`With diagnostics, should reevaluate with cached content then throw when
   ================================================================================
 `;
 
-exports[`With diagnostics, should reevaluate with cached content then throw when content has changed should fail using template "with-babel-7" 1`] = `
+exports[`With diagnostics throw, should reevaluate with cached content first throw should fail using template "with-babel-7" 1`] = `
   × jest
   ↳ exit code: 1
   ===[ STDOUT ]===================================================================
@@ -108,9 +36,9 @@ exports[`With diagnostics, should reevaluate with cached content then throw when
   FAIL ./main.spec.ts
     ● Test suite failed to run
   
-      main.spec.ts:4:14 - error TS2741: Property 'b' is missing in type '{ a: number; }' but required in type 'Thing'.
+      main.spec.ts:3:14 - error TS2741: Property 'b' is missing in type '{ a: number; }' but required in type 'Thing'.
   
-      4 export const thing: Thing = { a: 1 };
+      3 export const thing: Thing = { a: 1 };
                      ~~~~~
   
         main.ts:1:34
@@ -126,7 +54,7 @@ exports[`With diagnostics, should reevaluate with cached content then throw when
   ================================================================================
 `;
 
-exports[`With diagnostics, should reevaluate with cached content then throw when content has changed should fail using template "with-babel-7-string-config" 1`] = `
+exports[`With diagnostics throw, should reevaluate with cached content first throw should fail using template "with-babel-7-string-config" 1`] = `
   × jest
   ↳ exit code: 1
   ===[ STDOUT ]===================================================================
@@ -135,9 +63,9 @@ exports[`With diagnostics, should reevaluate with cached content then throw when
   FAIL ./main.spec.ts
     ● Test suite failed to run
   
-      main.spec.ts:4:14 - error TS2741: Property 'b' is missing in type '{ a: number; }' but required in type 'Thing'.
+      main.spec.ts:3:14 - error TS2741: Property 'b' is missing in type '{ a: number; }' but required in type 'Thing'.
   
-      4 export const thing: Thing = { a: 1 };
+      3 export const thing: Thing = { a: 1 };
                      ~~~~~
   
         main.ts:1:34
@@ -153,7 +81,7 @@ exports[`With diagnostics, should reevaluate with cached content then throw when
   ================================================================================
 `;
 
-exports[`With diagnostics, should reevaluate with cached content then throw when content has changed should fail using template "with-typescript-2-7" 1`] = `
+exports[`With diagnostics throw, should reevaluate with cached content first throw should fail using template "with-typescript-2-7" 1`] = `
   × jest
   ↳ exit code: 1
   ===[ STDOUT ]===================================================================
@@ -162,14 +90,82 @@ exports[`With diagnostics, should reevaluate with cached content then throw when
   FAIL ./main.spec.ts
     ● Test suite failed to run
   
-      main.spec.ts:4:14 - error TS2322: Type '{ a: number; }' is not assignable to type 'Thing'.
+      main.spec.ts:3:14 - error TS2322: Type '{ a: number; }' is not assignable to type 'Thing'.
         Property 'b' is missing in type '{ a: number; }'.
   
-      4 export const thing: Thing = { a: 1 };
+      3 export const thing: Thing = { a: 1 };
                      ~~~~~
   
   Test Suites: 1 failed, 1 total
   Tests:       0 total
+  Snapshots:   0 total
+  Time:        XXs
+  Ran all test suites.
+  ================================================================================
+`;
+
+exports[`With diagnostics throw, should reevaluate with cached content then passed when valid content has changed should pass using template "default" 1`] = `
+  √ jest
+  ↳ exit code: 0
+  ===[ STDOUT ]===================================================================
+  
+  ===[ STDERR ]===================================================================
+  PASS ./main.spec.ts
+    √ should do the thing
+  
+  Test Suites: 1 passed, 1 total
+  Tests:       1 passed, 1 total
+  Snapshots:   0 total
+  Time:        XXs
+  Ran all test suites.
+  ================================================================================
+`;
+
+exports[`With diagnostics throw, should reevaluate with cached content then passed when valid content has changed should pass using template "with-babel-7" 1`] = `
+  √ jest
+  ↳ exit code: 0
+  ===[ STDOUT ]===================================================================
+  
+  ===[ STDERR ]===================================================================
+  PASS ./main.spec.ts
+    √ should do the thing
+  
+  Test Suites: 1 passed, 1 total
+  Tests:       1 passed, 1 total
+  Snapshots:   0 total
+  Time:        XXs
+  Ran all test suites.
+  ================================================================================
+`;
+
+exports[`With diagnostics throw, should reevaluate with cached content then passed when valid content has changed should pass using template "with-babel-7-string-config" 1`] = `
+  √ jest
+  ↳ exit code: 0
+  ===[ STDOUT ]===================================================================
+  
+  ===[ STDERR ]===================================================================
+  PASS ./main.spec.ts
+    √ should do the thing
+  
+  Test Suites: 1 passed, 1 total
+  Tests:       1 passed, 1 total
+  Snapshots:   0 total
+  Time:        XXs
+  Ran all test suites.
+  ================================================================================
+`;
+
+exports[`With diagnostics throw, should reevaluate with cached content then passed when valid content has changed should pass using template "with-typescript-2-7" 1`] = `
+  √ jest
+  ↳ exit code: 0
+  ===[ STDOUT ]===================================================================
+  
+  ===[ STDERR ]===================================================================
+  PASS ./main.spec.ts
+    √ should do the thing
+  
+  Test Suites: 1 passed, 1 total
+  Tests:       1 passed, 1 total
   Snapshots:   0 total
   Time:        XXs
   Ran all test suites.
@@ -182,12 +178,17 @@ exports[`With diagnostics, warn only should pass using template "default" 1`] = 
   ===[ STDOUT ]===================================================================
   
   ===[ STDERR ]===================================================================
-  ts-jest[ts-compiler] (WARN) main.ts:2:3 - error TS2322: Type 'string' is not assignable to type 'number'.
+  ts-jest[ts-compiler] (WARN) main.spec.ts:3:14 - error TS2741: Property 'b' is missing in type '{ a: number; }' but required in type 'Thing'.
   
-  2   return input
-      ~~~~~~~~~~~~
+  3 export const thing: Thing = { a: 1 };
+                 ~~~~~
+  
+    main.ts:1:34
+      1 export type Thing = { a: number, b: number }
+                                         ~
+      'b' is declared here.
   PASS ./main.spec.ts
-    √ should pass
+    √ should do the thing
   
   Test Suites: 1 passed, 1 total
   Tests:       1 passed, 1 total
@@ -203,12 +204,17 @@ exports[`With diagnostics, warn only should pass using template "with-babel-7" 1
   ===[ STDOUT ]===================================================================
   
   ===[ STDERR ]===================================================================
-  ts-jest[ts-compiler] (WARN) main.ts:2:3 - error TS2322: Type 'string' is not assignable to type 'number'.
+  ts-jest[ts-compiler] (WARN) main.spec.ts:3:14 - error TS2741: Property 'b' is missing in type '{ a: number; }' but required in type 'Thing'.
   
-  2   return input
-      ~~~~~~~~~~~~
+  3 export const thing: Thing = { a: 1 };
+                 ~~~~~
+  
+    main.ts:1:34
+      1 export type Thing = { a: number, b: number }
+                                         ~
+      'b' is declared here.
   PASS ./main.spec.ts
-    √ should pass
+    √ should do the thing
   
   Test Suites: 1 passed, 1 total
   Tests:       1 passed, 1 total
@@ -224,12 +230,17 @@ exports[`With diagnostics, warn only should pass using template "with-babel-7-st
   ===[ STDOUT ]===================================================================
   
   ===[ STDERR ]===================================================================
-  ts-jest[ts-compiler] (WARN) main.ts:2:3 - error TS2322: Type 'string' is not assignable to type 'number'.
+  ts-jest[ts-compiler] (WARN) main.spec.ts:3:14 - error TS2741: Property 'b' is missing in type '{ a: number; }' but required in type 'Thing'.
   
-  2   return input
-      ~~~~~~~~~~~~
+  3 export const thing: Thing = { a: 1 };
+                 ~~~~~
+  
+    main.ts:1:34
+      1 export type Thing = { a: number, b: number }
+                                         ~
+      'b' is declared here.
   PASS ./main.spec.ts
-    √ should pass
+    √ should do the thing
   
   Test Suites: 1 passed, 1 total
   Tests:       1 passed, 1 total
@@ -245,12 +256,13 @@ exports[`With diagnostics, warn only should pass using template "with-typescript
   ===[ STDOUT ]===================================================================
   
   ===[ STDERR ]===================================================================
-  ts-jest[ts-compiler] (WARN) main.ts:2:3 - error TS2322: Type 'string' is not assignable to type 'number'.
+  ts-jest[ts-compiler] (WARN) main.spec.ts:3:14 - error TS2322: Type '{ a: number; }' is not assignable to type 'Thing'.
+    Property 'b' is missing in type '{ a: number; }'.
   
-  2   return input
-      ~~~~~~~~~~~~
+  3 export const thing: Thing = { a: 1 };
+                 ~~~~~
   PASS ./main.spec.ts
-    √ should pass
+    √ should do the thing
   
   Test Suites: 1 passed, 1 total
   Tests:       1 passed, 1 total

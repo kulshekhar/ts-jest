@@ -110,7 +110,10 @@ export const compileUsingLanguageService = (
       updateMemoryCache(code, normalizedFileName)
       const output: _ts.EmitOutput = service.getEmitOutput(normalizedFileName)
       // Do type checking by getting TypeScript diagnostics
+      logger.debug(`diagnoseFn(): computing diagnostics for ${normalizedFileName} using language service`)
+
       doTypeChecking(configs, normalizedFileName, service, logger)
+      /* istanbul ignore next (covered by e2e) */
       if (micromatch.isMatch(normalizedFileName, configs.testMatchPatterns)) {
         cacheResolvedModules(normalizedFileName, memoryCache, service.getProgram()!, configs.tsCacheDir, logger)
       } else {
@@ -118,6 +121,7 @@ export const compileUsingLanguageService = (
           `diagnoseFn(): computing diagnostics for test file that imports ${normalizedFileName} using language service`,
         )
 
+        /* istanbul ignore next (covered by e2e) */
         Object.entries(memoryCache.resolvedModules)
           .filter(entry => entry[1].find(modulePath => modulePath === normalizedFileName))
           .forEach(entry => {
@@ -138,21 +142,6 @@ export const compileUsingLanguageService = (
       }
 
       return [output.outputFiles[1].text, output.outputFiles[0].text]
-    },
-    diagnoseFn: (code: string, filePath: string) => {
-      const normalizedFileName = normalize(filePath)
-      updateMemoryCache(code, normalizedFileName)
-      if (configs.shouldReportDiagnostic(normalizedFileName)) {
-        logger.debug({ normalizedFileName }, 'compileFn(): computing diagnostics for language service')
-
-        // Get the relevant diagnostics - this is 3x faster than `getPreEmitDiagnostics`.
-        const diagnostics = service
-          .getCompilerOptionsDiagnostics()
-          .concat(service.getSyntacticDiagnostics(normalizedFileName))
-          .concat(service.getSemanticDiagnostics(normalizedFileName))
-        // will raise or just warn diagnostics depending on config
-        configs.raiseDiagnostics(diagnostics, normalizedFileName, logger)
-      }
     },
     program: service.getProgram(),
   }

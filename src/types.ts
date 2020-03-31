@@ -211,13 +211,8 @@ export type CompileFn = (code: string, fileName: string, lineOffset?: number) =>
 /**
  * @internal
  */
-export type DiagnoseFn = (code: string, filePath: string) => void
-/**
- * @internal
- */
 export interface CompilerInstance {
   compileFn: CompileFn
-  diagnoseFn?: DiagnoseFn
   program?: _ts.Program
 }
 /**
