@@ -13,129 +13,6 @@ const baseTsJestConfig = {
   compilerHost: true,
 }
 
-describe('typings', () => {
-  const fileName = 'test-typings.ts',
-    source = `
-const f = (v: number) => v
-const t: string = f(5)
-`
-
-  beforeAll(() => {
-    writeFileSync(fileName, source, 'utf8')
-  })
-
-  afterAll(() => {
-    removeSync(fileName)
-  })
-
-  describe('normal program', () => {
-    it('should report diagnostics with pathRegex config matches file name', () => {
-      const compiler = makeCompiler({
-        tsJestConfig: {
-          ...baseTsJestConfig,
-          incremental: false,
-          diagnostics: { pathRegex: fileName },
-        },
-      })
-
-      expect(() => compiler.compile(source, fileName)).toThrowErrorMatchingSnapshot()
-    })
-
-    it('should not report diagnostics with pathRegex config matches file name', () => {
-      const compiler = makeCompiler({
-        tsJestConfig: {
-          ...baseTsJestConfig,
-          incremental: false,
-          diagnostics: { pathRegex: 'foo.ts' },
-        },
-      })
-
-      try {
-        compiler.compile(source, fileName)
-      } catch (e) {
-        expect(e).not.toContain('TypeScript diagnostics')
-      }
-    })
-  })
-
-  describe('incremental program', () => {
-    it('should report diagnostics with pathRegex config matches file name', () => {
-      const compiler = makeCompiler({
-        tsJestConfig: {
-          ...baseTsJestConfig,
-          incremental: true,
-          diagnostics: { pathRegex: fileName },
-        },
-      })
-
-      expect(() => compiler.compile(source, fileName)).toThrowErrorMatchingSnapshot()
-    })
-
-    it('should not report diagnostics with pathRegex config does not match file name', () => {
-      const compiler = makeCompiler({
-        tsJestConfig: {
-          ...baseTsJestConfig,
-          incremental: true,
-          diagnostics: { pathRegex: 'foo.ts' },
-        },
-      })
-
-      try {
-        compiler.compile(source, fileName)
-      } catch (e) {
-        expect(e).not.toContain('TypeScript diagnostics')
-      }
-    })
-  })
-})
-
-describe('source-maps', () => {
-  const fileName = 'source-maps-test.ts',
-    source = 'console.log("hello")'
-
-  beforeAll(() => {
-    writeFileSync(fileName, source, 'utf8')
-  })
-
-  afterAll(() => {
-    removeSync(fileName)
-  })
-
-  it('should have correct source maps with normal program', () => {
-    const compiler = makeCompiler({
-      tsJestConfig: {
-        ...baseTsJestConfig,
-        incremental: false,
-      },
-    })
-
-    const compiled = compiler.compile(source, fileName)
-
-    expect(new ProcessedSource(compiled, fileName).outputSourceMaps).toMatchObject({
-      file: fileName,
-      sources: [fileName],
-      sourcesContent: [source],
-    })
-  })
-
-  it('should have correct source maps with incremental program', () => {
-    const compiler = makeCompiler({
-      tsJestConfig: {
-        ...baseTsJestConfig,
-        incremental: true,
-      },
-    })
-
-    const compiled = compiler.compile(source, fileName)
-
-    expect(new ProcessedSource(compiled, fileName).outputSourceMaps).toMatchObject({
-      file: fileName,
-      sources: [fileName],
-      sourcesContent: [source],
-    })
-  })
-})
-
 describe('cache', () => {
   const fileName = 'test-cache.ts',
     source = 'console.log("hello")'
@@ -171,8 +48,6 @@ describe('cache', () => {
         "[level:20] visitSourceFileNode(): hoisting
       ",
         "[level:20] diagnoseFn(): computing diagnostics for test-cache.ts using program
-      ",
-        "[level:20] diagnoseFn(): computing diagnostics for test file that imports test-cache.ts using program
       ",
         "[level:20] readThrough(): writing caches
       ",
@@ -214,8 +89,6 @@ describe('cache', () => {
         "[level:20] visitSourceFileNode(): hoisting
       ",
         "[level:20] diagnoseFn(): computing diagnostics for test-cache.ts using incremental program
-      ",
-        "[level:20] diagnoseFn(): computing diagnostics for test file that imports test-cache.ts using incremental program
       ",
         "[level:20] readThrough(): writing caches
       ",
@@ -346,6 +219,129 @@ describe('other jsx options', () => {
     const compiled = compiler.compile(source, fileName)
 
     expect(new ProcessedSource(compiled, fileName)).toMatchSnapshot()
+  })
+})
+
+describe('diagnostics', () => {
+  const fileName = 'test-typings.ts',
+    source = `
+const f = (v: number) => v
+const t: string = f(5)
+`
+
+  beforeAll(() => {
+    writeFileSync(fileName, source, 'utf8')
+  })
+
+  afterAll(() => {
+    removeSync(fileName)
+  })
+
+  describe('normal program', () => {
+    it('should report diagnostics with pathRegex config matches file name', () => {
+      const compiler = makeCompiler({
+        tsJestConfig: {
+          ...baseTsJestConfig,
+          incremental: false,
+          diagnostics: { pathRegex: fileName },
+        },
+      })
+
+      expect(() => compiler.compile(source, fileName)).toThrowErrorMatchingSnapshot()
+    })
+
+    it('should not report diagnostics with pathRegex config matches file name', () => {
+      const compiler = makeCompiler({
+        tsJestConfig: {
+          ...baseTsJestConfig,
+          incremental: false,
+          diagnostics: { pathRegex: 'foo.ts' },
+        },
+      })
+
+      try {
+        compiler.compile(source, fileName)
+      } catch (e) {
+        expect(e).not.toContain('TypeScript diagnostics')
+      }
+    })
+  })
+
+  describe('incremental program', () => {
+    it('should report diagnostics with pathRegex config matches file name', () => {
+      const compiler = makeCompiler({
+        tsJestConfig: {
+          ...baseTsJestConfig,
+          incremental: true,
+          diagnostics: { pathRegex: fileName },
+        },
+      })
+
+      expect(() => compiler.compile(source, fileName)).toThrowErrorMatchingSnapshot()
+    })
+
+    it('should not report diagnostics with pathRegex config does not match file name', () => {
+      const compiler = makeCompiler({
+        tsJestConfig: {
+          ...baseTsJestConfig,
+          incremental: true,
+          diagnostics: { pathRegex: 'foo.ts' },
+        },
+      })
+
+      try {
+        compiler.compile(source, fileName)
+      } catch (e) {
+        expect(e).not.toContain('TypeScript diagnostics')
+      }
+    })
+  })
+})
+
+describe('source-maps', () => {
+  const fileName = 'source-maps-test.ts',
+    source = 'console.log("hello")'
+
+  beforeAll(() => {
+    writeFileSync(fileName, source, 'utf8')
+  })
+
+  afterAll(() => {
+    removeSync(fileName)
+  })
+
+  it('should have correct source maps with normal program', () => {
+    const compiler = makeCompiler({
+      tsJestConfig: {
+        ...baseTsJestConfig,
+        incremental: false,
+      },
+    })
+
+    const compiled = compiler.compile(source, fileName)
+
+    expect(new ProcessedSource(compiled, fileName).outputSourceMaps).toMatchObject({
+      file: fileName,
+      sources: [fileName],
+      sourcesContent: [source],
+    })
+  })
+
+  it('should have correct source maps with incremental program', () => {
+    const compiler = makeCompiler({
+      tsJestConfig: {
+        ...baseTsJestConfig,
+        incremental: true,
+      },
+    })
+
+    const compiled = compiler.compile(source, fileName)
+
+    expect(new ProcessedSource(compiled, fileName).outputSourceMaps).toMatchObject({
+      file: fileName,
+      sources: [fileName],
+      sourcesContent: [source],
+    })
   })
 })
 

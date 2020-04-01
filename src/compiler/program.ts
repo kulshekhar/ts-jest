@@ -157,14 +157,25 @@ export const compileUsingProgram = (configs: ConfigSet, logger: Logger, memoryCa
       if (micromatch.isMatch(normalizedFileName, configs.testMatchPatterns)) {
         cacheResolvedModules(normalizedFileName, memoryCache, program, configs.tsCacheDir, logger)
       } else {
-        logger.debug(
-          `diagnoseFn(): computing diagnostics for test file that imports ${normalizedFileName} using ${programDebugText}`,
-        )
-
         /* istanbul ignore next (covered by e2e) */
         Object.entries(memoryCache.resolvedModules)
-          .filter(entry => entry[1].find(modulePath => modulePath === normalizedFileName))
+          .filter(entry => {
+            /**
+             * When imported modules change, we only need to check whether the test file is compiled previously or not.
+             * Due to jest cache, our memory cache won't contain compiled result of test file so we are sure that we
+             * can do type checking on test file. By checking memory cache, we can avoid repeatedly doing type checking
+             * against test file for 1st time run after clearing cache.
+             */
+            return (
+              entry[1].find(modulePath => modulePath === normalizedFileName) &&
+              !hasOwn.call(memoryCache.outputs, entry[0])
+            )
+          })
           .forEach(entry => {
+            logger.debug(
+              `diagnoseFn(): computing diagnostics for test file that imports ${normalizedFileName} using ${programDebugText}`,
+            )
+
             doTypeChecking(configs, entry[0], program, logger)
           })
       }
