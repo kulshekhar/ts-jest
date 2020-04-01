@@ -14,13 +14,13 @@ describe('language service', () => {
   })
 
   it('should use the cache', () => {
-    const tmp = tempDir('compiler'),
-      compiler = makeCompiler({
-        jestConfig: { cache: true, cacheDirectory: tmp },
-        tsJestConfig: { tsConfig: false },
-      }),
-      source = 'console.log("hello")',
-      fileName = 'test-cache.ts'
+    const tmp = tempDir('compiler')
+    const compiler = makeCompiler({
+      jestConfig: { cache: true, cacheDirectory: tmp },
+      tsJestConfig: { tsConfig: false },
+    })
+    const source = 'console.log("hello")'
+    const fileName = 'test-cache.ts'
 
     writeFileSync(fileName, source, 'utf8')
 
@@ -61,11 +61,11 @@ describe('language service', () => {
   })
 
   it('should compile js file for allowJs true', () => {
-    const fileName = `test-allow-js.js`,
-      compiler = makeCompiler({
-        tsJestConfig: { tsConfig: { allowJs: true, outDir: '$$ts-jest$$' } },
-      }),
-      source = 'export default 42'
+    const fileName = `test-allow-js.js`
+    const compiler = makeCompiler({
+      tsJestConfig: { tsConfig: { allowJs: true, outDir: '$$ts-jest$$' } },
+    })
+    const source = 'export default 42'
 
     writeFileSync(fileName, source, 'utf8')
     const compiled = compiler.compile(source, fileName)
@@ -76,15 +76,15 @@ describe('language service', () => {
   })
 
   it('should compile tsx file for jsx preserve', () => {
-    const fileName = 'test-jsx-preserve.tsx',
-      compiler = makeCompiler({
-        tsJestConfig: {
-          tsConfig: {
-            jsx: 'preserve' as any,
-          },
+    const fileName = 'test-jsx-preserve.tsx'
+    const compiler = makeCompiler({
+      tsJestConfig: {
+        tsConfig: {
+          jsx: 'preserve' as any,
         },
-      }),
-      source = `
+      },
+    })
+    const source = `
         const App = () => {
           return <>Test</>
         }
@@ -98,15 +98,15 @@ describe('language service', () => {
   })
 
   it('should compile tsx file for other jsx options', () => {
-    const fileName = 'test-jsx-options.tsx',
-      compiler = makeCompiler({
-        tsJestConfig: {
-          tsConfig: {
-            jsx: 'react' as any,
-          },
+    const fileName = 'test-jsx-options.tsx'
+    const compiler = makeCompiler({
+      tsJestConfig: {
+        tsConfig: {
+          jsx: 'react' as any,
         },
-      }),
-      source = `
+      },
+    })
+    const source = `
         const App = () => {
           return <>Test</>
         }
@@ -120,9 +120,9 @@ describe('language service', () => {
   })
 
   it('should have correct source maps', () => {
-    const compiler = makeCompiler({ tsJestConfig: { tsConfig: false } }),
-      source = 'const gsm = (v: number) => v\nconst h: number = gsm(5)',
-      fileName = 'test-source-map.ts'
+    const compiler = makeCompiler({ tsJestConfig: { tsConfig: false } })
+    const source = 'const gsm = (v: number) => v\nconst h: number = gsm(5)'
+    const fileName = 'test-source-map.ts'
     writeFileSync(fileName, source, 'utf8')
 
     const compiled = compiler.compile(source, fileName)
@@ -137,14 +137,14 @@ describe('language service', () => {
   })
 
   it('should report diagnostics related to typings with pathRegex config matches file name', () => {
-    const fileName = 'test-match-regex-diagnostics.ts',
-      source = `
+    const fileName = 'test-match-regex-diagnostics.ts'
+    const source = `
 const g = (v: number) => v
 const x: string = g(5)
-`,
-      compiler = makeCompiler({
-        tsJestConfig: { tsConfig: false, diagnostics: { pathRegex: fileName } },
-      })
+`
+    const compiler = makeCompiler({
+      tsJestConfig: { tsConfig: false, diagnostics: { pathRegex: fileName } },
+    })
     writeFileSync(fileName, source, 'utf8')
 
     expect(() => compiler.compile(source, fileName)).toThrowErrorMatchingSnapshot()
@@ -153,14 +153,14 @@ const x: string = g(5)
   })
 
   it('should not report diagnostics related to typings with pathRegex config does not match file name', () => {
-    const fileName = 'test-non-match-regex-diagnostics.ts',
-      source = `
+    const fileName = 'test-non-match-regex-diagnostics.ts'
+    const source = `
 const f = (v: number) => v
 const t: string = f(5)
-`,
-      compiler = makeCompiler({
-        tsJestConfig: { tsConfig: false, diagnostics: { pathRegex: 'bar.ts' } },
-      })
+`
+    const compiler = makeCompiler({
+      tsJestConfig: { tsConfig: false, diagnostics: { pathRegex: 'bar.ts' } },
+    })
     writeFileSync(fileName, source, 'utf8')
 
     expect(() => compiler.compile(source, fileName)).not.toThrowError()
@@ -169,15 +169,15 @@ const t: string = f(5)
   })
 
   it('should throw error when cannot compile', () => {
-    const fileName = 'test-cannot-compile.d.ts',
-      source = `
+    const fileName = 'test-cannot-compile.d.ts'
+    const source = `
         interface Foo {
           a: string
         }
-      `,
-      compiler = makeCompiler({
-        tsJestConfig: { tsConfig: false },
-      })
+      `
+    const compiler = makeCompiler({
+      tsJestConfig: { tsConfig: false },
+    })
     writeFileSync(fileName, source, 'utf8')
 
     expect(() => compiler.compile(source, fileName)).toThrowErrorMatchingSnapshot()

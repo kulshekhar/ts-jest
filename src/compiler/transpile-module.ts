@@ -14,13 +14,13 @@ export const compileUsingTranspileModule = (configs: ConfigSet, logger: Logger):
     compileFn: (code: string, fileName: string): SourceOutput => {
       logger.debug({ fileName }, 'getOutput(): compiling as isolated module')
 
-      const normalizedFileName = normalize(fileName),
-        result = configs.compilerModule.transpileModule(code, {
-          fileName: normalizedFileName,
-          transformers: configs.tsCustomTransformers,
-          compilerOptions: configs.typescript.options,
-          reportDiagnostics: configs.shouldReportDiagnostic(normalizedFileName),
-        })
+      const normalizedFileName = normalize(fileName)
+      const result = configs.compilerModule.transpileModule(code, {
+        fileName: normalizedFileName,
+        transformers: configs.tsCustomTransformers,
+        compilerOptions: configs.typescript.options,
+        reportDiagnostics: configs.shouldReportDiagnostic(normalizedFileName),
+      })
 
       if (result.diagnostics && configs.shouldReportDiagnostic(normalizedFileName)) {
         configs.raiseDiagnostics(result.diagnostics, normalizedFileName, logger)

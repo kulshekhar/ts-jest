@@ -14,8 +14,8 @@ const baseTsJestConfig = {
 }
 
 describe('cache', () => {
-  const fileName = 'test-cache.ts',
-    source = 'console.log("hello")'
+  const fileName = 'test-cache.ts'
+  const source = 'console.log("hello")'
 
   beforeAll(() => {
     writeFileSync(fileName, source, 'utf8')
@@ -26,14 +26,14 @@ describe('cache', () => {
   })
 
   it('should use the cache with normal program', () => {
-    const tmp = tempDir('program-compiler'),
-      compiler = makeCompiler({
-        jestConfig: { cache: true, cacheDirectory: tmp },
-        tsJestConfig: {
-          ...baseTsJestConfig,
-          incremental: false,
-        },
-      })
+    const tmp = tempDir('program-compiler')
+    const compiler = makeCompiler({
+      jestConfig: { cache: true, cacheDirectory: tmp },
+      tsJestConfig: {
+        ...baseTsJestConfig,
+        incremental: false,
+      },
+    })
 
     logTarget.clear()
     const compiled1 = compiler.compile(source, fileName)
@@ -67,14 +67,14 @@ describe('cache', () => {
   })
 
   it('should use the cache with incremental program', () => {
-    const tmp = tempDir('incremental-program-compiler'),
-      compiler = makeCompiler({
-        jestConfig: { cache: true, cacheDirectory: tmp },
-        tsJestConfig: {
-          ...baseTsJestConfig,
-          incremental: true,
-        },
-      })
+    const tmp = tempDir('incremental-program-compiler')
+    const compiler = makeCompiler({
+      jestConfig: { cache: true, cacheDirectory: tmp },
+      tsJestConfig: {
+        ...baseTsJestConfig,
+        incremental: true,
+      },
+    })
 
     logTarget.clear()
     const compiled1 = compiler.compile(source, fileName)
@@ -109,9 +109,9 @@ describe('cache', () => {
 })
 
 describe('allowJs', () => {
-  const fileName = 'test-allowJs.test.js',
-    source = 'export default 42',
-    tsConfig = { allowJs: true, outDir: '$$ts-jest$$' }
+  const fileName = 'test-allowJs.test.js'
+  const source = 'export default 42'
+  const tsConfig = { allowJs: true, outDir: '$$ts-jest$$' }
 
   beforeAll(() => {
     writeFileSync(fileName, source, 'utf8')
@@ -143,15 +143,15 @@ describe('allowJs', () => {
 })
 
 describe('jsx preserve', () => {
-  const fileName = 'test-jsx-preserve.tsx',
-    source = `
+  const fileName = 'test-jsx-preserve.tsx'
+  const source = `
       const App = () => {
         return <>Test</>
       }
-    `,
-    tsConfig = {
-      jsx: 'preserve' as any,
-    }
+    `
+  const tsConfig = {
+    jsx: 'preserve' as any,
+  }
 
   beforeAll(() => {
     writeFileSync(fileName, source, 'utf8')
@@ -183,15 +183,15 @@ describe('jsx preserve', () => {
 })
 
 describe('other jsx options', () => {
-  const fileName = 'test-jsx-options.tsx',
-    source = `
+  const fileName = 'test-jsx-options.tsx'
+  const source = `
       const App = () => {
         return <>Test</>
       }
-    `,
-    tsConfig = {
-      jsx: 'react' as any,
-    }
+    `
+  const tsConfig = {
+    jsx: 'react' as any,
+  }
 
   beforeAll(() => {
     writeFileSync(fileName, source, 'utf8')
@@ -223,8 +223,8 @@ describe('other jsx options', () => {
 })
 
 describe('diagnostics', () => {
-  const fileName = 'test-typings.ts',
-    source = `
+  const fileName = 'test-typings.ts'
+  const source = `
 const f = (v: number) => v
 const t: string = f(5)
 `
@@ -299,8 +299,8 @@ const t: string = f(5)
 })
 
 describe('source-maps', () => {
-  const fileName = 'source-maps-test.ts',
-    source = 'console.log("hello")'
+  const fileName = 'source-maps-test.ts'
+  const source = 'console.log("hello")'
 
   beforeAll(() => {
     writeFileSync(fileName, source, 'utf8')
@@ -346,9 +346,9 @@ describe('source-maps', () => {
 })
 
 describe('cannot compile', () => {
-  const fileName1 = 'test-cannot-compile.d.ts',
-    fileName2 = 'test-cannot-compile.jsx',
-    source = `
+  const fileName1 = 'test-cannot-compile.d.ts'
+  const fileName2 = 'test-cannot-compile.jsx'
+  const source = `
       interface Foo {
         a: string
       }

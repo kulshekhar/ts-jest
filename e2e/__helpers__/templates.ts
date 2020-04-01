@@ -6,7 +6,7 @@ export enum PackageSets {
   // invalid
   unsupportedVersion = 'with-unsupported-version',
 }
-export const allValidPackageSets = [PackageSets.default, PackageSets.babel7, PackageSets.babel7StringConfig, PackageSets.typescript2_7],
-  allPackageSetsWithPreset = [PackageSets.default, PackageSets.babel7, PackageSets.babel7StringConfig, PackageSets.typescript2_7],
-  allPackageSetsWithProgram = [PackageSets.default, PackageSets.babel7, PackageSets.babel7StringConfig],
-  allPackageSetsWithoutProgram = [PackageSets.typescript2_7, PackageSets.unsupportedVersion]
+export const allValidPackageSets = [PackageSets.default, PackageSets.babel7, PackageSets.babel7StringConfig, PackageSets.typescript2_7]
+export const allPackageSetsWithPreset = [PackageSets.default, PackageSets.babel7, PackageSets.babel7StringConfig, PackageSets.typescript2_7]
+export const allPackageSetsWithProgram = [PackageSets.default, PackageSets.babel7, PackageSets.babel7StringConfig]
+export const allPackageSetsWithoutProgram = [PackageSets.typescript2_7, PackageSets.unsupportedVersion]

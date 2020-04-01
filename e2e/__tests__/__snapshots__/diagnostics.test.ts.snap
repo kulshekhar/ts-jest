@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Diagnostics using incremental program with throw first throw should fail using template "default" 1`] = `
+exports[`With diagnostics throw using incremental program first throw should fail using template "default" 1`] = `
   × jest
   ↳ exit code: 1
   ===[ STDOUT ]===================================================================
@@ -27,7 +27,7 @@ exports[`Diagnostics using incremental program with throw first throw should fai
   ================================================================================
 `;
 
-exports[`Diagnostics using incremental program with throw first throw should fail using template "with-babel-7" 1`] = `
+exports[`With diagnostics throw using incremental program first throw should fail using template "with-babel-7" 1`] = `
   × jest
   ↳ exit code: 1
   ===[ STDOUT ]===================================================================
@@ -54,7 +54,7 @@ exports[`Diagnostics using incremental program with throw first throw should fai
   ================================================================================
 `;
 
-exports[`Diagnostics using incremental program with throw first throw should fail using template "with-babel-7-string-config" 1`] = `
+exports[`With diagnostics throw using incremental program first throw should fail using template "with-babel-7-string-config" 1`] = `
   × jest
   ↳ exit code: 1
   ===[ STDOUT ]===================================================================
@@ -81,7 +81,7 @@ exports[`Diagnostics using incremental program with throw first throw should fai
   ================================================================================
 `;
 
-exports[`Diagnostics using incremental program with throw then passed when content has changed to valid base on cache of the previous run should pass using template "default" 1`] = `
+exports[`With diagnostics throw using incremental program then passed when content has changed to valid base on cache of the previous run should pass using template "default" 1`] = `
   √ jest
   ↳ exit code: 0
   ===[ STDOUT ]===================================================================
@@ -98,7 +98,7 @@ exports[`Diagnostics using incremental program with throw then passed when conte
   ================================================================================
 `;
 
-exports[`Diagnostics using incremental program with throw then passed when content has changed to valid base on cache of the previous run should pass using template "with-babel-7" 1`] = `
+exports[`With diagnostics throw using incremental program then passed when content has changed to valid base on cache of the previous run should pass using template "with-babel-7" 1`] = `
   √ jest
   ↳ exit code: 0
   ===[ STDOUT ]===================================================================
@@ -115,7 +115,7 @@ exports[`Diagnostics using incremental program with throw then passed when conte
   ================================================================================
 `;
 
-exports[`Diagnostics using incremental program with throw then passed when content has changed to valid base on cache of the previous run should pass using template "with-babel-7-string-config" 1`] = `
+exports[`With diagnostics throw using incremental program then passed when content has changed to valid base on cache of the previous run should pass using template "with-babel-7-string-config" 1`] = `
   √ jest
   ↳ exit code: 0
   ===[ STDOUT ]===================================================================
@@ -132,8 +132,8 @@ exports[`Diagnostics using incremental program with throw then passed when conte
   ================================================================================
 `;
 
-exports[`Diagnostics using incremental program with typescript version not supported incremental program should fail using template "with-typescript-2-7" 1`] = `
-  × jest --no-cache
+exports[`With diagnostics throw using incremental program with unsupported version should fail using template "with-typescript-2-7" 1`] = `
+  × jest
   ↳ exit code: 1
   ===[ STDOUT ]===================================================================
   
@@ -153,8 +153,8 @@ exports[`Diagnostics using incremental program with typescript version not suppo
   ================================================================================
 `;
 
-exports[`Diagnostics using incremental program with typescript version not supported incremental program should fail using template "with-unsupported-version" 1`] = `
-  × jest --no-cache
+exports[`With diagnostics throw using incremental program with unsupported version should fail using template "with-unsupported-version" 1`] = `
+  × jest
   ↳ exit code: 1
   ===[ STDOUT ]===================================================================
   
@@ -175,136 +175,7 @@ exports[`Diagnostics using incremental program with typescript version not suppo
   ================================================================================
 `;
 
-exports[`Diagnostics using incremental program with warn only first passed without warning should pass using template "default" 1`] = `
-  √ jest
-  ↳ exit code: 0
-  ===[ STDOUT ]===================================================================
-  
-  ===[ STDERR ]===================================================================
-  PASS ./main.spec.ts
-    √ should do the thing
-  
-  Test Suites: 1 passed, 1 total
-  Tests:       1 passed, 1 total
-  Snapshots:   0 total
-  Time:        XXs
-  Ran all test suites.
-  ================================================================================
-`;
-
-exports[`Diagnostics using incremental program with warn only first passed without warning should pass using template "with-babel-7" 1`] = `
-  √ jest
-  ↳ exit code: 0
-  ===[ STDOUT ]===================================================================
-  
-  ===[ STDERR ]===================================================================
-  PASS ./main.spec.ts
-    √ should do the thing
-  
-  Test Suites: 1 passed, 1 total
-  Tests:       1 passed, 1 total
-  Snapshots:   0 total
-  Time:        XXs
-  Ran all test suites.
-  ================================================================================
-`;
-
-exports[`Diagnostics using incremental program with warn only first passed without warning should pass using template "with-babel-7-string-config" 1`] = `
-  √ jest
-  ↳ exit code: 0
-  ===[ STDOUT ]===================================================================
-  
-  ===[ STDERR ]===================================================================
-  PASS ./main.spec.ts
-    √ should do the thing
-  
-  Test Suites: 1 passed, 1 total
-  Tests:       1 passed, 1 total
-  Snapshots:   0 total
-  Time:        XXs
-  Ran all test suites.
-  ================================================================================
-`;
-
-exports[`Diagnostics using incremental program with warn only then show warning when content changed to invalid base on cached of the previous run should pass using template "default" 1`] = `
-  √ jest
-  ↳ exit code: 0
-  ===[ STDOUT ]===================================================================
-  
-  ===[ STDERR ]===================================================================
-  ts-jest[ts-compiler] (WARN) main.spec.ts:3:14 - error TS2741: Property 'b' is missing in type '{ a: number; }' but required in type 'Thing'.
-  
-  3 export const thing: Thing = { a: 1 };
-                 ~~~~~
-  
-    main.ts:1:34
-      1 export type Thing = { a: number, b: number }
-                                         ~
-      'b' is declared here.
-  PASS ./main.spec.ts
-    √ should do the thing
-  
-  Test Suites: 1 passed, 1 total
-  Tests:       1 passed, 1 total
-  Snapshots:   0 total
-  Time:        XXs
-  Ran all test suites.
-  ================================================================================
-`;
-
-exports[`Diagnostics using incremental program with warn only then show warning when content changed to invalid base on cached of the previous run should pass using template "with-babel-7" 1`] = `
-  √ jest
-  ↳ exit code: 0
-  ===[ STDOUT ]===================================================================
-  
-  ===[ STDERR ]===================================================================
-  ts-jest[ts-compiler] (WARN) main.spec.ts:3:14 - error TS2741: Property 'b' is missing in type '{ a: number; }' but required in type 'Thing'.
-  
-  3 export const thing: Thing = { a: 1 };
-                 ~~~~~
-  
-    main.ts:1:34
-      1 export type Thing = { a: number, b: number }
-                                         ~
-      'b' is declared here.
-  PASS ./main.spec.ts
-    √ should do the thing
-  
-  Test Suites: 1 passed, 1 total
-  Tests:       1 passed, 1 total
-  Snapshots:   0 total
-  Time:        XXs
-  Ran all test suites.
-  ================================================================================
-`;
-
-exports[`Diagnostics using incremental program with warn only then show warning when content changed to invalid base on cached of the previous run should pass using template "with-babel-7-string-config" 1`] = `
-  √ jest
-  ↳ exit code: 0
-  ===[ STDOUT ]===================================================================
-  
-  ===[ STDERR ]===================================================================
-  ts-jest[ts-compiler] (WARN) main.spec.ts:3:14 - error TS2741: Property 'b' is missing in type '{ a: number; }' but required in type 'Thing'.
-  
-  3 export const thing: Thing = { a: 1 };
-                 ~~~~~
-  
-    main.ts:1:34
-      1 export type Thing = { a: number, b: number }
-                                         ~
-      'b' is declared here.
-  PASS ./main.spec.ts
-    √ should do the thing
-  
-  Test Suites: 1 passed, 1 total
-  Tests:       1 passed, 1 total
-  Snapshots:   0 total
-  Time:        XXs
-  Ran all test suites.
-  ================================================================================
-`;
-
-exports[`Diagnostics using language service with throw first throw should fail using template "default" 1`] = `
+exports[`With diagnostics throw using language service first throw should fail using template "default" 1`] = `
   × jest
   ↳ exit code: 1
   ===[ STDOUT ]===================================================================
@@ -331,7 +202,7 @@ exports[`Diagnostics using language service with throw first throw should fail u
   ================================================================================
 `;
 
-exports[`Diagnostics using language service with throw first throw should fail using template "with-babel-7" 1`] = `
+exports[`With diagnostics throw using language service first throw should fail using template "with-babel-7" 1`] = `
   × jest
   ↳ exit code: 1
   ===[ STDOUT ]===================================================================
@@ -358,7 +229,7 @@ exports[`Diagnostics using language service with throw first throw should fail u
   ================================================================================
 `;
 
-exports[`Diagnostics using language service with throw first throw should fail using template "with-babel-7-string-config" 1`] = `
+exports[`With diagnostics throw using language service first throw should fail using template "with-babel-7-string-config" 1`] = `
   × jest
   ↳ exit code: 1
   ===[ STDOUT ]===================================================================
@@ -385,7 +256,7 @@ exports[`Diagnostics using language service with throw first throw should fail u
   ================================================================================
 `;
 
-exports[`Diagnostics using language service with throw first throw should fail using template "with-typescript-2-7" 1`] = `
+exports[`With diagnostics throw using language service first throw should fail using template "with-typescript-2-7" 1`] = `
   × jest
   ↳ exit code: 1
   ===[ STDOUT ]===================================================================
@@ -408,7 +279,7 @@ exports[`Diagnostics using language service with throw first throw should fail u
   ================================================================================
 `;
 
-exports[`Diagnostics using language service with throw then passed when content has changed to valid base on cache of the previous run should pass using template "default" 1`] = `
+exports[`With diagnostics throw using language service then passed when content has changed to valid base on cache of the previous run should pass using template "default" 1`] = `
   √ jest
   ↳ exit code: 0
   ===[ STDOUT ]===================================================================
@@ -425,7 +296,7 @@ exports[`Diagnostics using language service with throw then passed when content 
   ================================================================================
 `;
 
-exports[`Diagnostics using language service with throw then passed when content has changed to valid base on cache of the previous run should pass using template "with-babel-7" 1`] = `
+exports[`With diagnostics throw using language service then passed when content has changed to valid base on cache of the previous run should pass using template "with-babel-7" 1`] = `
   √ jest
   ↳ exit code: 0
   ===[ STDOUT ]===================================================================
@@ -442,7 +313,7 @@ exports[`Diagnostics using language service with throw then passed when content 
   ================================================================================
 `;
 
-exports[`Diagnostics using language service with throw then passed when content has changed to valid base on cache of the previous run should pass using template "with-babel-7-string-config" 1`] = `
+exports[`With diagnostics throw using language service then passed when content has changed to valid base on cache of the previous run should pass using template "with-babel-7-string-config" 1`] = `
   √ jest
   ↳ exit code: 0
   ===[ STDOUT ]===================================================================
@@ -459,7 +330,7 @@ exports[`Diagnostics using language service with throw then passed when content 
   ================================================================================
 `;
 
-exports[`Diagnostics using language service with throw then passed when content has changed to valid base on cache of the previous run should pass using template "with-typescript-2-7" 1`] = `
+exports[`With diagnostics throw using language service then passed when content has changed to valid base on cache of the previous run should pass using template "with-typescript-2-7" 1`] = `
   √ jest
   ↳ exit code: 0
   ===[ STDOUT ]===================================================================
@@ -476,143 +347,7 @@ exports[`Diagnostics using language service with throw then passed when content 
   ================================================================================
 `;
 
-exports[`Diagnostics using language service with warn only first passed without warning should pass using template "default" 1`] = `
-  √ jest
-  ↳ exit code: 0
-  ===[ STDOUT ]===================================================================
-  
-  ===[ STDERR ]===================================================================
-  PASS ./main.spec.ts
-    √ should do the thing
-  
-  Test Suites: 1 passed, 1 total
-  Tests:       1 passed, 1 total
-  Snapshots:   0 total
-  Time:        XXs
-  Ran all test suites.
-  ================================================================================
-`;
-
-exports[`Diagnostics using language service with warn only first passed without warning should pass using template "with-babel-7" 1`] = `
-  √ jest
-  ↳ exit code: 0
-  ===[ STDOUT ]===================================================================
-  
-  ===[ STDERR ]===================================================================
-  PASS ./main.spec.ts
-    √ should do the thing
-  
-  Test Suites: 1 passed, 1 total
-  Tests:       1 passed, 1 total
-  Snapshots:   0 total
-  Time:        XXs
-  Ran all test suites.
-  ================================================================================
-`;
-
-exports[`Diagnostics using language service with warn only first passed without warning should pass using template "with-babel-7-string-config" 1`] = `
-  √ jest
-  ↳ exit code: 0
-  ===[ STDOUT ]===================================================================
-  
-  ===[ STDERR ]===================================================================
-  PASS ./main.spec.ts
-    √ should do the thing
-  
-  Test Suites: 1 passed, 1 total
-  Tests:       1 passed, 1 total
-  Snapshots:   0 total
-  Time:        XXs
-  Ran all test suites.
-  ================================================================================
-`;
-
-exports[`Diagnostics using language service with warn only first passed without warning should pass using template "with-typescript-2-7" 1`] = `
-  √ jest
-  ↳ exit code: 0
-  ===[ STDOUT ]===================================================================
-  
-  ===[ STDERR ]===================================================================
-  PASS ./main.spec.ts
-    √ should do the thing
-  
-  Test Suites: 1 passed, 1 total
-  Tests:       1 passed, 1 total
-  Snapshots:   0 total
-  Time:        XXs
-  Ran all test suites.
-  ================================================================================
-`;
-
-exports[`Diagnostics using language service with warn only then show warning when content changed to invalid base on cached of the previous run should pass using template "default" 1`] = `
-  √ jest
-  ↳ exit code: 0
-  ===[ STDOUT ]===================================================================
-  
-  ===[ STDERR ]===================================================================
-  PASS ./main.spec.ts
-    √ should do the thing
-  
-  Test Suites: 1 passed, 1 total
-  Tests:       1 passed, 1 total
-  Snapshots:   0 total
-  Time:        XXs
-  Ran all test suites.
-  ================================================================================
-`;
-
-exports[`Diagnostics using language service with warn only then show warning when content changed to invalid base on cached of the previous run should pass using template "with-babel-7" 1`] = `
-  √ jest
-  ↳ exit code: 0
-  ===[ STDOUT ]===================================================================
-  
-  ===[ STDERR ]===================================================================
-  PASS ./main.spec.ts
-    √ should do the thing
-  
-  Test Suites: 1 passed, 1 total
-  Tests:       1 passed, 1 total
-  Snapshots:   0 total
-  Time:        XXs
-  Ran all test suites.
-  ================================================================================
-`;
-
-exports[`Diagnostics using language service with warn only then show warning when content changed to invalid base on cached of the previous run should pass using template "with-babel-7-string-config" 1`] = `
-  √ jest
-  ↳ exit code: 0
-  ===[ STDOUT ]===================================================================
-  
-  ===[ STDERR ]===================================================================
-  PASS ./main.spec.ts
-    √ should do the thing
-  
-  Test Suites: 1 passed, 1 total
-  Tests:       1 passed, 1 total
-  Snapshots:   0 total
-  Time:        XXs
-  Ran all test suites.
-  ================================================================================
-`;
-
-exports[`Diagnostics using language service with warn only then show warning when content changed to invalid base on cached of the previous run should pass using template "with-typescript-2-7" 1`] = `
-  √ jest
-  ↳ exit code: 0
-  ===[ STDOUT ]===================================================================
-  
-  ===[ STDERR ]===================================================================
-  PASS ./main.spec.ts
-    √ should do the thing
-  
-  Test Suites: 1 passed, 1 total
-  Tests:       1 passed, 1 total
-  Snapshots:   0 total
-  Time:        XXs
-  Ran all test suites.
-  ================================================================================
-`;
-
-exports[`Diagnostics using program with throw first throw should fail using template "default" 1`] = `
+exports[`With diagnostics throw using program first throw should fail using template "default" 1`] = `
   × jest
   ↳ exit code: 1
   ===[ STDOUT ]===================================================================
@@ -639,7 +374,7 @@ exports[`Diagnostics using program with throw first throw should fail using temp
   ================================================================================
 `;
 
-exports[`Diagnostics using program with throw first throw should fail using template "with-babel-7" 1`] = `
+exports[`With diagnostics throw using program first throw should fail using template "with-babel-7" 1`] = `
   × jest
   ↳ exit code: 1
   ===[ STDOUT ]===================================================================
@@ -666,7 +401,7 @@ exports[`Diagnostics using program with throw first throw should fail using temp
   ================================================================================
 `;
 
-exports[`Diagnostics using program with throw first throw should fail using template "with-babel-7-string-config" 1`] = `
+exports[`With diagnostics throw using program first throw should fail using template "with-babel-7-string-config" 1`] = `
   × jest
   ↳ exit code: 1
   ===[ STDOUT ]===================================================================
@@ -693,7 +428,7 @@ exports[`Diagnostics using program with throw first throw should fail using temp
   ================================================================================
 `;
 
-exports[`Diagnostics using program with throw then passed when content has changed to valid base on cache of the previous run should pass using template "default" 1`] = `
+exports[`With diagnostics throw using program then passed when content has changed to valid base on cache of the previous run should pass using template "default" 1`] = `
   √ jest
   ↳ exit code: 0
   ===[ STDOUT ]===================================================================
@@ -710,7 +445,7 @@ exports[`Diagnostics using program with throw then passed when content has chang
   ================================================================================
 `;
 
-exports[`Diagnostics using program with throw then passed when content has changed to valid base on cache of the previous run should pass using template "with-babel-7" 1`] = `
+exports[`With diagnostics throw using program then passed when content has changed to valid base on cache of the previous run should pass using template "with-babel-7" 1`] = `
   √ jest
   ↳ exit code: 0
   ===[ STDOUT ]===================================================================
@@ -727,7 +462,7 @@ exports[`Diagnostics using program with throw then passed when content has chang
   ================================================================================
 `;
 
-exports[`Diagnostics using program with throw then passed when content has changed to valid base on cache of the previous run should pass using template "with-babel-7-string-config" 1`] = `
+exports[`With diagnostics throw using program then passed when content has changed to valid base on cache of the previous run should pass using template "with-babel-7-string-config" 1`] = `
   √ jest
   ↳ exit code: 0
   ===[ STDOUT ]===================================================================
@@ -744,7 +479,7 @@ exports[`Diagnostics using program with throw then passed when content has chang
   ================================================================================
 `;
 
-exports[`Diagnostics using program with typescript version not supported program should fail using template "with-typescript-2-7" 1`] = `
+exports[`With diagnostics throw using program with unsupported version should fail using template "with-typescript-2-7" 1`] = `
   × jest
   ↳ exit code: 1
   ===[ STDOUT ]===================================================================
@@ -765,7 +500,7 @@ exports[`Diagnostics using program with typescript version not supported program
   ================================================================================
 `;
 
-exports[`Diagnostics using program with typescript version not supported program should fail using template "with-unsupported-version" 1`] = `
+exports[`With diagnostics throw using program with unsupported version should fail using template "with-unsupported-version" 1`] = `
   × jest
   ↳ exit code: 1
   ===[ STDOUT ]===================================================================
@@ -787,58 +522,7 @@ exports[`Diagnostics using program with typescript version not supported program
   ================================================================================
 `;
 
-exports[`Diagnostics using program with warn only first passed without warning should pass using template "default" 1`] = `
-  √ jest
-  ↳ exit code: 0
-  ===[ STDOUT ]===================================================================
-  
-  ===[ STDERR ]===================================================================
-  PASS ./main.spec.ts
-    √ should do the thing
-  
-  Test Suites: 1 passed, 1 total
-  Tests:       1 passed, 1 total
-  Snapshots:   0 total
-  Time:        XXs
-  Ran all test suites.
-  ================================================================================
-`;
-
-exports[`Diagnostics using program with warn only first passed without warning should pass using template "with-babel-7" 1`] = `
-  √ jest
-  ↳ exit code: 0
-  ===[ STDOUT ]===================================================================
-  
-  ===[ STDERR ]===================================================================
-  PASS ./main.spec.ts
-    √ should do the thing
-  
-  Test Suites: 1 passed, 1 total
-  Tests:       1 passed, 1 total
-  Snapshots:   0 total
-  Time:        XXs
-  Ran all test suites.
-  ================================================================================
-`;
-
-exports[`Diagnostics using program with warn only first passed without warning should pass using template "with-babel-7-string-config" 1`] = `
-  √ jest
-  ↳ exit code: 0
-  ===[ STDOUT ]===================================================================
-  
-  ===[ STDERR ]===================================================================
-  PASS ./main.spec.ts
-    √ should do the thing
-  
-  Test Suites: 1 passed, 1 total
-  Tests:       1 passed, 1 total
-  Snapshots:   0 total
-  Time:        XXs
-  Ran all test suites.
-  ================================================================================
-`;
-
-exports[`Diagnostics using program with warn only then show warning when content changed to invalid base on cached of the previous run should pass using template "default" 1`] = `
+exports[`With diagnostics warn only using incremental program first show warning should pass using template "default" 1`] = `
   √ jest
   ↳ exit code: 0
   ===[ STDOUT ]===================================================================
@@ -864,7 +548,7 @@ exports[`Diagnostics using program with warn only then show warning when content
   ================================================================================
 `;
 
-exports[`Diagnostics using program with warn only then show warning when content changed to invalid base on cached of the previous run should pass using template "with-babel-7" 1`] = `
+exports[`With diagnostics warn only using incremental program first show warning should pass using template "with-babel-7" 1`] = `
   √ jest
   ↳ exit code: 0
   ===[ STDOUT ]===================================================================
@@ -890,7 +574,7 @@ exports[`Diagnostics using program with warn only then show warning when content
   ================================================================================
 `;
 
-exports[`Diagnostics using program with warn only then show warning when content changed to invalid base on cached of the previous run should pass using template "with-babel-7-string-config" 1`] = `
+exports[`With diagnostics warn only using incremental program first show warning should pass using template "with-babel-7-string-config" 1`] = `
   √ jest
   ↳ exit code: 0
   ===[ STDOUT ]===================================================================
@@ -910,6 +594,440 @@ exports[`Diagnostics using program with warn only then show warning when content
   
   Test Suites: 1 passed, 1 total
   Tests:       1 passed, 1 total
+  Snapshots:   0 total
+  Time:        XXs
+  Ran all test suites.
+  ================================================================================
+`;
+
+exports[`With diagnostics warn only using incremental program then not showing warning when content has changed to valid base on cache of the previous run should pass using template "default" 1`] = `
+  √ jest
+  ↳ exit code: 0
+  ===[ STDOUT ]===================================================================
+  
+  ===[ STDERR ]===================================================================
+  PASS ./main.spec.ts
+    √ should do the thing
+  
+  Test Suites: 1 passed, 1 total
+  Tests:       1 passed, 1 total
+  Snapshots:   0 total
+  Time:        XXs
+  Ran all test suites.
+  ================================================================================
+`;
+
+exports[`With diagnostics warn only using incremental program then not showing warning when content has changed to valid base on cache of the previous run should pass using template "with-babel-7" 1`] = `
+  √ jest
+  ↳ exit code: 0
+  ===[ STDOUT ]===================================================================
+  
+  ===[ STDERR ]===================================================================
+  PASS ./main.spec.ts
+    √ should do the thing
+  
+  Test Suites: 1 passed, 1 total
+  Tests:       1 passed, 1 total
+  Snapshots:   0 total
+  Time:        XXs
+  Ran all test suites.
+  ================================================================================
+`;
+
+exports[`With diagnostics warn only using incremental program then not showing warning when content has changed to valid base on cache of the previous run should pass using template "with-babel-7-string-config" 1`] = `
+  √ jest
+  ↳ exit code: 0
+  ===[ STDOUT ]===================================================================
+  
+  ===[ STDERR ]===================================================================
+  PASS ./main.spec.ts
+    √ should do the thing
+  
+  Test Suites: 1 passed, 1 total
+  Tests:       1 passed, 1 total
+  Snapshots:   0 total
+  Time:        XXs
+  Ran all test suites.
+  ================================================================================
+`;
+
+exports[`With diagnostics warn only using incremental program with unsupported version should fail using template "with-typescript-2-7" 1`] = `
+  × jest
+  ↳ exit code: 1
+  ===[ STDOUT ]===================================================================
+  
+  ===[ STDERR ]===================================================================
+  FAIL ./main.spec.ts
+    ● Test suite failed to run
+  
+      TypeError: ts.createIncrementalCompilerHost is not a function
+  
+        at Object.exports.compileUsingProgram (../../__templates__/with-typescript-2-7/node_modules/ts-jest/dist/compiler/program.js:40:19)
+  
+  Test Suites: 1 failed, 1 total
+  Tests:       0 total
+  Snapshots:   0 total
+  Time:        XXs
+  Ran all test suites.
+  ================================================================================
+`;
+
+exports[`With diagnostics warn only using incremental program with unsupported version should fail using template "with-unsupported-version" 1`] = `
+  × jest
+  ↳ exit code: 1
+  ===[ STDOUT ]===================================================================
+  
+  ===[ STDERR ]===================================================================
+  ts-jest[versions] (WARN) Version 2.5.3 of typescript installed has not been tested with ts-jest. If you're experiencing issues, consider using a supported version (>=2.7.0 <4.0.0). Please do not report issues in ts-jest if you are using unsupported versions.
+  FAIL ./main.spec.ts
+    ● Test suite failed to run
+  
+      TypeError: ts.createIncrementalCompilerHost is not a function
+  
+        at Object.exports.compileUsingProgram (../../__templates__/with-unsupported-version/node_modules/ts-jest/dist/compiler/program.js:40:19)
+  
+  Test Suites: 1 failed, 1 total
+  Tests:       0 total
+  Snapshots:   0 total
+  Time:        XXs
+  Ran all test suites.
+  ================================================================================
+`;
+
+exports[`With diagnostics warn only using language service first show warning should pass using template "default" 1`] = `
+  √ jest
+  ↳ exit code: 0
+  ===[ STDOUT ]===================================================================
+  
+  ===[ STDERR ]===================================================================
+  ts-jest[ts-compiler] (WARN) main.spec.ts:3:14 - error TS2741: Property 'b' is missing in type '{ a: number; }' but required in type 'Thing'.
+  
+  3 export const thing: Thing = { a: 1 };
+                 ~~~~~
+  
+    main.ts:1:34
+      1 export type Thing = { a: number, b: number }
+                                         ~
+      'b' is declared here.
+  PASS ./main.spec.ts
+    √ should do the thing
+  
+  Test Suites: 1 passed, 1 total
+  Tests:       1 passed, 1 total
+  Snapshots:   0 total
+  Time:        XXs
+  Ran all test suites.
+  ================================================================================
+`;
+
+exports[`With diagnostics warn only using language service first show warning should pass using template "with-babel-7" 1`] = `
+  √ jest
+  ↳ exit code: 0
+  ===[ STDOUT ]===================================================================
+  
+  ===[ STDERR ]===================================================================
+  ts-jest[ts-compiler] (WARN) main.spec.ts:3:14 - error TS2741: Property 'b' is missing in type '{ a: number; }' but required in type 'Thing'.
+  
+  3 export const thing: Thing = { a: 1 };
+                 ~~~~~
+  
+    main.ts:1:34
+      1 export type Thing = { a: number, b: number }
+                                         ~
+      'b' is declared here.
+  PASS ./main.spec.ts
+    √ should do the thing
+  
+  Test Suites: 1 passed, 1 total
+  Tests:       1 passed, 1 total
+  Snapshots:   0 total
+  Time:        XXs
+  Ran all test suites.
+  ================================================================================
+`;
+
+exports[`With diagnostics warn only using language service first show warning should pass using template "with-babel-7-string-config" 1`] = `
+  √ jest
+  ↳ exit code: 0
+  ===[ STDOUT ]===================================================================
+  
+  ===[ STDERR ]===================================================================
+  ts-jest[ts-compiler] (WARN) main.spec.ts:3:14 - error TS2741: Property 'b' is missing in type '{ a: number; }' but required in type 'Thing'.
+  
+  3 export const thing: Thing = { a: 1 };
+                 ~~~~~
+  
+    main.ts:1:34
+      1 export type Thing = { a: number, b: number }
+                                         ~
+      'b' is declared here.
+  PASS ./main.spec.ts
+    √ should do the thing
+  
+  Test Suites: 1 passed, 1 total
+  Tests:       1 passed, 1 total
+  Snapshots:   0 total
+  Time:        XXs
+  Ran all test suites.
+  ================================================================================
+`;
+
+exports[`With diagnostics warn only using language service first show warning should pass using template "with-typescript-2-7" 1`] = `
+  √ jest
+  ↳ exit code: 0
+  ===[ STDOUT ]===================================================================
+  
+  ===[ STDERR ]===================================================================
+  ts-jest[ts-compiler] (WARN) main.spec.ts:3:14 - error TS2322: Type '{ a: number; }' is not assignable to type 'Thing'.
+    Property 'b' is missing in type '{ a: number; }'.
+  
+  3 export const thing: Thing = { a: 1 };
+                 ~~~~~
+  PASS ./main.spec.ts
+    √ should do the thing
+  
+  Test Suites: 1 passed, 1 total
+  Tests:       1 passed, 1 total
+  Snapshots:   0 total
+  Time:        XXs
+  Ran all test suites.
+  ================================================================================
+`;
+
+exports[`With diagnostics warn only using language service then not showing warning when content has changed to valid base on cache of the previous run should pass using template "default" 1`] = `
+  √ jest
+  ↳ exit code: 0
+  ===[ STDOUT ]===================================================================
+  
+  ===[ STDERR ]===================================================================
+  PASS ./main.spec.ts
+    √ should do the thing
+  
+  Test Suites: 1 passed, 1 total
+  Tests:       1 passed, 1 total
+  Snapshots:   0 total
+  Time:        XXs
+  Ran all test suites.
+  ================================================================================
+`;
+
+exports[`With diagnostics warn only using language service then not showing warning when content has changed to valid base on cache of the previous run should pass using template "with-babel-7" 1`] = `
+  √ jest
+  ↳ exit code: 0
+  ===[ STDOUT ]===================================================================
+  
+  ===[ STDERR ]===================================================================
+  PASS ./main.spec.ts
+    √ should do the thing
+  
+  Test Suites: 1 passed, 1 total
+  Tests:       1 passed, 1 total
+  Snapshots:   0 total
+  Time:        XXs
+  Ran all test suites.
+  ================================================================================
+`;
+
+exports[`With diagnostics warn only using language service then not showing warning when content has changed to valid base on cache of the previous run should pass using template "with-babel-7-string-config" 1`] = `
+  √ jest
+  ↳ exit code: 0
+  ===[ STDOUT ]===================================================================
+  
+  ===[ STDERR ]===================================================================
+  PASS ./main.spec.ts
+    √ should do the thing
+  
+  Test Suites: 1 passed, 1 total
+  Tests:       1 passed, 1 total
+  Snapshots:   0 total
+  Time:        XXs
+  Ran all test suites.
+  ================================================================================
+`;
+
+exports[`With diagnostics warn only using language service then not showing warning when content has changed to valid base on cache of the previous run should pass using template "with-typescript-2-7" 1`] = `
+  √ jest
+  ↳ exit code: 0
+  ===[ STDOUT ]===================================================================
+  
+  ===[ STDERR ]===================================================================
+  PASS ./main.spec.ts
+    √ should do the thing
+  
+  Test Suites: 1 passed, 1 total
+  Tests:       1 passed, 1 total
+  Snapshots:   0 total
+  Time:        XXs
+  Ran all test suites.
+  ================================================================================
+`;
+
+exports[`With diagnostics warn only using program first show warning should pass using template "default" 1`] = `
+  √ jest
+  ↳ exit code: 0
+  ===[ STDOUT ]===================================================================
+  
+  ===[ STDERR ]===================================================================
+  ts-jest[ts-compiler] (WARN) main.spec.ts:3:14 - error TS2741: Property 'b' is missing in type '{ a: number; }' but required in type 'Thing'.
+  
+  3 export const thing: Thing = { a: 1 };
+                 ~~~~~
+  
+    main.ts:1:34
+      1 export type Thing = { a: number, b: number }
+                                         ~
+      'b' is declared here.
+  PASS ./main.spec.ts
+    √ should do the thing
+  
+  Test Suites: 1 passed, 1 total
+  Tests:       1 passed, 1 total
+  Snapshots:   0 total
+  Time:        XXs
+  Ran all test suites.
+  ================================================================================
+`;
+
+exports[`With diagnostics warn only using program first show warning should pass using template "with-babel-7" 1`] = `
+  √ jest
+  ↳ exit code: 0
+  ===[ STDOUT ]===================================================================
+  
+  ===[ STDERR ]===================================================================
+  ts-jest[ts-compiler] (WARN) main.spec.ts:3:14 - error TS2741: Property 'b' is missing in type '{ a: number; }' but required in type 'Thing'.
+  
+  3 export const thing: Thing = { a: 1 };
+                 ~~~~~
+  
+    main.ts:1:34
+      1 export type Thing = { a: number, b: number }
+                                         ~
+      'b' is declared here.
+  PASS ./main.spec.ts
+    √ should do the thing
+  
+  Test Suites: 1 passed, 1 total
+  Tests:       1 passed, 1 total
+  Snapshots:   0 total
+  Time:        XXs
+  Ran all test suites.
+  ================================================================================
+`;
+
+exports[`With diagnostics warn only using program first show warning should pass using template "with-babel-7-string-config" 1`] = `
+  √ jest
+  ↳ exit code: 0
+  ===[ STDOUT ]===================================================================
+  
+  ===[ STDERR ]===================================================================
+  ts-jest[ts-compiler] (WARN) main.spec.ts:3:14 - error TS2741: Property 'b' is missing in type '{ a: number; }' but required in type 'Thing'.
+  
+  3 export const thing: Thing = { a: 1 };
+                 ~~~~~
+  
+    main.ts:1:34
+      1 export type Thing = { a: number, b: number }
+                                         ~
+      'b' is declared here.
+  PASS ./main.spec.ts
+    √ should do the thing
+  
+  Test Suites: 1 passed, 1 total
+  Tests:       1 passed, 1 total
+  Snapshots:   0 total
+  Time:        XXs
+  Ran all test suites.
+  ================================================================================
+`;
+
+exports[`With diagnostics warn only using program then not show warning when content has changed to valid base on cache of the previous run should pass using template "default" 1`] = `
+  √ jest
+  ↳ exit code: 0
+  ===[ STDOUT ]===================================================================
+  
+  ===[ STDERR ]===================================================================
+  PASS ./main.spec.ts
+    √ should do the thing
+  
+  Test Suites: 1 passed, 1 total
+  Tests:       1 passed, 1 total
+  Snapshots:   0 total
+  Time:        XXs
+  Ran all test suites.
+  ================================================================================
+`;
+
+exports[`With diagnostics warn only using program then not show warning when content has changed to valid base on cache of the previous run should pass using template "with-babel-7" 1`] = `
+  √ jest
+  ↳ exit code: 0
+  ===[ STDOUT ]===================================================================
+  
+  ===[ STDERR ]===================================================================
+  PASS ./main.spec.ts
+    √ should do the thing
+  
+  Test Suites: 1 passed, 1 total
+  Tests:       1 passed, 1 total
+  Snapshots:   0 total
+  Time:        XXs
+  Ran all test suites.
+  ================================================================================
+`;
+
+exports[`With diagnostics warn only using program then not show warning when content has changed to valid base on cache of the previous run should pass using template "with-babel-7-string-config" 1`] = `
+  √ jest
+  ↳ exit code: 0
+  ===[ STDOUT ]===================================================================
+  
+  ===[ STDERR ]===================================================================
+  PASS ./main.spec.ts
+    √ should do the thing
+  
+  Test Suites: 1 passed, 1 total
+  Tests:       1 passed, 1 total
+  Snapshots:   0 total
+  Time:        XXs
+  Ran all test suites.
+  ================================================================================
+`;
+
+exports[`With diagnostics warn only using program with unsupported version should fail using template "with-typescript-2-7" 1`] = `
+  × jest
+  ↳ exit code: 1
+  ===[ STDOUT ]===================================================================
+  
+  ===[ STDERR ]===================================================================
+  FAIL ./main.spec.ts
+    ● Test suite failed to run
+  
+      TypeError: Cannot read property 'maxNodeModuleJsDepth' of undefined
+  
+        at Object.createProgram (../../__templates__/with-typescript-2-7/node_modules/typescript/lib/typescript.js:73929:51)
+  
+  Test Suites: 1 failed, 1 total
+  Tests:       0 total
+  Snapshots:   0 total
+  Time:        XXs
+  Ran all test suites.
+  ================================================================================
+`;
+
+exports[`With diagnostics warn only using program with unsupported version should fail using template "with-unsupported-version" 1`] = `
+  × jest
+  ↳ exit code: 1
+  ===[ STDOUT ]===================================================================
+  
+  ===[ STDERR ]===================================================================
+  ts-jest[versions] (WARN) Version 2.5.3 of typescript installed has not been tested with ts-jest. If you're experiencing issues, consider using a supported version (>=2.7.0 <4.0.0). Please do not report issues in ts-jest if you are using unsupported versions.
+  FAIL ./main.spec.ts
+    ● Test suite failed to run
+  
+      TypeError: Cannot read property 'maxNodeModuleJsDepth' of undefined
+  
+        at Object.createProgram (../../__templates__/with-unsupported-version/node_modules/typescript/lib/typescript.js:69709:51)
+  
+  Test Suites: 1 failed, 1 total
+  Tests:       0 total
   Snapshots:   0 total
   Time:        XXs
   Ran all test suites.

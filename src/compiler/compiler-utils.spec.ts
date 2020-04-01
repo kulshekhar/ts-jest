@@ -36,14 +36,14 @@ describe('cacheResolvedModules', () => {
     spy.mockRestore()
   })
 
-  it('should store resolved modules in memory cache and file system when there are resolved modules and cache dir', () => {
-    const tmp = tempDir('compiler'),
-      compiler = makeCompiler({
-        jestConfig: { cache: true, cacheDirectory: tmp },
-        tsJestConfig: { tsConfig: false },
-      }),
-      fileName = 'src/__mocks__/main.spec.ts',
-      source = JSON.stringify(require('../__mocks__/main.spec'))
+  it('should store resolved modules in memory cache and file system when there are resolved modules', () => {
+    const tmp = tempDir('compiler')
+    const compiler = makeCompiler({
+      jestConfig: { cache: true, cacheDirectory: tmp },
+      tsJestConfig: { tsConfig: false },
+    })
+    const fileName = 'src/__mocks__/main.spec.ts'
+    const source = JSON.stringify(require('../__mocks__/main.spec'))
 
     compiler.compile(source, fileName)
 
@@ -55,38 +55,20 @@ describe('cacheResolvedModules', () => {
   })
 
   it(`should store resolved modules in memory cache but not file system when there aren't resolved modules`, () => {
-    const tmp = tempDir('compiler'),
-      compiler = makeCompiler({
-        jestConfig: { cache: true, cacheDirectory: tmp },
-        tsJestConfig: { tsConfig: false },
-      }),
-      fileName = 'src/__mocks__/thing.spec.ts',
-      source = JSON.stringify(require('../__mocks__/thing.spec'))
+    const tmp = tempDir('compiler')
+    const compiler = makeCompiler({
+      jestConfig: { cache: true, cacheDirectory: tmp },
+      tsJestConfig: { tsConfig: false },
+    })
+    const fileName = 'src/__mocks__/thing.spec.ts'
+    const source = JSON.stringify(require('../__mocks__/thing.spec'))
 
     compiler.compile(source, fileName)
 
     logTarget.clear()
-    cacheResolvedModules(fileName, memoryCache, compiler.program!, undefined, logger)
+    cacheResolvedModules(fileName, memoryCache, compiler.program!, tmp, logger)
 
     expect(memoryCache.resolvedModules[fileName]).toBe(undefined)
-    expect(spy).not.toHaveBeenCalled()
-  })
-
-  it(`should store resolved modules in memory cache but not file system when there are resolved modules but no cache dir`, () => {
-    const tmp = tempDir('compiler'),
-      compiler = makeCompiler({
-        jestConfig: { cache: true, cacheDirectory: tmp },
-        tsJestConfig: { tsConfig: false },
-      }),
-      fileName = 'src/__mocks__/main.spec.ts',
-      source = JSON.stringify(require('../__mocks__/main.spec'))
-
-    compiler.compile(source, fileName)
-
-    logTarget.clear()
-    cacheResolvedModules(fileName, memoryCache, compiler.program!, undefined, logger)
-
-    expect(memoryCache.resolvedModules[fileName]).toContain(resolve('src/__mocks__/main.ts'))
     expect(spy).not.toHaveBeenCalled()
   })
 })

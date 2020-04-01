@@ -25,7 +25,7 @@ export function cacheResolvedModules(
   fileName: string,
   memoryCache: MemoryCache,
   program: _ts.Program,
-  cachedir: string | undefined,
+  cacheDir: string,
   logger: Logger,
 ) {
   // @ts-ignore
@@ -45,8 +45,6 @@ export function cacheResolvedModules(
         )
       })
       .reduce((a: any, b: any) => a.concat(b), [])
-    if (cachedir) {
-      writeFileSync(getResolvedModulesCache(cachedir), JSON.stringify(memoryCache.resolvedModules))
-    }
+    writeFileSync(getResolvedModulesCache(cacheDir), JSON.stringify(memoryCache.resolvedModules))
   }
 }

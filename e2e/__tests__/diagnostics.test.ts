@@ -4,8 +4,8 @@ import { join } from 'path'
 import { allPackageSetsWithProgram, allPackageSetsWithoutProgram, allValidPackageSets } from '../__helpers__/templates'
 import { configureTestCase } from '../__helpers__/test-case'
 
-describe('Diagnostics using language service', () => {
-  describe('with throw', () => {
+describe('With diagnostics throw', () => {
+  describe('using language service', () => {
     const testCase = configureTestCase('diagnostics')
 
     describe('first throw', () => {
@@ -27,7 +27,7 @@ describe('Diagnostics using language service', () => {
       })
 
       afterAll(() => {
-        writeFileSync(join(__dirname, '../__cases__/diagnostics/main.ts'), `export type Thing = { a: number, b: number }`)
+        writeFileSync(join(__dirname, '../__cases__/diagnostics/main.ts'), `export type Thing = { a: number, b: number }\n`)
       })
 
       testCase.runWithTemplates(allValidPackageSets, 0, (runTest, { testLabel }) => {
@@ -40,48 +40,12 @@ describe('Diagnostics using language service', () => {
     })
   })
 
-  describe('with warn only', () => {
+  describe('using program', () => {
     const testCase = configureTestCase('diagnostics', {
-      tsJestConfig: { diagnostics: { warnOnly: true } },
-    })
-
-    describe('first passed without warning', () => {
-      beforeAll(() => {
-        writeFileSync(join(__dirname, '../__cases__/diagnostics/main.ts'), `export type Thing = {
-  a: number;
-  // b: number;
-}`)
-      })
-
-      afterAll(() => {
-        writeFileSync(join(__dirname, '../__cases__/diagnostics/main.ts'), `export type Thing = { a: number, b: number }`)
-      })
-
-      testCase.runWithTemplates(allValidPackageSets, 0, (runTest, { testLabel }) => {
-        it(testLabel, () => {
-          const result = runTest()
-          expect(result.status).toBe(0)
-          expect(result).toMatchSnapshot()
-        })
-      })
-    })
-
-    describe('then show warning when content changed to invalid base on cached of the previous run', () => {
-      testCase.runWithTemplates(allValidPackageSets, 0, (runTest, { testLabel }) => {
-        it(testLabel, () => {
-          const result = runTest()
-          expect(result.status).toBe(0)
-          expect(result).toMatchSnapshot()
-        })
-      })
-    })
-  })
-})
-
-describe('Diagnostics using program', () => {
-  describe('with throw', () => {
-    const testCase = configureTestCase('diagnostics', {
-      tsJestConfig: { compilerHost: true, incremental: false },
+      tsJestConfig: {
+        compilerHost: true,
+        incremental: false,
+      },
     })
 
     describe('first throw', () => {
@@ -103,34 +67,7 @@ describe('Diagnostics using program', () => {
       })
 
       afterAll(() => {
-        writeFileSync(join(__dirname, '../__cases__/diagnostics/main.ts'), `export type Thing = { a: number, b: number }`)
-      })
-
-      testCase.runWithTemplates(allPackageSetsWithProgram, 0, (runTest, { testLabel }) => {
-        it(testLabel, () => {
-          const result = runTest()
-          expect(result.status).toBe(0)
-          expect(result).toMatchSnapshot()
-        })
-      })
-    })
-  })
-
-  describe('with warn only', () => {
-    const testCase = configureTestCase('diagnostics', {
-      tsJestConfig: { compilerHost: true, incremental: false, diagnostics: { warnOnly: true } },
-    })
-
-    describe('first passed without warning', () => {
-      beforeAll(() => {
-        writeFileSync(join(__dirname, '../__cases__/diagnostics/main.ts'), `export type Thing = {
-  a: number;
-  // b: number;
-}`)
-      })
-
-      afterAll(() => {
-        writeFileSync(join(__dirname, '../__cases__/diagnostics/main.ts'), `export type Thing = { a: number, b: number }`)
+        writeFileSync(join(__dirname, '../__cases__/diagnostics/main.ts'), `export type Thing = { a: number, b: number }\n`)
       })
 
       testCase.runWithTemplates(allPackageSetsWithProgram, 0, (runTest, { testLabel }) => {
@@ -142,36 +79,23 @@ describe('Diagnostics using program', () => {
       })
     })
 
-    describe('then show warning when content changed to invalid base on cached of the previous run', () => {
-      testCase.runWithTemplates(allPackageSetsWithProgram, 0, (runTest, { testLabel }) => {
+    describe('with unsupported version', () => {
+      testCase.runWithTemplates(allPackageSetsWithoutProgram, 1, (runTest, { testLabel }) => {
         it(testLabel, () => {
           const result = runTest()
-          expect(result.status).toBe(0)
+          expect(result.status).toBe(1)
           expect(result).toMatchSnapshot()
         })
       })
     })
   })
 
-  describe('with typescript version not supported program', () => {
+  describe('using incremental program', () => {
     const testCase = configureTestCase('diagnostics', {
-      tsJestConfig: { compilerHost: true, incremental: false, diagnostics: { warnOnly: true } },
-    })
-
-    testCase.runWithTemplates(allPackageSetsWithoutProgram, 1, (runTest, { testLabel }) => {
-      it(testLabel, () => {
-        const result = runTest()
-        expect(result.status).toBe(1)
-        expect(result).toMatchSnapshot()
-      })
-    })
-  })
-})
-
-describe('Diagnostics using incremental program', () => {
-  describe('with throw', () => {
-    const testCase = configureTestCase('diagnostics', {
-      tsJestConfig: { compilerHost: true, incremental: true },
+      tsJestConfig: {
+        compilerHost: true,
+        incremental: true,
+      },
     })
 
     describe('first throw', () => {
@@ -193,7 +117,7 @@ describe('Diagnostics using incremental program', () => {
       })
 
       afterAll(() => {
-        writeFileSync(join(__dirname, '../__cases__/diagnostics/main.ts'), `export type Thing = { a: number, b: number }`)
+        writeFileSync(join(__dirname, '../__cases__/diagnostics/main.ts'), `export type Thing = { a: number, b: number }\n`)
       })
 
       testCase.runWithTemplates(allPackageSetsWithProgram, 0, (runTest, { testLabel }) => {
@@ -204,14 +128,38 @@ describe('Diagnostics using incremental program', () => {
         })
       })
     })
-  })
 
-  describe('with warn only', () => {
+    describe('with unsupported version', () => {
+      testCase.runWithTemplates(allPackageSetsWithoutProgram, 1, (runTest, { testLabel }) => {
+        it(testLabel, () => {
+          const result = runTest()
+          expect(result.status).toBe(1)
+          expect(result).toMatchSnapshot()
+        })
+      })
+    })
+  })
+})
+
+describe('With diagnostics warn only', () => {
+  describe('using language service', () => {
     const testCase = configureTestCase('diagnostics', {
-      tsJestConfig: { compilerHost: true, incremental: true, diagnostics: { warnOnly: true } },
+      tsJestConfig: {
+        diagnostics: { warnOnly: true },
+      },
     })
 
-    describe('first passed without warning', () => {
+    describe('first show warning', () => {
+      testCase.runWithTemplates(allValidPackageSets, 0, (runTest, { testLabel }) => {
+        it(testLabel, () => {
+          const result = runTest()
+          expect(result.status).toBe(0)
+          expect(result).toMatchSnapshot()
+        })
+      })
+    })
+
+    describe('then not showing warning when content has changed to valid base on cache of the previous run', () => {
       beforeAll(() => {
         writeFileSync(join(__dirname, '../__cases__/diagnostics/main.ts'), `export type Thing = {
   a: number;
@@ -220,20 +168,10 @@ describe('Diagnostics using incremental program', () => {
       })
 
       afterAll(() => {
-        writeFileSync(join(__dirname, '../__cases__/diagnostics/main.ts'), `export type Thing = { a: number, b: number }`)
+        writeFileSync(join(__dirname, '../__cases__/diagnostics/main.ts'), `export type Thing = { a: number, b: number }\n`)
       })
 
-      testCase.runWithTemplates(allPackageSetsWithProgram, 0, (runTest, { testLabel }) => {
-        it(testLabel, () => {
-          const result = runTest()
-          expect(result.status).toBe(0)
-          expect(result).toMatchSnapshot()
-        })
-      })
-    })
-
-    describe('then show warning when content changed to invalid base on cached of the previous run', () => {
-      testCase.runWithTemplates(allPackageSetsWithProgram, 0, (runTest, { testLabel }) => {
+      testCase.runWithTemplates(allValidPackageSets, 0, (runTest, { testLabel }) => {
         it(testLabel, () => {
           const result = runTest()
           expect(result.status).toBe(0)
@@ -243,17 +181,104 @@ describe('Diagnostics using incremental program', () => {
     })
   })
 
-  describe('with typescript version not supported incremental program', () => {
+  describe('using program', () => {
     const testCase = configureTestCase('diagnostics', {
-      tsJestConfig: { compilerHost: true, incremental: true, diagnostics: { warnOnly: true } },
-      noCache: true,
+      tsJestConfig: {
+        compilerHost: true,
+        incremental: false,
+        diagnostics: { warnOnly: true },
+      },
     })
 
-    testCase.runWithTemplates(allPackageSetsWithoutProgram, 1, (runTest, { testLabel }) => {
-      it(testLabel, () => {
-        const result = runTest()
-        expect(result.status).toBe(1)
-        expect(result).toMatchSnapshot()
+    describe('first show warning', () => {
+      testCase.runWithTemplates(allPackageSetsWithProgram, 0, (runTest, { testLabel }) => {
+        it(testLabel, () => {
+          const result = runTest()
+          expect(result.status).toBe(0)
+          expect(result).toMatchSnapshot()
+        })
+      })
+    })
+
+    describe('then not show warning when content has changed to valid base on cache of the previous run', () => {
+      beforeAll(() => {
+        writeFileSync(join(__dirname, '../__cases__/diagnostics/main.ts'), `export type Thing = {
+  a: number;
+  // b: number;
+}`)
+      })
+
+      afterAll(() => {
+        writeFileSync(join(__dirname, '../__cases__/diagnostics/main.ts'), `export type Thing = { a: number, b: number }\n`)
+      })
+
+      testCase.runWithTemplates(allPackageSetsWithProgram, 0, (runTest, { testLabel }) => {
+        it(testLabel, () => {
+          const result = runTest()
+          expect(result.status).toBe(0)
+          expect(result).toMatchSnapshot()
+        })
+      })
+    })
+
+    describe('with unsupported version', () => {
+      testCase.runWithTemplates(allPackageSetsWithoutProgram, 1, (runTest, { testLabel }) => {
+        it(testLabel, () => {
+          const result = runTest()
+          expect(result.status).toBe(1)
+          expect(result).toMatchSnapshot()
+        })
+      })
+    })
+  })
+
+  describe('using incremental program', () => {
+    const testCase = configureTestCase('diagnostics', {
+      tsJestConfig: {
+        compilerHost: true,
+        incremental: true,
+        diagnostics: { warnOnly: true },
+      },
+    })
+
+    describe('first show warning', () => {
+      testCase.runWithTemplates(allPackageSetsWithProgram, 0, (runTest, { testLabel }) => {
+        it(testLabel, () => {
+          const result = runTest()
+          expect(result.status).toBe(0)
+          expect(result).toMatchSnapshot()
+        })
+      })
+    })
+
+    describe('then not showing warning when content has changed to valid base on cache of the previous run', () => {
+      beforeAll(() => {
+        writeFileSync(join(__dirname, '../__cases__/diagnostics/main.ts'), `export type Thing = {
+  a: number;
+  // b: number;
+}`)
+      })
+
+      afterAll(() => {
+        writeFileSync(join(__dirname, '../__cases__/diagnostics/main.ts'), `export type Thing = { a: number, b: number }\n`)
+      })
+
+      testCase.runWithTemplates(allPackageSetsWithProgram, 0, (runTest, { testLabel }) => {
+        it(testLabel, () => {
+          const result = runTest()
+          expect(result.status).toBe(0)
+          expect(result).toMatchSnapshot()
+        })
+      })
+    })
+
+    describe('with unsupported version', () => {
+      testCase.runWithTemplates(allPackageSetsWithoutProgram, 1, (runTest, { testLabel }) => {
+        it(testLabel, () => {
+          const result = runTest()
+          expect(result.status).toBe(1)
+          expect(result).toMatchSnapshot()
+        })
       })
     })
   })
