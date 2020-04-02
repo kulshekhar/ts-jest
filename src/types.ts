@@ -130,6 +130,7 @@ interface TsJestConfig$diagnostics {
   ignoreCodes: number[]
   pathRegex?: string | undefined
   throws: boolean
+  warnOnly?: boolean
 }
 interface TsJestConfig$babelConfig$file {
   kind: 'file'
