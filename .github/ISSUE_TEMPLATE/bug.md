@@ -1,6 +1,6 @@
 ---
 name: 🐛 Bug report
-labels: ':bug:Bug', Needs Triage, Needs Repo
+labels: Bug Report, Needs Triage, Needs Repo
 about: Create a report to help us improve
 ---
 
