@@ -2,16 +2,16 @@
 <html lang="en"><head>
  <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.5.0 -->
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
 <title>Compiler option | ts-jest</title>
-<meta name="generator" content="Jekyll v3.7.4" />
+<meta name="generator" content="Jekyll v3.8.5" />
 <meta property="og:title" content="Compiler option" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="ts-jest is a TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript." />
 <meta property="og:description" content="ts-jest is a TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript." />
 <meta property="og:site_name" content="ts-jest" />
 <script type="application/ld+json">
-{"url":"/ts-jest/user/config/compiler.html","description":"ts-jest is a TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript.","headline":"Compiler option","@type":"WebPage","@context":"http://schema.org"}</script>
+{"headline":"Compiler option","description":"ts-jest is a TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript.","@type":"WebPage","url":"/ts-jest/user/config/compiler.html","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 <link rel="stylesheet" href="/ts-jest/assets/css/main.css"><link type="application/atom+xml" rel="alternate" href="/ts-jest/feed.xml" title="ts-jest" /><script src="/ts-jest/assets/js/bootstrap/jquery.min.js"></script>
   <script src="/ts-jest/assets/js/bootstrap/bootstrap.bundle.min.js"></script>
@@ -122,7 +122,7 @@
   
   <li class="nav-item">
     <a class="nav-link inverse"
-       href="http://github.com/kulshekhar/ts-jest">Fork me <span class="fab fa-github"></span></a>
+       href="https://github.com/kulshekhar/ts-jest">Fork me <span class="fab fa-github"></span></a>
   </li>
 </ul>
 
@@ -138,12 +138,12 @@
   </header>
 
   <section>
-    <p>The <code class="highlighter-rouge">compiler</code> option allows you to define the compiler to be used. It’ll be used to load the NodeJS module holding the TypeScript compiler.</p>
+    <p>The <code class="language-plaintext highlighter-rouge">compiler</code> option allows you to define the compiler to be used. It’ll be used to load the NodeJS module holding the TypeScript compiler.</p>
 
-<p>The default value is <code class="highlighter-rouge">typescript</code>, which will load the original <a href="https://www.npmjs.com/package/typescript">TypeScript compiler module</a>.
+<p>The default value is <code class="language-plaintext highlighter-rouge">typescript</code>, which will load the original <a href="https://www.npmjs.com/package/typescript">TypeScript compiler module</a>.
 The loaded version will depend on the one installed in your project.</p>
 
-<p>If you use a custom compiler, such as <code class="highlighter-rouge">ttypescript</code>, make sure its API is the same as the original TypeScript, at least for what <code class="highlighter-rouge">ts-jest</code> is using.</p>
+<p>If you use a custom compiler, such as <code class="language-plaintext highlighter-rouge">ttypescript</code>, make sure its API is the same as the original TypeScript, at least for what <code class="language-plaintext highlighter-rouge">ts-jest</code> is using.</p>
 
 <h3 id="example">Example</h3>
 
@@ -153,8 +153,8 @@ The loaded version will depend on the one installed in your project.</p>
 <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
   <span class="c1">// [...]</span>
   <span class="na">globals</span><span class="p">:</span> <span class="p">{</span>
-    <span class="s1">'ts-jest'</span><span class="p">:</span> <span class="p">{</span>
-      <span class="na">compiler</span><span class="p">:</span> <span class="s1">'ttypescript'</span>
+    <span class="dl">'</span><span class="s1">ts-jest</span><span class="dl">'</span><span class="p">:</span> <span class="p">{</span>
+      <span class="na">compiler</span><span class="p">:</span> <span class="dl">'</span><span class="s1">ttypescript</span><span class="dl">'</span>
     <span class="p">}</span>
   <span class="p">}</span>
 <span class="p">};</span>
@@ -165,10 +165,10 @@ The loaded version will depend on the one installed in your project.</p>
     <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// OR package.json</span>
 <span class="p">{</span>
   <span class="c1">// [...]</span>
-  <span class="s2">"jest"</span><span class="p">:</span> <span class="p">{</span>
-    <span class="s2">"globals"</span><span class="p">:</span> <span class="p">{</span>
-      <span class="s2">"ts-jest"</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">"compiler"</span><span class="p">:</span> <span class="s2">"ttypescript"</span>
+  <span class="dl">"</span><span class="s2">jest</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+    <span class="dl">"</span><span class="s2">globals</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+      <span class="dl">"</span><span class="s2">ts-jest</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="dl">"</span><span class="s2">compiler</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">ttypescript</span><span class="dl">"</span>
       <span class="p">}</span>
     <span class="p">}</span>
   <span class="p">}</span>
@@ -186,7 +186,7 @@ The loaded version will depend on the one installed in your project.</p>
   <div class="container">
     <div class="row">
       <div class="col-sm text-right">
-        <a href="http://github.com/kulshekhar/ts-jest/tree/master/docs/user/config/compiler.md">
+        <a href="https://github.com/kulshekhar/ts-jest/tree/master/docs/user/config/compiler.md">
           edit this page <i class="far fa-edit"></i>
         </a>
       </div>

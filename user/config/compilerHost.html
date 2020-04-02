@@ -3,15 +3,15 @@
  <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
-<title>Babel Config option | ts-jest</title>
+<title>Compiler Host option | ts-jest</title>
 <meta name="generator" content="Jekyll v3.8.5" />
-<meta property="og:title" content="Babel Config option" />
+<meta property="og:title" content="Compiler Host option" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="ts-jest is a TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript." />
 <meta property="og:description" content="ts-jest is a TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript." />
 <meta property="og:site_name" content="ts-jest" />
 <script type="application/ld+json">
-{"headline":"Babel Config option","description":"ts-jest is a TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript.","@type":"WebPage","url":"/ts-jest/user/config/babelConfig.html","@context":"https://schema.org"}</script>
+{"headline":"Compiler Host option","description":"ts-jest is a TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript.","@type":"WebPage","url":"/ts-jest/user/config/compilerHost.html","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 <link rel="stylesheet" href="/ts-jest/assets/css/main.css"><link type="application/atom+xml" rel="alternate" href="/ts-jest/feed.xml" title="ts-jest" /><script src="/ts-jest/assets/js/bootstrap/jquery.min.js"></script>
   <script src="/ts-jest/assets/js/bootstrap/bootstrap.bundle.min.js"></script>
@@ -134,23 +134,33 @@
           <article>
 
   <header>
-    <h1>Babel Config option</h1>
+    <h1>Compiler Host option</h1>
   </header>
 
   <section>
-    <p><code class="language-plaintext highlighter-rouge">ts-jest</code> by default does <strong>NOT</strong> use Babel. But you may want to use it, especially if your code rely on Babel plugins to make some transformations. <code class="language-plaintext highlighter-rouge">ts-jest</code> can call the BabelJest processor once TypeScript has transformed the source into JavaScript.</p>
+    <p>By default <code class="language-plaintext highlighter-rouge">ts-jest</code> uses TypeScript <code class="language-plaintext highlighter-rouge">LanguageService</code> API in the context of a project (yours), with full type-checking and features.
+But TypeScript <code class="language-plaintext highlighter-rouge">Program</code> can also be used to achieve the same behavior as <code class="language-plaintext highlighter-rouge">LanguageService</code>.
+That’s what the <code class="language-plaintext highlighter-rouge">compilerHost</code> option (which defaults to <code class="language-plaintext highlighter-rouge">false</code>) does.</p>
 
-<p>The option is <code class="language-plaintext highlighter-rouge">babelConfig</code> and it works pretty much as the <code class="language-plaintext highlighter-rouge">tsConfig</code> option, except that it is disabled by default. Here is the possible values it can take:</p>
+<p>There are 2 types of TypeScript <code class="language-plaintext highlighter-rouge">Program</code>, one is <code class="language-plaintext highlighter-rouge">Incremental Program</code> which is only available from TypeScript 3.4 
+and the other one is normal <code class="language-plaintext highlighter-rouge">Program</code>.</p>
 
+<p>By default <code class="language-plaintext highlighter-rouge">ts-jest</code> uses <code class="language-plaintext highlighter-rouge">Incremental Program</code> if <code class="language-plaintext highlighter-rouge">compilerHost</code> is enabled. The priority of using TypeScript APIs in <code class="language-plaintext highlighter-rouge">ts-jest</code>
+as below:</p>
 <ul>
-  <li><code class="language-plaintext highlighter-rouge">false</code>: the default, disables the use of Babel</li>
-  <li><code class="language-plaintext highlighter-rouge">true</code>: enables Babel processing. <code class="language-plaintext highlighter-rouge">ts-jest</code> will try to find a <code class="language-plaintext highlighter-rouge">.babelrc</code>, <code class="language-plaintext highlighter-rouge">.babelrc.js</code>, <code class="language-plaintext highlighter-rouge">babel.config.js</code> file or a <code class="language-plaintext highlighter-rouge">babel</code> section in the <code class="language-plaintext highlighter-rouge">package.json</code> file of your project and use it as the config to pass to <code class="language-plaintext highlighter-rouge">babel-jest</code> processor.</li>
-  <li><code class="language-plaintext highlighter-rouge">{ ... }</code>: inline <a href="https://babeljs.io/docs/en/next/options">Babel options</a>. You can also set this to an empty object (<code class="language-plaintext highlighter-rouge">{}</code>) so that the default Babel config file is not used.</li>
+  <li>Default TypeScript API is <code class="language-plaintext highlighter-rouge">LanguageService</code>.</li>
+  <li><code class="language-plaintext highlighter-rouge">compilerHost</code> is enabled:
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">incremental</code> is enabled (<strong>default</strong>): use TypeScript <code class="language-plaintext highlighter-rouge">Incremental Program</code>.</li>
+      <li><code class="language-plaintext highlighter-rouge">incremental</code> is disabled: use TypeScript <code class="language-plaintext highlighter-rouge">Program</code>.</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">isolatedModules</code> is enabled, use TypeScript transpile modules.</li>
 </ul>
 
-<h3 id="examples">Examples</h3>
+<p>Here is how to enable <code class="language-plaintext highlighter-rouge">ts-jest</code> to compile using TypeScript <code class="language-plaintext highlighter-rouge">Program</code></p>
 
-<h4 id="use-default-babelrc-file">Use default <code class="language-plaintext highlighter-rouge">babelrc</code> file</h4>
+<h3 id="example">Example</h3>
 
 <div class="row"><div class="col-md-6">
 
@@ -159,7 +169,8 @@
   <span class="c1">// [...]</span>
   <span class="na">globals</span><span class="p">:</span> <span class="p">{</span>
     <span class="dl">'</span><span class="s1">ts-jest</span><span class="dl">'</span><span class="p">:</span> <span class="p">{</span>
-      <span class="na">babelConfig</span><span class="p">:</span> <span class="kc">true</span>
+      <span class="na">compilerHost</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+      <span class="na">incremental</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
     <span class="p">}</span>
   <span class="p">}</span>
 <span class="p">};</span>
@@ -167,101 +178,53 @@
 
   </div><div class="col-md-6">
 
-    <pre><code class="language-json5">// OR package.json
-{
-  // [...]
-  "jest": {
-    "globals": {
-      "ts-jest": {
-        "babelConfig": true
-      }
-    }
-  }
-}
-</code></pre>
-
-  </div></div>
-
-<h4 id="path-to-a-babelrc-file">Path to a <code class="language-plaintext highlighter-rouge">babelrc</code> file</h4>
-
-<p>The path should be relative to the current working directory where you start Jest from. You can also use <code class="language-plaintext highlighter-rouge">\&lt;rootDir&gt;</code> in the path, or use an absolute path (this last one is strongly not recommended).</p>
-
-<div class="row"><div class="col-md-6">
-
-    <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// jest.config.js</span>
-<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+    <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// OR package.json</span>
+<span class="p">{</span>
   <span class="c1">// [...]</span>
-  <span class="na">globals</span><span class="p">:</span> <span class="p">{</span>
-    <span class="dl">'</span><span class="s1">ts-jest</span><span class="dl">'</span><span class="p">:</span> <span class="p">{</span>
-      <span class="na">babelConfig</span><span class="p">:</span> <span class="dl">'</span><span class="s1">babelrc.test.js</span><span class="dl">'</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
-<span class="p">};</span>
-</code></pre></div>    </div>
-    <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// OR jest.config.js with require for babelrc</span>
-<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
-  <span class="c1">// [...]</span>
-  <span class="na">globals</span><span class="p">:</span> <span class="p">{</span>
-    <span class="dl">'</span><span class="s1">ts-jest</span><span class="dl">'</span><span class="p">:</span> <span class="p">{</span>
-      <span class="na">babelConfig</span><span class="p">:</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">./babelrc.test.js</span><span class="dl">'</span><span class="p">),</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
-<span class="p">};</span>
-</code></pre></div>    </div>
-  </div><div class="col-md-6">
-
-    <pre><code class="language-json5">// OR package.json
-{
-  // [...]
-  "jest": {
-    "globals": {
-      "ts-jest": {
-        "babelConfig": "babelrc.test.js"
-      }
-    }
-  }
-}
-</code></pre>
-
-  </div></div>
-
-<h4 id="inline-compiler-options">Inline compiler options</h4>
-
-<p>Refer to the <a href="https://babeljs.io/docs/en/next/options">Babel options</a> to know what can be used there.</p>
-
-<div class="row"><div class="col-md-6">
-
-    <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// jest.config.js</span>
-<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
-  <span class="c1">// [...]</span>
-  <span class="na">globals</span><span class="p">:</span> <span class="p">{</span>
-    <span class="dl">'</span><span class="s1">ts-jest</span><span class="dl">'</span><span class="p">:</span> <span class="p">{</span>
-      <span class="na">babelConfig</span><span class="p">:</span> <span class="p">{</span>
-        <span class="na">comments</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
-        <span class="na">plugins</span><span class="p">:</span> <span class="p">[</span><span class="dl">'</span><span class="s1">@babel/plugin-transform-for-of</span><span class="dl">'</span><span class="p">]</span>
+  <span class="dl">"</span><span class="s2">jest</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+    <span class="dl">"</span><span class="s2">globals</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+      <span class="dl">"</span><span class="s2">ts-jest</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="dl">"</span><span class="s2">compilerHost</span><span class="dl">"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">incremental</span><span class="dl">"</span><span class="p">:</span> <span class="kc">false</span>
       <span class="p">}</span>
     <span class="p">}</span>
   <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>    </div>
+
+  </div></div>
+
+<p>Here is how to enable <code class="language-plaintext highlighter-rouge">ts-jest</code> to compile using TypeScript <code class="language-plaintext highlighter-rouge">IncrementalProgram</code></p>
+
+<h3 id="example-1">Example</h3>
+
+<div class="row"><div class="col-md-6">
+
+    <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// jest.config.js</span>
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="c1">// [...]</span>
+  <span class="na">globals</span><span class="p">:</span> <span class="p">{</span>
+    <span class="dl">'</span><span class="s1">ts-jest</span><span class="dl">'</span><span class="p">:</span> <span class="p">{</span>
+      <span class="na">compilerHost</span><span class="p">:</span> <span class="kc">true</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
 <span class="p">};</span>
 </code></pre></div>    </div>
 
   </div><div class="col-md-6">
 
-    <pre><code class="language-json5">// OR package.json
-{
-  // [...]
-  "jest": {
-    "globals": {
-      "ts-jest": {
-        "babelConfig": {
-          "comments": false,
-          "plugins": ["@babel/plugin-transform-for-of"]
-        }
-      }
-    }
-  }
-}
-</code></pre>
+    <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// OR package.json</span>
+<span class="p">{</span>
+  <span class="c1">// [...]</span>
+  <span class="dl">"</span><span class="s2">jest</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+    <span class="dl">"</span><span class="s2">globals</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+      <span class="dl">"</span><span class="s2">ts-jest</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="dl">"</span><span class="s2">compilerHost</span><span class="dl">"</span><span class="p">:</span> <span class="kc">true</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>    </div>
 
   </div></div>
 
@@ -274,7 +237,7 @@
   <div class="container">
     <div class="row">
       <div class="col-sm text-right">
-        <a href="https://github.com/kulshekhar/ts-jest/tree/master/docs/user/config/babelConfig.md">
+        <a href="https://github.com/kulshekhar/ts-jest/tree/master/docs/user/config/compilerHost.md">
           edit this page <i class="far fa-edit"></i>
         </a>
       </div>

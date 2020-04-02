@@ -2,16 +2,16 @@
 <html lang="en"><head>
  <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.5.0 -->
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
 <title>Configuration | ts-jest</title>
-<meta name="generator" content="Jekyll v3.7.4" />
+<meta name="generator" content="Jekyll v3.8.5" />
 <meta property="og:title" content="Configuration" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="ts-jest is a TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript." />
 <meta property="og:description" content="ts-jest is a TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript." />
 <meta property="og:site_name" content="ts-jest" />
 <script type="application/ld+json">
-{"url":"/ts-jest/user/config/","description":"ts-jest is a TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript.","headline":"Configuration","@type":"WebPage","@context":"http://schema.org"}</script>
+{"headline":"Configuration","description":"ts-jest is a TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript.","@type":"WebPage","url":"/ts-jest/user/config/","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 <link rel="stylesheet" href="/ts-jest/assets/css/main.css"><link type="application/atom+xml" rel="alternate" href="/ts-jest/feed.xml" title="ts-jest" /><script src="/ts-jest/assets/js/bootstrap/jquery.min.js"></script>
   <script src="/ts-jest/assets/js/bootstrap/bootstrap.bundle.min.js"></script>
@@ -122,7 +122,7 @@
   
   <li class="nav-item">
     <a class="nav-link inverse"
-       href="http://github.com/kulshekhar/ts-jest">Fork me <span class="fab fa-github"></span></a>
+       href="https://github.com/kulshekhar/ts-jest">Fork me <span class="fab fa-github"></span></a>
   </li>
 </ul>
 
@@ -138,14 +138,14 @@
   </header>
 
   <section>
-    <p><code class="highlighter-rouge">ts-jest</code> configuration is done within Jest configuration object. This latest can be in <code class="highlighter-rouge">package.json</code> under the <code class="highlighter-rouge">jest</code> property, or in its own <code class="highlighter-rouge">jest.config.js</code> file.
-The later is preferred since it’s more customizable, but it depends on your needs and preference.</p>
+    <p><code class="language-plaintext highlighter-rouge">ts-jest</code> configuration is done within the Jest configuration object. This can be in <code class="language-plaintext highlighter-rouge">package.json</code> under the <code class="language-plaintext highlighter-rouge">jest</code> property, or in its own <code class="language-plaintext highlighter-rouge">jest.config.js</code> file.
+The latter is preferred since it’s more customizable, but it depends on your needs and preference.</p>
 
 <h2 id="jest-preset">Jest preset</h2>
 
 <h3 id="the-3-presets">The 3 presets</h3>
 
-<p><code class="highlighter-rouge">ts-jest</code> comes with 3 presets, covering most of project’s base configuration:</p>
+<p><code class="language-plaintext highlighter-rouge">ts-jest</code> comes with 3 presets, covering most of the project’s base configuration:</p>
 
 <table>
   <thead>
@@ -156,23 +156,23 @@ The later is preferred since it’s more customizable, but it depends on your ne
   </thead>
   <tbody>
     <tr>
-      <td><code class="highlighter-rouge">ts-jest/presets/default</code><br />or <code class="highlighter-rouge">ts-jest</code></td>
-      <td><code class="highlighter-rouge">ts-jest</code> will take care of <code class="highlighter-rouge">.ts</code> and <code class="highlighter-rouge">.tsx</code> files only, leaving JavaScript files as-is.</td>
+      <td><code class="language-plaintext highlighter-rouge">ts-jest/presets/default</code><br />or <code class="language-plaintext highlighter-rouge">ts-jest</code></td>
+      <td><code class="language-plaintext highlighter-rouge">ts-jest</code> will take care of <code class="language-plaintext highlighter-rouge">.ts</code> and <code class="language-plaintext highlighter-rouge">.tsx</code> files only, leaving JavaScript files as-is.</td>
     </tr>
     <tr>
-      <td><code class="highlighter-rouge">ts-jest/presets/js-with-ts</code></td>
-      <td>TypeScript and JavaScript file (<code class="highlighter-rouge">.ts</code>, <code class="highlighter-rouge">.tsx</code>, <code class="highlighter-rouge">.js</code> and <code class="highlighter-rouge">.jsx</code>) will be handled by <code class="highlighter-rouge">ts-jest</code>.<br />You’ll need to set <code class="highlighter-rouge">allowJs</code> to <code class="highlighter-rouge">true</code> in your <code class="highlighter-rouge">tsconfig.json</code> file.</td>
+      <td><code class="language-plaintext highlighter-rouge">ts-jest/presets/js-with-ts</code></td>
+      <td>TypeScript and JavaScript files (<code class="language-plaintext highlighter-rouge">.ts</code>, <code class="language-plaintext highlighter-rouge">.tsx</code>, <code class="language-plaintext highlighter-rouge">.js</code> and <code class="language-plaintext highlighter-rouge">.jsx</code>) will be handled by <code class="language-plaintext highlighter-rouge">ts-jest</code>.<br />You’ll need to set <code class="language-plaintext highlighter-rouge">allowJs</code> to <code class="language-plaintext highlighter-rouge">true</code> in your <code class="language-plaintext highlighter-rouge">tsconfig.json</code> file.</td>
     </tr>
     <tr>
-      <td><code class="highlighter-rouge">ts-jest/presets/js-with-babel</code></td>
-      <td>TypeScript files will be handled by <code class="highlighter-rouge">ts-jest</code>, and JavaScript files will be handled by <code class="highlighter-rouge">babel-jest</code>.</td>
+      <td><code class="language-plaintext highlighter-rouge">ts-jest/presets/js-with-babel</code></td>
+      <td>TypeScript files will be handled by <code class="language-plaintext highlighter-rouge">ts-jest</code>, and JavaScript files will be handled by <code class="language-plaintext highlighter-rouge">babel-jest</code>.</td>
     </tr>
   </tbody>
 </table>
 
 <h3 id="basic-usage">Basic usage</h3>
 
-<p>In most cases, simply setting the <code class="highlighter-rouge">preset</code> key to the desired preset name in your Jest config should be enough to start using TypeScript with Jest (assuming you did add <code class="highlighter-rouge">ts-jest</code> to your dev. dependencies of course):</p>
+<p>In most cases, simply setting the <code class="language-plaintext highlighter-rouge">preset</code> key to the desired preset name in your Jest config should be enough to start using TypeScript with Jest (assuming you added <code class="language-plaintext highlighter-rouge">ts-jest</code> to your dev. dependencies of course):</p>
 
 <div class="row"><div class="col-md-6">
 
@@ -181,7 +181,7 @@ The later is preferred since it’s more customizable, but it depends on your ne
   <span class="c1">// [...]</span>
   <span class="c1">// Replace `ts-jest` with the preset you want to use</span>
   <span class="c1">// from the above list</span>
-  <span class="na">preset</span><span class="p">:</span> <span class="s1">'ts-jest'</span>
+  <span class="na">preset</span><span class="p">:</span> <span class="dl">'</span><span class="s1">ts-jest</span><span class="dl">'</span>
 <span class="p">};</span>
 </code></pre></div>    </div>
 
@@ -190,26 +190,26 @@ The later is preferred since it’s more customizable, but it depends on your ne
     <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// OR package.json</span>
 <span class="p">{</span>
   <span class="c1">// [...]</span>
-  <span class="s2">"jest"</span><span class="p">:</span> <span class="p">{</span>
+  <span class="dl">"</span><span class="s2">jest</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
     <span class="c1">// Replace `ts-jest` with the preset you want to use</span>
     <span class="c1">// from the above list</span>
-    <span class="s2">"preset"</span><span class="p">:</span> <span class="s2">"ts-jest"</span>
+    <span class="dl">"</span><span class="s2">preset</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">ts-jest</span><span class="dl">"</span>
   <span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div>    </div>
 
   </div></div>
 
-<p><strong>Note:</strong> presets use <code class="highlighter-rouge">testMatch</code>, like Jest does in its defaults. If you want to use <code class="highlighter-rouge">testRegex</code> instead in your configuration, you MUST set <code class="highlighter-rouge">testMatch</code> to <code class="highlighter-rouge">null</code> or Jest will bail.</p>
+<p><strong>Note:</strong> presets use <code class="language-plaintext highlighter-rouge">testMatch</code>, like Jest does in its defaults. If you want to use <code class="language-plaintext highlighter-rouge">testRegex</code> instead in your configuration, you MUST set <code class="language-plaintext highlighter-rouge">testMatch</code> to <code class="language-plaintext highlighter-rouge">null</code> or Jest will bail.</p>
 
 <h3 id="advanced">Advanced</h3>
 
 <p>Any preset can also be used with other options.
-If you’re already using another preset, you might want only some specific settings from the chosen <code class="highlighter-rouge">ts-jest</code> preset.
+If you’re already using another preset, you might want only some specific settings from the chosen <code class="language-plaintext highlighter-rouge">ts-jest</code> preset.
 In this case you’ll need to use the JavaScript version of Jest config (comment/uncomment according to your use-case):</p>
 
 <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// jest.config.js</span>
-<span class="kd">const</span> <span class="p">{</span> <span class="na">defaults</span><span class="p">:</span> <span class="nx">tsjPreset</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'ts-jest/presets'</span><span class="p">);</span>
+<span class="kd">const</span> <span class="p">{</span> <span class="na">defaults</span><span class="p">:</span> <span class="nx">tsjPreset</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">ts-jest/presets</span><span class="dl">'</span><span class="p">);</span>
 <span class="c1">// const { jsWithTs: tsjPreset } = require('ts-jest/presets');</span>
 <span class="c1">// const { jsWithBabel: tsjPreset } = require('ts-jest/presets');</span>
 
@@ -224,22 +224,23 @@ In this case you’ll need to use the JavaScript version of Jest config (comment
 
 <h2 id="paths-mapping">Paths mapping</h2>
 
-<p>If you use <a href="https://www.typescriptlang.org/docs/handbook/module-resolution.html">“baseUrl” and “paths” options</a> in your <code class="highlighter-rouge">tsconfig</code> file, you should make sure the <a href="https://facebook.github.io/jest/docs/en/configuration.html#modulenamemapper-object-string-string">“moduleNameMapper”</a> option in your Jest config is setup accordingly.</p>
+<p>If you use <a href="https://www.typescriptlang.org/docs/handbook/module-resolution.html">“baseUrl” and “paths” options</a> in your <code class="language-plaintext highlighter-rouge">tsconfig</code> file, you should make sure the <a href="https://facebook.github.io/jest/docs/en/configuration.html#modulenamemapper-object-string-string">“moduleNameMapper”</a> option in your Jest config is setup accordingly.</p>
 
-<p><code class="highlighter-rouge">ts-jest</code> provides a helper to transform the mapping from <code class="highlighter-rouge">tsconfig</code> to Jest config format, but it needs the <code class="highlighter-rouge">.js</code> version of the config file.</p>
+<p><code class="language-plaintext highlighter-rouge">ts-jest</code> provides a helper to transform the mapping from <code class="language-plaintext highlighter-rouge">tsconfig</code> to Jest config format, but it needs the <code class="language-plaintext highlighter-rouge">.js</code> version of the config file.</p>
 
 <h3 id="example">Example</h3>
 
 <h4 id="typescript-config">TypeScript config</h4>
 
-<p>With the below config in your <code class="highlighter-rouge">tsconfig</code>:</p>
+<p>With the below config in your <code class="language-plaintext highlighter-rouge">tsconfig</code>:</p>
 
 <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// tsconfig.json</span>
 <span class="p">{</span>
-  <span class="s2">"compilerOptions"</span><span class="p">:</span> <span class="p">{</span>
-    <span class="s2">"paths"</span><span class="p">:</span> <span class="p">{</span>
-      <span class="s2">"@App/*"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"src/*"</span><span class="p">],</span>
-      <span class="s2">"lib/*"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"common/*"</span><span class="p">]</span>
+  <span class="dl">"</span><span class="s2">compilerOptions</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+    <span class="dl">"</span><span class="s2">baseUrl</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">.</span><span class="dl">"</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">paths</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+      <span class="dl">"</span><span class="s2">@App/*</span><span class="dl">"</span><span class="p">:</span> <span class="p">[</span><span class="dl">"</span><span class="s2">src/*</span><span class="dl">"</span><span class="p">],</span>
+      <span class="dl">"</span><span class="s2">lib/*</span><span class="dl">"</span><span class="p">:</span> <span class="p">[</span><span class="dl">"</span><span class="s2">common/*</span><span class="dl">"</span><span class="p">]</span>
     <span class="p">}</span>
   <span class="p">}</span>
 <span class="p">}</span>
@@ -253,8 +254,8 @@ In this case you’ll need to use the JavaScript version of Jest config (comment
 <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
   <span class="c1">// [...]</span>
   <span class="na">moduleNameMapper</span><span class="p">:</span> <span class="p">{</span>
-    <span class="s1">'^@App/(.*)$'</span><span class="p">:</span> <span class="s1">'&lt;rootDir&gt;/src/$1'</span><span class="p">,</span>
-    <span class="s1">'^lib/(.*)$'</span><span class="p">:</span> <span class="s1">'&lt;rootDir&gt;/common/$1'</span>
+    <span class="dl">'</span><span class="s1">^@App/(.*)$</span><span class="dl">'</span><span class="p">:</span> <span class="dl">'</span><span class="s1">&lt;rootDir&gt;/src/$1</span><span class="dl">'</span><span class="p">,</span>
+    <span class="dl">'</span><span class="s1">^lib/(.*)$</span><span class="dl">'</span><span class="p">:</span> <span class="dl">'</span><span class="s1">&lt;rootDir&gt;/common/$1</span><span class="dl">'</span>
   <span class="p">}</span>
 <span class="p">};</span>
 </code></pre></div>    </div>
@@ -264,10 +265,10 @@ In this case you’ll need to use the JavaScript version of Jest config (comment
     <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// OR package.json</span>
 <span class="p">{</span>
   <span class="c1">// [...]</span>
-  <span class="s2">"jest"</span><span class="p">:</span> <span class="p">{</span>
-    <span class="s2">"moduleNameMapper"</span><span class="p">:</span> <span class="p">{</span>
-      <span class="s2">"^@App/(.*)$"</span><span class="p">:</span> <span class="s2">"&lt;rootDir&gt;/src/$1"</span><span class="p">,</span>
-      <span class="s2">"^lib/(.*)$"</span><span class="p">:</span> <span class="s2">"&lt;rootDir&gt;/common/$1"</span>
+  <span class="dl">"</span><span class="s2">jest</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+    <span class="dl">"</span><span class="s2">moduleNameMapper</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+      <span class="dl">"</span><span class="s2">^@App/(.*)$</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">&lt;rootDir&gt;/src/$1</span><span class="dl">"</span><span class="p">,</span>
+      <span class="dl">"</span><span class="s2">^lib/(.*)$</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">&lt;rootDir&gt;/common/$1</span><span class="dl">"</span>
     <span class="p">}</span>
   <span class="p">}</span>
 <span class="p">}</span>
@@ -278,10 +279,10 @@ In this case you’ll need to use the JavaScript version of Jest config (comment
 <h4 id="jest-config-with-helper">Jest config (with helper)</h4>
 
 <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// jest.config.js</span>
-<span class="kd">const</span> <span class="p">{</span> <span class="nx">pathsToModuleNameMapper</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'ts-jest/utils'</span><span class="p">);</span>
+<span class="kd">const</span> <span class="p">{</span> <span class="nx">pathsToModuleNameMapper</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">ts-jest/utils</span><span class="dl">'</span><span class="p">);</span>
 <span class="c1">// In the following statement, replace `./tsconfig` with the path to your `tsconfig` file</span>
 <span class="c1">// which contains the path mapping (ie the `compilerOptions.paths` option):</span>
-<span class="kd">const</span> <span class="p">{</span> <span class="nx">compilerOptions</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'./tsconfig'</span><span class="p">);</span>
+<span class="kd">const</span> <span class="p">{</span> <span class="nx">compilerOptions</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">./tsconfig</span><span class="dl">'</span><span class="p">);</span>
 
 <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
   <span class="c1">// [...]</span>
@@ -289,11 +290,11 @@ In this case you’ll need to use the JavaScript version of Jest config (comment
 <span class="p">};</span>
 </code></pre></div></div>
 
-<h2 id="ts-jest-options"><code class="highlighter-rouge">ts-jest</code> options</h2>
+<h2 id="ts-jest-options"><code class="language-plaintext highlighter-rouge">ts-jest</code> options</h2>
 
 <h3 id="introduction">Introduction</h3>
 
-<p>All configuration of <code class="highlighter-rouge">ts-jest</code> specific options are located under <code class="highlighter-rouge">globals.ts-jest</code> path of your Jest config:</p>
+<p>All configuration of <code class="language-plaintext highlighter-rouge">ts-jest</code> specific options are located under <code class="language-plaintext highlighter-rouge">globals.ts-jest</code> path of your Jest config:</p>
 
 <div class="row"><div class="col-md-6">
 
@@ -301,7 +302,7 @@ In this case you’ll need to use the JavaScript version of Jest config (comment
 <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
   <span class="c1">// [...]</span>
   <span class="na">globals</span><span class="p">:</span> <span class="p">{</span>
-    <span class="s1">'ts-jest'</span><span class="p">:</span> <span class="p">{</span>
+    <span class="dl">'</span><span class="s1">ts-jest</span><span class="dl">'</span><span class="p">:</span> <span class="p">{</span>
       <span class="c1">// ts-jest configuration goes here</span>
     <span class="p">}</span>
   <span class="p">}</span>
@@ -313,9 +314,9 @@ In this case you’ll need to use the JavaScript version of Jest config (comment
     <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// OR package.json</span>
 <span class="p">{</span>
   <span class="c1">// [...]</span>
-  <span class="s2">"jest"</span><span class="p">:</span> <span class="p">{</span>
-    <span class="s2">"globals"</span><span class="p">:</span> <span class="p">{</span>
-      <span class="s2">"ts-jest"</span><span class="p">:</span> <span class="p">{</span>
+  <span class="dl">"</span><span class="s2">jest</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+    <span class="dl">"</span><span class="s2">globals</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+      <span class="dl">"</span><span class="s2">ts-jest</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
         <span class="c1">// ts-jest configuration goes here</span>
       <span class="p">}</span>
     <span class="p">}</span>
@@ -340,58 +341,76 @@ In this case you’ll need to use the JavaScript version of Jest config (comment
   </thead>
   <tbody>
     <tr>
-      <td><a href="compiler"><strong><code class="highlighter-rouge">compiler</code></strong></a></td>
+      <td><a href="compiler"><strong><code class="language-plaintext highlighter-rouge">compiler</code></strong></a></td>
       <td><a href="compiler">TypeScript module to use as compiler.</a></td>
-      <td><code class="highlighter-rouge">string</code></td>
-      <td><code class="highlighter-rouge">"typescript"</code></td>
+      <td><code class="language-plaintext highlighter-rouge">string</code></td>
+      <td><code class="language-plaintext highlighter-rouge">"typescript"</code></td>
     </tr>
     <tr>
-      <td><a href="tsConfig"><strong><code class="highlighter-rouge">tsConfig</code></strong></a></td>
+      <td><a href="tsConfig"><strong><code class="language-plaintext highlighter-rouge">tsConfig</code></strong></a></td>
       <td><a href="tsConfig">TypeScript compiler related configuration.</a></td>
-      <td><code class="highlighter-rouge">string</code>|<code class="highlighter-rouge">object</code>|<code class="highlighter-rouge">boolean</code></td>
+      <td><code class="language-plaintext highlighter-rouge">string</code>|<code class="language-plaintext highlighter-rouge">object</code>|<code class="language-plaintext highlighter-rouge">boolean</code></td>
       <td><em>auto</em></td>
     </tr>
     <tr>
-      <td><a href="isolatedModules"><strong><code class="highlighter-rouge">isolatedModules</code></strong></a></td>
+      <td><a href="isolatedModules"><strong><code class="language-plaintext highlighter-rouge">isolatedModules</code></strong></a></td>
       <td><a href="isolatedModules">Disable type-checking</a></td>
-      <td><code class="highlighter-rouge">boolean</code></td>
-      <td><code class="highlighter-rouge">false</code></td>
+      <td><code class="language-plaintext highlighter-rouge">boolean</code></td>
+      <td><code class="language-plaintext highlighter-rouge">false</code></td>
     </tr>
     <tr>
-      <td><a href="diagnostics"><strong><code class="highlighter-rouge">diagnostics</code></strong></a></td>
+      <td><a href="compilerHost"><strong><code class="language-plaintext highlighter-rouge">compilerHost</code></strong></a></td>
+      <td><a href="compilerHost">Use TypeScript Compiler API</a></td>
+      <td><code class="language-plaintext highlighter-rouge">boolean</code></td>
+      <td><code class="language-plaintext highlighter-rouge">false</code></td>
+    </tr>
+    <tr>
+      <td><a href="compilerHost"><strong><code class="language-plaintext highlighter-rouge">incremental (use with </code>compilerHost<code class="language-plaintext highlighter-rouge">)</code></strong></a></td>
+      <td><a href="compilerHost">Use TypeScript Incremental Program</a></td>
+      <td><code class="language-plaintext highlighter-rouge">boolean</code></td>
+      <td><code class="language-plaintext highlighter-rouge">true</code></td>
+    </tr>
+    <tr>
+      <td><a href="diagnostics"><strong><code class="language-plaintext highlighter-rouge">diagnostics</code></strong></a></td>
       <td><a href="diagnostics">Diagnostics related configuration.</a></td>
-      <td><code class="highlighter-rouge">boolean</code>|<code class="highlighter-rouge">object</code></td>
-      <td><code class="highlighter-rouge">true</code></td>
+      <td><code class="language-plaintext highlighter-rouge">boolean</code>|<code class="language-plaintext highlighter-rouge">object</code></td>
+      <td><code class="language-plaintext highlighter-rouge">true</code></td>
     </tr>
     <tr>
-      <td><a href="babelConfig"><strong><code class="highlighter-rouge">babelConfig</code></strong></a></td>
+      <td><a href="babelConfig"><strong><code class="language-plaintext highlighter-rouge">babelConfig</code></strong></a></td>
       <td><a href="babelConfig">Babel(Jest) related configuration.</a></td>
-      <td><code class="highlighter-rouge">boolean</code>|<code class="highlighter-rouge">object</code></td>
+      <td><code class="language-plaintext highlighter-rouge">boolean</code>|<code class="language-plaintext highlighter-rouge">object</code></td>
       <td><em>disabled</em></td>
     </tr>
     <tr>
-      <td><a href="stringifyContentPathRegex"><strong><code class="highlighter-rouge">stringifyContentPathRegex</code></strong></a></td>
+      <td><a href="stringifyContentPathRegex"><strong><code class="language-plaintext highlighter-rouge">stringifyContentPathRegex</code></strong></a></td>
       <td><a href="stringifyContentPathRegex">Files which will become modules returning self content.</a></td>
-      <td><code class="highlighter-rouge">string</code>|<code class="highlighter-rouge">RegExp</code></td>
+      <td><code class="language-plaintext highlighter-rouge">string</code>|<code class="language-plaintext highlighter-rouge">RegExp</code></td>
       <td><em>disabled</em></td>
+    </tr>
+    <tr>
+      <td><a href="packageJson"><strong><code class="language-plaintext highlighter-rouge">packageJson</code></strong></a></td>
+      <td><a href="packageJson">Package metadata.</a></td>
+      <td><code class="language-plaintext highlighter-rouge">string</code>|<code class="language-plaintext highlighter-rouge">object</code>|<code class="language-plaintext highlighter-rouge">boolean</code></td>
+      <td><em>auto</em></td>
     </tr>
   </tbody>
 </table>
 
 <h3 id="upgrading">Upgrading</h3>
 
-<p>You can use the <code class="highlighter-rouge">config:migrate</code> tool of <code class="highlighter-rouge">ts-jest</code> CLI if you’re coming from an older version to help you migrate your Jest configuration.</p>
+<p>You can use the <code class="language-plaintext highlighter-rouge">config:migrate</code> tool of <code class="language-plaintext highlighter-rouge">ts-jest</code> CLI if you’re coming from an older version to help you migrate your Jest configuration.</p>
 
 <div class="row"><div class="col-md-6">
 
-    <p><em>If you’re using <code class="highlighter-rouge">jest.config.json</code>:</em></p>
+    <p><em>If you’re using <code class="language-plaintext highlighter-rouge">jest.config.json</code>:</em></p>
 
     <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npx ts-jest config:migrate jest.config.js
 </code></pre></div>    </div>
 
   </div><div class="col-md-6">
 
-    <p><em>If you’re using <code class="highlighter-rouge">jest</code> config property of <code class="highlighter-rouge">package.json</code>:</em></p>
+    <p><em>If you’re using <code class="language-plaintext highlighter-rouge">jest</code> config property of <code class="language-plaintext highlighter-rouge">package.json</code>:</em></p>
 
     <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npx ts-jest config:migrate package.json
 </code></pre></div>    </div>
@@ -408,7 +427,7 @@ In this case you’ll need to use the JavaScript version of Jest config (comment
   <div class="container">
     <div class="row">
       <div class="col-sm text-right">
-        <a href="http://github.com/kulshekhar/ts-jest/tree/master/docs/user/config/index.md">
+        <a href="https://github.com/kulshekhar/ts-jest/tree/master/docs/user/config/index.md">
           edit this page <i class="far fa-edit"></i>
         </a>
       </div>

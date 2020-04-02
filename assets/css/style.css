@@ -21,7 +21,7 @@ audio:not([controls]) { display: none; height: 0; }
 progress { vertical-align: baseline; }
 
 /** Add the correct display in IE 10-. 1. Add the correct display in IE. */
-template, [hidden] { display: none; }
+template, [hidden] { display: none !important; }
 
 /* Links ========================================================================== */
 /** Remove the gray background on active links in IE 10. */
@@ -146,6 +146,8 @@ td, th { padding: 0; }
 
 button { cursor: pointer; border-radius: 0; }
 
+[hidden][hidden] { display: none !important; }
+
 details summary { cursor: pointer; }
 details:not([open]) > *:not(summary) { display: none !important; }
 
@@ -231,26 +233,17 @@ pre { margin-top: 0; margin-bottom: 0; font-family: "SFMono-Regular", Consolas, 
   50% { transform: scale3d(1.1, 1.1, 1.1); }
   100% { transform: scale3d(1, 1, 1); } }
 /* Increase scale of an element on hover */
-.hover-grow { transition: transform 0.3s; }
+.hover-grow { transition: transform 0.3s; backface-visibility: hidden; }
 .hover-grow:hover { transform: scale(1.025); }
 
-/* Add a gray border */
+/* Add a gray border on all sides */
 .border { border: 1px #e1e4e8 solid !important; }
-
-/* Add a gray border to the top */
-.border-top { border-top: 1px #e1e4e8 solid !important; }
-
-/* Add a gray border to the right */
-.border-right { border-right: 1px #e1e4e8 solid !important; }
-
-/* Add a gray border to the bottom */
-.border-bottom { border-bottom: 1px #e1e4e8 solid !important; }
-
-/* Add a gray border to the left */
-.border-left { border-left: 1px #e1e4e8 solid !important; }
 
 /* Add a gray border to the left and right */
 .border-y { border-top: 1px #e1e4e8 solid !important; border-bottom: 1px #e1e4e8 solid !important; }
+
+/* Remove borders from all sides */
+.border-0 { border: 0 !important; }
 
 .border-dashed { border-style: dashed !important; }
 
@@ -287,8 +280,18 @@ pre { margin-top: 0; margin-bottom: 0; font-family: "SFMono-Regular", Consolas, 
 /* Use with .border to turn the border rgba black 0.15 */
 .border-black-fade { border-color: rgba(27, 31, 35, 0.15) !important; }
 
-/* Remove all borders */
-.border-0 { border: 0 !important; }
+/* Add a gray border */
+/* Add a gray border to the top */
+.border-top { border-top: 1px #e1e4e8 solid !important; }
+
+/* Add a gray border to the right */
+.border-right { border-right: 1px #e1e4e8 solid !important; }
+
+/* Add a gray border to the bottom */
+.border-bottom { border-bottom: 1px #e1e4e8 solid !important; }
+
+/* Add a gray border to the left */
+.border-left { border-left: 1px #e1e4e8 solid !important; }
 
 /* Remove the top border */
 .border-top-0 { border-top: 0 !important; }
@@ -311,6 +314,170 @@ pre { margin-top: 0; margin-bottom: 0; font-family: "SFMono-Regular", Consolas, 
 /* Add a 2x border-radius to all corners */
 .rounded-2 { border-radius: 6px !important; }
 
+.rounded-top-0 { border-top-left-radius: 0 !important; border-top-right-radius: 0 !important; }
+
+.rounded-top-1 { border-top-left-radius: 3px !important; border-top-right-radius: 3px !important; }
+
+.rounded-top-2 { border-top-left-radius: 6px !important; border-top-right-radius: 6px !important; }
+
+.rounded-right-0 { border-top-right-radius: 0 !important; border-bottom-right-radius: 0 !important; }
+
+.rounded-right-1 { border-top-right-radius: 3px !important; border-bottom-right-radius: 3px !important; }
+
+.rounded-right-2 { border-top-right-radius: 6px !important; border-bottom-right-radius: 6px !important; }
+
+.rounded-bottom-0 { border-bottom-right-radius: 0 !important; border-bottom-left-radius: 0 !important; }
+
+.rounded-bottom-1 { border-bottom-right-radius: 3px !important; border-bottom-left-radius: 3px !important; }
+
+.rounded-bottom-2 { border-bottom-right-radius: 6px !important; border-bottom-left-radius: 6px !important; }
+
+.rounded-left-0 { border-bottom-left-radius: 0 !important; border-top-left-radius: 0 !important; }
+
+.rounded-left-1 { border-bottom-left-radius: 3px !important; border-top-left-radius: 3px !important; }
+
+.rounded-left-2 { border-bottom-left-radius: 6px !important; border-top-left-radius: 6px !important; }
+
+@media (min-width: 544px) { /* Add a gray border */
+  /* Add a gray border to the top */
+  .border-sm-top { border-top: 1px #e1e4e8 solid !important; }
+  /* Add a gray border to the right */
+  .border-sm-right { border-right: 1px #e1e4e8 solid !important; }
+  /* Add a gray border to the bottom */
+  .border-sm-bottom { border-bottom: 1px #e1e4e8 solid !important; }
+  /* Add a gray border to the left */
+  .border-sm-left { border-left: 1px #e1e4e8 solid !important; }
+  /* Remove the top border */
+  .border-sm-top-0 { border-top: 0 !important; }
+  /* Remove the right border */
+  .border-sm-right-0 { border-right: 0 !important; }
+  /* Remove the bottom border */
+  .border-sm-bottom-0 { border-bottom: 0 !important; }
+  /* Remove the left border */
+  .border-sm-left-0 { border-left: 0 !important; }
+  /* Remove the border-radius */
+  .rounded-sm-0 { border-radius: 0 !important; }
+  /* Add a border-radius to all corners */
+  .rounded-sm-1 { border-radius: 3px !important; }
+  /* Add a 2x border-radius to all corners */
+  .rounded-sm-2 { border-radius: 6px !important; }
+  .rounded-sm-top-0 { border-top-left-radius: 0 !important; border-top-right-radius: 0 !important; }
+  .rounded-sm-top-1 { border-top-left-radius: 3px !important; border-top-right-radius: 3px !important; }
+  .rounded-sm-top-2 { border-top-left-radius: 6px !important; border-top-right-radius: 6px !important; }
+  .rounded-sm-right-0 { border-top-right-radius: 0 !important; border-bottom-right-radius: 0 !important; }
+  .rounded-sm-right-1 { border-top-right-radius: 3px !important; border-bottom-right-radius: 3px !important; }
+  .rounded-sm-right-2 { border-top-right-radius: 6px !important; border-bottom-right-radius: 6px !important; }
+  .rounded-sm-bottom-0 { border-bottom-right-radius: 0 !important; border-bottom-left-radius: 0 !important; }
+  .rounded-sm-bottom-1 { border-bottom-right-radius: 3px !important; border-bottom-left-radius: 3px !important; }
+  .rounded-sm-bottom-2 { border-bottom-right-radius: 6px !important; border-bottom-left-radius: 6px !important; }
+  .rounded-sm-left-0 { border-bottom-left-radius: 0 !important; border-top-left-radius: 0 !important; }
+  .rounded-sm-left-1 { border-bottom-left-radius: 3px !important; border-top-left-radius: 3px !important; }
+  .rounded-sm-left-2 { border-bottom-left-radius: 6px !important; border-top-left-radius: 6px !important; } }
+@media (min-width: 768px) { /* Add a gray border */
+  /* Add a gray border to the top */
+  .border-md-top { border-top: 1px #e1e4e8 solid !important; }
+  /* Add a gray border to the right */
+  .border-md-right { border-right: 1px #e1e4e8 solid !important; }
+  /* Add a gray border to the bottom */
+  .border-md-bottom { border-bottom: 1px #e1e4e8 solid !important; }
+  /* Add a gray border to the left */
+  .border-md-left { border-left: 1px #e1e4e8 solid !important; }
+  /* Remove the top border */
+  .border-md-top-0 { border-top: 0 !important; }
+  /* Remove the right border */
+  .border-md-right-0 { border-right: 0 !important; }
+  /* Remove the bottom border */
+  .border-md-bottom-0 { border-bottom: 0 !important; }
+  /* Remove the left border */
+  .border-md-left-0 { border-left: 0 !important; }
+  /* Remove the border-radius */
+  .rounded-md-0 { border-radius: 0 !important; }
+  /* Add a border-radius to all corners */
+  .rounded-md-1 { border-radius: 3px !important; }
+  /* Add a 2x border-radius to all corners */
+  .rounded-md-2 { border-radius: 6px !important; }
+  .rounded-md-top-0 { border-top-left-radius: 0 !important; border-top-right-radius: 0 !important; }
+  .rounded-md-top-1 { border-top-left-radius: 3px !important; border-top-right-radius: 3px !important; }
+  .rounded-md-top-2 { border-top-left-radius: 6px !important; border-top-right-radius: 6px !important; }
+  .rounded-md-right-0 { border-top-right-radius: 0 !important; border-bottom-right-radius: 0 !important; }
+  .rounded-md-right-1 { border-top-right-radius: 3px !important; border-bottom-right-radius: 3px !important; }
+  .rounded-md-right-2 { border-top-right-radius: 6px !important; border-bottom-right-radius: 6px !important; }
+  .rounded-md-bottom-0 { border-bottom-right-radius: 0 !important; border-bottom-left-radius: 0 !important; }
+  .rounded-md-bottom-1 { border-bottom-right-radius: 3px !important; border-bottom-left-radius: 3px !important; }
+  .rounded-md-bottom-2 { border-bottom-right-radius: 6px !important; border-bottom-left-radius: 6px !important; }
+  .rounded-md-left-0 { border-bottom-left-radius: 0 !important; border-top-left-radius: 0 !important; }
+  .rounded-md-left-1 { border-bottom-left-radius: 3px !important; border-top-left-radius: 3px !important; }
+  .rounded-md-left-2 { border-bottom-left-radius: 6px !important; border-top-left-radius: 6px !important; } }
+@media (min-width: 1012px) { /* Add a gray border */
+  /* Add a gray border to the top */
+  .border-lg-top { border-top: 1px #e1e4e8 solid !important; }
+  /* Add a gray border to the right */
+  .border-lg-right { border-right: 1px #e1e4e8 solid !important; }
+  /* Add a gray border to the bottom */
+  .border-lg-bottom { border-bottom: 1px #e1e4e8 solid !important; }
+  /* Add a gray border to the left */
+  .border-lg-left { border-left: 1px #e1e4e8 solid !important; }
+  /* Remove the top border */
+  .border-lg-top-0 { border-top: 0 !important; }
+  /* Remove the right border */
+  .border-lg-right-0 { border-right: 0 !important; }
+  /* Remove the bottom border */
+  .border-lg-bottom-0 { border-bottom: 0 !important; }
+  /* Remove the left border */
+  .border-lg-left-0 { border-left: 0 !important; }
+  /* Remove the border-radius */
+  .rounded-lg-0 { border-radius: 0 !important; }
+  /* Add a border-radius to all corners */
+  .rounded-lg-1 { border-radius: 3px !important; }
+  /* Add a 2x border-radius to all corners */
+  .rounded-lg-2 { border-radius: 6px !important; }
+  .rounded-lg-top-0 { border-top-left-radius: 0 !important; border-top-right-radius: 0 !important; }
+  .rounded-lg-top-1 { border-top-left-radius: 3px !important; border-top-right-radius: 3px !important; }
+  .rounded-lg-top-2 { border-top-left-radius: 6px !important; border-top-right-radius: 6px !important; }
+  .rounded-lg-right-0 { border-top-right-radius: 0 !important; border-bottom-right-radius: 0 !important; }
+  .rounded-lg-right-1 { border-top-right-radius: 3px !important; border-bottom-right-radius: 3px !important; }
+  .rounded-lg-right-2 { border-top-right-radius: 6px !important; border-bottom-right-radius: 6px !important; }
+  .rounded-lg-bottom-0 { border-bottom-right-radius: 0 !important; border-bottom-left-radius: 0 !important; }
+  .rounded-lg-bottom-1 { border-bottom-right-radius: 3px !important; border-bottom-left-radius: 3px !important; }
+  .rounded-lg-bottom-2 { border-bottom-right-radius: 6px !important; border-bottom-left-radius: 6px !important; }
+  .rounded-lg-left-0 { border-bottom-left-radius: 0 !important; border-top-left-radius: 0 !important; }
+  .rounded-lg-left-1 { border-bottom-left-radius: 3px !important; border-top-left-radius: 3px !important; }
+  .rounded-lg-left-2 { border-bottom-left-radius: 6px !important; border-top-left-radius: 6px !important; } }
+@media (min-width: 1280px) { /* Add a gray border */
+  /* Add a gray border to the top */
+  .border-xl-top { border-top: 1px #e1e4e8 solid !important; }
+  /* Add a gray border to the right */
+  .border-xl-right { border-right: 1px #e1e4e8 solid !important; }
+  /* Add a gray border to the bottom */
+  .border-xl-bottom { border-bottom: 1px #e1e4e8 solid !important; }
+  /* Add a gray border to the left */
+  .border-xl-left { border-left: 1px #e1e4e8 solid !important; }
+  /* Remove the top border */
+  .border-xl-top-0 { border-top: 0 !important; }
+  /* Remove the right border */
+  .border-xl-right-0 { border-right: 0 !important; }
+  /* Remove the bottom border */
+  .border-xl-bottom-0 { border-bottom: 0 !important; }
+  /* Remove the left border */
+  .border-xl-left-0 { border-left: 0 !important; }
+  /* Remove the border-radius */
+  .rounded-xl-0 { border-radius: 0 !important; }
+  /* Add a border-radius to all corners */
+  .rounded-xl-1 { border-radius: 3px !important; }
+  /* Add a 2x border-radius to all corners */
+  .rounded-xl-2 { border-radius: 6px !important; }
+  .rounded-xl-top-0 { border-top-left-radius: 0 !important; border-top-right-radius: 0 !important; }
+  .rounded-xl-top-1 { border-top-left-radius: 3px !important; border-top-right-radius: 3px !important; }
+  .rounded-xl-top-2 { border-top-left-radius: 6px !important; border-top-right-radius: 6px !important; }
+  .rounded-xl-right-0 { border-top-right-radius: 0 !important; border-bottom-right-radius: 0 !important; }
+  .rounded-xl-right-1 { border-top-right-radius: 3px !important; border-bottom-right-radius: 3px !important; }
+  .rounded-xl-right-2 { border-top-right-radius: 6px !important; border-bottom-right-radius: 6px !important; }
+  .rounded-xl-bottom-0 { border-bottom-right-radius: 0 !important; border-bottom-left-radius: 0 !important; }
+  .rounded-xl-bottom-1 { border-bottom-right-radius: 3px !important; border-bottom-left-radius: 3px !important; }
+  .rounded-xl-bottom-2 { border-bottom-right-radius: 6px !important; border-bottom-left-radius: 6px !important; }
+  .rounded-xl-left-0 { border-bottom-left-radius: 0 !important; border-top-left-radius: 0 !important; }
+  .rounded-xl-left-1 { border-bottom-left-radius: 3px !important; border-top-left-radius: 3px !important; }
+  .rounded-xl-left-2 { border-bottom-left-radius: 6px !important; border-top-left-radius: 6px !important; } }
 /* Add a 50% border-radius to make something into a circle */
 .circle { border-radius: 50% !important; }
 
@@ -417,6 +584,10 @@ pre { margin-top: 0; margin-bottom: 0; font-family: "SFMono-Regular", Consolas, 
 /* Make a link $text-gray, then $text-blue on hover and removes the underline */
 .muted-link { color: #586069 !important; }
 .muted-link:hover { color: #0366d6 !important; text-decoration: none; }
+
+.details-overlay[open] > summary::before { position: fixed; top: 0; right: 0; bottom: 0; left: 0; z-index: 80; display: block; cursor: default; content: " "; background: transparent; }
+
+.details-overlay-dark[open] > summary::before { z-index: 99; background: rgba(27, 31, 35, 0.5); }
 
 .flex-row { flex-direction: row !important; }
 
@@ -653,38 +824,38 @@ pre { margin-top: 0; margin-bottom: 0; font-family: "SFMono-Regular", Consolas, 
 .clearfix::before { display: table; content: ""; }
 .clearfix::after { display: table; clear: both; content: ""; }
 
-/* Float to the right */
-.float-right { float: right !important; }
-
 /* Float to the left */
 .float-left { float: left !important; }
 
-/* Don't float left or right */
+/* Float to the right */
+.float-right { float: right !important; }
+
+/* No float */
 .float-none { float: none !important; }
 
-@media (min-width: 544px) { /* Float to the left at the sm breakpoint */
+@media (min-width: 544px) { /* Float to the left */
   .float-sm-left { float: left !important; }
-  /* Float to the right at the sm breakpoint */
+  /* Float to the right */
   .float-sm-right { float: right !important; }
-  /* No float at the sm breakpoint */
+  /* No float */
   .float-sm-none { float: none !important; } }
-@media (min-width: 768px) { /* Float to the left at the md breakpoint */
+@media (min-width: 768px) { /* Float to the left */
   .float-md-left { float: left !important; }
-  /* Float to the right at the md breakpoint */
+  /* Float to the right */
   .float-md-right { float: right !important; }
-  /* No float at the md breakpoint */
+  /* No float */
   .float-md-none { float: none !important; } }
-@media (min-width: 1012px) { /* Float to the left at the lg breakpoint */
+@media (min-width: 1012px) { /* Float to the left */
   .float-lg-left { float: left !important; }
-  /* Float to the right at the lg breakpoint */
+  /* Float to the right */
   .float-lg-right { float: right !important; }
-  /* No float at the lg breakpoint */
+  /* No float */
   .float-lg-none { float: none !important; } }
-@media (min-width: 1280px) { /* Float to the left at the xl breakpoint */
+@media (min-width: 1280px) { /* Float to the left */
   .float-xl-left { float: left !important; }
-  /* Float to the right at the xl breakpoint */
+  /* Float to the right */
   .float-xl-right { float: right !important; }
-  /* No float at the xl breakpoint */
+  /* No float */
   .float-xl-none { float: none !important; } }
 /* Max width 100% */
 .width-fit { max-width: 100% !important; }
@@ -707,1410 +878,1374 @@ pre { margin-top: 0; margin-bottom: 0; font-family: "SFMono-Regular", Consolas, 
 /* Set the direction to ltr */
 .direction-ltr { direction: ltr !important; }
 
-@media (min-width: 544px) { /* Set the direction to rtl at the sm breakpoint */
+@media (min-width: 544px) { /* Set the direction to rtl */
   .direction-sm-rtl { direction: rtl !important; }
-  /* Set the direction to ltr at the sm breakpoint */
+  /* Set the direction to ltr */
   .direction-sm-ltr { direction: ltr !important; } }
-@media (min-width: 768px) { /* Set the direction to rtl at the md breakpoint */
+@media (min-width: 768px) { /* Set the direction to rtl */
   .direction-md-rtl { direction: rtl !important; }
-  /* Set the direction to ltr at the md breakpoint */
+  /* Set the direction to ltr */
   .direction-md-ltr { direction: ltr !important; } }
-@media (min-width: 1012px) { /* Set the direction to rtl at the lg breakpoint */
+@media (min-width: 1012px) { /* Set the direction to rtl */
   .direction-lg-rtl { direction: rtl !important; }
-  /* Set the direction to ltr at the lg breakpoint */
+  /* Set the direction to ltr */
   .direction-lg-ltr { direction: ltr !important; } }
-@media (min-width: 1280px) { /* Set the direction to rtl at the xl breakpoint */
+@media (min-width: 1280px) { /* Set the direction to rtl */
   .direction-xl-rtl { direction: rtl !important; }
-  /* Set the direction to ltr at the xl breakpoint */
+  /* Set the direction to ltr */
   .direction-xl-ltr { direction: ltr !important; } }
-/* Set a 0 margin to all sides */
+/* Set a $size margin to all sides at $breakpoint */
 .m-0 { margin: 0 !important; }
 
-/* Set a 0 margin on the top */
+/* Set a $size margin on the top at $breakpoint */
 .mt-0 { margin-top: 0 !important; }
 
-/* Set a 0 margin on the right */
+/* Set a $size margin on the right at $breakpoint */
 .mr-0 { margin-right: 0 !important; }
 
-/* Set a 0 margin on the bottom */
+/* Set a $size margin on the bottom at $breakpoint */
 .mb-0 { margin-bottom: 0 !important; }
 
-/* Set a 0 margin on the left */
+/* Set a $size margin on the left at $breakpoint */
 .ml-0 { margin-left: 0 !important; }
 
-/* Set a negative 0 margin on top */
-.mt-n0 { margin-top: -0 !important; }
-
-/* Set a negative 0 margin on the right */
-.mr-n0 { margin-right: -0 !important; }
-
-/* Set a negative 0 margin on the bottom */
-.mb-n0 { margin-bottom: -0 !important; }
-
-/* Set a negative 0 margin on the left */
-.ml-n0 { margin-left: -0 !important; }
-
-/* Set a 0 margin on the left & right */
+/* Set a $size margin on the left & right at $breakpoint */
 .mx-0 { margin-right: 0 !important; margin-left: 0 !important; }
 
-/* Set a 0 margin on the top & bottom */
+/* Set a $size margin on the top & bottom at $breakpoint */
 .my-0 { margin-top: 0 !important; margin-bottom: 0 !important; }
 
-/* Set a 4px margin to all sides */
+/* Set a $size margin to all sides at $breakpoint */
 .m-1 { margin: 4px !important; }
 
-/* Set a 4px margin on the top */
+/* Set a $size margin on the top at $breakpoint */
 .mt-1 { margin-top: 4px !important; }
 
-/* Set a 4px margin on the right */
+/* Set a $size margin on the right at $breakpoint */
 .mr-1 { margin-right: 4px !important; }
 
-/* Set a 4px margin on the bottom */
+/* Set a $size margin on the bottom at $breakpoint */
 .mb-1 { margin-bottom: 4px !important; }
 
-/* Set a 4px margin on the left */
+/* Set a $size margin on the left at $breakpoint */
 .ml-1 { margin-left: 4px !important; }
 
-/* Set a negative 4px margin on top */
+/* Set a negative $size margin on top at $breakpoint */
 .mt-n1 { margin-top: -4px !important; }
 
-/* Set a negative 4px margin on the right */
+/* Set a negative $size margin on the right at $breakpoint */
 .mr-n1 { margin-right: -4px !important; }
 
-/* Set a negative 4px margin on the bottom */
+/* Set a negative $size margin on the bottom at $breakpoint */
 .mb-n1 { margin-bottom: -4px !important; }
 
-/* Set a negative 4px margin on the left */
+/* Set a negative $size margin on the left at $breakpoint */
 .ml-n1 { margin-left: -4px !important; }
 
-/* Set a 4px margin on the left & right */
+/* Set a $size margin on the left & right at $breakpoint */
 .mx-1 { margin-right: 4px !important; margin-left: 4px !important; }
 
-/* Set a 4px margin on the top & bottom */
+/* Set a $size margin on the top & bottom at $breakpoint */
 .my-1 { margin-top: 4px !important; margin-bottom: 4px !important; }
 
-/* Set a 8px margin to all sides */
+/* Set a $size margin to all sides at $breakpoint */
 .m-2 { margin: 8px !important; }
 
-/* Set a 8px margin on the top */
+/* Set a $size margin on the top at $breakpoint */
 .mt-2 { margin-top: 8px !important; }
 
-/* Set a 8px margin on the right */
+/* Set a $size margin on the right at $breakpoint */
 .mr-2 { margin-right: 8px !important; }
 
-/* Set a 8px margin on the bottom */
+/* Set a $size margin on the bottom at $breakpoint */
 .mb-2 { margin-bottom: 8px !important; }
 
-/* Set a 8px margin on the left */
+/* Set a $size margin on the left at $breakpoint */
 .ml-2 { margin-left: 8px !important; }
 
-/* Set a negative 8px margin on top */
+/* Set a negative $size margin on top at $breakpoint */
 .mt-n2 { margin-top: -8px !important; }
 
-/* Set a negative 8px margin on the right */
+/* Set a negative $size margin on the right at $breakpoint */
 .mr-n2 { margin-right: -8px !important; }
 
-/* Set a negative 8px margin on the bottom */
+/* Set a negative $size margin on the bottom at $breakpoint */
 .mb-n2 { margin-bottom: -8px !important; }
 
-/* Set a negative 8px margin on the left */
+/* Set a negative $size margin on the left at $breakpoint */
 .ml-n2 { margin-left: -8px !important; }
 
-/* Set a 8px margin on the left & right */
+/* Set a $size margin on the left & right at $breakpoint */
 .mx-2 { margin-right: 8px !important; margin-left: 8px !important; }
 
-/* Set a 8px margin on the top & bottom */
+/* Set a $size margin on the top & bottom at $breakpoint */
 .my-2 { margin-top: 8px !important; margin-bottom: 8px !important; }
 
-/* Set a 16px margin to all sides */
+/* Set a $size margin to all sides at $breakpoint */
 .m-3 { margin: 16px !important; }
 
-/* Set a 16px margin on the top */
+/* Set a $size margin on the top at $breakpoint */
 .mt-3 { margin-top: 16px !important; }
 
-/* Set a 16px margin on the right */
+/* Set a $size margin on the right at $breakpoint */
 .mr-3 { margin-right: 16px !important; }
 
-/* Set a 16px margin on the bottom */
+/* Set a $size margin on the bottom at $breakpoint */
 .mb-3 { margin-bottom: 16px !important; }
 
-/* Set a 16px margin on the left */
+/* Set a $size margin on the left at $breakpoint */
 .ml-3 { margin-left: 16px !important; }
 
-/* Set a negative 16px margin on top */
+/* Set a negative $size margin on top at $breakpoint */
 .mt-n3 { margin-top: -16px !important; }
 
-/* Set a negative 16px margin on the right */
+/* Set a negative $size margin on the right at $breakpoint */
 .mr-n3 { margin-right: -16px !important; }
 
-/* Set a negative 16px margin on the bottom */
+/* Set a negative $size margin on the bottom at $breakpoint */
 .mb-n3 { margin-bottom: -16px !important; }
 
-/* Set a negative 16px margin on the left */
+/* Set a negative $size margin on the left at $breakpoint */
 .ml-n3 { margin-left: -16px !important; }
 
-/* Set a 16px margin on the left & right */
+/* Set a $size margin on the left & right at $breakpoint */
 .mx-3 { margin-right: 16px !important; margin-left: 16px !important; }
 
-/* Set a 16px margin on the top & bottom */
+/* Set a $size margin on the top & bottom at $breakpoint */
 .my-3 { margin-top: 16px !important; margin-bottom: 16px !important; }
 
-/* Set a 24px margin to all sides */
+/* Set a $size margin to all sides at $breakpoint */
 .m-4 { margin: 24px !important; }
 
-/* Set a 24px margin on the top */
+/* Set a $size margin on the top at $breakpoint */
 .mt-4 { margin-top: 24px !important; }
 
-/* Set a 24px margin on the right */
+/* Set a $size margin on the right at $breakpoint */
 .mr-4 { margin-right: 24px !important; }
 
-/* Set a 24px margin on the bottom */
+/* Set a $size margin on the bottom at $breakpoint */
 .mb-4 { margin-bottom: 24px !important; }
 
-/* Set a 24px margin on the left */
+/* Set a $size margin on the left at $breakpoint */
 .ml-4 { margin-left: 24px !important; }
 
-/* Set a negative 24px margin on top */
+/* Set a negative $size margin on top at $breakpoint */
 .mt-n4 { margin-top: -24px !important; }
 
-/* Set a negative 24px margin on the right */
+/* Set a negative $size margin on the right at $breakpoint */
 .mr-n4 { margin-right: -24px !important; }
 
-/* Set a negative 24px margin on the bottom */
+/* Set a negative $size margin on the bottom at $breakpoint */
 .mb-n4 { margin-bottom: -24px !important; }
 
-/* Set a negative 24px margin on the left */
+/* Set a negative $size margin on the left at $breakpoint */
 .ml-n4 { margin-left: -24px !important; }
 
-/* Set a 24px margin on the left & right */
+/* Set a $size margin on the left & right at $breakpoint */
 .mx-4 { margin-right: 24px !important; margin-left: 24px !important; }
 
-/* Set a 24px margin on the top & bottom */
+/* Set a $size margin on the top & bottom at $breakpoint */
 .my-4 { margin-top: 24px !important; margin-bottom: 24px !important; }
 
-/* Set a 32px margin to all sides */
+/* Set a $size margin to all sides at $breakpoint */
 .m-5 { margin: 32px !important; }
 
-/* Set a 32px margin on the top */
+/* Set a $size margin on the top at $breakpoint */
 .mt-5 { margin-top: 32px !important; }
 
-/* Set a 32px margin on the right */
+/* Set a $size margin on the right at $breakpoint */
 .mr-5 { margin-right: 32px !important; }
 
-/* Set a 32px margin on the bottom */
+/* Set a $size margin on the bottom at $breakpoint */
 .mb-5 { margin-bottom: 32px !important; }
 
-/* Set a 32px margin on the left */
+/* Set a $size margin on the left at $breakpoint */
 .ml-5 { margin-left: 32px !important; }
 
-/* Set a negative 32px margin on top */
+/* Set a negative $size margin on top at $breakpoint */
 .mt-n5 { margin-top: -32px !important; }
 
-/* Set a negative 32px margin on the right */
+/* Set a negative $size margin on the right at $breakpoint */
 .mr-n5 { margin-right: -32px !important; }
 
-/* Set a negative 32px margin on the bottom */
+/* Set a negative $size margin on the bottom at $breakpoint */
 .mb-n5 { margin-bottom: -32px !important; }
 
-/* Set a negative 32px margin on the left */
+/* Set a negative $size margin on the left at $breakpoint */
 .ml-n5 { margin-left: -32px !important; }
 
-/* Set a 32px margin on the left & right */
+/* Set a $size margin on the left & right at $breakpoint */
 .mx-5 { margin-right: 32px !important; margin-left: 32px !important; }
 
-/* Set a 32px margin on the top & bottom */
+/* Set a $size margin on the top & bottom at $breakpoint */
 .my-5 { margin-top: 32px !important; margin-bottom: 32px !important; }
 
-/* Set a 40px margin to all sides */
+/* Set a $size margin to all sides at $breakpoint */
 .m-6 { margin: 40px !important; }
 
-/* Set a 40px margin on the top */
+/* Set a $size margin on the top at $breakpoint */
 .mt-6 { margin-top: 40px !important; }
 
-/* Set a 40px margin on the right */
+/* Set a $size margin on the right at $breakpoint */
 .mr-6 { margin-right: 40px !important; }
 
-/* Set a 40px margin on the bottom */
+/* Set a $size margin on the bottom at $breakpoint */
 .mb-6 { margin-bottom: 40px !important; }
 
-/* Set a 40px margin on the left */
+/* Set a $size margin on the left at $breakpoint */
 .ml-6 { margin-left: 40px !important; }
 
-/* Set a negative 40px margin on top */
+/* Set a negative $size margin on top at $breakpoint */
 .mt-n6 { margin-top: -40px !important; }
 
-/* Set a negative 40px margin on the right */
+/* Set a negative $size margin on the right at $breakpoint */
 .mr-n6 { margin-right: -40px !important; }
 
-/* Set a negative 40px margin on the bottom */
+/* Set a negative $size margin on the bottom at $breakpoint */
 .mb-n6 { margin-bottom: -40px !important; }
 
-/* Set a negative 40px margin on the left */
+/* Set a negative $size margin on the left at $breakpoint */
 .ml-n6 { margin-left: -40px !important; }
 
-/* Set a 40px margin on the left & right */
+/* Set a $size margin on the left & right at $breakpoint */
 .mx-6 { margin-right: 40px !important; margin-left: 40px !important; }
 
-/* Set a 40px margin on the top & bottom */
+/* Set a $size margin on the top & bottom at $breakpoint */
 .my-6 { margin-top: 40px !important; margin-bottom: 40px !important; }
 
-/* Set an auto margin on left & right */
+/* responsive horizontal auto margins */
 .mx-auto { margin-right: auto !important; margin-left: auto !important; }
 
-@media (min-width: 544px) { /* Set a 0 margin to all sides at the breakpoint sm */
+@media (min-width: 544px) { /* Set a $size margin to all sides at $breakpoint */
   .m-sm-0 { margin: 0 !important; }
-  /* Set a 0 margin on the top at the breakpoint sm */
+  /* Set a $size margin on the top at $breakpoint */
   .mt-sm-0 { margin-top: 0 !important; }
-  /* Set a 0 margin on the right at the breakpoint sm */
+  /* Set a $size margin on the right at $breakpoint */
   .mr-sm-0 { margin-right: 0 !important; }
-  /* Set a 0 margin on the bottom at the breakpoint sm */
+  /* Set a $size margin on the bottom at $breakpoint */
   .mb-sm-0 { margin-bottom: 0 !important; }
-  /* Set a 0 margin on the left at the breakpoint sm */
+  /* Set a $size margin on the left at $breakpoint */
   .ml-sm-0 { margin-left: 0 !important; }
-  /* Set a negative 0 margin on top at the breakpoint sm */
-  .mt-sm-n0 { margin-top: -0 !important; }
-  /* Set a negative 0 margin on the right at the breakpoint sm */
-  .mr-sm-n0 { margin-right: -0 !important; }
-  /* Set a negative 0 margin on the bottom at the breakpoint sm */
-  .mb-sm-n0 { margin-bottom: -0 !important; }
-  /* Set a negative 0 margin on the left at the breakpoint sm */
-  .ml-sm-n0 { margin-left: -0 !important; }
-  /* Set a 0 margin on the left & right at the breakpoint sm */
+  /* Set a $size margin on the left & right at $breakpoint */
   .mx-sm-0 { margin-right: 0 !important; margin-left: 0 !important; }
-  /* Set a 0 margin on the top & bottom at the breakpoint sm */
-  .my-sm-0 { margin-top: 0 !important; margin-bottom: 0 !important; } }
-@media (min-width: 544px) { /* Set a 4px margin to all sides at the breakpoint sm */
+  /* Set a $size margin on the top & bottom at $breakpoint */
+  .my-sm-0 { margin-top: 0 !important; margin-bottom: 0 !important; }
+  /* Set a $size margin to all sides at $breakpoint */
   .m-sm-1 { margin: 4px !important; }
-  /* Set a 4px margin on the top at the breakpoint sm */
+  /* Set a $size margin on the top at $breakpoint */
   .mt-sm-1 { margin-top: 4px !important; }
-  /* Set a 4px margin on the right at the breakpoint sm */
+  /* Set a $size margin on the right at $breakpoint */
   .mr-sm-1 { margin-right: 4px !important; }
-  /* Set a 4px margin on the bottom at the breakpoint sm */
+  /* Set a $size margin on the bottom at $breakpoint */
   .mb-sm-1 { margin-bottom: 4px !important; }
-  /* Set a 4px margin on the left at the breakpoint sm */
+  /* Set a $size margin on the left at $breakpoint */
   .ml-sm-1 { margin-left: 4px !important; }
-  /* Set a negative 4px margin on top at the breakpoint sm */
+  /* Set a negative $size margin on top at $breakpoint */
   .mt-sm-n1 { margin-top: -4px !important; }
-  /* Set a negative 4px margin on the right at the breakpoint sm */
+  /* Set a negative $size margin on the right at $breakpoint */
   .mr-sm-n1 { margin-right: -4px !important; }
-  /* Set a negative 4px margin on the bottom at the breakpoint sm */
+  /* Set a negative $size margin on the bottom at $breakpoint */
   .mb-sm-n1 { margin-bottom: -4px !important; }
-  /* Set a negative 4px margin on the left at the breakpoint sm */
+  /* Set a negative $size margin on the left at $breakpoint */
   .ml-sm-n1 { margin-left: -4px !important; }
-  /* Set a 4px margin on the left & right at the breakpoint sm */
+  /* Set a $size margin on the left & right at $breakpoint */
   .mx-sm-1 { margin-right: 4px !important; margin-left: 4px !important; }
-  /* Set a 4px margin on the top & bottom at the breakpoint sm */
-  .my-sm-1 { margin-top: 4px !important; margin-bottom: 4px !important; } }
-@media (min-width: 544px) { /* Set a 8px margin to all sides at the breakpoint sm */
+  /* Set a $size margin on the top & bottom at $breakpoint */
+  .my-sm-1 { margin-top: 4px !important; margin-bottom: 4px !important; }
+  /* Set a $size margin to all sides at $breakpoint */
   .m-sm-2 { margin: 8px !important; }
-  /* Set a 8px margin on the top at the breakpoint sm */
+  /* Set a $size margin on the top at $breakpoint */
   .mt-sm-2 { margin-top: 8px !important; }
-  /* Set a 8px margin on the right at the breakpoint sm */
+  /* Set a $size margin on the right at $breakpoint */
   .mr-sm-2 { margin-right: 8px !important; }
-  /* Set a 8px margin on the bottom at the breakpoint sm */
+  /* Set a $size margin on the bottom at $breakpoint */
   .mb-sm-2 { margin-bottom: 8px !important; }
-  /* Set a 8px margin on the left at the breakpoint sm */
+  /* Set a $size margin on the left at $breakpoint */
   .ml-sm-2 { margin-left: 8px !important; }
-  /* Set a negative 8px margin on top at the breakpoint sm */
+  /* Set a negative $size margin on top at $breakpoint */
   .mt-sm-n2 { margin-top: -8px !important; }
-  /* Set a negative 8px margin on the right at the breakpoint sm */
+  /* Set a negative $size margin on the right at $breakpoint */
   .mr-sm-n2 { margin-right: -8px !important; }
-  /* Set a negative 8px margin on the bottom at the breakpoint sm */
+  /* Set a negative $size margin on the bottom at $breakpoint */
   .mb-sm-n2 { margin-bottom: -8px !important; }
-  /* Set a negative 8px margin on the left at the breakpoint sm */
+  /* Set a negative $size margin on the left at $breakpoint */
   .ml-sm-n2 { margin-left: -8px !important; }
-  /* Set a 8px margin on the left & right at the breakpoint sm */
+  /* Set a $size margin on the left & right at $breakpoint */
   .mx-sm-2 { margin-right: 8px !important; margin-left: 8px !important; }
-  /* Set a 8px margin on the top & bottom at the breakpoint sm */
-  .my-sm-2 { margin-top: 8px !important; margin-bottom: 8px !important; } }
-@media (min-width: 544px) { /* Set a 16px margin to all sides at the breakpoint sm */
+  /* Set a $size margin on the top & bottom at $breakpoint */
+  .my-sm-2 { margin-top: 8px !important; margin-bottom: 8px !important; }
+  /* Set a $size margin to all sides at $breakpoint */
   .m-sm-3 { margin: 16px !important; }
-  /* Set a 16px margin on the top at the breakpoint sm */
+  /* Set a $size margin on the top at $breakpoint */
   .mt-sm-3 { margin-top: 16px !important; }
-  /* Set a 16px margin on the right at the breakpoint sm */
+  /* Set a $size margin on the right at $breakpoint */
   .mr-sm-3 { margin-right: 16px !important; }
-  /* Set a 16px margin on the bottom at the breakpoint sm */
+  /* Set a $size margin on the bottom at $breakpoint */
   .mb-sm-3 { margin-bottom: 16px !important; }
-  /* Set a 16px margin on the left at the breakpoint sm */
+  /* Set a $size margin on the left at $breakpoint */
   .ml-sm-3 { margin-left: 16px !important; }
-  /* Set a negative 16px margin on top at the breakpoint sm */
+  /* Set a negative $size margin on top at $breakpoint */
   .mt-sm-n3 { margin-top: -16px !important; }
-  /* Set a negative 16px margin on the right at the breakpoint sm */
+  /* Set a negative $size margin on the right at $breakpoint */
   .mr-sm-n3 { margin-right: -16px !important; }
-  /* Set a negative 16px margin on the bottom at the breakpoint sm */
+  /* Set a negative $size margin on the bottom at $breakpoint */
   .mb-sm-n3 { margin-bottom: -16px !important; }
-  /* Set a negative 16px margin on the left at the breakpoint sm */
+  /* Set a negative $size margin on the left at $breakpoint */
   .ml-sm-n3 { margin-left: -16px !important; }
-  /* Set a 16px margin on the left & right at the breakpoint sm */
+  /* Set a $size margin on the left & right at $breakpoint */
   .mx-sm-3 { margin-right: 16px !important; margin-left: 16px !important; }
-  /* Set a 16px margin on the top & bottom at the breakpoint sm */
-  .my-sm-3 { margin-top: 16px !important; margin-bottom: 16px !important; } }
-@media (min-width: 544px) { /* Set a 24px margin to all sides at the breakpoint sm */
+  /* Set a $size margin on the top & bottom at $breakpoint */
+  .my-sm-3 { margin-top: 16px !important; margin-bottom: 16px !important; }
+  /* Set a $size margin to all sides at $breakpoint */
   .m-sm-4 { margin: 24px !important; }
-  /* Set a 24px margin on the top at the breakpoint sm */
+  /* Set a $size margin on the top at $breakpoint */
   .mt-sm-4 { margin-top: 24px !important; }
-  /* Set a 24px margin on the right at the breakpoint sm */
+  /* Set a $size margin on the right at $breakpoint */
   .mr-sm-4 { margin-right: 24px !important; }
-  /* Set a 24px margin on the bottom at the breakpoint sm */
+  /* Set a $size margin on the bottom at $breakpoint */
   .mb-sm-4 { margin-bottom: 24px !important; }
-  /* Set a 24px margin on the left at the breakpoint sm */
+  /* Set a $size margin on the left at $breakpoint */
   .ml-sm-4 { margin-left: 24px !important; }
-  /* Set a negative 24px margin on top at the breakpoint sm */
+  /* Set a negative $size margin on top at $breakpoint */
   .mt-sm-n4 { margin-top: -24px !important; }
-  /* Set a negative 24px margin on the right at the breakpoint sm */
+  /* Set a negative $size margin on the right at $breakpoint */
   .mr-sm-n4 { margin-right: -24px !important; }
-  /* Set a negative 24px margin on the bottom at the breakpoint sm */
+  /* Set a negative $size margin on the bottom at $breakpoint */
   .mb-sm-n4 { margin-bottom: -24px !important; }
-  /* Set a negative 24px margin on the left at the breakpoint sm */
+  /* Set a negative $size margin on the left at $breakpoint */
   .ml-sm-n4 { margin-left: -24px !important; }
-  /* Set a 24px margin on the left & right at the breakpoint sm */
+  /* Set a $size margin on the left & right at $breakpoint */
   .mx-sm-4 { margin-right: 24px !important; margin-left: 24px !important; }
-  /* Set a 24px margin on the top & bottom at the breakpoint sm */
-  .my-sm-4 { margin-top: 24px !important; margin-bottom: 24px !important; } }
-@media (min-width: 544px) { /* Set a 32px margin to all sides at the breakpoint sm */
+  /* Set a $size margin on the top & bottom at $breakpoint */
+  .my-sm-4 { margin-top: 24px !important; margin-bottom: 24px !important; }
+  /* Set a $size margin to all sides at $breakpoint */
   .m-sm-5 { margin: 32px !important; }
-  /* Set a 32px margin on the top at the breakpoint sm */
+  /* Set a $size margin on the top at $breakpoint */
   .mt-sm-5 { margin-top: 32px !important; }
-  /* Set a 32px margin on the right at the breakpoint sm */
+  /* Set a $size margin on the right at $breakpoint */
   .mr-sm-5 { margin-right: 32px !important; }
-  /* Set a 32px margin on the bottom at the breakpoint sm */
+  /* Set a $size margin on the bottom at $breakpoint */
   .mb-sm-5 { margin-bottom: 32px !important; }
-  /* Set a 32px margin on the left at the breakpoint sm */
+  /* Set a $size margin on the left at $breakpoint */
   .ml-sm-5 { margin-left: 32px !important; }
-  /* Set a negative 32px margin on top at the breakpoint sm */
+  /* Set a negative $size margin on top at $breakpoint */
   .mt-sm-n5 { margin-top: -32px !important; }
-  /* Set a negative 32px margin on the right at the breakpoint sm */
+  /* Set a negative $size margin on the right at $breakpoint */
   .mr-sm-n5 { margin-right: -32px !important; }
-  /* Set a negative 32px margin on the bottom at the breakpoint sm */
+  /* Set a negative $size margin on the bottom at $breakpoint */
   .mb-sm-n5 { margin-bottom: -32px !important; }
-  /* Set a negative 32px margin on the left at the breakpoint sm */
+  /* Set a negative $size margin on the left at $breakpoint */
   .ml-sm-n5 { margin-left: -32px !important; }
-  /* Set a 32px margin on the left & right at the breakpoint sm */
+  /* Set a $size margin on the left & right at $breakpoint */
   .mx-sm-5 { margin-right: 32px !important; margin-left: 32px !important; }
-  /* Set a 32px margin on the top & bottom at the breakpoint sm */
-  .my-sm-5 { margin-top: 32px !important; margin-bottom: 32px !important; } }
-@media (min-width: 544px) { /* Set a 40px margin to all sides at the breakpoint sm */
+  /* Set a $size margin on the top & bottom at $breakpoint */
+  .my-sm-5 { margin-top: 32px !important; margin-bottom: 32px !important; }
+  /* Set a $size margin to all sides at $breakpoint */
   .m-sm-6 { margin: 40px !important; }
-  /* Set a 40px margin on the top at the breakpoint sm */
+  /* Set a $size margin on the top at $breakpoint */
   .mt-sm-6 { margin-top: 40px !important; }
-  /* Set a 40px margin on the right at the breakpoint sm */
+  /* Set a $size margin on the right at $breakpoint */
   .mr-sm-6 { margin-right: 40px !important; }
-  /* Set a 40px margin on the bottom at the breakpoint sm */
+  /* Set a $size margin on the bottom at $breakpoint */
   .mb-sm-6 { margin-bottom: 40px !important; }
-  /* Set a 40px margin on the left at the breakpoint sm */
+  /* Set a $size margin on the left at $breakpoint */
   .ml-sm-6 { margin-left: 40px !important; }
-  /* Set a negative 40px margin on top at the breakpoint sm */
+  /* Set a negative $size margin on top at $breakpoint */
   .mt-sm-n6 { margin-top: -40px !important; }
-  /* Set a negative 40px margin on the right at the breakpoint sm */
+  /* Set a negative $size margin on the right at $breakpoint */
   .mr-sm-n6 { margin-right: -40px !important; }
-  /* Set a negative 40px margin on the bottom at the breakpoint sm */
+  /* Set a negative $size margin on the bottom at $breakpoint */
   .mb-sm-n6 { margin-bottom: -40px !important; }
-  /* Set a negative 40px margin on the left at the breakpoint sm */
+  /* Set a negative $size margin on the left at $breakpoint */
   .ml-sm-n6 { margin-left: -40px !important; }
-  /* Set a 40px margin on the left & right at the breakpoint sm */
+  /* Set a $size margin on the left & right at $breakpoint */
   .mx-sm-6 { margin-right: 40px !important; margin-left: 40px !important; }
-  /* Set a 40px margin on the top & bottom at the breakpoint sm */
-  .my-sm-6 { margin-top: 40px !important; margin-bottom: 40px !important; } }
-@media (min-width: 768px) { /* Set a 0 margin to all sides at the breakpoint md */
+  /* Set a $size margin on the top & bottom at $breakpoint */
+  .my-sm-6 { margin-top: 40px !important; margin-bottom: 40px !important; }
+  /* responsive horizontal auto margins */
+  .mx-sm-auto { margin-right: auto !important; margin-left: auto !important; } }
+@media (min-width: 768px) { /* Set a $size margin to all sides at $breakpoint */
   .m-md-0 { margin: 0 !important; }
-  /* Set a 0 margin on the top at the breakpoint md */
+  /* Set a $size margin on the top at $breakpoint */
   .mt-md-0 { margin-top: 0 !important; }
-  /* Set a 0 margin on the right at the breakpoint md */
+  /* Set a $size margin on the right at $breakpoint */
   .mr-md-0 { margin-right: 0 !important; }
-  /* Set a 0 margin on the bottom at the breakpoint md */
+  /* Set a $size margin on the bottom at $breakpoint */
   .mb-md-0 { margin-bottom: 0 !important; }
-  /* Set a 0 margin on the left at the breakpoint md */
+  /* Set a $size margin on the left at $breakpoint */
   .ml-md-0 { margin-left: 0 !important; }
-  /* Set a negative 0 margin on top at the breakpoint md */
-  .mt-md-n0 { margin-top: -0 !important; }
-  /* Set a negative 0 margin on the right at the breakpoint md */
-  .mr-md-n0 { margin-right: -0 !important; }
-  /* Set a negative 0 margin on the bottom at the breakpoint md */
-  .mb-md-n0 { margin-bottom: -0 !important; }
-  /* Set a negative 0 margin on the left at the breakpoint md */
-  .ml-md-n0 { margin-left: -0 !important; }
-  /* Set a 0 margin on the left & right at the breakpoint md */
+  /* Set a $size margin on the left & right at $breakpoint */
   .mx-md-0 { margin-right: 0 !important; margin-left: 0 !important; }
-  /* Set a 0 margin on the top & bottom at the breakpoint md */
-  .my-md-0 { margin-top: 0 !important; margin-bottom: 0 !important; } }
-@media (min-width: 768px) { /* Set a 4px margin to all sides at the breakpoint md */
+  /* Set a $size margin on the top & bottom at $breakpoint */
+  .my-md-0 { margin-top: 0 !important; margin-bottom: 0 !important; }
+  /* Set a $size margin to all sides at $breakpoint */
   .m-md-1 { margin: 4px !important; }
-  /* Set a 4px margin on the top at the breakpoint md */
+  /* Set a $size margin on the top at $breakpoint */
   .mt-md-1 { margin-top: 4px !important; }
-  /* Set a 4px margin on the right at the breakpoint md */
+  /* Set a $size margin on the right at $breakpoint */
   .mr-md-1 { margin-right: 4px !important; }
-  /* Set a 4px margin on the bottom at the breakpoint md */
+  /* Set a $size margin on the bottom at $breakpoint */
   .mb-md-1 { margin-bottom: 4px !important; }
-  /* Set a 4px margin on the left at the breakpoint md */
+  /* Set a $size margin on the left at $breakpoint */
   .ml-md-1 { margin-left: 4px !important; }
-  /* Set a negative 4px margin on top at the breakpoint md */
+  /* Set a negative $size margin on top at $breakpoint */
   .mt-md-n1 { margin-top: -4px !important; }
-  /* Set a negative 4px margin on the right at the breakpoint md */
+  /* Set a negative $size margin on the right at $breakpoint */
   .mr-md-n1 { margin-right: -4px !important; }
-  /* Set a negative 4px margin on the bottom at the breakpoint md */
+  /* Set a negative $size margin on the bottom at $breakpoint */
   .mb-md-n1 { margin-bottom: -4px !important; }
-  /* Set a negative 4px margin on the left at the breakpoint md */
+  /* Set a negative $size margin on the left at $breakpoint */
   .ml-md-n1 { margin-left: -4px !important; }
-  /* Set a 4px margin on the left & right at the breakpoint md */
+  /* Set a $size margin on the left & right at $breakpoint */
   .mx-md-1 { margin-right: 4px !important; margin-left: 4px !important; }
-  /* Set a 4px margin on the top & bottom at the breakpoint md */
-  .my-md-1 { margin-top: 4px !important; margin-bottom: 4px !important; } }
-@media (min-width: 768px) { /* Set a 8px margin to all sides at the breakpoint md */
+  /* Set a $size margin on the top & bottom at $breakpoint */
+  .my-md-1 { margin-top: 4px !important; margin-bottom: 4px !important; }
+  /* Set a $size margin to all sides at $breakpoint */
   .m-md-2 { margin: 8px !important; }
-  /* Set a 8px margin on the top at the breakpoint md */
+  /* Set a $size margin on the top at $breakpoint */
   .mt-md-2 { margin-top: 8px !important; }
-  /* Set a 8px margin on the right at the breakpoint md */
+  /* Set a $size margin on the right at $breakpoint */
   .mr-md-2 { margin-right: 8px !important; }
-  /* Set a 8px margin on the bottom at the breakpoint md */
+  /* Set a $size margin on the bottom at $breakpoint */
   .mb-md-2 { margin-bottom: 8px !important; }
-  /* Set a 8px margin on the left at the breakpoint md */
+  /* Set a $size margin on the left at $breakpoint */
   .ml-md-2 { margin-left: 8px !important; }
-  /* Set a negative 8px margin on top at the breakpoint md */
+  /* Set a negative $size margin on top at $breakpoint */
   .mt-md-n2 { margin-top: -8px !important; }
-  /* Set a negative 8px margin on the right at the breakpoint md */
+  /* Set a negative $size margin on the right at $breakpoint */
   .mr-md-n2 { margin-right: -8px !important; }
-  /* Set a negative 8px margin on the bottom at the breakpoint md */
+  /* Set a negative $size margin on the bottom at $breakpoint */
   .mb-md-n2 { margin-bottom: -8px !important; }
-  /* Set a negative 8px margin on the left at the breakpoint md */
+  /* Set a negative $size margin on the left at $breakpoint */
   .ml-md-n2 { margin-left: -8px !important; }
-  /* Set a 8px margin on the left & right at the breakpoint md */
+  /* Set a $size margin on the left & right at $breakpoint */
   .mx-md-2 { margin-right: 8px !important; margin-left: 8px !important; }
-  /* Set a 8px margin on the top & bottom at the breakpoint md */
-  .my-md-2 { margin-top: 8px !important; margin-bottom: 8px !important; } }
-@media (min-width: 768px) { /* Set a 16px margin to all sides at the breakpoint md */
+  /* Set a $size margin on the top & bottom at $breakpoint */
+  .my-md-2 { margin-top: 8px !important; margin-bottom: 8px !important; }
+  /* Set a $size margin to all sides at $breakpoint */
   .m-md-3 { margin: 16px !important; }
-  /* Set a 16px margin on the top at the breakpoint md */
+  /* Set a $size margin on the top at $breakpoint */
   .mt-md-3 { margin-top: 16px !important; }
-  /* Set a 16px margin on the right at the breakpoint md */
+  /* Set a $size margin on the right at $breakpoint */
   .mr-md-3 { margin-right: 16px !important; }
-  /* Set a 16px margin on the bottom at the breakpoint md */
+  /* Set a $size margin on the bottom at $breakpoint */
   .mb-md-3 { margin-bottom: 16px !important; }
-  /* Set a 16px margin on the left at the breakpoint md */
+  /* Set a $size margin on the left at $breakpoint */
   .ml-md-3 { margin-left: 16px !important; }
-  /* Set a negative 16px margin on top at the breakpoint md */
+  /* Set a negative $size margin on top at $breakpoint */
   .mt-md-n3 { margin-top: -16px !important; }
-  /* Set a negative 16px margin on the right at the breakpoint md */
+  /* Set a negative $size margin on the right at $breakpoint */
   .mr-md-n3 { margin-right: -16px !important; }
-  /* Set a negative 16px margin on the bottom at the breakpoint md */
+  /* Set a negative $size margin on the bottom at $breakpoint */
   .mb-md-n3 { margin-bottom: -16px !important; }
-  /* Set a negative 16px margin on the left at the breakpoint md */
+  /* Set a negative $size margin on the left at $breakpoint */
   .ml-md-n3 { margin-left: -16px !important; }
-  /* Set a 16px margin on the left & right at the breakpoint md */
+  /* Set a $size margin on the left & right at $breakpoint */
   .mx-md-3 { margin-right: 16px !important; margin-left: 16px !important; }
-  /* Set a 16px margin on the top & bottom at the breakpoint md */
-  .my-md-3 { margin-top: 16px !important; margin-bottom: 16px !important; } }
-@media (min-width: 768px) { /* Set a 24px margin to all sides at the breakpoint md */
+  /* Set a $size margin on the top & bottom at $breakpoint */
+  .my-md-3 { margin-top: 16px !important; margin-bottom: 16px !important; }
+  /* Set a $size margin to all sides at $breakpoint */
   .m-md-4 { margin: 24px !important; }
-  /* Set a 24px margin on the top at the breakpoint md */
+  /* Set a $size margin on the top at $breakpoint */
   .mt-md-4 { margin-top: 24px !important; }
-  /* Set a 24px margin on the right at the breakpoint md */
+  /* Set a $size margin on the right at $breakpoint */
   .mr-md-4 { margin-right: 24px !important; }
-  /* Set a 24px margin on the bottom at the breakpoint md */
+  /* Set a $size margin on the bottom at $breakpoint */
   .mb-md-4 { margin-bottom: 24px !important; }
-  /* Set a 24px margin on the left at the breakpoint md */
+  /* Set a $size margin on the left at $breakpoint */
   .ml-md-4 { margin-left: 24px !important; }
-  /* Set a negative 24px margin on top at the breakpoint md */
+  /* Set a negative $size margin on top at $breakpoint */
   .mt-md-n4 { margin-top: -24px !important; }
-  /* Set a negative 24px margin on the right at the breakpoint md */
+  /* Set a negative $size margin on the right at $breakpoint */
   .mr-md-n4 { margin-right: -24px !important; }
-  /* Set a negative 24px margin on the bottom at the breakpoint md */
+  /* Set a negative $size margin on the bottom at $breakpoint */
   .mb-md-n4 { margin-bottom: -24px !important; }
-  /* Set a negative 24px margin on the left at the breakpoint md */
+  /* Set a negative $size margin on the left at $breakpoint */
   .ml-md-n4 { margin-left: -24px !important; }
-  /* Set a 24px margin on the left & right at the breakpoint md */
+  /* Set a $size margin on the left & right at $breakpoint */
   .mx-md-4 { margin-right: 24px !important; margin-left: 24px !important; }
-  /* Set a 24px margin on the top & bottom at the breakpoint md */
-  .my-md-4 { margin-top: 24px !important; margin-bottom: 24px !important; } }
-@media (min-width: 768px) { /* Set a 32px margin to all sides at the breakpoint md */
+  /* Set a $size margin on the top & bottom at $breakpoint */
+  .my-md-4 { margin-top: 24px !important; margin-bottom: 24px !important; }
+  /* Set a $size margin to all sides at $breakpoint */
   .m-md-5 { margin: 32px !important; }
-  /* Set a 32px margin on the top at the breakpoint md */
+  /* Set a $size margin on the top at $breakpoint */
   .mt-md-5 { margin-top: 32px !important; }
-  /* Set a 32px margin on the right at the breakpoint md */
+  /* Set a $size margin on the right at $breakpoint */
   .mr-md-5 { margin-right: 32px !important; }
-  /* Set a 32px margin on the bottom at the breakpoint md */
+  /* Set a $size margin on the bottom at $breakpoint */
   .mb-md-5 { margin-bottom: 32px !important; }
-  /* Set a 32px margin on the left at the breakpoint md */
+  /* Set a $size margin on the left at $breakpoint */
   .ml-md-5 { margin-left: 32px !important; }
-  /* Set a negative 32px margin on top at the breakpoint md */
+  /* Set a negative $size margin on top at $breakpoint */
   .mt-md-n5 { margin-top: -32px !important; }
-  /* Set a negative 32px margin on the right at the breakpoint md */
+  /* Set a negative $size margin on the right at $breakpoint */
   .mr-md-n5 { margin-right: -32px !important; }
-  /* Set a negative 32px margin on the bottom at the breakpoint md */
+  /* Set a negative $size margin on the bottom at $breakpoint */
   .mb-md-n5 { margin-bottom: -32px !important; }
-  /* Set a negative 32px margin on the left at the breakpoint md */
+  /* Set a negative $size margin on the left at $breakpoint */
   .ml-md-n5 { margin-left: -32px !important; }
-  /* Set a 32px margin on the left & right at the breakpoint md */
+  /* Set a $size margin on the left & right at $breakpoint */
   .mx-md-5 { margin-right: 32px !important; margin-left: 32px !important; }
-  /* Set a 32px margin on the top & bottom at the breakpoint md */
-  .my-md-5 { margin-top: 32px !important; margin-bottom: 32px !important; } }
-@media (min-width: 768px) { /* Set a 40px margin to all sides at the breakpoint md */
+  /* Set a $size margin on the top & bottom at $breakpoint */
+  .my-md-5 { margin-top: 32px !important; margin-bottom: 32px !important; }
+  /* Set a $size margin to all sides at $breakpoint */
   .m-md-6 { margin: 40px !important; }
-  /* Set a 40px margin on the top at the breakpoint md */
+  /* Set a $size margin on the top at $breakpoint */
   .mt-md-6 { margin-top: 40px !important; }
-  /* Set a 40px margin on the right at the breakpoint md */
+  /* Set a $size margin on the right at $breakpoint */
   .mr-md-6 { margin-right: 40px !important; }
-  /* Set a 40px margin on the bottom at the breakpoint md */
+  /* Set a $size margin on the bottom at $breakpoint */
   .mb-md-6 { margin-bottom: 40px !important; }
-  /* Set a 40px margin on the left at the breakpoint md */
+  /* Set a $size margin on the left at $breakpoint */
   .ml-md-6 { margin-left: 40px !important; }
-  /* Set a negative 40px margin on top at the breakpoint md */
+  /* Set a negative $size margin on top at $breakpoint */
   .mt-md-n6 { margin-top: -40px !important; }
-  /* Set a negative 40px margin on the right at the breakpoint md */
+  /* Set a negative $size margin on the right at $breakpoint */
   .mr-md-n6 { margin-right: -40px !important; }
-  /* Set a negative 40px margin on the bottom at the breakpoint md */
+  /* Set a negative $size margin on the bottom at $breakpoint */
   .mb-md-n6 { margin-bottom: -40px !important; }
-  /* Set a negative 40px margin on the left at the breakpoint md */
+  /* Set a negative $size margin on the left at $breakpoint */
   .ml-md-n6 { margin-left: -40px !important; }
-  /* Set a 40px margin on the left & right at the breakpoint md */
+  /* Set a $size margin on the left & right at $breakpoint */
   .mx-md-6 { margin-right: 40px !important; margin-left: 40px !important; }
-  /* Set a 40px margin on the top & bottom at the breakpoint md */
-  .my-md-6 { margin-top: 40px !important; margin-bottom: 40px !important; } }
-@media (min-width: 1012px) { /* Set a 0 margin to all sides at the breakpoint lg */
+  /* Set a $size margin on the top & bottom at $breakpoint */
+  .my-md-6 { margin-top: 40px !important; margin-bottom: 40px !important; }
+  /* responsive horizontal auto margins */
+  .mx-md-auto { margin-right: auto !important; margin-left: auto !important; } }
+@media (min-width: 1012px) { /* Set a $size margin to all sides at $breakpoint */
   .m-lg-0 { margin: 0 !important; }
-  /* Set a 0 margin on the top at the breakpoint lg */
+  /* Set a $size margin on the top at $breakpoint */
   .mt-lg-0 { margin-top: 0 !important; }
-  /* Set a 0 margin on the right at the breakpoint lg */
+  /* Set a $size margin on the right at $breakpoint */
   .mr-lg-0 { margin-right: 0 !important; }
-  /* Set a 0 margin on the bottom at the breakpoint lg */
+  /* Set a $size margin on the bottom at $breakpoint */
   .mb-lg-0 { margin-bottom: 0 !important; }
-  /* Set a 0 margin on the left at the breakpoint lg */
+  /* Set a $size margin on the left at $breakpoint */
   .ml-lg-0 { margin-left: 0 !important; }
-  /* Set a negative 0 margin on top at the breakpoint lg */
-  .mt-lg-n0 { margin-top: -0 !important; }
-  /* Set a negative 0 margin on the right at the breakpoint lg */
-  .mr-lg-n0 { margin-right: -0 !important; }
-  /* Set a negative 0 margin on the bottom at the breakpoint lg */
-  .mb-lg-n0 { margin-bottom: -0 !important; }
-  /* Set a negative 0 margin on the left at the breakpoint lg */
-  .ml-lg-n0 { margin-left: -0 !important; }
-  /* Set a 0 margin on the left & right at the breakpoint lg */
+  /* Set a $size margin on the left & right at $breakpoint */
   .mx-lg-0 { margin-right: 0 !important; margin-left: 0 !important; }
-  /* Set a 0 margin on the top & bottom at the breakpoint lg */
-  .my-lg-0 { margin-top: 0 !important; margin-bottom: 0 !important; } }
-@media (min-width: 1012px) { /* Set a 4px margin to all sides at the breakpoint lg */
+  /* Set a $size margin on the top & bottom at $breakpoint */
+  .my-lg-0 { margin-top: 0 !important; margin-bottom: 0 !important; }
+  /* Set a $size margin to all sides at $breakpoint */
   .m-lg-1 { margin: 4px !important; }
-  /* Set a 4px margin on the top at the breakpoint lg */
+  /* Set a $size margin on the top at $breakpoint */
   .mt-lg-1 { margin-top: 4px !important; }
-  /* Set a 4px margin on the right at the breakpoint lg */
+  /* Set a $size margin on the right at $breakpoint */
   .mr-lg-1 { margin-right: 4px !important; }
-  /* Set a 4px margin on the bottom at the breakpoint lg */
+  /* Set a $size margin on the bottom at $breakpoint */
   .mb-lg-1 { margin-bottom: 4px !important; }
-  /* Set a 4px margin on the left at the breakpoint lg */
+  /* Set a $size margin on the left at $breakpoint */
   .ml-lg-1 { margin-left: 4px !important; }
-  /* Set a negative 4px margin on top at the breakpoint lg */
+  /* Set a negative $size margin on top at $breakpoint */
   .mt-lg-n1 { margin-top: -4px !important; }
-  /* Set a negative 4px margin on the right at the breakpoint lg */
+  /* Set a negative $size margin on the right at $breakpoint */
   .mr-lg-n1 { margin-right: -4px !important; }
-  /* Set a negative 4px margin on the bottom at the breakpoint lg */
+  /* Set a negative $size margin on the bottom at $breakpoint */
   .mb-lg-n1 { margin-bottom: -4px !important; }
-  /* Set a negative 4px margin on the left at the breakpoint lg */
+  /* Set a negative $size margin on the left at $breakpoint */
   .ml-lg-n1 { margin-left: -4px !important; }
-  /* Set a 4px margin on the left & right at the breakpoint lg */
+  /* Set a $size margin on the left & right at $breakpoint */
   .mx-lg-1 { margin-right: 4px !important; margin-left: 4px !important; }
-  /* Set a 4px margin on the top & bottom at the breakpoint lg */
-  .my-lg-1 { margin-top: 4px !important; margin-bottom: 4px !important; } }
-@media (min-width: 1012px) { /* Set a 8px margin to all sides at the breakpoint lg */
+  /* Set a $size margin on the top & bottom at $breakpoint */
+  .my-lg-1 { margin-top: 4px !important; margin-bottom: 4px !important; }
+  /* Set a $size margin to all sides at $breakpoint */
   .m-lg-2 { margin: 8px !important; }
-  /* Set a 8px margin on the top at the breakpoint lg */
+  /* Set a $size margin on the top at $breakpoint */
   .mt-lg-2 { margin-top: 8px !important; }
-  /* Set a 8px margin on the right at the breakpoint lg */
+  /* Set a $size margin on the right at $breakpoint */
   .mr-lg-2 { margin-right: 8px !important; }
-  /* Set a 8px margin on the bottom at the breakpoint lg */
+  /* Set a $size margin on the bottom at $breakpoint */
   .mb-lg-2 { margin-bottom: 8px !important; }
-  /* Set a 8px margin on the left at the breakpoint lg */
+  /* Set a $size margin on the left at $breakpoint */
   .ml-lg-2 { margin-left: 8px !important; }
-  /* Set a negative 8px margin on top at the breakpoint lg */
+  /* Set a negative $size margin on top at $breakpoint */
   .mt-lg-n2 { margin-top: -8px !important; }
-  /* Set a negative 8px margin on the right at the breakpoint lg */
+  /* Set a negative $size margin on the right at $breakpoint */
   .mr-lg-n2 { margin-right: -8px !important; }
-  /* Set a negative 8px margin on the bottom at the breakpoint lg */
+  /* Set a negative $size margin on the bottom at $breakpoint */
   .mb-lg-n2 { margin-bottom: -8px !important; }
-  /* Set a negative 8px margin on the left at the breakpoint lg */
+  /* Set a negative $size margin on the left at $breakpoint */
   .ml-lg-n2 { margin-left: -8px !important; }
-  /* Set a 8px margin on the left & right at the breakpoint lg */
+  /* Set a $size margin on the left & right at $breakpoint */
   .mx-lg-2 { margin-right: 8px !important; margin-left: 8px !important; }
-  /* Set a 8px margin on the top & bottom at the breakpoint lg */
-  .my-lg-2 { margin-top: 8px !important; margin-bottom: 8px !important; } }
-@media (min-width: 1012px) { /* Set a 16px margin to all sides at the breakpoint lg */
+  /* Set a $size margin on the top & bottom at $breakpoint */
+  .my-lg-2 { margin-top: 8px !important; margin-bottom: 8px !important; }
+  /* Set a $size margin to all sides at $breakpoint */
   .m-lg-3 { margin: 16px !important; }
-  /* Set a 16px margin on the top at the breakpoint lg */
+  /* Set a $size margin on the top at $breakpoint */
   .mt-lg-3 { margin-top: 16px !important; }
-  /* Set a 16px margin on the right at the breakpoint lg */
+  /* Set a $size margin on the right at $breakpoint */
   .mr-lg-3 { margin-right: 16px !important; }
-  /* Set a 16px margin on the bottom at the breakpoint lg */
+  /* Set a $size margin on the bottom at $breakpoint */
   .mb-lg-3 { margin-bottom: 16px !important; }
-  /* Set a 16px margin on the left at the breakpoint lg */
+  /* Set a $size margin on the left at $breakpoint */
   .ml-lg-3 { margin-left: 16px !important; }
-  /* Set a negative 16px margin on top at the breakpoint lg */
+  /* Set a negative $size margin on top at $breakpoint */
   .mt-lg-n3 { margin-top: -16px !important; }
-  /* Set a negative 16px margin on the right at the breakpoint lg */
+  /* Set a negative $size margin on the right at $breakpoint */
   .mr-lg-n3 { margin-right: -16px !important; }
-  /* Set a negative 16px margin on the bottom at the breakpoint lg */
+  /* Set a negative $size margin on the bottom at $breakpoint */
   .mb-lg-n3 { margin-bottom: -16px !important; }
-  /* Set a negative 16px margin on the left at the breakpoint lg */
+  /* Set a negative $size margin on the left at $breakpoint */
   .ml-lg-n3 { margin-left: -16px !important; }
-  /* Set a 16px margin on the left & right at the breakpoint lg */
+  /* Set a $size margin on the left & right at $breakpoint */
   .mx-lg-3 { margin-right: 16px !important; margin-left: 16px !important; }
-  /* Set a 16px margin on the top & bottom at the breakpoint lg */
-  .my-lg-3 { margin-top: 16px !important; margin-bottom: 16px !important; } }
-@media (min-width: 1012px) { /* Set a 24px margin to all sides at the breakpoint lg */
+  /* Set a $size margin on the top & bottom at $breakpoint */
+  .my-lg-3 { margin-top: 16px !important; margin-bottom: 16px !important; }
+  /* Set a $size margin to all sides at $breakpoint */
   .m-lg-4 { margin: 24px !important; }
-  /* Set a 24px margin on the top at the breakpoint lg */
+  /* Set a $size margin on the top at $breakpoint */
   .mt-lg-4 { margin-top: 24px !important; }
-  /* Set a 24px margin on the right at the breakpoint lg */
+  /* Set a $size margin on the right at $breakpoint */
   .mr-lg-4 { margin-right: 24px !important; }
-  /* Set a 24px margin on the bottom at the breakpoint lg */
+  /* Set a $size margin on the bottom at $breakpoint */
   .mb-lg-4 { margin-bottom: 24px !important; }
-  /* Set a 24px margin on the left at the breakpoint lg */
+  /* Set a $size margin on the left at $breakpoint */
   .ml-lg-4 { margin-left: 24px !important; }
-  /* Set a negative 24px margin on top at the breakpoint lg */
+  /* Set a negative $size margin on top at $breakpoint */
   .mt-lg-n4 { margin-top: -24px !important; }
-  /* Set a negative 24px margin on the right at the breakpoint lg */
+  /* Set a negative $size margin on the right at $breakpoint */
   .mr-lg-n4 { margin-right: -24px !important; }
-  /* Set a negative 24px margin on the bottom at the breakpoint lg */
+  /* Set a negative $size margin on the bottom at $breakpoint */
   .mb-lg-n4 { margin-bottom: -24px !important; }
-  /* Set a negative 24px margin on the left at the breakpoint lg */
+  /* Set a negative $size margin on the left at $breakpoint */
   .ml-lg-n4 { margin-left: -24px !important; }
-  /* Set a 24px margin on the left & right at the breakpoint lg */
+  /* Set a $size margin on the left & right at $breakpoint */
   .mx-lg-4 { margin-right: 24px !important; margin-left: 24px !important; }
-  /* Set a 24px margin on the top & bottom at the breakpoint lg */
-  .my-lg-4 { margin-top: 24px !important; margin-bottom: 24px !important; } }
-@media (min-width: 1012px) { /* Set a 32px margin to all sides at the breakpoint lg */
+  /* Set a $size margin on the top & bottom at $breakpoint */
+  .my-lg-4 { margin-top: 24px !important; margin-bottom: 24px !important; }
+  /* Set a $size margin to all sides at $breakpoint */
   .m-lg-5 { margin: 32px !important; }
-  /* Set a 32px margin on the top at the breakpoint lg */
+  /* Set a $size margin on the top at $breakpoint */
   .mt-lg-5 { margin-top: 32px !important; }
-  /* Set a 32px margin on the right at the breakpoint lg */
+  /* Set a $size margin on the right at $breakpoint */
   .mr-lg-5 { margin-right: 32px !important; }
-  /* Set a 32px margin on the bottom at the breakpoint lg */
+  /* Set a $size margin on the bottom at $breakpoint */
   .mb-lg-5 { margin-bottom: 32px !important; }
-  /* Set a 32px margin on the left at the breakpoint lg */
+  /* Set a $size margin on the left at $breakpoint */
   .ml-lg-5 { margin-left: 32px !important; }
-  /* Set a negative 32px margin on top at the breakpoint lg */
+  /* Set a negative $size margin on top at $breakpoint */
   .mt-lg-n5 { margin-top: -32px !important; }
-  /* Set a negative 32px margin on the right at the breakpoint lg */
+  /* Set a negative $size margin on the right at $breakpoint */
   .mr-lg-n5 { margin-right: -32px !important; }
-  /* Set a negative 32px margin on the bottom at the breakpoint lg */
+  /* Set a negative $size margin on the bottom at $breakpoint */
   .mb-lg-n5 { margin-bottom: -32px !important; }
-  /* Set a negative 32px margin on the left at the breakpoint lg */
+  /* Set a negative $size margin on the left at $breakpoint */
   .ml-lg-n5 { margin-left: -32px !important; }
-  /* Set a 32px margin on the left & right at the breakpoint lg */
+  /* Set a $size margin on the left & right at $breakpoint */
   .mx-lg-5 { margin-right: 32px !important; margin-left: 32px !important; }
-  /* Set a 32px margin on the top & bottom at the breakpoint lg */
-  .my-lg-5 { margin-top: 32px !important; margin-bottom: 32px !important; } }
-@media (min-width: 1012px) { /* Set a 40px margin to all sides at the breakpoint lg */
+  /* Set a $size margin on the top & bottom at $breakpoint */
+  .my-lg-5 { margin-top: 32px !important; margin-bottom: 32px !important; }
+  /* Set a $size margin to all sides at $breakpoint */
   .m-lg-6 { margin: 40px !important; }
-  /* Set a 40px margin on the top at the breakpoint lg */
+  /* Set a $size margin on the top at $breakpoint */
   .mt-lg-6 { margin-top: 40px !important; }
-  /* Set a 40px margin on the right at the breakpoint lg */
+  /* Set a $size margin on the right at $breakpoint */
   .mr-lg-6 { margin-right: 40px !important; }
-  /* Set a 40px margin on the bottom at the breakpoint lg */
+  /* Set a $size margin on the bottom at $breakpoint */
   .mb-lg-6 { margin-bottom: 40px !important; }
-  /* Set a 40px margin on the left at the breakpoint lg */
+  /* Set a $size margin on the left at $breakpoint */
   .ml-lg-6 { margin-left: 40px !important; }
-  /* Set a negative 40px margin on top at the breakpoint lg */
+  /* Set a negative $size margin on top at $breakpoint */
   .mt-lg-n6 { margin-top: -40px !important; }
-  /* Set a negative 40px margin on the right at the breakpoint lg */
+  /* Set a negative $size margin on the right at $breakpoint */
   .mr-lg-n6 { margin-right: -40px !important; }
-  /* Set a negative 40px margin on the bottom at the breakpoint lg */
+  /* Set a negative $size margin on the bottom at $breakpoint */
   .mb-lg-n6 { margin-bottom: -40px !important; }
-  /* Set a negative 40px margin on the left at the breakpoint lg */
+  /* Set a negative $size margin on the left at $breakpoint */
   .ml-lg-n6 { margin-left: -40px !important; }
-  /* Set a 40px margin on the left & right at the breakpoint lg */
+  /* Set a $size margin on the left & right at $breakpoint */
   .mx-lg-6 { margin-right: 40px !important; margin-left: 40px !important; }
-  /* Set a 40px margin on the top & bottom at the breakpoint lg */
-  .my-lg-6 { margin-top: 40px !important; margin-bottom: 40px !important; } }
-@media (min-width: 1280px) { /* Set a 0 margin to all sides at the breakpoint xl */
+  /* Set a $size margin on the top & bottom at $breakpoint */
+  .my-lg-6 { margin-top: 40px !important; margin-bottom: 40px !important; }
+  /* responsive horizontal auto margins */
+  .mx-lg-auto { margin-right: auto !important; margin-left: auto !important; } }
+@media (min-width: 1280px) { /* Set a $size margin to all sides at $breakpoint */
   .m-xl-0 { margin: 0 !important; }
-  /* Set a 0 margin on the top at the breakpoint xl */
+  /* Set a $size margin on the top at $breakpoint */
   .mt-xl-0 { margin-top: 0 !important; }
-  /* Set a 0 margin on the right at the breakpoint xl */
+  /* Set a $size margin on the right at $breakpoint */
   .mr-xl-0 { margin-right: 0 !important; }
-  /* Set a 0 margin on the bottom at the breakpoint xl */
+  /* Set a $size margin on the bottom at $breakpoint */
   .mb-xl-0 { margin-bottom: 0 !important; }
-  /* Set a 0 margin on the left at the breakpoint xl */
+  /* Set a $size margin on the left at $breakpoint */
   .ml-xl-0 { margin-left: 0 !important; }
-  /* Set a negative 0 margin on top at the breakpoint xl */
-  .mt-xl-n0 { margin-top: -0 !important; }
-  /* Set a negative 0 margin on the right at the breakpoint xl */
-  .mr-xl-n0 { margin-right: -0 !important; }
-  /* Set a negative 0 margin on the bottom at the breakpoint xl */
-  .mb-xl-n0 { margin-bottom: -0 !important; }
-  /* Set a negative 0 margin on the left at the breakpoint xl */
-  .ml-xl-n0 { margin-left: -0 !important; }
-  /* Set a 0 margin on the left & right at the breakpoint xl */
+  /* Set a $size margin on the left & right at $breakpoint */
   .mx-xl-0 { margin-right: 0 !important; margin-left: 0 !important; }
-  /* Set a 0 margin on the top & bottom at the breakpoint xl */
-  .my-xl-0 { margin-top: 0 !important; margin-bottom: 0 !important; } }
-@media (min-width: 1280px) { /* Set a 4px margin to all sides at the breakpoint xl */
+  /* Set a $size margin on the top & bottom at $breakpoint */
+  .my-xl-0 { margin-top: 0 !important; margin-bottom: 0 !important; }
+  /* Set a $size margin to all sides at $breakpoint */
   .m-xl-1 { margin: 4px !important; }
-  /* Set a 4px margin on the top at the breakpoint xl */
+  /* Set a $size margin on the top at $breakpoint */
   .mt-xl-1 { margin-top: 4px !important; }
-  /* Set a 4px margin on the right at the breakpoint xl */
+  /* Set a $size margin on the right at $breakpoint */
   .mr-xl-1 { margin-right: 4px !important; }
-  /* Set a 4px margin on the bottom at the breakpoint xl */
+  /* Set a $size margin on the bottom at $breakpoint */
   .mb-xl-1 { margin-bottom: 4px !important; }
-  /* Set a 4px margin on the left at the breakpoint xl */
+  /* Set a $size margin on the left at $breakpoint */
   .ml-xl-1 { margin-left: 4px !important; }
-  /* Set a negative 4px margin on top at the breakpoint xl */
+  /* Set a negative $size margin on top at $breakpoint */
   .mt-xl-n1 { margin-top: -4px !important; }
-  /* Set a negative 4px margin on the right at the breakpoint xl */
+  /* Set a negative $size margin on the right at $breakpoint */
   .mr-xl-n1 { margin-right: -4px !important; }
-  /* Set a negative 4px margin on the bottom at the breakpoint xl */
+  /* Set a negative $size margin on the bottom at $breakpoint */
   .mb-xl-n1 { margin-bottom: -4px !important; }
-  /* Set a negative 4px margin on the left at the breakpoint xl */
+  /* Set a negative $size margin on the left at $breakpoint */
   .ml-xl-n1 { margin-left: -4px !important; }
-  /* Set a 4px margin on the left & right at the breakpoint xl */
+  /* Set a $size margin on the left & right at $breakpoint */
   .mx-xl-1 { margin-right: 4px !important; margin-left: 4px !important; }
-  /* Set a 4px margin on the top & bottom at the breakpoint xl */
-  .my-xl-1 { margin-top: 4px !important; margin-bottom: 4px !important; } }
-@media (min-width: 1280px) { /* Set a 8px margin to all sides at the breakpoint xl */
+  /* Set a $size margin on the top & bottom at $breakpoint */
+  .my-xl-1 { margin-top: 4px !important; margin-bottom: 4px !important; }
+  /* Set a $size margin to all sides at $breakpoint */
   .m-xl-2 { margin: 8px !important; }
-  /* Set a 8px margin on the top at the breakpoint xl */
+  /* Set a $size margin on the top at $breakpoint */
   .mt-xl-2 { margin-top: 8px !important; }
-  /* Set a 8px margin on the right at the breakpoint xl */
+  /* Set a $size margin on the right at $breakpoint */
   .mr-xl-2 { margin-right: 8px !important; }
-  /* Set a 8px margin on the bottom at the breakpoint xl */
+  /* Set a $size margin on the bottom at $breakpoint */
   .mb-xl-2 { margin-bottom: 8px !important; }
-  /* Set a 8px margin on the left at the breakpoint xl */
+  /* Set a $size margin on the left at $breakpoint */
   .ml-xl-2 { margin-left: 8px !important; }
-  /* Set a negative 8px margin on top at the breakpoint xl */
+  /* Set a negative $size margin on top at $breakpoint */
   .mt-xl-n2 { margin-top: -8px !important; }
-  /* Set a negative 8px margin on the right at the breakpoint xl */
+  /* Set a negative $size margin on the right at $breakpoint */
   .mr-xl-n2 { margin-right: -8px !important; }
-  /* Set a negative 8px margin on the bottom at the breakpoint xl */
+  /* Set a negative $size margin on the bottom at $breakpoint */
   .mb-xl-n2 { margin-bottom: -8px !important; }
-  /* Set a negative 8px margin on the left at the breakpoint xl */
+  /* Set a negative $size margin on the left at $breakpoint */
   .ml-xl-n2 { margin-left: -8px !important; }
-  /* Set a 8px margin on the left & right at the breakpoint xl */
+  /* Set a $size margin on the left & right at $breakpoint */
   .mx-xl-2 { margin-right: 8px !important; margin-left: 8px !important; }
-  /* Set a 8px margin on the top & bottom at the breakpoint xl */
-  .my-xl-2 { margin-top: 8px !important; margin-bottom: 8px !important; } }
-@media (min-width: 1280px) { /* Set a 16px margin to all sides at the breakpoint xl */
+  /* Set a $size margin on the top & bottom at $breakpoint */
+  .my-xl-2 { margin-top: 8px !important; margin-bottom: 8px !important; }
+  /* Set a $size margin to all sides at $breakpoint */
   .m-xl-3 { margin: 16px !important; }
-  /* Set a 16px margin on the top at the breakpoint xl */
+  /* Set a $size margin on the top at $breakpoint */
   .mt-xl-3 { margin-top: 16px !important; }
-  /* Set a 16px margin on the right at the breakpoint xl */
+  /* Set a $size margin on the right at $breakpoint */
   .mr-xl-3 { margin-right: 16px !important; }
-  /* Set a 16px margin on the bottom at the breakpoint xl */
+  /* Set a $size margin on the bottom at $breakpoint */
   .mb-xl-3 { margin-bottom: 16px !important; }
-  /* Set a 16px margin on the left at the breakpoint xl */
+  /* Set a $size margin on the left at $breakpoint */
   .ml-xl-3 { margin-left: 16px !important; }
-  /* Set a negative 16px margin on top at the breakpoint xl */
+  /* Set a negative $size margin on top at $breakpoint */
   .mt-xl-n3 { margin-top: -16px !important; }
-  /* Set a negative 16px margin on the right at the breakpoint xl */
+  /* Set a negative $size margin on the right at $breakpoint */
   .mr-xl-n3 { margin-right: -16px !important; }
-  /* Set a negative 16px margin on the bottom at the breakpoint xl */
+  /* Set a negative $size margin on the bottom at $breakpoint */
   .mb-xl-n3 { margin-bottom: -16px !important; }
-  /* Set a negative 16px margin on the left at the breakpoint xl */
+  /* Set a negative $size margin on the left at $breakpoint */
   .ml-xl-n3 { margin-left: -16px !important; }
-  /* Set a 16px margin on the left & right at the breakpoint xl */
+  /* Set a $size margin on the left & right at $breakpoint */
   .mx-xl-3 { margin-right: 16px !important; margin-left: 16px !important; }
-  /* Set a 16px margin on the top & bottom at the breakpoint xl */
-  .my-xl-3 { margin-top: 16px !important; margin-bottom: 16px !important; } }
-@media (min-width: 1280px) { /* Set a 24px margin to all sides at the breakpoint xl */
+  /* Set a $size margin on the top & bottom at $breakpoint */
+  .my-xl-3 { margin-top: 16px !important; margin-bottom: 16px !important; }
+  /* Set a $size margin to all sides at $breakpoint */
   .m-xl-4 { margin: 24px !important; }
-  /* Set a 24px margin on the top at the breakpoint xl */
+  /* Set a $size margin on the top at $breakpoint */
   .mt-xl-4 { margin-top: 24px !important; }
-  /* Set a 24px margin on the right at the breakpoint xl */
+  /* Set a $size margin on the right at $breakpoint */
   .mr-xl-4 { margin-right: 24px !important; }
-  /* Set a 24px margin on the bottom at the breakpoint xl */
+  /* Set a $size margin on the bottom at $breakpoint */
   .mb-xl-4 { margin-bottom: 24px !important; }
-  /* Set a 24px margin on the left at the breakpoint xl */
+  /* Set a $size margin on the left at $breakpoint */
   .ml-xl-4 { margin-left: 24px !important; }
-  /* Set a negative 24px margin on top at the breakpoint xl */
+  /* Set a negative $size margin on top at $breakpoint */
   .mt-xl-n4 { margin-top: -24px !important; }
-  /* Set a negative 24px margin on the right at the breakpoint xl */
+  /* Set a negative $size margin on the right at $breakpoint */
   .mr-xl-n4 { margin-right: -24px !important; }
-  /* Set a negative 24px margin on the bottom at the breakpoint xl */
+  /* Set a negative $size margin on the bottom at $breakpoint */
   .mb-xl-n4 { margin-bottom: -24px !important; }
-  /* Set a negative 24px margin on the left at the breakpoint xl */
+  /* Set a negative $size margin on the left at $breakpoint */
   .ml-xl-n4 { margin-left: -24px !important; }
-  /* Set a 24px margin on the left & right at the breakpoint xl */
+  /* Set a $size margin on the left & right at $breakpoint */
   .mx-xl-4 { margin-right: 24px !important; margin-left: 24px !important; }
-  /* Set a 24px margin on the top & bottom at the breakpoint xl */
-  .my-xl-4 { margin-top: 24px !important; margin-bottom: 24px !important; } }
-@media (min-width: 1280px) { /* Set a 32px margin to all sides at the breakpoint xl */
+  /* Set a $size margin on the top & bottom at $breakpoint */
+  .my-xl-4 { margin-top: 24px !important; margin-bottom: 24px !important; }
+  /* Set a $size margin to all sides at $breakpoint */
   .m-xl-5 { margin: 32px !important; }
-  /* Set a 32px margin on the top at the breakpoint xl */
+  /* Set a $size margin on the top at $breakpoint */
   .mt-xl-5 { margin-top: 32px !important; }
-  /* Set a 32px margin on the right at the breakpoint xl */
+  /* Set a $size margin on the right at $breakpoint */
   .mr-xl-5 { margin-right: 32px !important; }
-  /* Set a 32px margin on the bottom at the breakpoint xl */
+  /* Set a $size margin on the bottom at $breakpoint */
   .mb-xl-5 { margin-bottom: 32px !important; }
-  /* Set a 32px margin on the left at the breakpoint xl */
+  /* Set a $size margin on the left at $breakpoint */
   .ml-xl-5 { margin-left: 32px !important; }
-  /* Set a negative 32px margin on top at the breakpoint xl */
+  /* Set a negative $size margin on top at $breakpoint */
   .mt-xl-n5 { margin-top: -32px !important; }
-  /* Set a negative 32px margin on the right at the breakpoint xl */
+  /* Set a negative $size margin on the right at $breakpoint */
   .mr-xl-n5 { margin-right: -32px !important; }
-  /* Set a negative 32px margin on the bottom at the breakpoint xl */
+  /* Set a negative $size margin on the bottom at $breakpoint */
   .mb-xl-n5 { margin-bottom: -32px !important; }
-  /* Set a negative 32px margin on the left at the breakpoint xl */
+  /* Set a negative $size margin on the left at $breakpoint */
   .ml-xl-n5 { margin-left: -32px !important; }
-  /* Set a 32px margin on the left & right at the breakpoint xl */
+  /* Set a $size margin on the left & right at $breakpoint */
   .mx-xl-5 { margin-right: 32px !important; margin-left: 32px !important; }
-  /* Set a 32px margin on the top & bottom at the breakpoint xl */
-  .my-xl-5 { margin-top: 32px !important; margin-bottom: 32px !important; } }
-@media (min-width: 1280px) { /* Set a 40px margin to all sides at the breakpoint xl */
+  /* Set a $size margin on the top & bottom at $breakpoint */
+  .my-xl-5 { margin-top: 32px !important; margin-bottom: 32px !important; }
+  /* Set a $size margin to all sides at $breakpoint */
   .m-xl-6 { margin: 40px !important; }
-  /* Set a 40px margin on the top at the breakpoint xl */
+  /* Set a $size margin on the top at $breakpoint */
   .mt-xl-6 { margin-top: 40px !important; }
-  /* Set a 40px margin on the right at the breakpoint xl */
+  /* Set a $size margin on the right at $breakpoint */
   .mr-xl-6 { margin-right: 40px !important; }
-  /* Set a 40px margin on the bottom at the breakpoint xl */
+  /* Set a $size margin on the bottom at $breakpoint */
   .mb-xl-6 { margin-bottom: 40px !important; }
-  /* Set a 40px margin on the left at the breakpoint xl */
+  /* Set a $size margin on the left at $breakpoint */
   .ml-xl-6 { margin-left: 40px !important; }
-  /* Set a negative 40px margin on top at the breakpoint xl */
+  /* Set a negative $size margin on top at $breakpoint */
   .mt-xl-n6 { margin-top: -40px !important; }
-  /* Set a negative 40px margin on the right at the breakpoint xl */
+  /* Set a negative $size margin on the right at $breakpoint */
   .mr-xl-n6 { margin-right: -40px !important; }
-  /* Set a negative 40px margin on the bottom at the breakpoint xl */
+  /* Set a negative $size margin on the bottom at $breakpoint */
   .mb-xl-n6 { margin-bottom: -40px !important; }
-  /* Set a negative 40px margin on the left at the breakpoint xl */
+  /* Set a negative $size margin on the left at $breakpoint */
   .ml-xl-n6 { margin-left: -40px !important; }
-  /* Set a 40px margin on the left & right at the breakpoint xl */
+  /* Set a $size margin on the left & right at $breakpoint */
   .mx-xl-6 { margin-right: 40px !important; margin-left: 40px !important; }
-  /* Set a 40px margin on the top & bottom at the breakpoint xl */
-  .my-xl-6 { margin-top: 40px !important; margin-bottom: 40px !important; } }
-/* Set a 0 padding to all sides */
+  /* Set a $size margin on the top & bottom at $breakpoint */
+  .my-xl-6 { margin-top: 40px !important; margin-bottom: 40px !important; }
+  /* responsive horizontal auto margins */
+  .mx-xl-auto { margin-right: auto !important; margin-left: auto !important; } }
+/* Set a $size padding to all sides at $breakpoint */
 .p-0 { padding: 0 !important; }
 
-/* Set a 0 padding to the top */
+/* Set a $size padding to the top at $breakpoint */
 .pt-0 { padding-top: 0 !important; }
 
-/* Set a 0 padding to the right */
+/* Set a $size padding to the right at $breakpoint */
 .pr-0 { padding-right: 0 !important; }
 
-/* Set a 0 padding to the bottom */
+/* Set a $size padding to the bottom at $breakpoint */
 .pb-0 { padding-bottom: 0 !important; }
 
-/* Set a 0 padding to the left */
+/* Set a $size padding to the left at $breakpoint */
 .pl-0 { padding-left: 0 !important; }
 
-/* Set a 0 padding to the left & right */
+/* Set a $size padding to the left & right at $breakpoint */
 .px-0 { padding-right: 0 !important; padding-left: 0 !important; }
 
-/* Set a 0 padding to the top & bottom */
+/* Set a $size padding to the top & bottom at $breakpoint */
 .py-0 { padding-top: 0 !important; padding-bottom: 0 !important; }
 
-/* Set a 4px padding to all sides */
+/* Set a $size padding to all sides at $breakpoint */
 .p-1 { padding: 4px !important; }
 
-/* Set a 4px padding to the top */
+/* Set a $size padding to the top at $breakpoint */
 .pt-1 { padding-top: 4px !important; }
 
-/* Set a 4px padding to the right */
+/* Set a $size padding to the right at $breakpoint */
 .pr-1 { padding-right: 4px !important; }
 
-/* Set a 4px padding to the bottom */
+/* Set a $size padding to the bottom at $breakpoint */
 .pb-1 { padding-bottom: 4px !important; }
 
-/* Set a 4px padding to the left */
+/* Set a $size padding to the left at $breakpoint */
 .pl-1 { padding-left: 4px !important; }
 
-/* Set a 4px padding to the left & right */
+/* Set a $size padding to the left & right at $breakpoint */
 .px-1 { padding-right: 4px !important; padding-left: 4px !important; }
 
-/* Set a 4px padding to the top & bottom */
+/* Set a $size padding to the top & bottom at $breakpoint */
 .py-1 { padding-top: 4px !important; padding-bottom: 4px !important; }
 
-/* Set a 8px padding to all sides */
+/* Set a $size padding to all sides at $breakpoint */
 .p-2 { padding: 8px !important; }
 
-/* Set a 8px padding to the top */
+/* Set a $size padding to the top at $breakpoint */
 .pt-2 { padding-top: 8px !important; }
 
-/* Set a 8px padding to the right */
+/* Set a $size padding to the right at $breakpoint */
 .pr-2 { padding-right: 8px !important; }
 
-/* Set a 8px padding to the bottom */
+/* Set a $size padding to the bottom at $breakpoint */
 .pb-2 { padding-bottom: 8px !important; }
 
-/* Set a 8px padding to the left */
+/* Set a $size padding to the left at $breakpoint */
 .pl-2 { padding-left: 8px !important; }
 
-/* Set a 8px padding to the left & right */
+/* Set a $size padding to the left & right at $breakpoint */
 .px-2 { padding-right: 8px !important; padding-left: 8px !important; }
 
-/* Set a 8px padding to the top & bottom */
+/* Set a $size padding to the top & bottom at $breakpoint */
 .py-2 { padding-top: 8px !important; padding-bottom: 8px !important; }
 
-/* Set a 16px padding to all sides */
+/* Set a $size padding to all sides at $breakpoint */
 .p-3 { padding: 16px !important; }
 
-/* Set a 16px padding to the top */
+/* Set a $size padding to the top at $breakpoint */
 .pt-3 { padding-top: 16px !important; }
 
-/* Set a 16px padding to the right */
+/* Set a $size padding to the right at $breakpoint */
 .pr-3 { padding-right: 16px !important; }
 
-/* Set a 16px padding to the bottom */
+/* Set a $size padding to the bottom at $breakpoint */
 .pb-3 { padding-bottom: 16px !important; }
 
-/* Set a 16px padding to the left */
+/* Set a $size padding to the left at $breakpoint */
 .pl-3 { padding-left: 16px !important; }
 
-/* Set a 16px padding to the left & right */
+/* Set a $size padding to the left & right at $breakpoint */
 .px-3 { padding-right: 16px !important; padding-left: 16px !important; }
 
-/* Set a 16px padding to the top & bottom */
+/* Set a $size padding to the top & bottom at $breakpoint */
 .py-3 { padding-top: 16px !important; padding-bottom: 16px !important; }
 
-/* Set a 24px padding to all sides */
+/* Set a $size padding to all sides at $breakpoint */
 .p-4 { padding: 24px !important; }
 
-/* Set a 24px padding to the top */
+/* Set a $size padding to the top at $breakpoint */
 .pt-4 { padding-top: 24px !important; }
 
-/* Set a 24px padding to the right */
+/* Set a $size padding to the right at $breakpoint */
 .pr-4 { padding-right: 24px !important; }
 
-/* Set a 24px padding to the bottom */
+/* Set a $size padding to the bottom at $breakpoint */
 .pb-4 { padding-bottom: 24px !important; }
 
-/* Set a 24px padding to the left */
+/* Set a $size padding to the left at $breakpoint */
 .pl-4 { padding-left: 24px !important; }
 
-/* Set a 24px padding to the left & right */
+/* Set a $size padding to the left & right at $breakpoint */
 .px-4 { padding-right: 24px !important; padding-left: 24px !important; }
 
-/* Set a 24px padding to the top & bottom */
+/* Set a $size padding to the top & bottom at $breakpoint */
 .py-4 { padding-top: 24px !important; padding-bottom: 24px !important; }
 
-/* Set a 32px padding to all sides */
+/* Set a $size padding to all sides at $breakpoint */
 .p-5 { padding: 32px !important; }
 
-/* Set a 32px padding to the top */
+/* Set a $size padding to the top at $breakpoint */
 .pt-5 { padding-top: 32px !important; }
 
-/* Set a 32px padding to the right */
+/* Set a $size padding to the right at $breakpoint */
 .pr-5 { padding-right: 32px !important; }
 
-/* Set a 32px padding to the bottom */
+/* Set a $size padding to the bottom at $breakpoint */
 .pb-5 { padding-bottom: 32px !important; }
 
-/* Set a 32px padding to the left */
+/* Set a $size padding to the left at $breakpoint */
 .pl-5 { padding-left: 32px !important; }
 
-/* Set a 32px padding to the left & right */
+/* Set a $size padding to the left & right at $breakpoint */
 .px-5 { padding-right: 32px !important; padding-left: 32px !important; }
 
-/* Set a 32px padding to the top & bottom */
+/* Set a $size padding to the top & bottom at $breakpoint */
 .py-5 { padding-top: 32px !important; padding-bottom: 32px !important; }
 
-/* Set a 40px padding to all sides */
+/* Set a $size padding to all sides at $breakpoint */
 .p-6 { padding: 40px !important; }
 
-/* Set a 40px padding to the top */
+/* Set a $size padding to the top at $breakpoint */
 .pt-6 { padding-top: 40px !important; }
 
-/* Set a 40px padding to the right */
+/* Set a $size padding to the right at $breakpoint */
 .pr-6 { padding-right: 40px !important; }
 
-/* Set a 40px padding to the bottom */
+/* Set a $size padding to the bottom at $breakpoint */
 .pb-6 { padding-bottom: 40px !important; }
 
-/* Set a 40px padding to the left */
+/* Set a $size padding to the left at $breakpoint */
 .pl-6 { padding-left: 40px !important; }
 
-/* Set a 40px padding to the left & right */
+/* Set a $size padding to the left & right at $breakpoint */
 .px-6 { padding-right: 40px !important; padding-left: 40px !important; }
 
-/* Set a 40px padding to the top & bottom */
+/* Set a $size padding to the top & bottom at $breakpoint */
 .py-6 { padding-top: 40px !important; padding-bottom: 40px !important; }
 
-@media (min-width: 544px) { /* Set a 0 padding to all sides at the sm breakpoint */
+@media (min-width: 544px) { /* Set a $size padding to all sides at $breakpoint */
   .p-sm-0 { padding: 0 !important; }
-  /* Set a 0 padding to the top at the sm breakpoint */
+  /* Set a $size padding to the top at $breakpoint */
   .pt-sm-0 { padding-top: 0 !important; }
-  /* Set a 0 padding to the right at the sm breakpoint */
+  /* Set a $size padding to the right at $breakpoint */
   .pr-sm-0 { padding-right: 0 !important; }
-  /* Set a 0 padding to the bottom at the sm breakpoint */
+  /* Set a $size padding to the bottom at $breakpoint */
   .pb-sm-0 { padding-bottom: 0 !important; }
-  /* Set a 0 padding to the left at the sm breakpoint */
+  /* Set a $size padding to the left at $breakpoint */
   .pl-sm-0 { padding-left: 0 !important; }
-  /* Set a 0 padding to the left & right at the sm breakpoint */
+  /* Set a $size padding to the left & right at $breakpoint */
   .px-sm-0 { padding-right: 0 !important; padding-left: 0 !important; }
-  /* Set a 0 padding to the top & bottom at the sm breakpoint */
-  .py-sm-0 { padding-top: 0 !important; padding-bottom: 0 !important; } }
-@media (min-width: 544px) { /* Set a 4px padding to all sides at the sm breakpoint */
+  /* Set a $size padding to the top & bottom at $breakpoint */
+  .py-sm-0 { padding-top: 0 !important; padding-bottom: 0 !important; }
+  /* Set a $size padding to all sides at $breakpoint */
   .p-sm-1 { padding: 4px !important; }
-  /* Set a 4px padding to the top at the sm breakpoint */
+  /* Set a $size padding to the top at $breakpoint */
   .pt-sm-1 { padding-top: 4px !important; }
-  /* Set a 4px padding to the right at the sm breakpoint */
+  /* Set a $size padding to the right at $breakpoint */
   .pr-sm-1 { padding-right: 4px !important; }
-  /* Set a 4px padding to the bottom at the sm breakpoint */
+  /* Set a $size padding to the bottom at $breakpoint */
   .pb-sm-1 { padding-bottom: 4px !important; }
-  /* Set a 4px padding to the left at the sm breakpoint */
+  /* Set a $size padding to the left at $breakpoint */
   .pl-sm-1 { padding-left: 4px !important; }
-  /* Set a 4px padding to the left & right at the sm breakpoint */
+  /* Set a $size padding to the left & right at $breakpoint */
   .px-sm-1 { padding-right: 4px !important; padding-left: 4px !important; }
-  /* Set a 4px padding to the top & bottom at the sm breakpoint */
-  .py-sm-1 { padding-top: 4px !important; padding-bottom: 4px !important; } }
-@media (min-width: 544px) { /* Set a 8px padding to all sides at the sm breakpoint */
+  /* Set a $size padding to the top & bottom at $breakpoint */
+  .py-sm-1 { padding-top: 4px !important; padding-bottom: 4px !important; }
+  /* Set a $size padding to all sides at $breakpoint */
   .p-sm-2 { padding: 8px !important; }
-  /* Set a 8px padding to the top at the sm breakpoint */
+  /* Set a $size padding to the top at $breakpoint */
   .pt-sm-2 { padding-top: 8px !important; }
-  /* Set a 8px padding to the right at the sm breakpoint */
+  /* Set a $size padding to the right at $breakpoint */
   .pr-sm-2 { padding-right: 8px !important; }
-  /* Set a 8px padding to the bottom at the sm breakpoint */
+  /* Set a $size padding to the bottom at $breakpoint */
   .pb-sm-2 { padding-bottom: 8px !important; }
-  /* Set a 8px padding to the left at the sm breakpoint */
+  /* Set a $size padding to the left at $breakpoint */
   .pl-sm-2 { padding-left: 8px !important; }
-  /* Set a 8px padding to the left & right at the sm breakpoint */
+  /* Set a $size padding to the left & right at $breakpoint */
   .px-sm-2 { padding-right: 8px !important; padding-left: 8px !important; }
-  /* Set a 8px padding to the top & bottom at the sm breakpoint */
-  .py-sm-2 { padding-top: 8px !important; padding-bottom: 8px !important; } }
-@media (min-width: 544px) { /* Set a 16px padding to all sides at the sm breakpoint */
+  /* Set a $size padding to the top & bottom at $breakpoint */
+  .py-sm-2 { padding-top: 8px !important; padding-bottom: 8px !important; }
+  /* Set a $size padding to all sides at $breakpoint */
   .p-sm-3 { padding: 16px !important; }
-  /* Set a 16px padding to the top at the sm breakpoint */
+  /* Set a $size padding to the top at $breakpoint */
   .pt-sm-3 { padding-top: 16px !important; }
-  /* Set a 16px padding to the right at the sm breakpoint */
+  /* Set a $size padding to the right at $breakpoint */
   .pr-sm-3 { padding-right: 16px !important; }
-  /* Set a 16px padding to the bottom at the sm breakpoint */
+  /* Set a $size padding to the bottom at $breakpoint */
   .pb-sm-3 { padding-bottom: 16px !important; }
-  /* Set a 16px padding to the left at the sm breakpoint */
+  /* Set a $size padding to the left at $breakpoint */
   .pl-sm-3 { padding-left: 16px !important; }
-  /* Set a 16px padding to the left & right at the sm breakpoint */
+  /* Set a $size padding to the left & right at $breakpoint */
   .px-sm-3 { padding-right: 16px !important; padding-left: 16px !important; }
-  /* Set a 16px padding to the top & bottom at the sm breakpoint */
-  .py-sm-3 { padding-top: 16px !important; padding-bottom: 16px !important; } }
-@media (min-width: 544px) { /* Set a 24px padding to all sides at the sm breakpoint */
+  /* Set a $size padding to the top & bottom at $breakpoint */
+  .py-sm-3 { padding-top: 16px !important; padding-bottom: 16px !important; }
+  /* Set a $size padding to all sides at $breakpoint */
   .p-sm-4 { padding: 24px !important; }
-  /* Set a 24px padding to the top at the sm breakpoint */
+  /* Set a $size padding to the top at $breakpoint */
   .pt-sm-4 { padding-top: 24px !important; }
-  /* Set a 24px padding to the right at the sm breakpoint */
+  /* Set a $size padding to the right at $breakpoint */
   .pr-sm-4 { padding-right: 24px !important; }
-  /* Set a 24px padding to the bottom at the sm breakpoint */
+  /* Set a $size padding to the bottom at $breakpoint */
   .pb-sm-4 { padding-bottom: 24px !important; }
-  /* Set a 24px padding to the left at the sm breakpoint */
+  /* Set a $size padding to the left at $breakpoint */
   .pl-sm-4 { padding-left: 24px !important; }
-  /* Set a 24px padding to the left & right at the sm breakpoint */
+  /* Set a $size padding to the left & right at $breakpoint */
   .px-sm-4 { padding-right: 24px !important; padding-left: 24px !important; }
-  /* Set a 24px padding to the top & bottom at the sm breakpoint */
-  .py-sm-4 { padding-top: 24px !important; padding-bottom: 24px !important; } }
-@media (min-width: 544px) { /* Set a 32px padding to all sides at the sm breakpoint */
+  /* Set a $size padding to the top & bottom at $breakpoint */
+  .py-sm-4 { padding-top: 24px !important; padding-bottom: 24px !important; }
+  /* Set a $size padding to all sides at $breakpoint */
   .p-sm-5 { padding: 32px !important; }
-  /* Set a 32px padding to the top at the sm breakpoint */
+  /* Set a $size padding to the top at $breakpoint */
   .pt-sm-5 { padding-top: 32px !important; }
-  /* Set a 32px padding to the right at the sm breakpoint */
+  /* Set a $size padding to the right at $breakpoint */
   .pr-sm-5 { padding-right: 32px !important; }
-  /* Set a 32px padding to the bottom at the sm breakpoint */
+  /* Set a $size padding to the bottom at $breakpoint */
   .pb-sm-5 { padding-bottom: 32px !important; }
-  /* Set a 32px padding to the left at the sm breakpoint */
+  /* Set a $size padding to the left at $breakpoint */
   .pl-sm-5 { padding-left: 32px !important; }
-  /* Set a 32px padding to the left & right at the sm breakpoint */
+  /* Set a $size padding to the left & right at $breakpoint */
   .px-sm-5 { padding-right: 32px !important; padding-left: 32px !important; }
-  /* Set a 32px padding to the top & bottom at the sm breakpoint */
-  .py-sm-5 { padding-top: 32px !important; padding-bottom: 32px !important; } }
-@media (min-width: 544px) { /* Set a 40px padding to all sides at the sm breakpoint */
+  /* Set a $size padding to the top & bottom at $breakpoint */
+  .py-sm-5 { padding-top: 32px !important; padding-bottom: 32px !important; }
+  /* Set a $size padding to all sides at $breakpoint */
   .p-sm-6 { padding: 40px !important; }
-  /* Set a 40px padding to the top at the sm breakpoint */
+  /* Set a $size padding to the top at $breakpoint */
   .pt-sm-6 { padding-top: 40px !important; }
-  /* Set a 40px padding to the right at the sm breakpoint */
+  /* Set a $size padding to the right at $breakpoint */
   .pr-sm-6 { padding-right: 40px !important; }
-  /* Set a 40px padding to the bottom at the sm breakpoint */
+  /* Set a $size padding to the bottom at $breakpoint */
   .pb-sm-6 { padding-bottom: 40px !important; }
-  /* Set a 40px padding to the left at the sm breakpoint */
+  /* Set a $size padding to the left at $breakpoint */
   .pl-sm-6 { padding-left: 40px !important; }
-  /* Set a 40px padding to the left & right at the sm breakpoint */
+  /* Set a $size padding to the left & right at $breakpoint */
   .px-sm-6 { padding-right: 40px !important; padding-left: 40px !important; }
-  /* Set a 40px padding to the top & bottom at the sm breakpoint */
+  /* Set a $size padding to the top & bottom at $breakpoint */
   .py-sm-6 { padding-top: 40px !important; padding-bottom: 40px !important; } }
-@media (min-width: 768px) { /* Set a 0 padding to all sides at the md breakpoint */
+@media (min-width: 768px) { /* Set a $size padding to all sides at $breakpoint */
   .p-md-0 { padding: 0 !important; }
-  /* Set a 0 padding to the top at the md breakpoint */
+  /* Set a $size padding to the top at $breakpoint */
   .pt-md-0 { padding-top: 0 !important; }
-  /* Set a 0 padding to the right at the md breakpoint */
+  /* Set a $size padding to the right at $breakpoint */
   .pr-md-0 { padding-right: 0 !important; }
-  /* Set a 0 padding to the bottom at the md breakpoint */
+  /* Set a $size padding to the bottom at $breakpoint */
   .pb-md-0 { padding-bottom: 0 !important; }
-  /* Set a 0 padding to the left at the md breakpoint */
+  /* Set a $size padding to the left at $breakpoint */
   .pl-md-0 { padding-left: 0 !important; }
-  /* Set a 0 padding to the left & right at the md breakpoint */
+  /* Set a $size padding to the left & right at $breakpoint */
   .px-md-0 { padding-right: 0 !important; padding-left: 0 !important; }
-  /* Set a 0 padding to the top & bottom at the md breakpoint */
-  .py-md-0 { padding-top: 0 !important; padding-bottom: 0 !important; } }
-@media (min-width: 768px) { /* Set a 4px padding to all sides at the md breakpoint */
+  /* Set a $size padding to the top & bottom at $breakpoint */
+  .py-md-0 { padding-top: 0 !important; padding-bottom: 0 !important; }
+  /* Set a $size padding to all sides at $breakpoint */
   .p-md-1 { padding: 4px !important; }
-  /* Set a 4px padding to the top at the md breakpoint */
+  /* Set a $size padding to the top at $breakpoint */
   .pt-md-1 { padding-top: 4px !important; }
-  /* Set a 4px padding to the right at the md breakpoint */
+  /* Set a $size padding to the right at $breakpoint */
   .pr-md-1 { padding-right: 4px !important; }
-  /* Set a 4px padding to the bottom at the md breakpoint */
+  /* Set a $size padding to the bottom at $breakpoint */
   .pb-md-1 { padding-bottom: 4px !important; }
-  /* Set a 4px padding to the left at the md breakpoint */
+  /* Set a $size padding to the left at $breakpoint */
   .pl-md-1 { padding-left: 4px !important; }
-  /* Set a 4px padding to the left & right at the md breakpoint */
+  /* Set a $size padding to the left & right at $breakpoint */
   .px-md-1 { padding-right: 4px !important; padding-left: 4px !important; }
-  /* Set a 4px padding to the top & bottom at the md breakpoint */
-  .py-md-1 { padding-top: 4px !important; padding-bottom: 4px !important; } }
-@media (min-width: 768px) { /* Set a 8px padding to all sides at the md breakpoint */
+  /* Set a $size padding to the top & bottom at $breakpoint */
+  .py-md-1 { padding-top: 4px !important; padding-bottom: 4px !important; }
+  /* Set a $size padding to all sides at $breakpoint */
   .p-md-2 { padding: 8px !important; }
-  /* Set a 8px padding to the top at the md breakpoint */
+  /* Set a $size padding to the top at $breakpoint */
   .pt-md-2 { padding-top: 8px !important; }
-  /* Set a 8px padding to the right at the md breakpoint */
+  /* Set a $size padding to the right at $breakpoint */
   .pr-md-2 { padding-right: 8px !important; }
-  /* Set a 8px padding to the bottom at the md breakpoint */
+  /* Set a $size padding to the bottom at $breakpoint */
   .pb-md-2 { padding-bottom: 8px !important; }
-  /* Set a 8px padding to the left at the md breakpoint */
+  /* Set a $size padding to the left at $breakpoint */
   .pl-md-2 { padding-left: 8px !important; }
-  /* Set a 8px padding to the left & right at the md breakpoint */
+  /* Set a $size padding to the left & right at $breakpoint */
   .px-md-2 { padding-right: 8px !important; padding-left: 8px !important; }
-  /* Set a 8px padding to the top & bottom at the md breakpoint */
-  .py-md-2 { padding-top: 8px !important; padding-bottom: 8px !important; } }
-@media (min-width: 768px) { /* Set a 16px padding to all sides at the md breakpoint */
+  /* Set a $size padding to the top & bottom at $breakpoint */
+  .py-md-2 { padding-top: 8px !important; padding-bottom: 8px !important; }
+  /* Set a $size padding to all sides at $breakpoint */
   .p-md-3 { padding: 16px !important; }
-  /* Set a 16px padding to the top at the md breakpoint */
+  /* Set a $size padding to the top at $breakpoint */
   .pt-md-3 { padding-top: 16px !important; }
-  /* Set a 16px padding to the right at the md breakpoint */
+  /* Set a $size padding to the right at $breakpoint */
   .pr-md-3 { padding-right: 16px !important; }
-  /* Set a 16px padding to the bottom at the md breakpoint */
+  /* Set a $size padding to the bottom at $breakpoint */
   .pb-md-3 { padding-bottom: 16px !important; }
-  /* Set a 16px padding to the left at the md breakpoint */
+  /* Set a $size padding to the left at $breakpoint */
   .pl-md-3 { padding-left: 16px !important; }
-  /* Set a 16px padding to the left & right at the md breakpoint */
+  /* Set a $size padding to the left & right at $breakpoint */
   .px-md-3 { padding-right: 16px !important; padding-left: 16px !important; }
-  /* Set a 16px padding to the top & bottom at the md breakpoint */
-  .py-md-3 { padding-top: 16px !important; padding-bottom: 16px !important; } }
-@media (min-width: 768px) { /* Set a 24px padding to all sides at the md breakpoint */
+  /* Set a $size padding to the top & bottom at $breakpoint */
+  .py-md-3 { padding-top: 16px !important; padding-bottom: 16px !important; }
+  /* Set a $size padding to all sides at $breakpoint */
   .p-md-4 { padding: 24px !important; }
-  /* Set a 24px padding to the top at the md breakpoint */
+  /* Set a $size padding to the top at $breakpoint */
   .pt-md-4 { padding-top: 24px !important; }
-  /* Set a 24px padding to the right at the md breakpoint */
+  /* Set a $size padding to the right at $breakpoint */
   .pr-md-4 { padding-right: 24px !important; }
-  /* Set a 24px padding to the bottom at the md breakpoint */
+  /* Set a $size padding to the bottom at $breakpoint */
   .pb-md-4 { padding-bottom: 24px !important; }
-  /* Set a 24px padding to the left at the md breakpoint */
+  /* Set a $size padding to the left at $breakpoint */
   .pl-md-4 { padding-left: 24px !important; }
-  /* Set a 24px padding to the left & right at the md breakpoint */
+  /* Set a $size padding to the left & right at $breakpoint */
   .px-md-4 { padding-right: 24px !important; padding-left: 24px !important; }
-  /* Set a 24px padding to the top & bottom at the md breakpoint */
-  .py-md-4 { padding-top: 24px !important; padding-bottom: 24px !important; } }
-@media (min-width: 768px) { /* Set a 32px padding to all sides at the md breakpoint */
+  /* Set a $size padding to the top & bottom at $breakpoint */
+  .py-md-4 { padding-top: 24px !important; padding-bottom: 24px !important; }
+  /* Set a $size padding to all sides at $breakpoint */
   .p-md-5 { padding: 32px !important; }
-  /* Set a 32px padding to the top at the md breakpoint */
+  /* Set a $size padding to the top at $breakpoint */
   .pt-md-5 { padding-top: 32px !important; }
-  /* Set a 32px padding to the right at the md breakpoint */
+  /* Set a $size padding to the right at $breakpoint */
   .pr-md-5 { padding-right: 32px !important; }
-  /* Set a 32px padding to the bottom at the md breakpoint */
+  /* Set a $size padding to the bottom at $breakpoint */
   .pb-md-5 { padding-bottom: 32px !important; }
-  /* Set a 32px padding to the left at the md breakpoint */
+  /* Set a $size padding to the left at $breakpoint */
   .pl-md-5 { padding-left: 32px !important; }
-  /* Set a 32px padding to the left & right at the md breakpoint */
+  /* Set a $size padding to the left & right at $breakpoint */
   .px-md-5 { padding-right: 32px !important; padding-left: 32px !important; }
-  /* Set a 32px padding to the top & bottom at the md breakpoint */
-  .py-md-5 { padding-top: 32px !important; padding-bottom: 32px !important; } }
-@media (min-width: 768px) { /* Set a 40px padding to all sides at the md breakpoint */
+  /* Set a $size padding to the top & bottom at $breakpoint */
+  .py-md-5 { padding-top: 32px !important; padding-bottom: 32px !important; }
+  /* Set a $size padding to all sides at $breakpoint */
   .p-md-6 { padding: 40px !important; }
-  /* Set a 40px padding to the top at the md breakpoint */
+  /* Set a $size padding to the top at $breakpoint */
   .pt-md-6 { padding-top: 40px !important; }
-  /* Set a 40px padding to the right at the md breakpoint */
+  /* Set a $size padding to the right at $breakpoint */
   .pr-md-6 { padding-right: 40px !important; }
-  /* Set a 40px padding to the bottom at the md breakpoint */
+  /* Set a $size padding to the bottom at $breakpoint */
   .pb-md-6 { padding-bottom: 40px !important; }
-  /* Set a 40px padding to the left at the md breakpoint */
+  /* Set a $size padding to the left at $breakpoint */
   .pl-md-6 { padding-left: 40px !important; }
-  /* Set a 40px padding to the left & right at the md breakpoint */
+  /* Set a $size padding to the left & right at $breakpoint */
   .px-md-6 { padding-right: 40px !important; padding-left: 40px !important; }
-  /* Set a 40px padding to the top & bottom at the md breakpoint */
+  /* Set a $size padding to the top & bottom at $breakpoint */
   .py-md-6 { padding-top: 40px !important; padding-bottom: 40px !important; } }
-@media (min-width: 1012px) { /* Set a 0 padding to all sides at the lg breakpoint */
+@media (min-width: 1012px) { /* Set a $size padding to all sides at $breakpoint */
   .p-lg-0 { padding: 0 !important; }
-  /* Set a 0 padding to the top at the lg breakpoint */
+  /* Set a $size padding to the top at $breakpoint */
   .pt-lg-0 { padding-top: 0 !important; }
-  /* Set a 0 padding to the right at the lg breakpoint */
+  /* Set a $size padding to the right at $breakpoint */
   .pr-lg-0 { padding-right: 0 !important; }
-  /* Set a 0 padding to the bottom at the lg breakpoint */
+  /* Set a $size padding to the bottom at $breakpoint */
   .pb-lg-0 { padding-bottom: 0 !important; }
-  /* Set a 0 padding to the left at the lg breakpoint */
+  /* Set a $size padding to the left at $breakpoint */
   .pl-lg-0 { padding-left: 0 !important; }
-  /* Set a 0 padding to the left & right at the lg breakpoint */
+  /* Set a $size padding to the left & right at $breakpoint */
   .px-lg-0 { padding-right: 0 !important; padding-left: 0 !important; }
-  /* Set a 0 padding to the top & bottom at the lg breakpoint */
-  .py-lg-0 { padding-top: 0 !important; padding-bottom: 0 !important; } }
-@media (min-width: 1012px) { /* Set a 4px padding to all sides at the lg breakpoint */
+  /* Set a $size padding to the top & bottom at $breakpoint */
+  .py-lg-0 { padding-top: 0 !important; padding-bottom: 0 !important; }
+  /* Set a $size padding to all sides at $breakpoint */
   .p-lg-1 { padding: 4px !important; }
-  /* Set a 4px padding to the top at the lg breakpoint */
+  /* Set a $size padding to the top at $breakpoint */
   .pt-lg-1 { padding-top: 4px !important; }
-  /* Set a 4px padding to the right at the lg breakpoint */
+  /* Set a $size padding to the right at $breakpoint */
   .pr-lg-1 { padding-right: 4px !important; }
-  /* Set a 4px padding to the bottom at the lg breakpoint */
+  /* Set a $size padding to the bottom at $breakpoint */
   .pb-lg-1 { padding-bottom: 4px !important; }
-  /* Set a 4px padding to the left at the lg breakpoint */
+  /* Set a $size padding to the left at $breakpoint */
   .pl-lg-1 { padding-left: 4px !important; }
-  /* Set a 4px padding to the left & right at the lg breakpoint */
+  /* Set a $size padding to the left & right at $breakpoint */
   .px-lg-1 { padding-right: 4px !important; padding-left: 4px !important; }
-  /* Set a 4px padding to the top & bottom at the lg breakpoint */
-  .py-lg-1 { padding-top: 4px !important; padding-bottom: 4px !important; } }
-@media (min-width: 1012px) { /* Set a 8px padding to all sides at the lg breakpoint */
+  /* Set a $size padding to the top & bottom at $breakpoint */
+  .py-lg-1 { padding-top: 4px !important; padding-bottom: 4px !important; }
+  /* Set a $size padding to all sides at $breakpoint */
   .p-lg-2 { padding: 8px !important; }
-  /* Set a 8px padding to the top at the lg breakpoint */
+  /* Set a $size padding to the top at $breakpoint */
   .pt-lg-2 { padding-top: 8px !important; }
-  /* Set a 8px padding to the right at the lg breakpoint */
+  /* Set a $size padding to the right at $breakpoint */
   .pr-lg-2 { padding-right: 8px !important; }
-  /* Set a 8px padding to the bottom at the lg breakpoint */
+  /* Set a $size padding to the bottom at $breakpoint */
   .pb-lg-2 { padding-bottom: 8px !important; }
-  /* Set a 8px padding to the left at the lg breakpoint */
+  /* Set a $size padding to the left at $breakpoint */
   .pl-lg-2 { padding-left: 8px !important; }
-  /* Set a 8px padding to the left & right at the lg breakpoint */
+  /* Set a $size padding to the left & right at $breakpoint */
   .px-lg-2 { padding-right: 8px !important; padding-left: 8px !important; }
-  /* Set a 8px padding to the top & bottom at the lg breakpoint */
-  .py-lg-2 { padding-top: 8px !important; padding-bottom: 8px !important; } }
-@media (min-width: 1012px) { /* Set a 16px padding to all sides at the lg breakpoint */
+  /* Set a $size padding to the top & bottom at $breakpoint */
+  .py-lg-2 { padding-top: 8px !important; padding-bottom: 8px !important; }
+  /* Set a $size padding to all sides at $breakpoint */
   .p-lg-3 { padding: 16px !important; }
-  /* Set a 16px padding to the top at the lg breakpoint */
+  /* Set a $size padding to the top at $breakpoint */
   .pt-lg-3 { padding-top: 16px !important; }
-  /* Set a 16px padding to the right at the lg breakpoint */
+  /* Set a $size padding to the right at $breakpoint */
   .pr-lg-3 { padding-right: 16px !important; }
-  /* Set a 16px padding to the bottom at the lg breakpoint */
+  /* Set a $size padding to the bottom at $breakpoint */
   .pb-lg-3 { padding-bottom: 16px !important; }
-  /* Set a 16px padding to the left at the lg breakpoint */
+  /* Set a $size padding to the left at $breakpoint */
   .pl-lg-3 { padding-left: 16px !important; }
-  /* Set a 16px padding to the left & right at the lg breakpoint */
+  /* Set a $size padding to the left & right at $breakpoint */
   .px-lg-3 { padding-right: 16px !important; padding-left: 16px !important; }
-  /* Set a 16px padding to the top & bottom at the lg breakpoint */
-  .py-lg-3 { padding-top: 16px !important; padding-bottom: 16px !important; } }
-@media (min-width: 1012px) { /* Set a 24px padding to all sides at the lg breakpoint */
+  /* Set a $size padding to the top & bottom at $breakpoint */
+  .py-lg-3 { padding-top: 16px !important; padding-bottom: 16px !important; }
+  /* Set a $size padding to all sides at $breakpoint */
   .p-lg-4 { padding: 24px !important; }
-  /* Set a 24px padding to the top at the lg breakpoint */
+  /* Set a $size padding to the top at $breakpoint */
   .pt-lg-4 { padding-top: 24px !important; }
-  /* Set a 24px padding to the right at the lg breakpoint */
+  /* Set a $size padding to the right at $breakpoint */
   .pr-lg-4 { padding-right: 24px !important; }
-  /* Set a 24px padding to the bottom at the lg breakpoint */
+  /* Set a $size padding to the bottom at $breakpoint */
   .pb-lg-4 { padding-bottom: 24px !important; }
-  /* Set a 24px padding to the left at the lg breakpoint */
+  /* Set a $size padding to the left at $breakpoint */
   .pl-lg-4 { padding-left: 24px !important; }
-  /* Set a 24px padding to the left & right at the lg breakpoint */
+  /* Set a $size padding to the left & right at $breakpoint */
   .px-lg-4 { padding-right: 24px !important; padding-left: 24px !important; }
-  /* Set a 24px padding to the top & bottom at the lg breakpoint */
-  .py-lg-4 { padding-top: 24px !important; padding-bottom: 24px !important; } }
-@media (min-width: 1012px) { /* Set a 32px padding to all sides at the lg breakpoint */
+  /* Set a $size padding to the top & bottom at $breakpoint */
+  .py-lg-4 { padding-top: 24px !important; padding-bottom: 24px !important; }
+  /* Set a $size padding to all sides at $breakpoint */
   .p-lg-5 { padding: 32px !important; }
-  /* Set a 32px padding to the top at the lg breakpoint */
+  /* Set a $size padding to the top at $breakpoint */
   .pt-lg-5 { padding-top: 32px !important; }
-  /* Set a 32px padding to the right at the lg breakpoint */
+  /* Set a $size padding to the right at $breakpoint */
   .pr-lg-5 { padding-right: 32px !important; }
-  /* Set a 32px padding to the bottom at the lg breakpoint */
+  /* Set a $size padding to the bottom at $breakpoint */
   .pb-lg-5 { padding-bottom: 32px !important; }
-  /* Set a 32px padding to the left at the lg breakpoint */
+  /* Set a $size padding to the left at $breakpoint */
   .pl-lg-5 { padding-left: 32px !important; }
-  /* Set a 32px padding to the left & right at the lg breakpoint */
+  /* Set a $size padding to the left & right at $breakpoint */
   .px-lg-5 { padding-right: 32px !important; padding-left: 32px !important; }
-  /* Set a 32px padding to the top & bottom at the lg breakpoint */
-  .py-lg-5 { padding-top: 32px !important; padding-bottom: 32px !important; } }
-@media (min-width: 1012px) { /* Set a 40px padding to all sides at the lg breakpoint */
+  /* Set a $size padding to the top & bottom at $breakpoint */
+  .py-lg-5 { padding-top: 32px !important; padding-bottom: 32px !important; }
+  /* Set a $size padding to all sides at $breakpoint */
   .p-lg-6 { padding: 40px !important; }
-  /* Set a 40px padding to the top at the lg breakpoint */
+  /* Set a $size padding to the top at $breakpoint */
   .pt-lg-6 { padding-top: 40px !important; }
-  /* Set a 40px padding to the right at the lg breakpoint */
+  /* Set a $size padding to the right at $breakpoint */
   .pr-lg-6 { padding-right: 40px !important; }
-  /* Set a 40px padding to the bottom at the lg breakpoint */
+  /* Set a $size padding to the bottom at $breakpoint */
   .pb-lg-6 { padding-bottom: 40px !important; }
-  /* Set a 40px padding to the left at the lg breakpoint */
+  /* Set a $size padding to the left at $breakpoint */
   .pl-lg-6 { padding-left: 40px !important; }
-  /* Set a 40px padding to the left & right at the lg breakpoint */
+  /* Set a $size padding to the left & right at $breakpoint */
   .px-lg-6 { padding-right: 40px !important; padding-left: 40px !important; }
-  /* Set a 40px padding to the top & bottom at the lg breakpoint */
+  /* Set a $size padding to the top & bottom at $breakpoint */
   .py-lg-6 { padding-top: 40px !important; padding-bottom: 40px !important; } }
-@media (min-width: 1280px) { /* Set a 0 padding to all sides at the xl breakpoint */
+@media (min-width: 1280px) { /* Set a $size padding to all sides at $breakpoint */
   .p-xl-0 { padding: 0 !important; }
-  /* Set a 0 padding to the top at the xl breakpoint */
+  /* Set a $size padding to the top at $breakpoint */
   .pt-xl-0 { padding-top: 0 !important; }
-  /* Set a 0 padding to the right at the xl breakpoint */
+  /* Set a $size padding to the right at $breakpoint */
   .pr-xl-0 { padding-right: 0 !important; }
-  /* Set a 0 padding to the bottom at the xl breakpoint */
+  /* Set a $size padding to the bottom at $breakpoint */
   .pb-xl-0 { padding-bottom: 0 !important; }
-  /* Set a 0 padding to the left at the xl breakpoint */
+  /* Set a $size padding to the left at $breakpoint */
   .pl-xl-0 { padding-left: 0 !important; }
-  /* Set a 0 padding to the left & right at the xl breakpoint */
+  /* Set a $size padding to the left & right at $breakpoint */
   .px-xl-0 { padding-right: 0 !important; padding-left: 0 !important; }
-  /* Set a 0 padding to the top & bottom at the xl breakpoint */
-  .py-xl-0 { padding-top: 0 !important; padding-bottom: 0 !important; } }
-@media (min-width: 1280px) { /* Set a 4px padding to all sides at the xl breakpoint */
+  /* Set a $size padding to the top & bottom at $breakpoint */
+  .py-xl-0 { padding-top: 0 !important; padding-bottom: 0 !important; }
+  /* Set a $size padding to all sides at $breakpoint */
   .p-xl-1 { padding: 4px !important; }
-  /* Set a 4px padding to the top at the xl breakpoint */
+  /* Set a $size padding to the top at $breakpoint */
   .pt-xl-1 { padding-top: 4px !important; }
-  /* Set a 4px padding to the right at the xl breakpoint */
+  /* Set a $size padding to the right at $breakpoint */
   .pr-xl-1 { padding-right: 4px !important; }
-  /* Set a 4px padding to the bottom at the xl breakpoint */
+  /* Set a $size padding to the bottom at $breakpoint */
   .pb-xl-1 { padding-bottom: 4px !important; }
-  /* Set a 4px padding to the left at the xl breakpoint */
+  /* Set a $size padding to the left at $breakpoint */
   .pl-xl-1 { padding-left: 4px !important; }
-  /* Set a 4px padding to the left & right at the xl breakpoint */
+  /* Set a $size padding to the left & right at $breakpoint */
   .px-xl-1 { padding-right: 4px !important; padding-left: 4px !important; }
-  /* Set a 4px padding to the top & bottom at the xl breakpoint */
-  .py-xl-1 { padding-top: 4px !important; padding-bottom: 4px !important; } }
-@media (min-width: 1280px) { /* Set a 8px padding to all sides at the xl breakpoint */
+  /* Set a $size padding to the top & bottom at $breakpoint */
+  .py-xl-1 { padding-top: 4px !important; padding-bottom: 4px !important; }
+  /* Set a $size padding to all sides at $breakpoint */
   .p-xl-2 { padding: 8px !important; }
-  /* Set a 8px padding to the top at the xl breakpoint */
+  /* Set a $size padding to the top at $breakpoint */
   .pt-xl-2 { padding-top: 8px !important; }
-  /* Set a 8px padding to the right at the xl breakpoint */
+  /* Set a $size padding to the right at $breakpoint */
   .pr-xl-2 { padding-right: 8px !important; }
-  /* Set a 8px padding to the bottom at the xl breakpoint */
+  /* Set a $size padding to the bottom at $breakpoint */
   .pb-xl-2 { padding-bottom: 8px !important; }
-  /* Set a 8px padding to the left at the xl breakpoint */
+  /* Set a $size padding to the left at $breakpoint */
   .pl-xl-2 { padding-left: 8px !important; }
-  /* Set a 8px padding to the left & right at the xl breakpoint */
+  /* Set a $size padding to the left & right at $breakpoint */
   .px-xl-2 { padding-right: 8px !important; padding-left: 8px !important; }
-  /* Set a 8px padding to the top & bottom at the xl breakpoint */
-  .py-xl-2 { padding-top: 8px !important; padding-bottom: 8px !important; } }
-@media (min-width: 1280px) { /* Set a 16px padding to all sides at the xl breakpoint */
+  /* Set a $size padding to the top & bottom at $breakpoint */
+  .py-xl-2 { padding-top: 8px !important; padding-bottom: 8px !important; }
+  /* Set a $size padding to all sides at $breakpoint */
   .p-xl-3 { padding: 16px !important; }
-  /* Set a 16px padding to the top at the xl breakpoint */
+  /* Set a $size padding to the top at $breakpoint */
   .pt-xl-3 { padding-top: 16px !important; }
-  /* Set a 16px padding to the right at the xl breakpoint */
+  /* Set a $size padding to the right at $breakpoint */
   .pr-xl-3 { padding-right: 16px !important; }
-  /* Set a 16px padding to the bottom at the xl breakpoint */
+  /* Set a $size padding to the bottom at $breakpoint */
   .pb-xl-3 { padding-bottom: 16px !important; }
-  /* Set a 16px padding to the left at the xl breakpoint */
+  /* Set a $size padding to the left at $breakpoint */
   .pl-xl-3 { padding-left: 16px !important; }
-  /* Set a 16px padding to the left & right at the xl breakpoint */
+  /* Set a $size padding to the left & right at $breakpoint */
   .px-xl-3 { padding-right: 16px !important; padding-left: 16px !important; }
-  /* Set a 16px padding to the top & bottom at the xl breakpoint */
-  .py-xl-3 { padding-top: 16px !important; padding-bottom: 16px !important; } }
-@media (min-width: 1280px) { /* Set a 24px padding to all sides at the xl breakpoint */
+  /* Set a $size padding to the top & bottom at $breakpoint */
+  .py-xl-3 { padding-top: 16px !important; padding-bottom: 16px !important; }
+  /* Set a $size padding to all sides at $breakpoint */
   .p-xl-4 { padding: 24px !important; }
-  /* Set a 24px padding to the top at the xl breakpoint */
+  /* Set a $size padding to the top at $breakpoint */
   .pt-xl-4 { padding-top: 24px !important; }
-  /* Set a 24px padding to the right at the xl breakpoint */
+  /* Set a $size padding to the right at $breakpoint */
   .pr-xl-4 { padding-right: 24px !important; }
-  /* Set a 24px padding to the bottom at the xl breakpoint */
+  /* Set a $size padding to the bottom at $breakpoint */
   .pb-xl-4 { padding-bottom: 24px !important; }
-  /* Set a 24px padding to the left at the xl breakpoint */
+  /* Set a $size padding to the left at $breakpoint */
   .pl-xl-4 { padding-left: 24px !important; }
-  /* Set a 24px padding to the left & right at the xl breakpoint */
+  /* Set a $size padding to the left & right at $breakpoint */
   .px-xl-4 { padding-right: 24px !important; padding-left: 24px !important; }
-  /* Set a 24px padding to the top & bottom at the xl breakpoint */
-  .py-xl-4 { padding-top: 24px !important; padding-bottom: 24px !important; } }
-@media (min-width: 1280px) { /* Set a 32px padding to all sides at the xl breakpoint */
+  /* Set a $size padding to the top & bottom at $breakpoint */
+  .py-xl-4 { padding-top: 24px !important; padding-bottom: 24px !important; }
+  /* Set a $size padding to all sides at $breakpoint */
   .p-xl-5 { padding: 32px !important; }
-  /* Set a 32px padding to the top at the xl breakpoint */
+  /* Set a $size padding to the top at $breakpoint */
   .pt-xl-5 { padding-top: 32px !important; }
-  /* Set a 32px padding to the right at the xl breakpoint */
+  /* Set a $size padding to the right at $breakpoint */
   .pr-xl-5 { padding-right: 32px !important; }
-  /* Set a 32px padding to the bottom at the xl breakpoint */
+  /* Set a $size padding to the bottom at $breakpoint */
   .pb-xl-5 { padding-bottom: 32px !important; }
-  /* Set a 32px padding to the left at the xl breakpoint */
+  /* Set a $size padding to the left at $breakpoint */
   .pl-xl-5 { padding-left: 32px !important; }
-  /* Set a 32px padding to the left & right at the xl breakpoint */
+  /* Set a $size padding to the left & right at $breakpoint */
   .px-xl-5 { padding-right: 32px !important; padding-left: 32px !important; }
-  /* Set a 32px padding to the top & bottom at the xl breakpoint */
-  .py-xl-5 { padding-top: 32px !important; padding-bottom: 32px !important; } }
-@media (min-width: 1280px) { /* Set a 40px padding to all sides at the xl breakpoint */
+  /* Set a $size padding to the top & bottom at $breakpoint */
+  .py-xl-5 { padding-top: 32px !important; padding-bottom: 32px !important; }
+  /* Set a $size padding to all sides at $breakpoint */
   .p-xl-6 { padding: 40px !important; }
-  /* Set a 40px padding to the top at the xl breakpoint */
+  /* Set a $size padding to the top at $breakpoint */
   .pt-xl-6 { padding-top: 40px !important; }
-  /* Set a 40px padding to the right at the xl breakpoint */
+  /* Set a $size padding to the right at $breakpoint */
   .pr-xl-6 { padding-right: 40px !important; }
-  /* Set a 40px padding to the bottom at the xl breakpoint */
+  /* Set a $size padding to the bottom at $breakpoint */
   .pb-xl-6 { padding-bottom: 40px !important; }
-  /* Set a 40px padding to the left at the xl breakpoint */
+  /* Set a $size padding to the left at $breakpoint */
   .pl-xl-6 { padding-left: 40px !important; }
-  /* Set a 40px padding to the left & right at the xl breakpoint */
+  /* Set a $size padding to the left & right at $breakpoint */
   .px-xl-6 { padding-right: 40px !important; padding-left: 40px !important; }
-  /* Set a 40px padding to the top & bottom at the xl breakpoint */
+  /* Set a $size padding to the top & bottom at $breakpoint */
   .py-xl-6 { padding-top: 40px !important; padding-bottom: 40px !important; } }
 .p-responsive { padding-right: 16px !important; padding-left: 16px !important; }
 @media (min-width: 544px) { .p-responsive { padding-right: 40px !important; padding-left: 40px !important; } }
@@ -2196,6 +2331,9 @@ pre { margin-top: 0; margin-bottom: 0; font-family: "SFMono-Regular", Consolas, 
 /* Set the line height to default */
 .lh-default { line-height: 1.5 !important; }
 
+/* Set the line height to zero */
+.lh-0 { line-height: 0 !important; }
+
 /* Text align to the right */
 .text-right { text-align: right !important; }
 
@@ -2205,17 +2343,29 @@ pre { margin-top: 0; margin-bottom: 0; font-family: "SFMono-Regular", Consolas, 
 /* Text align to the center */
 .text-center { text-align: center !important; }
 
-@media (min-width: 544px) { .text-sm-right { text-align: right !important; }
+@media (min-width: 544px) { /* Text align to the right */
+  .text-sm-right { text-align: right !important; }
+  /* Text align to the left */
   .text-sm-left { text-align: left !important; }
+  /* Text align to the center */
   .text-sm-center { text-align: center !important; } }
-@media (min-width: 768px) { .text-md-right { text-align: right !important; }
+@media (min-width: 768px) { /* Text align to the right */
+  .text-md-right { text-align: right !important; }
+  /* Text align to the left */
   .text-md-left { text-align: left !important; }
+  /* Text align to the center */
   .text-md-center { text-align: center !important; } }
-@media (min-width: 1012px) { .text-lg-right { text-align: right !important; }
+@media (min-width: 1012px) { /* Text align to the right */
+  .text-lg-right { text-align: right !important; }
+  /* Text align to the left */
   .text-lg-left { text-align: left !important; }
+  /* Text align to the center */
   .text-lg-center { text-align: center !important; } }
-@media (min-width: 1280px) { .text-xl-right { text-align: right !important; }
+@media (min-width: 1280px) { /* Text align to the right */
+  .text-xl-right { text-align: right !important; }
+  /* Text align to the left */
   .text-xl-left { text-align: left !important; }
+  /* Text align to the center */
   .text-xl-center { text-align: center !important; } }
 /* Set the font weight to normal */
 .text-normal { font-weight: 400 !important; }
@@ -2230,6 +2380,9 @@ pre { margin-top: 0; margin-bottom: 0; font-family: "SFMono-Regular", Consolas, 
 .text-uppercase { text-transform: uppercase !important; }
 
 /* Underline text */
+.text-underline { text-decoration: underline !important; }
+
+/* Don't underline text */
 .no-underline { text-decoration: none !important; }
 
 /* Don't wrap white space */
@@ -2251,107 +2404,71 @@ pre { margin-top: 0; margin-bottom: 0; font-family: "SFMono-Regular", Consolas, 
 /* Add a light text shadow */
 .text-shadow-light { text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5); }
 
-/* Visibility hidden */
-.v-hidden { visibility: hidden !important; }
+/* Set to monospace font */
+.text-mono { font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace; }
 
-/* Visibility visible */
-.v-visible { visibility: visible !important; }
+/* Disallow user from selecting text */
+.user-select-none { user-select: none !important; }
 
-/* Set the display to table */
-.d-table { display: table !important; }
-
-/* Set the display to table-cell */
-.d-table-cell { display: table-cell !important; }
-
-/* Set the table-layout to fixed */
-.table-fixed { table-layout: fixed !important; }
-
-/* Set the display to block */
 .d-block { display: block !important; }
 
-/* Set the display to inline */
-.d-inline { display: inline !important; }
-
-/* Set the display to inline-block */
-.d-inline-block { display: inline-block !important; }
-
-/* Set the display to flex */
 .d-flex { display: flex !important; }
 
-/* Set the display to inline-flex */
+.d-inline { display: inline !important; }
+
+.d-inline-block { display: inline-block !important; }
+
 .d-inline-flex { display: inline-flex !important; }
 
-/* Set the display to none */
 .d-none { display: none !important; }
 
-@media (min-width: 544px) { /* Set the display to table at the sm breakpoint */
-  .d-sm-table { display: table !important; }
-  /* Set the display to table cell at the sm breakpoint */
-  .d-sm-table-cell { display: table-cell !important; }
-  /* Set the display to block at the sm breakpoint */
-  .d-sm-block { display: block !important; }
-  /* Set the display to inline at the sm breakpoint */
-  .d-sm-inline { display: inline !important; }
-  /* Set the display to inline block at the sm breakpoint */
-  .d-sm-inline-block { display: inline-block !important; }
-  /* Set the display to flex at the sm breakpoint */
+.d-table { display: table !important; }
+
+.d-table-cell { display: table-cell !important; }
+
+@media (min-width: 544px) { .d-sm-block { display: block !important; }
   .d-sm-flex { display: flex !important; }
-  /* Set the display to flex at the sm breakpoint */
+  .d-sm-inline { display: inline !important; }
+  .d-sm-inline-block { display: inline-block !important; }
   .d-sm-inline-flex { display: inline-flex !important; }
-  /* Set the display to none at the sm breakpoint */
-  .d-sm-none { display: none !important; } }
-@media (min-width: 768px) { /* Set the display to table at the md breakpoint */
-  .d-md-table { display: table !important; }
-  /* Set the display to table cell at the md breakpoint */
-  .d-md-table-cell { display: table-cell !important; }
-  /* Set the display to block at the md breakpoint */
-  .d-md-block { display: block !important; }
-  /* Set the display to inline at the md breakpoint */
-  .d-md-inline { display: inline !important; }
-  /* Set the display to inline block at the md breakpoint */
-  .d-md-inline-block { display: inline-block !important; }
-  /* Set the display to flex at the md breakpoint */
+  .d-sm-none { display: none !important; }
+  .d-sm-table { display: table !important; }
+  .d-sm-table-cell { display: table-cell !important; } }
+@media (min-width: 768px) { .d-md-block { display: block !important; }
   .d-md-flex { display: flex !important; }
-  /* Set the display to flex at the md breakpoint */
+  .d-md-inline { display: inline !important; }
+  .d-md-inline-block { display: inline-block !important; }
   .d-md-inline-flex { display: inline-flex !important; }
-  /* Set the display to none at the md breakpoint */
-  .d-md-none { display: none !important; } }
-@media (min-width: 1012px) { /* Set the display to table at the lg breakpoint */
-  .d-lg-table { display: table !important; }
-  /* Set the display to table cell at the lg breakpoint */
-  .d-lg-table-cell { display: table-cell !important; }
-  /* Set the display to block at the lg breakpoint */
-  .d-lg-block { display: block !important; }
-  /* Set the display to inline at the lg breakpoint */
-  .d-lg-inline { display: inline !important; }
-  /* Set the display to inline block at the lg breakpoint */
-  .d-lg-inline-block { display: inline-block !important; }
-  /* Set the display to flex at the lg breakpoint */
+  .d-md-none { display: none !important; }
+  .d-md-table { display: table !important; }
+  .d-md-table-cell { display: table-cell !important; } }
+@media (min-width: 1012px) { .d-lg-block { display: block !important; }
   .d-lg-flex { display: flex !important; }
-  /* Set the display to flex at the lg breakpoint */
+  .d-lg-inline { display: inline !important; }
+  .d-lg-inline-block { display: inline-block !important; }
   .d-lg-inline-flex { display: inline-flex !important; }
-  /* Set the display to none at the lg breakpoint */
-  .d-lg-none { display: none !important; } }
-@media (min-width: 1280px) { /* Set the display to table at the xl breakpoint */
-  .d-xl-table { display: table !important; }
-  /* Set the display to table cell at the xl breakpoint */
-  .d-xl-table-cell { display: table-cell !important; }
-  /* Set the display to block at the xl breakpoint */
-  .d-xl-block { display: block !important; }
-  /* Set the display to inline at the xl breakpoint */
-  .d-xl-inline { display: inline !important; }
-  /* Set the display to inline block at the xl breakpoint */
-  .d-xl-inline-block { display: inline-block !important; }
-  /* Set the display to flex at the xl breakpoint */
+  .d-lg-none { display: none !important; }
+  .d-lg-table { display: table !important; }
+  .d-lg-table-cell { display: table-cell !important; } }
+@media (min-width: 1280px) { .d-xl-block { display: block !important; }
   .d-xl-flex { display: flex !important; }
-  /* Set the display to flex at the xl breakpoint */
+  .d-xl-inline { display: inline !important; }
+  .d-xl-inline-block { display: inline-block !important; }
   .d-xl-inline-flex { display: inline-flex !important; }
-  /* Set the display to none at the xl breakpoint */
-  .d-xl-none { display: none !important; } }
+  .d-xl-none { display: none !important; }
+  .d-xl-table { display: table !important; }
+  .d-xl-table-cell { display: table-cell !important; } }
+.v-hidden { visibility: hidden !important; }
+
+.v-visible { visibility: visible !important; }
+
 @media (max-width: 544px) { .hide-sm { display: none !important; } }
 @media (min-width: 544px) and (max-width: 768px) { .hide-md { display: none !important; } }
 @media (min-width: 768px) and (max-width: 1012px) { .hide-lg { display: none !important; } }
 @media (min-width: 1012px) { .hide-xl { display: none !important; } }
+/* Set the table-layout to fixed */
+.table-fixed { table-layout: fixed !important; }
+
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip: rect(0, 0, 0, 0); word-wrap: normal; border: 0; }
 
 .show-on-focus { position: absolute; width: 1px; height: 1px; margin: 0; overflow: hidden; clip: rect(1px, 1px, 1px, 1px); }
@@ -2494,72 +2611,72 @@ pre { margin-top: 0; margin-bottom: 0; font-family: "SFMono-Regular", Consolas, 
   .gutter-xl-condensed > [class*="col-"] { padding-right: 8px !important; padding-left: 8px !important; }
   .gutter-xl-spacious { margin-right: -24px; margin-left: -24px; }
   .gutter-xl-spacious > [class*="col-"] { padding-right: 24px !important; padding-left: 24px !important; } }
-.offset-1 { margin-left: 8.3333333333%; }
+.offset-1 { margin-left: 8.3333333333% !important; }
 
-.offset-2 { margin-left: 16.6666666667%; }
+.offset-2 { margin-left: 16.6666666667% !important; }
 
-.offset-3 { margin-left: 25%; }
+.offset-3 { margin-left: 25% !important; }
 
-.offset-4 { margin-left: 33.3333333333%; }
+.offset-4 { margin-left: 33.3333333333% !important; }
 
-.offset-5 { margin-left: 41.6666666667%; }
+.offset-5 { margin-left: 41.6666666667% !important; }
 
-.offset-6 { margin-left: 50%; }
+.offset-6 { margin-left: 50% !important; }
 
-.offset-7 { margin-left: 58.3333333333%; }
+.offset-7 { margin-left: 58.3333333333% !important; }
 
-.offset-8 { margin-left: 66.6666666667%; }
+.offset-8 { margin-left: 66.6666666667% !important; }
 
-.offset-9 { margin-left: 75%; }
+.offset-9 { margin-left: 75% !important; }
 
-.offset-10 { margin-left: 83.3333333333%; }
+.offset-10 { margin-left: 83.3333333333% !important; }
 
-.offset-11 { margin-left: 91.6666666667%; }
+.offset-11 { margin-left: 91.6666666667% !important; }
 
-@media (min-width: 544px) { .offset-sm-1 { margin-left: 8.3333333333%; }
-  .offset-sm-2 { margin-left: 16.6666666667%; }
-  .offset-sm-3 { margin-left: 25%; }
-  .offset-sm-4 { margin-left: 33.3333333333%; }
-  .offset-sm-5 { margin-left: 41.6666666667%; }
-  .offset-sm-6 { margin-left: 50%; }
-  .offset-sm-7 { margin-left: 58.3333333333%; }
-  .offset-sm-8 { margin-left: 66.6666666667%; }
-  .offset-sm-9 { margin-left: 75%; }
-  .offset-sm-10 { margin-left: 83.3333333333%; }
-  .offset-sm-11 { margin-left: 91.6666666667%; } }
-@media (min-width: 768px) { .offset-md-1 { margin-left: 8.3333333333%; }
-  .offset-md-2 { margin-left: 16.6666666667%; }
-  .offset-md-3 { margin-left: 25%; }
-  .offset-md-4 { margin-left: 33.3333333333%; }
-  .offset-md-5 { margin-left: 41.6666666667%; }
-  .offset-md-6 { margin-left: 50%; }
-  .offset-md-7 { margin-left: 58.3333333333%; }
-  .offset-md-8 { margin-left: 66.6666666667%; }
-  .offset-md-9 { margin-left: 75%; }
-  .offset-md-10 { margin-left: 83.3333333333%; }
-  .offset-md-11 { margin-left: 91.6666666667%; } }
-@media (min-width: 1012px) { .offset-lg-1 { margin-left: 8.3333333333%; }
-  .offset-lg-2 { margin-left: 16.6666666667%; }
-  .offset-lg-3 { margin-left: 25%; }
-  .offset-lg-4 { margin-left: 33.3333333333%; }
-  .offset-lg-5 { margin-left: 41.6666666667%; }
-  .offset-lg-6 { margin-left: 50%; }
-  .offset-lg-7 { margin-left: 58.3333333333%; }
-  .offset-lg-8 { margin-left: 66.6666666667%; }
-  .offset-lg-9 { margin-left: 75%; }
-  .offset-lg-10 { margin-left: 83.3333333333%; }
-  .offset-lg-11 { margin-left: 91.6666666667%; } }
-@media (min-width: 1280px) { .offset-xl-1 { margin-left: 8.3333333333%; }
-  .offset-xl-2 { margin-left: 16.6666666667%; }
-  .offset-xl-3 { margin-left: 25%; }
-  .offset-xl-4 { margin-left: 33.3333333333%; }
-  .offset-xl-5 { margin-left: 41.6666666667%; }
-  .offset-xl-6 { margin-left: 50%; }
-  .offset-xl-7 { margin-left: 58.3333333333%; }
-  .offset-xl-8 { margin-left: 66.6666666667%; }
-  .offset-xl-9 { margin-left: 75%; }
-  .offset-xl-10 { margin-left: 83.3333333333%; }
-  .offset-xl-11 { margin-left: 91.6666666667%; } }
+@media (min-width: 544px) { .offset-sm-1 { margin-left: 8.3333333333% !important; }
+  .offset-sm-2 { margin-left: 16.6666666667% !important; }
+  .offset-sm-3 { margin-left: 25% !important; }
+  .offset-sm-4 { margin-left: 33.3333333333% !important; }
+  .offset-sm-5 { margin-left: 41.6666666667% !important; }
+  .offset-sm-6 { margin-left: 50% !important; }
+  .offset-sm-7 { margin-left: 58.3333333333% !important; }
+  .offset-sm-8 { margin-left: 66.6666666667% !important; }
+  .offset-sm-9 { margin-left: 75% !important; }
+  .offset-sm-10 { margin-left: 83.3333333333% !important; }
+  .offset-sm-11 { margin-left: 91.6666666667% !important; } }
+@media (min-width: 768px) { .offset-md-1 { margin-left: 8.3333333333% !important; }
+  .offset-md-2 { margin-left: 16.6666666667% !important; }
+  .offset-md-3 { margin-left: 25% !important; }
+  .offset-md-4 { margin-left: 33.3333333333% !important; }
+  .offset-md-5 { margin-left: 41.6666666667% !important; }
+  .offset-md-6 { margin-left: 50% !important; }
+  .offset-md-7 { margin-left: 58.3333333333% !important; }
+  .offset-md-8 { margin-left: 66.6666666667% !important; }
+  .offset-md-9 { margin-left: 75% !important; }
+  .offset-md-10 { margin-left: 83.3333333333% !important; }
+  .offset-md-11 { margin-left: 91.6666666667% !important; } }
+@media (min-width: 1012px) { .offset-lg-1 { margin-left: 8.3333333333% !important; }
+  .offset-lg-2 { margin-left: 16.6666666667% !important; }
+  .offset-lg-3 { margin-left: 25% !important; }
+  .offset-lg-4 { margin-left: 33.3333333333% !important; }
+  .offset-lg-5 { margin-left: 41.6666666667% !important; }
+  .offset-lg-6 { margin-left: 50% !important; }
+  .offset-lg-7 { margin-left: 58.3333333333% !important; }
+  .offset-lg-8 { margin-left: 66.6666666667% !important; }
+  .offset-lg-9 { margin-left: 75% !important; }
+  .offset-lg-10 { margin-left: 83.3333333333% !important; }
+  .offset-lg-11 { margin-left: 91.6666666667% !important; } }
+@media (min-width: 1280px) { .offset-xl-1 { margin-left: 8.3333333333% !important; }
+  .offset-xl-2 { margin-left: 16.6666666667% !important; }
+  .offset-xl-3 { margin-left: 25% !important; }
+  .offset-xl-4 { margin-left: 33.3333333333% !important; }
+  .offset-xl-5 { margin-left: 41.6666666667% !important; }
+  .offset-xl-6 { margin-left: 50% !important; }
+  .offset-xl-7 { margin-left: 58.3333333333% !important; }
+  .offset-xl-8 { margin-left: 66.6666666667% !important; }
+  .offset-xl-9 { margin-left: 75% !important; }
+  .offset-xl-10 { margin-left: 83.3333333333% !important; }
+  .offset-xl-11 { margin-left: 91.6666666667% !important; } }
 .markdown-body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"; font-size: 16px; line-height: 1.5; word-wrap: break-word; }
 .markdown-body::before { display: table; content: ""; }
 .markdown-body::after { display: table; clear: both; content: ""; }

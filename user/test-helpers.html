@@ -2,16 +2,16 @@
 <html lang="en"><head>
  <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.5.0 -->
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
 <title>Test helpers | ts-jest</title>
-<meta name="generator" content="Jekyll v3.7.4" />
+<meta name="generator" content="Jekyll v3.8.5" />
 <meta property="og:title" content="Test helpers" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="ts-jest is a TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript." />
 <meta property="og:description" content="ts-jest is a TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript." />
 <meta property="og:site_name" content="ts-jest" />
 <script type="application/ld+json">
-{"url":"/ts-jest/user/test-helpers.html","description":"ts-jest is a TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript.","headline":"Test helpers","@type":"WebPage","@context":"http://schema.org"}</script>
+{"headline":"Test helpers","description":"ts-jest is a TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript.","@type":"WebPage","url":"/ts-jest/user/test-helpers.html","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 <link rel="stylesheet" href="/ts-jest/assets/css/main.css"><link type="application/atom+xml" rel="alternate" href="/ts-jest/feed.xml" title="ts-jest" /><script src="/ts-jest/assets/js/bootstrap/jquery.min.js"></script>
   <script src="/ts-jest/assets/js/bootstrap/bootstrap.bundle.min.js"></script>
@@ -122,7 +122,7 @@
   
   <li class="nav-item">
     <a class="nav-link inverse"
-       href="http://github.com/kulshekhar/ts-jest">Fork me <span class="fab fa-github"></span></a>
+       href="https://github.com/kulshekhar/ts-jest">Fork me <span class="fab fa-github"></span></a>
   </li>
 </ul>
 
@@ -138,11 +138,11 @@
   </header>
 
   <section>
-    <p><code class="highlighter-rouge">ts-jest</code> provides some test utilities to be used in your test, related to TypeScript.</p>
+    <p><code class="language-plaintext highlighter-rouge">ts-jest</code> provides some test utilities to be used in your test, related to TypeScript.</p>
 
-<h2 id="mocked"><code class="highlighter-rouge">mocked()</code></h2>
+<h2 id="mocked"><code class="language-plaintext highlighter-rouge">mocked()</code></h2>
 
-<p>The <code class="highlighter-rouge">mocked</code> test helper provides typings on your mocked modules and even their deep methods, based on the typing of its source. It make use of the latest TypeScript features so you even have argument types completion in the IDE (as opposed to <code class="highlighter-rouge">jest.MockInstance</code>).</p>
+<p>The <code class="language-plaintext highlighter-rouge">mocked</code> test helper provides typings on your mocked modules and even their deep methods, based on the typing of its source. It make use of the latest TypeScript features so you even have argument types completion in the IDE (as opposed to <code class="language-plaintext highlighter-rouge">jest.MockInstance</code>).</p>
 
 <p><strong>Note:</strong> while it needs to be a function so that input type is changed, the helper itself does nothing else than returning the given input value.</p>
 
@@ -157,26 +157,26 @@
       <span class="p">},</span>
     <span class="p">},</span>
   <span class="p">},</span>
-  <span class="na">name</span><span class="p">:</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="s1">'foo'</span><span class="p">,</span>
+  <span class="na">name</span><span class="p">:</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="dl">'</span><span class="s1">foo</span><span class="dl">'</span><span class="p">,</span>
 <span class="p">}</span>
 </code></pre></div></div>
 
 <div class="language-ts highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// foo.spec.ts</span>
-<span class="k">import</span> <span class="p">{</span> <span class="nx">mocked</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'ts-jest/utils'</span>
-<span class="k">import</span> <span class="p">{</span> <span class="nx">foo</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'./foo'</span>
-<span class="nx">jest</span><span class="p">.</span><span class="nx">mock</span><span class="p">(</span><span class="s1">'./foo'</span><span class="p">)</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">mocked</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">ts-jest/utils</span><span class="dl">'</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">foo</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">./foo</span><span class="dl">'</span>
+<span class="nx">jest</span><span class="p">.</span><span class="nx">mock</span><span class="p">(</span><span class="dl">'</span><span class="s1">./foo</span><span class="dl">'</span><span class="p">)</span>
 
 <span class="c1">// here the whole foo var is mocked deeply</span>
 <span class="kd">const</span> <span class="nx">mockedFoo</span> <span class="o">=</span> <span class="nx">mocked</span><span class="p">(</span><span class="nx">foo</span><span class="p">,</span> <span class="kc">true</span><span class="p">)</span>
 
-<span class="nx">test</span><span class="p">(</span><span class="s1">'deep'</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+<span class="nx">test</span><span class="p">(</span><span class="dl">'</span><span class="s1">deep</span><span class="dl">'</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
   <span class="c1">// there will be no TS error here, and you'll have completion in modern IDEs</span>
-  <span class="nx">mockedFoo</span><span class="p">.</span><span class="nx">a</span><span class="p">.</span><span class="nx">b</span><span class="p">.</span><span class="nx">c</span><span class="p">.</span><span class="nx">hello</span><span class="p">(</span><span class="s1">'me'</span><span class="p">)</span>
+  <span class="nx">mockedFoo</span><span class="p">.</span><span class="nx">a</span><span class="p">.</span><span class="nx">b</span><span class="p">.</span><span class="nx">c</span><span class="p">.</span><span class="nx">hello</span><span class="p">(</span><span class="dl">'</span><span class="s1">me</span><span class="dl">'</span><span class="p">)</span>
   <span class="c1">// same here</span>
   <span class="nx">expect</span><span class="p">(</span><span class="nx">mockedFoo</span><span class="p">.</span><span class="nx">a</span><span class="p">.</span><span class="nx">b</span><span class="p">.</span><span class="nx">c</span><span class="p">.</span><span class="nx">hello</span><span class="p">.</span><span class="nx">mock</span><span class="p">.</span><span class="nx">calls</span><span class="p">).</span><span class="nx">toHaveLength</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 <span class="p">})</span>
 
-<span class="nx">test</span><span class="p">(</span><span class="s1">'direct'</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+<span class="nx">test</span><span class="p">(</span><span class="dl">'</span><span class="s1">direct</span><span class="dl">'</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
   <span class="nx">foo</span><span class="p">.</span><span class="nx">name</span><span class="p">()</span>
   <span class="c1">// here only foo.name is mocked (or its methods if it's an object)</span>
   <span class="nx">expect</span><span class="p">(</span><span class="nx">mocked</span><span class="p">(</span><span class="nx">foo</span><span class="p">.</span><span class="nx">name</span><span class="p">).</span><span class="nx">mock</span><span class="p">.</span><span class="nx">calls</span><span class="p">).</span><span class="nx">toHaveLength</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
@@ -193,7 +193,7 @@
   <div class="container">
     <div class="row">
       <div class="col-sm text-right">
-        <a href="http://github.com/kulshekhar/ts-jest/tree/master/docs/user/test-helpers.md">
+        <a href="https://github.com/kulshekhar/ts-jest/tree/master/docs/user/test-helpers.md">
           edit this page <i class="far fa-edit"></i>
         </a>
       </div>

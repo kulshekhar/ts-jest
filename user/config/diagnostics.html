@@ -2,16 +2,16 @@
 <html lang="en"><head>
  <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.5.0 -->
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
 <title>Diagnostics option | ts-jest</title>
-<meta name="generator" content="Jekyll v3.7.4" />
+<meta name="generator" content="Jekyll v3.8.5" />
 <meta property="og:title" content="Diagnostics option" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="ts-jest is a TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript." />
 <meta property="og:description" content="ts-jest is a TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript." />
 <meta property="og:site_name" content="ts-jest" />
 <script type="application/ld+json">
-{"url":"/ts-jest/user/config/diagnostics.html","description":"ts-jest is a TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript.","headline":"Diagnostics option","@type":"WebPage","@context":"http://schema.org"}</script>
+{"headline":"Diagnostics option","description":"ts-jest is a TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript.","@type":"WebPage","url":"/ts-jest/user/config/diagnostics.html","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 <link rel="stylesheet" href="/ts-jest/assets/css/main.css"><link type="application/atom+xml" rel="alternate" href="/ts-jest/feed.xml" title="ts-jest" /><script src="/ts-jest/assets/js/bootstrap/jquery.min.js"></script>
   <script src="/ts-jest/assets/js/bootstrap/bootstrap.bundle.min.js"></script>
@@ -122,7 +122,7 @@
   
   <li class="nav-item">
     <a class="nav-link inverse"
-       href="http://github.com/kulshekhar/ts-jest">Fork me <span class="fab fa-github"></span></a>
+       href="https://github.com/kulshekhar/ts-jest">Fork me <span class="fab fa-github"></span></a>
   </li>
 </ul>
 
@@ -138,32 +138,32 @@
   </header>
 
   <section>
-    <p>The <code class="highlighter-rouge">diagnostics</code> option allows to configure error reporting.
+    <p>The <code class="language-plaintext highlighter-rouge">diagnostics</code> option configures error reporting.
 It can both be enabled/disabled entirely or limited to a specific type of errors and/or files.</p>
 
-<p>If a diagnostic is not filtered out, <code class="highlighter-rouge">ts-jest</code> will fail the compilation and your test.</p>
+<p>If a diagnostic is not filtered out, <code class="language-plaintext highlighter-rouge">ts-jest</code> will fail the compilation and your test.</p>
 
 <h3 id="disablingenabling">Disabling/enabling</h3>
 
-<p>By default all diagnostics are enabled. This is the same as setting the <code class="highlighter-rouge">diagnostics</code> option to <code class="highlighter-rouge">true</code>.
-To disable all diagnostics, set <code class="highlighter-rouge">diagnostics</code> to <code class="highlighter-rouge">false</code>.
+<p>By default all diagnostics are enabled. This is the same as setting the <code class="language-plaintext highlighter-rouge">diagnostics</code> option to <code class="language-plaintext highlighter-rouge">true</code>.
+To disable all diagnostics, set <code class="language-plaintext highlighter-rouge">diagnostics</code> to <code class="language-plaintext highlighter-rouge">false</code>.
 This might lead to slightly better performance, especially if you’re not using Jest’s cache.</p>
 
 <h3 id="advanced-configuration">Advanced configuration</h3>
 
-<p>The option’s value can also accept an object for more advanced configuration. Each config. key is optional:</p>
+<p>The <code class="language-plaintext highlighter-rouge">diagnostics</code> option’s value can also accept an object for more advanced configuration. Each config. key is optional:</p>
 
 <ul>
-  <li><strong><code class="highlighter-rouge">warnOnly</code></strong>: If specified and <code class="highlighter-rouge">true</code>, diagnostics will be reported but won’t stop compilation (default: <em>disabled</em>).</li>
-  <li><strong><code class="highlighter-rouge">ignoreCodes</code></strong>: List of TypeScript error codes to ignore. Complete list can be found <a href="https://github.com/Microsoft/TypeScript/blob/master/src/compiler/diagnosticMessages.json">there</a>. By default here are the ones ignored:
+  <li><strong><code class="language-plaintext highlighter-rouge">warnOnly</code></strong>: If specified and <code class="language-plaintext highlighter-rouge">true</code>, diagnostics will be reported but won’t stop compilation (default: <em>disabled</em>).</li>
+  <li><strong><code class="language-plaintext highlighter-rouge">ignoreCodes</code></strong>: List of TypeScript error codes to ignore. Complete list can be found <a href="https://github.com/Microsoft/TypeScript/blob/master/src/compiler/diagnosticMessages.json">there</a>. By default here are the ones ignored:
     <ul>
-      <li><code class="highlighter-rouge">6059</code>: <em>‘rootDir’ is expected to contain all source files.</em></li>
-      <li><code class="highlighter-rouge">18002</code>: <em>The ‘files’ list in config file is empty.</em> (it is strongly recommended to include this one)</li>
-      <li><code class="highlighter-rouge">18003</code>: <em>No inputs were found in config file.</em></li>
+      <li><code class="language-plaintext highlighter-rouge">6059</code>: <em>‘rootDir’ is expected to contain all source files.</em></li>
+      <li><code class="language-plaintext highlighter-rouge">18002</code>: <em>The ‘files’ list in config file is empty.</em> (it is strongly recommended to include this one)</li>
+      <li><code class="language-plaintext highlighter-rouge">18003</code>: <em>No inputs were found in config file.</em></li>
     </ul>
   </li>
-  <li><strong><code class="highlighter-rouge">pathRegex</code></strong>: If specified, diagnostics of source files which path does <strong>not</strong> match will be ignored.</li>
-  <li><strong><code class="highlighter-rouge">pretty</code></strong>: Enables/disables colorful and pretty output of errors (default: <em>enabled</em>).</li>
+  <li><strong><code class="language-plaintext highlighter-rouge">pathRegex</code></strong>: If specified, diagnostics of source files which path does <strong>not</strong> match will be ignored.</li>
+  <li><strong><code class="language-plaintext highlighter-rouge">pretty</code></strong>: Enables/disables colorful and pretty output of errors (default: <em>enabled</em>).</li>
 </ul>
 
 <h3 id="examples">Examples</h3>
@@ -176,7 +176,7 @@ This might lead to slightly better performance, especially if you’re not using
 <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
   <span class="c1">// [...]</span>
   <span class="na">globals</span><span class="p">:</span> <span class="p">{</span>
-    <span class="s1">'ts-jest'</span><span class="p">:</span> <span class="p">{</span>
+    <span class="dl">'</span><span class="s1">ts-jest</span><span class="dl">'</span><span class="p">:</span> <span class="p">{</span>
       <span class="na">diagnostics</span><span class="p">:</span> <span class="kc">false</span>
     <span class="p">}</span>
   <span class="p">}</span>
@@ -188,10 +188,10 @@ This might lead to slightly better performance, especially if you’re not using
     <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// OR package.json</span>
 <span class="p">{</span>
   <span class="c1">// [...]</span>
-  <span class="s2">"jest"</span><span class="p">:</span> <span class="p">{</span>
-    <span class="s2">"globals"</span><span class="p">:</span> <span class="p">{</span>
-      <span class="s2">"ts-jest"</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">"diagnostics"</span><span class="p">:</span> <span class="kc">false</span>
+  <span class="dl">"</span><span class="s2">jest</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+    <span class="dl">"</span><span class="s2">globals</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+      <span class="dl">"</span><span class="s2">ts-jest</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="dl">"</span><span class="s2">diagnostics</span><span class="dl">"</span><span class="p">:</span> <span class="kc">false</span>
       <span class="p">}</span>
     <span class="p">}</span>
   <span class="p">}</span>
@@ -204,7 +204,7 @@ This might lead to slightly better performance, especially if you’re not using
 
 <h5 id="enabling-diagnostics-for-test-files-only">Enabling diagnostics for test files only</h5>
 
-<p>Assuming all your test files ends with <code class="highlighter-rouge">.spec.ts</code> or <code class="highlighter-rouge">.test.ts</code>, using the following config will enable error reporting only for those files:</p>
+<p>Assuming all your test files ends with <code class="language-plaintext highlighter-rouge">.spec.ts</code> or <code class="language-plaintext highlighter-rouge">.test.ts</code>, using the following config will enable error reporting only for those files:</p>
 
 <div class="row"><div class="col-md-6">
 
@@ -212,7 +212,7 @@ This might lead to slightly better performance, especially if you’re not using
 <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
   <span class="c1">// [...]</span>
   <span class="na">globals</span><span class="p">:</span> <span class="p">{</span>
-    <span class="s1">'ts-jest'</span><span class="p">:</span> <span class="p">{</span>
+    <span class="dl">'</span><span class="s1">ts-jest</span><span class="dl">'</span><span class="p">:</span> <span class="p">{</span>
       <span class="na">diagnostics</span><span class="p">:</span> <span class="p">{</span>
         <span class="na">pathRegex</span><span class="p">:</span> <span class="sr">/</span><span class="se">\.(</span><span class="sr">spec|test</span><span class="se">)\.</span><span class="sr">ts$/</span>
       <span class="p">}</span>
@@ -226,11 +226,11 @@ This might lead to slightly better performance, especially if you’re not using
     <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// OR package.json</span>
 <span class="p">{</span>
   <span class="c1">// [...]</span>
-  <span class="s2">"jest"</span><span class="p">:</span> <span class="p">{</span>
-    <span class="s2">"globals"</span><span class="p">:</span> <span class="p">{</span>
-      <span class="s2">"ts-jest"</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">"diagnostics"</span><span class="p">:</span> <span class="p">{</span>
-          <span class="s2">"pathRegex"</span><span class="p">:</span> <span class="s2">"</span><span class="err">\\</span><span class="s2">.(spec|test)</span><span class="err">\\</span><span class="s2">.ts$"</span>
+  <span class="dl">"</span><span class="s2">jest</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+    <span class="dl">"</span><span class="s2">globals</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+      <span class="dl">"</span><span class="s2">ts-jest</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="dl">"</span><span class="s2">diagnostics</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+          <span class="dl">"</span><span class="s2">pathRegex</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="se">\\</span><span class="s2">.(spec|test)</span><span class="se">\\</span><span class="s2">.ts$</span><span class="dl">"</span>
         <span class="p">}</span>
       <span class="p">}</span>
     <span class="p">}</span>
@@ -242,7 +242,7 @@ This might lead to slightly better performance, especially if you’re not using
 
 <h5 id="do-not-fail-on-first-error">Do not fail on first error</h5>
 
-<p>While some diagnostics are stop-blockers for the compilation, most of them are not. If you want the compilation (and so your tests) to continue when encountering those, set the <code class="highlighter-rouge">warnOnly</code> to <code class="highlighter-rouge">true</code>:</p>
+<p>While some diagnostics are stop-blockers for the compilation, most of them are not. If you want the compilation (and so your tests) to continue when encountering those, set the <code class="language-plaintext highlighter-rouge">warnOnly</code> to <code class="language-plaintext highlighter-rouge">true</code>:</p>
 
 <div class="row"><div class="col-md-6">
 
@@ -250,7 +250,7 @@ This might lead to slightly better performance, especially if you’re not using
 <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
   <span class="c1">// [...]</span>
   <span class="na">globals</span><span class="p">:</span> <span class="p">{</span>
-    <span class="s1">'ts-jest'</span><span class="p">:</span> <span class="p">{</span>
+    <span class="dl">'</span><span class="s1">ts-jest</span><span class="dl">'</span><span class="p">:</span> <span class="p">{</span>
       <span class="na">diagnostics</span><span class="p">:</span> <span class="p">{</span>
         <span class="na">warnOnly</span><span class="p">:</span> <span class="kc">true</span>
       <span class="p">}</span>
@@ -264,11 +264,11 @@ This might lead to slightly better performance, especially if you’re not using
     <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// OR package.json</span>
 <span class="p">{</span>
   <span class="c1">// [...]</span>
-  <span class="s2">"jest"</span><span class="p">:</span> <span class="p">{</span>
-    <span class="s2">"globals"</span><span class="p">:</span> <span class="p">{</span>
-      <span class="s2">"ts-jest"</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">"diagnostics"</span><span class="p">:</span> <span class="p">{</span>
-          <span class="s2">"warnOnly"</span><span class="p">:</span> <span class="kc">true</span>
+  <span class="dl">"</span><span class="s2">jest</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+    <span class="dl">"</span><span class="s2">globals</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+      <span class="dl">"</span><span class="s2">ts-jest</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="dl">"</span><span class="s2">diagnostics</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+          <span class="dl">"</span><span class="s2">warnOnly</span><span class="dl">"</span><span class="p">:</span> <span class="kc">true</span>
         <span class="p">}</span>
       <span class="p">}</span>
     <span class="p">}</span>
@@ -280,13 +280,13 @@ This might lead to slightly better performance, especially if you’re not using
 
 <h5 id="ignoring-some-error-codes">Ignoring some error codes</h5>
 
-<p>All TypeScript error codes can be found <a href="https://github.com/Microsoft/TypeScript/blob/master/src/compiler/diagnosticMessages.json">there</a>. The <code class="highlighter-rouge">ignoreCodes</code> option accepts this values:</p>
+<p>All TypeScript error codes can be found <a href="https://github.com/Microsoft/TypeScript/blob/master/src/compiler/diagnosticMessages.json">there</a>. The <code class="language-plaintext highlighter-rouge">ignoreCodes</code> option accepts this values:</p>
 
 <ol>
-  <li>A single <code class="highlighter-rouge">number</code> (example: <code class="highlighter-rouge">1009</code>): unique error code to ignore</li>
-  <li>A <code class="highlighter-rouge">string</code> with a code (example <code class="highlighter-rouge">"1009"</code>, <code class="highlighter-rouge">"TS1009"</code> or <code class="highlighter-rouge">"ts1009"</code>)</li>
-  <li>A <code class="highlighter-rouge">string</code> with a list of the above (example: <code class="highlighter-rouge">"1009, TS2571, 4072 ,ts6031 "</code>)</li>
-  <li>An <code class="highlighter-rouge">array</code> of one or more from <code class="highlighter-rouge">1</code> or <code class="highlighter-rouge">3</code> (example: <code class="highlighter-rouge">[1009, "TS2571", "6031"]</code>)</li>
+  <li>A single <code class="language-plaintext highlighter-rouge">number</code> (example: <code class="language-plaintext highlighter-rouge">1009</code>): unique error code to ignore</li>
+  <li>A <code class="language-plaintext highlighter-rouge">string</code> with a code (example <code class="language-plaintext highlighter-rouge">"1009"</code>, <code class="language-plaintext highlighter-rouge">"TS1009"</code> or <code class="language-plaintext highlighter-rouge">"ts1009"</code>)</li>
+  <li>A <code class="language-plaintext highlighter-rouge">string</code> with a list of the above (example: <code class="language-plaintext highlighter-rouge">"1009, TS2571, 4072 ,ts6031 "</code>)</li>
+  <li>An <code class="language-plaintext highlighter-rouge">array</code> of one or more from <code class="language-plaintext highlighter-rouge">1</code> or <code class="language-plaintext highlighter-rouge">3</code> (example: <code class="language-plaintext highlighter-rouge">[1009, "TS2571", "6031"]</code>)</li>
 </ol>
 
 <div class="row"><div class="col-md-6">
@@ -295,7 +295,7 @@ This might lead to slightly better performance, especially if you’re not using
 <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
   <span class="c1">// [...]</span>
   <span class="na">globals</span><span class="p">:</span> <span class="p">{</span>
-    <span class="s1">'ts-jest'</span><span class="p">:</span> <span class="p">{</span>
+    <span class="dl">'</span><span class="s1">ts-jest</span><span class="dl">'</span><span class="p">:</span> <span class="p">{</span>
       <span class="na">diagnostics</span><span class="p">:</span> <span class="p">{</span>
         <span class="na">ignoreCodes</span><span class="p">:</span> <span class="p">[</span><span class="mi">2571</span><span class="p">,</span> <span class="mi">6031</span><span class="p">,</span> <span class="mi">18003</span><span class="p">]</span>
       <span class="p">}</span>
@@ -309,11 +309,11 @@ This might lead to slightly better performance, especially if you’re not using
     <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// OR package.json</span>
 <span class="p">{</span>
   <span class="c1">// [...]</span>
-  <span class="s2">"jest"</span><span class="p">:</span> <span class="p">{</span>
-    <span class="s2">"globals"</span><span class="p">:</span> <span class="p">{</span>
-      <span class="s2">"ts-jest"</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">"diagnostics"</span><span class="p">:</span> <span class="p">{</span>
-          <span class="s2">"ignoreCodes"</span><span class="p">:</span> <span class="p">[</span><span class="mi">2571</span><span class="p">,</span> <span class="mi">6031</span><span class="p">,</span> <span class="mi">18003</span><span class="p">]</span>
+  <span class="dl">"</span><span class="s2">jest</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+    <span class="dl">"</span><span class="s2">globals</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+      <span class="dl">"</span><span class="s2">ts-jest</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="dl">"</span><span class="s2">diagnostics</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+          <span class="dl">"</span><span class="s2">ignoreCodes</span><span class="dl">"</span><span class="p">:</span> <span class="p">[</span><span class="mi">2571</span><span class="p">,</span> <span class="mi">6031</span><span class="p">,</span> <span class="mi">18003</span><span class="p">]</span>
         <span class="p">}</span>
       <span class="p">}</span>
     <span class="p">}</span>
@@ -332,7 +332,7 @@ This might lead to slightly better performance, especially if you’re not using
   <div class="container">
     <div class="row">
       <div class="col-sm text-right">
-        <a href="http://github.com/kulshekhar/ts-jest/tree/master/docs/user/config/diagnostics.md">
+        <a href="https://github.com/kulshekhar/ts-jest/tree/master/docs/user/config/diagnostics.md">
           edit this page <i class="far fa-edit"></i>
         </a>
       </div>

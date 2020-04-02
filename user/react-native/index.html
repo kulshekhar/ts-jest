@@ -2,16 +2,16 @@
 <html lang="en"><head>
  <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.5.0 -->
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
 <title>Using with React Native | ts-jest</title>
-<meta name="generator" content="Jekyll v3.7.4" />
+<meta name="generator" content="Jekyll v3.8.5" />
 <meta property="og:title" content="Using with React Native" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="ts-jest is a TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript." />
 <meta property="og:description" content="ts-jest is a TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript." />
 <meta property="og:site_name" content="ts-jest" />
 <script type="application/ld+json">
-{"url":"/ts-jest/user/react-native/","description":"ts-jest is a TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript.","headline":"Using with React Native","@type":"WebPage","@context":"http://schema.org"}</script>
+{"headline":"Using with React Native","description":"ts-jest is a TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript.","@type":"WebPage","url":"/ts-jest/user/react-native/","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 <link rel="stylesheet" href="/ts-jest/assets/css/main.css"><link type="application/atom+xml" rel="alternate" href="/ts-jest/feed.xml" title="ts-jest" /><script src="/ts-jest/assets/js/bootstrap/jquery.min.js"></script>
   <script src="/ts-jest/assets/js/bootstrap/bootstrap.bundle.min.js"></script>
@@ -122,7 +122,7 @@
   
   <li class="nav-item">
     <a class="nav-link inverse"
-       href="http://github.com/kulshekhar/ts-jest">Fork me <span class="fab fa-github"></span></a>
+       href="https://github.com/kulshekhar/ts-jest">Fork me <span class="fab fa-github"></span></a>
   </li>
 </ul>
 
@@ -138,44 +138,44 @@
   </header>
 
   <section>
-    <p>To use <code class="highlighter-rouge">ts-jest</code> with React Native + TypeScript and Babel 7, you’ll first need to follow <a href="https://facebook.github.io/react-native/blog/2018/05/07/using-typescript-with-react-native">this tutorial</a>.</p>
+    <p>To use <code class="language-plaintext highlighter-rouge">ts-jest</code> with React Native + TypeScript and Babel 7, you’ll first need to follow <a href="https://facebook.github.io/react-native/blog/2018/05/07/using-typescript-with-react-native">this tutorial</a>.</p>
 
 <p>After that, some little modifications will be required as follows:</p>
 
 <h3 id="babel-config">Babel config</h3>
 
-<p>If you didn’t yet, move any Babel config from <code class="highlighter-rouge">.babelrc</code> to <code class="highlighter-rouge">babel.config.js</code>. It should at least contain:</p>
+<p>If you didn’t yet, move any Babel config from <code class="language-plaintext highlighter-rouge">.babelrc</code> to <code class="language-plaintext highlighter-rouge">babel.config.js</code>. It should at least contain:</p>
 
 <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// babel.config.js</span>
 <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
   <span class="na">presets</span><span class="p">:</span> <span class="p">[</span>
-    <span class="s1">'module:metro-react-native-babel-preset'</span>
+    <span class="dl">'</span><span class="s1">module:metro-react-native-babel-preset</span><span class="dl">'</span>
   <span class="p">]</span>
 <span class="p">};</span>
 </code></pre></div></div>
 
 <h3 id="jest-config">Jest config</h3>
 
-<p>In the same way that you moved Babel config, move Jest config from <code class="highlighter-rouge">jest</code> key of <code class="highlighter-rouge">package.json</code> to <code class="highlighter-rouge">jest.config.js</code>. It should look like this:</p>
+<p>In the same way that you moved Babel config, move Jest config from <code class="language-plaintext highlighter-rouge">jest</code> key of <code class="language-plaintext highlighter-rouge">package.json</code> to <code class="language-plaintext highlighter-rouge">jest.config.js</code>. It should look like this:</p>
 
 <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// jest.config.js</span>
-<span class="kd">const</span> <span class="p">{</span> <span class="na">defaults</span><span class="p">:</span> <span class="nx">tsjPreset</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'ts-jest/presets'</span><span class="p">);</span>
+<span class="kd">const</span> <span class="p">{</span> <span class="na">defaults</span><span class="p">:</span> <span class="nx">tsjPreset</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">ts-jest/presets</span><span class="dl">'</span><span class="p">);</span>
 
 <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
   <span class="p">...</span><span class="nx">tsjPreset</span><span class="p">,</span>
-  <span class="na">preset</span><span class="p">:</span> <span class="s1">'react-native'</span><span class="p">,</span>
+  <span class="na">preset</span><span class="p">:</span> <span class="dl">'</span><span class="s1">react-native</span><span class="dl">'</span><span class="p">,</span>
   <span class="na">transform</span><span class="p">:</span> <span class="p">{</span>
     <span class="p">...</span><span class="nx">tsjPreset</span><span class="p">.</span><span class="nx">transform</span><span class="p">,</span>
-    <span class="s1">'</span><span class="err">\\</span><span class="s1">.js$'</span><span class="p">:</span> <span class="s1">'&lt;rootDir&gt;/node_modules/react-native/jest/preprocessor.js'</span><span class="p">,</span>
+    <span class="dl">'</span><span class="se">\\</span><span class="s1">.js$</span><span class="dl">'</span><span class="p">:</span> <span class="dl">'</span><span class="s1">&lt;rootDir&gt;/node_modules/react-native/jest/preprocessor.js</span><span class="dl">'</span><span class="p">,</span>
   <span class="p">},</span>
   <span class="na">globals</span><span class="p">:</span> <span class="p">{</span>
-    <span class="s1">'ts-jest'</span><span class="p">:</span> <span class="p">{</span>
+    <span class="dl">'</span><span class="s1">ts-jest</span><span class="dl">'</span><span class="p">:</span> <span class="p">{</span>
       <span class="na">babelConfig</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
     <span class="p">}</span>
   <span class="p">},</span>
   <span class="c1">// This is the only part which you can keep</span>
   <span class="c1">// from the above linked tutorial's config:</span>
-  <span class="na">cacheDirectory</span><span class="p">:</span> <span class="s1">'.jest/cache'</span><span class="p">,</span>
+  <span class="na">cacheDirectory</span><span class="p">:</span> <span class="dl">'</span><span class="s1">.jest/cache</span><span class="dl">'</span><span class="p">,</span>
 <span class="p">};</span>
 </code></pre></div></div>
 
@@ -188,7 +188,7 @@
   <div class="container">
     <div class="row">
       <div class="col-sm text-right">
-        <a href="http://github.com/kulshekhar/ts-jest/tree/master/docs/user/react-native/index.md">
+        <a href="https://github.com/kulshekhar/ts-jest/tree/master/docs/user/react-native/index.md">
           edit this page <i class="far fa-edit"></i>
         </a>
       </div>
