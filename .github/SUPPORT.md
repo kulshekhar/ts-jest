@@ -1,0 +1,1 @@
+Please note this issue tracker is not a help forum. We recommend using [StackOverflow](https://stackoverflow.com/questions/tagged/ts-jest) or our [Slack channel](https://bit.ly/3bRHFPQ) for questions.
