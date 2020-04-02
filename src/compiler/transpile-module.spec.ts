@@ -17,8 +17,8 @@ describe('transpile module with isolatedModule: true', () => {
   })
 
   it('should compile using transpileModule and not use cache', () => {
-    const compiler = makeCompiler({ tsJestConfig: { ...baseTsJestConfig, tsConfig: false } }),
-      spy = jest.spyOn(require('typescript'), 'transpileModule')
+    const compiler = makeCompiler({ tsJestConfig: { ...baseTsJestConfig, tsConfig: false } })
+    const spy = jest.spyOn(require('typescript'), 'transpileModule')
 
     logTarget.clear()
     const compiled = compiler.compile('export default 42', __filename)
@@ -40,11 +40,11 @@ describe('transpile module with isolatedModule: true', () => {
   })
 
   it('should compile js file for allowJs true', () => {
-    const fileName = `${__filename}.test.js`,
-      compiler = makeCompiler({
-        tsJestConfig: { ...baseTsJestConfig, tsConfig: { allowJs: true, outDir: '$$ts-jest$$' } },
-      }),
-      source = 'export default 42'
+    const fileName = `${__filename}.test.js`
+    const compiler = makeCompiler({
+      tsJestConfig: { ...baseTsJestConfig, tsConfig: { allowJs: true, outDir: '$$ts-jest$$' } },
+    })
+    const source = 'export default 42'
 
     writeFileSync(fileName, source, 'utf8')
     const compiled = compiler.compile(source, fileName)
@@ -55,16 +55,16 @@ describe('transpile module with isolatedModule: true', () => {
   })
 
   it('should compile tsx file for jsx preserve', () => {
-    const fileName = `foo.tsx`,
-      compiler = makeCompiler({
-        tsJestConfig: {
-          ...baseTsJestConfig,
-          tsConfig: {
-            jsx: 'preserve' as any,
-          },
+    const fileName = `foo.tsx`
+    const compiler = makeCompiler({
+      tsJestConfig: {
+        ...baseTsJestConfig,
+        tsConfig: {
+          jsx: 'preserve' as any,
         },
-      }),
-      source = `
+      },
+    })
+    const source = `
         const App = () => {
           return <>Test</>
         }
@@ -79,16 +79,16 @@ describe('transpile module with isolatedModule: true', () => {
   })
 
   it('should compile tsx file for other jsx options', () => {
-    const fileName = `foo.tsx`,
-      compiler = makeCompiler({
-        tsJestConfig: {
-          ...baseTsJestConfig,
-          tsConfig: {
-            jsx: 'react' as any,
-          },
+    const fileName = `foo.tsx`
+    const compiler = makeCompiler({
+      tsJestConfig: {
+        ...baseTsJestConfig,
+        tsConfig: {
+          jsx: 'react' as any,
         },
-      }),
-      source = `
+      },
+    })
+    const source = `
         const App = () => {
           return <>Test</>
         }
@@ -103,8 +103,8 @@ describe('transpile module with isolatedModule: true', () => {
   })
 
   it('should have correct source maps', () => {
-    const compiler = makeCompiler({ tsJestConfig: { ...baseTsJestConfig, tsConfig: false } }),
-      source = 'const f = (v: number) => v\nconst t: number = f(5)'
+    const compiler = makeCompiler({ tsJestConfig: { ...baseTsJestConfig, tsConfig: false } })
+    const source = 'const f = (v: number) => v\nconst t: number = f(5)'
 
     const compiled = compiler.compile(source, __filename)
 

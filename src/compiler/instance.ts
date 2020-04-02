@@ -38,6 +38,7 @@ import { ConfigSet } from '../config/config-set'
 import { CompileFn, CompilerInstance, MemoryCache, TsCompiler } from '../types'
 import { sha1 } from '../util/sha1'
 
+import { getResolvedModulesCache } from './compiler-utils'
 import { compileUsingLanguageService } from './language-service'
 import { compileUsingProgram } from './program'
 import { compileUsingTranspileModule } from './transpile-module'
@@ -100,7 +101,9 @@ const readThrough = (
   if (!cachedir) {
     return (code: string, fileName: string, lineOffset?: number) => {
       const normalizedFileName = normalize(fileName)
+
       logger.debug({ normalizedFileName }, 'readThrough(): no cache')
+
       const [value, sourceMap] = compileFn(code, normalizedFileName, lineOffset)
       const output = updateOutput(value, fileName, sourceMap, getExtension)
       memoryCache.outputs[normalizedFileName] = output
@@ -111,12 +114,17 @@ const readThrough = (
 
   // Make sure the cache directory exists before continuing.
   mkdirp.sync(cachedir)
+  try {
+    const resolvedModulesCache = readFileSync(getResolvedModulesCache(cachedir), 'utf-8')
+    /* istanbul ignore next (covered by e2e) */
+    memoryCache.resolvedModules = JSON.parse(resolvedModulesCache)
+  } catch (e) {}
 
   return (code: string, fileName: string, lineOffset?: number) => {
-    const normalizedFileName = normalize(fileName),
-      cachePath = join(cachedir, getCacheName(code, normalizedFileName)),
-      extension = getExtension(normalizedFileName),
-      outputPath = `${cachePath}${extension}`
+    const normalizedFileName = normalize(fileName)
+    const cachePath = join(cachedir, getCacheName(code, normalizedFileName))
+    const extension = getExtension(normalizedFileName)
+    const outputPath = `${cachePath}${extension}`
     try {
       const output = readFileSync(outputPath, 'utf8')
       if (isValidCacheContent(output)) {
@@ -129,8 +137,8 @@ const readThrough = (
 
     logger.debug({ fileName }, 'readThrough(): cache miss')
 
-    const [value, sourceMap] = compileFn(code, normalizedFileName, lineOffset),
-      output = updateOutput(value, normalizedFileName, sourceMap, getExtension)
+    const [value, sourceMap] = compileFn(code, normalizedFileName, lineOffset)
+    const output = updateOutput(value, normalizedFileName, sourceMap, getExtension)
 
     logger.debug({ normalizedFileName, outputPath }, 'readThrough(): writing caches')
 
@@ -151,14 +159,15 @@ export const createCompiler = (configs: ConfigSet): TsCompiler => {
     typescript: { options: compilerOptions, fileNames },
     tsJest,
   } = configs
-  const cachedir = configs.tsCacheDir,
-    ts = configs.compilerModule, // Require the TypeScript compiler and configuration.
-    extensions = ['.ts', '.tsx'],
-    memoryCache: MemoryCache = {
-      contents: Object.create(null),
-      versions: Object.create(null),
-      outputs: Object.create(null),
-    }
+  const cachedir = configs.tsCacheDir
+  const ts = configs.compilerModule // Require the TypeScript compiler and configuration.
+  const extensions = ['.ts', '.tsx']
+  const memoryCache: MemoryCache = {
+    contents: Object.create(null),
+    versions: Object.create(null),
+    outputs: Object.create(null),
+    resolvedModules: Object.create(null),
+  }
   // Enable `allowJs` when flag is set.
   if (compilerOptions.allowJs) {
     extensions.push('.js')
@@ -184,5 +193,5 @@ export const createCompiler = (configs: ConfigSet): TsCompiler => {
   }
   const compile = readThrough(cachedir, memoryCache, compilerInstance.compileFn, getExtension, logger)
 
-  return { cwd: configs.cwd, compile, program: compilerInstance.program, diagnose: compilerInstance.diagnoseFn }
+  return { cwd: configs.cwd, compile, program: compilerInstance.program }
 }

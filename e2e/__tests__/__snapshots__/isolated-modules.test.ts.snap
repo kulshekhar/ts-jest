@@ -7,7 +7,7 @@ exports[`With isolatedModules enabled should pass using template "default" 1`] =
   
   ===[ STDERR ]===================================================================
   PASS ./main.spec.ts
-    √ should pass
+    √ should do the thing
   
   Test Suites: 1 passed, 1 total
   Tests:       1 passed, 1 total
@@ -24,7 +24,7 @@ exports[`With isolatedModules enabled should pass using template "with-babel-7" 
   
   ===[ STDERR ]===================================================================
   PASS ./main.spec.ts
-    √ should pass
+    √ should do the thing
   
   Test Suites: 1 passed, 1 total
   Tests:       1 passed, 1 total
@@ -41,7 +41,7 @@ exports[`With isolatedModules enabled should pass using template "with-babel-7-s
   
   ===[ STDERR ]===================================================================
   PASS ./main.spec.ts
-    √ should pass
+    √ should do the thing
   
   Test Suites: 1 passed, 1 total
   Tests:       1 passed, 1 total
@@ -58,7 +58,7 @@ exports[`With isolatedModules enabled should pass using template "with-typescrip
   
   ===[ STDERR ]===================================================================
   PASS ./main.spec.ts
-    √ should pass
+    √ should do the thing
   
   Test Suites: 1 passed, 1 total
   Tests:       1 passed, 1 total

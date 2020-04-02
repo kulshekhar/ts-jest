@@ -5,6 +5,7 @@ module.exports = {
     '\\.ts$': '<rootDir>/dist/index.js',
   },
   testMatch: ['<rootDir>/src/**/*.spec.ts'],
+  testPathIgnorePatterns: ['<rootDir>/src/__mocks__/*'],
   collectCoverageFrom: [
     '<rootDir>/src/**/*.ts',
     '!<rootDir>/src/**/*.d.ts',

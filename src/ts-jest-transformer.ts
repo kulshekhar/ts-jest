@@ -18,18 +18,6 @@ interface ConfigSetIndexItem {
   jestConfig: JsonableValue<Config.ProjectConfig>
 }
 
-function checkDefinitionFile(filePath: string): boolean {
-  return filePath.endsWith('.d.ts')
-}
-
-function checkJsFile(filePath: string): boolean {
-  return /\.jsx?$/.test(filePath)
-}
-
-function checkTsFile(filePath: string): boolean {
-  return !checkDefinitionFile(filePath) && /\.tsx?$/.test(filePath)
-}
-
 export class TsJestTransformer implements Transformer {
   /**
    * @internal
@@ -114,14 +102,14 @@ export class TsJestTransformer implements Transformer {
     this.logger.debug({ fileName: filePath, transformOptions }, 'processing', filePath)
 
     let result: string | TransformedSource
-    const source: string = input,
-      configs = this.configsFor(jestConfig),
-      { hooks } = configs,
-      stringify = configs.shouldStringifyContent(filePath),
-      babelJest = stringify ? undefined : configs.babelJestTransformer,
-      isDefinitionFile = checkDefinitionFile(filePath),
-      isJsFile = checkJsFile(filePath),
-      isTsFile = checkTsFile(filePath)
+    const source: string = input
+    const configs = this.configsFor(jestConfig)
+    const { hooks } = configs
+    const stringify = configs.shouldStringifyContent(filePath)
+    const babelJest = stringify ? undefined : configs.babelJestTransformer
+    const isDefinitionFile = filePath.endsWith('.d.ts')
+    const isJsFile = /\.jsx?$/.test(filePath)
+    const isTsFile = !isDefinitionFile && /\.tsx?$/.test(filePath)
     if (stringify) {
       // handles here what we should simply stringify
       result = `module.exports=${JSON.stringify(source)}`
@@ -189,9 +177,6 @@ export class TsJestTransformer implements Transformer {
     const configs = this.configsFor(jestConfigStr)
     // we do not instrument, ensure it is false all the time
     const { instrument = false, rootDir = configs.rootDir } = transformOptions
-    if (configs.tsCompiler.diagnose && (checkJsFile(filePath) || checkTsFile(filePath))) {
-      configs.tsCompiler.diagnose(fileContent, filePath)
-    }
 
     return sha1(
       configs.cacheKey,

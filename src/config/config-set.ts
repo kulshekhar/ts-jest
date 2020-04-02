@@ -191,6 +191,14 @@ export class ConfigSet {
    * @internal
    */
   @Memoize()
+  get testMatchPatterns(): string[] {
+    return this.jest.testMatch.concat(this.jest.testRegex)
+  }
+
+  /**
+   * @internal
+   */
+  @Memoize()
   get tsJest(): TsJestConfig {
     const parsedConfig = this.jest
     const { globals = {} } = parsedConfig as any
@@ -769,10 +777,6 @@ export class ConfigSet {
       if (!('allowSyntheticDefaultImports' in config.compilerOptions)) {
         finalOptions.allowSyntheticDefaultImports = true
       }
-    }
-    // Make sure when allowJs is enabled, outDir is set otherwise we run into error: Cannot write file ... because it would overwrite input
-    if (finalOptions.allowJs && !finalOptions.outDir) {
-      finalOptions.outDir = '$$ts-jest$$'
     }
 
     // ensure undefined are removed and other values are overridden
