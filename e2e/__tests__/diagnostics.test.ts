@@ -142,144 +142,17 @@ describe('With diagnostics throw', () => {
 })
 
 describe('With diagnostics warn only', () => {
-  describe('using language service', () => {
-    const testCase = configureTestCase('diagnostics', {
-      tsJestConfig: {
-        diagnostics: { warnOnly: true },
-      },
-    })
-
-    describe('first show warning', () => {
-      testCase.runWithTemplates(allValidPackageSets, 0, (runTest, { testLabel }) => {
-        it(testLabel, () => {
-          const result = runTest()
-          expect(result.status).toBe(0)
-          expect(result).toMatchSnapshot()
-        })
-      })
-    })
-
-    describe('then not showing warning when content has changed to valid base on cache of the previous run', () => {
-      beforeAll(() => {
-        writeFileSync(join(__dirname, '../__cases__/diagnostics/main.ts'), `export type Thing = {
-  a: number;
-  // b: number;
-}`)
-      })
-
-      afterAll(() => {
-        writeFileSync(join(__dirname, '../__cases__/diagnostics/main.ts'), `export type Thing = { a: number, b: number }\n`)
-      })
-
-      testCase.runWithTemplates(allValidPackageSets, 0, (runTest, { testLabel }) => {
-        it(testLabel, () => {
-          const result = runTest()
-          expect(result.status).toBe(0)
-          expect(result).toMatchSnapshot()
-        })
-      })
-    })
+  const testCase = configureTestCase('diagnostics', {
+    tsJestConfig: {
+      diagnostics: { warnOnly: true },
+    },
   })
 
-  describe('using program', () => {
-    const testCase = configureTestCase('diagnostics', {
-      tsJestConfig: {
-        compilerHost: true,
-        incremental: false,
-        diagnostics: { warnOnly: true },
-      },
-    })
-
-    describe('first show warning', () => {
-      testCase.runWithTemplates(allPackageSetsWithProgram, 0, (runTest, { testLabel }) => {
-        it(testLabel, () => {
-          const result = runTest()
-          expect(result.status).toBe(0)
-          expect(result).toMatchSnapshot()
-        })
-      })
-    })
-
-    describe('then not show warning when content has changed to valid base on cache of the previous run', () => {
-      beforeAll(() => {
-        writeFileSync(join(__dirname, '../__cases__/diagnostics/main.ts'), `export type Thing = {
-  a: number;
-  // b: number;
-}`)
-      })
-
-      afterAll(() => {
-        writeFileSync(join(__dirname, '../__cases__/diagnostics/main.ts'), `export type Thing = { a: number, b: number }\n`)
-      })
-
-      testCase.runWithTemplates(allPackageSetsWithProgram, 0, (runTest, { testLabel }) => {
-        it(testLabel, () => {
-          const result = runTest()
-          expect(result.status).toBe(0)
-          expect(result).toMatchSnapshot()
-        })
-      })
-    })
-
-    describe('with unsupported version', () => {
-      testCase.runWithTemplates(allPackageSetsWithoutProgram, 1, (runTest, { testLabel }) => {
-        it(testLabel, () => {
-          const result = runTest()
-          expect(result.status).toBe(1)
-          expect(result).toMatchSnapshot()
-        })
-      })
-    })
-  })
-
-  describe('using incremental program', () => {
-    const testCase = configureTestCase('diagnostics', {
-      tsJestConfig: {
-        compilerHost: true,
-        incremental: true,
-        diagnostics: { warnOnly: true },
-      },
-    })
-
-    describe('first show warning', () => {
-      testCase.runWithTemplates(allPackageSetsWithProgram, 0, (runTest, { testLabel }) => {
-        it(testLabel, () => {
-          const result = runTest()
-          expect(result.status).toBe(0)
-          expect(result).toMatchSnapshot()
-        })
-      })
-    })
-
-    describe('then not showing warning when content has changed to valid base on cache of the previous run', () => {
-      beforeAll(() => {
-        writeFileSync(join(__dirname, '../__cases__/diagnostics/main.ts'), `export type Thing = {
-  a: number;
-  // b: number;
-}`)
-      })
-
-      afterAll(() => {
-        writeFileSync(join(__dirname, '../__cases__/diagnostics/main.ts'), `export type Thing = { a: number, b: number }\n`)
-      })
-
-      testCase.runWithTemplates(allPackageSetsWithProgram, 0, (runTest, { testLabel }) => {
-        it(testLabel, () => {
-          const result = runTest()
-          expect(result.status).toBe(0)
-          expect(result).toMatchSnapshot()
-        })
-      })
-    })
-
-    describe('with unsupported version', () => {
-      testCase.runWithTemplates(allPackageSetsWithoutProgram, 1, (runTest, { testLabel }) => {
-        it(testLabel, () => {
-          const result = runTest()
-          expect(result.status).toBe(1)
-          expect(result).toMatchSnapshot()
-        })
-      })
+  testCase.runWithTemplates(allValidPackageSets, 0, (runTest, { testLabel }) => {
+    it(testLabel, () => {
+      const result = runTest()
+      expect(result.status).toBe(0)
+      expect(result).toMatchSnapshot()
     })
   })
 })
