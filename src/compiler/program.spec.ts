@@ -14,19 +14,12 @@ const baseTsJestConfig = {
 }
 
 describe('cache', () => {
-  const fileName = 'test-cache.ts'
   const source = 'console.log("hello")'
 
-  beforeAll(() => {
-    writeFileSync(fileName, source, 'utf8')
-  })
-
-  afterAll(() => {
-    removeSync(fileName)
-  })
-
   it('should use the cache with normal program', () => {
+    const fileName = 'test-cache-program.ts'
     const tmp = tempDir('program-compiler')
+    writeFileSync(fileName, source, 'utf8')
     const compiler = makeCompiler({
       jestConfig: { cache: true, cacheDirectory: tmp },
       tsJestConfig: {
@@ -47,7 +40,7 @@ describe('cache', () => {
       ",
         "[level:20] visitSourceFileNode(): hoisting
       ",
-        "[level:20] diagnoseFn(): computing diagnostics for test-cache.ts using program
+        "[level:20] diagnoseFn(): computing diagnostics for test-cache-program.ts using program
       ",
         "[level:20] readThrough(): writing caches
       ",
@@ -64,10 +57,14 @@ describe('cache', () => {
     `)
 
     expect(compiled2).toBe(compiled1)
+
+    removeSync(fileName)
   })
 
   it('should use the cache with incremental program', () => {
+    const fileName = 'test-cache-incremental-program.ts'
     const tmp = tempDir('incremental-program-compiler')
+    writeFileSync(fileName, source, 'utf8')
     const compiler = makeCompiler({
       jestConfig: { cache: true, cacheDirectory: tmp },
       tsJestConfig: {
@@ -88,7 +85,7 @@ describe('cache', () => {
       ",
         "[level:20] visitSourceFileNode(): hoisting
       ",
-        "[level:20] diagnoseFn(): computing diagnostics for test-cache.ts using incremental program
+        "[level:20] diagnoseFn(): computing diagnostics for test-cache-incremental-program.ts using incremental program
       ",
         "[level:20] readThrough(): writing caches
       ",
@@ -105,6 +102,8 @@ describe('cache', () => {
     `)
 
     expect(compiled2).toBe(compiled1)
+
+    removeSync(fileName)
   })
 })
 
