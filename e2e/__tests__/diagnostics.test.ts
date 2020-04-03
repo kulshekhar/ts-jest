@@ -145,6 +145,7 @@ describe('With diagnostics warn only', () => {
   const testCase = configureTestCase('diagnostics', {
     tsJestConfig: {
       diagnostics: { warnOnly: true },
+      noCache: true, // warnings shown only on first compilation
     },
   })
 
