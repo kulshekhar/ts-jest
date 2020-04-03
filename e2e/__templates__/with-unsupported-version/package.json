@@ -3,9 +3,9 @@
   "version": "0.0.0-tmpl.0",
   "private": true,
   "devDependencies": {
-    "@types/jest": "25.1.4",
-    "@types/node": "12.12.32",
-    "jest": "25.2.4",
+    "@types/jest": "25.1.5",
+    "@types/node": "12.12.34",
+    "jest": "25.2.7",
     "typescript": "2.5.3"
   },
   "wantedDependencies": {
