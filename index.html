@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+ <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>ts-jest | ts-jest is a TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript.</title>
+<meta name="generator" content="Jekyll v3.8.5" />
+<meta property="og:title" content="ts-jest" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="ts-jest is a TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript." />
+<meta property="og:description" content="ts-jest is a TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript." />
+<meta property="og:site_name" content="ts-jest" />
+<script type="application/ld+json">
+{"description":"ts-jest is a TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript.","headline":"ts-jest","@type":"WebSite","name":"ts-jest","url":"/ts-jest/","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/ts-jest/assets/css/main.css"><link type="application/atom+xml" rel="alternate" href="/ts-jest/feed.xml" title="ts-jest" /><script src="/ts-jest/assets/js/bootstrap/jquery.min.js"></script>
+  <script src="/ts-jest/assets/js/bootstrap/bootstrap.bundle.min.js"></script>
+</head>
+<body><nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container">
+    <a class="navbar-brand"
+    href="/ts-jest/">
+      <!--img width="30" height="30"
+           class="d-inline-block align-top"
+           src="/ts-jest/assets/img/logo.png"
+           alt="ts-jest Logo"-->
+      ts-jest
+    </a>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto">
+  
+  
+    
+    
+    
+      <li class="nav-item dropdown ">
+        <a href="/ts-jest/user"
+           class="nav-link dropdown-toggle"
+           data-toggle="dropdown"
+           role="button"
+           aria-haspopup="true"
+           aria-expanded="false">
+           User Documentation
+        </a>
+        <div class="dropdown-menu">
+          
+            
+              <a href="/ts-jest/user/install"
+                 class="dropdown-item">
+                 Installation
+              </a>
+            
+          
+            
+              <a href="/ts-jest/user/config"
+                 class="dropdown-item">
+                 Configuration
+              </a>
+            
+          
+            
+              <a href="/ts-jest/user/test-helpers"
+                 class="dropdown-item">
+                 Test helpers
+              </a>
+            
+          
+            
+              <a href="/ts-jest/user/react-native"
+                 class="dropdown-item">
+                 React Native
+              </a>
+            
+          
+            
+              <a href="/ts-jest/user/babel7-or-ts"
+                 class="dropdown-item">
+                 Babel7 or TypeScript
+              </a>
+            
+          
+        </div>
+      </li>
+    
+  
+    
+    
+    
+      <li class="nav-item dropdown ">
+        <a href="/ts-jest/tech"
+           class="nav-link dropdown-toggle"
+           data-toggle="dropdown"
+           role="button"
+           aria-haspopup="true"
+           aria-expanded="false">
+           Contributor Reference
+        </a>
+        <div class="dropdown-menu">
+          
+            
+              <a href="/ts-jest/tech/process"
+                 class="dropdown-item">
+                 Processing
+              </a>
+            
+          
+            
+              <a href="/ts-jest/tech/e2e"
+                 class="dropdown-item">
+                 E2E Testing
+              </a>
+            
+          
+        </div>
+      </li>
+    
+  
+  <li class="nav-item">
+    <a class="nav-link inverse"
+       href="https://github.com/kulshekhar/ts-jest">Fork me <span class="fab fa-github"></span></a>
+  </li>
+</ul>
+
+    </div>
+  </div>
+</nav>
+<div class="py-5">
+      <div class="container page-content">
+          <div><section>
+    <p align="center">
+<img src="assets/img/logo.png" title="ts-jest Log" width="128" height="128" />
+</p>
+
+<p><strong><code class="language-plaintext highlighter-rouge">ts-jest</code></strong> is a TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript.</p>
+
+<p>It supports all features of TypeScript including type-checking. <a href="user/babel7-or-ts">Read more about Babel7 + <code class="language-plaintext highlighter-rouge">preset-typescript</code> <strong>vs</strong> TypeScript (and <code class="language-plaintext highlighter-rouge">ts-jest</code>)</a>.</p>
+
+<p><a href="https://badge.fury.io/js/ts-jest"><img src="https://badge.fury.io/js/ts-jest.svg" alt="npm version" /></a> <a href="https://npmjs.org/package/ts-jest"><img src="https://img.shields.io/npm/dm/ts-jest.svg?style=flat" alt="NPM downloads" /></a> <a href="https://snyk.io/test/github/kulshekhar/ts-jest"><img src="https://snyk.io/test/github/kulshekhar/ts-jest/badge.svg" alt="Known Vulnerabilities" /></a> <a href="https://coveralls.io/github/kulshekhar/ts-jest?branch=master"><img src="https://coveralls.io/repos/github/kulshekhar/ts-jest/badge.svg?branch=master" alt="Coverage Status" /></a> <a href="https://travis-ci.org/kulshekhar/ts-jest"><img src="https://travis-ci.org/kulshekhar/ts-jest.svg?branch=master" alt="Build Status for linux" /></a> <a href="https://ci.appveyor.com/project/kulshekhar/ts-jest/branch/master"><img src="https://ci.appveyor.com/api/projects/status/g8tt9qd7usv0tolb/branch/master?svg=true" alt="Build Status for Windows" /></a></p>
+
+<hr />
+
+<p><img src="assets/img/slack.png" align="left" height="24" /> <a href="https://bit.ly/3bRHFPQ">Ask for some help in the <code class="language-plaintext highlighter-rouge">ts-jest</code> community of Slack</a></p>
+
+<!--
+<img src="assets/img/troubleshooting.png" align="left" height="24"> [Before reporting any issue, be sure to check the troubleshooting page](user/troubleshooting)
+-->
+
+<p><img src="assets/img/pull-request.png" align="left" height="24" /> <a href="https://github.com/kulshekhar/ts-jest/issues/223">Looking for collaborators. Want to help improve <code class="language-plaintext highlighter-rouge">ts-jest</code>?</a></p>
+
+<hr />
+
+<h2 id="usage">Usage</h2>
+
+<p>Refer to the <a href="user/install">installation</a> and <a href="user/config">configuration</a> instructions.</p>
+
+<h2 id="built-with">Built With</h2>
+
+<ul>
+  <li><a href="https://www.typescriptlang.org/">TypeScript</a> - JavaScript that scales</li>
+  <li><a href="https://jestjs.io/">Jest</a> - Delightful JavaScript Testing</li>
+  <li><a href="https://github.com/kulshekhar/ts-jest"><code class="language-plaintext highlighter-rouge">ts-jest</code></a> - Jest processor for TypeScript <em>(yes, <code class="language-plaintext highlighter-rouge">ts-jest</code> uses itself for its tests)</em></li>
+</ul>
+
+<h2 id="contributing">Contributing</h2>
+
+<p>Please read <a href="CONTRIBUTING.md">CONTRIBUTING.md</a> for details on our code of conduct, and the process for submitting pull requests to us.</p>
+
+<h2 id="versioning">Versioning</h2>
+
+<p>We <strong>DO NOT</strong> use <a href="http://semver.org/">SemVer</a> for versioning. Our Major version follows Jest, which means that our <strong>minor changes can be breaking.</strong>
+Please make sure to pin your version of <code class="language-plaintext highlighter-rouge">ts-jest</code> to a specific version if this is a problem. For the versions available, see the <a href="https://github.com/kulshekhar/ts-jest/tags">tags on this repository</a>.</p>
+
+<h2 id="authorsmaintainers">Authors/maintainers</h2>
+
+<ul>
+  <li><strong>Kulshekhar Kabra</strong> - <a href="https://github.com/kulshekhar">kulshekhar</a></li>
+  <li><strong>Gustav Wengel</strong> - <a href="https://github.com/GeeWee">GeeWee</a></li>
+  <li><strong>Ahn</strong> - <a href="https://github.com/ahnpnl">ahnpnl</a></li>
+  <li><strong>Huafu Gandon</strong> - <a href="https://github.com/huafu">huafu</a></li>
+</ul>
+
+<p>See also the list of <a href="https://github.com/kulshekhar/ts-jest/contributors">contributors</a> who participated in this project.</p>
+
+<h2 id="supporters">Supporters</h2>
+
+<ul>
+  <li><a href="https://www.jetbrains.com/?from=ts-jest">JetBrains</a> has been kind enough to support ts-jest with an <a href="https://www.jetbrains.com/community/opensource/?from=ts-jest">open source license</a>.</li>
+</ul>
+
+<h2 id="license">License</h2>
+
+<p>This project is licensed under the MIT License - see the <a href="https:/github.com/kulshekhar/ts-jest/LICENSE.md">LICENSE.md</a> file for details</p>
+
+  </section></div>
+
+      </div>
+    </div><div class="py-1 bg-light">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm text-right">
+        <a href="https://github.com/kulshekhar/ts-jest/tree/master/docs/index.md">
+          edit this page <i class="far fa-edit"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--div class="py-5 border-top">
+  <div class="container">
+
+    <p class="h5 mb-3">ts-jest</p>
+
+    <div class="row">
+
+      <div class="col-sm">
+        <ul class="list-unstyled">
+          <li>ts-jest</li></ul>
+      </div>
+
+
+      <div class="col-sm text-right">
+        <p>`ts-jest` is a TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript.</p>
+      </div>
+
+    </div>
+
+  </div>
+</div-->
+<script src="/ts-jest/assets/js/bootstrap-additions.js"></script>
+<script src="/ts-jest/assets/js/anchors.js"></script>
+</body>
+
+</html>

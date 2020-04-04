@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+ <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Babel Config option | ts-jest</title>
+<meta name="generator" content="Jekyll v3.8.5" />
+<meta property="og:title" content="Babel Config option" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="ts-jest is a TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript." />
+<meta property="og:description" content="ts-jest is a TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript." />
+<meta property="og:site_name" content="ts-jest" />
+<script type="application/ld+json">
+{"description":"ts-jest is a TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript.","headline":"Babel Config option","@type":"WebPage","url":"/ts-jest/user/config/babelConfig.html","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/ts-jest/assets/css/main.css"><link type="application/atom+xml" rel="alternate" href="/ts-jest/feed.xml" title="ts-jest" /><script src="/ts-jest/assets/js/bootstrap/jquery.min.js"></script>
+  <script src="/ts-jest/assets/js/bootstrap/bootstrap.bundle.min.js"></script>
+</head>
+<body><nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container">
+    <a class="navbar-brand"
+    href="/ts-jest/">
+      <!--img width="30" height="30"
+           class="d-inline-block align-top"
+           src="/ts-jest/assets/img/logo.png"
+           alt="ts-jest Logo"-->
+      ts-jest
+    </a>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto">
+  
+  
+    
+    
+    
+      <li class="nav-item dropdown active">
+        <a href="/ts-jest/user"
+           class="nav-link dropdown-toggle"
+           data-toggle="dropdown"
+           role="button"
+           aria-haspopup="true"
+           aria-expanded="false">
+           User Documentation
+        </a>
+        <div class="dropdown-menu">
+          
+            
+              <a href="/ts-jest/user/install"
+                 class="dropdown-item">
+                 Installation
+              </a>
+            
+          
+            
+              <a href="/ts-jest/user/config"
+                 class="dropdown-item">
+                 Configuration
+              </a>
+            
+          
+            
+              <a href="/ts-jest/user/test-helpers"
+                 class="dropdown-item">
+                 Test helpers
+              </a>
+            
+          
+            
+              <a href="/ts-jest/user/react-native"
+                 class="dropdown-item">
+                 React Native
+              </a>
+            
+          
+            
+              <a href="/ts-jest/user/babel7-or-ts"
+                 class="dropdown-item">
+                 Babel7 or TypeScript
+              </a>
+            
+          
+        </div>
+      </li>
+    
+  
+    
+    
+    
+      <li class="nav-item dropdown ">
+        <a href="/ts-jest/tech"
+           class="nav-link dropdown-toggle"
+           data-toggle="dropdown"
+           role="button"
+           aria-haspopup="true"
+           aria-expanded="false">
+           Contributor Reference
+        </a>
+        <div class="dropdown-menu">
+          
+            
+              <a href="/ts-jest/tech/process"
+                 class="dropdown-item">
+                 Processing
+              </a>
+            
+          
+            
+              <a href="/ts-jest/tech/e2e"
+                 class="dropdown-item">
+                 E2E Testing
+              </a>
+            
+          
+        </div>
+      </li>
+    
+  
+  <li class="nav-item">
+    <a class="nav-link inverse"
+       href="https://github.com/kulshekhar/ts-jest">Fork me <span class="fab fa-github"></span></a>
+  </li>
+</ul>
+
+    </div>
+  </div>
+</nav>
+<div class="py-5">
+      <div class="container page-content">
+          <article>
+
+  <header>
+    <h1>Babel Config option</h1>
+  </header>
+
+  <section>
+    <p><code class="language-plaintext highlighter-rouge">ts-jest</code> by default does <strong>NOT</strong> use Babel. But you may want to use it, especially if your code rely on Babel plugins to make some transformations. <code class="language-plaintext highlighter-rouge">ts-jest</code> can call the BabelJest processor once TypeScript has transformed the source into JavaScript.</p>
+
+<p>The option is <code class="language-plaintext highlighter-rouge">babelConfig</code> and it works pretty much as the <code class="language-plaintext highlighter-rouge">tsConfig</code> option, except that it is disabled by default. Here is the possible values it can take:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">false</code>: the default, disables the use of Babel</li>
+  <li><code class="language-plaintext highlighter-rouge">true</code>: enables Babel processing. <code class="language-plaintext highlighter-rouge">ts-jest</code> will try to find a <code class="language-plaintext highlighter-rouge">.babelrc</code>, <code class="language-plaintext highlighter-rouge">.babelrc.js</code>, <code class="language-plaintext highlighter-rouge">babel.config.js</code> file or a <code class="language-plaintext highlighter-rouge">babel</code> section in the <code class="language-plaintext highlighter-rouge">package.json</code> file of your project and use it as the config to pass to <code class="language-plaintext highlighter-rouge">babel-jest</code> processor.</li>
+  <li><code class="language-plaintext highlighter-rouge">{ ... }</code>: inline <a href="https://babeljs.io/docs/en/next/options">Babel options</a>. You can also set this to an empty object (<code class="language-plaintext highlighter-rouge">{}</code>) so that the default Babel config file is not used.</li>
+</ul>
+
+<h3 id="examples">Examples</h3>
+
+<h4 id="use-default-babelrc-file">Use default <code class="language-plaintext highlighter-rouge">babelrc</code> file</h4>
+
+<div class="row"><div class="col-md-6">
+
+    <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// jest.config.js</span>
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="c1">// [...]</span>
+  <span class="na">globals</span><span class="p">:</span> <span class="p">{</span>
+    <span class="dl">'</span><span class="s1">ts-jest</span><span class="dl">'</span><span class="p">:</span> <span class="p">{</span>
+      <span class="na">babelConfig</span><span class="p">:</span> <span class="kc">true</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div>    </div>
+
+  </div><div class="col-md-6">
+
+    <pre><code class="language-json5">// OR package.json
+{
+  // [...]
+  "jest": {
+    "globals": {
+      "ts-jest": {
+        "babelConfig": true
+      }
+    }
+  }
+}
+</code></pre>
+
+  </div></div>
+
+<h4 id="path-to-a-babelrc-file">Path to a <code class="language-plaintext highlighter-rouge">babelrc</code> file</h4>
+
+<p>The path should be relative to the current working directory where you start Jest from. You can also use <code class="language-plaintext highlighter-rouge">\&lt;rootDir&gt;</code> in the path, or use an absolute path (this last one is strongly not recommended).</p>
+
+<div class="row"><div class="col-md-6">
+
+    <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// jest.config.js</span>
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="c1">// [...]</span>
+  <span class="na">globals</span><span class="p">:</span> <span class="p">{</span>
+    <span class="dl">'</span><span class="s1">ts-jest</span><span class="dl">'</span><span class="p">:</span> <span class="p">{</span>
+      <span class="na">babelConfig</span><span class="p">:</span> <span class="dl">'</span><span class="s1">babelrc.test.js</span><span class="dl">'</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div>    </div>
+    <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// OR jest.config.js with require for babelrc</span>
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="c1">// [...]</span>
+  <span class="na">globals</span><span class="p">:</span> <span class="p">{</span>
+    <span class="dl">'</span><span class="s1">ts-jest</span><span class="dl">'</span><span class="p">:</span> <span class="p">{</span>
+      <span class="na">babelConfig</span><span class="p">:</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">./babelrc.test.js</span><span class="dl">'</span><span class="p">),</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div>    </div>
+  </div><div class="col-md-6">
+
+    <pre><code class="language-json5">// OR package.json
+{
+  // [...]
+  "jest": {
+    "globals": {
+      "ts-jest": {
+        "babelConfig": "babelrc.test.js"
+      }
+    }
+  }
+}
+</code></pre>
+
+  </div></div>
+
+<h4 id="inline-compiler-options">Inline compiler options</h4>
+
+<p>Refer to the <a href="https://babeljs.io/docs/en/next/options">Babel options</a> to know what can be used there.</p>
+
+<div class="row"><div class="col-md-6">
+
+    <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// jest.config.js</span>
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="c1">// [...]</span>
+  <span class="na">globals</span><span class="p">:</span> <span class="p">{</span>
+    <span class="dl">'</span><span class="s1">ts-jest</span><span class="dl">'</span><span class="p">:</span> <span class="p">{</span>
+      <span class="na">babelConfig</span><span class="p">:</span> <span class="p">{</span>
+        <span class="na">comments</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+        <span class="na">plugins</span><span class="p">:</span> <span class="p">[</span><span class="dl">'</span><span class="s1">@babel/plugin-transform-for-of</span><span class="dl">'</span><span class="p">]</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div>    </div>
+
+  </div><div class="col-md-6">
+
+    <pre><code class="language-json5">// OR package.json
+{
+  // [...]
+  "jest": {
+    "globals": {
+      "ts-jest": {
+        "babelConfig": {
+          "comments": false,
+          "plugins": ["@babel/plugin-transform-for-of"]
+        }
+      }
+    }
+  }
+}
+</code></pre>
+
+  </div></div>
+
+  </section>
+
+</article>
+
+      </div>
+    </div><div class="py-1 bg-light">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm text-right">
+        <a href="https://github.com/kulshekhar/ts-jest/tree/master/docs/user/config/babelConfig.md">
+          edit this page <i class="far fa-edit"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--div class="py-5 border-top">
+  <div class="container">
+
+    <p class="h5 mb-3">ts-jest</p>
+
+    <div class="row">
+
+      <div class="col-sm">
+        <ul class="list-unstyled">
+          <li>ts-jest</li></ul>
+      </div>
+
+
+      <div class="col-sm text-right">
+        <p>`ts-jest` is a TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript.</p>
+      </div>
+
+    </div>
+
+  </div>
+</div-->
+<script src="/ts-jest/assets/js/bootstrap-additions.js"></script>
+<script src="/ts-jest/assets/js/anchors.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+ <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Installing ts-jest | ts-jest</title>
+<meta name="generator" content="Jekyll v3.8.5" />
+<meta property="og:title" content="Installing ts-jest" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="ts-jest is a TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript." />
+<meta property="og:description" content="ts-jest is a TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript." />
+<meta property="og:site_name" content="ts-jest" />
+<script type="application/ld+json">
+{"description":"ts-jest is a TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript.","headline":"Installing ts-jest","@type":"WebPage","url":"/ts-jest/user/install.html","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/ts-jest/assets/css/main.css"><link type="application/atom+xml" rel="alternate" href="/ts-jest/feed.xml" title="ts-jest" /><script src="/ts-jest/assets/js/bootstrap/jquery.min.js"></script>
+  <script src="/ts-jest/assets/js/bootstrap/bootstrap.bundle.min.js"></script>
+</head>
+<body><nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container">
+    <a class="navbar-brand"
+    href="/ts-jest/">
+      <!--img width="30" height="30"
+           class="d-inline-block align-top"
+           src="/ts-jest/assets/img/logo.png"
+           alt="ts-jest Logo"-->
+      ts-jest
+    </a>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto">
+  
+  
+    
+    
+    
+      <li class="nav-item dropdown active">
+        <a href="/ts-jest/user"
+           class="nav-link dropdown-toggle"
+           data-toggle="dropdown"
+           role="button"
+           aria-haspopup="true"
+           aria-expanded="false">
+           User Documentation
+        </a>
+        <div class="dropdown-menu">
+          
+            
+              <a href="/ts-jest/user/install"
+                 class="dropdown-item">
+                 Installation
+              </a>
+            
+          
+            
+              <a href="/ts-jest/user/config"
+                 class="dropdown-item">
+                 Configuration
+              </a>
+            
+          
+            
+              <a href="/ts-jest/user/test-helpers"
+                 class="dropdown-item">
+                 Test helpers
+              </a>
+            
+          
+            
+              <a href="/ts-jest/user/react-native"
+                 class="dropdown-item">
+                 React Native
+              </a>
+            
+          
+            
+              <a href="/ts-jest/user/babel7-or-ts"
+                 class="dropdown-item">
+                 Babel7 or TypeScript
+              </a>
+            
+          
+        </div>
+      </li>
+    
+  
+    
+    
+    
+      <li class="nav-item dropdown ">
+        <a href="/ts-jest/tech"
+           class="nav-link dropdown-toggle"
+           data-toggle="dropdown"
+           role="button"
+           aria-haspopup="true"
+           aria-expanded="false">
+           Contributor Reference
+        </a>
+        <div class="dropdown-menu">
+          
+            
+              <a href="/ts-jest/tech/process"
+                 class="dropdown-item">
+                 Processing
+              </a>
+            
+          
+            
+              <a href="/ts-jest/tech/e2e"
+                 class="dropdown-item">
+                 E2E Testing
+              </a>
+            
+          
+        </div>
+      </li>
+    
+  
+  <li class="nav-item">
+    <a class="nav-link inverse"
+       href="https://github.com/kulshekhar/ts-jest">Fork me <span class="fab fa-github"></span></a>
+  </li>
+</ul>
+
+    </div>
+  </div>
+</nav>
+<div class="py-5">
+      <div class="container page-content">
+          <article>
+
+  <header>
+    <h1>Installing ts-jest</h1>
+  </header>
+
+  <section>
+    <p><code class="language-plaintext highlighter-rouge">ts-jest</code> is a Typescript preprocessor for Jest pre-processor. You’ll need both Jest and TypeScript installed inside your project.</p>
+
+<blockquote>
+  <p>Tip: If you get an error with the following <code class="language-plaintext highlighter-rouge">npm</code> commands such as <code class="language-plaintext highlighter-rouge">npx: command not found</code>, you can replace <code class="language-plaintext highlighter-rouge">npx XXX</code> with <code class="language-plaintext highlighter-rouge">node node_modules/.bin/XXX</code> from the root of your project.</p>
+</blockquote>
+
+<h2 id="dependencies">Dependencies</h2>
+
+<p>You can install <code class="language-plaintext highlighter-rouge">ts-jest</code> and dependencies all at once with the following commands.</p>
+
+<div class="row"><div class="col-md-6">
+    <p>Using <code class="language-plaintext highlighter-rouge">npm</code>:</p>
+
+    <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm <span class="nb">install</span> <span class="nt">--save-dev</span> jest typescript ts-jest @types/jest
+</code></pre></div>    </div>
+
+  </div><div class="col-md-6">
+
+    <p>Using <code class="language-plaintext highlighter-rouge">yarn</code>:</p>
+
+    <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>yarn add <span class="nt">--dev</span> jest typescript ts-jest @types/jest
+</code></pre></div>    </div>
+
+  </div></div>
+
+<h2 id="jest-config-file">Jest config file</h2>
+
+<h3 id="creating">Creating</h3>
+
+<p>By default Jest can run without any config files, but it will not compile <code class="language-plaintext highlighter-rouge">.ts</code> files.
+To make it transpile TypeScript with <code class="language-plaintext highlighter-rouge">ts-jest</code>, we will need to create a configuration file.</p>
+
+<p><code class="language-plaintext highlighter-rouge">ts-jest</code> can create the configuration file for you automatically:</p>
+<div class="row"><div class="col-md-6">
+
+    <p>Using <code class="language-plaintext highlighter-rouge">npm</code>:</p>
+
+    <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npx ts-jest config:init
+</code></pre></div>    </div>
+
+  </div><div class="col-md-6">
+
+    <p>Using <code class="language-plaintext highlighter-rouge">yarn</code>:</p>
+
+    <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>yarn ts-jest config:init
+</code></pre></div>    </div>
+
+  </div></div>
+
+<p>This will create a basic Jest configuration file which will make Jest know about your <code class="language-plaintext highlighter-rouge">.ts</code> files and handle them correctly.</p>
+
+<p>You can also use the <code class="language-plaintext highlighter-rouge">jest --init</code> command (prefixed with either <code class="language-plaintext highlighter-rouge">npx</code> or <code class="language-plaintext highlighter-rouge">yarn</code> depending on what you’re using) to have more options related to Jest.
+However, answer <code class="language-plaintext highlighter-rouge">no</code> to the Jest question about whether or not to enable Typescript. Instead, add the line: <code class="language-plaintext highlighter-rouge">preset: "ts-jest"</code> to the <code class="language-plaintext highlighter-rouge">jest.config.js</code> file afterwards.</p>
+
+<h3 id="customizing">Customizing</h3>
+
+<p>For customizing jest, please follow their <a href="https://jestjs.io/docs/en/configuration.html">official guide online</a>.</p>
+
+<p><code class="language-plaintext highlighter-rouge">ts-jest</code> specific options can be found <a href="config">here</a>.</p>
+
+  </section>
+
+</article>
+
+      </div>
+    </div><div class="py-1 bg-light">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm text-right">
+        <a href="https://github.com/kulshekhar/ts-jest/tree/master/docs/user/install.md">
+          edit this page <i class="far fa-edit"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--div class="py-5 border-top">
+  <div class="container">
+
+    <p class="h5 mb-3">ts-jest</p>
+
+    <div class="row">
+
+      <div class="col-sm">
+        <ul class="list-unstyled">
+          <li>ts-jest</li></ul>
+      </div>
+
+
+      <div class="col-sm text-right">
+        <p>`ts-jest` is a TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript.</p>
+      </div>
+
+    </div>
+
+  </div>
+</div-->
+<script src="/ts-jest/assets/js/bootstrap-additions.js"></script>
+<script src="/ts-jest/assets/js/anchors.js"></script>
+</body>
+
+</html>
