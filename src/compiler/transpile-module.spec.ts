@@ -4,6 +4,7 @@ import { removeSync, writeFileSync } from 'fs-extra'
 import { makeCompiler } from '../__helpers__/fakers'
 import { logTargetMock } from '../__helpers__/mocks'
 import ProcessedSource from '../__helpers__/processed-source'
+import { TS_JEST_OUT_DIR } from '../config/config-set'
 
 const logTarget = logTargetMock()
 
@@ -42,7 +43,7 @@ describe('transpile module with isolatedModule: true', () => {
   it('should compile js file for allowJs true', () => {
     const fileName = `${__filename}.test.js`
     const compiler = makeCompiler({
-      tsJestConfig: { ...baseTsJestConfig, tsConfig: { allowJs: true, outDir: '$$ts-jest$$' } },
+      tsJestConfig: { ...baseTsJestConfig, tsConfig: { allowJs: true, outDir: TS_JEST_OUT_DIR } },
     })
     const source = 'export default 42'
 

@@ -15,7 +15,7 @@ import { getPackageVersion } from '../util/get-package-version'
 import { normalizeSlashes } from '../util/normalize-slashes'
 import { mocked } from '../util/testing'
 
-import { ConfigSet, IGNORE_DIAGNOSTIC_CODES, MATCH_NOTHING } from './config-set'
+import { ConfigSet, IGNORE_DIAGNOSTIC_CODES, MATCH_NOTHING, TS_JEST_OUT_DIR } from './config-set'
 
 jest.mock('../util/backports')
 jest.mock('../index')
@@ -460,6 +460,10 @@ describe('typescript', () => {
       module: ts.ModuleKind.CommonJS,
       inlineSources: true,
     })
+  })
+
+  it('should include default outDir $$ts-jest$$ when allowJs is enabled and no outDir from config', () => {
+    expect(get(void 0, { tsConfig: { allowJs: true } }).options.outDir).toBe(TS_JEST_OUT_DIR)
   })
 
   it('should be able to read extends', () => {

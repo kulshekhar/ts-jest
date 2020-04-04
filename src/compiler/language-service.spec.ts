@@ -60,10 +60,25 @@ describe('language service', () => {
     removeSync(fileName)
   })
 
-  it('should compile js file for allowJs true', () => {
-    const fileName = `test-allow-js.js`
+  it('should compile js file for allowJs true with outDir', () => {
+    const fileName = `test-allow-js-with-outDir.js`
     const compiler = makeCompiler({
-      tsJestConfig: { tsConfig: { allowJs: true, outDir: '$$ts-jest$$' } },
+      tsJestConfig: { tsConfig: { allowJs: true, outDir: '$$foo$$' } },
+    })
+    const source = 'export default 42'
+
+    writeFileSync(fileName, source, 'utf8')
+    const compiled = compiler.compile(source, fileName)
+
+    expect(new ProcessedSource(compiled, fileName)).toMatchSnapshot()
+
+    removeSync(fileName)
+  })
+
+  it('should compile js file for allowJs true without outDir', () => {
+    const fileName = `test-allow-js-no-outDir.js`
+    const compiler = makeCompiler({
+      tsJestConfig: { tsConfig: { allowJs: true } },
     })
     const source = 'export default 42'
 
