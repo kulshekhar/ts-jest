@@ -68,7 +68,7 @@ exports[`using babel-jest for js files should pass using template "with-typescri
   ================================================================================
 `;
 
-exports[`using ts-jest for js files should pass using template "default" 1`] = `
+exports[`using ts-jest for js files with outDir should pass using template "default" 1`] = `
   √ jest
   ↳ exit code: 0
   ===[ STDOUT ]===================================================================
@@ -85,7 +85,7 @@ exports[`using ts-jest for js files should pass using template "default" 1`] = `
   ================================================================================
 `;
 
-exports[`using ts-jest for js files should pass using template "with-babel-7" 1`] = `
+exports[`using ts-jest for js files with outDir should pass using template "with-babel-7" 1`] = `
   √ jest
   ↳ exit code: 0
   ===[ STDOUT ]===================================================================
@@ -102,7 +102,7 @@ exports[`using ts-jest for js files should pass using template "with-babel-7" 1`
   ================================================================================
 `;
 
-exports[`using ts-jest for js files should pass using template "with-babel-7-string-config" 1`] = `
+exports[`using ts-jest for js files with outDir should pass using template "with-babel-7-string-config" 1`] = `
   √ jest
   ↳ exit code: 0
   ===[ STDOUT ]===================================================================
@@ -119,7 +119,75 @@ exports[`using ts-jest for js files should pass using template "with-babel-7-str
   ================================================================================
 `;
 
-exports[`using ts-jest for js files should pass using template "with-typescript-2-7" 1`] = `
+exports[`using ts-jest for js files with outDir should pass using template "with-typescript-2-7" 1`] = `
+  √ jest
+  ↳ exit code: 0
+  ===[ STDOUT ]===================================================================
+  
+  ===[ STDERR ]===================================================================
+  PASS ./esm.spec.js
+    √ esm
+  
+  Test Suites: 1 passed, 1 total
+  Tests:       1 passed, 1 total
+  Snapshots:   0 total
+  Time:        XXs
+  Ran all test suites.
+  ================================================================================
+`;
+
+exports[`using ts-jest for js files without outDir should pass using template "default" 1`] = `
+  √ jest
+  ↳ exit code: 0
+  ===[ STDOUT ]===================================================================
+  
+  ===[ STDERR ]===================================================================
+  PASS ./esm.spec.js
+    √ esm
+  
+  Test Suites: 1 passed, 1 total
+  Tests:       1 passed, 1 total
+  Snapshots:   0 total
+  Time:        XXs
+  Ran all test suites.
+  ================================================================================
+`;
+
+exports[`using ts-jest for js files without outDir should pass using template "with-babel-7" 1`] = `
+  √ jest
+  ↳ exit code: 0
+  ===[ STDOUT ]===================================================================
+  
+  ===[ STDERR ]===================================================================
+  PASS ./esm.spec.js
+    √ esm
+  
+  Test Suites: 1 passed, 1 total
+  Tests:       1 passed, 1 total
+  Snapshots:   0 total
+  Time:        XXs
+  Ran all test suites.
+  ================================================================================
+`;
+
+exports[`using ts-jest for js files without outDir should pass using template "with-babel-7-string-config" 1`] = `
+  √ jest
+  ↳ exit code: 0
+  ===[ STDOUT ]===================================================================
+  
+  ===[ STDERR ]===================================================================
+  PASS ./esm.spec.js
+    √ esm
+  
+  Test Suites: 1 passed, 1 total
+  Tests:       1 passed, 1 total
+  Snapshots:   0 total
+  Time:        XXs
+  Ran all test suites.
+  ================================================================================
+`;
+
+exports[`using ts-jest for js files without outDir should pass using template "with-typescript-2-7" 1`] = `
   √ jest
   ↳ exit code: 0
   ===[ STDOUT ]===================================================================

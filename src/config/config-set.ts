@@ -70,6 +70,10 @@ export const IGNORE_DIAGNOSTIC_CODES = [
   18002, // "The 'files' list in config file is empty."
   18003, // "No inputs were found in config file."
 ]
+/**
+ * @internal
+ */
+export const TS_JEST_OUT_DIR = '$$ts-jest$$'
 
 /**
  * @internal
@@ -584,7 +588,7 @@ export class ConfigSet {
       inlineSources: true,
       // we don't want to create declaration files
       declaration: false,
-      noEmit: false,
+      noEmit: false, // set to true will make compiler API not emit any compiled results.
       // else istanbul related will be dropped
       removeComments: false,
       // to clear out else it's buggy
@@ -777,6 +781,10 @@ export class ConfigSet {
       if (!('allowSyntheticDefaultImports' in config.compilerOptions)) {
         finalOptions.allowSyntheticDefaultImports = true
       }
+    }
+    // Make sure when allowJs is enabled, outDir is required to have when using allowJs: true
+    if (finalOptions.allowJs && !finalOptions.outDir) {
+      finalOptions.outDir = TS_JEST_OUT_DIR
     }
 
     // ensure undefined are removed and other values are overridden
