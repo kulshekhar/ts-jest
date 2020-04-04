@@ -4,10 +4,10 @@
   "private": true,
   "devDependencies": {
     "@babel/core": "7.9.0",
-    "@types/jest": "25.1.4",
-    "@types/node": "12.12.32",
-    "babel-jest": "25.2.4",
-    "jest": "25.2.4",
+    "@types/jest": "25.1.5",
+    "@types/node": "12.12.34",
+    "babel-jest": "25.2.6",
+    "jest": "25.2.7",
     "typescript": "3.8.3"
   },
   "wantedDependencies": {
