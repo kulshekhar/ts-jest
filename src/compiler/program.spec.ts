@@ -108,36 +108,83 @@ describe('cache', () => {
 })
 
 describe('allowJs', () => {
-  const fileName = 'test-allowJs.test.js'
+  const baseFileName = 'test-allowJs'
+  const baseFileExt = 'test.js'
   const source = 'export default 42'
-  const tsConfig = { allowJs: true, outDir: '$$ts-jest$$' }
+  const tsConfig = { allowJs: true }
 
-  beforeAll(() => {
-    writeFileSync(fileName, source, 'utf8')
-  })
+  describe(`with program`, () => {
+    it('should compile js file for allowJs true with outDir', () => {
+      const fileName = `${baseFileName}-program-outDir.${baseFileExt}`
+      writeFileSync(fileName, source, 'utf8')
+      const compiler = makeCompiler({
+        tsJestConfig: {
+          ...baseTsJestConfig,
+          incremental: false,
+          tsConfig: {
+            ...tsConfig,
+            outDir: '$$foo$$',
+          },
+        },
+      })
 
-  afterAll(() => {
-    removeSync(fileName)
-  })
+      const compiled = compiler.compile(source, fileName)
 
-  it('should compile js file for allowJs true with normal program', () => {
-    const compiler = makeCompiler({
-      tsJestConfig: { ...baseTsJestConfig, incremental: false, tsConfig },
+      expect(new ProcessedSource(compiled, fileName)).toMatchSnapshot()
+
+      removeSync(fileName)
     })
 
-    const compiled = compiler.compile(source, fileName)
+    it('should compile js file for allowJs true without outDir', () => {
+      const fileName = `${baseFileName}-program-no-outDir.${baseFileExt}`
+      writeFileSync(fileName, source, 'utf8')
+      const compiler = makeCompiler({
+        tsJestConfig: { ...baseTsJestConfig, incremental: false, tsConfig },
+      })
 
-    expect(new ProcessedSource(compiled, fileName)).toMatchSnapshot()
+      const compiled = compiler.compile(source, fileName)
+
+      expect(new ProcessedSource(compiled, fileName)).toMatchSnapshot()
+
+      removeSync(fileName)
+    })
   })
 
-  it('should compile js file for allowJs true with incremental program', () => {
-    const compiler = makeCompiler({
-      tsJestConfig: { ...baseTsJestConfig, incremental: true, tsConfig },
+  describe(`with incremental program`, () => {
+    it('should compile js file for allowJs true with outDir', () => {
+      const fileName = `${baseFileName}-incremental-outDir.${baseFileExt}`
+      writeFileSync(fileName, source, 'utf8')
+      const compiler = makeCompiler({
+        tsJestConfig: {
+          ...baseTsJestConfig,
+          incremental: true,
+          tsConfig: {
+            ...tsConfig,
+            outDir: '$$foo$$',
+          },
+        },
+      })
+
+      const compiled = compiler.compile(source, fileName)
+
+      expect(new ProcessedSource(compiled, fileName)).toMatchSnapshot()
+
+      removeSync(fileName)
     })
 
-    const compiled = compiler.compile(source, fileName)
+    it('should compile js file for allowJs true without outDir', () => {
+      const fileName = `${baseFileName}-incremental-no-outDir.${baseFileExt}`
+      writeFileSync(fileName, source, 'utf8')
+      const compiler = makeCompiler({
+        tsJestConfig: { ...baseTsJestConfig, incremental: true, tsConfig },
+      })
 
-    expect(new ProcessedSource(compiled, fileName)).toMatchSnapshot()
+      const compiled = compiler.compile(source, fileName)
+
+      expect(new ProcessedSource(compiled, fileName)).toMatchSnapshot()
+
+      removeSync(fileName)
+    })
   })
 })
 

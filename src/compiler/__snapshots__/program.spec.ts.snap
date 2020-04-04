@@ -1,35 +1,71 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`allowJs should compile js file for allowJs true with incremental program 1`] = `
-  ===[ FILE: test-allowJs.test.js ]===============================================
+exports[`allowJs with incremental program should compile js file for allowJs true with outDir 1`] = `
+  ===[ FILE: test-allowJs-incremental-outDir.test.js ]============================
   "use strict";
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.default = 42;
-  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoidGVzdC1hbGxvd0pzLnRlc3QuanMiLCJtYXBwaW5ncyI6Ijs7QUFBQSxrQkFBZSxFQUFFLENBQUEiLCJuYW1lcyI6W10sInNvdXJjZXMiOlsidGVzdC1hbGxvd0pzLnRlc3QuanMiXSwic291cmNlc0NvbnRlbnQiOlsiZXhwb3J0IGRlZmF1bHQgNDIiXSwidmVyc2lvbiI6M30=
+  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoidGVzdC1hbGxvd0pzLWluY3JlbWVudGFsLW91dERpci50ZXN0LmpzIiwibWFwcGluZ3MiOiI7O0FBQUEsa0JBQWUsRUFBRSxDQUFBIiwibmFtZXMiOltdLCJzb3VyY2VzIjpbInRlc3QtYWxsb3dKcy1pbmNyZW1lbnRhbC1vdXREaXIudGVzdC5qcyJdLCJzb3VyY2VzQ29udGVudCI6WyJleHBvcnQgZGVmYXVsdCA0MiJdLCJ2ZXJzaW9uIjozfQ==
   ===[ INLINE SOURCE MAPS ]=======================================================
-  file: test-allowJs.test.js
+  file: test-allowJs-incremental-outDir.test.js
   mappings: ';;AAAA,kBAAe,EAAE,CAAA'
   names: []
   sources:
-    - test-allowJs.test.js
+    - test-allowJs-incremental-outDir.test.js
   sourcesContent:
     - export default 42
   version: 3
   ================================================================================
 `;
 
-exports[`allowJs should compile js file for allowJs true with normal program 1`] = `
-  ===[ FILE: test-allowJs.test.js ]===============================================
+exports[`allowJs with incremental program should compile js file for allowJs true without outDir 1`] = `
+  ===[ FILE: test-allowJs-incremental-no-outDir.test.js ]=========================
   "use strict";
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.default = 42;
-  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoidGVzdC1hbGxvd0pzLnRlc3QuanMiLCJtYXBwaW5ncyI6Ijs7QUFBQSxrQkFBZSxFQUFFLENBQUEiLCJuYW1lcyI6W10sInNvdXJjZXMiOlsidGVzdC1hbGxvd0pzLnRlc3QuanMiXSwic291cmNlc0NvbnRlbnQiOlsiZXhwb3J0IGRlZmF1bHQgNDIiXSwidmVyc2lvbiI6M30=
+  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoidGVzdC1hbGxvd0pzLWluY3JlbWVudGFsLW5vLW91dERpci50ZXN0LmpzIiwibWFwcGluZ3MiOiI7O0FBQUEsa0JBQWUsRUFBRSxDQUFBIiwibmFtZXMiOltdLCJzb3VyY2VzIjpbInRlc3QtYWxsb3dKcy1pbmNyZW1lbnRhbC1uby1vdXREaXIudGVzdC5qcyJdLCJzb3VyY2VzQ29udGVudCI6WyJleHBvcnQgZGVmYXVsdCA0MiJdLCJ2ZXJzaW9uIjozfQ==
   ===[ INLINE SOURCE MAPS ]=======================================================
-  file: test-allowJs.test.js
+  file: test-allowJs-incremental-no-outDir.test.js
   mappings: ';;AAAA,kBAAe,EAAE,CAAA'
   names: []
   sources:
-    - test-allowJs.test.js
+    - test-allowJs-incremental-no-outDir.test.js
+  sourcesContent:
+    - export default 42
+  version: 3
+  ================================================================================
+`;
+
+exports[`allowJs with program should compile js file for allowJs true with outDir 1`] = `
+  ===[ FILE: test-allowJs-program-outDir.test.js ]================================
+  "use strict";
+  Object.defineProperty(exports, "__esModule", { value: true });
+  exports.default = 42;
+  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoidGVzdC1hbGxvd0pzLXByb2dyYW0tb3V0RGlyLnRlc3QuanMiLCJtYXBwaW5ncyI6Ijs7QUFBQSxrQkFBZSxFQUFFLENBQUEiLCJuYW1lcyI6W10sInNvdXJjZXMiOlsidGVzdC1hbGxvd0pzLXByb2dyYW0tb3V0RGlyLnRlc3QuanMiXSwic291cmNlc0NvbnRlbnQiOlsiZXhwb3J0IGRlZmF1bHQgNDIiXSwidmVyc2lvbiI6M30=
+  ===[ INLINE SOURCE MAPS ]=======================================================
+  file: test-allowJs-program-outDir.test.js
+  mappings: ';;AAAA,kBAAe,EAAE,CAAA'
+  names: []
+  sources:
+    - test-allowJs-program-outDir.test.js
+  sourcesContent:
+    - export default 42
+  version: 3
+  ================================================================================
+`;
+
+exports[`allowJs with program should compile js file for allowJs true without outDir 1`] = `
+  ===[ FILE: test-allowJs-program-no-outDir.test.js ]=============================
+  "use strict";
+  Object.defineProperty(exports, "__esModule", { value: true });
+  exports.default = 42;
+  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoidGVzdC1hbGxvd0pzLXByb2dyYW0tbm8tb3V0RGlyLnRlc3QuanMiLCJtYXBwaW5ncyI6Ijs7QUFBQSxrQkFBZSxFQUFFLENBQUEiLCJuYW1lcyI6W10sInNvdXJjZXMiOlsidGVzdC1hbGxvd0pzLXByb2dyYW0tbm8tb3V0RGlyLnRlc3QuanMiXSwic291cmNlc0NvbnRlbnQiOlsiZXhwb3J0IGRlZmF1bHQgNDIiXSwidmVyc2lvbiI6M30=
+  ===[ INLINE SOURCE MAPS ]=======================================================
+  file: test-allowJs-program-no-outDir.test.js
+  mappings: ';;AAAA,kBAAe,EAAE,CAAA'
+  names: []
+  sources:
+    - test-allowJs-program-no-outDir.test.js
   sourcesContent:
     - export default 42
   version: 3
