@@ -23,6 +23,7 @@ export function getResolvedModulesCache(cachedir: string): string {
  */
 export function cacheResolvedModules(
   fileName: string,
+  fileContent: string,
   memoryCache: MemoryCache,
   program: _ts.Program,
   cacheDir: string,
@@ -36,7 +37,8 @@ export function cacheResolvedModules(
   if (importReferences.length) {
     logger.debug({ fileName }, `cacheResolvedModules(): get resolved modules of test file ${fileName}`)
 
-    memoryCache.resolvedModules[fileName] = importReferences
+    memoryCache.resolvedModules[fileName] = Object.create(null)
+    memoryCache.resolvedModules[fileName].modulePaths = importReferences
       .filter((importReference: any) => importReference.parent.parent.resolvedModules?.get(importReference.text))
       .map((importReference: any) => {
         return normalize(
@@ -45,6 +47,7 @@ export function cacheResolvedModules(
         )
       })
       .reduce((a: any, b: any) => a.concat(b), [])
+    memoryCache.resolvedModules[fileName].testFileContent = fileContent
     writeFileSync(getResolvedModulesCache(cacheDir), JSON.stringify(memoryCache.resolvedModules))
   }
 }

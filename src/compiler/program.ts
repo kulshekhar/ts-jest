@@ -169,7 +169,7 @@ export const compileUsingProgram = (configs: ConfigSet, logger: Logger, memoryCa
       /* istanbul ignore next (covered by e2e) */
       if (cacheDir) {
         if (micromatch.isMatch(normalizedFileName, configs.testMatchPatterns)) {
-          cacheResolvedModules(normalizedFileName, memoryCache, program, cacheDir, logger)
+          cacheResolvedModules(normalizedFileName, code, memoryCache, program, cacheDir, logger)
         } else {
           /* istanbul ignore next (covered by e2e) */
           Object.entries(memoryCache.resolvedModules)
@@ -180,7 +180,7 @@ export const compileUsingProgram = (configs: ConfigSet, logger: Logger, memoryCa
                * test file for 1st time run after clearing cache because
                */
               return (
-                entry[1].find(modulePath => modulePath === normalizedFileName) &&
+                entry[1].modulePaths.find(modulePath => modulePath === normalizedFileName) &&
                 !hasOwn.call(memoryCache.outputs, entry[0])
               )
             })

@@ -40,7 +40,7 @@ export const compileUsingLanguageService = (
   }
   let projectVersion = 1
   // Set the file contents into cache.
-  const updateMemoryCache = (contents: string | undefined, fileName: string) => {
+  const updateMemoryCache = (contents: string, fileName: string) => {
     logger.debug({ fileName }, `updateMemoryCache(): update memory cache for language service`)
 
     let shouldIncrementProjectVersion = false
@@ -123,7 +123,7 @@ export const compileUsingLanguageService = (
       /* istanbul ignore next (covered by e2e) */
       if (cacheDir) {
         if (micromatch.isMatch(normalizedFileName, configs.testMatchPatterns)) {
-          cacheResolvedModules(normalizedFileName, memoryCache, service.getProgram()!, cacheDir, logger)
+          cacheResolvedModules(normalizedFileName, code, memoryCache, service.getProgram()!, cacheDir, logger)
         } else {
           /* istanbul ignore next (covered by e2e) */
           Object.entries(memoryCache.resolvedModules)
@@ -134,7 +134,7 @@ export const compileUsingLanguageService = (
                * test file for 1st time run after clearing cache because
                */
               return (
-                entry[1].find(modulePath => modulePath === normalizedFileName) &&
+                entry[1].modulePaths.find(modulePath => modulePath === normalizedFileName) &&
                 !hasOwn.call(memoryCache.outputs, entry[0])
               )
             })
@@ -144,7 +144,7 @@ export const compileUsingLanguageService = (
               )
 
               const testFileName = entry[0]
-              updateMemoryCache(ts.sys.readFile(testFileName), testFileName)
+              updateMemoryCache(entry[1].testFileContent, testFileName)
               doTypeChecking(configs, testFileName, service, logger)
             })
         }

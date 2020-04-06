@@ -203,7 +203,12 @@ export interface MemoryCache {
   contents: { [filePath: string]: string | undefined }
   versions: { [filePath: string]: number }
   outputs: { [filePath: string]: string }
-  resolvedModules: { [testFilePath: string]: string[] }
+  resolvedModules: {
+    [testFilePath: string]: {
+      testFileContent: string
+      modulePaths: string[]
+    }
+  }
 }
 /**
  * @internal
