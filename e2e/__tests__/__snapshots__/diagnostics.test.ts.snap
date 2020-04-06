@@ -14,8 +14,8 @@ exports[`With diagnostics throw using incremental program first throw should fai
       3 export const thing: Thing = { a: 1 };
                      ~~~~~
   
-        main.ts:1:34
-          1 export type Thing = { a: number, b: number }
+        main.ts:2:34
+          2 export type Thing = { a: number, b: number }
                                              ~
           'b' is declared here.
   
@@ -41,8 +41,8 @@ exports[`With diagnostics throw using incremental program first throw should fai
       3 export const thing: Thing = { a: 1 };
                      ~~~~~
   
-        main.ts:1:34
-          1 export type Thing = { a: number, b: number }
+        main.ts:2:34
+          2 export type Thing = { a: number, b: number }
                                              ~
           'b' is declared here.
   
@@ -68,8 +68,8 @@ exports[`With diagnostics throw using incremental program first throw should fai
       3 export const thing: Thing = { a: 1 };
                      ~~~~~
   
-        main.ts:1:34
-          1 export type Thing = { a: number, b: number }
+        main.ts:2:34
+          2 export type Thing = { a: number, b: number }
                                              ~
           'b' is declared here.
   
@@ -81,14 +81,113 @@ exports[`With diagnostics throw using incremental program first throw should fai
   ================================================================================
 `;
 
-exports[`With diagnostics throw using incremental program then passed when content has changed to valid base on cache of the previous run should pass using template "default" 1`] = `
+exports[`With diagnostics throw using incremental program then failed when code has changed to invalid base on cache of the previous run should fail using template "default" 1`] = `
+  × jest
+  ↳ exit code: 1
+  ===[ STDOUT ]===================================================================
+  
+  ===[ STDERR ]===================================================================
+  FAIL ./main.spec.ts
+    × foo is 42
+  
+    ● foo is 42
+  
+      expect(received).toBe(expected) // Object.is equality
+  
+      Expected: 42
+      Received: 43
+  
+        4 | 
+        5 | test('foo is 42', () => {
+      > 6 |   expect(foo).toBe(42);
+          |               ^
+        7 | });
+        8 | 
+  
+        at Object.<anonymous> (main.spec.ts:6:15)
+  
+  Test Suites: 1 failed, 1 total
+  Tests:       1 failed, 1 total
+  Snapshots:   0 total
+  Time:        XXs
+  Ran all test suites.
+  ================================================================================
+`;
+
+exports[`With diagnostics throw using incremental program then failed when code has changed to invalid base on cache of the previous run should fail using template "with-babel-7" 1`] = `
+  × jest
+  ↳ exit code: 1
+  ===[ STDOUT ]===================================================================
+  
+  ===[ STDERR ]===================================================================
+  FAIL ./main.spec.ts
+    × foo is 42
+  
+    ● foo is 42
+  
+      expect(received).toBe(expected) // Object.is equality
+  
+      Expected: 42
+      Received: 43
+  
+        4 | 
+        5 | test('foo is 42', () => {
+      > 6 |   expect(foo).toBe(42);
+          |               ^
+        7 | });
+        8 | 
+  
+        at Object.<anonymous> (main.spec.ts:6:15)
+  
+  Test Suites: 1 failed, 1 total
+  Tests:       1 failed, 1 total
+  Snapshots:   0 total
+  Time:        XXs
+  Ran all test suites.
+  ================================================================================
+`;
+
+exports[`With diagnostics throw using incremental program then failed when code has changed to invalid base on cache of the previous run should fail using template "with-babel-7-string-config" 1`] = `
+  × jest
+  ↳ exit code: 1
+  ===[ STDOUT ]===================================================================
+  
+  ===[ STDERR ]===================================================================
+  FAIL ./main.spec.ts
+    × foo is 42
+  
+    ● foo is 42
+  
+      expect(received).toBe(expected) // Object.is equality
+  
+      Expected: 42
+      Received: 43
+  
+        4 | 
+        5 | test('foo is 42', () => {
+      > 6 |   expect(foo).toBe(42);
+          |               ^
+        7 | });
+        8 | 
+  
+        at Object.<anonymous> (main.spec.ts:6:15)
+  
+  Test Suites: 1 failed, 1 total
+  Tests:       1 failed, 1 total
+  Snapshots:   0 total
+  Time:        XXs
+  Ran all test suites.
+  ================================================================================
+`;
+
+exports[`With diagnostics throw using incremental program then pass when type has changed to valid base on cache of the previous run should pass using template "default" 1`] = `
   √ jest
   ↳ exit code: 0
   ===[ STDOUT ]===================================================================
   
   ===[ STDERR ]===================================================================
   PASS ./main.spec.ts
-    √ should do the thing
+    √ foo is 42
   
   Test Suites: 1 passed, 1 total
   Tests:       1 passed, 1 total
@@ -98,14 +197,14 @@ exports[`With diagnostics throw using incremental program then passed when conte
   ================================================================================
 `;
 
-exports[`With diagnostics throw using incremental program then passed when content has changed to valid base on cache of the previous run should pass using template "with-babel-7" 1`] = `
+exports[`With diagnostics throw using incremental program then pass when type has changed to valid base on cache of the previous run should pass using template "with-babel-7" 1`] = `
   √ jest
   ↳ exit code: 0
   ===[ STDOUT ]===================================================================
   
   ===[ STDERR ]===================================================================
   PASS ./main.spec.ts
-    √ should do the thing
+    √ foo is 42
   
   Test Suites: 1 passed, 1 total
   Tests:       1 passed, 1 total
@@ -115,14 +214,14 @@ exports[`With diagnostics throw using incremental program then passed when conte
   ================================================================================
 `;
 
-exports[`With diagnostics throw using incremental program then passed when content has changed to valid base on cache of the previous run should pass using template "with-babel-7-string-config" 1`] = `
+exports[`With diagnostics throw using incremental program then pass when type has changed to valid base on cache of the previous run should pass using template "with-babel-7-string-config" 1`] = `
   √ jest
   ↳ exit code: 0
   ===[ STDOUT ]===================================================================
   
   ===[ STDERR ]===================================================================
   PASS ./main.spec.ts
-    √ should do the thing
+    √ foo is 42
   
   Test Suites: 1 passed, 1 total
   Tests:       1 passed, 1 total
@@ -189,8 +288,8 @@ exports[`With diagnostics throw using language service first throw should fail u
       3 export const thing: Thing = { a: 1 };
                      ~~~~~
   
-        main.ts:1:34
-          1 export type Thing = { a: number, b: number }
+        main.ts:2:34
+          2 export type Thing = { a: number, b: number }
                                              ~
           'b' is declared here.
   
@@ -216,8 +315,8 @@ exports[`With diagnostics throw using language service first throw should fail u
       3 export const thing: Thing = { a: 1 };
                      ~~~~~
   
-        main.ts:1:34
-          1 export type Thing = { a: number, b: number }
+        main.ts:2:34
+          2 export type Thing = { a: number, b: number }
                                              ~
           'b' is declared here.
   
@@ -243,8 +342,8 @@ exports[`With diagnostics throw using language service first throw should fail u
       3 export const thing: Thing = { a: 1 };
                      ~~~~~
   
-        main.ts:1:34
-          1 export type Thing = { a: number, b: number }
+        main.ts:2:34
+          2 export type Thing = { a: number, b: number }
                                              ~
           'b' is declared here.
   
@@ -279,14 +378,146 @@ exports[`With diagnostics throw using language service first throw should fail u
   ================================================================================
 `;
 
-exports[`With diagnostics throw using language service then passed when content has changed to valid base on cache of the previous run should pass using template "default" 1`] = `
+exports[`With diagnostics throw using language service then fail when code has changed to invalid base on cache of the previous run should fail using template "default" 1`] = `
+  × jest
+  ↳ exit code: 1
+  ===[ STDOUT ]===================================================================
+  
+  ===[ STDERR ]===================================================================
+  FAIL ./main.spec.ts
+    × foo is 42
+  
+    ● foo is 42
+  
+      expect(received).toBe(expected) // Object.is equality
+  
+      Expected: 42
+      Received: 43
+  
+        4 | 
+        5 | test('foo is 42', () => {
+      > 6 |   expect(foo).toBe(42);
+          |               ^
+        7 | });
+        8 | 
+  
+        at Object.<anonymous> (main.spec.ts:6:15)
+  
+  Test Suites: 1 failed, 1 total
+  Tests:       1 failed, 1 total
+  Snapshots:   0 total
+  Time:        XXs
+  Ran all test suites.
+  ================================================================================
+`;
+
+exports[`With diagnostics throw using language service then fail when code has changed to invalid base on cache of the previous run should fail using template "with-babel-7" 1`] = `
+  × jest
+  ↳ exit code: 1
+  ===[ STDOUT ]===================================================================
+  
+  ===[ STDERR ]===================================================================
+  FAIL ./main.spec.ts
+    × foo is 42
+  
+    ● foo is 42
+  
+      expect(received).toBe(expected) // Object.is equality
+  
+      Expected: 42
+      Received: 43
+  
+        4 | 
+        5 | test('foo is 42', () => {
+      > 6 |   expect(foo).toBe(42);
+          |               ^
+        7 | });
+        8 | 
+  
+        at Object.<anonymous> (main.spec.ts:6:15)
+  
+  Test Suites: 1 failed, 1 total
+  Tests:       1 failed, 1 total
+  Snapshots:   0 total
+  Time:        XXs
+  Ran all test suites.
+  ================================================================================
+`;
+
+exports[`With diagnostics throw using language service then fail when code has changed to invalid base on cache of the previous run should fail using template "with-babel-7-string-config" 1`] = `
+  × jest
+  ↳ exit code: 1
+  ===[ STDOUT ]===================================================================
+  
+  ===[ STDERR ]===================================================================
+  FAIL ./main.spec.ts
+    × foo is 42
+  
+    ● foo is 42
+  
+      expect(received).toBe(expected) // Object.is equality
+  
+      Expected: 42
+      Received: 43
+  
+        4 | 
+        5 | test('foo is 42', () => {
+      > 6 |   expect(foo).toBe(42);
+          |               ^
+        7 | });
+        8 | 
+  
+        at Object.<anonymous> (main.spec.ts:6:15)
+  
+  Test Suites: 1 failed, 1 total
+  Tests:       1 failed, 1 total
+  Snapshots:   0 total
+  Time:        XXs
+  Ran all test suites.
+  ================================================================================
+`;
+
+exports[`With diagnostics throw using language service then fail when code has changed to invalid base on cache of the previous run should fail using template "with-typescript-2-7" 1`] = `
+  × jest
+  ↳ exit code: 1
+  ===[ STDOUT ]===================================================================
+  
+  ===[ STDERR ]===================================================================
+  FAIL ./main.spec.ts
+    × foo is 42
+  
+    ● foo is 42
+  
+      expect(received).toBe(expected) // Object.is equality
+  
+      Expected: 42
+      Received: 43
+  
+        4 | 
+        5 | test('foo is 42', () => {
+      > 6 |   expect(foo).toBe(42);
+          |               ^
+        7 | });
+        8 | 
+  
+        at Object.<anonymous> (main.spec.ts:6:15)
+  
+  Test Suites: 1 failed, 1 total
+  Tests:       1 failed, 1 total
+  Snapshots:   0 total
+  Time:        XXs
+  Ran all test suites.
+  ================================================================================
+`;
+
+exports[`With diagnostics throw using language service then pass when type has changed to valid base on cache of the previous run should pass using template "default" 1`] = `
   √ jest
   ↳ exit code: 0
   ===[ STDOUT ]===================================================================
   
   ===[ STDERR ]===================================================================
   PASS ./main.spec.ts
-    √ should do the thing
+    √ foo is 42
   
   Test Suites: 1 passed, 1 total
   Tests:       1 passed, 1 total
@@ -296,14 +527,14 @@ exports[`With diagnostics throw using language service then passed when content 
   ================================================================================
 `;
 
-exports[`With diagnostics throw using language service then passed when content has changed to valid base on cache of the previous run should pass using template "with-babel-7" 1`] = `
+exports[`With diagnostics throw using language service then pass when type has changed to valid base on cache of the previous run should pass using template "with-babel-7" 1`] = `
   √ jest
   ↳ exit code: 0
   ===[ STDOUT ]===================================================================
   
   ===[ STDERR ]===================================================================
   PASS ./main.spec.ts
-    √ should do the thing
+    √ foo is 42
   
   Test Suites: 1 passed, 1 total
   Tests:       1 passed, 1 total
@@ -313,14 +544,14 @@ exports[`With diagnostics throw using language service then passed when content 
   ================================================================================
 `;
 
-exports[`With diagnostics throw using language service then passed when content has changed to valid base on cache of the previous run should pass using template "with-babel-7-string-config" 1`] = `
+exports[`With diagnostics throw using language service then pass when type has changed to valid base on cache of the previous run should pass using template "with-babel-7-string-config" 1`] = `
   √ jest
   ↳ exit code: 0
   ===[ STDOUT ]===================================================================
   
   ===[ STDERR ]===================================================================
   PASS ./main.spec.ts
-    √ should do the thing
+    √ foo is 42
   
   Test Suites: 1 passed, 1 total
   Tests:       1 passed, 1 total
@@ -330,14 +561,14 @@ exports[`With diagnostics throw using language service then passed when content 
   ================================================================================
 `;
 
-exports[`With diagnostics throw using language service then passed when content has changed to valid base on cache of the previous run should pass using template "with-typescript-2-7" 1`] = `
+exports[`With diagnostics throw using language service then pass when type has changed to valid base on cache of the previous run should pass using template "with-typescript-2-7" 1`] = `
   √ jest
   ↳ exit code: 0
   ===[ STDOUT ]===================================================================
   
   ===[ STDERR ]===================================================================
   PASS ./main.spec.ts
-    √ should do the thing
+    √ foo is 42
   
   Test Suites: 1 passed, 1 total
   Tests:       1 passed, 1 total
@@ -361,8 +592,8 @@ exports[`With diagnostics throw using program first throw should fail using temp
       3 export const thing: Thing = { a: 1 };
                      ~~~~~
   
-        main.ts:1:34
-          1 export type Thing = { a: number, b: number }
+        main.ts:2:34
+          2 export type Thing = { a: number, b: number }
                                              ~
           'b' is declared here.
   
@@ -388,8 +619,8 @@ exports[`With diagnostics throw using program first throw should fail using temp
       3 export const thing: Thing = { a: 1 };
                      ~~~~~
   
-        main.ts:1:34
-          1 export type Thing = { a: number, b: number }
+        main.ts:2:34
+          2 export type Thing = { a: number, b: number }
                                              ~
           'b' is declared here.
   
@@ -415,8 +646,8 @@ exports[`With diagnostics throw using program first throw should fail using temp
       3 export const thing: Thing = { a: 1 };
                      ~~~~~
   
-        main.ts:1:34
-          1 export type Thing = { a: number, b: number }
+        main.ts:2:34
+          2 export type Thing = { a: number, b: number }
                                              ~
           'b' is declared here.
   
@@ -428,14 +659,113 @@ exports[`With diagnostics throw using program first throw should fail using temp
   ================================================================================
 `;
 
-exports[`With diagnostics throw using program then passed when content has changed to valid base on cache of the previous run should pass using template "default" 1`] = `
+exports[`With diagnostics throw using program then failed when type has changed to invalid base on cache of the previous run should fail using template "default" 1`] = `
+  × jest
+  ↳ exit code: 1
+  ===[ STDOUT ]===================================================================
+  
+  ===[ STDERR ]===================================================================
+  FAIL ./main.spec.ts
+    × foo is 42
+  
+    ● foo is 42
+  
+      expect(received).toBe(expected) // Object.is equality
+  
+      Expected: 42
+      Received: 43
+  
+        4 | 
+        5 | test('foo is 42', () => {
+      > 6 |   expect(foo).toBe(42);
+          |               ^
+        7 | });
+        8 | 
+  
+        at Object.<anonymous> (main.spec.ts:6:15)
+  
+  Test Suites: 1 failed, 1 total
+  Tests:       1 failed, 1 total
+  Snapshots:   0 total
+  Time:        XXs
+  Ran all test suites.
+  ================================================================================
+`;
+
+exports[`With diagnostics throw using program then failed when type has changed to invalid base on cache of the previous run should fail using template "with-babel-7" 1`] = `
+  × jest
+  ↳ exit code: 1
+  ===[ STDOUT ]===================================================================
+  
+  ===[ STDERR ]===================================================================
+  FAIL ./main.spec.ts
+    × foo is 42
+  
+    ● foo is 42
+  
+      expect(received).toBe(expected) // Object.is equality
+  
+      Expected: 42
+      Received: 43
+  
+        4 | 
+        5 | test('foo is 42', () => {
+      > 6 |   expect(foo).toBe(42);
+          |               ^
+        7 | });
+        8 | 
+  
+        at Object.<anonymous> (main.spec.ts:6:15)
+  
+  Test Suites: 1 failed, 1 total
+  Tests:       1 failed, 1 total
+  Snapshots:   0 total
+  Time:        XXs
+  Ran all test suites.
+  ================================================================================
+`;
+
+exports[`With diagnostics throw using program then failed when type has changed to invalid base on cache of the previous run should fail using template "with-babel-7-string-config" 1`] = `
+  × jest
+  ↳ exit code: 1
+  ===[ STDOUT ]===================================================================
+  
+  ===[ STDERR ]===================================================================
+  FAIL ./main.spec.ts
+    × foo is 42
+  
+    ● foo is 42
+  
+      expect(received).toBe(expected) // Object.is equality
+  
+      Expected: 42
+      Received: 43
+  
+        4 | 
+        5 | test('foo is 42', () => {
+      > 6 |   expect(foo).toBe(42);
+          |               ^
+        7 | });
+        8 | 
+  
+        at Object.<anonymous> (main.spec.ts:6:15)
+  
+  Test Suites: 1 failed, 1 total
+  Tests:       1 failed, 1 total
+  Snapshots:   0 total
+  Time:        XXs
+  Ran all test suites.
+  ================================================================================
+`;
+
+exports[`With diagnostics throw using program then pass when type has changed to valid base on cache of the previous run should pass using template "default" 1`] = `
   √ jest
   ↳ exit code: 0
   ===[ STDOUT ]===================================================================
   
   ===[ STDERR ]===================================================================
   PASS ./main.spec.ts
-    √ should do the thing
+    √ foo is 42
   
   Test Suites: 1 passed, 1 total
   Tests:       1 passed, 1 total
@@ -445,14 +775,14 @@ exports[`With diagnostics throw using program then passed when content has chang
   ================================================================================
 `;
 
-exports[`With diagnostics throw using program then passed when content has changed to valid base on cache of the previous run should pass using template "with-babel-7" 1`] = `
+exports[`With diagnostics throw using program then pass when type has changed to valid base on cache of the previous run should pass using template "with-babel-7" 1`] = `
   √ jest
   ↳ exit code: 0
   ===[ STDOUT ]===================================================================
   
   ===[ STDERR ]===================================================================
   PASS ./main.spec.ts
-    √ should do the thing
+    √ foo is 42
   
   Test Suites: 1 passed, 1 total
   Tests:       1 passed, 1 total
@@ -462,14 +792,14 @@ exports[`With diagnostics throw using program then passed when content has chang
   ================================================================================
 `;
 
-exports[`With diagnostics throw using program then passed when content has changed to valid base on cache of the previous run should pass using template "with-babel-7-string-config" 1`] = `
+exports[`With diagnostics throw using program then pass when type has changed to valid base on cache of the previous run should pass using template "with-babel-7-string-config" 1`] = `
   √ jest
   ↳ exit code: 0
   ===[ STDOUT ]===================================================================
   
   ===[ STDERR ]===================================================================
   PASS ./main.spec.ts
-    √ should do the thing
+    √ foo is 42
   
   Test Suites: 1 passed, 1 total
   Tests:       1 passed, 1 total
@@ -533,12 +863,12 @@ exports[`With diagnostics warn only should pass using template "default" 1`] = `
   3 export const thing: Thing = { a: 1 };
                  ~~~~~
   
-    main.ts:1:34
-      1 export type Thing = { a: number, b: number }
+    main.ts:2:34
+      2 export type Thing = { a: number, b: number }
                                          ~
       'b' is declared here.
   PASS ./main.spec.ts
-    √ should do the thing
+    √ foo is 42
   
   Test Suites: 1 passed, 1 total
   Tests:       1 passed, 1 total
@@ -559,12 +889,12 @@ exports[`With diagnostics warn only should pass using template "with-babel-7" 1`
   3 export const thing: Thing = { a: 1 };
                  ~~~~~
   
-    main.ts:1:34
-      1 export type Thing = { a: number, b: number }
+    main.ts:2:34
+      2 export type Thing = { a: number, b: number }
                                          ~
       'b' is declared here.
   PASS ./main.spec.ts
-    √ should do the thing
+    √ foo is 42
   
   Test Suites: 1 passed, 1 total
   Tests:       1 passed, 1 total
@@ -585,12 +915,12 @@ exports[`With diagnostics warn only should pass using template "with-babel-7-str
   3 export const thing: Thing = { a: 1 };
                  ~~~~~
   
-    main.ts:1:34
-      1 export type Thing = { a: number, b: number }
+    main.ts:2:34
+      2 export type Thing = { a: number, b: number }
                                          ~
       'b' is declared here.
   PASS ./main.spec.ts
-    √ should do the thing
+    √ foo is 42
   
   Test Suites: 1 passed, 1 total
   Tests:       1 passed, 1 total
@@ -612,7 +942,7 @@ exports[`With diagnostics warn only should pass using template "with-typescript-
   3 export const thing: Thing = { a: 1 };
                  ~~~~~
   PASS ./main.spec.ts
-    √ should do the thing
+    √ foo is 42
   
   Test Suites: 1 passed, 1 total
   Tests:       1 passed, 1 total

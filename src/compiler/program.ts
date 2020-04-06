@@ -86,19 +86,27 @@ export const compileUsingProgram = (configs: ConfigSet, logger: Logger, memoryCa
   }
   // Read and cache custom transformers.
   const customTransformers = configs.tsCustomTransformers
-  const updateMemoryCache = (code: string, fileName: string): void => {
+  const updateMemoryCache = (contents: string, fileName: string): void => {
     logger.debug({ fileName }, `updateMemoryCache(): update memory cache for ${programDebugText}`)
 
     const sourceFile = incremental ? builderProgram.getSourceFile(fileName) : program.getSourceFile(fileName)
-    if (!hasOwn.call(memoryCache.versions, fileName)) {
+    const fileVersion = memoryCache.versions[fileName] ?? 0
+    const isFileInCache = fileVersion !== 0
+    if (!isFileInCache) {
       memoryCache.versions[fileName] = 1
     }
-    if (memoryCache.contents[fileName] !== code) {
-      memoryCache.contents[fileName] = code
-      memoryCache.versions[fileName] = (memoryCache.versions[fileName] || 0) + 1
+    const previousContents = memoryCache.contents[fileName]
+    // Avoid incrementing cache when nothing has changed.
+    if (previousContents !== contents) {
+      memoryCache.versions[fileName] = fileVersion + 1
+      memoryCache.contents[fileName] = contents
     }
     // Update program when file changes.
-    if (sourceFile === undefined || sourceFile.text !== code || program.isSourceFileFromExternalLibrary(sourceFile)) {
+    if (
+      sourceFile === undefined ||
+      sourceFile.text !== contents ||
+      program.isSourceFileFromExternalLibrary(sourceFile)
+    ) {
       const programOptions = {
         rootNames: Object.keys(memoryCache.versions),
         options,
