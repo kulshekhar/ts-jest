@@ -1,11 +1,11 @@
-import { TransformOptions, TransformedSource, Transformer } from '@jest/transform/build/types'
+import { CacheKeyOptions, TransformOptions, TransformedSource, Transformer } from '@jest/transform/build/types'
 import { Config } from '@jest/types'
 import { Logger } from 'bs-logger'
 import { inspect } from 'util'
 
 import { ConfigSet } from './config/config-set'
 import { TsJestGlobalOptions } from './types'
-import { parse, stringify } from './util/json'
+import { stringify } from './util/json'
 import { JsonableValue } from './util/jsonable-value'
 import { rootLogger } from './util/logger'
 import { Errors, interpolate } from './util/messages'
@@ -58,28 +58,23 @@ export class TsJestTransformer implements Transformer {
   /**
    * Use by e2e, don't mark as internal
    */
-  configsFor(jestConfig: Config.ProjectConfig | string): ConfigSet {
-    let csi: ConfigSetIndexItem | undefined
-    let jestConfigObj: Config.ProjectConfig
-    if (typeof jestConfig === 'string') {
-      csi = TsJestTransformer._configSetsIndex.find(cs => cs.jestConfig.serialized === jestConfig)
-      if (csi) return csi.configSet
-      jestConfigObj = parse(jestConfig)
-    } else {
-      csi = TsJestTransformer._configSetsIndex.find(cs => cs.jestConfig.value === jestConfig)
-      if (csi) return csi.configSet
-      // try to look-it up by stringified version
-      const serialized = stringify(jestConfig)
-      csi = TsJestTransformer._configSetsIndex.find(cs => cs.jestConfig.serialized === serialized)
-      if (csi) {
-        // update the object so that we can find it later
-        // this happens because jest first calls getCacheKey with stringified version of
-        // the config, and then it calls the transformer with the proper object
-        csi.jestConfig.value = jestConfig
-        return csi.configSet
-      }
-      jestConfigObj = jestConfig
+  configsFor(jestConfig: Config.ProjectConfig): ConfigSet {
+    let csi: ConfigSetIndexItem | undefined = TsJestTransformer._configSetsIndex.find(
+      cs => cs.jestConfig.value === jestConfig,
+    )
+    if (csi) return csi.configSet
+    // try to look-it up by stringified version
+    const serialized = stringify(jestConfig)
+    csi = TsJestTransformer._configSetsIndex.find(cs => cs.jestConfig.serialized === serialized)
+    if (csi) {
+      // update the object so that we can find it later
+      // this happens because jest first calls getCacheKey with stringified version of
+      // the config, and then it calls the transformer with the proper object
+      csi.jestConfig.value = jestConfig
+
+      return csi.configSet
     }
+    const jestConfigObj: Config.ProjectConfig = jestConfig
 
     // create the new record in the index
     this.logger.info(`no matching config-set found, creating a new one`)
@@ -161,7 +156,7 @@ export class TsJestTransformer implements Transformer {
    * @see https://github.com/facebook/jest/blob/v23.5.0/packages/jest-runtime/src/script_transformer.js#L61-L90
    * @param fileContent The content of the file
    * @param filePath The full path to the file
-   * @param jestConfigStr The JSON-encoded version of jest config
+   * @param _jestConfigStr The JSON-encoded version of jest config
    * @param transformOptions
    * @param transformOptions.instrument Whether the content will be instrumented by our transformer (always false)
    * @param transformOptions.rootDir Jest current rootDir
@@ -169,12 +164,12 @@ export class TsJestTransformer implements Transformer {
   getCacheKey(
     fileContent: string,
     filePath: string,
-    jestConfigStr: string,
-    transformOptions: { instrument?: boolean; rootDir?: string } = {},
+    _jestConfigStr: string,
+    transformOptions: CacheKeyOptions,
   ): string {
     this.logger.debug({ fileName: filePath, transformOptions }, 'computing cache key for', filePath)
 
-    const configs = this.configsFor(jestConfigStr)
+    const configs = this.configsFor(transformOptions.config)
     // we do not instrument, ensure it is false all the time
     const { instrument = false, rootDir = configs.rootDir } = transformOptions
 

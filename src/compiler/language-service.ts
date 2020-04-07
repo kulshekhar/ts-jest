@@ -1,6 +1,5 @@
 import { LogContexts, LogLevels, Logger } from 'bs-logger'
 import memoize = require('lodash.memoize')
-import micromatch = require('micromatch')
 import { basename, normalize, relative } from 'path'
 import * as _ts from 'typescript'
 
@@ -8,7 +7,7 @@ import { ConfigSet } from '../config/config-set'
 import { CompilerInstance, MemoryCache, SourceOutput } from '../types'
 import { Errors, interpolate } from '../util/messages'
 
-import { cacheResolvedModules, hasOwn } from './compiler-utils'
+import { cacheResolvedModules, hasOwn, isTestFile } from './compiler-utils'
 
 function doTypeChecking(configs: ConfigSet, fileName: string, service: _ts.LanguageService, logger: Logger) {
   if (configs.shouldReportDiagnostic(fileName)) {
@@ -120,9 +119,8 @@ export const compileUsingLanguageService = (
       /**
        * We don't need the following logic with no cache run because no cache always gives correct typing
        */
-      /* istanbul ignore next (covered by e2e) */
       if (cacheDir) {
-        if (micromatch.isMatch(normalizedFileName, configs.testMatchPatterns)) {
+        if (isTestFile(configs.testMatchPatterns, normalizedFileName)) {
           cacheResolvedModules(normalizedFileName, code, memoryCache, service.getProgram()!, cacheDir, logger)
         } else {
           /* istanbul ignore next (covered by e2e) */

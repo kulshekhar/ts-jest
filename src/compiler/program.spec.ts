@@ -1,11 +1,14 @@
 import { LogLevels } from 'bs-logger'
 import { writeFileSync } from 'fs'
 import { removeSync } from 'fs-extra'
+import { normalize } from 'path'
 
 import { makeCompiler } from '../__helpers__/fakers'
 import { logTargetMock } from '../__helpers__/mocks'
 import { tempDir } from '../__helpers__/path'
 import ProcessedSource from '../__helpers__/processed-source'
+
+import * as compilerUtils from './compiler-utils'
 
 const logTarget = logTargetMock()
 
@@ -104,6 +107,82 @@ describe('cache', () => {
     expect(compiled2).toBe(compiled1)
 
     removeSync(fileName)
+  })
+})
+
+describe('cache resolved modules for test file', () => {
+  let spy: jest.SpyInstance
+  const fileName = 'src/__mocks__/main.spec.ts'
+  const source = JSON.stringify(require('../__mocks__/main.spec'))
+
+  describe('with program', () => {
+    beforeEach(() => {
+      // tslint:disable-next-line:no-empty
+      spy = jest.spyOn(compilerUtils, 'cacheResolvedModules').mockImplementationOnce(() => {})
+    })
+
+    afterEach(() => {
+      spy.mockRestore()
+    })
+
+    it('should cache resolved modules for test file with testMatchPatterns from jest config when match', () => {
+      const tmp = tempDir('compiler')
+      const compiler = makeCompiler({
+        jestConfig: { cache: true, cacheDirectory: tmp, testRegex: [/.*\.(spec|test)\.[jt]sx?$/] as any[] },
+        tsJestConfig: { tsConfig: false, compilerHost: true, incremental: false },
+      })
+      compiler.compile(source, fileName)
+
+      expect(spy).toHaveBeenCalled()
+      expect(spy.mock.calls[0][0]).toEqual(normalize(fileName))
+      expect(spy.mock.calls[0][1]).toEqual(source)
+    })
+
+    it(`shouldn't cache resolved modules for test file with testMatchPatterns from jest config when not match`, () => {
+      const tmp = tempDir('compiler')
+      const compiler = makeCompiler({
+        jestConfig: { cache: true, cacheDirectory: tmp, testRegex: [/.*\.(foo|bar)\.[jt]sx?$/] as any[] },
+        tsJestConfig: { tsConfig: false, compilerHost: true, incremental: false },
+      })
+      compiler.compile(source, fileName)
+
+      expect(spy).not.toHaveBeenCalled()
+    })
+  })
+
+  describe('with incremental program', () => {
+    beforeEach(() => {
+      // tslint:disable-next-line:no-empty
+      spy = jest.spyOn(compilerUtils, 'cacheResolvedModules').mockImplementationOnce(() => {})
+    })
+
+    afterEach(() => {
+      spy.mockRestore()
+    })
+
+    it('should cache resolved modules for test file with testMatchPatterns from jest config when match', () => {
+      const tmp = tempDir('compiler')
+      const compiler = makeCompiler({
+        jestConfig: { cache: true, cacheDirectory: tmp, testRegex: [/.*\.(spec|test)\.[jt]sx?$/] as any[] },
+        tsJestConfig: { tsConfig: false, compilerHost: true, incremental: true },
+      })
+      compiler.compile(source, fileName)
+
+      expect(spy).toHaveBeenCalled()
+      expect(spy.mock.calls[0][0]).toEqual(normalize(fileName))
+      expect(spy.mock.calls[0][1]).toEqual(source)
+    })
+
+    it(`shouldn't cache resolved modules for test file with testMatchPatterns from jest config when not match`, () => {
+      const tmp = tempDir('compiler')
+      const compiler = makeCompiler({
+        jestConfig: { cache: true, cacheDirectory: tmp, testRegex: [/.*\.(foo|bar)\.[jt]sx?$/] as any[] },
+        tsJestConfig: { tsConfig: false, compilerHost: true, incremental: true },
+      })
+      compiler.compile(source, fileName)
+
+      expect(spy).not.toHaveBeenCalled()
+    })
   })
 })
 

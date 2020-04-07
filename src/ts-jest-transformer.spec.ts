@@ -1,5 +1,4 @@
 import { Config } from '@jest/types'
-import stringify = require('fast-json-stable-stringify')
 import { sep } from 'path'
 import { ParsedCommandLine } from 'typescript'
 
@@ -10,8 +9,7 @@ import { TsJestTransformer } from './ts-jest-transformer'
 describe('configFor', () => {
   it('should return the same config-set for same values with jest config string is not in configSetsIndex', () => {
     const obj1 = { cwd: '/foo/.', rootDir: '/bar//dummy/..', globals: {} }
-    const str = stringify(obj1)
-    const cs3 = new TsJestTransformer().configsFor(str)
+    const cs3 = new TsJestTransformer().configsFor(obj1 as any)
     expect(cs3.cwd).toBe(`${sep}foo`)
     expect(cs3.rootDir).toBe(`${sep}bar`)
   })
@@ -19,14 +17,11 @@ describe('configFor', () => {
   it('should return the same config-set for same values with jest config string in configSetsIndex', () => {
     const obj1 = { cwd: '/foo/.', rootDir: '/bar//dummy/..', globals: {} }
     const obj2 = { ...obj1 }
-    const str = stringify(obj1)
     const cs1 = new TsJestTransformer().configsFor(obj1 as any)
     const cs2 = new TsJestTransformer().configsFor(obj2 as any)
-    const cs3 = new TsJestTransformer().configsFor(str)
     expect(cs1.cwd).toBe(`${sep}foo`)
     expect(cs1.rootDir).toBe(`${sep}bar`)
     expect(cs2).toBe(cs1)
-    expect(cs3).toBe(cs1)
   })
 })
 
@@ -242,17 +237,16 @@ describe('getCacheKey', () => {
     const tr = new TsJestTransformer()
     jest
       .spyOn(tr, 'configsFor')
-      .mockImplementation(jestConfigStr => (({ cacheKey: jestConfigStr } as unknown) as ConfigSet))
+      .mockImplementation(jestConfigStr => (({ cacheKey: JSON.stringify(jestConfigStr) } as unknown) as ConfigSet))
     const input = {
       fileContent: 'export default "foo"',
       fileName: 'foo.ts',
       jestConfigStr: '{"foo": "bar"}',
-      options: { instrument: false, rootDir: '/foo' },
+      options: { config: { foo: 'bar' } as any, instrument: false, rootDir: '/foo' },
     }
     const keys = [
       tr.getCacheKey(input.fileContent, input.fileName, input.jestConfigStr, input.options),
       tr.getCacheKey(input.fileContent, 'bar.ts', input.jestConfigStr, input.options),
-      tr.getCacheKey(input.fileContent, input.fileName, '{}', input.options),
       tr.getCacheKey(input.fileContent, input.fileName, '{}', { ...input.options, instrument: true }),
       tr.getCacheKey(input.fileContent, input.fileName, '{}', { ...input.options, rootDir: '/bar' }),
     ]

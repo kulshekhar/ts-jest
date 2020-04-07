@@ -186,6 +186,7 @@ export class ConfigSet {
         ...globals['ts-jest'],
       }
     }
+
     this.logger.debug({ jestConfig: config }, 'normalized jest config')
 
     return config
@@ -195,8 +196,8 @@ export class ConfigSet {
    * @internal
    */
   @Memoize()
-  get testMatchPatterns(): string[] {
-    return this.jest.testMatch.concat(this.jest.testRegex)
+  get testMatchPatterns(): [string, RegExp] {
+    return this.jest.testMatch.concat(this.jest.testRegex) as [string, RegExp]
   }
 
   /**

@@ -217,9 +217,9 @@ describe('tsJest', () => {
       expect(cs.tsJest.babelConfig).toBeUndefined()
       expect(cs.babel).toBeUndefined()
       expect(logger.target.lines[2]).toMatchInlineSnapshot(`
-"[level:20] babel is disabled
-"
-`)
+        "[level:20] babel is disabled
+        "
+      `)
     })
 
     it('should be correct for true', () => {
@@ -294,9 +294,9 @@ describe('tsJest', () => {
       expect(cs.tsJest.babelConfig!.kind).toEqual('inline')
       expect(cs.babel).toEqual(expect.objectContaining(babelConfig))
       expect(logger.target.lines[2]).toMatchInlineSnapshot(`
-"[level:20] normalized babel config via ts-jest option
-"
-`)
+        "[level:20] normalized babel config via ts-jest option
+        "
+      `)
     })
 
     it('should be correct for inline config', () => {
@@ -312,9 +312,9 @@ describe('tsJest', () => {
       expect(cs.tsJest.babelConfig!.kind).toEqual('inline')
       expect(cs.babel).toEqual(expect.objectContaining(CONFIG))
       expect(logger.target.lines[2]).toMatchInlineSnapshot(`
-"[level:20] normalized babel config via ts-jest option
-"
-`)
+        "[level:20] normalized babel config via ts-jest option
+        "
+      `)
     })
   }) // babelConfig
 
@@ -425,15 +425,15 @@ describe('makeDiagnostic', () => {
   it('should set category', () => {
     expect(cs.makeDiagnostic(4321, 'foo might be bar', { category: ts.DiagnosticCategory.Error }))
       .toMatchInlineSnapshot(`
-Object {
-  "category": 1,
-  "code": 4321,
-  "file": undefined,
-  "length": undefined,
-  "messageText": "foo might be bar",
-  "start": undefined,
-}
-`)
+      Object {
+        "category": 1,
+        "code": 4321,
+        "file": undefined,
+        "length": undefined,
+        "messageText": "foo might be bar",
+        "start": undefined,
+      }
+    `)
   })
 }) // makeDiagnostic
 
@@ -494,9 +494,9 @@ describe('typescript', () => {
       esModuleInterop: false,
     })
     expect(target.lines.warn.join()).toMatchInlineSnapshot(`
-"[level:40] message TS151001: If you have issues related to imports, you should consider setting \`esModuleInterop\` to \`true\` in your TypeScript configuration file (usually \`tsconfig.json\`). See https://blogs.msdn.microsoft.com/typescript/2018/01/31/announcing-typescript-2-7/#easier-ecmascript-module-interoperability for more information.
-"
-`)
+      "[level:40] message TS151001: If you have issues related to imports, you should consider setting \`esModuleInterop\` to \`true\` in your TypeScript configuration file (usually \`tsconfig.json\`). See https://blogs.msdn.microsoft.com/typescript/2018/01/31/announcing-typescript-2-7/#easier-ecmascript-module-interoperability for more information.
+      "
+    `)
   })
 
   it('should not warn neither set synth. default imports if using babel', () => {
@@ -976,11 +976,11 @@ describe('raiseDiagnostics', () => {
       expect(() => raiseDiagnostics([])).not.toThrow()
       expect(() => raiseDiagnostics([makeDiagnostic()])).not.toThrow()
       expect(logger.target.lines).toMatchInlineSnapshot(`
-      Array [
-        "[level:40] [TS9999] foo
-      ",
-      ]
-    `)
+              Array [
+                "[level:40] [TS9999] foo
+              ",
+              ]
+          `)
     })
   })
 
