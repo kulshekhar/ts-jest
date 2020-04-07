@@ -1,6 +1,6 @@
 ---
 name: 💬 Questions / Help
-label: ':speech_balloon: Question'
+labels: ':speech_balloon: Question'
 about: If you have questions, please check our Slack or StackOverflow
 ---
 
