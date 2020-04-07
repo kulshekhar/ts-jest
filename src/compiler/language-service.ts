@@ -40,20 +40,26 @@ export const compileUsingLanguageService = (
   }
   let projectVersion = 1
   // Set the file contents into cache.
-  const updateMemoryCache = (code: string, fileName: string) => {
+  const updateMemoryCache = (contents: string, fileName: string) => {
     logger.debug({ fileName }, `updateMemoryCache(): update memory cache for language service`)
 
+    let shouldIncrementProjectVersion = false
     const fileVersion = memoryCache.versions[fileName] ?? 0
     const isFileInCache = fileVersion !== 0
     if (!isFileInCache) {
       memoryCache.versions[fileName] = 1
+      shouldIncrementProjectVersion = true
     }
-    if (memoryCache.contents[fileName] !== code) {
-      memoryCache.contents[fileName] = code
+    const previousContents = memoryCache.contents[fileName]
+    // Avoid incrementing cache when nothing has changed.
+    if (previousContents !== contents) {
       memoryCache.versions[fileName] = fileVersion + 1
-      // Increment project version for every file change.
-      projectVersion++
+      memoryCache.contents[fileName] = contents
+      // Only bump project version when file is modified in cache, not when discovered for the first time
+      if (isFileInCache) shouldIncrementProjectVersion = true
     }
+
+    if (shouldIncrementProjectVersion) projectVersion++
   }
   const serviceHost: _ts.LanguageServiceHost = {
     getProjectVersion: () => String(projectVersion),
@@ -117,7 +123,7 @@ export const compileUsingLanguageService = (
       /* istanbul ignore next (covered by e2e) */
       if (cacheDir) {
         if (micromatch.isMatch(normalizedFileName, configs.testMatchPatterns)) {
-          cacheResolvedModules(normalizedFileName, memoryCache, service.getProgram()!, cacheDir, logger)
+          cacheResolvedModules(normalizedFileName, code, memoryCache, service.getProgram()!, cacheDir, logger)
         } else {
           /* istanbul ignore next (covered by e2e) */
           Object.entries(memoryCache.resolvedModules)
@@ -128,7 +134,7 @@ export const compileUsingLanguageService = (
                * test file for 1st time run after clearing cache because
                */
               return (
-                entry[1].find(modulePath => modulePath === normalizedFileName) &&
+                entry[1].modulePaths.find(modulePath => modulePath === normalizedFileName) &&
                 !hasOwn.call(memoryCache.outputs, entry[0])
               )
             })
@@ -137,7 +143,9 @@ export const compileUsingLanguageService = (
                 `diagnoseFn(): computing diagnostics for test file that imports ${normalizedFileName} using language service`,
               )
 
-              doTypeChecking(configs, entry[0], service, logger)
+              const testFileName = entry[0]
+              updateMemoryCache(entry[1].testFileContent, testFileName)
+              doTypeChecking(configs, testFileName, service, logger)
             })
         }
       }

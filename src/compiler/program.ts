@@ -86,19 +86,27 @@ export const compileUsingProgram = (configs: ConfigSet, logger: Logger, memoryCa
   }
   // Read and cache custom transformers.
   const customTransformers = configs.tsCustomTransformers
-  const updateMemoryCache = (code: string, fileName: string): void => {
+  const updateMemoryCache = (contents: string, fileName: string): void => {
     logger.debug({ fileName }, `updateMemoryCache(): update memory cache for ${programDebugText}`)
 
     const sourceFile = incremental ? builderProgram.getSourceFile(fileName) : program.getSourceFile(fileName)
-    if (!hasOwn.call(memoryCache.versions, fileName)) {
+    const fileVersion = memoryCache.versions[fileName] ?? 0
+    const isFileInCache = fileVersion !== 0
+    if (!isFileInCache) {
       memoryCache.versions[fileName] = 1
     }
-    if (memoryCache.contents[fileName] !== code) {
-      memoryCache.contents[fileName] = code
-      memoryCache.versions[fileName] = (memoryCache.versions[fileName] || 0) + 1
+    const previousContents = memoryCache.contents[fileName]
+    // Avoid incrementing cache when nothing has changed.
+    if (previousContents !== contents) {
+      memoryCache.versions[fileName] = fileVersion + 1
+      memoryCache.contents[fileName] = contents
     }
     // Update program when file changes.
-    if (sourceFile === undefined || sourceFile.text !== code || program.isSourceFileFromExternalLibrary(sourceFile)) {
+    if (
+      sourceFile === undefined ||
+      sourceFile.text !== contents ||
+      program.isSourceFileFromExternalLibrary(sourceFile)
+    ) {
       const programOptions = {
         rootNames: Object.keys(memoryCache.versions),
         options,
@@ -161,7 +169,7 @@ export const compileUsingProgram = (configs: ConfigSet, logger: Logger, memoryCa
       /* istanbul ignore next (covered by e2e) */
       if (cacheDir) {
         if (micromatch.isMatch(normalizedFileName, configs.testMatchPatterns)) {
-          cacheResolvedModules(normalizedFileName, memoryCache, program, cacheDir, logger)
+          cacheResolvedModules(normalizedFileName, code, memoryCache, program, cacheDir, logger)
         } else {
           /* istanbul ignore next (covered by e2e) */
           Object.entries(memoryCache.resolvedModules)
@@ -172,7 +180,7 @@ export const compileUsingProgram = (configs: ConfigSet, logger: Logger, memoryCa
                * test file for 1st time run after clearing cache because
                */
               return (
-                entry[1].find(modulePath => modulePath === normalizedFileName) &&
+                entry[1].modulePaths.find(modulePath => modulePath === normalizedFileName) &&
                 !hasOwn.call(memoryCache.outputs, entry[0])
               )
             })
