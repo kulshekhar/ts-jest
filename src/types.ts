@@ -1,4 +1,4 @@
-import { TransformedSource, Transformer } from '@jest/transform/build/types'
+import { TransformedSource, Transformer } from '@jest/transform'
 import * as _babel from 'babel__core'
 import { CompilerOptions, SourceFile, TransformerFactory } from 'typescript'
 // tslint:disable-next-line:no-duplicate-imports
