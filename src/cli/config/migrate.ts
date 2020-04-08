@@ -1,12 +1,12 @@
 import { Config } from '@jest/types'
 import { createLogger } from 'bs-logger'
-import * as stringifyJson from 'fast-json-stable-stringify'
 import { existsSync } from 'fs'
 import { stringify as stringifyJson5 } from 'json5'
 import { basename, resolve } from 'path'
 import { Arguments } from 'yargs'
 
 import { CliCommand } from '..'
+import { fastJsonStableStringify as stringifyJson } from '../../shims'
 import { backportJestConfig } from '../../util/backports'
 import { JestPresetNames, TsJestPresetDescriptor, allPresets, defaults } from '../helpers/presets'
 
