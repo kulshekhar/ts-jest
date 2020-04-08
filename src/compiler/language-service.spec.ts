@@ -1,10 +1,13 @@
 import { LogLevels } from 'bs-logger'
 import { removeSync, writeFileSync } from 'fs-extra'
+import { normalize } from 'path'
 
 import { makeCompiler } from '../__helpers__/fakers'
 import { logTargetMock } from '../__helpers__/mocks'
 import { tempDir } from '../__helpers__/path'
 import ProcessedSource from '../__helpers__/processed-source'
+
+import * as compilerUtils from './compiler-utils'
 
 const logTarget = logTargetMock()
 
@@ -58,6 +61,42 @@ describe('language service', () => {
     expect(compiled2).toBe(compiled1)
 
     removeSync(fileName)
+  })
+
+  it('should cache resolved modules for test file with testMatchPatterns from jest config when match', () => {
+    // tslint:disable-next-line:no-empty
+    const spy = jest.spyOn(compilerUtils, 'cacheResolvedModules').mockImplementationOnce(() => {})
+    const tmp = tempDir('compiler')
+    const compiler = makeCompiler({
+      jestConfig: { cache: true, cacheDirectory: tmp, testRegex: [/.*\.(spec|test)\.[jt]sx?$/] as any[] },
+      tsJestConfig: { tsConfig: false },
+    })
+    const fileName = 'src/__mocks__/main.spec.ts'
+    const source = JSON.stringify(require('../__mocks__/main.spec'))
+
+    compiler.compile(source, fileName)
+
+    expect(spy).toHaveBeenCalled()
+    expect(spy.mock.calls[0][0]).toEqual(normalize(fileName))
+    expect(spy.mock.calls[0][1]).toEqual(source)
+
+    spy.mockRestore()
+  })
+
+  it(`shouldn't cache resolved modules for test file with testMatchPatterns from jest config when not match`, () => {
+    // tslint:disable-next-line:no-empty
+    jest.spyOn(compilerUtils, 'cacheResolvedModules').mockImplementationOnce(() => {})
+    const tmp = tempDir('compiler')
+    const compiler = makeCompiler({
+      jestConfig: { cache: true, cacheDirectory: tmp, testRegex: [/.*\.(foo|bar)\.[jt]sx?$/] as any[] },
+      tsJestConfig: { tsConfig: false },
+    })
+    const fileName = 'src/__mocks__/main.spec.ts'
+    const source = JSON.stringify(require('../__mocks__/main.spec'))
+
+    compiler.compile(source, fileName)
+
+    expect(compilerUtils.cacheResolvedModules).not.toHaveBeenCalled()
   })
 
   it('should compile js file for allowJs true with outDir', () => {

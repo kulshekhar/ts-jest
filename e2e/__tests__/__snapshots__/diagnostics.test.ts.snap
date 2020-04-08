@@ -242,7 +242,7 @@ exports[`With diagnostics throw using incremental program with unsupported versi
   
       TypeError: ts.createIncrementalCompilerHost is not a function
   
-        at Object.exports.compileUsingProgram (../../__templates__/with-typescript-2-7/node_modules/ts-jest/dist/compiler/program.js:47:19)
+        at Object.exports.compileUsingProgram (../../__templates__/with-typescript-2-7/node_modules/ts-jest/dist/compiler/program.js:46:19)
   
   Test Suites: 1 failed, 1 total
   Tests:       0 total
@@ -264,7 +264,7 @@ exports[`With diagnostics throw using incremental program with unsupported versi
   
       TypeError: ts.createIncrementalCompilerHost is not a function
   
-        at Object.exports.compileUsingProgram (../../__templates__/with-unsupported-version/node_modules/ts-jest/dist/compiler/program.js:47:19)
+        at Object.exports.compileUsingProgram (../../__templates__/with-unsupported-version/node_modules/ts-jest/dist/compiler/program.js:46:19)
   
   Test Suites: 1 failed, 1 total
   Tests:       0 total
