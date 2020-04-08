@@ -1,4 +1,4 @@
-import { CacheKeyOptions, TransformOptions, TransformedSource, Transformer } from '@jest/transform/build/types'
+import { CacheKeyOptions, TransformOptions, TransformedSource, Transformer } from '@jest/transform'
 import { Config } from '@jest/types'
 import { Logger } from 'bs-logger'
 import { inspect } from 'util'

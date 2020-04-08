@@ -1,4 +1,4 @@
-import { TransformOptions, TransformedSource } from '@jest/transform/build/types'
+import { TransformOptions, TransformedSource } from '@jest/transform'
 import { Config } from '@jest/types'
 
 import ProcessedSource from '../../../src/__helpers__/processed-source'
