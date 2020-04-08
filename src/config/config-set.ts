@@ -196,8 +196,8 @@ export class ConfigSet {
    * @internal
    */
   @Memoize()
-  get testMatchPatterns(): [string, RegExp] {
-    return this.jest.testMatch.concat(this.jest.testRegex) as [string, RegExp]
+  get testMatchPatterns(): (string | RegExp)[] {
+    return [...this.jest.testMatch, ...this.jest.testRegex]
   }
 
   /**
