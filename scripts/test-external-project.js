@@ -13,9 +13,11 @@ const npm = require('./lib/npm')
 let projectPath = process.argv[2]
 const jestArgs = process.argv.slice(3)
 let gitUrl = false
+const externalRepoPath = 'e2e/__external-repos__'
 const PROJECTS_TO_RUN = [
-  'e2e/__monorepos__/simple/with-dependency',
-  'e2e/__monorepos__/yarn-workspace-composite',
+  `${externalRepoPath}/nrwl-nx`,
+  `${externalRepoPath}/simple/with-dependency`,
+  `${externalRepoPath}/yarn-workspace-composite`,
 ]
 
 const randomStr = () => parseInt(Math.random() * 1e17, 10).toString(36)
@@ -83,7 +85,7 @@ if (/^((https|ssh|git):\/\/|[a-z0-9]+@[a-z0-9.]+:).+$/.test(projectPath)) {
   gitUrl = projectPath
   projectPath = resolve(tmpdir(), 'ts-jest-git-ext', randomStr(), randomStr())
 } else {
-  if (projectPath === 'monorepo') {
+  if (projectPath === 'external-repos') {
     const cwd = process.cwd()
     // first we need to create a bundle
     const bundle = createBundle()
