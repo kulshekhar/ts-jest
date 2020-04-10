@@ -25,7 +25,7 @@ jobs:
         - npm i -g yarn
       script:
         - npm run clean -- --when-ci-commit-message
-        - npm run test:monorepo
+        - npm run test:external-repos
     - os: linux
       node_js: 10
       env: TS_JEST_E2E_WORKDIR=/tmp/ts-jest-e2e-workdir TS_JEST_E2E_OPTIMIZATIONS=1
@@ -53,7 +53,7 @@ jobs:
         - npm run clean -- --when-ci-commit-message
         # only grab coverage data on node 10
         - npm run test -- --runInBand --coverage
-        - npm run test:monorepo
+        - npm run test:external-repos
       after_success:
         # report coverages to coveralls
         - if [[ -s coverage/lcov.info ]]; then cat coverage/lcov.info | coveralls; fi
