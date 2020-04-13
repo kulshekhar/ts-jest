@@ -1,7 +1,5 @@
-import { TransformedSource, Transformer } from '@jest/transform/build/types'
+import { TransformedSource, Transformer } from '@jest/transform'
 import * as _babel from 'babel__core'
-import { CompilerOptions, SourceFile, TransformerFactory } from 'typescript'
-// tslint:disable-next-line:no-duplicate-imports
 import * as _ts from 'typescript'
 
 import { ConfigSet } from './config/config-set'
@@ -37,7 +35,7 @@ export interface TsJestGlobalOptions {
    *     - `path/to/tsconfig.json`: path to a specific tsconfig file (<rootDir> can be used)
    *     - `{...}`: an object with inline compiler options
    */
-  tsConfig?: boolean | string | CompilerOptions
+  tsConfig?: boolean | string | _ts.CompilerOptions
 
   /**
    * packageJson. It can be:
@@ -122,7 +120,7 @@ interface TsJestConfig$tsConfig$file {
 }
 interface TsJestConfig$tsConfig$inline {
   kind: 'inline'
-  value: CompilerOptions
+  value: _ts.CompilerOptions
 }
 type TsJestConfig$tsConfig = TsJestConfig$tsConfig$file | TsJestConfig$tsConfig$inline | undefined
 interface TsJestConfig$diagnostics {
@@ -227,5 +225,5 @@ export interface CompilerInstance {
 export interface AstTransformerDesc {
   name: string
   version: number
-  factory(cs: ConfigSet): TransformerFactory<SourceFile>
+  factory(cs: ConfigSet): _ts.TransformerFactory<_ts.SourceFile>
 }
