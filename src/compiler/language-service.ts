@@ -1,4 +1,5 @@
 import { LogContexts, LogLevels, Logger } from 'bs-logger'
+import { defaults as JestDefaults, replaceRootDirInPath } from 'jest-config/build'
 import memoize = require('lodash.memoize')
 import { basename, normalize, relative } from 'path'
 import * as _ts from 'typescript'
@@ -103,6 +104,10 @@ export const compileUsingLanguageService = (
 
   logger.debug('compileUsingLanguageService(): creating language service')
   const service: _ts.LanguageService = ts.createLanguageService(serviceHost)
+  const transformIgnorePattern = (configs.jest.transformIgnorePatterns || JestDefaults.transformIgnorePatterns)
+    .map(pattern => replaceRootDirInPath(configs.rootDir, pattern))
+    .join('|')
+  const transformIgnoreRegExp = new RegExp(transformIgnorePattern)
 
   return {
     compileFn: (code: string, fileName: string): SourceOutput => {
@@ -111,7 +116,7 @@ export const compileUsingLanguageService = (
       logger.debug({ normalizedFileName }, 'compileFn(): compiling using language service')
       // Must set memory cache before attempting to read file.
       updateMemoryCache(code, normalizedFileName)
-      const output: _ts.EmitOutput = service.getEmitOutput(normalizedFileName)
+      let output: _ts.EmitOutput = service.getEmitOutput(normalizedFileName)
       // Do type checking by getting TypeScript diagnostics
       logger.debug(`diagnoseFn(): computing diagnostics for ${normalizedFileName} using language service`)
 
@@ -129,7 +134,7 @@ export const compileUsingLanguageService = (
               /**
                * When imported modules change, we only need to check whether the test file is compiled previously or not
                * base on memory cache. By checking memory cache, we can avoid repeatedly doing type checking against
-               * test file for 1st time run after clearing cache because
+               * test file for 1st time run after clearing cache
                */
               return (
                 entry[1].modulePaths.find(modulePath => modulePath === normalizedFileName) &&
@@ -150,6 +155,24 @@ export const compileUsingLanguageService = (
       /* istanbul ignore next (this should never happen but is kept for security) */
       if (output.emitSkipped) {
         throw new TypeError(`${relative(cwd, normalizedFileName)}: Emit skipped for language service`)
+      }
+      // if this block executes we have attempted to compile a resolved dependency
+      // that typescript ignored, likely because the file was located in node_modules.
+      // we can force the compiler to retry by invalidating its internal module
+      // resolution cache.
+      //
+      // @see https://github.com/Microsoft/TypeScript/issues/12358
+      // @see https://github.com/microsoft/TypeScript/issues/11946
+      /* istanbul ignore next (covered by e2e) */
+      if (!output.outputFiles.length && !transformIgnoreRegExp.test(fileName)) {
+        const normalizedFileName = normalize(fileName)
+        // our implementation of getScriptFileNames() depends on the keys
+        // of memoryCache.versions so we must make sure that the file is
+        // in there.
+        if (!hasOwn.call(memoryCache.versions, normalizedFileName)) {
+          memoryCache.versions[normalizedFileName] = 0
+        }
+        output = service.getEmitOutput(fileName)
       }
       // Throw an error when requiring `.d.ts` files.
       if (!output.outputFiles.length) {

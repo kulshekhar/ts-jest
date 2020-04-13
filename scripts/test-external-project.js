@@ -17,6 +17,7 @@ const externalRepoPath = 'e2e/__external-repos__'
 const PROJECTS_TO_RUN = [
   `${externalRepoPath}/nrwl-nx`,
   `${externalRepoPath}/simple/with-dependency`,
+  `${externalRepoPath}/ts-in-node-modules`,
   `${externalRepoPath}/yarn-workspace-composite`,
 ]
 
