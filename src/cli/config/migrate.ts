@@ -1,6 +1,6 @@
 import { Config } from '@jest/types'
 import { createLogger } from 'bs-logger'
-import * as stringifyJson from 'fast-json-stable-stringify'
+import stableStringify = require('fast-json-stable-stringify')
 import { existsSync } from 'fs'
 import { stringify as stringifyJson5 } from 'json5'
 import { basename, resolve } from 'path'
@@ -119,7 +119,7 @@ Visit https://kulshekhar.github.io/ts-jest/user/config/#jest-preset for more inf
   if (
     preset &&
     migratedConfig.transform &&
-    stringifyJson(migratedConfig.transform) === stringifyJson(preset.value.transform)
+    stableStringify(migratedConfig.transform) === stableStringify(preset.value.transform)
   ) {
     delete migratedConfig.transform
   }
@@ -127,8 +127,8 @@ Visit https://kulshekhar.github.io/ts-jest/user/config/#jest-preset for more inf
   // cleanup
   cleanupConfig(actualConfig)
   cleanupConfig(migratedConfig)
-  const before = stringifyJson(actualConfig)
-  const after = stringifyJson(migratedConfig)
+  const before = stableStringify(actualConfig)
+  const after = stableStringify(migratedConfig)
   if (after === before) {
     process.stderr.write(`
 No migration needed for given Jest configuration

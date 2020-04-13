@@ -1,4 +1,4 @@
-import { Transformer } from '@jest/transform/build/types'
+import { Transformer } from '@jest/transform'
 import { Config } from '@jest/types'
 import { testing } from 'bs-logger'
 import { readFileSync } from 'fs'

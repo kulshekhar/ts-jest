@@ -53,7 +53,7 @@ export function cacheResolvedModules(
   }
 }
 
-export function isTestFile(testMatchPatterns: [string, RegExp], fileName: string) {
+export function isTestFile(testMatchPatterns: (string | RegExp)[], fileName: string) {
   return testMatchPatterns.some(pattern =>
     typeof pattern === 'string' ? micromatch.isMatch(fileName, pattern) : pattern.test(fileName),
   )
