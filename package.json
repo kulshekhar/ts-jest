@@ -85,7 +85,7 @@
   },
   "devDependencies": {
     "@commitlint/cli": "8.x",
-    "@commitlint/config-conventional": "7.x",
+    "@commitlint/config-conventional": "8.x",
     "@jest/transform": "25.x",
     "@jest/types": "25.x",
     "@types/babel__core": "7.x",
