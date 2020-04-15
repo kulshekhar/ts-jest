@@ -4,6 +4,7 @@ import { Logger } from 'bs-logger'
 import { inspect } from 'util'
 
 import { ConfigSet } from './config/config-set'
+import { JS_JSX_REGEX, TS_TSX_REGEX } from './constants'
 import { TsJestGlobalOptions } from './types'
 import { stringify } from './util/json'
 import { JsonableValue } from './util/jsonable-value'
@@ -103,8 +104,8 @@ export class TsJestTransformer implements Transformer {
     const stringify = configs.shouldStringifyContent(filePath)
     const babelJest = stringify ? undefined : configs.babelJestTransformer
     const isDefinitionFile = filePath.endsWith('.d.ts')
-    const isJsFile = /\.jsx?$/.test(filePath)
-    const isTsFile = !isDefinitionFile && /\.tsx?$/.test(filePath)
+    const isJsFile = JS_JSX_REGEX.test(filePath)
+    const isTsFile = !isDefinitionFile && TS_TSX_REGEX.test(filePath)
     if (stringify) {
       // handles here what we should simply stringify
       result = `module.exports=${JSON.stringify(source)}`

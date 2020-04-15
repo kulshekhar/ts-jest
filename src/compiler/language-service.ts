@@ -4,6 +4,7 @@ import { basename, normalize, relative } from 'path'
 import * as _ts from 'typescript'
 
 import { ConfigSet } from '../config/config-set'
+import { LINE_FEED } from '../constants'
 import { CompilerInstance, MemoryCache, SourceOutput } from '../types'
 import { Errors, interpolate } from '../util/messages'
 
@@ -94,7 +95,7 @@ export const compileUsingLanguageService = (
     getDirectories: memoize(ts.sys.getDirectories),
     directoryExists: memoize(ts.sys.directoryExists),
     realpath: memoize(ts.sys.realpath!),
-    getNewLine: () => '\n',
+    getNewLine: () => LINE_FEED,
     getCurrentDirectory: () => cwd,
     getCompilationSettings: () => options,
     getDefaultLibFileName: () => ts.getDefaultLibFilePath(options),
