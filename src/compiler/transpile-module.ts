@@ -47,6 +47,7 @@ export const compileUsingTranspileModule = (configs: ConfigSet, logger: Logger):
 
       updateFileInCache(code, normalizedFileName)
       const referencedProject = getAndCacheProjectReference(normalizedFileName, program, files, projectReferences)
+      /* istanbul ignore next (referencedProject object is too complex to mock so we leave this for e2e) */
       if (referencedProject !== undefined) {
         const [relativeProjectConfigPath, relativeFilePath] = [
           configs.resolvePath(referencedProject.sourceFile.fileName),

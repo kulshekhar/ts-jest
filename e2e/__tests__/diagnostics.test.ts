@@ -6,7 +6,7 @@ import { configureTestCase } from '../__helpers__/test-case'
 
 describe('With diagnostics throw', () => {
   describe('using language service', () => {
-    const testCase = configureTestCase('diagnostics')
+    const testCase = configureTestCase('diagnostics/throw')
 
     describe('first throw', () => {
       testCase.runWithTemplates(allValidPackageSets, 1, (runTest, { testLabel }) => {
@@ -20,11 +20,11 @@ describe('With diagnostics throw', () => {
 
     describe('then pass when type has changed to valid base on cache of the previous run', () => {
       beforeAll(() => {
-        writeFileSync(join(__dirname, '../__cases__/diagnostics/main.ts'), `export const foo = 42\nexport type Thing = { a: number }`)
+        writeFileSync(join(__dirname, '../__cases__/diagnostics/throw/main.ts'), `export const foo = 42\nexport type Thing = { a: number }`)
       })
 
       afterAll(() => {
-        writeFileSync(join(__dirname, '../__cases__/diagnostics/main.ts'), `export const foo = 42\nexport type Thing = { a: number, b: number }\n`)
+        writeFileSync(join(__dirname, '../__cases__/diagnostics/throw/main.ts'), `export const foo = 42\nexport type Thing = { a: number, b: number }\n`)
       })
 
       testCase.runWithTemplates(allValidPackageSets, 0, (runTest, { testLabel }) => {
@@ -38,11 +38,11 @@ describe('With diagnostics throw', () => {
 
     describe('then fail when code has changed to invalid base on cache of the previous run', () => {
       beforeAll(() => {
-        writeFileSync(join(__dirname, '../__cases__/diagnostics/main.ts'), `export const foo = 43\nexport type Thing = { a: number }`)
+        writeFileSync(join(__dirname, '../__cases__/diagnostics/throw/main.ts'), `export const foo = 43\nexport type Thing = { a: number }`)
       })
 
       afterAll(() => {
-        writeFileSync(join(__dirname, '../__cases__/diagnostics/main.ts'), `export const foo = 42\nexport type Thing = { a: number, b: number }\n`)
+        writeFileSync(join(__dirname, '../__cases__/diagnostics/throw/main.ts'), `export const foo = 42\nexport type Thing = { a: number, b: number }\n`)
       })
 
       testCase.runWithTemplates(allValidPackageSets, 1, (runTest, { testLabel }) => {
@@ -56,7 +56,7 @@ describe('With diagnostics throw', () => {
   })
 
   describe('using program', () => {
-    const testCase = configureTestCase('diagnostics', {
+    const testCase = configureTestCase('diagnostics/throw', {
       tsJestConfig: {
         compilerHost: true,
         incremental: false,
@@ -75,11 +75,11 @@ describe('With diagnostics throw', () => {
 
     describe('then pass when type has changed to valid base on cache of the previous run', () => {
       beforeAll(() => {
-        writeFileSync(join(__dirname, '../__cases__/diagnostics/main.ts'), `export const foo = 42\nexport type Thing = { a: number }`)
+        writeFileSync(join(__dirname, '../__cases__/diagnostics/throw/main.ts'), `export const foo = 42\nexport type Thing = { a: number }`)
       })
 
       afterAll(() => {
-        writeFileSync(join(__dirname, '../__cases__/diagnostics/main.ts'), `export const foo = 42\nexport type Thing = { a: number, b: number }\n`)
+        writeFileSync(join(__dirname, '../__cases__/diagnostics/throw/main.ts'), `export const foo = 42\nexport type Thing = { a: number, b: number }\n`)
       })
 
       testCase.runWithTemplates(allPackageSetsWithProgram, 0, (runTest, { testLabel }) => {
@@ -93,11 +93,11 @@ describe('With diagnostics throw', () => {
 
     describe('then failed when type has changed to invalid base on cache of the previous run', () => {
       beforeAll(() => {
-        writeFileSync(join(__dirname, '../__cases__/diagnostics/main.ts'), `export const foo = 43\nexport type Thing = { a: number }`)
+        writeFileSync(join(__dirname, '../__cases__/diagnostics/throw/main.ts'), `export const foo = 43\nexport type Thing = { a: number }`)
       })
 
       afterAll(() => {
-        writeFileSync(join(__dirname, '../__cases__/diagnostics/main.ts'), `export const foo = 42\nexport type Thing = { a: number, b: number }\n`)
+        writeFileSync(join(__dirname, '../__cases__/diagnostics/throw/main.ts'), `export const foo = 42\nexport type Thing = { a: number, b: number }\n`)
       })
 
       testCase.runWithTemplates(allPackageSetsWithProgram, 1, (runTest, { testLabel }) => {
@@ -121,7 +121,7 @@ describe('With diagnostics throw', () => {
   })
 
   describe('using incremental program', () => {
-    const testCase = configureTestCase('diagnostics', {
+    const testCase = configureTestCase('diagnostics/throw', {
       tsJestConfig: {
         compilerHost: true,
         incremental: true,
@@ -140,11 +140,11 @@ describe('With diagnostics throw', () => {
 
     describe('then pass when type has changed to valid base on cache of the previous run', () => {
       beforeAll(() => {
-        writeFileSync(join(__dirname, '../__cases__/diagnostics/main.ts'), `export const foo = 42\nexport type Thing = { a: number }`)
+        writeFileSync(join(__dirname, '../__cases__/diagnostics/throw/main.ts'), `export const foo = 42\nexport type Thing = { a: number }`)
       })
 
       afterAll(() => {
-        writeFileSync(join(__dirname, '../__cases__/diagnostics/main.ts'), `export const foo = 42\nexport type Thing = { a: number, b: number }\n`)
+        writeFileSync(join(__dirname, '../__cases__/diagnostics/throw/main.ts'), `export const foo = 42\nexport type Thing = { a: number, b: number }\n`)
       })
 
       testCase.runWithTemplates(allPackageSetsWithProgram, 0, (runTest, { testLabel }) => {
@@ -158,11 +158,11 @@ describe('With diagnostics throw', () => {
 
     describe('then failed when code has changed to invalid base on cache of the previous run', () => {
       beforeAll(() => {
-        writeFileSync(join(__dirname, '../__cases__/diagnostics/main.ts'), `export const foo = 43\nexport type Thing = { a: number }`)
+        writeFileSync(join(__dirname, '../__cases__/diagnostics/throw/main.ts'), `export const foo = 43\nexport type Thing = { a: number }`)
       })
 
       afterAll(() => {
-        writeFileSync(join(__dirname, '../__cases__/diagnostics/main.ts'), `export const foo = 42\nexport type Thing = { a: number, b: number }\n`)
+        writeFileSync(join(__dirname, '../__cases__/diagnostics/throw/main.ts'), `export const foo = 42\nexport type Thing = { a: number, b: number }\n`)
       })
 
       testCase.runWithTemplates(allPackageSetsWithProgram, 1, (runTest, { testLabel }) => {
@@ -187,11 +187,11 @@ describe('With diagnostics throw', () => {
 })
 
 describe('With diagnostics warn only', () => {
-  const testCase = configureTestCase('diagnostics', {
+  const testCase = configureTestCase('diagnostics/warn', {
     tsJestConfig: {
       diagnostics: { warnOnly: true },
-      noCache: true, // warnings shown only on first compilation
     },
+    noCache: true, // warnings shown only on first compilation
   })
 
   testCase.runWithTemplates(allValidPackageSets, 0, (runTest, { testLabel }) => {

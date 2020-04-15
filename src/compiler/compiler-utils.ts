@@ -54,12 +54,16 @@ export function cacheResolvedModules(
   }
 }
 
+/**
+ * @internal
+ */
 export function isTestFile(testMatchPatterns: (string | RegExp)[], fileName: string) {
   return testMatchPatterns.some(pattern =>
     typeof pattern === 'string' ? micromatch.isMatch(fileName, pattern) : pattern.test(fileName),
   )
 }
 
+/* istanbul ignore next (we leave this for e2e) */
 function isUsingProjectReferences(
   program: _ts.Program,
   projectReferences: ReadonlyArray<_ts.ProjectReference> | undefined,
@@ -71,6 +75,7 @@ function isUsingProjectReferences(
   return false
 }
 
+/* istanbul ignore next (we leave this for e2e) */
 function getResolvedProjectReferences(
   program: _ts.Program,
 ): ReadonlyArray<_ts.ResolvedProjectReference | undefined> | undefined {
@@ -82,6 +87,7 @@ function getResolvedProjectReferences(
   return
 }
 
+/* istanbul ignore next (we leave this for e2e) */
 function getProjectReferenceForFile(
   filePath: string,
   program: _ts.Program,
@@ -99,6 +105,10 @@ function getProjectReferenceForFile(
   return
 }
 
+/**
+ * @internal
+ */
+/* istanbul ignore next (we leave this for e2e) */
 export function getAndCacheProjectReference(
   filePath: string,
   program: _ts.Program,
@@ -119,6 +129,7 @@ export function getAndCacheProjectReference(
 }
 
 // Adapted from https://github.com/Microsoft/TypeScript/blob/45101491c0b077c509b25830ef0ee5f85b293754/src/compiler/tsbuild.ts#L305
+/* istanbul ignore next (we leave this for e2e) */
 function getOutputJavaScriptFileName(inputFileName: string, projectReference: _ts.ResolvedProjectReference) {
   const { options } = projectReference.commandLine
   const projectDirectory = options.rootDir || dirname(projectReference.sourceFile.fileName)
@@ -134,9 +145,11 @@ function getOutputJavaScriptFileName(inputFileName: string, projectReference: _t
 }
 
 /**
+ * @internal
  * Gets the output JS file path for an input file governed by a composite project.
  * Pulls from the cache if it exists; computes and caches the result otherwise.
  */
+/* istanbul ignore next (we leave this for e2e) */
 export function getAndCacheOutputJSFileName(
   inputFileName: string,
   projectReference: _ts.ResolvedProjectReference,

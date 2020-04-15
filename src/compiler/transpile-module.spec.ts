@@ -40,6 +40,40 @@ describe('transpile module with isolatedModule: true', () => {
     spy.mockRestore()
   })
 
+  it('should call createProgram() with projectReferences when there are projectReferences from tsconfig', () => {
+    const compiler = makeCompiler({
+      tsJestConfig: {
+        ...baseTsJestConfig,
+        tsConfig: 'src/__mocks__/tsconfig-project-references.json',
+      },
+    })
+    const programSpy = jest.spyOn(require('typescript'), 'createProgram')
+    logTarget.clear()
+    compiler.compile('export default 42', __filename)
+
+    expect(programSpy).toHaveBeenCalled()
+    expect((programSpy.mock.calls[0][1] as any).configFilePath).toContain('tsconfig-project-references.json')
+
+    programSpy.mockRestore()
+  })
+
+  it('should call createProgram() without projectReferences when there are no projectReferences from tsconfig', () => {
+    const compiler = makeCompiler({
+      tsJestConfig: {
+        ...baseTsJestConfig,
+        tsConfig: false,
+      },
+    })
+    const programSpy = jest.spyOn(require('typescript'), 'createProgram')
+    logTarget.clear()
+    compiler.compile('export default 42', __filename)
+
+    expect(programSpy).toHaveBeenCalled()
+    expect((programSpy.mock.calls[0][1] as any).configFilePath).toBeUndefined()
+
+    programSpy.mockRestore()
+  })
+
   it('should compile js file for allowJs true', () => {
     const fileName = `${__filename}.test.js`
     const compiler = makeCompiler({
