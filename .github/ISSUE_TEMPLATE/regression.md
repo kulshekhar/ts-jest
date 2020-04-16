@@ -30,7 +30,7 @@ Issues without a reproduction link are likely to stall.
 -->
 
 ## Debug log:
-<!-- You can activate the debug logger by setting the environment variable TS_JEST_LOG="ts-jest.log" before running tests. 
+<!-- You can activate the debug logger by setting the environment variable TS_JEST_LOG=ts-jest.log before running tests. 
 The output of the logger will be in **ts-jest.log** in CWD, paste it in the below section: 
 -->
 
