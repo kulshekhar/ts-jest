@@ -15,8 +15,8 @@ const jestArgs = process.argv.slice(3)
 let gitUrl = false
 const externalRepoPath = 'e2e/__external-repos__'
 const PROJECTS_TO_RUN = [
-  `${externalRepoPath}/nrwl-nx`,
   `${externalRepoPath}/simple/with-dependency`,
+  `${externalRepoPath}/simple-project-references`,
   `${externalRepoPath}/yarn-workspace-composite`,
 ]
 

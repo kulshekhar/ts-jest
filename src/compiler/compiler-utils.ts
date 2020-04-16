@@ -1,10 +1,11 @@
 import { Logger } from 'bs-logger'
 import { writeFileSync } from 'fs'
 import micromatch = require('micromatch')
-import { join, normalize } from 'path'
+import { dirname, join, normalize, relative, resolve } from 'path'
 import * as _ts from 'typescript'
 
-import { MemoryCache } from '../types'
+import { EXTENSION_REGEX, JSON_REGEX, TS_TSX_REGEX } from '../constants'
+import { MemoryCache, TSFiles } from '../types'
 import { sha1 } from '../util/sha1'
 
 /**
@@ -53,8 +54,119 @@ export function cacheResolvedModules(
   }
 }
 
+/**
+ * @internal
+ */
 export function isTestFile(testMatchPatterns: (string | RegExp)[], fileName: string) {
   return testMatchPatterns.some(pattern =>
     typeof pattern === 'string' ? micromatch.isMatch(fileName, pattern) : pattern.test(fileName),
   )
+}
+
+/* istanbul ignore next (we leave this for e2e) */
+function isUsingProjectReferences(
+  program: _ts.Program,
+  projectReferences: ReadonlyArray<_ts.ProjectReference> | undefined,
+) {
+  if (projectReferences && !!program.getProjectReferences) {
+    return Boolean(program && program.getProjectReferences())
+  }
+
+  return false
+}
+
+/* istanbul ignore next (we leave this for e2e) */
+function getResolvedProjectReferences(
+  program: _ts.Program,
+): ReadonlyArray<_ts.ResolvedProjectReference | undefined> | undefined {
+  const getProjectReferences = program.getResolvedProjectReferences || program.getProjectReferences
+  if (getProjectReferences) {
+    return getProjectReferences()
+  }
+
+  return
+}
+
+/* istanbul ignore next (we leave this for e2e) */
+function getProjectReferenceForFile(
+  filePath: string,
+  program: _ts.Program,
+  projectReferences: ReadonlyArray<_ts.ProjectReference> | undefined,
+) {
+  if (isUsingProjectReferences(program, projectReferences)) {
+    return (
+      program &&
+      getResolvedProjectReferences(program)!.find(
+        ref => (ref && ref.commandLine.fileNames.some(file => normalize(file) === filePath)) || false,
+      )
+    )
+  }
+
+  return
+}
+
+/**
+ * @internal
+ */
+/* istanbul ignore next (we leave this for e2e) */
+export function getAndCacheProjectReference(
+  filePath: string,
+  program: _ts.Program,
+  files: TSFiles,
+  projectReferences: ReadonlyArray<_ts.ProjectReference> | undefined,
+) {
+  const file = files.get(filePath)
+  if (file !== undefined && file.projectReference) {
+    return file.projectReference.project
+  }
+
+  const projectReference = getProjectReferenceForFile(filePath, program, projectReferences)
+  if (file !== undefined) {
+    file.projectReference = { project: projectReference }
+  }
+
+  return projectReference
+}
+
+// Adapted from https://github.com/Microsoft/TypeScript/blob/45101491c0b077c509b25830ef0ee5f85b293754/src/compiler/tsbuild.ts#L305
+/* istanbul ignore next (we leave this for e2e) */
+function getOutputJavaScriptFileName(inputFileName: string, projectReference: _ts.ResolvedProjectReference) {
+  const { options } = projectReference.commandLine
+  const projectDirectory = options.rootDir || dirname(projectReference.sourceFile.fileName)
+  const relativePath = relative(projectDirectory, inputFileName)
+  const outputPath = resolve(options.outDir || projectDirectory, relativePath)
+  const newExtension = JSON_REGEX.test(inputFileName)
+    ? '.json'
+    : TS_TSX_REGEX.test(inputFileName) && options.jsx === _ts.JsxEmit.Preserve
+    ? '.jsx'
+    : '.js'
+
+  return outputPath.replace(EXTENSION_REGEX, newExtension)
+}
+
+/**
+ * @internal
+ * Gets the output JS file path for an input file governed by a composite project.
+ * Pulls from the cache if it exists; computes and caches the result otherwise.
+ */
+/* istanbul ignore next (we leave this for e2e) */
+export function getAndCacheOutputJSFileName(
+  inputFileName: string,
+  projectReference: _ts.ResolvedProjectReference,
+  files: TSFiles,
+) {
+  const file = files.get(inputFileName)
+  if (file && file.projectReference && file.projectReference.outputFileName) {
+    return file.projectReference.outputFileName
+  }
+
+  const outputFileName = getOutputJavaScriptFileName(inputFileName, projectReference)
+  if (file !== undefined) {
+    file.projectReference = file.projectReference || {
+      project: projectReference,
+    }
+    file.projectReference.outputFileName = outputFileName
+  }
+
+  return outputFileName
 }

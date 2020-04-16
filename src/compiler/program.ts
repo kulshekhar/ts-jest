@@ -4,6 +4,7 @@ import { basename, normalize, relative } from 'path'
 import * as _ts from 'typescript'
 
 import { ConfigSet } from '../config/config-set'
+import { LINE_FEED } from '../constants'
 import { CompilerInstance, MemoryCache, SourceOutput } from '../types'
 import { Errors, interpolate } from '../util/messages'
 
@@ -45,7 +46,7 @@ export const compileUsingProgram = (configs: ConfigSet, logger: Logger, memoryCa
     resolvePath: memoize(ts.sys.resolvePath),
     realpath: memoize(ts.sys.realpath!),
     getCurrentDirectory: () => cwd,
-    getNewLine: () => '\n',
+    getNewLine: () => LINE_FEED,
     getCanonicalFileName: (fileName: string) => (ts.sys.useCaseSensitiveFileNames ? fileName : fileName.toLowerCase()),
   }
   let builderProgram: _ts.EmitAndSemanticDiagnosticsBuilderProgram

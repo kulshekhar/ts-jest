@@ -1,0 +1,9 @@
+# https://prettier.io/docs/en/ignore.html
+
+/target/
+/config/target/
+
+# CLI ignores Node modules by default https://github.com/prettier/prettier/pull/1683, VSCode
+# extension does not https://github.com/prettier/prettier-vscode/issues/198,
+# https://github.com/prettier/prettier-vscode/issues/548.
+node_modules/
