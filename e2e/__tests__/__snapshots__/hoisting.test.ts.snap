@@ -161,57 +161,6 @@ exports[`Hoisting jest.disableAutomock() should pass using template "with-babel-
   ================================================================================
 `;
 
-exports[`Hoisting jest.disableAutomock() should pass using template "with-typescript-2-7": io-disableAutomock 1`] = `
-  ===[ FILE: disable-automock.spec.ts ]===========================================
-  "use strict";
-  Object.defineProperty(exports, "__esModule", { value: true });
-  jest.disableAutomock();
-  var disable_automock_1 = require("./disable-automock");
-  test('original implementation', function () {
-      // now we have the original implementation,
-      // even if we set the automocking in a jest configuration
-      expect(disable_automock_1.default()).toBe('hi!');
-  });
-  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoiPGN3ZD4vZGlzYWJsZS1hdXRvbW9jay5zcGVjLnRzIiwibWFwcGluZ3MiOiI7O0FBRUEsSUFBSSxDQUFDLGVBQWUsRUFBRSxDQUFBO0FBRnRCLHVEQUFzQztBQUl0QyxJQUFJLENBQUMseUJBQXlCLEVBQUU7SUFDOUIsMkNBQTJDO0lBQzNDLHlEQUF5RDtJQUN6RCxNQUFNLENBQUMsMEJBQUssRUFBRSxDQUFDLENBQUMsSUFBSSxDQUFDLEtBQUssQ0FBQyxDQUFBO0FBQzdCLENBQUMsQ0FBQyxDQUFBIiwibmFtZXMiOltdLCJzb3VyY2VzIjpbIjxjd2Q+L2Rpc2FibGUtYXV0b21vY2suc3BlYy50cyJdLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgaGVsbG8gZnJvbSAnLi9kaXNhYmxlLWF1dG9tb2NrJ1xuXG5qZXN0LmRpc2FibGVBdXRvbW9jaygpXG5cbnRlc3QoJ29yaWdpbmFsIGltcGxlbWVudGF0aW9uJywgKCkgPT4ge1xuICAvLyBub3cgd2UgaGF2ZSB0aGUgb3JpZ2luYWwgaW1wbGVtZW50YXRpb24sXG4gIC8vIGV2ZW4gaWYgd2Ugc2V0IHRoZSBhdXRvbW9ja2luZyBpbiBhIGplc3QgY29uZmlndXJhdGlvblxuICBleHBlY3QoaGVsbG8oKSkudG9CZSgnaGkhJylcbn0pXG4iXSwidmVyc2lvbiI6M30=
-  ===[ INLINE SOURCE MAPS ]=======================================================
-  file: <cwd>/disable-automock.spec.ts
-  mappings: >-
-    ;;AAEA,IAAI,CAAC,eAAe,EAAE,CAAA;AAFtB,uDAAsC;AAItC,IAAI,CAAC,yBAAyB,EAAE;IAC9B,2CAA2C;IAC3C,yDAAyD;IACzD,MAAM,CAAC,0BAAK,EAAE,CAAC,CAAC,IAAI,CAAC,KAAK,CAAC,CAAA;AAC7B,CAAC,CAAC,CAAA
-  names: []
-  sources:
-    - <cwd>/disable-automock.spec.ts
-  sourcesContent:
-    - |
-      import hello from './disable-automock'
-  
-      jest.disableAutomock()
-  
-      test('original implementation', () => {
-        // now we have the original implementation,
-        // even if we set the automocking in a jest configuration
-        expect(hello()).toBe('hi!')
-      })
-  version: 3
-  ================================================================================
-`;
-
-exports[`Hoisting jest.disableAutomock() should pass using template "with-typescript-2-7": output-disableAutomock 1`] = `
-  √ jest --no-cache
-  ↳ exit code: 0
-  ===[ STDOUT ]===================================================================
-  
-  ===[ STDERR ]===================================================================
-  PASS ./disable-automock.spec.ts
-    √ original implementation
-  
-  Test Suites: 1 passed, 1 total
-  Tests:       1 passed, 1 total
-  Snapshots:   0 total
-  Time:        XXs
-  Ran all test suites.
-  ================================================================================
-`;
-
 exports[`Hoisting jest.enableAutomock() should pass using template "default": io-enableAutomock 1`] = `
   ===[ FILE: enable-automock.spec.ts ]============================================
   "use strict";
@@ -357,57 +306,6 @@ exports[`Hoisting jest.enableAutomock() should pass using template "with-babel-7
 `;
 
 exports[`Hoisting jest.enableAutomock() should pass using template "with-babel-7-string-config": output-enableAutomock 1`] = `
-  √ jest --no-cache
-  ↳ exit code: 0
-  ===[ STDOUT ]===================================================================
-  
-  ===[ STDERR ]===================================================================
-  PASS ./enable-automock.spec.ts
-    √ original implementation
-  
-  Test Suites: 1 passed, 1 total
-  Tests:       1 passed, 1 total
-  Snapshots:   0 total
-  Time:        XXs
-  Ran all test suites.
-  ================================================================================
-`;
-
-exports[`Hoisting jest.enableAutomock() should pass using template "with-typescript-2-7": io-enableAutomock 1`] = `
-  ===[ FILE: enable-automock.spec.ts ]============================================
-  "use strict";
-  Object.defineProperty(exports, "__esModule", { value: true });
-  jest.enableAutomock();
-  var enable_automock_1 = require("./enable-automock");
-  test('original implementation', function () {
-      // now we have the mocked implementation,
-      // @ts-ignore
-      expect(enable_automock_1.default._isMockFunction).toBeTruthy();
-  });
-  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoiPGN3ZD4vZW5hYmxlLWF1dG9tb2NrLnNwZWMudHMiLCJtYXBwaW5ncyI6Ijs7QUFBQSxJQUFJLENBQUMsY0FBYyxFQUFFLENBQUE7QUFFckIscURBQXFDO0FBRXJDLElBQUksQ0FBQyx5QkFBeUIsRUFBRTtJQUM5Qix5Q0FBeUM7SUFDekMsYUFBYTtJQUNiLE1BQU0sQ0FBQyx5QkFBSyxDQUFDLGVBQWUsQ0FBQyxDQUFDLFVBQVUsRUFBRSxDQUFBO0FBQzVDLENBQUMsQ0FBQyxDQUFBIiwibmFtZXMiOltdLCJzb3VyY2VzIjpbIjxjd2Q+L2VuYWJsZS1hdXRvbW9jay5zcGVjLnRzIl0sInNvdXJjZXNDb250ZW50IjpbImplc3QuZW5hYmxlQXV0b21vY2soKVxuXG5pbXBvcnQgaGVsbG8gZnJvbSAnLi9lbmFibGUtYXV0b21vY2snXG5cbnRlc3QoJ29yaWdpbmFsIGltcGxlbWVudGF0aW9uJywgKCkgPT4ge1xuICAvLyBub3cgd2UgaGF2ZSB0aGUgbW9ja2VkIGltcGxlbWVudGF0aW9uLFxuICAvLyBAdHMtaWdub3JlXG4gIGV4cGVjdChoZWxsby5faXNNb2NrRnVuY3Rpb24pLnRvQmVUcnV0aHkoKVxufSlcbiJdLCJ2ZXJzaW9uIjozfQ==
-  ===[ INLINE SOURCE MAPS ]=======================================================
-  file: <cwd>/enable-automock.spec.ts
-  mappings: >-
-    ;;AAAA,IAAI,CAAC,cAAc,EAAE,CAAA;AAErB,qDAAqC;AAErC,IAAI,CAAC,yBAAyB,EAAE;IAC9B,yCAAyC;IACzC,aAAa;IACb,MAAM,CAAC,yBAAK,CAAC,eAAe,CAAC,CAAC,UAAU,EAAE,CAAA;AAC5C,CAAC,CAAC,CAAA
-  names: []
-  sources:
-    - <cwd>/enable-automock.spec.ts
-  sourcesContent:
-    - |
-      jest.enableAutomock()
-  
-      import hello from './enable-automock'
-  
-      test('original implementation', () => {
-        // now we have the mocked implementation,
-        // @ts-ignore
-        expect(hello._isMockFunction).toBeTruthy()
-      })
-  version: 3
-  ================================================================================
-`;
-
-exports[`Hoisting jest.enableAutomock() should pass using template "with-typescript-2-7": output-enableAutomock 1`] = `
   √ jest --no-cache
   ↳ exit code: 0
   ===[ STDOUT ]===================================================================
@@ -601,65 +499,6 @@ exports[`Hoisting jest.mock() & jest.unmock() should pass using template "with-b
 `;
 
 exports[`Hoisting jest.mock() & jest.unmock() should pass using template "with-babel-7-string-config": output-mockUnmock 1`] = `
-  √ jest --no-cache
-  ↳ exit code: 0
-  ===[ STDOUT ]===================================================================
-  
-  ===[ STDERR ]===================================================================
-  PASS ./mock-unmock.spec.ts
-    √ should have been mocked
-  
-  Test Suites: 1 passed, 1 total
-  Tests:       1 passed, 1 total
-  Snapshots:   0 total
-  Time:        XXs
-  Ran all test suites.
-  ================================================================================
-`;
-
-exports[`Hoisting jest.mock() & jest.unmock() should pass using template "with-typescript-2-7": io-mockUnmock 1`] = `
-  ===[ FILE: mock-unmock.spec.ts ]================================================
-  "use strict";
-  Object.defineProperty(exports, "__esModule", { value: true });
-  jest.mock('./mock-unmock');
-  var mock_unmock_1 = require("./mock-unmock");
-  var original = jest.requireActual('./mock-unmock').default;
-  it('should have been mocked', function () {
-      jest.mock('foo', function () { return 'bar'; }, { virtual: true });
-      var msg = mock_unmock_1.default();
-      expect(mock_unmock_1.default).not.toBe(original);
-      expect(msg).toBeUndefined();
-      expect(mock_unmock_1.default).toHaveProperty('mock');
-      expect(require('foo')).toBe('bar');
-  });
-  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoiPGN3ZD4vbW9jay11bm1vY2suc3BlYy50cyIsIm1hcHBpbmdzIjoiOztBQUVBLElBQUksQ0FBQyxJQUFJLENBQUMsZUFBZSxDQUFDLENBQUE7QUFGMUIsNkNBQWlDO0FBSWpDLElBQU0sUUFBUSxHQUFHLElBQUksQ0FBQyxhQUFhLENBQUMsZUFBZSxDQUFDLENBQUMsT0FBTyxDQUFBO0FBQzVELEVBQUUsQ0FBQyx5QkFBeUIsRUFBRTtJQU01QixJQUFJLENBQUMsSUFBSSxDQUFDLEtBQUssRUFBRSxjQUFNLE9BQUEsS0FBSyxFQUFMLENBQUssRUFBRSxFQUFFLE9BQU8sRUFBRSxJQUFJLEVBQUUsQ0FBQyxDQUFBO0lBTGhELElBQU0sR0FBRyxHQUFHLHFCQUFLLEVBQUUsQ0FBQTtJQUNuQixNQUFNLENBQUMscUJBQUssQ0FBQyxDQUFDLEdBQUcsQ0FBQyxJQUFJLENBQUMsUUFBUSxDQUFDLENBQUE7SUFDaEMsTUFBTSxDQUFDLEdBQUcsQ0FBQyxDQUFDLGFBQWEsRUFBRSxDQUFBO0lBQzNCLE1BQU0sQ0FBQyxxQkFBSyxDQUFDLENBQUMsY0FBYyxDQUFDLE1BQU0sQ0FBQyxDQUFBO0lBQ3BDLE1BQU0sQ0FBQyxPQUFPLENBQUMsS0FBSyxDQUFDLENBQUMsQ0FBQyxJQUFJLENBQUMsS0FBSyxDQUFDLENBQUE7Q0FFbkMsQ0FBQyxDQUFBIiwibmFtZXMiOltdLCJzb3VyY2VzIjpbIjxjd2Q+L21vY2stdW5tb2NrLnNwZWMudHMiXSwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IGhlbGxvIGZyb20gJy4vbW9jay11bm1vY2snXG5cbmplc3QubW9jaygnLi9tb2NrLXVubW9jaycpXG5cbmNvbnN0IG9yaWdpbmFsID0gamVzdC5yZXF1aXJlQWN0dWFsKCcuL21vY2stdW5tb2NrJykuZGVmYXVsdFxuaXQoJ3Nob3VsZCBoYXZlIGJlZW4gbW9ja2VkJywgKCkgPT4ge1xuICBjb25zdCBtc2cgPSBoZWxsbygpXG4gIGV4cGVjdChoZWxsbykubm90LnRvQmUob3JpZ2luYWwpXG4gIGV4cGVjdChtc2cpLnRvQmVVbmRlZmluZWQoKVxuICBleHBlY3QoaGVsbG8pLnRvSGF2ZVByb3BlcnR5KCdtb2NrJylcbiAgZXhwZWN0KHJlcXVpcmUoJ2ZvbycpKS50b0JlKCdiYXInKVxuICBqZXN0Lm1vY2soJ2ZvbycsICgpID0+ICdiYXInLCB7IHZpcnR1YWw6IHRydWUgfSlcbn0pXG4iXSwidmVyc2lvbiI6M30=
-  ===[ INLINE SOURCE MAPS ]=======================================================
-  file: <cwd>/mock-unmock.spec.ts
-  mappings: >-
-    ;;AAEA,IAAI,CAAC,IAAI,CAAC,eAAe,CAAC,CAAA;AAF1B,6CAAiC;AAIjC,IAAM,QAAQ,GAAG,IAAI,CAAC,aAAa,CAAC,eAAe,CAAC,CAAC,OAAO,CAAA;AAC5D,EAAE,CAAC,yBAAyB,EAAE;IAM5B,IAAI,CAAC,IAAI,CAAC,KAAK,EAAE,cAAM,OAAA,KAAK,EAAL,CAAK,EAAE,EAAE,OAAO,EAAE,IAAI,EAAE,CAAC,CAAA;IALhD,IAAM,GAAG,GAAG,qBAAK,EAAE,CAAA;IACnB,MAAM,CAAC,qBAAK,CAAC,CAAC,GAAG,CAAC,IAAI,CAAC,QAAQ,CAAC,CAAA;IAChC,MAAM,CAAC,GAAG,CAAC,CAAC,aAAa,EAAE,CAAA;IAC3B,MAAM,CAAC,qBAAK,CAAC,CAAC,cAAc,CAAC,MAAM,CAAC,CAAA;IACpC,MAAM,CAAC,OAAO,CAAC,KAAK,CAAC,CAAC,CAAC,IAAI,CAAC,KAAK,CAAC,CAAA;CAEnC,CAAC,CAAA
-  names: []
-  sources:
-    - <cwd>/mock-unmock.spec.ts
-  sourcesContent:
-    - |
-      import hello from './mock-unmock'
-  
-      jest.mock('./mock-unmock')
-  
-      const original = jest.requireActual('./mock-unmock').default
-      it('should have been mocked', () => {
-        const msg = hello()
-        expect(hello).not.toBe(original)
-        expect(msg).toBeUndefined()
-        expect(hello).toHaveProperty('mock')
-        expect(require('foo')).toBe('bar')
-        jest.mock('foo', () => 'bar', { virtual: true })
-      })
-  version: 3
-  ================================================================================
-`;
-
-exports[`Hoisting jest.mock() & jest.unmock() should pass using template "with-typescript-2-7": output-mockUnmock 1`] = `
   √ jest --no-cache
   ↳ exit code: 0
   ===[ STDOUT ]===================================================================

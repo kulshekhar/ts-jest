@@ -231,49 +231,6 @@ exports[`With diagnostics throw using incremental program then pass when type ha
   ================================================================================
 `;
 
-exports[`With diagnostics throw using incremental program with unsupported version should fail using template "with-typescript-2-7" 1`] = `
-  × jest
-  ↳ exit code: 1
-  ===[ STDOUT ]===================================================================
-  
-  ===[ STDERR ]===================================================================
-  FAIL ./main.spec.ts
-    ● Test suite failed to run
-  
-      TypeError: ts.createIncrementalCompilerHost is not a function
-  
-        at Object.exports.compileUsingProgram (../../../__templates__/with-typescript-2-7/node_modules/ts-jest/dist/compiler/program.js:47:19)
-  
-  Test Suites: 1 failed, 1 total
-  Tests:       0 total
-  Snapshots:   0 total
-  Time:        XXs
-  Ran all test suites.
-  ================================================================================
-`;
-
-exports[`With diagnostics throw using incremental program with unsupported version should fail using template "with-unsupported-version" 1`] = `
-  × jest
-  ↳ exit code: 1
-  ===[ STDOUT ]===================================================================
-  
-  ===[ STDERR ]===================================================================
-  ts-jest[versions] (WARN) Version 2.5.3 of typescript installed has not been tested with ts-jest. If you're experiencing issues, consider using a supported version (>=2.7.0 <4.0.0). Please do not report issues in ts-jest if you are using unsupported versions.
-  FAIL ./main.spec.ts
-    ● Test suite failed to run
-  
-      TypeError: ts.createIncrementalCompilerHost is not a function
-  
-        at Object.exports.compileUsingProgram (../../../__templates__/with-unsupported-version/node_modules/ts-jest/dist/compiler/program.js:47:19)
-  
-  Test Suites: 1 failed, 1 total
-  Tests:       0 total
-  Snapshots:   0 total
-  Time:        XXs
-  Ran all test suites.
-  ================================================================================
-`;
-
 exports[`With diagnostics throw using language service first throw should fail using template "default" 1`] = `
   × jest
   ↳ exit code: 1
@@ -346,29 +303,6 @@ exports[`With diagnostics throw using language service first throw should fail u
           2 export type Thing = { a: number, b: number }
                                              ~
           'b' is declared here.
-  
-  Test Suites: 1 failed, 1 total
-  Tests:       0 total
-  Snapshots:   0 total
-  Time:        XXs
-  Ran all test suites.
-  ================================================================================
-`;
-
-exports[`With diagnostics throw using language service first throw should fail using template "with-typescript-2-7" 1`] = `
-  × jest
-  ↳ exit code: 1
-  ===[ STDOUT ]===================================================================
-  
-  ===[ STDERR ]===================================================================
-  FAIL ./main.spec.ts
-    ● Test suite failed to run
-  
-      main.spec.ts:3:14 - error TS2322: Type '{ a: number; }' is not assignable to type 'Thing'.
-        Property 'b' is missing in type '{ a: number; }'.
-  
-      3 export const thing: Thing = { a: 1 };
-                     ~~~~~
   
   Test Suites: 1 failed, 1 total
   Tests:       0 total
@@ -477,39 +411,6 @@ exports[`With diagnostics throw using language service then fail when code has c
   ================================================================================
 `;
 
-exports[`With diagnostics throw using language service then fail when code has changed to invalid base on cache of the previous run should fail using template "with-typescript-2-7" 1`] = `
-  × jest
-  ↳ exit code: 1
-  ===[ STDOUT ]===================================================================
-  
-  ===[ STDERR ]===================================================================
-  FAIL ./main.spec.ts
-    × foo is 42
-  
-    ● foo is 42
-  
-      expect(received).toBe(expected) // Object.is equality
-  
-      Expected: 42
-      Received: 43
-  
-        4 | 
-        5 | test('foo is 42', () => {
-      > 6 |   expect(foo).toBe(42);
-          |               ^
-        7 | });
-        8 | 
-  
-        at Object.<anonymous> (main.spec.ts:6:15)
-  
-  Test Suites: 1 failed, 1 total
-  Tests:       1 failed, 1 total
-  Snapshots:   0 total
-  Time:        XXs
-  Ran all test suites.
-  ================================================================================
-`;
-
 exports[`With diagnostics throw using language service then pass when type has changed to valid base on cache of the previous run should pass using template "default" 1`] = `
   √ jest
   ↳ exit code: 0
@@ -545,23 +446,6 @@ exports[`With diagnostics throw using language service then pass when type has c
 `;
 
 exports[`With diagnostics throw using language service then pass when type has changed to valid base on cache of the previous run should pass using template "with-babel-7-string-config" 1`] = `
-  √ jest
-  ↳ exit code: 0
-  ===[ STDOUT ]===================================================================
-  
-  ===[ STDERR ]===================================================================
-  PASS ./main.spec.ts
-    √ foo is 42
-  
-  Test Suites: 1 passed, 1 total
-  Tests:       1 passed, 1 total
-  Snapshots:   0 total
-  Time:        XXs
-  Ran all test suites.
-  ================================================================================
-`;
-
-exports[`With diagnostics throw using language service then pass when type has changed to valid base on cache of the previous run should pass using template "with-typescript-2-7" 1`] = `
   √ jest
   ↳ exit code: 0
   ===[ STDOUT ]===================================================================
@@ -809,49 +693,6 @@ exports[`With diagnostics throw using program then pass when type has changed to
   ================================================================================
 `;
 
-exports[`With diagnostics throw using program with unsupported version should fail using template "with-typescript-2-7" 1`] = `
-  × jest
-  ↳ exit code: 1
-  ===[ STDOUT ]===================================================================
-  
-  ===[ STDERR ]===================================================================
-  FAIL ./main.spec.ts
-    ● Test suite failed to run
-  
-      TypeError: Cannot read property 'maxNodeModuleJsDepth' of undefined
-  
-        at Object.createProgram (../../../__templates__/with-typescript-2-7/node_modules/typescript/lib/typescript.js:73929:51)
-  
-  Test Suites: 1 failed, 1 total
-  Tests:       0 total
-  Snapshots:   0 total
-  Time:        XXs
-  Ran all test suites.
-  ================================================================================
-`;
-
-exports[`With diagnostics throw using program with unsupported version should fail using template "with-unsupported-version" 1`] = `
-  × jest
-  ↳ exit code: 1
-  ===[ STDOUT ]===================================================================
-  
-  ===[ STDERR ]===================================================================
-  ts-jest[versions] (WARN) Version 2.5.3 of typescript installed has not been tested with ts-jest. If you're experiencing issues, consider using a supported version (>=2.7.0 <4.0.0). Please do not report issues in ts-jest if you are using unsupported versions.
-  FAIL ./main.spec.ts
-    ● Test suite failed to run
-  
-      TypeError: Cannot read property 'maxNodeModuleJsDepth' of undefined
-  
-        at Object.createProgram (../../../__templates__/with-unsupported-version/node_modules/typescript/lib/typescript.js:69709:51)
-  
-  Test Suites: 1 failed, 1 total
-  Tests:       0 total
-  Snapshots:   0 total
-  Time:        XXs
-  Ran all test suites.
-  ================================================================================
-`;
-
 exports[`With diagnostics warn only should pass using template "default" 1`] = `
   √ jest --no-cache
   ↳ exit code: 0
@@ -919,28 +760,6 @@ exports[`With diagnostics warn only should pass using template "with-babel-7-str
       2 export type Thing = { a: number, b: number }
                                          ~
       'b' is declared here.
-  PASS ./main.spec.ts
-    √ foo is 42
-  
-  Test Suites: 1 passed, 1 total
-  Tests:       1 passed, 1 total
-  Snapshots:   0 total
-  Time:        XXs
-  Ran all test suites.
-  ================================================================================
-`;
-
-exports[`With diagnostics warn only should pass using template "with-typescript-2-7" 1`] = `
-  √ jest --no-cache
-  ↳ exit code: 0
-  ===[ STDOUT ]===================================================================
-  
-  ===[ STDERR ]===================================================================
-  ts-jest[ts-compiler] (WARN) main.spec.ts:3:14 - error TS2322: Type '{ a: number; }' is not assignable to type 'Thing'.
-    Property 'b' is missing in type '{ a: number; }'.
-  
-  3 export const thing: Thing = { a: 1 };
-                 ~~~~~
   PASS ./main.spec.ts
     √ foo is 42
   

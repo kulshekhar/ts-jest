@@ -11,7 +11,7 @@ const logger = rootLogger.child({ namespace: 'versions' })
  */
 export const enum ExpectedVersions {
   Jest = '>=25 <26',
-  TypeScript = '>=2.7 <4',
+  TypeScript = '>=3.4 <4',
   BabelJest = '>=25 <26',
   BabelCore = '>=7.0.0-beta.0 <8',
 }

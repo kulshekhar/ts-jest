@@ -50,20 +50,3 @@ exports[`With isolatedModules enabled should pass using template "with-babel-7-s
   Ran all test suites.
   ================================================================================
 `;
-
-exports[`With isolatedModules enabled should pass using template "with-typescript-2-7" 1`] = `
-  √ jest
-  ↳ exit code: 0
-  ===[ STDOUT ]===================================================================
-  
-  ===[ STDERR ]===================================================================
-  PASS ./main.spec.ts
-    √ should do the thing
-  
-  Test Suites: 1 passed, 1 total
-  Tests:       1 passed, 1 total
-  Snapshots:   0 total
-  Time:        XXs
-  Ran all test suites.
-  ================================================================================
-`;
