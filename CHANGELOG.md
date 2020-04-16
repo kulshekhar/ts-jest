@@ -15,34 +15,6 @@
 
 ### Bug Fixes
 
-* add jest-config to dependencies list ([6d9e0d8](https://github.com/kulshekhar/ts-jest/commit/6d9e0d8))
-* always do type check for all files provided to ts-jest transformer ([#1450](https://github.com/kulshekhar/ts-jest/issues/1450)) ([107e062](https://github.com/kulshekhar/ts-jest/commit/107e062))
-* **docs:** correct changelog, correct version in package.json ([#1406](https://github.com/kulshekhar/ts-jest/issues/1406)) ([542e181](https://github.com/kulshekhar/ts-jest/commit/542e181))
-
-
-### Chores
-
-* **config:** improve diagnostics message ([#1444](https://github.com/kulshekhar/ts-jest/issues/1444)) ([96cd9b3](https://github.com/kulshekhar/ts-jest/commit/96cd9b3))
-
-
-### Features
-
-* **compiler:** expose internal ts `Program` via ConfigSet `TsCompiler` ([#1433](https://github.com/kulshekhar/ts-jest/issues/1433)) ([7153246](https://github.com/kulshekhar/ts-jest/commit/7153246))
-* **config:** add incremental option ([#1418](https://github.com/kulshekhar/ts-jest/issues/1418)) ([5a69bce](https://github.com/kulshekhar/ts-jest/commit/5a69bce))
-
-
-### BREAKING CHANGES
-
-* **config:** This will affect to any snapshots or assertion against diagnostics messages
-
-
-
-<a name="25.3.0"></a>
-# [25.3.0](https://github.com/kulshekhar/ts-jest/compare/25.2.1...v25.3.0) (2020-03-30)
-
-
-### Bug Fixes
-
 * add `jest-config` to dependencies list ([6d9e0d8](https://github.com/kulshekhar/ts-jest/commit/6d9e0d8))
 * always do type check for all files provided to ts-jest transformer for non-watch mode ([#1450](https://github.com/kulshekhar/ts-jest/issues/1450)) ([107e062](https://github.com/kulshekhar/ts-jest/commit/107e062))
 

@@ -31,7 +31,7 @@
     "doc:unlink": "git worktree prune",
     "doc:build": "cd docs && bundle exec jekyll build",
     "doc:build-commit": "npm run doc:build && cd docs/_site && git add --all && git commit -m \"Updates github pages\"",
-    "changelog": "node_modules/.bin/conventional-changelog -p angular -i CHANGELOG.md -s -r 2",
+    "changelog": "node_modules/.bin/conventional-changelog -p angular -i CHANGELOG.md -s -r 1",
     "prepare": "npm run build",
     "prepublishOnly": "npm run test",
     "preversion": "npm run test",
@@ -74,7 +74,8 @@
     "yargs-parser": "18.x"
   },
   "peerDependencies": {
-    "jest": ">=25 <26"
+    "jest": ">=25 <26",
+    "typescript": ">=3.4 <4.0"
   },
   "husky": {
     "hooks": {

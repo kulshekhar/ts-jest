@@ -1,7 +1,7 @@
 import { writeFileSync } from 'fs'
 import { join } from 'path'
 
-import { allPackageSetsWithProgram, allPackageSetsWithoutProgram, allValidPackageSets } from '../__helpers__/templates'
+import { allPackageSetsWithProgram, allValidPackageSets } from '../__helpers__/templates'
 import { configureTestCase } from '../__helpers__/test-case'
 
 describe('With diagnostics throw', () => {
@@ -108,16 +108,6 @@ describe('With diagnostics throw', () => {
         })
       })
     })
-
-    describe('with unsupported version', () => {
-      testCase.runWithTemplates(allPackageSetsWithoutProgram, 1, (runTest, { testLabel }) => {
-        it(testLabel, () => {
-          const result = runTest()
-          expect(result.status).toBe(1)
-          expect(result).toMatchSnapshot()
-        })
-      })
-    })
   })
 
   describe('using incremental program', () => {
@@ -166,16 +156,6 @@ describe('With diagnostics throw', () => {
       })
 
       testCase.runWithTemplates(allPackageSetsWithProgram, 1, (runTest, { testLabel }) => {
-        it(testLabel, () => {
-          const result = runTest()
-          expect(result.status).toBe(1)
-          expect(result).toMatchSnapshot()
-        })
-      })
-    })
-
-    describe('with unsupported version', () => {
-      testCase.runWithTemplates(allPackageSetsWithoutProgram, 1, (runTest, { testLabel }) => {
         it(testLabel, () => {
           const result = runTest()
           expect(result.status).toBe(1)
