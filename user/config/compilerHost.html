@@ -139,26 +139,17 @@
 
   <section>
     <p>By default <code class="language-plaintext highlighter-rouge">ts-jest</code> uses TypeScript <code class="language-plaintext highlighter-rouge">LanguageService</code> API in the context of a project (yours), with full type-checking and features.
-But TypeScript <code class="language-plaintext highlighter-rouge">Program</code> can also be used to achieve the same behavior as <code class="language-plaintext highlighter-rouge">LanguageService</code>.
+But TypeScript <code class="language-plaintext highlighter-rouge">Incremental Program</code> can also be used to achieve the same behavior as <code class="language-plaintext highlighter-rouge">LanguageService</code>.
 That’s what the <code class="language-plaintext highlighter-rouge">compilerHost</code> option (which defaults to <code class="language-plaintext highlighter-rouge">false</code>) does.</p>
 
-<p>There are 2 types of TypeScript <code class="language-plaintext highlighter-rouge">Program</code>, one is <code class="language-plaintext highlighter-rouge">Incremental Program</code> which is only available from TypeScript 3.4 
-and the other one is normal <code class="language-plaintext highlighter-rouge">Program</code>.</p>
-
-<p>By default <code class="language-plaintext highlighter-rouge">ts-jest</code> uses <code class="language-plaintext highlighter-rouge">Incremental Program</code> if <code class="language-plaintext highlighter-rouge">compilerHost</code> is enabled. The priority of using TypeScript APIs in <code class="language-plaintext highlighter-rouge">ts-jest</code>
-as below:</p>
+<p>The priority of using TypeScript APIs in <code class="language-plaintext highlighter-rouge">ts-jest</code> as below:</p>
 <ul>
   <li>Default TypeScript API is <code class="language-plaintext highlighter-rouge">LanguageService</code>.</li>
-  <li><code class="language-plaintext highlighter-rouge">compilerHost</code> is enabled:
-    <ul>
-      <li><code class="language-plaintext highlighter-rouge">incremental</code> is enabled (<strong>default</strong>): use TypeScript <code class="language-plaintext highlighter-rouge">Incremental Program</code>.</li>
-      <li><code class="language-plaintext highlighter-rouge">incremental</code> is disabled: use TypeScript <code class="language-plaintext highlighter-rouge">Program</code>.</li>
-    </ul>
-  </li>
-  <li><code class="language-plaintext highlighter-rouge">isolatedModules</code> is enabled, use TypeScript transpile modules.</li>
+  <li><code class="language-plaintext highlighter-rouge">compilerHost</code> is enabled: use TypeScript <code class="language-plaintext highlighter-rouge">Incremental Program</code>.</li>
+  <li><code class="language-plaintext highlighter-rouge">isolatedModules</code> is enabled: use TypeScript transpile modules.</li>
 </ul>
 
-<p>Here is how to enable <code class="language-plaintext highlighter-rouge">ts-jest</code> to compile using TypeScript <code class="language-plaintext highlighter-rouge">Program</code></p>
+<p>Here is how to enable <code class="language-plaintext highlighter-rouge">ts-jest</code> to compile using TypeScript <code class="language-plaintext highlighter-rouge">Incremental Program</code></p>
 
 <h3 id="example">Example</h3>
 
@@ -170,7 +161,6 @@ as below:</p>
   <span class="na">globals</span><span class="p">:</span> <span class="p">{</span>
     <span class="dl">'</span><span class="s1">ts-jest</span><span class="dl">'</span><span class="p">:</span> <span class="p">{</span>
       <span class="na">compilerHost</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
-      <span class="na">incremental</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
     <span class="p">}</span>
   <span class="p">}</span>
 <span class="p">};</span>
@@ -185,41 +175,6 @@ as below:</p>
     <span class="dl">"</span><span class="s2">globals</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
       <span class="dl">"</span><span class="s2">ts-jest</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
         <span class="dl">"</span><span class="s2">compilerHost</span><span class="dl">"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
-        <span class="dl">"</span><span class="s2">incremental</span><span class="dl">"</span><span class="p">:</span> <span class="kc">false</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div>    </div>
-
-  </div></div>
-
-<p>Here is how to enable <code class="language-plaintext highlighter-rouge">ts-jest</code> to compile using TypeScript <code class="language-plaintext highlighter-rouge">IncrementalProgram</code></p>
-
-<h3 id="example-1">Example</h3>
-
-<div class="row"><div class="col-md-6">
-
-    <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// jest.config.js</span>
-<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
-  <span class="c1">// [...]</span>
-  <span class="na">globals</span><span class="p">:</span> <span class="p">{</span>
-    <span class="dl">'</span><span class="s1">ts-jest</span><span class="dl">'</span><span class="p">:</span> <span class="p">{</span>
-      <span class="na">compilerHost</span><span class="p">:</span> <span class="kc">true</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
-<span class="p">};</span>
-</code></pre></div>    </div>
-
-  </div><div class="col-md-6">
-
-    <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// OR package.json</span>
-<span class="p">{</span>
-  <span class="c1">// [...]</span>
-  <span class="dl">"</span><span class="s2">jest</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
-    <span class="dl">"</span><span class="s2">globals</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
-      <span class="dl">"</span><span class="s2">ts-jest</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
-        <span class="dl">"</span><span class="s2">compilerHost</span><span class="dl">"</span><span class="p">:</span> <span class="kc">true</span>
       <span class="p">}</span>
     <span class="p">}</span>
   <span class="p">}</span>
