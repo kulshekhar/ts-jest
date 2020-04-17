@@ -17,67 +17,18 @@ const baseTsJestConfig = {
 }
 
 describe('cache', () => {
-  const source = 'console.log("hello")'
-
-  it('should use the cache with normal program', () => {
-    const fileName = 'test-cache-program.ts'
-    const tmp = tempDir('program-compiler')
-    writeFileSync(fileName, source, 'utf8')
-    const compiler = makeCompiler({
-      jestConfig: { cache: true, cacheDirectory: tmp },
-      tsJestConfig: {
-        ...baseTsJestConfig,
-        incremental: false,
-      },
-    })
-
-    logTarget.clear()
-    const compiled1 = compiler.compile(source, fileName)
-    expect(logTarget.filteredLines(LogLevels.debug, Infinity)).toMatchInlineSnapshot(`
-      Array [
-        "[level:20] readThrough(): cache miss
-      ",
-        "[level:20] updateMemoryCache(): update memory cache for program
-      ",
-        "[level:20] compileFn(): compiling using program
-      ",
-        "[level:20] visitSourceFileNode(): hoisting
-      ",
-        "[level:20] diagnoseFn(): computing diagnostics for test-cache-program.ts using program
-      ",
-        "[level:20] readThrough(): writing caches
-      ",
-      ]
-    `)
-
-    logTarget.clear()
-    const compiled2 = compiler.compile(source, fileName)
-    expect(logTarget.lines).toMatchInlineSnapshot(`
-      Array [
-        "[level:20] readThrough(): cache hit
-      ",
-      ]
-    `)
-
-    expect(compiled2).toBe(compiled1)
-
-    removeSync(fileName)
-  })
-
-  it('should use the cache with incremental program', () => {
+  it('should use the cache', () => {
+    const source = 'console.log("hello")'
     const fileName = 'test-cache-incremental-program.ts'
     const tmp = tempDir('incremental-program-compiler')
     writeFileSync(fileName, source, 'utf8')
     const compiler = makeCompiler({
       jestConfig: { cache: true, cacheDirectory: tmp },
-      tsJestConfig: {
-        ...baseTsJestConfig,
-        incremental: true,
-      },
+      tsJestConfig: baseTsJestConfig,
     })
 
     logTarget.clear()
-    const compiled1 = compiler.compile(source, fileName)
+    const compiled = compiler.compile(source, fileName)
     expect(logTarget.filteredLines(LogLevels.debug, Infinity)).toMatchInlineSnapshot(`
       Array [
         "[level:20] readThrough(): cache miss
@@ -104,7 +55,7 @@ describe('cache', () => {
       ]
     `)
 
-    expect(compiled2).toBe(compiled1)
+    expect(compiled2).toBe(compiled)
 
     removeSync(fileName)
   })
@@ -115,155 +66,78 @@ describe('cache resolved modules for test file', () => {
   const fileName = 'src/__mocks__/main.spec.ts'
   const source = JSON.stringify(require('../__mocks__/main.spec'))
 
-  describe('with program', () => {
-    beforeEach(() => {
-      // tslint:disable-next-line:no-empty
-      spy = jest.spyOn(compilerUtils, 'cacheResolvedModules').mockImplementationOnce(() => {})
-    })
-
-    afterEach(() => {
-      spy.mockRestore()
-    })
-
-    it('should cache resolved modules for test file with testMatchPatterns from jest config when match', () => {
-      const tmp = tempDir('compiler')
-      const compiler = makeCompiler({
-        jestConfig: { cache: true, cacheDirectory: tmp, testRegex: [/.*\.(spec|test)\.[jt]sx?$/] as any[] },
-        tsJestConfig: { tsConfig: false, compilerHost: true, incremental: false },
-      })
-      compiler.compile(source, fileName)
-
-      expect(spy).toHaveBeenCalled()
-      expect(spy.mock.calls[0][0]).toEqual(normalize(fileName))
-      expect(spy.mock.calls[0][1]).toEqual(source)
-    })
-
-    it(`shouldn't cache resolved modules for test file with testMatchPatterns from jest config when not match`, () => {
-      const tmp = tempDir('compiler')
-      const compiler = makeCompiler({
-        jestConfig: { cache: true, cacheDirectory: tmp, testRegex: [/.*\.(foo|bar)\.[jt]sx?$/] as any[] },
-        tsJestConfig: { tsConfig: false, compilerHost: true, incremental: false },
-      })
-      compiler.compile(source, fileName)
-
-      expect(spy).not.toHaveBeenCalled()
-    })
+  beforeEach(() => {
+    // tslint:disable-next-line:no-empty
+    spy = jest.spyOn(compilerUtils, 'cacheResolvedModules').mockImplementationOnce(() => {})
   })
 
-  describe('with incremental program', () => {
-    beforeEach(() => {
-      // tslint:disable-next-line:no-empty
-      spy = jest.spyOn(compilerUtils, 'cacheResolvedModules').mockImplementationOnce(() => {})
+  afterEach(() => {
+    spy.mockRestore()
+  })
+
+  it('should cache resolved modules for test file with testMatchPatterns from jest config when match', () => {
+    const tmp = tempDir('compiler')
+    const compiler = makeCompiler({
+      jestConfig: { cache: true, cacheDirectory: tmp, testRegex: [/.*\.(spec|test)\.[jt]sx?$/] as any[] },
+      tsJestConfig: { tsConfig: false, compilerHost: true },
     })
+    compiler.compile(source, fileName)
 
-    afterEach(() => {
-      spy.mockRestore()
+    expect(spy).toHaveBeenCalled()
+    expect(spy.mock.calls[0][0]).toEqual(normalize(fileName))
+    expect(spy.mock.calls[0][1]).toEqual(source)
+  })
+
+  it(`shouldn't cache resolved modules for test file with testMatchPatterns from jest config when not match`, () => {
+    const tmp = tempDir('compiler')
+    const compiler = makeCompiler({
+      jestConfig: { cache: true, cacheDirectory: tmp, testRegex: [/.*\.(foo|bar)\.[jt]sx?$/] as any[] },
+      tsJestConfig: { tsConfig: false, compilerHost: true },
     })
+    compiler.compile(source, fileName)
 
-    it('should cache resolved modules for test file with testMatchPatterns from jest config when match', () => {
-      const tmp = tempDir('compiler')
-      const compiler = makeCompiler({
-        jestConfig: { cache: true, cacheDirectory: tmp, testRegex: [/.*\.(spec|test)\.[jt]sx?$/] as any[] },
-        tsJestConfig: { tsConfig: false, compilerHost: true, incremental: true },
-      })
-      compiler.compile(source, fileName)
-
-      expect(spy).toHaveBeenCalled()
-      expect(spy.mock.calls[0][0]).toEqual(normalize(fileName))
-      expect(spy.mock.calls[0][1]).toEqual(source)
-    })
-
-    it(`shouldn't cache resolved modules for test file with testMatchPatterns from jest config when not match`, () => {
-      const tmp = tempDir('compiler')
-      const compiler = makeCompiler({
-        jestConfig: { cache: true, cacheDirectory: tmp, testRegex: [/.*\.(foo|bar)\.[jt]sx?$/] as any[] },
-        tsJestConfig: { tsConfig: false, compilerHost: true, incremental: true },
-      })
-      compiler.compile(source, fileName)
-
-      expect(spy).not.toHaveBeenCalled()
-    })
+    expect(spy).not.toHaveBeenCalled()
   })
 })
 
-describe('allowJs', () => {
+describe(`allowJs`, () => {
   const baseFileName = 'test-allowJs'
   const baseFileExt = 'test.js'
   const source = 'export default 42'
   const tsConfig = { allowJs: true }
 
-  describe(`with program`, () => {
-    it('should compile js file for allowJs true with outDir', () => {
-      const fileName = `${baseFileName}-program-outDir.${baseFileExt}`
-      writeFileSync(fileName, source, 'utf8')
-      const compiler = makeCompiler({
-        tsJestConfig: {
-          ...baseTsJestConfig,
-          incremental: false,
-          tsConfig: {
-            ...tsConfig,
-            outDir: '$$foo$$',
-          },
+  it('should compile js file for allowJs true with outDir', () => {
+    const fileName = `${baseFileName}-incremental-outDir.${baseFileExt}`
+    writeFileSync(fileName, source, 'utf8')
+    const compiler = makeCompiler({
+      tsJestConfig: {
+        ...baseTsJestConfig,
+        tsConfig: {
+          ...tsConfig,
+          outDir: '$$foo$$',
         },
-      })
-
-      const compiled = compiler.compile(source, fileName)
-
-      expect(new ProcessedSource(compiled, fileName)).toMatchSnapshot()
-
-      removeSync(fileName)
+      },
     })
 
-    it('should compile js file for allowJs true without outDir', () => {
-      const fileName = `${baseFileName}-program-no-outDir.${baseFileExt}`
-      writeFileSync(fileName, source, 'utf8')
-      const compiler = makeCompiler({
-        tsJestConfig: { ...baseTsJestConfig, incremental: false, tsConfig },
-      })
+    const compiled = compiler.compile(source, fileName)
 
-      const compiled = compiler.compile(source, fileName)
+    expect(new ProcessedSource(compiled, fileName)).toMatchSnapshot()
 
-      expect(new ProcessedSource(compiled, fileName)).toMatchSnapshot()
-
-      removeSync(fileName)
-    })
+    removeSync(fileName)
   })
 
-  describe(`with incremental program`, () => {
-    it('should compile js file for allowJs true with outDir', () => {
-      const fileName = `${baseFileName}-incremental-outDir.${baseFileExt}`
-      writeFileSync(fileName, source, 'utf8')
-      const compiler = makeCompiler({
-        tsJestConfig: {
-          ...baseTsJestConfig,
-          incremental: true,
-          tsConfig: {
-            ...tsConfig,
-            outDir: '$$foo$$',
-          },
-        },
-      })
-
-      const compiled = compiler.compile(source, fileName)
-
-      expect(new ProcessedSource(compiled, fileName)).toMatchSnapshot()
-
-      removeSync(fileName)
+  it('should compile js file for allowJs true without outDir', () => {
+    const fileName = `${baseFileName}-incremental-no-outDir.${baseFileExt}`
+    writeFileSync(fileName, source, 'utf8')
+    const compiler = makeCompiler({
+      tsJestConfig: { ...baseTsJestConfig, tsConfig },
     })
 
-    it('should compile js file for allowJs true without outDir', () => {
-      const fileName = `${baseFileName}-incremental-no-outDir.${baseFileExt}`
-      writeFileSync(fileName, source, 'utf8')
-      const compiler = makeCompiler({
-        tsJestConfig: { ...baseTsJestConfig, incremental: true, tsConfig },
-      })
+    const compiled = compiler.compile(source, fileName)
 
-      const compiled = compiler.compile(source, fileName)
+    expect(new ProcessedSource(compiled, fileName)).toMatchSnapshot()
 
-      expect(new ProcessedSource(compiled, fileName)).toMatchSnapshot()
-
-      removeSync(fileName)
-    })
+    removeSync(fileName)
   })
 })
 
@@ -286,19 +160,9 @@ describe('jsx preserve', () => {
     removeSync(fileName)
   })
 
-  it('should compile tsx file with program', () => {
+  it('should compile tsx file', () => {
     const compiler = makeCompiler({
-      tsJestConfig: { ...baseTsJestConfig, incremental: false, tsConfig },
-    })
-
-    const compiled = compiler.compile(source, fileName)
-
-    expect(new ProcessedSource(compiled, fileName)).toMatchSnapshot()
-  })
-
-  it('should compile tsx file for with incremental program', () => {
-    const compiler = makeCompiler({
-      tsJestConfig: { ...baseTsJestConfig, incremental: true, tsConfig },
+      tsJestConfig: { ...baseTsJestConfig, tsConfig },
     })
 
     const compiled = compiler.compile(source, fileName)
@@ -326,19 +190,9 @@ describe('other jsx options', () => {
     removeSync(fileName)
   })
 
-  it('should compile tsx file for with program', () => {
+  it('should compile tsx file', () => {
     const compiler = makeCompiler({
-      tsJestConfig: { ...baseTsJestConfig, incremental: false, tsConfig },
-    })
-
-    const compiled = compiler.compile(source, fileName)
-
-    expect(new ProcessedSource(compiled, fileName)).toMatchSnapshot()
-  })
-
-  it('should compile tsx file for with incremental program', () => {
-    const compiler = makeCompiler({
-      tsJestConfig: { ...baseTsJestConfig, incremental: true, tsConfig },
+      tsJestConfig: { ...baseTsJestConfig, tsConfig },
     })
 
     const compiled = compiler.compile(source, fileName)
@@ -362,64 +216,30 @@ const t: string = f(5)
     removeSync(fileName)
   })
 
-  describe('normal program', () => {
-    it('should report diagnostics with pathRegex config matches file name', () => {
-      const compiler = makeCompiler({
-        tsJestConfig: {
-          ...baseTsJestConfig,
-          incremental: false,
-          diagnostics: { pathRegex: fileName },
-        },
-      })
-
-      expect(() => compiler.compile(source, fileName)).toThrowErrorMatchingSnapshot()
+  it('should report diagnostics with pathRegex config matches file name', () => {
+    const compiler = makeCompiler({
+      tsJestConfig: {
+        ...baseTsJestConfig,
+        diagnostics: { pathRegex: fileName },
+      },
     })
 
-    it('should not report diagnostics with pathRegex config matches file name', () => {
-      const compiler = makeCompiler({
-        tsJestConfig: {
-          ...baseTsJestConfig,
-          incremental: false,
-          diagnostics: { pathRegex: 'foo.ts' },
-        },
-      })
-
-      try {
-        compiler.compile(source, fileName)
-      } catch (e) {
-        expect(e).not.toContain('TypeScript diagnostics')
-      }
-    })
+    expect(() => compiler.compile(source, fileName)).toThrowErrorMatchingSnapshot()
   })
 
-  describe('incremental program', () => {
-    it('should report diagnostics with pathRegex config matches file name', () => {
-      const compiler = makeCompiler({
-        tsJestConfig: {
-          ...baseTsJestConfig,
-          incremental: true,
-          diagnostics: { pathRegex: fileName },
-        },
-      })
-
-      expect(() => compiler.compile(source, fileName)).toThrowErrorMatchingSnapshot()
+  it('should not report diagnostics with pathRegex config does not match file name', () => {
+    const compiler = makeCompiler({
+      tsJestConfig: {
+        ...baseTsJestConfig,
+        diagnostics: { pathRegex: 'foo.ts' },
+      },
     })
 
-    it('should not report diagnostics with pathRegex config does not match file name', () => {
-      const compiler = makeCompiler({
-        tsJestConfig: {
-          ...baseTsJestConfig,
-          incremental: true,
-          diagnostics: { pathRegex: 'foo.ts' },
-        },
-      })
-
-      try {
-        compiler.compile(source, fileName)
-      } catch (e) {
-        expect(e).not.toContain('TypeScript diagnostics')
-      }
-    })
+    try {
+      compiler.compile(source, fileName)
+    } catch (e) {
+      expect(e).not.toContain('TypeScript diagnostics')
+    }
   })
 })
 
@@ -435,28 +255,10 @@ describe('source-maps', () => {
     removeSync(fileName)
   })
 
-  it('should have correct source maps with normal program', () => {
+  it('should have correct source maps', () => {
     const compiler = makeCompiler({
       tsJestConfig: {
         ...baseTsJestConfig,
-        incremental: false,
-      },
-    })
-
-    const compiled = compiler.compile(source, fileName)
-
-    expect(new ProcessedSource(compiled, fileName).outputSourceMaps).toMatchObject({
-      file: fileName,
-      sources: [fileName],
-      sourcesContent: [source],
-    })
-  })
-
-  it('should have correct source maps with incremental program', () => {
-    const compiler = makeCompiler({
-      tsJestConfig: {
-        ...baseTsJestConfig,
-        incremental: true,
       },
     })
 
@@ -489,18 +291,9 @@ describe('cannot compile', () => {
     removeSync(fileName2)
   })
 
-  it('should throw error with normal program', () => {
+  it('should throw error', () => {
     const compiler = makeCompiler({
-      tsJestConfig: { ...baseTsJestConfig, incremental: false, tsConfig: false },
-    })
-
-    expect(() => compiler.compile(source, fileName1)).toThrowErrorMatchingSnapshot()
-    expect(() => compiler.compile(source, fileName2)).toThrowErrorMatchingSnapshot()
-  })
-
-  it('should throw error with incremental program', () => {
-    const compiler = makeCompiler({
-      tsJestConfig: { ...baseTsJestConfig, incremental: true, tsConfig: false },
+      tsJestConfig: { ...baseTsJestConfig, tsConfig: false },
     })
 
     expect(() => compiler.compile(source, fileName1)).toThrowErrorMatchingSnapshot()

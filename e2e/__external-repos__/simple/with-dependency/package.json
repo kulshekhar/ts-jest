@@ -31,8 +31,7 @@
     "globals": {
       "ts-jest": {
         "diagnostics": true,
-        "tsConfig": "<rootDir>/tsconfig.json",
-        "compilerHost": true
+        "tsConfig": "<rootDir>/tsconfig.json"
       }
     }
   },

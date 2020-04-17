@@ -58,12 +58,6 @@ export interface TsJestGlobalOptions {
   compilerHost?: boolean
 
   /**
-   * Use TypeScript's Incremental Program. This option only works when `compilerHost` is `true`
-   * @default false
-   */
-  incremental?: boolean
-
-  /**
    * Compiler to use (default to 'typescript'):
    */
   compiler?: string
@@ -155,7 +149,6 @@ export interface TsJestConfig {
   packageJson: TsJestConfig$packageJson
   isolatedModules: boolean
   compilerHost: boolean
-  incremental: boolean
   compiler: string
   diagnostics: TsJestConfig$diagnostics
   babelConfig: TsJestConfig$babelConfig
