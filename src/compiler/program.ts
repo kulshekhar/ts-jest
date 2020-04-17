@@ -28,8 +28,6 @@ export const compileUsingProgram = (configs: ConfigSet, logger: Logger, memoryCa
   const ts = configs.compilerModule
   const cwd = configs.cwd
   const { options, projectReferences, errors } = configs.typescript
-  const incremental = configs.tsJest.incremental
-  const programDebugText = `${incremental ? 'incremental program' : 'program'}`
   const cacheDir = configs.tsCacheDir
   const compilerHostTraceCtx = {
     namespace: 'ts:compilerHost',
@@ -49,47 +47,21 @@ export const compileUsingProgram = (configs: ConfigSet, logger: Logger, memoryCa
     getNewLine: () => LINE_FEED,
     getCanonicalFileName: (fileName: string) => (ts.sys.useCaseSensitiveFileNames ? fileName : fileName.toLowerCase()),
   }
-  let builderProgram: _ts.EmitAndSemanticDiagnosticsBuilderProgram
-  let program: _ts.Program
-  let host: _ts.CompilerHost
-  if (incremental) {
-    host = ts.createIncrementalCompilerHost(options, sys)
-    builderProgram = ts.createIncrementalProgram({
-      rootNames: Object.keys(memoryCache.versions),
-      options,
-      host,
-      configFileParsingDiagnostics: errors,
-      projectReferences,
-    })
-    program = builderProgram.getProgram()
-  } else {
-    // Fallback for older TypeScript releases without incremental API.
-    host = {
-      ...sys,
-      getSourceFile: (fileName, languageVersion) => {
-        const contents = ts.sys.readFile(fileName)
-
-        if (contents === undefined) return
-
-        return ts.createSourceFile(fileName, contents, languageVersion)
-      },
-      getDefaultLibFileName: () => ts.getDefaultLibFilePath(options),
-      useCaseSensitiveFileNames: () => sys.useCaseSensitiveFileNames,
-    }
-    program = ts.createProgram({
-      rootNames: Object.keys(memoryCache.versions),
-      options,
-      host,
-      configFileParsingDiagnostics: errors,
-      projectReferences,
-    })
-  }
+  const host: _ts.CompilerHost = ts.createIncrementalCompilerHost(options, sys)
+  let builderProgram: _ts.EmitAndSemanticDiagnosticsBuilderProgram = ts.createIncrementalProgram({
+    rootNames: Object.keys(memoryCache.versions),
+    options,
+    host,
+    configFileParsingDiagnostics: errors,
+    projectReferences,
+  })
+  let program = builderProgram.getProgram()
   // Read and cache custom transformers.
   const customTransformers = configs.tsCustomTransformers
   const updateMemoryCache = (contents: string, fileName: string): void => {
-    logger.debug({ fileName }, `updateMemoryCache(): update memory cache for ${programDebugText}`)
+    logger.debug({ fileName }, `updateMemoryCache(): update memory cache for incremental program`)
 
-    const sourceFile = incremental ? builderProgram.getSourceFile(fileName) : program.getSourceFile(fileName)
+    const sourceFile = builderProgram.getSourceFile(fileName)
     const fileVersion = memoryCache.versions[fileName] ?? 0
     const isFileInCache = fileVersion !== 0
     if (!isFileInCache) {
@@ -114,15 +86,8 @@ export const compileUsingProgram = (configs: ConfigSet, logger: Logger, memoryCa
         configFileParsingDiagnostics: errors,
         projectReferences,
       }
-      if (incremental) {
-        builderProgram = ts.createIncrementalProgram(programOptions)
-        program = builderProgram.getProgram()
-      } else {
-        program = ts.createProgram({
-          ...programOptions,
-          oldProgram: program,
-        })
-      }
+      builderProgram = ts.createIncrementalProgram(programOptions)
+      program = builderProgram.getProgram()
     }
   }
 
@@ -132,35 +97,23 @@ export const compileUsingProgram = (configs: ConfigSet, logger: Logger, memoryCa
       const output: [string, string] = ['', '']
       // Must set memory cache before attempting to read file.
       updateMemoryCache(code, normalizedFileName)
-      const sourceFile = incremental
-        ? builderProgram.getSourceFile(normalizedFileName)
-        : program.getSourceFile(normalizedFileName)
+      const sourceFile = builderProgram.getSourceFile(normalizedFileName)
 
       if (!sourceFile) throw new TypeError(`Unable to read file: ${fileName}`)
 
-      logger.debug({ normalizedFileName }, `compileFn(): compiling using ${programDebugText}`)
+      logger.debug({ normalizedFileName }, `compileFn(): compiling using incremental program`)
 
-      const result: _ts.EmitResult = incremental
-        ? builderProgram.emit(
-            sourceFile,
-            (path, file, _writeByteOrderMark) => {
-              output[path.endsWith('.map') ? 1 : 0] = file
-            },
-            undefined,
-            undefined,
-            customTransformers,
-          )
-        : program.emit(
-            sourceFile,
-            (path, file, _writeByteOrderMark) => {
-              output[path.endsWith('.map') ? 1 : 0] = file
-            },
-            undefined,
-            undefined,
-            customTransformers,
-          )
+      const result: _ts.EmitResult = builderProgram.emit(
+        sourceFile,
+        (path, file, _writeByteOrderMark) => {
+          output[path.endsWith('.map') ? 1 : 0] = file
+        },
+        undefined,
+        undefined,
+        customTransformers,
+      )
       // Do type checking by getting TypeScript diagnostics
-      logger.debug(`diagnoseFn(): computing diagnostics for ${normalizedFileName} using ${programDebugText}`)
+      logger.debug(`diagnoseFn(): computing diagnostics for ${normalizedFileName} using incremental program`)
 
       doTypeChecking(configs, normalizedFileName, program, logger)
       /**
@@ -185,7 +138,7 @@ export const compileUsingProgram = (configs: ConfigSet, logger: Logger, memoryCa
             })
             .forEach(entry => {
               logger.debug(
-                `diagnoseFn(): computing diagnostics for test file that imports ${normalizedFileName} using ${programDebugText}`,
+                `diagnoseFn(): computing diagnostics for test file that imports ${normalizedFileName} using incremental program`,
               )
 
               doTypeChecking(configs, entry[0], program, logger)

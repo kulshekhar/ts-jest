@@ -291,7 +291,6 @@ export class ConfigSet {
     const res: TsJestConfig = {
       tsConfig,
       compilerHost: options.compilerHost ?? false,
-      incremental: options.incremental ?? true,
       packageJson,
       babelConfig,
       diagnostics,

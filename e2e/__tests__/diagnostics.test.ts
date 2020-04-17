@@ -55,66 +55,10 @@ describe('With diagnostics throw', () => {
     })
   })
 
-  describe('using program', () => {
-    const testCase = configureTestCase('diagnostics/throw', {
-      tsJestConfig: {
-        compilerHost: true,
-        incremental: false,
-      },
-    })
-
-    describe('first throw', () => {
-      testCase.runWithTemplates(allPackageSetsWithProgram, 1, (runTest, { testLabel }) => {
-        it(testLabel, () => {
-          const result = runTest()
-          expect(result.status).toBe(1)
-          expect(result).toMatchSnapshot()
-        })
-      })
-    })
-
-    describe('then pass when type has changed to valid base on cache of the previous run', () => {
-      beforeAll(() => {
-        writeFileSync(join(__dirname, '../__cases__/diagnostics/throw/main.ts'), `export const foo = 42\nexport type Thing = { a: number }`)
-      })
-
-      afterAll(() => {
-        writeFileSync(join(__dirname, '../__cases__/diagnostics/throw/main.ts'), `export const foo = 42\nexport type Thing = { a: number, b: number }\n`)
-      })
-
-      testCase.runWithTemplates(allPackageSetsWithProgram, 0, (runTest, { testLabel }) => {
-        it(testLabel, () => {
-          const result = runTest()
-          expect(result.status).toBe(0)
-          expect(result).toMatchSnapshot()
-        })
-      })
-    })
-
-    describe('then failed when type has changed to invalid base on cache of the previous run', () => {
-      beforeAll(() => {
-        writeFileSync(join(__dirname, '../__cases__/diagnostics/throw/main.ts'), `export const foo = 43\nexport type Thing = { a: number }`)
-      })
-
-      afterAll(() => {
-        writeFileSync(join(__dirname, '../__cases__/diagnostics/throw/main.ts'), `export const foo = 42\nexport type Thing = { a: number, b: number }\n`)
-      })
-
-      testCase.runWithTemplates(allPackageSetsWithProgram, 1, (runTest, { testLabel }) => {
-        it(testLabel, () => {
-          const result = runTest()
-          expect(result.status).toBe(1)
-          expect(result).toMatchSnapshot()
-        })
-      })
-    })
-  })
-
   describe('using incremental program', () => {
     const testCase = configureTestCase('diagnostics/throw', {
       tsJestConfig: {
         compilerHost: true,
-        incremental: true,
       },
     })
 

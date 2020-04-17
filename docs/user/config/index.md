@@ -191,7 +191,6 @@ All options have default values which should fit most of the projects. Click on 
 | [**`tsConfig`**][tsConfig] | [TypeScript compiler related configuration.][tsConfig] | `string`\|`object`\|`boolean` | _auto_ |
 | [**`isolatedModules`**][isolatedModules] | [Disable type-checking][isolatedModules] | `boolean` | `false` |
 | [**`compilerHost`**][compilerHost] | [Use TypeScript Compiler API][compilerHost] | `boolean` | `false` |
-| [**`incremental (use with `compilerHost`)`**][compilerHost] | [Use TypeScript Incremental Program][compilerHost] | `boolean` | `true` |
 | [**`diagnostics`**][diagnostics] | [Diagnostics related configuration.][diagnostics] | `boolean`\|`object` | `true` |
 | [**`babelConfig`**][babelConfig] | [Babel(Jest) related configuration.][babelConfig] | `boolean`\|`object` | _disabled_ |
 | [**`stringifyContentPathRegex`**][stringifyContentPathRegex] | [Files which will become modules returning self content.][stringifyContentPathRegex] | `string`\|`RegExp` | _disabled_ |
