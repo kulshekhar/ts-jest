@@ -1,3 +1,16 @@
+<a name="25.4.0"></a>
+# [25.4.0](https://github.com/kulshekhar/ts-jest/compare/v25.3.1...v25.4.0) (2020-04-17)
+
+
+### Bug Fixes
+
+* **compiler:** make `projectReferences` work with `isolatedModules: true` ([#1527](https://github.com/kulshekhar/ts-jest/issues/1527)) ([aa6b74c](https://github.com/kulshekhar/ts-jest/commit/aa6b74c))
+* **compiler:** make sure `LanguageService` updated with test file information before getting diagnostics for test file ([#1507](https://github.com/kulshekhar/ts-jest/issues/1507)) ([311eaeb](https://github.com/kulshekhar/ts-jest/commit/311eaeb))
+* **config:** set default `outDir` when `allowJs` is true and no `outDir` in `tsconfig` ([#1502](https://github.com/kulshekhar/ts-jest/issues/1502)) ([1a287ad](https://github.com/kulshekhar/ts-jest/commit/1a287ad))
+* **config:** use original jest config object instead of stringified config ([#1511](https://github.com/kulshekhar/ts-jest/issues/1511)) ([4f0bb33](https://github.com/kulshekhar/ts-jest/commit/4f0bb33))
+
+
+
 <a name="25.3.1"></a>
 ## [25.3.1](https://github.com/kulshekhar/ts-jest/compare/v25.3.0...v25.3.1) (2020-04-03)
 
