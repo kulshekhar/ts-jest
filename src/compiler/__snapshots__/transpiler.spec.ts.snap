@@ -1,24 +1,24 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`transpile module with isolatedModule: true should compile js file for allowJs true 1`] = `
-  ===[ FILE: src/compiler/transpile-module.spec.ts.test.js ]======================
+exports[`Transpiler should compile js file for allowJs true 1`] = `
+  ===[ FILE: src/compiler/transpiler.spec.ts.test.js ]============================
   "use strict";
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.default = 42;
-  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoiPGN3ZD4vc3JjL2NvbXBpbGVyL3RyYW5zcGlsZS1tb2R1bGUuc3BlYy50cy50ZXN0LmpzIiwibWFwcGluZ3MiOiI7O0FBQUEsa0JBQWUsRUFBRSxDQUFBIiwibmFtZXMiOltdLCJzb3VyY2VzIjpbIjxjd2Q+L3NyYy9jb21waWxlci90cmFuc3BpbGUtbW9kdWxlLnNwZWMudHMudGVzdC5qcyJdLCJzb3VyY2VzQ29udGVudCI6WyJleHBvcnQgZGVmYXVsdCA0MiJdLCJ2ZXJzaW9uIjozfQ==
+  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoiPGN3ZD4vc3JjL2NvbXBpbGVyL3RyYW5zcGlsZXIuc3BlYy50cy50ZXN0LmpzIiwibWFwcGluZ3MiOiI7O0FBQUEsa0JBQWUsRUFBRSxDQUFBIiwibmFtZXMiOltdLCJzb3VyY2VzIjpbIjxjd2Q+L3NyYy9jb21waWxlci90cmFuc3BpbGVyLnNwZWMudHMudGVzdC5qcyJdLCJzb3VyY2VzQ29udGVudCI6WyJleHBvcnQgZGVmYXVsdCA0MiJdLCJ2ZXJzaW9uIjozfQ==
   ===[ INLINE SOURCE MAPS ]=======================================================
-  file: <cwd>/src/compiler/transpile-module.spec.ts.test.js
+  file: <cwd>/src/compiler/transpiler.spec.ts.test.js
   mappings: ';;AAAA,kBAAe,EAAE,CAAA'
   names: []
   sources:
-    - <cwd>/src/compiler/transpile-module.spec.ts.test.js
+    - <cwd>/src/compiler/transpiler.spec.ts.test.js
   sourcesContent:
     - export default 42
   version: 3
   ================================================================================
 `;
 
-exports[`transpile module with isolatedModule: true should compile tsx file for jsx preserve 1`] = `
+exports[`Transpiler should compile tsx file for jsx preserve 1`] = `
   ===[ FILE: foo.tsx ]============================================================
   "use strict";
   var App = function () {
@@ -42,7 +42,7 @@ exports[`transpile module with isolatedModule: true should compile tsx file for 
   ================================================================================
 `;
 
-exports[`transpile module with isolatedModule: true should compile tsx file for other jsx options 1`] = `
+exports[`Transpiler should compile tsx file for other jsx options 1`] = `
   ===[ FILE: foo.tsx ]============================================================
   "use strict";
   var App = function () {
@@ -66,24 +66,24 @@ exports[`transpile module with isolatedModule: true should compile tsx file for 
   ================================================================================
 `;
 
-exports[`transpile module with isolatedModule: true should compile using transpileModule and not use cache 1`] = `
-  ===[ FILE: src/compiler/transpile-module.spec.ts ]==============================
+exports[`Transpiler should compile using transpileModule and not use cache 1`] = `
+  ===[ FILE: src/compiler/transpiler.spec.ts ]====================================
   "use strict";
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.default = 42;
-  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoiPGN3ZD4vc3JjL2NvbXBpbGVyL3RyYW5zcGlsZS1tb2R1bGUuc3BlYy50cyIsIm1hcHBpbmdzIjoiOztBQUFBLGtCQUFlLEVBQUUsQ0FBQSIsIm5hbWVzIjpbXSwic291cmNlcyI6WyI8Y3dkPi9zcmMvY29tcGlsZXIvdHJhbnNwaWxlLW1vZHVsZS5zcGVjLnRzIl0sInNvdXJjZXNDb250ZW50IjpbImV4cG9ydCBkZWZhdWx0IDQyIl0sInZlcnNpb24iOjN9
+  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoiPGN3ZD4vc3JjL2NvbXBpbGVyL3RyYW5zcGlsZXIuc3BlYy50cyIsIm1hcHBpbmdzIjoiOztBQUFBLGtCQUFlLEVBQUUsQ0FBQSIsIm5hbWVzIjpbXSwic291cmNlcyI6WyI8Y3dkPi9zcmMvY29tcGlsZXIvdHJhbnNwaWxlci5zcGVjLnRzIl0sInNvdXJjZXNDb250ZW50IjpbImV4cG9ydCBkZWZhdWx0IDQyIl0sInZlcnNpb24iOjN9
   ===[ INLINE SOURCE MAPS ]=======================================================
-  file: <cwd>/src/compiler/transpile-module.spec.ts
+  file: <cwd>/src/compiler/transpiler.spec.ts
   mappings: ';;AAAA,kBAAe,EAAE,CAAA'
   names: []
   sources:
-    - <cwd>/src/compiler/transpile-module.spec.ts
+    - <cwd>/src/compiler/transpiler.spec.ts
   sourcesContent:
     - export default 42
   version: 3
   ================================================================================
 `;
 
-exports[`transpile module with isolatedModule: true should report diagnostics related to codes with pathRegex config is undefined 1`] = `"foo.ts(2,23): error TS1005: '=>' expected."`;
+exports[`Transpiler should report diagnostics related to codes with pathRegex config is undefined 1`] = `"foo.ts(2,23): error TS1005: '=>' expected."`;
 
-exports[`transpile module with isolatedModule: true should report diagnostics related to codes with pathRegex config matches file name 1`] = `"foo.ts(2,23): error TS1005: '=>' expected."`;
+exports[`Transpiler should report diagnostics related to codes with pathRegex config matches file name 1`] = `"foo.ts(2,23): error TS1005: '=>' expected."`;

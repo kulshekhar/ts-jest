@@ -24,7 +24,7 @@ import {
 } from 'typescript'
 
 import { digest as MY_DIGEST, version as MY_VERSION } from '..'
-import { createCompiler } from '../compiler/instance'
+import { createCompilerInstance } from '../compiler/instance'
 import { internals as internalAstTransformers } from '../transformers'
 import {
   AstTransformerDesc,
@@ -435,7 +435,7 @@ export class ConfigSet {
 
   @Memoize()
   get tsCompiler(): TsCompiler {
-    return createCompiler(this)
+    return createCompilerInstance(this)
   }
 
   /**
