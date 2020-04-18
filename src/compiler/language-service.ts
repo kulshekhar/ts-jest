@@ -50,7 +50,8 @@ export const initializeLanguageServiceInstance = (
     logger.debug({ fileName }, `updateMemoryCache(): update memory cache for language service`)
 
     const file = memoryCache.files.get(fileName)
-    if (file && file.text !== contents) {
+    /* istanbul ignore next (covered by e2e) */
+    if (file && file?.text !== contents) {
       file.version++
       file.text = contents
     }

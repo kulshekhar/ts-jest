@@ -73,8 +73,6 @@ describe('Transpiler', () => {
       expect(getAndCacheProjectReferenceSpy).toHaveBeenCalled()
       expect(compilerUtils.getCompileResultFromReferencedProject).toHaveBeenCalled()
 
-      programSpy.mockRestore()
-      getAndCacheProjectReferenceSpy.mockRestore()
       jest.restoreAllMocks()
       removeSync(fileName)
     },
@@ -102,8 +100,6 @@ describe('Transpiler', () => {
     expect(getAndCacheProjectReferenceSpy).toHaveBeenCalled()
     expect(compilerUtils.getCompileResultFromReferencedProject).not.toHaveBeenCalled()
 
-    programSpy.mockRestore()
-    getAndCacheProjectReferenceSpy.mockRestore()
     jest.restoreAllMocks()
     removeSync(fileName)
   })

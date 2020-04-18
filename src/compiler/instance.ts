@@ -180,7 +180,6 @@ export const createCompilerInstance = (configs: ConfigSet): TsCompiler => {
     const normalizedFilePath = normalize(path)
     memoryCache.versions[normalizedFilePath] = 1
     memoryCache.files.set(normalizedFilePath, {
-      text: readFileSync(normalizedFilePath, 'utf-8'),
       version: 0,
     })
   }

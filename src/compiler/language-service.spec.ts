@@ -87,7 +87,30 @@ describe('Language service', () => {
     expect(getAndCacheProjectReferenceSpy).toHaveBeenCalled()
     expect(compilerUtils.getCompileResultFromReferencedProject).toHaveBeenCalled()
 
-    getAndCacheProjectReferenceSpy.mockRestore()
+    jest.restoreAllMocks()
+    removeSync(fileName)
+  })
+
+  it('should get compile result from language service when there is no referenced project', () => {
+    const tmp = tempDir('compiler')
+    const compiler = makeCompiler({
+      jestConfig: { cache: true, cacheDirectory: tmp },
+      tsJestConfig: { tsConfig: false },
+    })
+    const source = 'console.log("hello")'
+    const fileName = 'test-no-reference-project.ts'
+    const getAndCacheProjectReferenceSpy = jest
+      .spyOn(compilerUtils, 'getAndCacheProjectReference')
+      .mockReturnValueOnce(undefined)
+    jest.spyOn(compilerUtils, 'getCompileResultFromReferencedProject')
+    writeFileSync(fileName, source, 'utf8')
+
+    compiler.compile(source, fileName)
+
+    expect(getAndCacheProjectReferenceSpy).toHaveBeenCalled()
+    expect(compilerUtils.getCompileResultFromReferencedProject).not.toHaveBeenCalled()
+
+    jest.restoreAllMocks()
     removeSync(fileName)
   })
 

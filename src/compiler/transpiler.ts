@@ -25,7 +25,7 @@ export const initializeTranspilerInstance = (
         options,
         projectReferences,
       })
-    : ts.createProgram([], options)
+    : ts.createProgram(fileNames, options)
   const updateFileInCache = (contents: string, filePath: string) => {
     const file = memoryCache.files.get(filePath)
     if (file && file.text !== contents) {
