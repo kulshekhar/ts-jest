@@ -6,11 +6,11 @@
     "packages/*"
   ],
   "scripts": {
-    "test": "jest --no-cache"
+    "test": "yarn tsc -b packages/my-app/tsconfig.json && jest --no-cache"
   },
   "devDependencies": {
-    "@types/jest": "^25.1.2",
-    "jest": "^25.1.0",
-    "typescript": "~3.7.5"
+    "@types/jest": "^25.2.1",
+    "jest": "^25.3.0",
+    "typescript": "~3.8.3"
   }
 }
