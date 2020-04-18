@@ -22,7 +22,11 @@ function doTypeChecking(configs: ConfigSet, fileName: string, program: _ts.Progr
 /**
  * @internal
  */
-export const compileUsingProgram = (configs: ConfigSet, logger: Logger, memoryCache: MemoryCache): CompilerInstance => {
+export const initializeProgramInstance = (
+  configs: ConfigSet,
+  logger: Logger,
+  memoryCache: MemoryCache,
+): CompilerInstance => {
   logger.debug('compileUsingProgram(): create typescript compiler')
 
   const ts = configs.compilerModule

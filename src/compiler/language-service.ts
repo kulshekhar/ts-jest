@@ -22,7 +22,7 @@ function doTypeChecking(configs: ConfigSet, fileName: string, service: _ts.Langu
 /**
  * @internal
  */
-export const compileUsingLanguageService = (
+export const initializeLanguageServiceInstance = (
   configs: ConfigSet,
   logger: Logger,
   memoryCache: MemoryCache,

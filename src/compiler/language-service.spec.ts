@@ -11,7 +11,7 @@ import * as compilerUtils from './compiler-utils'
 
 const logTarget = logTargetMock()
 
-describe('language service', () => {
+describe('Language service', () => {
   beforeEach(() => {
     logTarget.clear()
   })

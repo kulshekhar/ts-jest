@@ -8,7 +8,7 @@ import { TS_JEST_OUT_DIR } from '../config/config-set'
 
 const logTarget = logTargetMock()
 
-describe('transpile module with isolatedModule: true', () => {
+describe('Transpiler', () => {
   const baseTsJestConfig = {
     isolatedModules: true,
   }

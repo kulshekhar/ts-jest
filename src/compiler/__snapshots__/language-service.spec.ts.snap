@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`language service should compile js file for allowJs true with outDir 1`] = `
+exports[`Language service should compile js file for allowJs true with outDir 1`] = `
   ===[ FILE: test-allow-js-with-outDir.js ]=======================================
   "use strict";
   Object.defineProperty(exports, "__esModule", { value: true });
@@ -18,7 +18,7 @@ exports[`language service should compile js file for allowJs true with outDir 1`
   ================================================================================
 `;
 
-exports[`language service should compile js file for allowJs true without outDir 1`] = `
+exports[`Language service should compile js file for allowJs true without outDir 1`] = `
   ===[ FILE: test-allow-js-no-outDir.js ]=========================================
   "use strict";
   Object.defineProperty(exports, "__esModule", { value: true });
@@ -36,7 +36,7 @@ exports[`language service should compile js file for allowJs true without outDir
   ================================================================================
 `;
 
-exports[`language service should compile tsx file for jsx preserve 1`] = `
+exports[`Language service should compile tsx file for jsx preserve 1`] = `
   ===[ FILE: test-jsx-preserve.tsx ]==============================================
   "use strict";
   var App = function () {
@@ -60,7 +60,7 @@ exports[`language service should compile tsx file for jsx preserve 1`] = `
   ================================================================================
 `;
 
-exports[`language service should compile tsx file for other jsx options 1`] = `
+exports[`Language service should compile tsx file for other jsx options 1`] = `
   ===[ FILE: test-jsx-options.tsx ]===============================================
   "use strict";
   var App = function () {
@@ -84,14 +84,14 @@ exports[`language service should compile tsx file for other jsx options 1`] = `
   ================================================================================
 `;
 
-exports[`language service should report diagnostics related to typings with pathRegex config matches file name 1`] = `"test-match-regex-diagnostics.ts(3,7): error TS2322: Type 'number' is not assignable to type 'string'."`;
+exports[`Language service should report diagnostics related to typings with pathRegex config matches file name 1`] = `"test-match-regex-diagnostics.ts(3,7): error TS2322: Type 'number' is not assignable to type 'string'."`;
 
-exports[`language service should throw error when cannot compile 1`] = `
+exports[`Language service should throw error when cannot compile 1`] = `
 "Unable to require \`.d.ts\` file for file: test-cannot-compile.d.ts.
 This is usually the result of a faulty configuration or import. Make sure there is a \`.js\`, \`.json\` or another executable extension available alongside \`test-cannot-compile.d.ts\`."
 `;
 
-exports[`language service should use the cache 3`] = `
+exports[`Language service should use the cache 3`] = `
   ===[ FILE: test-cache.ts ]======================================================
   console.log("hello");
   //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoidGVzdC1jYWNoZS50cyIsIm1hcHBpbmdzIjoiQUFBQSxPQUFPLENBQUMsR0FBRyxDQUFDLE9BQU8sQ0FBQyxDQUFBIiwibmFtZXMiOltdLCJzb3VyY2VzIjpbInRlc3QtY2FjaGUudHMiXSwic291cmNlc0NvbnRlbnQiOlsiY29uc29sZS5sb2coXCJoZWxsb1wiKSJdLCJ2ZXJzaW9uIjozfQ==

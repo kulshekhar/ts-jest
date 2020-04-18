@@ -11,12 +11,12 @@ import { getAndCacheOutputJSFileName, getAndCacheProjectReference } from './comp
 /**
  * @internal
  */
-export const compileUsingTranspileModule = (configs: ConfigSet, logger: Logger): CompilerInstance => {
+export const initializeTranspilerInstance = (configs: ConfigSet, logger: Logger): CompilerInstance => {
   logger.debug('compileUsingTranspileModule(): create typescript compiler')
 
   const { options, projectReferences, fileNames } = configs.typescript
   const files: TSFiles = new Map<string, TSFile>()
-  const compiler = configs.compilerModule
+  const ts = configs.compilerModule
   fileNames.forEach(filePath => {
     const normalizedFilePath = normalize(filePath)
     files.set(normalizedFilePath, {
@@ -25,12 +25,12 @@ export const compileUsingTranspileModule = (configs: ConfigSet, logger: Logger):
     })
   })
   const program = projectReferences
-    ? compiler.createProgram({
+    ? ts.createProgram({
         rootNames: fileNames,
         options,
         projectReferences,
       })
-    : compiler.createProgram([], options)
+    : ts.createProgram([], options)
   const updateFileInCache = (contents: string, filePath: string) => {
     const file = files.get(filePath)
     if (file && file.text !== contents) {
@@ -62,7 +62,7 @@ export const compileUsingTranspileModule = (configs: ConfigSet, logger: Logger):
 
         const jsFileName = getAndCacheOutputJSFileName(normalizedFileName, referencedProject, files)
         const relativeJSFileName = configs.resolvePath(jsFileName)
-        if (!compiler.sys.fileExists(jsFileName)) {
+        if (!ts.sys.fileExists(jsFileName)) {
           throw new Error(
             // tslint:disable-next-line:prefer-template
             `Could not find output JavaScript file for input ` +
@@ -75,12 +75,12 @@ export const compileUsingTranspileModule = (configs: ConfigSet, logger: Logger):
         }
 
         const mapFileName = `${jsFileName}.map`
-        const outputText = compiler.sys.readFile(jsFileName)
-        const sourceMapText = compiler.sys.readFile(mapFileName)
+        const outputText = ts.sys.readFile(jsFileName)
+        const sourceMapText = ts.sys.readFile(mapFileName)
 
         return [outputText!, sourceMapText!]
       } else {
-        const result: _ts.TranspileOutput = compiler.transpileModule(code, {
+        const result: _ts.TranspileOutput = ts.transpileModule(code, {
           fileName: normalizedFileName,
           transformers: configs.tsCustomTransformers,
           compilerOptions: options,

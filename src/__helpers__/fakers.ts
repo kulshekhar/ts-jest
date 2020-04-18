@@ -1,7 +1,7 @@
 import { Config } from '@jest/types'
 import { resolve } from 'path'
 
-import { createCompiler } from '../compiler/instance'
+import { createCompilerInstance } from '../compiler/instance'
 import { ConfigSet } from '../config/config-set'
 import { BabelConfig, TsJestConfig, TsJestGlobalOptions } from '../types'
 import { ImportReasons } from '../util/messages'
@@ -76,5 +76,5 @@ export function makeCompiler({
   }
   const cs = new ConfigSet(getJestConfig(jestConfig, tsJestConfig), parentConfig)
 
-  return createCompiler(cs)
+  return createCompilerInstance(cs)
 }

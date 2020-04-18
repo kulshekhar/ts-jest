@@ -39,9 +39,9 @@ import { CompileFn, CompilerInstance, MemoryCache, TsCompiler } from '../types'
 import { sha1 } from '../util/sha1'
 
 import { getResolvedModulesCache } from './compiler-utils'
-import { compileUsingLanguageService } from './language-service'
-import { compileUsingProgram } from './program'
-import { compileUsingTranspileModule } from './transpile-module'
+import { initializeLanguageServiceInstance } from './language-service'
+import { initializeProgramInstance } from './program'
+import { initializeTranspilerInstance } from './transpiler'
 
 /**
  * Update the output remapping the source map.
@@ -89,9 +89,10 @@ const isValidCacheContent = (contents: string): boolean => {
 }
 
 /**
- * Wrap the function with caching.
+ * Compile files which are provided by jest via transform config and cache the result in file system if users run with
+ * cache mode
  */
-const readThrough = (
+const compileAndCacheResult = (
   cachedir: string | undefined,
   memoryCache: MemoryCache,
   compileFn: CompileFn,
@@ -150,10 +151,10 @@ const readThrough = (
 }
 
 /**
- * Register TypeScript compiler.
+ * Register TypeScript compiler instance.
  * @internal
  */
-export const createCompiler = (configs: ConfigSet): TsCompiler => {
+export const createCompilerInstance = (configs: ConfigSet): TsCompiler => {
   const logger = configs.logger.child({ namespace: 'ts-compiler' })
   const {
     typescript: { options: compilerOptions, fileNames },
@@ -186,12 +187,12 @@ export const createCompiler = (configs: ConfigSet): TsCompiler => {
   if (!tsJest.isolatedModules) {
     // Use language services by default
     compilerInstance = !tsJest.compilerHost
-      ? compileUsingLanguageService(configs, logger, memoryCache)
-      : compileUsingProgram(configs, logger, memoryCache)
+      ? initializeLanguageServiceInstance(configs, logger, memoryCache)
+      : initializeProgramInstance(configs, logger, memoryCache)
   } else {
-    compilerInstance = compileUsingTranspileModule(configs, logger)
+    compilerInstance = initializeTranspilerInstance(configs, logger)
   }
-  const compile = readThrough(cachedir, memoryCache, compilerInstance.compileFn, getExtension, logger)
+  const compile = compileAndCacheResult(cachedir, memoryCache, compilerInstance.compileFn, getExtension, logger)
 
   return { cwd: configs.cwd, compile, program: compilerInstance.program }
 }
