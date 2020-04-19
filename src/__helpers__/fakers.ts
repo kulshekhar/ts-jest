@@ -14,7 +14,6 @@ export const rootDir = filePath('')
 
 export function tsJestConfig(options?: Partial<TsJestConfig>): TsJestConfig {
   return {
-    compilerHost: false,
     isolatedModules: false,
     compiler: 'typescript',
     transformers: [],

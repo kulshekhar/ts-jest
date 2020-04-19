@@ -40,7 +40,6 @@ import { sha1 } from '../util/sha1'
 
 import { getResolvedModulesCache } from './compiler-utils'
 import { initializeLanguageServiceInstance } from './language-service'
-import { initializeProgramInstance } from './program'
 import { initializeTranspilerInstance } from './transpiler'
 
 /**
@@ -193,9 +192,7 @@ export const createCompilerInstance = (configs: ConfigSet): TsCompiler => {
   let compilerInstance: CompilerInstance
   if (!tsJest.isolatedModules) {
     // Use language services by default
-    compilerInstance = !tsJest.compilerHost
-      ? initializeLanguageServiceInstance(configs, memoryCache, logger)
-      : initializeProgramInstance(configs, memoryCache, logger)
+    compilerInstance = initializeLanguageServiceInstance(configs, memoryCache, logger)
   } else {
     compilerInstance = initializeTranspilerInstance(configs, memoryCache, logger)
   }

@@ -290,7 +290,6 @@ export class ConfigSet {
     // parsed options
     const res: TsJestConfig = {
       tsConfig,
-      compilerHost: options.compilerHost ?? false,
       packageJson,
       babelConfig,
       diagnostics,

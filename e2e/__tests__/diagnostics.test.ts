@@ -1,110 +1,54 @@
 import { writeFileSync } from 'fs'
 import { join } from 'path'
 
-import { allPackageSetsWithProgram, allValidPackageSets } from '../__helpers__/templates'
+import { allValidPackageSets } from '../__helpers__/templates'
 import { configureTestCase } from '../__helpers__/test-case'
 
 describe('With diagnostics throw', () => {
-  describe('using language service', () => {
-    const testCase = configureTestCase('diagnostics/throw')
+  const testCase = configureTestCase('diagnostics/throw')
 
-    describe('first throw', () => {
-      testCase.runWithTemplates(allValidPackageSets, 1, (runTest, { testLabel }) => {
-        it(testLabel, () => {
-          const result = runTest()
-          expect(result.status).toBe(1)
-          expect(result).toMatchSnapshot()
-        })
-      })
-    })
-
-    describe('then pass when type has changed to valid base on cache of the previous run', () => {
-      beforeAll(() => {
-        writeFileSync(join(__dirname, '../__cases__/diagnostics/throw/main.ts'), `export const foo = 42\nexport type Thing = { a: number }`)
-      })
-
-      afterAll(() => {
-        writeFileSync(join(__dirname, '../__cases__/diagnostics/throw/main.ts'), `export const foo = 42\nexport type Thing = { a: number, b: number }\n`)
-      })
-
-      testCase.runWithTemplates(allValidPackageSets, 0, (runTest, { testLabel }) => {
-        it(testLabel, () => {
-          const result = runTest()
-          expect(result.status).toBe(0)
-          expect(result).toMatchSnapshot()
-        })
-      })
-    })
-
-    describe('then fail when code has changed to invalid base on cache of the previous run', () => {
-      beforeAll(() => {
-        writeFileSync(join(__dirname, '../__cases__/diagnostics/throw/main.ts'), `export const foo = 43\nexport type Thing = { a: number }`)
-      })
-
-      afterAll(() => {
-        writeFileSync(join(__dirname, '../__cases__/diagnostics/throw/main.ts'), `export const foo = 42\nexport type Thing = { a: number, b: number }\n`)
-      })
-
-      testCase.runWithTemplates(allValidPackageSets, 1, (runTest, { testLabel }) => {
-        it(testLabel, () => {
-          const result = runTest()
-          expect(result.status).toBe(1)
-          expect(result).toMatchSnapshot()
-        })
+  describe('first throw', () => {
+    testCase.runWithTemplates(allValidPackageSets, 1, (runTest, { testLabel }) => {
+      it(testLabel, () => {
+        const result = runTest()
+        expect(result.status).toBe(1)
+        expect(result).toMatchSnapshot()
       })
     })
   })
 
-  describe('using incremental program', () => {
-    const testCase = configureTestCase('diagnostics/throw', {
-      tsJestConfig: {
-        compilerHost: true,
-      },
+  describe('then pass when type has changed to valid base on cache of the previous run', () => {
+    beforeAll(() => {
+      writeFileSync(join(__dirname, '../__cases__/diagnostics/throw/main.ts'), `export const foo = 42\nexport type Thing = { a: number }`)
     })
 
-    describe('first throw', () => {
-      testCase.runWithTemplates(allPackageSetsWithProgram, 1, (runTest, { testLabel }) => {
-        it(testLabel, () => {
-          const result = runTest()
-          expect(result.status).toBe(1)
-          expect(result).toMatchSnapshot()
-        })
-      })
+    afterAll(() => {
+      writeFileSync(join(__dirname, '../__cases__/diagnostics/throw/main.ts'), `export const foo = 42\nexport type Thing = { a: number, b: number }\n`)
     })
 
-    describe('then pass when type has changed to valid base on cache of the previous run', () => {
-      beforeAll(() => {
-        writeFileSync(join(__dirname, '../__cases__/diagnostics/throw/main.ts'), `export const foo = 42\nexport type Thing = { a: number }`)
-      })
-
-      afterAll(() => {
-        writeFileSync(join(__dirname, '../__cases__/diagnostics/throw/main.ts'), `export const foo = 42\nexport type Thing = { a: number, b: number }\n`)
-      })
-
-      testCase.runWithTemplates(allPackageSetsWithProgram, 0, (runTest, { testLabel }) => {
-        it(testLabel, () => {
-          const result = runTest()
-          expect(result.status).toBe(0)
-          expect(result).toMatchSnapshot()
-        })
+    testCase.runWithTemplates(allValidPackageSets, 0, (runTest, { testLabel }) => {
+      it(testLabel, () => {
+        const result = runTest()
+        expect(result.status).toBe(0)
+        expect(result).toMatchSnapshot()
       })
     })
+  })
 
-    describe('then failed when code has changed to invalid base on cache of the previous run', () => {
-      beforeAll(() => {
-        writeFileSync(join(__dirname, '../__cases__/diagnostics/throw/main.ts'), `export const foo = 43\nexport type Thing = { a: number }`)
-      })
+  describe('then fail when code has changed to invalid base on cache of the previous run', () => {
+    beforeAll(() => {
+      writeFileSync(join(__dirname, '../__cases__/diagnostics/throw/main.ts'), `export const foo = 43\nexport type Thing = { a: number }`)
+    })
 
-      afterAll(() => {
-        writeFileSync(join(__dirname, '../__cases__/diagnostics/throw/main.ts'), `export const foo = 42\nexport type Thing = { a: number, b: number }\n`)
-      })
+    afterAll(() => {
+      writeFileSync(join(__dirname, '../__cases__/diagnostics/throw/main.ts'), `export const foo = 42\nexport type Thing = { a: number, b: number }\n`)
+    })
 
-      testCase.runWithTemplates(allPackageSetsWithProgram, 1, (runTest, { testLabel }) => {
-        it(testLabel, () => {
-          const result = runTest()
-          expect(result.status).toBe(1)
-          expect(result).toMatchSnapshot()
-        })
+    testCase.runWithTemplates(allValidPackageSets, 1, (runTest, { testLabel }) => {
+      it(testLabel, () => {
+        const result = runTest()
+        expect(result.status).toBe(1)
+        expect(result).toMatchSnapshot()
       })
     })
   })
