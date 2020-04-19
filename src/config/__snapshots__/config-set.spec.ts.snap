@@ -51,6 +51,7 @@ Object {
       "pretty": true,
       "throws": true,
     },
+    "internal": true,
     "isolatedModules": false,
     "packageJson": Object {
       "kind": "file",
@@ -139,6 +140,7 @@ Object {
     "pretty": true,
     "throws": true,
   },
+  "internal": true,
   "isolatedModules": false,
   "packageJson": Object {
     "kind": "file",

@@ -106,7 +106,10 @@ const compileAndCacheResult = (
 
       const [value, sourceMap] = compileFn(code, normalizedFileName, lineOffset)
       const output = updateOutput(value, fileName, sourceMap, getExtension)
-      memoryCache.outputs[normalizedFileName] = output
+      memoryCache.files.set(normalizedFileName, {
+        ...memoryCache.files.get(normalizedFileName)!,
+        output,
+      })
 
       return output
     }
@@ -129,7 +132,10 @@ const compileAndCacheResult = (
       const output = readFileSync(outputPath, 'utf8')
       if (isValidCacheContent(output)) {
         logger.debug({ normalizedFileName }, 'readThrough(): cache hit')
-        memoryCache.outputs[normalizedFileName] = output
+        memoryCache.files.set(normalizedFileName, {
+          ...memoryCache.files.get(normalizedFileName)!,
+          output,
+        })
 
         return output
       }
@@ -142,7 +148,10 @@ const compileAndCacheResult = (
 
     logger.debug({ normalizedFileName, outputPath }, 'readThrough(): writing caches')
 
-    memoryCache.outputs[normalizedFileName] = output
+    memoryCache.files.set(normalizedFileName, {
+      ...memoryCache.files.get(normalizedFileName)!,
+      output,
+    })
     writeFileSync(outputPath, output)
 
     return output
@@ -156,16 +165,13 @@ const compileAndCacheResult = (
 export const createCompilerInstance = (configs: ConfigSet): TsCompiler => {
   const logger = configs.logger.child({ namespace: 'ts-compiler' })
   const {
-    typescript: { options: compilerOptions, fileNames },
+    typescript: { options: compilerOptions },
     tsJest,
   } = configs
-  const cachedir = configs.tsCacheDir
+  const cacheDir = configs.tsCacheDir
   const ts = configs.compilerModule // Require the TypeScript compiler and configuration.
   const extensions = ['.ts', '.tsx']
   const memoryCache: MemoryCache = {
-    contents: Object.create(null),
-    versions: Object.create(null),
-    outputs: Object.create(null),
     resolvedModules: Object.create(null),
     files: new Map<string, TSFile>(),
   }
@@ -175,11 +181,30 @@ export const createCompilerInstance = (configs: ConfigSet): TsCompiler => {
     extensions.push('.jsx')
   }
   // Initialize files from TypeScript into project.
-  for (const path of fileNames) {
-    const normalizedFilePath = normalize(path)
-    memoryCache.versions[normalizedFilePath] = 1
-    memoryCache.files.set(normalizedFilePath, {
-      version: 0,
+  /* istanbul ignore next (cover by e2e) */
+  if (configs.tsJest.internal) {
+    /**
+     * Unfortunately our internal tests don't allow the optimization of Program below so we need this hack. This shouldn't
+     * affect to the final outcome of tests, only affects to performance.
+     */
+    for (const path of configs.typescript.fileNames) {
+      const normalizedFilePath = normalize(path)
+      memoryCache.files.set(normalizedFilePath, {
+        version: 0,
+      })
+    }
+  } else {
+    /**
+     * To utilize incremental feature of TypeScript Program, it is mandatory to know which files should be loaded initially
+     * when creating LanguageService instance or Program instance. Here we inform TypeScript Program that it should load
+     * jest setupFiles and setupFilesAfterEnv to be available for files in test environment to use. Because in parallel mode,
+     * it is possible that some jest workers don't have these files' information which can fail tests randomly.
+     */
+    configs.jest.setupFiles.concat(configs.jest.setupFilesAfterEnv).forEach(setupFile => {
+      const normalizedFileName = normalize(setupFile)
+      memoryCache.files.set(normalizedFileName, {
+        version: 0,
+      })
     })
   }
   /**
@@ -196,7 +221,7 @@ export const createCompilerInstance = (configs: ConfigSet): TsCompiler => {
   } else {
     compilerInstance = initializeTranspilerInstance(configs, memoryCache, logger)
   }
-  const compile = compileAndCacheResult(cachedir, memoryCache, compilerInstance.compileFn, getExtension, logger)
+  const compile = compileAndCacheResult(cacheDir, memoryCache, compilerInstance.compileFn, getExtension, logger)
 
   return { cwd: configs.cwd, compile, program: compilerInstance.program }
 }

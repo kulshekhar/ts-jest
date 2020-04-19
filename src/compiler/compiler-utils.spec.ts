@@ -9,9 +9,6 @@ import { MemoryCache, TSFile } from '../types'
 import { cacheResolvedModules, getResolvedModulesCache } from './compiler-utils'
 
 const memoryCache: MemoryCache = {
-  contents: Object.create(null),
-  versions: Object.create(null),
-  outputs: Object.create(null),
   resolvedModules: Object.create(null),
   files: new Map<string, TSFile>(),
 }
