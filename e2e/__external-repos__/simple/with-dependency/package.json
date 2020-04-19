@@ -36,12 +36,12 @@
     }
   },
   "devDependencies": {
-    "typescript": "^3.7.5"
+    "typescript": "^3.8.3"
   },
   "dependencies": {
-    "@types/jest": "^25.1.2",
+    "@types/jest": "^25.2.1",
     "dependency": "file:../dependency",
-    "jest": "^25.1.0"
+    "jest": "^25.3.0"
   },
   "main": "./index.ts"
 }

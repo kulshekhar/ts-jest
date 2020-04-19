@@ -4,7 +4,7 @@ import { resolve } from 'path'
 
 import { makeCompiler } from '../__helpers__/fakers'
 import { tempDir } from '../__helpers__/path'
-import { MemoryCache } from '../types'
+import { MemoryCache, TSFile } from '../types'
 
 import { cacheResolvedModules, getResolvedModulesCache } from './compiler-utils'
 
@@ -13,6 +13,7 @@ const memoryCache: MemoryCache = {
   versions: Object.create(null),
   outputs: Object.create(null),
   resolvedModules: Object.create(null),
+  files: new Map<string, TSFile>(),
 }
 
 describe('cacheResolvedModules', () => {

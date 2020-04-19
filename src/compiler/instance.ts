@@ -35,7 +35,7 @@ import mkdirp = require('mkdirp')
 import { basename, extname, join, normalize } from 'path'
 
 import { ConfigSet } from '../config/config-set'
-import { CompileFn, CompilerInstance, MemoryCache, TsCompiler } from '../types'
+import { CompileFn, CompilerInstance, MemoryCache, TSFile, TsCompiler } from '../types'
 import { sha1 } from '../util/sha1'
 
 import { getResolvedModulesCache } from './compiler-utils'
@@ -168,6 +168,7 @@ export const createCompilerInstance = (configs: ConfigSet): TsCompiler => {
     versions: Object.create(null),
     outputs: Object.create(null),
     resolvedModules: Object.create(null),
+    files: new Map<string, TSFile>(),
   }
   // Enable `allowJs` when flag is set.
   if (compilerOptions.allowJs) {
@@ -175,7 +176,13 @@ export const createCompilerInstance = (configs: ConfigSet): TsCompiler => {
     extensions.push('.jsx')
   }
   // Initialize files from TypeScript into project.
-  for (const path of fileNames) memoryCache.versions[normalize(path)] = 1
+  for (const path of fileNames) {
+    const normalizedFilePath = normalize(path)
+    memoryCache.versions[normalizedFilePath] = 1
+    memoryCache.files.set(normalizedFilePath, {
+      version: 0,
+    })
+  }
   /**
    * Get the extension for a transpiled file.
    */
@@ -187,10 +194,10 @@ export const createCompilerInstance = (configs: ConfigSet): TsCompiler => {
   if (!tsJest.isolatedModules) {
     // Use language services by default
     compilerInstance = !tsJest.compilerHost
-      ? initializeLanguageServiceInstance(configs, logger, memoryCache)
-      : initializeProgramInstance(configs, logger, memoryCache)
+      ? initializeLanguageServiceInstance(configs, memoryCache, logger)
+      : initializeProgramInstance(configs, memoryCache, logger)
   } else {
-    compilerInstance = initializeTranspilerInstance(configs, logger)
+    compilerInstance = initializeTranspilerInstance(configs, memoryCache, logger)
   }
   const compile = compileAndCacheResult(cachedir, memoryCache, compilerInstance.compileFn, getExtension, logger)
 

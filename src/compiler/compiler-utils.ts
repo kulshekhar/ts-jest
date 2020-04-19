@@ -4,8 +4,9 @@ import micromatch = require('micromatch')
 import { dirname, join, normalize, relative, resolve } from 'path'
 import * as _ts from 'typescript'
 
+import { ConfigSet } from '../config/config-set'
 import { EXTENSION_REGEX, JSON_REGEX, TS_TSX_REGEX } from '../constants'
-import { MemoryCache, TSFiles } from '../types'
+import { MemoryCache, SourceOutput, TSFiles } from '../types'
 import { sha1 } from '../util/sha1'
 
 /**
@@ -145,12 +146,11 @@ function getOutputJavaScriptFileName(inputFileName: string, projectReference: _t
 }
 
 /**
- * @internal
  * Gets the output JS file path for an input file governed by a composite project.
  * Pulls from the cache if it exists; computes and caches the result otherwise.
  */
 /* istanbul ignore next (we leave this for e2e) */
-export function getAndCacheOutputJSFileName(
+function getAndCacheOutputJSFileName(
   inputFileName: string,
   projectReference: _ts.ResolvedProjectReference,
   files: TSFiles,
@@ -169,4 +169,46 @@ export function getAndCacheOutputJSFileName(
   }
 
   return outputFileName
+}
+
+/**
+ * @internal
+ */
+/* istanbul ignore next (we leave this for e2e) */
+export function getCompileResultFromReferencedProject(
+  fileName: string,
+  configs: ConfigSet,
+  files: TSFiles,
+  referencedProject: _ts.ResolvedProjectReference,
+): SourceOutput {
+  const [relativeProjectConfigPath, relativeFilePath] = [
+    configs.resolvePath(referencedProject.sourceFile.fileName),
+    configs.resolvePath(fileName),
+  ]
+  if (referencedProject.commandLine.options.outFile !== undefined) {
+    throw new Error(
+      `The referenced project at ${relativeProjectConfigPath} is using ` +
+        `the outFile' option, which is not supported with ts-jest.`,
+    )
+  }
+
+  const jsFileName = getAndCacheOutputJSFileName(fileName, referencedProject, files)
+  const relativeJSFileName = configs.resolvePath(jsFileName)
+  if (!configs.compilerModule.sys.fileExists(jsFileName)) {
+    throw new Error(
+      // tslint:disable-next-line:prefer-template
+      `Could not find output JavaScript file for input ` +
+        `${relativeFilePath} (looked at ${relativeJSFileName}).\n` +
+        `The input file is part of a project reference located at ` +
+        `${relativeProjectConfigPath}, so ts-jest is looking for the ` +
+        'project’s pre-built output on disk. Try running `tsc --build` ' +
+        'to build project references.',
+    )
+  }
+
+  const mapFileName = `${jsFileName}.map`
+  const outputText = configs.compilerModule.sys.readFile(jsFileName)
+  const sourceMapText = configs.compilerModule.sys.readFile(mapFileName)
+
+  return [outputText!, sourceMapText!]
 }

@@ -24,10 +24,10 @@ function doTypeChecking(configs: ConfigSet, fileName: string, program: _ts.Progr
  */
 export const initializeProgramInstance = (
   configs: ConfigSet,
-  logger: Logger,
   memoryCache: MemoryCache,
+  logger: Logger,
 ): CompilerInstance => {
-  logger.debug('compileUsingProgram(): create typescript compiler')
+  logger.debug('initializeProgramInstance(): create typescript compiler')
 
   const ts = configs.compilerModule
   const cwd = configs.cwd
@@ -117,7 +117,7 @@ export const initializeProgramInstance = (
         customTransformers,
       )
       // Do type checking by getting TypeScript diagnostics
-      logger.debug(`diagnoseFn(): computing diagnostics for ${normalizedFileName} using incremental program`)
+      logger.debug(`compileFn(): computing diagnostics for ${normalizedFileName} using incremental program`)
 
       doTypeChecking(configs, normalizedFileName, program, logger)
       /**
@@ -142,7 +142,7 @@ export const initializeProgramInstance = (
             })
             .forEach(entry => {
               logger.debug(
-                `diagnoseFn(): computing diagnostics for test file that imports ${normalizedFileName} using incremental program`,
+                `compileFn(): computing diagnostics for test file that imports ${normalizedFileName} using incremental program`,
               )
 
               doTypeChecking(configs, entry[0], program, logger)

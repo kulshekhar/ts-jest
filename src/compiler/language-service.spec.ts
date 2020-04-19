@@ -40,7 +40,7 @@ describe('Language service', () => {
       ",
         "[level:20] visitSourceFileNode(): hoisting
       ",
-        "[level:20] diagnoseFn(): computing diagnostics for test-cache.ts using language service
+        "[level:20] compileFn(): computing diagnostics for test-cache.ts using language service
       ",
         "[level:20] readThrough(): writing caches
       ",
@@ -60,6 +60,57 @@ describe('Language service', () => {
     expect(new ProcessedSource(compiled1, fileName)).toMatchSnapshot()
     expect(compiled2).toBe(compiled1)
 
+    removeSync(fileName)
+  })
+
+  it('should get compile result from referenced project when there is a built reference project', () => {
+    const tmp = tempDir('compiler')
+    const compiler = makeCompiler({
+      jestConfig: { cache: true, cacheDirectory: tmp },
+      tsJestConfig: { tsConfig: false },
+    })
+    const source = 'console.log("hello")'
+    const fileName = 'test-reference-project.ts'
+    const getAndCacheProjectReferenceSpy = jest
+      .spyOn(compilerUtils, 'getAndCacheProjectReference')
+      .mockReturnValueOnce({} as any)
+    jest
+      .spyOn(compilerUtils, 'getCompileResultFromReferencedProject')
+      .mockImplementationOnce(() => [
+        source,
+        '{"version":3,"file":"test-reference-project.js","sourceRoot":"","sources":["test-reference-project.ts"],"names":[],"mappings":"AAAA,OAAO,CAAC,GAAG,CAAC,OAAO,CAAC,CAAA","sourcesContent":["console.log(\\"hello\\")"]}',
+      ])
+    writeFileSync(fileName, source, 'utf8')
+
+    compiler.compile(source, fileName)
+
+    expect(getAndCacheProjectReferenceSpy).toHaveBeenCalled()
+    expect(compilerUtils.getCompileResultFromReferencedProject).toHaveBeenCalled()
+
+    jest.restoreAllMocks()
+    removeSync(fileName)
+  })
+
+  it('should get compile result from language service when there is no referenced project', () => {
+    const tmp = tempDir('compiler')
+    const compiler = makeCompiler({
+      jestConfig: { cache: true, cacheDirectory: tmp },
+      tsJestConfig: { tsConfig: false },
+    })
+    const source = 'console.log("hello")'
+    const fileName = 'test-no-reference-project.ts'
+    const getAndCacheProjectReferenceSpy = jest
+      .spyOn(compilerUtils, 'getAndCacheProjectReference')
+      .mockReturnValueOnce(undefined)
+    jest.spyOn(compilerUtils, 'getCompileResultFromReferencedProject')
+    writeFileSync(fileName, source, 'utf8')
+
+    compiler.compile(source, fileName)
+
+    expect(getAndCacheProjectReferenceSpy).toHaveBeenCalled()
+    expect(compilerUtils.getCompileResultFromReferencedProject).not.toHaveBeenCalled()
+
+    jest.restoreAllMocks()
     removeSync(fileName)
   })
 

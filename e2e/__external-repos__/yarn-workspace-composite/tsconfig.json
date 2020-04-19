@@ -9,6 +9,7 @@
     "noImplicitAny": true,
     "noFallthroughCasesInSwitch": true,
     "noUnusedLocals": true,
+    "outDir": "./target/",
     "lib": [
       "dom", "es2018"
     ]

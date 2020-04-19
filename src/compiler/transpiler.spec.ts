@@ -1,10 +1,13 @@
 import { LogLevels } from 'bs-logger'
 import { removeSync, writeFileSync } from 'fs-extra'
+import * as _ts from 'typescript'
 
 import { makeCompiler } from '../__helpers__/fakers'
 import { logTargetMock } from '../__helpers__/mocks'
 import ProcessedSource from '../__helpers__/processed-source'
 import { TS_JEST_OUT_DIR } from '../config/config-set'
+
+import * as compilerUtils from './compiler-utils'
 
 const logTarget = logTargetMock()
 
@@ -19,7 +22,7 @@ describe('Transpiler', () => {
 
   it('should compile using transpileModule and not use cache', () => {
     const compiler = makeCompiler({ tsJestConfig: { ...baseTsJestConfig, tsConfig: false } })
-    const spy = jest.spyOn(require('typescript'), 'transpileModule')
+    const spy = jest.spyOn(_ts, 'transpileModule')
 
     logTarget.clear()
     const compiled = compiler.compile('export default 42', __filename)
@@ -30,7 +33,7 @@ describe('Transpiler', () => {
       Array [
         "[level:20] readThrough(): no cache
       ",
-        "[level:20] getOutput(): compiling as isolated module
+        "[level:20] compileFn(): compiling as isolated module
       ",
         "[level:20] visitSourceFileNode(): hoisting
       ",
@@ -40,38 +43,65 @@ describe('Transpiler', () => {
     spy.mockRestore()
   })
 
-  it('should call createProgram() with projectReferences when there are projectReferences from tsconfig', () => {
-    const compiler = makeCompiler({
-      tsJestConfig: {
-        ...baseTsJestConfig,
-        tsConfig: 'src/__mocks__/tsconfig-project-references.json',
-      },
-    })
-    const programSpy = jest.spyOn(require('typescript'), 'createProgram')
-    logTarget.clear()
-    compiler.compile('export default 42', __filename)
+  it(
+    'should call createProgram() with projectReferences, call getAndCacheProjectReference()' +
+      ' and getCompileResultFromReferenceProject() when there are projectReferences from tsconfig',
+    () => {
+      const programSpy = jest.spyOn(_ts, 'createProgram')
+      const source = 'console.log("hello")'
+      const fileName = 'isolated-test-reference-project.ts'
+      const getAndCacheProjectReferenceSpy = jest
+        .spyOn(compilerUtils, 'getAndCacheProjectReference')
+        .mockReturnValueOnce({} as any)
+      jest
+        .spyOn(compilerUtils, 'getCompileResultFromReferencedProject')
+        .mockImplementationOnce(() => [
+          source,
+          '{"version":3,"file":"isolated-test-reference-project.js","sourceRoot":"","sources":["isolated-test-reference-project.ts"],"names":[],"mappings":"AAAA,OAAO,CAAC,GAAG,CAAC,OAAO,CAAC,CAAA","sourcesContent":["console.log(\\"hello\\")"]}',
+        ])
+      writeFileSync(fileName, source)
+      const compiler = makeCompiler({
+        tsJestConfig: {
+          ...baseTsJestConfig,
+          tsConfig: 'src/__mocks__/tsconfig-project-references.json',
+        },
+      })
+      compiler.compile(source, fileName)
 
-    expect(programSpy).toHaveBeenCalled()
-    expect((programSpy.mock.calls[0][1] as any).configFilePath).toContain('tsconfig-project-references.json')
+      expect(programSpy).toHaveBeenCalled()
+      expect((programSpy.mock.calls[0][0] as any).options.configFilePath).toContain('tsconfig-project-references.json')
+      expect(getAndCacheProjectReferenceSpy).toHaveBeenCalled()
+      expect(compilerUtils.getCompileResultFromReferencedProject).toHaveBeenCalled()
 
-    programSpy.mockRestore()
-  })
+      jest.restoreAllMocks()
+      removeSync(fileName)
+    },
+  )
 
   it('should call createProgram() without projectReferences when there are no projectReferences from tsconfig', () => {
+    const programSpy = jest.spyOn(_ts, 'createProgram')
+    const source = 'console.log("hello")'
+    const fileName = 'isolated-test-reference-project-1.ts'
+    const getAndCacheProjectReferenceSpy = jest
+      .spyOn(compilerUtils, 'getAndCacheProjectReference')
+      .mockReturnValueOnce(undefined)
+    jest.spyOn(compilerUtils, 'getCompileResultFromReferencedProject')
+    writeFileSync(fileName, source, 'utf8')
     const compiler = makeCompiler({
       tsJestConfig: {
         ...baseTsJestConfig,
         tsConfig: false,
       },
     })
-    const programSpy = jest.spyOn(require('typescript'), 'createProgram')
-    logTarget.clear()
-    compiler.compile('export default 42', __filename)
+    compiler.compile(source, fileName)
 
     expect(programSpy).toHaveBeenCalled()
     expect((programSpy.mock.calls[0][1] as any).configFilePath).toBeUndefined()
+    expect(getAndCacheProjectReferenceSpy).toHaveBeenCalled()
+    expect(compilerUtils.getCompileResultFromReferencedProject).not.toHaveBeenCalled()
 
-    programSpy.mockRestore()
+    jest.restoreAllMocks()
+    removeSync(fileName)
   })
 
   it('should compile js file for allowJs true', () => {

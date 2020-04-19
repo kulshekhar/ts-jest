@@ -8,7 +8,13 @@ import { LINE_FEED } from '../constants'
 import { CompilerInstance, MemoryCache, SourceOutput } from '../types'
 import { Errors, interpolate } from '../util/messages'
 
-import { cacheResolvedModules, hasOwn, isTestFile } from './compiler-utils'
+import {
+  cacheResolvedModules,
+  getAndCacheProjectReference,
+  getCompileResultFromReferencedProject,
+  hasOwn,
+  isTestFile,
+} from './compiler-utils'
 
 function doTypeChecking(configs: ConfigSet, fileName: string, service: _ts.LanguageService, logger: Logger) {
   if (configs.shouldReportDiagnostic(fileName)) {
@@ -24,15 +30,15 @@ function doTypeChecking(configs: ConfigSet, fileName: string, service: _ts.Langu
  */
 export const initializeLanguageServiceInstance = (
   configs: ConfigSet,
-  logger: Logger,
   memoryCache: MemoryCache,
+  logger: Logger,
 ): CompilerInstance => {
-  logger.debug('compileUsingLanguageService(): create typescript compiler')
+  logger.debug('initializeLanguageServiceInstance(): create typescript compiler')
 
   const ts = configs.compilerModule
   const cwd = configs.cwd
   const cacheDir = configs.tsCacheDir
-  const { options } = configs.typescript
+  const { options, projectReferences } = configs.typescript
   const serviceHostTraceCtx = {
     namespace: 'ts:serviceHost',
     call: null,
@@ -43,6 +49,12 @@ export const initializeLanguageServiceInstance = (
   const updateMemoryCache = (contents: string, fileName: string) => {
     logger.debug({ fileName }, `updateMemoryCache(): update memory cache for language service`)
 
+    const file = memoryCache.files.get(fileName)
+    /* istanbul ignore next (covered by e2e) */
+    if (file && file?.text !== contents) {
+      file.version++
+      file.text = contents
+    }
     let shouldIncrementProjectVersion = false
     const fileVersion = memoryCache.versions[fileName] ?? 0
     const isFileInCache = fileVersion !== 0
@@ -63,6 +75,7 @@ export const initializeLanguageServiceInstance = (
   }
   const serviceHost: _ts.LanguageServiceHost = {
     getProjectVersion: () => String(projectVersion),
+    getProjectReferences: () => projectReferences,
     getScriptFileNames: () => Object.keys(memoryCache.versions),
     getScriptVersion: (fileName: string) => {
       const normalizedFileName = normalize(fileName)
@@ -103,7 +116,7 @@ export const initializeLanguageServiceInstance = (
   }
 
   logger.debug('compileUsingLanguageService(): creating language service')
-  const service: _ts.LanguageService = ts.createLanguageService(serviceHost)
+  const service: _ts.LanguageService = ts.createLanguageService(serviceHost, ts.createDocumentRegistry())
 
   return {
     compileFn: (code: string, fileName: string): SourceOutput => {
@@ -112,56 +125,68 @@ export const initializeLanguageServiceInstance = (
       logger.debug({ normalizedFileName }, 'compileFn(): compiling using language service')
       // Must set memory cache before attempting to read file.
       updateMemoryCache(code, normalizedFileName)
-      const output: _ts.EmitOutput = service.getEmitOutput(normalizedFileName)
-      // Do type checking by getting TypeScript diagnostics
-      logger.debug(`diagnoseFn(): computing diagnostics for ${normalizedFileName} using language service`)
+      const referencedProject = getAndCacheProjectReference(
+        normalizedFileName,
+        service.getProgram()!,
+        memoryCache.files,
+        projectReferences,
+      )
+      if (referencedProject !== undefined) {
+        logger.debug({ normalizedFileName }, 'compileFn(): get compile result from referenced project')
 
-      doTypeChecking(configs, normalizedFileName, service, logger)
-      /**
-       * We don't need the following logic with no cache run because no cache always gives correct typing
-       */
-      if (cacheDir) {
-        if (isTestFile(configs.testMatchPatterns, normalizedFileName)) {
-          cacheResolvedModules(normalizedFileName, code, memoryCache, service.getProgram()!, cacheDir, logger)
-        } else {
-          /* istanbul ignore next (covered by e2e) */
-          Object.entries(memoryCache.resolvedModules)
-            .filter(entry => {
-              /**
-               * When imported modules change, we only need to check whether the test file is compiled previously or not
-               * base on memory cache. By checking memory cache, we can avoid repeatedly doing type checking against
-               * test file for 1st time run after clearing cache because
-               */
-              return (
-                entry[1].modulePaths.find(modulePath => modulePath === normalizedFileName) &&
-                !hasOwn.call(memoryCache.outputs, entry[0])
-              )
-            })
-            .forEach(entry => {
-              logger.debug(
-                `diagnoseFn(): computing diagnostics for test file that imports ${normalizedFileName} using language service`,
-              )
+        return getCompileResultFromReferencedProject(normalizedFileName, configs, memoryCache.files, referencedProject)
+      } else {
+        const output: _ts.EmitOutput = service.getEmitOutput(normalizedFileName)
+        // Do type checking by getting TypeScript diagnostics
+        logger.debug(`compileFn(): computing diagnostics for ${normalizedFileName} using language service`)
 
-              const testFileName = entry[0]
-              updateMemoryCache(entry[1].testFileContent, testFileName)
-              doTypeChecking(configs, testFileName, service, logger)
-            })
+        doTypeChecking(configs, normalizedFileName, service, logger)
+        /**
+         * We don't need the following logic with no cache run because no cache always gives correct typing
+         */
+        if (cacheDir) {
+          if (isTestFile(configs.testMatchPatterns, normalizedFileName)) {
+            cacheResolvedModules(normalizedFileName, code, memoryCache, service.getProgram()!, cacheDir, logger)
+          } else {
+            /* istanbul ignore next (covered by e2e) */
+            Object.entries(memoryCache.resolvedModules)
+              .filter(entry => {
+                /**
+                 * When imported modules change, we only need to check whether the test file is compiled previously or not
+                 * base on memory cache. By checking memory cache, we can avoid repeatedly doing type checking against
+                 * test file for 1st time run after clearing cache because
+                 */
+                return (
+                  entry[1].modulePaths.find(modulePath => modulePath === normalizedFileName) &&
+                  !hasOwn.call(memoryCache.outputs, entry[0])
+                )
+              })
+              .forEach(entry => {
+                logger.debug(
+                  `compileFn(): computing diagnostics for test file that imports ${normalizedFileName} using language service`,
+                )
+
+                const testFileName = entry[0]
+                updateMemoryCache(entry[1].testFileContent, testFileName)
+                doTypeChecking(configs, testFileName, service, logger)
+              })
+          }
         }
-      }
-      /* istanbul ignore next (this should never happen but is kept for security) */
-      if (output.emitSkipped) {
-        throw new TypeError(`${relative(cwd, normalizedFileName)}: Emit skipped for language service`)
-      }
-      // Throw an error when requiring `.d.ts` files.
-      if (!output.outputFiles.length) {
-        throw new TypeError(
-          interpolate(Errors.UnableToRequireDefinitionFile, {
-            file: basename(normalizedFileName),
-          }),
-        )
-      }
+        /* istanbul ignore next (this should never happen but is kept for security) */
+        if (output.emitSkipped) {
+          throw new TypeError(`${relative(cwd, normalizedFileName)}: Emit skipped for language service`)
+        }
+        // Throw an error when requiring `.d.ts` files.
+        if (!output.outputFiles.length) {
+          throw new TypeError(
+            interpolate(Errors.UnableToRequireDefinitionFile, {
+              file: basename(normalizedFileName),
+            }),
+          )
+        }
 
-      return [output.outputFiles[1].text, output.outputFiles[0].text]
+        return [output.outputFiles[1].text, output.outputFiles[0].text]
+      }
     },
     program: service.getProgram(),
   }

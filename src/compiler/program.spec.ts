@@ -39,7 +39,7 @@ describe('cache', () => {
       ",
         "[level:20] visitSourceFileNode(): hoisting
       ",
-        "[level:20] diagnoseFn(): computing diagnostics for test-cache-incremental-program.ts using incremental program
+        "[level:20] compileFn(): computing diagnostics for test-cache-incremental-program.ts using incremental program
       ",
         "[level:20] readThrough(): writing caches
       ",

@@ -200,6 +200,7 @@ export interface MemoryCache {
       modulePaths: string[]
     }
   }
+  files: TSFiles
 }
 /**
  * @internal
