@@ -12,10 +12,6 @@ import { sha1 } from '../util/sha1'
 /**
  * @internal
  */
-export const hasOwn = Object.prototype.hasOwnProperty
-/**
- * @internal
- */
 export function getResolvedModulesCache(cachedir: string): string {
   return join(cachedir, sha1('ts-jest-resolved-modules', '\x00'))
 }

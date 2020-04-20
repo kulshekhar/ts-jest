@@ -9,9 +9,6 @@ import { MemoryCache, TSFile } from '../types'
 import { cacheResolvedModules, getResolvedModulesCache } from './compiler-utils'
 
 const memoryCache: MemoryCache = {
-  contents: Object.create(null),
-  versions: Object.create(null),
-  outputs: Object.create(null),
   resolvedModules: Object.create(null),
   files: new Map<string, TSFile>(),
 }
@@ -39,7 +36,8 @@ describe('cacheResolvedModules', () => {
       tsJestConfig: { tsConfig: false },
     })
     const fileName = 'src/__mocks__/main.spec.ts'
-    const source = JSON.stringify(require('../__mocks__/main.spec'))
+    const source = `import { Thing } from './main'
+export const thing: Thing = { a: 1 }`
 
     compiler.compile(source, fileName)
     cacheResolvedModules(fileName, source, memoryCache, compiler.program!, tmp, logger)
@@ -56,7 +54,10 @@ describe('cacheResolvedModules', () => {
       tsJestConfig: { tsConfig: false },
     })
     const fileName = 'src/__mocks__/thing.spec.ts'
-    const source = JSON.stringify(require('../__mocks__/thing.spec'))
+    const source = `interface Thing {
+  a: number
+}
+export const thing: Thing = { a: 1 }`
 
     compiler.compile(source, fileName)
     cacheResolvedModules(fileName, source, memoryCache, compiler.program!, tmp, logger)

@@ -123,7 +123,9 @@ describe('Language service', () => {
       tsJestConfig: { tsConfig: false },
     })
     const fileName = 'src/__mocks__/main.spec.ts'
-    const source = JSON.stringify(require('../__mocks__/main.spec'))
+    const source = `import { Thing } from './main'
+
+export const thing: Thing = { a: 1 }`
 
     compiler.compile(source, fileName)
 
@@ -143,7 +145,9 @@ describe('Language service', () => {
       tsJestConfig: { tsConfig: false },
     })
     const fileName = 'src/__mocks__/main.spec.ts'
-    const source = JSON.stringify(require('../__mocks__/main.spec'))
+    const source = `import { Thing } from './main'
+
+export const thing: Thing = { a: 1 }`
 
     compiler.compile(source, fileName)
 
