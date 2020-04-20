@@ -180,6 +180,7 @@ export const createCompilerInstance = (configs: ConfigSet): TsCompiler => {
     extensions.push('.js')
     extensions.push('.jsx')
   }
+  /* istanbul ignore next (we leave this for e2e) */
   configs.jest.setupFiles.concat(configs.jest.setupFilesAfterEnv).forEach(setupFile => {
     const normalizedFileName = normalize(setupFile)
     memoryCache.files.set(normalizedFileName, {

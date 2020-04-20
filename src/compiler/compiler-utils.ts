@@ -20,6 +20,7 @@ export function getResolvedModulesCache(cachedir: string): string {
  * @internal
  * Get resolved modules of a test file and put into memory cache
  */
+/* istanbul ignore next (we leave this for e2e) */
 export function cacheResolvedModules(
   fileName: string,
   fileContent: string,
