@@ -296,7 +296,6 @@ export class ConfigSet {
       isolatedModules: !!options.isolatedModules,
       compiler: options.compiler ?? 'typescript',
       transformers,
-      internal: process.env.TS_JEST_INTERNAL !== undefined,
       stringifyContentPathRegex,
     }
     this.logger.debug({ tsJestConfig: res }, 'normalized ts-jest config')

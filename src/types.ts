@@ -145,10 +145,6 @@ export interface TsJestConfig {
   diagnostics: TsJestConfig$diagnostics
   babelConfig: TsJestConfig$babelConfig
   transformers: string[]
-  /**
-   * @internal
-   */
-  internal: boolean
   // to deprecate / deprecated === === ===
   stringifyContentPathRegex: TsJestConfig$stringifyContentPathRegex
 }

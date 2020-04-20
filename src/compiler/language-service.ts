@@ -96,7 +96,7 @@ export const initializeLanguageServiceInstance = (
     },
     getScriptSnapshot(fileName: string) {
       const normalizedFileName = normalize(fileName)
-      const hit = memoryCache.files.has(fileName) && memoryCache.files.get(fileName)!.version !== 0
+      const hit = memoryCache.files.has(normalizedFileName) && memoryCache.files.get(normalizedFileName)!.version !== 0
 
       logger.trace({ normalizedFileName, cacheHit: hit }, `getScriptSnapshot():`, 'cache', hit ? 'hit' : 'miss')
 
@@ -127,6 +127,7 @@ export const initializeLanguageServiceInstance = (
   }
 
   logger.debug('compileUsingLanguageService(): creating language service')
+
   const service: _ts.LanguageService = ts.createLanguageService(serviceHost, ts.createDocumentRegistry())
 
   return {

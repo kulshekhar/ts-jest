@@ -181,30 +181,10 @@ export const createCompilerInstance = (configs: ConfigSet): TsCompiler => {
     extensions.push('.jsx')
   }
   // Initialize files from TypeScript into project.
-  /* istanbul ignore next (cover by e2e) */
-  if (configs.tsJest.internal) {
-    /**
-     * Unfortunately our internal tests don't allow the optimization of Program below so we need this hack. This shouldn't
-     * affect to the final outcome of tests, only affects to performance.
-     */
-    for (const path of configs.typescript.fileNames) {
-      const normalizedFilePath = normalize(path)
-      memoryCache.files.set(normalizedFilePath, {
-        version: 0,
-      })
-    }
-  } else {
-    /**
-     * To utilize incremental feature of TypeScript Program, it is mandatory to know which files should be loaded initially
-     * when creating LanguageService instance or Program instance. Here we inform TypeScript Program that it should load
-     * jest setupFiles and setupFilesAfterEnv to be available for files in test environment to use. Because in parallel mode,
-     * it is possible that some jest workers don't have these files' information which can fail tests randomly.
-     */
-    configs.jest.setupFiles.concat(configs.jest.setupFilesAfterEnv).forEach(setupFile => {
-      const normalizedFileName = normalize(setupFile)
-      memoryCache.files.set(normalizedFileName, {
-        version: 0,
-      })
+  for (const path of configs.typescript.fileNames) {
+    const normalizedFilePath = normalize(path)
+    memoryCache.files.set(normalizedFilePath, {
+      version: 0,
     })
   }
   /**
