@@ -42,7 +42,6 @@ Object {
   "tsJest": Object {
     "babelConfig": undefined,
     "compiler": "typescript",
-    "compilerHost": false,
     "diagnostics": Object {
       "ignoreCodes": Array [
         6059,
@@ -131,7 +130,6 @@ exports[`tsJest should return correct defaults 1`] = `
 Object {
   "babelConfig": undefined,
   "compiler": "typescript",
-  "compilerHost": false,
   "diagnostics": Object {
     "ignoreCodes": Array [
       6059,

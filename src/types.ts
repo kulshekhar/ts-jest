@@ -51,13 +51,6 @@ export interface TsJestGlobalOptions {
   isolatedModules?: boolean
 
   /**
-   * Use TypeScript's compiler host API.
-   *
-   * @default false
-   */
-  compilerHost?: boolean
-
-  /**
    * Compiler to use (default to 'typescript'):
    */
   compiler?: string
@@ -148,7 +141,6 @@ export interface TsJestConfig {
   tsConfig: TsJestConfig$tsConfig
   packageJson: TsJestConfig$packageJson
   isolatedModules: boolean
-  compilerHost: boolean
   compiler: string
   diagnostics: TsJestConfig$diagnostics
   babelConfig: TsJestConfig$babelConfig

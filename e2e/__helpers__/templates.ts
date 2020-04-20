@@ -7,4 +7,3 @@ export enum PackageSets {
 }
 export const allValidPackageSets = [PackageSets.default, PackageSets.babel7, PackageSets.babel7StringConfig]
 export const allPackageSetsWithPreset = [PackageSets.default, PackageSets.babel7, PackageSets.babel7StringConfig]
-export const allPackageSetsWithProgram = [PackageSets.default, PackageSets.babel7, PackageSets.babel7StringConfig]
