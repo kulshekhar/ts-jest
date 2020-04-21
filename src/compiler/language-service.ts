@@ -132,33 +132,32 @@ export const initializeLanguageServiceInstance = (
 
   return {
     compileFn: (code: string, fileName: string): SourceOutput => {
-      const normalizedFileName = normalize(fileName)
+      logger.debug({ fileName }, 'compileFn(): compiling using language service')
 
-      logger.debug({ normalizedFileName }, 'compileFn(): compiling using language service')
       // Must set memory cache before attempting to read file.
-      updateMemoryCache(code, normalizedFileName)
+      updateMemoryCache(code, fileName)
       const referencedProject = getAndCacheProjectReference(
-        normalizedFileName,
+        fileName,
         service.getProgram()!,
         memoryCache.files,
         projectReferences,
       )
       if (referencedProject !== undefined) {
-        logger.debug({ normalizedFileName }, 'compileFn(): get compile result from referenced project')
+        logger.debug({ fileName }, 'compileFn(): get compile result from referenced project')
 
-        return getCompileResultFromReferencedProject(normalizedFileName, configs, memoryCache.files, referencedProject)
+        return getCompileResultFromReferencedProject(fileName, configs, memoryCache.files, referencedProject)
       } else {
-        const output: _ts.EmitOutput = service.getEmitOutput(normalizedFileName)
+        const output: _ts.EmitOutput = service.getEmitOutput(fileName)
         // Do type checking by getting TypeScript diagnostics
-        logger.debug(`compileFn(): computing diagnostics for ${normalizedFileName} using language service`)
+        logger.debug(`compileFn(): computing diagnostics for ${fileName} using language service`)
 
-        doTypeChecking(configs, normalizedFileName, service, logger)
+        doTypeChecking(configs, fileName, service, logger)
         /**
          * We don't need the following logic with no cache run because no cache always gives correct typing
          */
         if (cacheDir) {
-          if (isTestFile(configs.testMatchPatterns, normalizedFileName)) {
-            cacheResolvedModules(normalizedFileName, code, memoryCache, service.getProgram()!, cacheDir, logger)
+          if (isTestFile(configs.testMatchPatterns, fileName)) {
+            cacheResolvedModules(fileName, code, memoryCache, service.getProgram()!, cacheDir, logger)
           } else {
             /* istanbul ignore next (covered by e2e) */
             Object.entries(memoryCache.resolvedModules)
@@ -169,13 +168,12 @@ export const initializeLanguageServiceInstance = (
                  * test file for 1st time run after clearing cache because
                  */
                 return (
-                  entry[1].modulePaths.find(modulePath => modulePath === normalizedFileName) &&
-                  !memoryCache.files.has(entry[0])
+                  entry[1].modulePaths.find(modulePath => modulePath === fileName) && !memoryCache.files.has(entry[0])
                 )
               })
               .forEach(entry => {
                 logger.debug(
-                  `compileFn(): computing diagnostics for test file that imports ${normalizedFileName} using language service`,
+                  `compileFn(): computing diagnostics for test file that imports ${fileName} using language service`,
                 )
 
                 const testFileName = entry[0]
@@ -186,13 +184,13 @@ export const initializeLanguageServiceInstance = (
         }
         /* istanbul ignore next (this should never happen but is kept for security) */
         if (output.emitSkipped) {
-          throw new TypeError(`${relative(cwd, normalizedFileName)}: Emit skipped for language service`)
+          throw new TypeError(`${relative(cwd, fileName)}: Emit skipped for language service`)
         }
         // Throw an error when requiring `.d.ts` files.
         if (!output.outputFiles.length) {
           throw new TypeError(
             interpolate(Errors.UnableToRequireDefinitionFile, {
-              file: basename(normalizedFileName),
+              file: basename(fileName),
             }),
           )
         }

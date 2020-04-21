@@ -12,8 +12,8 @@ import { sha1 } from '../util/sha1'
 /**
  * @internal
  */
-export function getResolvedModulesCache(cachedir: string): string {
-  return join(cachedir, sha1('ts-jest-resolved-modules', '\x00'))
+export function getResolvedModulesCache(cacheDir: string): string {
+  return join(cacheDir, sha1('ts-jest-resolved-modules', '\x00'))
 }
 
 /**
