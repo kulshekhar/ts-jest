@@ -7,7 +7,7 @@
   "devDependencies": {
     "@types/jest": "^25.2.1",
     "@types/lodash": "^4.14.116",
-    "jest": "^25.3.0",
+    "jest": "^25.4.0",
     "typescript": "^3.8.3"
   }
 }

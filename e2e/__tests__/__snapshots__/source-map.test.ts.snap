@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`using template "default" should have the source maps comment 1`] = `
+exports[`Source map using template "default" should have the source maps comment 1`] = `
   ===[ FILE: main.ts ]============================================================
   "use strict";
   Object.defineProperty(exports, "__esModule", { value: true });
@@ -33,15 +33,19 @@ exports[`using template "default" should have the source maps comment 1`] = `
   ================================================================================
 `;
 
-exports[`using template "default" should report correct line numbers 1`] = `
+exports[`Source map using template "default" should report correct line numbers 1`] = `
   × jest --no-cache
   ↳ exit code: 1
   ===[ STDOUT ]===================================================================
-  console.log main.ts:2
+  console.log
       WITHIN SOURCE
   
-    console.log main.spec.ts:9
+        at Object.consoleLog (main.ts:2:11)
+  
+    console.log
       WITHIN TEST
+  
+        at Object.<anonymous> (main.spec.ts:9:13)
   ===[ STDERR ]===================================================================
   FAIL ./main.spec.ts
     console.log()
@@ -87,7 +91,7 @@ exports[`using template "default" should report correct line numbers 1`] = `
   ================================================================================
 `;
 
-exports[`using template "with-babel-7" should have the source maps comment 1`] = `
+exports[`Source map using template "with-babel-7" should have the source maps comment 1`] = `
   ===[ FILE: main.ts ]============================================================
   "use strict";
   
@@ -126,15 +130,19 @@ exports[`using template "with-babel-7" should have the source maps comment 1`] =
   ================================================================================
 `;
 
-exports[`using template "with-babel-7" should report correct line numbers 1`] = `
+exports[`Source map using template "with-babel-7" should report correct line numbers 1`] = `
   × jest --no-cache
   ↳ exit code: 1
   ===[ STDOUT ]===================================================================
-  console.log main.ts:2
+  console.log
       WITHIN SOURCE
   
-    console.log main.spec.ts:9
+        at Object.consoleLog (main.ts:2:11)
+  
+    console.log
       WITHIN TEST
+  
+        at Object.<anonymous> (main.spec.ts:9:13)
   ===[ STDERR ]===================================================================
   FAIL ./main.spec.ts
     console.log()
@@ -180,7 +188,7 @@ exports[`using template "with-babel-7" should report correct line numbers 1`] = 
   ================================================================================
 `;
 
-exports[`using template "with-babel-7-string-config" should have the source maps comment 1`] = `
+exports[`Source map using template "with-babel-7-string-config" should have the source maps comment 1`] = `
   ===[ FILE: main.ts ]============================================================
   "use strict";
   
@@ -219,15 +227,19 @@ exports[`using template "with-babel-7-string-config" should have the source maps
   ================================================================================
 `;
 
-exports[`using template "with-babel-7-string-config" should report correct line numbers 1`] = `
+exports[`Source map using template "with-babel-7-string-config" should report correct line numbers 1`] = `
   × jest --no-cache
   ↳ exit code: 1
   ===[ STDOUT ]===================================================================
-  console.log main.ts:2
+  console.log
       WITHIN SOURCE
   
-    console.log main.spec.ts:9
+        at Object.consoleLog (main.ts:2:11)
+  
+    console.log
       WITHIN TEST
+  
+        at Object.<anonymous> (main.spec.ts:9:13)
   ===[ STDERR ]===================================================================
   FAIL ./main.spec.ts
     console.log()
