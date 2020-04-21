@@ -68,7 +68,7 @@
     "lodash.memoize": "4.x",
     "make-error": "1.x",
     "micromatch": "4.x",
-    "mkdirp": "1.x",
+    "mkdirp": "0.x",
     "resolve": "1.x",
     "semver": "6.x",
     "yargs-parser": "18.x"
