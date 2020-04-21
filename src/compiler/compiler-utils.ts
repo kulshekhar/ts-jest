@@ -1,12 +1,13 @@
 import { Logger } from 'bs-logger'
 import { writeFileSync } from 'fs'
 import micromatch = require('micromatch')
-import { dirname, join, normalize, relative, resolve } from 'path'
+import { dirname, join, relative, resolve } from 'path'
 import * as _ts from 'typescript'
 
 import { ConfigSet } from '../config/config-set'
 import { EXTENSION_REGEX, JSON_REGEX, TS_TSX_REGEX } from '../constants'
 import { MemoryCache, SourceOutput, TSFiles } from '../types'
+import { normalizeSlashes } from '../util/normalize-slashes'
 import { sha1 } from '../util/sha1'
 
 /**
@@ -44,7 +45,7 @@ export function cacheResolvedModules(
     memoryCache.resolvedModules[fileName].modulePaths = importReferences
       .filter((importReference: any) => importReference.parent.parent.resolvedModules?.get(importReference.text))
       .map((importReference: any) => {
-        return normalize(
+        return normalizeSlashes(
           (importReference.parent.parent.resolvedModules.get(importReference.text) as _ts.ResolvedModule)
             .resolvedFileName,
         )
@@ -98,7 +99,7 @@ function getProjectReferenceForFile(
     return (
       program &&
       getResolvedProjectReferences(program)!.find(
-        ref => (ref && ref.commandLine.fileNames.some(file => normalize(file) === filePath)) || false,
+        ref => (ref && ref.commandLine.fileNames.some(file => normalizeSlashes(file) === filePath)) || false,
       )
     )
   }

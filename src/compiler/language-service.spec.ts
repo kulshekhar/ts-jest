@@ -1,11 +1,11 @@
 import { LogLevels } from 'bs-logger'
 import { removeSync, writeFileSync } from 'fs-extra'
-import { normalize } from 'path'
 
 import { makeCompiler } from '../__helpers__/fakers'
 import { logTargetMock } from '../__helpers__/mocks'
 import { tempDir } from '../__helpers__/path'
 import ProcessedSource from '../__helpers__/processed-source'
+import { normalizeSlashes } from '../util/normalize-slashes'
 
 import * as compilerUtils from './compiler-utils'
 
@@ -128,7 +128,7 @@ describe('Language service', () => {
     compiler.compile(source, fileName)
 
     expect(spy).toHaveBeenCalled()
-    expect(spy.mock.calls[0][0]).toEqual(normalize(fileName))
+    expect(spy.mock.calls[0][0]).toEqual(normalizeSlashes(fileName))
     expect(spy.mock.calls[0][1]).toEqual(source)
 
     spy.mockRestore()

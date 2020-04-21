@@ -32,10 +32,11 @@
 import { Logger } from 'bs-logger'
 import { readFileSync, writeFileSync } from 'fs'
 import mkdirp = require('mkdirp')
-import { basename, extname, join, normalize } from 'path'
+import { basename, extname, join } from 'path'
 
 import { ConfigSet } from '../config/config-set'
 import { CompileFn, CompilerInstance, MemoryCache, TSFile, TsCompiler } from '../types'
+import { normalizeSlashes } from '../util/normalize-slashes'
 import { sha1 } from '../util/sha1'
 
 import { getResolvedModulesCache } from './compiler-utils'
@@ -92,60 +93,57 @@ const isValidCacheContent = (contents: string): boolean => {
  * cache mode
  */
 const compileAndCacheResult = (
-  cachedir: string | undefined,
+  cacheDir: string | undefined,
   memoryCache: MemoryCache,
   compileFn: CompileFn,
   getExtension: (fileName: string) => string,
   logger: Logger,
 ) => {
-  if (!cachedir) {
-    return (code: string, fileName: string, lineOffset?: number) => {
-      const normalizedFileName = normalize(fileName)
-
-      logger.debug({ normalizedFileName }, 'readThrough(): no cache')
-
+  return (code: string, fileName: string, lineOffset?: number) => {
+    const normalizedFileName = normalizeSlashes(fileName)
+    function getCompileOutput(): string {
       const [value, sourceMap] = compileFn(code, normalizedFileName, lineOffset)
-      const output = updateOutput(value, fileName, sourceMap, getExtension)
+      const output = updateOutput(value, normalizedFileName, sourceMap, getExtension)
       memoryCache.outputs[normalizedFileName] = output
 
       return output
     }
-  }
+    if (!cacheDir) {
+      logger.debug({ normalizedFileName }, 'compileAndCacheResult(): no cache')
 
-  // Make sure the cache directory exists before continuing.
-  mkdirp.sync(cachedir)
-  try {
-    const resolvedModulesCache = readFileSync(getResolvedModulesCache(cachedir), 'utf-8')
-    /* istanbul ignore next (covered by e2e) */
-    memoryCache.resolvedModules = JSON.parse(resolvedModulesCache)
-  } catch (e) {}
+      return getCompileOutput()
+    } else {
+      // Make sure the cache directory exists before continuing.
+      mkdirp.sync(cacheDir)
+      try {
+        const resolvedModulesCache = readFileSync(getResolvedModulesCache(cacheDir), 'utf-8')
+        /* istanbul ignore next (covered by e2e) */
+        memoryCache.resolvedModules = JSON.parse(resolvedModulesCache)
+      } catch (e) {}
 
-  return (code: string, fileName: string, lineOffset?: number) => {
-    const normalizedFileName = normalize(fileName)
-    const cachePath = join(cachedir, getCacheName(code, normalizedFileName))
-    const extension = getExtension(normalizedFileName)
-    const outputPath = `${cachePath}${extension}`
-    try {
-      const output = readFileSync(outputPath, 'utf8')
-      if (isValidCacheContent(output)) {
-        logger.debug({ normalizedFileName }, 'readThrough(): cache hit')
-        memoryCache.outputs[normalizedFileName] = output
+      const cachePath = join(cacheDir, getCacheName(code, normalizedFileName))
+      const extension = getExtension(normalizedFileName)
+      const outputPath = `${cachePath}${extension}`
+      try {
+        const output = readFileSync(outputPath, 'utf8')
+        if (isValidCacheContent(output)) {
+          logger.debug({ normalizedFileName }, 'compileAndCacheResult(): cache hit')
+          memoryCache.outputs[normalizedFileName] = output
 
-        return output
-      }
-    } catch (err) {}
+          return output
+        }
+      } catch (err) {}
 
-    logger.debug({ fileName }, 'readThrough(): cache miss')
+      logger.debug({ normalizedFileName }, 'compileAndCacheResult(): cache miss')
 
-    const [value, sourceMap] = compileFn(code, normalizedFileName, lineOffset)
-    const output = updateOutput(value, normalizedFileName, sourceMap, getExtension)
+      const output = getCompileOutput()
 
-    logger.debug({ normalizedFileName, outputPath }, 'readThrough(): writing caches')
+      logger.debug({ normalizedFileName, outputPath }, 'compileAndCacheResult(): writing caches')
 
-    memoryCache.outputs[normalizedFileName] = output
-    writeFileSync(outputPath, output)
+      writeFileSync(outputPath, output)
 
-    return output
+      return output
+    }
   }
 }
 
@@ -159,7 +157,7 @@ export const createCompilerInstance = (configs: ConfigSet): TsCompiler => {
     typescript: { options: compilerOptions, fileNames },
     tsJest,
   } = configs
-  const cachedir = configs.tsCacheDir
+  const cacheDir = configs.tsCacheDir
   const ts = configs.compilerModule // Require the TypeScript compiler and configuration.
   const extensions = ['.ts', '.tsx']
   const memoryCache: MemoryCache = {
@@ -176,9 +174,8 @@ export const createCompilerInstance = (configs: ConfigSet): TsCompiler => {
   }
   // Initialize files from TypeScript into project.
   for (const path of fileNames) {
-    const normalizedFilePath = normalize(path)
-    memoryCache.versions[normalizedFilePath] = 1
-    memoryCache.files.set(normalizedFilePath, {
+    memoryCache.versions[path] = 1
+    memoryCache.files.set(path, {
       version: 0,
     })
   }
@@ -196,7 +193,7 @@ export const createCompilerInstance = (configs: ConfigSet): TsCompiler => {
   } else {
     compilerInstance = initializeTranspilerInstance(configs, memoryCache, logger)
   }
-  const compile = compileAndCacheResult(cachedir, memoryCache, compilerInstance.compileFn, getExtension, logger)
+  const compile = compileAndCacheResult(cacheDir, memoryCache, compilerInstance.compileFn, getExtension, logger)
 
   return { cwd: configs.cwd, compile, program: compilerInstance.program }
 }

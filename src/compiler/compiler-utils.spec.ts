@@ -5,6 +5,7 @@ import { resolve } from 'path'
 import { makeCompiler } from '../__helpers__/fakers'
 import { tempDir } from '../__helpers__/path'
 import { MemoryCache, TSFile } from '../types'
+import { normalizeSlashes } from '../util/normalize-slashes'
 
 import { cacheResolvedModules, getResolvedModulesCache } from './compiler-utils'
 
@@ -44,7 +45,9 @@ describe('cacheResolvedModules', () => {
     compiler.compile(source, fileName)
     cacheResolvedModules(fileName, source, memoryCache, compiler.program!, tmp, logger)
 
-    expect(memoryCache.resolvedModules[fileName].modulePaths).toContain(resolve('src/__mocks__/main.ts'))
+    expect(memoryCache.resolvedModules[fileName].modulePaths).toContain(
+      normalizeSlashes(resolve('src/__mocks__/main.ts')),
+    )
     expect(memoryCache.resolvedModules[fileName].testFileContent).toEqual(source)
     expect(spy).toHaveBeenCalledWith(getResolvedModulesCache(tmp), JSON.stringify(memoryCache.resolvedModules))
   })
