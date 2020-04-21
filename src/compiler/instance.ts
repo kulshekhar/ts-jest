@@ -114,14 +114,6 @@ const compileAndCacheResult = (
 
       return getCompileOutput()
     } else {
-      // Make sure the cache directory exists before continuing.
-      mkdirp.sync(cacheDir)
-      try {
-        const resolvedModulesCache = readFileSync(getResolvedModulesCache(cacheDir), 'utf-8')
-        /* istanbul ignore next (covered by e2e) */
-        memoryCache.resolvedModules = JSON.parse(resolvedModulesCache)
-      } catch (e) {}
-
       const cachePath = join(cacheDir, getCacheName(code, fileName))
       const extension = getExtension(fileName)
       const outputPath = `${cachePath}${extension}`
@@ -172,6 +164,15 @@ export const createCompilerInstance = (configs: ConfigSet): TsCompiler => {
   if (compilerOptions.allowJs) {
     extensions.push('.js')
     extensions.push('.jsx')
+  }
+  if (cacheDir) {
+    // Make sure the cache directory exists before continuing.
+    mkdirp.sync(cacheDir)
+    try {
+      const resolvedModulesCache = readFileSync(getResolvedModulesCache(cacheDir), 'utf-8')
+      /* istanbul ignore next (covered by e2e) */
+      memoryCache.resolvedModules = JSON.parse(resolvedModulesCache)
+    } catch (e) {}
   }
   /* istanbul ignore next (we leave this for e2e) */
   configs.jest.setupFiles.concat(configs.jest.setupFilesAfterEnv).forEach(setupFile => {
