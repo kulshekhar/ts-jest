@@ -1,11 +1,11 @@
 import { LogLevels } from 'bs-logger'
 import { removeSync, writeFileSync } from 'fs-extra'
-import { normalize } from 'path'
 
 import { makeCompiler } from '../__helpers__/fakers'
 import { logTargetMock } from '../__helpers__/mocks'
 import { tempDir } from '../__helpers__/path'
 import ProcessedSource from '../__helpers__/processed-source'
+import { normalizeSlashes } from '../util/normalize-slashes'
 
 import * as compilerUtils from './compiler-utils'
 
@@ -32,7 +32,7 @@ describe('Language service', () => {
 
     expect(logTarget.filteredLines(LogLevels.debug, Infinity)).toMatchInlineSnapshot(`
       Array [
-        "[level:20] readThrough(): cache miss
+        "[level:20] compileAndCacheResult(): cache miss
       ",
         "[level:20] compileFn(): compiling using language service
       ",
@@ -42,7 +42,7 @@ describe('Language service', () => {
       ",
         "[level:20] compileFn(): computing diagnostics for test-cache.ts using language service
       ",
-        "[level:20] readThrough(): writing caches
+        "[level:20] compileAndCacheResult(): writing caches
       ",
       ]
     `)
@@ -52,7 +52,7 @@ describe('Language service', () => {
 
     expect(logTarget.lines).toMatchInlineSnapshot(`
       Array [
-        "[level:20] readThrough(): cache hit
+        "[level:20] compileAndCacheResult(): cache hit
       ",
       ]
     `)
@@ -123,12 +123,14 @@ describe('Language service', () => {
       tsJestConfig: { tsConfig: false },
     })
     const fileName = 'src/__mocks__/main.spec.ts'
-    const source = JSON.stringify(require('../__mocks__/main.spec'))
+    const source = `import { Thing } from './main'
+
+export const thing: Thing = { a: 1 }`
 
     compiler.compile(source, fileName)
 
     expect(spy).toHaveBeenCalled()
-    expect(spy.mock.calls[0][0]).toEqual(normalize(fileName))
+    expect(spy.mock.calls[0][0]).toEqual(normalizeSlashes(fileName))
     expect(spy.mock.calls[0][1]).toEqual(source)
 
     spy.mockRestore()
@@ -143,7 +145,9 @@ describe('Language service', () => {
       tsJestConfig: { tsConfig: false },
     })
     const fileName = 'src/__mocks__/main.spec.ts'
-    const source = JSON.stringify(require('../__mocks__/main.spec'))
+    const source = `import { Thing } from './main'
+
+export const thing: Thing = { a: 1 }`
 
     compiler.compile(source, fileName)
 

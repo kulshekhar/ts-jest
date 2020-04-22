@@ -72,6 +72,8 @@ export function makeCompiler({
     ...jestConfig,
     testMatch: ['^.+\\.tsx?$'],
     testRegex: jestConfig?.testRegex ? [...testRegex, ...jestConfig.testRegex] : testRegex,
+    setupFiles: [],
+    setupFilesAfterEnv: [],
   }
   const cs = new ConfigSet(getJestConfig(jestConfig, tsJestConfig), parentConfig)
 

@@ -12,7 +12,6 @@ import {
   cacheResolvedModules,
   getAndCacheProjectReference,
   getCompileResultFromReferencedProject,
-  hasOwn,
   isTestFile,
 } from './compiler-utils'
 
@@ -38,7 +37,7 @@ export const initializeLanguageServiceInstance = (
   const ts = configs.compilerModule
   const cwd = configs.cwd
   const cacheDir = configs.tsCacheDir
-  const { options, projectReferences } = configs.typescript
+  const { options, projectReferences, fileNames } = configs.typescript
   const serviceHostTraceCtx = {
     namespace: 'ts:serviceHost',
     call: null,
@@ -46,29 +45,36 @@ export const initializeLanguageServiceInstance = (
   }
   let projectVersion = 1
   // Set the file contents into cache.
+  /* istanbul ignore next (cover by e2e) */
   const updateMemoryCache = (contents: string, fileName: string) => {
     logger.debug({ fileName }, `updateMemoryCache(): update memory cache for language service`)
 
-    const file = memoryCache.files.get(fileName)
-    /* istanbul ignore next (covered by e2e) */
-    if (file && file?.text !== contents) {
-      file.version++
-      file.text = contents
-    }
     let shouldIncrementProjectVersion = false
-    const fileVersion = memoryCache.versions[fileName] ?? 0
-    const isFileInCache = fileVersion !== 0
+    const isFileInCache = memoryCache.files.has(fileName) && memoryCache.files.get(fileName)!.version !== 0
     if (!isFileInCache) {
-      memoryCache.versions[fileName] = 1
+      memoryCache.files.set(fileName, {
+        text: contents,
+        version: 1,
+      })
       shouldIncrementProjectVersion = true
-    }
-    const previousContents = memoryCache.contents[fileName]
-    // Avoid incrementing cache when nothing has changed.
-    if (previousContents !== contents) {
-      memoryCache.versions[fileName] = fileVersion + 1
-      memoryCache.contents[fileName] = contents
-      // Only bump project version when file is modified in cache, not when discovered for the first time
-      if (isFileInCache) shouldIncrementProjectVersion = true
+    } else {
+      const previousContents = memoryCache.files.get(fileName)!.text
+      // Avoid incrementing cache when nothing has changed.
+      if (previousContents !== contents) {
+        memoryCache.files.set(fileName, {
+          version: memoryCache.files.get(fileName)!.version + 1,
+          text: contents,
+        })
+        // Only bump project version when file is modified in cache, not when discovered for the first time
+        if (isFileInCache) shouldIncrementProjectVersion = true
+      }
+      /**
+       * When a file is from node_modules or referenced to a referenced project and jest wants to transform it, we need
+       * to make sure that the Program is updated with this information
+       */
+      if (!fileNames.includes(fileName)) {
+        shouldIncrementProjectVersion = true
+      }
     }
 
     if (shouldIncrementProjectVersion) projectVersion++
@@ -76,10 +82,10 @@ export const initializeLanguageServiceInstance = (
   const serviceHost: _ts.LanguageServiceHost = {
     getProjectVersion: () => String(projectVersion),
     getProjectReferences: () => projectReferences,
-    getScriptFileNames: () => Object.keys(memoryCache.versions),
+    getScriptFileNames: () => [...memoryCache.files.keys()],
     getScriptVersion: (fileName: string) => {
       const normalizedFileName = normalize(fileName)
-      const version = memoryCache.versions[normalizedFileName]
+      const version = memoryCache.files.get(normalizedFileName)!.version
 
       // We need to return `undefined` and not a string here because TypeScript will use
       // `getScriptVersion` and compare against their own version - which can be `undefined`.
@@ -90,13 +96,18 @@ export const initializeLanguageServiceInstance = (
     },
     getScriptSnapshot(fileName: string) {
       const normalizedFileName = normalize(fileName)
-      const hit = hasOwn.call(memoryCache.contents, normalizedFileName)
+      const hit = memoryCache.files.has(normalizedFileName) && memoryCache.files.get(normalizedFileName)!.version !== 0
 
       logger.trace({ normalizedFileName, cacheHit: hit }, `getScriptSnapshot():`, 'cache', hit ? 'hit' : 'miss')
 
       // Read contents from TypeScript memory cache.
-      if (!hit) memoryCache.contents[normalizedFileName] = ts.sys.readFile(normalizedFileName)
-      const contents = memoryCache.contents[normalizedFileName]
+      if (!hit) {
+        memoryCache.files.set(normalizedFileName, {
+          version: 1,
+          text: ts.sys.readFile(normalizedFileName),
+        })
+      }
+      const contents = memoryCache.files.get(normalizedFileName)!.text
 
       if (contents === undefined) return
 
@@ -116,37 +127,37 @@ export const initializeLanguageServiceInstance = (
   }
 
   logger.debug('compileUsingLanguageService(): creating language service')
+
   const service: _ts.LanguageService = ts.createLanguageService(serviceHost, ts.createDocumentRegistry())
 
   return {
     compileFn: (code: string, fileName: string): SourceOutput => {
-      const normalizedFileName = normalize(fileName)
+      logger.debug({ fileName }, 'compileFn(): compiling using language service')
 
-      logger.debug({ normalizedFileName }, 'compileFn(): compiling using language service')
       // Must set memory cache before attempting to read file.
-      updateMemoryCache(code, normalizedFileName)
+      updateMemoryCache(code, fileName)
       const referencedProject = getAndCacheProjectReference(
-        normalizedFileName,
+        fileName,
         service.getProgram()!,
         memoryCache.files,
         projectReferences,
       )
       if (referencedProject !== undefined) {
-        logger.debug({ normalizedFileName }, 'compileFn(): get compile result from referenced project')
+        logger.debug({ fileName }, 'compileFn(): get compile result from referenced project')
 
-        return getCompileResultFromReferencedProject(normalizedFileName, configs, memoryCache.files, referencedProject)
+        return getCompileResultFromReferencedProject(fileName, configs, memoryCache.files, referencedProject)
       } else {
-        const output: _ts.EmitOutput = service.getEmitOutput(normalizedFileName)
+        const output: _ts.EmitOutput = service.getEmitOutput(fileName)
         // Do type checking by getting TypeScript diagnostics
-        logger.debug(`compileFn(): computing diagnostics for ${normalizedFileName} using language service`)
+        logger.debug(`compileFn(): computing diagnostics for ${fileName} using language service`)
 
-        doTypeChecking(configs, normalizedFileName, service, logger)
+        doTypeChecking(configs, fileName, service, logger)
         /**
          * We don't need the following logic with no cache run because no cache always gives correct typing
          */
         if (cacheDir) {
-          if (isTestFile(configs.testMatchPatterns, normalizedFileName)) {
-            cacheResolvedModules(normalizedFileName, code, memoryCache, service.getProgram()!, cacheDir, logger)
+          if (isTestFile(configs.testMatchPatterns, fileName)) {
+            cacheResolvedModules(fileName, code, memoryCache, service.getProgram()!, cacheDir, logger)
           } else {
             /* istanbul ignore next (covered by e2e) */
             Object.entries(memoryCache.resolvedModules)
@@ -157,13 +168,12 @@ export const initializeLanguageServiceInstance = (
                  * test file for 1st time run after clearing cache because
                  */
                 return (
-                  entry[1].modulePaths.find(modulePath => modulePath === normalizedFileName) &&
-                  !hasOwn.call(memoryCache.outputs, entry[0])
+                  entry[1].modulePaths.find(modulePath => modulePath === fileName) && !memoryCache.files.has(entry[0])
                 )
               })
               .forEach(entry => {
                 logger.debug(
-                  `compileFn(): computing diagnostics for test file that imports ${normalizedFileName} using language service`,
+                  `compileFn(): computing diagnostics for test file that imports ${fileName} using language service`,
                 )
 
                 const testFileName = entry[0]
@@ -174,13 +184,13 @@ export const initializeLanguageServiceInstance = (
         }
         /* istanbul ignore next (this should never happen but is kept for security) */
         if (output.emitSkipped) {
-          throw new TypeError(`${relative(cwd, normalizedFileName)}: Emit skipped for language service`)
+          throw new TypeError(`${relative(cwd, fileName)}: Emit skipped for language service`)
         }
         // Throw an error when requiring `.d.ts` files.
         if (!output.outputFiles.length) {
           throw new TypeError(
             interpolate(Errors.UnableToRequireDefinitionFile, {
-              file: basename(normalizedFileName),
+              file: basename(fileName),
             }),
           )
         }
