@@ -31,7 +31,7 @@ describe('Transpiler', () => {
     expect(spy).toHaveBeenCalled()
     expect(logTarget.filteredLines(LogLevels.debug, Infinity)).toMatchInlineSnapshot(`
       Array [
-        "[level:20] readThrough(): no cache
+        "[level:20] compileAndCacheResult(): no cache
       ",
         "[level:20] compileFn(): compiling as isolated module
       ",
@@ -170,14 +170,18 @@ describe('Transpiler', () => {
   it('should have correct source maps', () => {
     const compiler = makeCompiler({ tsJestConfig: { ...baseTsJestConfig, tsConfig: false } })
     const source = 'const f = (v: number) => v\nconst t: number = f(5)'
+    const fileName = 'test-source-map-transpiler.ts'
+    writeFileSync(fileName, source, 'utf8')
 
-    const compiled = compiler.compile(source, __filename)
+    const compiled = compiler.compile(source, fileName)
 
-    expect(new ProcessedSource(compiled, __filename).outputSourceMaps).toMatchObject({
-      file: __filename,
-      sources: [__filename],
+    expect(new ProcessedSource(compiled, fileName).outputSourceMaps).toMatchObject({
+      file: fileName,
+      sources: [fileName],
       sourcesContent: [source],
     })
+
+    removeSync(fileName)
   })
 
   it('should not report diagnostics related to typings', () => {
