@@ -32,7 +32,7 @@
 import { Logger } from 'bs-logger'
 import { readFileSync, writeFileSync } from 'fs'
 import mkdirp = require('mkdirp')
-import { basename, extname, join, normalize } from 'path'
+import { basename, extname, join } from 'path'
 
 import { ConfigSet } from '../config/config-set'
 import { CompileFn, CompilerInstance, MemoryCache, TSFile, TsCompiler } from '../types'
@@ -92,60 +92,54 @@ const isValidCacheContent = (contents: string): boolean => {
  * cache mode
  */
 const compileAndCacheResult = (
-  cachedir: string | undefined,
+  cacheDir: string | undefined,
   memoryCache: MemoryCache,
   compileFn: CompileFn,
   getExtension: (fileName: string) => string,
   logger: Logger,
 ) => {
-  if (!cachedir) {
-    return (code: string, fileName: string, lineOffset?: number) => {
-      const normalizedFileName = normalize(fileName)
-
-      logger.debug({ normalizedFileName }, 'readThrough(): no cache')
-
-      const [value, sourceMap] = compileFn(code, normalizedFileName, lineOffset)
+  return (code: string, fileName: string, lineOffset?: number) => {
+    function getCompileOutput(): string {
+      const [value, sourceMap] = compileFn(code, fileName, lineOffset)
       const output = updateOutput(value, fileName, sourceMap, getExtension)
-      memoryCache.outputs[normalizedFileName] = output
+      memoryCache.files.set(fileName, {
+        ...memoryCache.files.get(fileName)!,
+        output,
+      })
 
       return output
     }
-  }
+    if (!cacheDir) {
+      logger.debug({ fileName }, 'compileAndCacheResult(): no cache')
 
-  // Make sure the cache directory exists before continuing.
-  mkdirp.sync(cachedir)
-  try {
-    const resolvedModulesCache = readFileSync(getResolvedModulesCache(cachedir), 'utf-8')
-    /* istanbul ignore next (covered by e2e) */
-    memoryCache.resolvedModules = JSON.parse(resolvedModulesCache)
-  } catch (e) {}
+      return getCompileOutput()
+    } else {
+      const cachePath = join(cacheDir, getCacheName(code, fileName))
+      const extension = getExtension(fileName)
+      const outputPath = `${cachePath}${extension}`
+      try {
+        const output = readFileSync(outputPath, 'utf8')
+        if (isValidCacheContent(output)) {
+          logger.debug({ fileName }, 'compileAndCacheResult(): cache hit')
+          memoryCache.files.set(fileName, {
+            ...memoryCache.files.get(fileName)!,
+            output,
+          })
 
-  return (code: string, fileName: string, lineOffset?: number) => {
-    const normalizedFileName = normalize(fileName)
-    const cachePath = join(cachedir, getCacheName(code, normalizedFileName))
-    const extension = getExtension(normalizedFileName)
-    const outputPath = `${cachePath}${extension}`
-    try {
-      const output = readFileSync(outputPath, 'utf8')
-      if (isValidCacheContent(output)) {
-        logger.debug({ normalizedFileName }, 'readThrough(): cache hit')
-        memoryCache.outputs[normalizedFileName] = output
+          return output
+        }
+      } catch (err) {}
 
-        return output
-      }
-    } catch (err) {}
+      logger.debug({ fileName }, 'compileAndCacheResult(): cache miss')
 
-    logger.debug({ fileName }, 'readThrough(): cache miss')
+      const output = getCompileOutput()
 
-    const [value, sourceMap] = compileFn(code, normalizedFileName, lineOffset)
-    const output = updateOutput(value, normalizedFileName, sourceMap, getExtension)
+      logger.debug({ fileName, outputPath }, 'compileAndCacheResult(): writing caches')
 
-    logger.debug({ normalizedFileName, outputPath }, 'readThrough(): writing caches')
+      writeFileSync(outputPath, output)
 
-    memoryCache.outputs[normalizedFileName] = output
-    writeFileSync(outputPath, output)
-
-    return output
+      return output
+    }
   }
 }
 
@@ -156,16 +150,13 @@ const compileAndCacheResult = (
 export const createCompilerInstance = (configs: ConfigSet): TsCompiler => {
   const logger = configs.logger.child({ namespace: 'ts-compiler' })
   const {
-    typescript: { options: compilerOptions, fileNames },
+    typescript: { options: compilerOptions },
     tsJest,
   } = configs
-  const cachedir = configs.tsCacheDir
+  const cacheDir = configs.tsCacheDir
   const ts = configs.compilerModule // Require the TypeScript compiler and configuration.
   const extensions = ['.ts', '.tsx']
   const memoryCache: MemoryCache = {
-    contents: Object.create(null),
-    versions: Object.create(null),
-    outputs: Object.create(null),
     resolvedModules: Object.create(null),
     files: new Map<string, TSFile>(),
   }
@@ -174,14 +165,21 @@ export const createCompilerInstance = (configs: ConfigSet): TsCompiler => {
     extensions.push('.js')
     extensions.push('.jsx')
   }
-  // Initialize files from TypeScript into project.
-  for (const path of fileNames) {
-    const normalizedFilePath = normalize(path)
-    memoryCache.versions[normalizedFilePath] = 1
-    memoryCache.files.set(normalizedFilePath, {
+  if (cacheDir) {
+    // Make sure the cache directory exists before continuing.
+    mkdirp.sync(cacheDir)
+    try {
+      const resolvedModulesCache = readFileSync(getResolvedModulesCache(cacheDir), 'utf-8')
+      /* istanbul ignore next (covered by e2e) */
+      memoryCache.resolvedModules = JSON.parse(resolvedModulesCache)
+    } catch (e) {}
+  }
+  /* istanbul ignore next (we leave this for e2e) */
+  configs.jest.setupFiles.concat(configs.jest.setupFilesAfterEnv).forEach(setupFile => {
+    memoryCache.files.set(setupFile, {
       version: 0,
     })
-  }
+  })
   /**
    * Get the extension for a transpiled file.
    */
@@ -196,7 +194,7 @@ export const createCompilerInstance = (configs: ConfigSet): TsCompiler => {
   } else {
     compilerInstance = initializeTranspilerInstance(configs, memoryCache, logger)
   }
-  const compile = compileAndCacheResult(cachedir, memoryCache, compilerInstance.compileFn, getExtension, logger)
+  const compile = compileAndCacheResult(cacheDir, memoryCache, compilerInstance.compileFn, getExtension, logger)
 
   return { cwd: configs.cwd, compile, program: compilerInstance.program }
 }
