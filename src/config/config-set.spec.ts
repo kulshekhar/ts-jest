@@ -52,6 +52,7 @@ function createConfigSet({
   Object.keys(others).forEach(key => {
     Object.defineProperty(cs, key, { value: others[key] })
   })
+
   return cs
 }
 
@@ -875,7 +876,10 @@ describe('shouldReportDiagnostic', () => {
 
 describe('tsCompiler', () => {
   it('should be a compiler object', () => {
-    const cs = createConfigSet({ tsJestConfig: { tsConfig: false } as any })
+    const cs = createConfigSet({
+      tsJestConfig: { tsConfig: false } as any,
+      jestConfig: { setupFiles: [], setupFilesAfterEnv: [] } as any,
+    })
     const compiler = cs.tsCompiler
     expect(compiler.cwd).toBe(cs.cwd)
     expect(typeof compiler.compile).toBe('function')

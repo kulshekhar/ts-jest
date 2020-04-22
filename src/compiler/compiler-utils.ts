@@ -12,18 +12,15 @@ import { sha1 } from '../util/sha1'
 /**
  * @internal
  */
-export const hasOwn = Object.prototype.hasOwnProperty
-/**
- * @internal
- */
-export function getResolvedModulesCache(cachedir: string): string {
-  return join(cachedir, sha1('ts-jest-resolved-modules', '\x00'))
+export function getResolvedModulesCache(cacheDir: string): string {
+  return join(cacheDir, sha1('ts-jest-resolved-modules', '\x00'))
 }
 
 /**
  * @internal
  * Get resolved modules of a test file and put into memory cache
  */
+/* istanbul ignore next (we leave this for e2e) */
 export function cacheResolvedModules(
   fileName: string,
   fileContent: string,

@@ -211,9 +211,6 @@ export type SourceOutput = [string, string]
  * @internal
  */
 export interface MemoryCache {
-  contents: { [filePath: string]: string | undefined }
-  versions: { [filePath: string]: number }
-  outputs: { [filePath: string]: string }
   resolvedModules: {
     [testFilePath: string]: {
       testFileContent: string
@@ -245,6 +242,7 @@ export interface AstTransformerDesc {
 export type TSFiles = Map<string, TSFile>
 export interface TSFile {
   text?: string
+  output?: string
   version: number
   projectReference?: {
     /**
