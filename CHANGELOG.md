@@ -1,3 +1,21 @@
+<a name="25.5.0-alpha.0"></a>
+# [25.5.0-alpha.0](https://github.com/kulshekhar/ts-jest/compare/v25.4.0...v25.5.0-alpha.0) (2020-04-22)
+
+
+### Bug Fixes
+
+* **compiler:** make `projectReferences` work with `isolatedModules: false` ([#1541](https://github.com/kulshekhar/ts-jest/issues/1541)) ([3e8efbe](https://github.com/kulshekhar/ts-jest/commit/3e8efbe))
+
+### Performance
+
+* **compiler:** improve performance for `isolatedModules: false` ([#1558](https://github.com/kulshekhar/ts-jest/issues/1558)) ([85c09e3](https://github.com/kulshekhar/ts-jest/commit/85c09e3))
+
+### BREAKING CHANGES
+
+* **config:** `compilerHost` and `incremental` options are no longer available
+
+
+
 <a name="25.4.0"></a>
 # [25.4.0](https://github.com/kulshekhar/ts-jest/compare/v25.3.1...v25.4.0) (2020-04-17)
 
