@@ -81,7 +81,7 @@ function isUsingProjectReferences(
 function getResolvedProjectReferences(
   program: _ts.Program,
 ): ReadonlyArray<_ts.ResolvedProjectReference | undefined> | undefined {
-  const getProjectReferences = program.getResolvedProjectReferences || program.getProjectReferences
+  const getProjectReferences = program.getResolvedProjectReferences ?? program.getProjectReferences
   if (getProjectReferences) {
     return getProjectReferences()
   }
@@ -118,7 +118,7 @@ export function getAndCacheProjectReference(
   projectReferences: ReadonlyArray<_ts.ProjectReference> | undefined,
 ) {
   const file = files[filePath]
-  if (file !== undefined && file.projectReference) {
+  if (file?.projectReference) {
     return file.projectReference.project
   }
 
@@ -157,13 +157,13 @@ function getAndCacheOutputJSFileName(
   files: TSFiles,
 ) {
   const file = files[inputFileName]
-  if (file?.projectReference && file.projectReference.outputFileName) {
+  if (file?.projectReference?.outputFileName) {
     return file.projectReference.outputFileName
   }
 
   const outputFileName = getOutputJavaScriptFileName(inputFileName, projectReference)
   if (file !== undefined) {
-    file.projectReference = file.projectReference || {
+    file.projectReference = file.projectReference ?? {
       project: projectReference,
     }
     file.projectReference.outputFileName = outputFileName
