@@ -27,7 +27,7 @@ export const initializeTranspilerInstance = (
     : ts.createProgram([], options)
   /* istanbul ignore next (we leave this for e2e) */
   const updateFileInCache = (contents: string, filePath: string) => {
-    const file = memoryCache.files.get(filePath)
+    const file = memoryCache.files[filePath]
     if (file && file.text !== contents) {
       file.version++
       file.text = contents
