@@ -12,6 +12,10 @@ import { sha1 } from '../util/sha1'
 /**
  * @internal
  */
+export const hasOwn = Object.prototype.hasOwnProperty
+/**
+ * @internal
+ */
 export function getResolvedModulesCache(cacheDir: string): string {
   return join(cacheDir, sha1('ts-jest-resolved-modules', '\x00'))
 }
@@ -35,7 +39,7 @@ export function cacheResolvedModules(
    * Ugly trick while waiting for https://github.com/microsoft/TypeScript/issues/33994
    */
   if (importReferences.length) {
-    logger.debug({ fileName }, `cacheResolvedModules(): get resolved modules of test file ${fileName}`)
+    logger.debug({ fileName }, `cacheResolvedModules(): get resolved modules`)
 
     memoryCache.resolvedModules[fileName] = Object.create(null)
     memoryCache.resolvedModules[fileName].modulePaths = importReferences
@@ -113,7 +117,7 @@ export function getAndCacheProjectReference(
   files: TSFiles,
   projectReferences: ReadonlyArray<_ts.ProjectReference> | undefined,
 ) {
-  const file = files.get(filePath)
+  const file = files[filePath]
   if (file !== undefined && file.projectReference) {
     return file.projectReference.project
   }
@@ -152,8 +156,8 @@ function getAndCacheOutputJSFileName(
   projectReference: _ts.ResolvedProjectReference,
   files: TSFiles,
 ) {
-  const file = files.get(inputFileName)
-  if (file && file.projectReference && file.projectReference.outputFileName) {
+  const file = files[inputFileName]
+  if (file?.projectReference && file.projectReference.outputFileName) {
     return file.projectReference.outputFileName
   }
 
