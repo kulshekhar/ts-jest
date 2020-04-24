@@ -1,4 +1,3 @@
-import { LogLevels } from 'bs-logger'
 import { removeSync, writeFileSync } from 'fs-extra'
 
 import { makeCompiler } from '../__helpers__/fakers'
@@ -14,53 +13,6 @@ const logTarget = logTargetMock()
 describe('Language service', () => {
   beforeEach(() => {
     logTarget.clear()
-  })
-
-  it('should use the cache', () => {
-    const tmp = tempDir('compiler')
-    const compiler = makeCompiler({
-      jestConfig: { cache: true, cacheDirectory: tmp },
-      tsJestConfig: { tsConfig: false },
-    })
-    const source = 'console.log("hello")'
-    const fileName = 'test-cache.ts'
-
-    writeFileSync(fileName, source, 'utf8')
-
-    logTarget.clear()
-    const compiled1 = compiler.compile(source, fileName)
-
-    expect(logTarget.filteredLines(LogLevels.debug, Infinity)).toMatchInlineSnapshot(`
-      Array [
-        "[level:20] compileAndCacheResult(): cache miss
-      ",
-        "[level:20] compileFn(): compiling using language service
-      ",
-        "[level:20] updateMemoryCache(): update memory cache for language service
-      ",
-        "[level:20] visitSourceFileNode(): hoisting
-      ",
-        "[level:20] compileFn(): computing diagnostics for test-cache.ts using language service
-      ",
-        "[level:20] compileAndCacheResult(): writing caches
-      ",
-      ]
-    `)
-
-    logTarget.clear()
-    const compiled2 = compiler.compile(source, fileName)
-
-    expect(logTarget.lines).toMatchInlineSnapshot(`
-      Array [
-        "[level:20] compileAndCacheResult(): cache hit
-      ",
-      ]
-    `)
-
-    expect(new ProcessedSource(compiled1, fileName)).toMatchSnapshot()
-    expect(compiled2).toBe(compiled1)
-
-    removeSync(fileName)
   })
 
   it('should get compile result from referenced project when there is a built reference project', () => {
