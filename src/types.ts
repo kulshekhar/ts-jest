@@ -239,7 +239,9 @@ export interface AstTransformerDesc {
   factory(cs: ConfigSet): _ts.TransformerFactory<_ts.SourceFile>
 }
 /** where key is filepath */
-export type TSFiles = Map<string, TSFile>
+export interface TSFiles {
+  [filePath: string]: TSFile
+}
 export interface TSFile {
   text?: string
   output?: string
