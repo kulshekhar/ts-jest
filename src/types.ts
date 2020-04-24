@@ -30,28 +30,44 @@ export type BabelConfig = _babel.TransformOptions
 export interface TsJestGlobalOptions {
   /**
    * Compiler options. It can be:
-   *     - `true` (or `undefined`, it's the default): use default tsconfig file
-   *     - `false`: do NOT use default config file
-   *     - `path/to/tsconfig.json`: path to a specific tsconfig file (<rootDir> can be used)
-   *     - `{...}`: an object with inline compiler options
+   * - `true` (or `undefined`, it's the default): use default tsconfig file
+   * - `false`: do NOT use default config file
+   * - `path/to/tsconfig.json`: path to a specific tsconfig file (<rootDir> can be used)
+   * - `{...}`: an object with inline compiler options
+   * @default undefined uses the default tsconfig file
+   * @alias tsconfig
    */
   tsConfig?: boolean | string | _ts.CompilerOptions
 
   /**
+   * Compiler options. It can be:
+   * - `true` (or `undefined`, it's the default): use default tsconfig file
+   * - `false`: do NOT use default config file
+   * - `path/to/tsconfig.json`: path to a specific tsconfig file (<rootDir> can be used)
+   * - `{...}`: an object with inline compiler options
+   * @default undefined uses the default tsconfig file
+   * @alias tsConfig
+   */
+  tsconfig?: boolean | string | _ts.CompilerOptions
+
+  /**
    * packageJson. It can be:
-   *     - `true` (or `undefined`, it's the default): use default package.json file
-   *     - `path/to/package.json`: path to a specific package.json file (<rootDir> can be used)
-   *     - `{...}`: contents of a package.json
+   * - `true` (or `undefined`, it's the default): use default package.json file
+   * - `path/to/package.json`: path to a specific package.json file (<rootDir> can be used)
+   * - `{...}`: contents of a package.json
+   * @default undefined uses the default package.json file
    */
   packageJson?: boolean | string | object
 
   /**
-   * Whether to compile files as isolated modules (disables some features and type-checking, default to `false`):
+   * Compiles files as isolated modules (disables some features and type-checking)
+   * @default undefined (disabled)
    */
   isolatedModules?: boolean
 
   /**
-   * Compiler to use (default to 'typescript'):
+   * Compiler to use
+   * @default 'typescript'
    */
   compiler?: string
 
@@ -62,33 +78,45 @@ export interface TsJestGlobalOptions {
 
   /**
    * TS diagnostics - less to be reported if `isolatedModules` is `true`. It can be:
-   *     - `true` (or `undefined`, it's the default): show all diagnostics
-   *     - `false`: hide diagnostics of all files (kind of useless)
-   *     - `{...}`: an inline object with fine grained settings
+   * - `true` (or `undefined`, it's the default): show all diagnostics
+   * - `false`: hide diagnostics of all files (kind of useless)
+   * - `{...}`: an inline object with fine grained settings
+   * @default undefined shows all diagnostics
    */
   diagnostics?:
     | boolean
     | {
+        /**
+         * Enables colorful and pretty output of errors
+         * @default undefined (enabled)
+         */
         pretty?: boolean
         /**
-         * Ignore TypeScript warnings by diagnostic code.
+         * List of TypeScript diagnostic error codes to ignore
+         * [here](https://github.com/Microsoft/TypeScript/blob/master/src/compiler/diagnosticMessages.json).
+         * @see https://github.com/Microsoft/TypeScript/blob/master/src/compiler/diagnosticMessages.json
+         * @default [6059,18002,18003]
          */
         ignoreCodes?: number | string | (number | string)[]
+        /**
+         * If specified, diagnostics of source files which path does **not** match
+         * will be ignored
+         */
         pathRegex?: RegExp | string
         /**
-         * Logs TypeScript errors to stderr instead of throwing exceptions.
-         *
-         * @default false
+         * Logs TypeScript errors to stderr instead of throwing exceptions
+         * @default undefined (disabled)
          */
         warnOnly?: boolean
       }
 
   /**
    * Babel config. It can be:
-   *    - `false` (or `undefined`, it's the default): do NOT use babel
-   *    - `true`: use babel using default babelrc file
-   *    - `path/to/.babelrc`: path to a babelrc file (<rootDir> can be used)
-   *     - `{...}`: an object with inline babel options
+   * - `false` (or `undefined`, it's the default): do NOT use babel
+   * - `true`: use babel using default babelrc file
+   * - `path/to/.babelrc`: path to a babelrc file (<rootDir> can be used)
+   * - `{...}`: an object with inline babel options
+   * @default undefined does NOT use babel
    */
   babelConfig?: boolean | string | BabelConfig
 

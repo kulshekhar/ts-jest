@@ -188,10 +188,10 @@ All options have default values which should fit most of the projects. Click on 
 | Option | Description | Type | Default |
 |---|---|---|---|
 | [**`compiler`**][compiler] | [TypeScript module to use as compiler.][compiler] | `string` | `"typescript"` |
-| [**`tsConfig`**][tsConfig] | [TypeScript compiler related configuration.][tsConfig] | `string`\|`object`\|`boolean` | _auto_ |
-| [**`isolatedModules`**][isolatedModules] | [Disable type-checking][isolatedModules] | `boolean` | `false` |
-| [**`diagnostics`**][diagnostics] | [Diagnostics related configuration.][diagnostics] | `boolean`\|`object` | `true` |
-| [**`babelConfig`**][babelConfig] | [Babel(Jest) related configuration.][babelConfig] | `boolean`\|`object` | _disabled_ |
+| [**`tsConfig` or `tsconfig`**][tsConfig] | [TypeScript compiler related configuration.][tsConfig] | `string`\|`object`\|`boolean` | _auto_ |
+| [**`isolatedModules`**][isolatedModules] | [Disable type-checking][isolatedModules] | `boolean` | _disabled_ |
+| [**`diagnostics`**][diagnostics] | [Diagnostics related configuration.][diagnostics] | `boolean`\|`object` | _enabled_ |
+| [**`babelConfig`**][babelConfig] | [Babel(Jest) related configuration.][babelConfig] | `boolean`\|`string`\|`object` | _disabled_ |
 | [**`stringifyContentPathRegex`**][stringifyContentPathRegex] | [Files which will become modules returning self content.][stringifyContentPathRegex] | `string`\|`RegExp` | _disabled_ |
 | [**`packageJson`**][packageJson] | [Package metadata.][packageJson] | `string`\|`object`\|`boolean` | _auto_ |
 

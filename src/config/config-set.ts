@@ -222,9 +222,9 @@ export class ConfigSet {
     const options: TsJestGlobalOptions = { ...globals['ts-jest'] }
 
     // tsconfig
-    const { tsConfig: tsConfigOpt } = options
+    const tsConfigOpt = options.tsConfig ?? options.tsconfig ?? true
     let tsConfig: TsJestConfig['tsConfig']
-    if (typeof tsConfigOpt === 'string' || tsConfigOpt == null || tsConfigOpt === true) {
+    if (typeof tsConfigOpt === 'string' || tsConfigOpt === true) {
       tsConfig = {
         kind: 'file',
         value: typeof tsConfigOpt === 'string' ? this.resolvePath(tsConfigOpt) : undefined,
