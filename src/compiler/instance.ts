@@ -96,8 +96,8 @@ export const createCompilerInstance = (configs: ConfigSet): TsCompiler => {
     } catch (e) {}
   }
   /* istanbul ignore next (we leave this for e2e) */
-  configs.jest.setupFiles.concat(configs.jest.setupFilesAfterEnv).forEach(setupFile => {
-    memoryCache.files[setupFile] = {
+  configs.typescript.fileNames.forEach(fileName => {
+    memoryCache.files[fileName] = {
       version: 0,
     }
   })
