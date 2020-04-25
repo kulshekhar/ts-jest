@@ -31,13 +31,7 @@
       "react"
     ]
   },
-  "include": [
-    "e2e/__helpers__",
-    "e2e/__serializer__",
-    "e2e/__tests__",
-    "scripts/",
-    "src"
-  ],
+  "include": [],
   "exclude": [
     "e2e/__cases__",
     "e2e/__templates__",
