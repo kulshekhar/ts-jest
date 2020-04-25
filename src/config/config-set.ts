@@ -717,7 +717,7 @@ export class ConfigSet {
     resolvedConfigFile?: string | null,
     noProject?: boolean | null,
   ): ReadTsConfigResult {
-    let config = { compilerOptions: {} }
+    let config = { compilerOptions: {}, include: [] }
     let basePath = normalizeSlashes(this.rootDir)
     let configFileName: string | undefined
     const ts = this.compilerModule
@@ -759,6 +759,11 @@ export class ConfigSet {
       ...config.compilerOptions,
       ...compilerOptions,
     }
+    /**
+     * Always set include to empty array so fileNames after parseJsonConfigFileContent only contains the least minimum initial
+     * files to utilize LanguageService incremental feature
+     */
+    config.include = []
 
     // parse json, merge config extending others, ...
     const result = ts.parseJsonConfigFileContent(config, ts.sys, basePath, undefined, configFileName)
