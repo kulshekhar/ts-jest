@@ -122,7 +122,7 @@ describe('projectPackageJson', () => {
 })
 
 describe('jest', () => {
-  it('should returns correct config and go thru backports', () => {
+  it('should return correct config and go thru backports', () => {
     expect(createConfigSet().jest).toMatchSnapshot()
     expect(backports.backportJestConfig).toHaveBeenCalledTimes(1)
   })
@@ -147,6 +147,37 @@ describe('jest', () => {
         parentConfig: { __parent: true } as any,
       }).jest,
     ).toMatchSnapshot()
+  })
+})
+
+describe('testMatchPatterns', () => {
+  it.each([
+    {
+      jestConfig: {
+        testRegex: [{}],
+        testMatch: [],
+      } as any,
+    },
+    {
+      jestConfig: {
+        testMatch: [],
+        testRegex: [/.*\.(spec|test)\.[jt]sx?$/],
+      } as any,
+    },
+    {
+      jestConfig: {
+        testMatch: ['**/?(*.)+(spec|test).[tj]s?(x)'],
+        testRegex: [],
+      } as any,
+    },
+    {
+      jestConfig: {
+        testMatch: ['**/?(*.)+(spec|test).[tj]s?(x)'],
+        testRegex: ['**/?(*.)+(foo|bar).[tj]s?(x)'],
+      } as any,
+    },
+  ])('should return an array of patterns based on testRegex and testMatch from jestConfig', config => {
+    expect(createConfigSet(config).testMatchPatterns).toMatchSnapshot()
   })
 })
 
