@@ -18,7 +18,7 @@ Object {
 }
 `;
 
-exports[`jest should returns correct config and go thru backports 1`] = `
+exports[`jest should return correct config and go thru backports 1`] = `
 Object {
   "__backported": true,
   "globals": Object {},
@@ -123,6 +123,32 @@ Array [
     "messageText": "If you have issues related to imports, you should consider setting \`esModuleInterop\` to \`true\` in your TypeScript configuration file (usually \`tsconfig.json\`). See https://blogs.msdn.microsoft.com/typescript/2018/01/31/announcing-typescript-2-7/#easier-ecmascript-module-interoperability for more information.",
     "start": undefined,
   },
+]
+`;
+
+exports[`testMatchPatterns should return an array of patterns based on testRegex and testMatch from jestConfig 1`] = `
+Array [
+  "**/__tests__/**/*.[jt]s?(x)",
+  "**/?(*.)+(spec|test).[jt]s?(x)",
+]
+`;
+
+exports[`testMatchPatterns should return an array of patterns based on testRegex and testMatch from jestConfig 2`] = `
+Array [
+  /\\.\\*\\\\\\.\\(spec\\|test\\)\\\\\\.\\[jt\\]sx\\?\\$/,
+]
+`;
+
+exports[`testMatchPatterns should return an array of patterns based on testRegex and testMatch from jestConfig 3`] = `
+Array [
+  "**/?(*.)+(spec|test).[tj]s?(x)",
+]
+`;
+
+exports[`testMatchPatterns should return an array of patterns based on testRegex and testMatch from jestConfig 4`] = `
+Array [
+  "**/?(*.)+(spec|test).[tj]s?(x)",
+  "**/?(*.)+(foo|bar).[tj]s?(x)",
 ]
 `;
 

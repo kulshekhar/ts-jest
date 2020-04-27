@@ -25,6 +25,7 @@ import {
 
 import { digest as MY_DIGEST, version as MY_VERSION } from '..'
 import { createCompilerInstance } from '../compiler/instance'
+import { DEFAULT_JEST_TEST_MATCH } from '../constants'
 import { internals as internalAstTransformers } from '../transformers'
 import {
   AstTransformerDesc,
@@ -197,7 +198,18 @@ export class ConfigSet {
    */
   @Memoize()
   get testMatchPatterns(): (string | RegExp)[] {
-    return [...this.jest.testMatch, ...this.jest.testRegex]
+    const matchablePatterns = [...this.jest.testMatch, ...this.jest.testRegex].filter(pattern => {
+      /**
+       * jest config testRegex doesn't always deliver the correct RegExp object
+       * See https://github.com/facebook/jest/issues/9778
+       */
+      return pattern instanceof RegExp || typeof pattern === 'string'
+    })
+    if (!matchablePatterns.length) {
+      matchablePatterns.push(...DEFAULT_JEST_TEST_MATCH)
+    }
+
+    return matchablePatterns
   }
 
   /**
