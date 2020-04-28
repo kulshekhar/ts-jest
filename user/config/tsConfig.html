@@ -138,9 +138,9 @@
   </header>
 
   <section>
-    <p>The <code class="language-plaintext highlighter-rouge">tsConfig</code> option allows you to define the which <code class="language-plaintext highlighter-rouge">tsconfig</code> JSON file to use. An inline compiler options object can also be specified instead of the path to a file.</p>
+    <p>The <code class="language-plaintext highlighter-rouge">tsConfig</code> option (alias <code class="language-plaintext highlighter-rouge">tsconfig</code>) allows you to define which <code class="language-plaintext highlighter-rouge">tsconfig</code> JSON file to use. An inline <a href="https://www.typescriptlang.org/docs/handbook/compiler-options.html#compiler-options">compiler options</a> object can also be specified instead of a file path.</p>
 
-<p>By default, it’ll use the default TypeScript and use the project’s <code class="language-plaintext highlighter-rouge">tsconfig.json</code> file. If it cannot find one, it’ll use defaults TypeScript compiler options (except <code class="language-plaintext highlighter-rouge">es5</code> is used as target instead of <code class="language-plaintext highlighter-rouge">es3</code>).</p>
+<p>By default <code class="language-plaintext highlighter-rouge">ts-jest</code> will try to find a <code class="language-plaintext highlighter-rouge">tsconfig.json</code> in your project. If it cannot find one, it will use the default TypeScript <a href="https://www.typescriptlang.org/docs/handbook/compiler-options.html#compiler-options">compiler options</a>; except, <code class="language-plaintext highlighter-rouge">ES5</code> is used as <code class="language-plaintext highlighter-rouge">target</code> instead of <code class="language-plaintext highlighter-rouge">ES3</code>.</p>
 
 <p>If you need to use defaults and force <code class="language-plaintext highlighter-rouge">ts-jest</code> to use the defaults even if there is a <code class="language-plaintext highlighter-rouge">tsconfig.json</code> in your project, you can set this option to <code class="language-plaintext highlighter-rouge">false</code>.</p>
 
@@ -182,7 +182,7 @@
 
 <h4 id="inline-compiler-options">Inline compiler options</h4>
 
-<p>Refer to the <a href="https://www.typescriptlang.org/docs/handbook/compiler-options.html">TypeScript compiler options</a> to know what can be used.
+<p>Refer to the TypeScript <a href="https://www.typescriptlang.org/docs/handbook/compiler-options.html#compiler-options">compiler options</a> for reference.
 It’s basically the same object you’d put in your <code class="language-plaintext highlighter-rouge">tsconfig.json</code>’s <code class="language-plaintext highlighter-rouge">compilerOptions</code>.</p>
 
 <div class="row"><div class="col-md-6">
@@ -221,7 +221,7 @@ It’s basically the same object you’d put in your <code class="language-plain
 
 <h4 id="disable-auto-lookup">Disable auto-lookup</h4>
 
-<p>By default <code class="language-plaintext highlighter-rouge">ts-jest</code> will try to find the <code class="language-plaintext highlighter-rouge">tsconfig.json</code> in your project. But you may want to not use it at all and keep TypeScript default options. You can achieve this by setting <code class="language-plaintext highlighter-rouge">tsConfig</code> to <code class="language-plaintext highlighter-rouge">false</code>.</p>
+<p>By default <code class="language-plaintext highlighter-rouge">ts-jest</code> will try to find a <code class="language-plaintext highlighter-rouge">tsconfig.json</code> in your project. But you may not want to use it at all and keep TypeScript default options. You can achieve this by setting <code class="language-plaintext highlighter-rouge">tsConfig</code> to <code class="language-plaintext highlighter-rouge">false</code>.</p>
 
 <div class="row"><div class="col-md-6">
 
@@ -252,6 +252,7 @@ It’s basically the same object you’d put in your <code class="language-plain
 </code></pre></div>    </div>
 
   </div></div>
+
 
   </section>
 
