@@ -68,9 +68,10 @@ export function makeCompiler({
     pretty: false,
   }
   const testRegex = ['^.+\\.[tj]sx?$']
+  const testMatch = ['^.+\\.tsx?$']
   jestConfig = {
     ...jestConfig,
-    testMatch: ['^.+\\.tsx?$'],
+    testMatch: jestConfig?.testMatch ? [...jestConfig.testMatch, ...testMatch] : testMatch,
     testRegex: jestConfig?.testRegex ? [...testRegex, ...jestConfig.testRegex] : testRegex,
   }
   const cs = new ConfigSet(getJestConfig(jestConfig, tsJestConfig), parentConfig)

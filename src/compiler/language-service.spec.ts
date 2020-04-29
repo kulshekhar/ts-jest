@@ -1,3 +1,5 @@
+import { LogLevels } from 'bs-logger'
+import { readFileSync } from 'fs'
 import { removeSync, writeFileSync } from 'fs-extra'
 
 import { makeCompiler } from '../__helpers__/fakers'
@@ -74,7 +76,7 @@ describe('Language service', () => {
       jestConfig: { cache: true, cacheDirectory: tmp, testRegex: [/.*\.(spec|test)\.[jt]sx?$/] as any[] },
       tsJestConfig: { tsConfig: false },
     })
-    const fileName = 'src/__mocks__/main.spec.ts'
+    const fileName = 'src/__mocks__/unchanged-modules/main.spec.ts'
     const source = `import { Thing } from './main'
 
 export const thing: Thing = { a: 1 }`
@@ -96,7 +98,7 @@ export const thing: Thing = { a: 1 }`
       jestConfig: { cache: true, cacheDirectory: tmp, testRegex: [/.*\.(foo|bar)\.[jt]sx?$/] as any[] },
       tsJestConfig: { tsConfig: false },
     })
-    const fileName = 'src/__mocks__/main.spec.ts'
+    const fileName = 'src/__mocks__/unchanged-modules/main.spec.ts'
     const source = `import { Thing } from './main'
 
 export const thing: Thing = { a: 1 }`
@@ -195,6 +197,64 @@ export const thing: Thing = { a: 1 }`
     })
 
     removeSync(fileName)
+  })
+
+  it('should not do type check for the test file which is already finished type checking before', () => {
+    const tmp = tempDir('compiler')
+    const testFileName = 'src/__mocks__/unchanged-modules/main.spec.ts'
+    const testFileSrc = readFileSync(testFileName, 'utf-8')
+    const importedModuleSrc = readFileSync('src/__mocks__/unchanged-modules/main.ts', 'utf-8')
+
+    const compiler = makeCompiler({
+      jestConfig: { cache: true, cacheDirectory: tmp, testMatch: ['src/__mocks__/unchanged-modules/*.spec.ts'] },
+      tsJestConfig: { tsConfig: false },
+    })
+
+    compiler.compile(testFileSrc, testFileName)
+    logTarget.clear()
+    compiler.compile(importedModuleSrc, require.resolve('../__mocks__/unchanged-modules/main.ts'))
+
+    expect(logTarget.filteredLines(LogLevels.debug, Infinity)).toMatchInlineSnapshot(`
+      Array [
+        "[level:20] compileAndCacheResult(): get compile output
+      ",
+        "[level:20] compileFn(): compiling using language service
+      ",
+        "[level:20] updateMemoryCache(): update memory cache for language service
+      ",
+        "[level:20] visitSourceFileNode(): hoisting
+      ",
+        "[level:20] compileFn(): computing diagnostics using language service
+      ",
+      ]
+    `)
+  })
+
+  it('should do type check for the test file when imported module has changed', () => {
+    const tmp = tempDir('compiler')
+    const testFileName = 'src/__mocks__/changed-modules/main.spec.ts'
+    const testFileSrc = readFileSync(testFileName, 'utf-8')
+    const importedModulePath = 'src/__mocks__/changed-modules/main.ts'
+    const importedModuleSrc = readFileSync(importedModulePath, 'utf-8')
+    const newImportedModuleSrc = 'export interface Thing { a: number, b: number }'
+
+    const compiler1 = makeCompiler({
+      jestConfig: { cache: true, cacheDirectory: tmp, testMatch: ['src/__mocks__/changed-modules/*.spec.ts'] },
+      tsJestConfig: { tsConfig: false },
+    })
+    compiler1.compile(testFileSrc, testFileName)
+
+    writeFileSync(importedModulePath, 'export interface Thing { a: number, b: number }')
+    const compiler2 = makeCompiler({
+      jestConfig: { cache: true, cacheDirectory: tmp, testMatch: ['src/__mocks__/changed-modules/*.spec.ts'] },
+      tsJestConfig: { tsConfig: false },
+    })
+
+    expect(() =>
+      compiler2.compile(newImportedModuleSrc, require.resolve('../__mocks__/changed-modules/main.ts')),
+    ).toThrowErrorMatchingSnapshot()
+
+    writeFileSync(importedModulePath, importedModuleSrc)
   })
 
   it('should report diagnostics related to typings with pathRegex config matches file name', () => {
