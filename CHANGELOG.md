@@ -1,3 +1,41 @@
+<a name="25.5.0-beta.0"></a>
+# [25.5.0-beta.0](https://github.com/kulshekhar/ts-jest/compare/v25.5.0-alpha.0...v25.5.0-beta.0) (2020-04-29)
+
+
+### Bug Fixes
+
+* **compiler:** allow using `files` provided by `tsconfig` ([#1562](https://github.com/kulshekhar/ts-jest/issues/1562)) ([907a280](https://github.com/kulshekhar/ts-jest/commit/907a280))
+* **config:** verify `testMatchPatterns` contain `RegExp` instance or `string` type values ([#1569](https://github.com/kulshekhar/ts-jest/issues/1569)) ([7f85bab](https://github.com/kulshekhar/ts-jest/commit/7f85bab))
+
+
+### Features
+
+* **config:** add `tsconfig` alias to `tsConfig` option ([#1565](https://github.com/kulshekhar/ts-jest/issues/1565)) ([c10eb6d](https://github.com/kulshekhar/ts-jest/commit/c10eb6d))
+
+
+### Performance Improvements
+
+* **compiler:** don’t write compile output to file system but rely on `jest` cache ([#1561](https://github.com/kulshekhar/ts-jest/issues/1561)) ([07b5f62](https://github.com/kulshekhar/ts-jest/commit/07b5f62))
+
+
+### BREAKING CHANGES
+
+* Any custom typing files or files which are needed to be compiled and intended to use with `jest` need to be defined in `files` option of `tsconfig`.
+
+For example
+```
+// tsconfig.json
+{
+   // ...other configs
+   "files": [
+       "my-custom-typings.d.ts".
+       "my-global-module.ts"
+   ]
+}
+```
+
+
+
 <a name="25.5.0-alpha.0"></a>
 # [25.5.0-alpha.0](https://github.com/kulshekhar/ts-jest/compare/v25.4.0...v25.5.0-alpha.0) (2020-04-22)
 
