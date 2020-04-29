@@ -117,7 +117,7 @@ export function getAndCacheProjectReference(
   files: TSFiles,
   projectReferences: ReadonlyArray<_ts.ProjectReference> | undefined,
 ) {
-  const file = files[filePath]
+  const file = files.get(filePath)
   if (file?.projectReference) {
     return file.projectReference.project
   }
@@ -156,7 +156,7 @@ function getAndCacheOutputJSFileName(
   projectReference: _ts.ResolvedProjectReference,
   files: TSFiles,
 ) {
-  const file = files[inputFileName]
+  const file = files.get(inputFileName)
   if (file?.projectReference?.outputFileName) {
     return file.projectReference.outputFileName
   }
