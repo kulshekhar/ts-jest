@@ -44,6 +44,9 @@ export const initializeLanguageServiceInstance = (
     call: null,
     [LogContexts.logLevel]: LogLevels.trace,
   }
+  function isFileInCache(fileName: string) {
+    return memoryCache.files.has(fileName) && memoryCache.files.get(fileName)!.version !== 0
+  }
   let projectVersion = 1
   // Set the file contents into cache.
   /* istanbul ignore next (cover by e2e) */
@@ -51,23 +54,23 @@ export const initializeLanguageServiceInstance = (
     logger.debug({ fileName }, `updateMemoryCache(): update memory cache for language service`)
 
     let shouldIncrementProjectVersion = false
-    const isFileInCache = hasOwn.call(memoryCache.files, fileName) && memoryCache.files[fileName].version !== 0
-    if (!isFileInCache) {
-      memoryCache.files[fileName] = {
+    const hit = isFileInCache(fileName)
+    if (!hit) {
+      memoryCache.files.set(fileName, {
         text: contents,
         version: 1,
-      }
+      })
       shouldIncrementProjectVersion = true
     } else {
-      const previousContents = memoryCache.files[fileName].text
+      const previousContents = memoryCache.files.get(fileName)!.text
       // Avoid incrementing cache when nothing has changed.
       if (previousContents !== contents) {
-        memoryCache.files[fileName] = {
+        memoryCache.files.set(fileName, {
           text: contents,
-          version: memoryCache.files[fileName].version + 1,
-        }
+          version: memoryCache.files.get(fileName)!.version + 1,
+        })
         // Only bump project version when file is modified in cache, not when discovered for the first time
-        if (isFileInCache) shouldIncrementProjectVersion = true
+        if (hit) shouldIncrementProjectVersion = true
       }
       /**
        * When a file is from node_modules or referenced to a referenced project and jest wants to transform it, we need
@@ -83,10 +86,10 @@ export const initializeLanguageServiceInstance = (
   const serviceHost: _ts.LanguageServiceHost = {
     getProjectVersion: () => String(projectVersion),
     getProjectReferences: () => projectReferences,
-    getScriptFileNames: () => Object.keys(memoryCache.files),
+    getScriptFileNames: () => [...memoryCache.files.keys()],
     getScriptVersion: (fileName: string) => {
       const normalizedFileName = normalize(fileName)
-      const version = memoryCache.files[normalizedFileName].version
+      const version = memoryCache.files.get(normalizedFileName)!.version
 
       // We need to return `undefined` and not a string here because TypeScript will use
       // `getScriptVersion` and compare against their own version - which can be `undefined`.
@@ -97,19 +100,18 @@ export const initializeLanguageServiceInstance = (
     },
     getScriptSnapshot(fileName: string) {
       const normalizedFileName = normalize(fileName)
-      const hit =
-        hasOwn.call(memoryCache.files, normalizedFileName) && memoryCache.files[normalizedFileName].version !== 0
+      const hit = memoryCache.files.has(normalizedFileName) && memoryCache.files.get(normalizedFileName)!.version !== 0
 
       logger.trace({ normalizedFileName, cacheHit: hit }, `getScriptSnapshot():`, 'cache', hit ? 'hit' : 'miss')
 
       // Read contents from TypeScript memory cache.
       if (!hit) {
-        memoryCache.files[normalizedFileName] = {
+        memoryCache.files.set(normalizedFileName, {
           text: ts.sys.readFile(normalizedFileName),
           version: 1,
-        }
+        })
       }
-      const contents = memoryCache.files[normalizedFileName]?.text
+      const contents = memoryCache.files.get(normalizedFileName)?.text
 
       if (contents === undefined) return
 

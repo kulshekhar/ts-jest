@@ -4,7 +4,7 @@ import mkdirp = require('mkdirp')
 import { basename, extname } from 'path'
 
 import { ConfigSet } from '../config/config-set'
-import { CompileFn, CompilerInstance, MemoryCache, TsCompiler } from '../types'
+import { CompileFn, CompilerInstance, MemoryCache, TSFile, TsCompiler } from '../types'
 
 import { getResolvedModulesCache } from './compiler-utils'
 import { initializeLanguageServiceInstance } from './language-service'
@@ -55,10 +55,10 @@ const compileAndCacheResult = (
 
     const [value, sourceMap] = compileFn(code, fileName, lineOffset)
     const output = updateOutput(value, fileName, sourceMap, getExtension)
-    memoryCache.files[fileName] = {
-      ...memoryCache.files[fileName],
+    memoryCache.files.set(fileName, {
+      ...memoryCache.files.get(fileName)!,
       output,
-    }
+    })
 
     return output
   }
@@ -78,7 +78,7 @@ export const createCompilerInstance = (configs: ConfigSet): TsCompiler => {
   const ts = configs.compilerModule // Require the TypeScript compiler and configuration.
   const extensions = ['.ts', '.tsx']
   const memoryCache: MemoryCache = {
-    files: Object.create(null),
+    files: new Map<string, TSFile>(),
     resolvedModules: Object.create(null),
   }
   // Enable `allowJs` when flag is set.
@@ -95,11 +95,11 @@ export const createCompilerInstance = (configs: ConfigSet): TsCompiler => {
       memoryCache.resolvedModules = JSON.parse(fsMemoryCache)
     } catch (e) {}
   }
-  /* istanbul ignore next (we leave this for e2e) */
+  // Initialize memory cache for typescript compiler
   configs.typescript.fileNames.forEach(fileName => {
-    memoryCache.files[fileName] = {
+    memoryCache.files.set(fileName, {
       version: 0,
-    }
+    })
   })
   /**
    * Get the extension for a transpiled file.
