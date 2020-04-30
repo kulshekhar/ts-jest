@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`With diagnostics throw first throw should fail using template "default" 1`] = `
+exports[`With diagnostics throw should fail using template "default" 1`] = `
   × jest
   ↳ exit code: 1
   ===[ STDOUT ]===================================================================
@@ -27,7 +27,7 @@ exports[`With diagnostics throw first throw should fail using template "default"
   ================================================================================
 `;
 
-exports[`With diagnostics throw first throw should fail using template "with-babel-7" 1`] = `
+exports[`With diagnostics throw should fail using template "with-babel-7" 1`] = `
   × jest
   ↳ exit code: 1
   ===[ STDOUT ]===================================================================
@@ -54,7 +54,7 @@ exports[`With diagnostics throw first throw should fail using template "with-bab
   ================================================================================
 `;
 
-exports[`With diagnostics throw first throw should fail using template "with-babel-7-string-config" 1`] = `
+exports[`With diagnostics throw should fail using template "with-babel-7-string-config" 1`] = `
   × jest
   ↳ exit code: 1
   ===[ STDOUT ]===================================================================
@@ -75,156 +75,6 @@ exports[`With diagnostics throw first throw should fail using template "with-bab
   
   Test Suites: 1 failed, 1 total
   Tests:       0 total
-  Snapshots:   0 total
-  Time:        XXs
-  Ran all test suites.
-  ================================================================================
-`;
-
-exports[`With diagnostics throw then fail when code has changed to invalid base on cache of the previous run should fail using template "default" 1`] = `
-  × jest
-  ↳ exit code: 1
-  ===[ STDOUT ]===================================================================
-  
-  ===[ STDERR ]===================================================================
-  FAIL ./main.spec.ts
-    × foo is 42
-  
-    ● foo is 42
-  
-      expect(received).toBe(expected) // Object.is equality
-  
-      Expected: 42
-      Received: 43
-  
-        4 | 
-        5 | test('foo is 42', () => {
-      > 6 |   expect(foo).toBe(42);
-          |               ^
-        7 | });
-        8 | 
-  
-        at Object.<anonymous> (main.spec.ts:6:15)
-  
-  Test Suites: 1 failed, 1 total
-  Tests:       1 failed, 1 total
-  Snapshots:   0 total
-  Time:        XXs
-  Ran all test suites.
-  ================================================================================
-`;
-
-exports[`With diagnostics throw then fail when code has changed to invalid base on cache of the previous run should fail using template "with-babel-7" 1`] = `
-  × jest
-  ↳ exit code: 1
-  ===[ STDOUT ]===================================================================
-  
-  ===[ STDERR ]===================================================================
-  FAIL ./main.spec.ts
-    × foo is 42
-  
-    ● foo is 42
-  
-      expect(received).toBe(expected) // Object.is equality
-  
-      Expected: 42
-      Received: 43
-  
-        4 | 
-        5 | test('foo is 42', () => {
-      > 6 |   expect(foo).toBe(42);
-          |               ^
-        7 | });
-        8 | 
-  
-        at Object.<anonymous> (main.spec.ts:6:15)
-  
-  Test Suites: 1 failed, 1 total
-  Tests:       1 failed, 1 total
-  Snapshots:   0 total
-  Time:        XXs
-  Ran all test suites.
-  ================================================================================
-`;
-
-exports[`With diagnostics throw then fail when code has changed to invalid base on cache of the previous run should fail using template "with-babel-7-string-config" 1`] = `
-  × jest
-  ↳ exit code: 1
-  ===[ STDOUT ]===================================================================
-  
-  ===[ STDERR ]===================================================================
-  FAIL ./main.spec.ts
-    × foo is 42
-  
-    ● foo is 42
-  
-      expect(received).toBe(expected) // Object.is equality
-  
-      Expected: 42
-      Received: 43
-  
-        4 | 
-        5 | test('foo is 42', () => {
-      > 6 |   expect(foo).toBe(42);
-          |               ^
-        7 | });
-        8 | 
-  
-        at Object.<anonymous> (main.spec.ts:6:15)
-  
-  Test Suites: 1 failed, 1 total
-  Tests:       1 failed, 1 total
-  Snapshots:   0 total
-  Time:        XXs
-  Ran all test suites.
-  ================================================================================
-`;
-
-exports[`With diagnostics throw then pass when type has changed to valid base on cache of the previous run should pass using template "default" 1`] = `
-  √ jest
-  ↳ exit code: 0
-  ===[ STDOUT ]===================================================================
-  
-  ===[ STDERR ]===================================================================
-  PASS ./main.spec.ts
-    √ foo is 42
-  
-  Test Suites: 1 passed, 1 total
-  Tests:       1 passed, 1 total
-  Snapshots:   0 total
-  Time:        XXs
-  Ran all test suites.
-  ================================================================================
-`;
-
-exports[`With diagnostics throw then pass when type has changed to valid base on cache of the previous run should pass using template "with-babel-7" 1`] = `
-  √ jest
-  ↳ exit code: 0
-  ===[ STDOUT ]===================================================================
-  
-  ===[ STDERR ]===================================================================
-  PASS ./main.spec.ts
-    √ foo is 42
-  
-  Test Suites: 1 passed, 1 total
-  Tests:       1 passed, 1 total
-  Snapshots:   0 total
-  Time:        XXs
-  Ran all test suites.
-  ================================================================================
-`;
-
-exports[`With diagnostics throw then pass when type has changed to valid base on cache of the previous run should pass using template "with-babel-7-string-config" 1`] = `
-  √ jest
-  ↳ exit code: 0
-  ===[ STDOUT ]===================================================================
-  
-  ===[ STDERR ]===================================================================
-  PASS ./main.spec.ts
-    √ foo is 42
-  
-  Test Suites: 1 passed, 1 total
-  Tests:       1 passed, 1 total
   Snapshots:   0 total
   Time:        XXs
   Ran all test suites.

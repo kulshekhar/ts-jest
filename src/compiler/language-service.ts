@@ -12,7 +12,6 @@ import {
   cacheResolvedModules,
   getAndCacheProjectReference,
   getCompileResultFromReferencedProject,
-  hasOwn,
   isTestFile,
 } from './compiler-utils'
 
@@ -163,7 +162,6 @@ export const initializeLanguageServiceInstance = (
           if (isTestFile(configs.testMatchPatterns, fileName)) {
             cacheResolvedModules(fileName, code, memoryCache, service.getProgram()!, cacheDir, logger)
           } else {
-            /* istanbul ignore next (covered by e2e) */
             Object.entries(memoryCache.resolvedModules)
               .filter(entry => {
                 /**
@@ -172,8 +170,7 @@ export const initializeLanguageServiceInstance = (
                  * test file for 1st time run after clearing cache because
                  */
                 return (
-                  entry[1].modulePaths.find(modulePath => modulePath === fileName) &&
-                  !hasOwn.call(memoryCache.files, entry[0])
+                  entry[1].modulePaths.find(modulePath => modulePath === fileName) && !memoryCache.files.has(entry[0])
                 )
               })
               .forEach(entry => {
