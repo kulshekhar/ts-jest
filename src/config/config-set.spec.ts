@@ -471,7 +471,7 @@ describe('makeDiagnostic', () => {
 
 describe('typescript', () => {
   const get = (tsJest?: TsJestGlobalOptions, parentConfig?: TsJestGlobalOptions) =>
-    createConfigSet({ tsJestConfig: tsJest, parentConfig }).typescript
+    createConfigSet({ tsJestConfig: tsJest, parentConfig }).parsedTsConfig
 
   it('should read file list from default tsconfig', () => {
     // since the default is to lookup for tsconfig, but we set include to [] so we should not have this file in the list
@@ -502,7 +502,7 @@ describe('typescript', () => {
       tsJestConfig: { tsConfig: 'tsconfig.build.json' },
       resolve: null,
     })
-    expect(cs.typescript.options).toMatchObject({
+    expect(cs.parsedTsConfig.options).toMatchObject({
       module: ts.ModuleKind.CommonJS,
       rootDir: normalizeSlashes(resolve(__dirname, '..')),
       skipLibCheck: true,
@@ -519,7 +519,7 @@ describe('typescript', () => {
       },
       resolve: null,
     })
-    expect(cs.typescript.options).toMatchObject({
+    expect(cs.parsedTsConfig.options).toMatchObject({
       module: ts.ModuleKind.CommonJS,
       allowSyntheticDefaultImports: true,
       esModuleInterop: false,
@@ -541,11 +541,11 @@ describe('typescript', () => {
       },
       resolve: null,
     })
-    expect(cs.typescript.options).toMatchObject({
+    expect(cs.parsedTsConfig.options).toMatchObject({
       module: ts.ModuleKind.AMD,
       esModuleInterop: false,
     })
-    expect(cs.typescript.options.allowSyntheticDefaultImports).toBeFalsy()
+    expect(cs.parsedTsConfig.options.allowSyntheticDefaultImports).toBeFalsy()
     expect(target.lines.warn).toHaveLength(0)
   })
 }) // typescript
@@ -582,11 +582,13 @@ describe('readTsConfig', () => {
   let readConfig!: jest.SpyInstance<{ config?: any; error?: ts.Diagnostic }>
   let parseConfig!: jest.SpyInstance<ts.ParsedCommandLine>
   let cs!: ConfigSet
+
   beforeAll(() => {
     findConfig = jest.spyOn(ts, 'findConfigFile')
     readConfig = jest.spyOn(ts, 'readConfigFile')
     parseConfig = jest.spyOn(ts, 'parseJsonConfigFileContent')
   })
+
   afterAll(() => {
     findConfig.mockRestore()
     readConfig.mockRestore()
@@ -603,6 +605,7 @@ describe('readTsConfig', () => {
         } as any,
       })
     })
+
     afterEach(() => {
       findConfig.mockClear()
       readConfig.mockClear()
@@ -611,7 +614,7 @@ describe('readTsConfig', () => {
 
     it('should use correct paths when searching', () => {
       const conf = cs.readTsConfig()
-      expect(conf.input).toBeUndefined()
+      expect(conf.options.configFilePath).toBeUndefined()
       expect(readConfig).not.toHaveBeenCalled()
       expect(parseConfig.mock.calls[0][0]).toEqual(
         expect.objectContaining({
@@ -621,9 +624,10 @@ describe('readTsConfig', () => {
       expect(parseConfig.mock.calls[0][2]).toBe('/root')
       expect(parseConfig.mock.calls[0][4]).toBeUndefined()
     })
+
     it('should use given tsconfig path', () => {
       const conf = cs.readTsConfig(undefined, '/foo/tsconfig.bar.json')
-      expect(conf.input).toBeUndefined()
+      expect(conf.options.configFilePath).toBeUndefined()
       expect(findConfig).not.toBeCalled()
       expect(readConfig.mock.calls[0][0]).toBe('/foo/tsconfig.bar.json')
       expect(parseConfig).not.toHaveBeenCalled()
@@ -636,10 +640,12 @@ describe('readTsConfig', () => {
       findConfig.mockImplementation(p => `${p}/tsconfig.json`)
       readConfig.mockImplementation(p => ({ config: { path: p, compilerOptions: {} } }))
     })
+
     afterEach(() => {
       findConfig.mockClear()
       readConfig.mockClear()
     })
+
     describe('module in tsConfig is not the same as forced module and esModuleInterop is not in tsConfig', () => {
       beforeEach(() => {
         parseConfig.mockImplementation((conf: any) => ({
@@ -651,13 +657,14 @@ describe('readTsConfig', () => {
           errors: [],
         }))
       })
+
       afterEach(() => {
         parseConfig.mockClear()
       })
 
       it('should use correct paths when searching', () => {
         const conf = cs.readTsConfig()
-        expect(conf.input.path).toBe('/root/tsconfig.json')
+        expect(conf.options.path).toBe('/root/tsconfig.json')
         expect(findConfig.mock.calls[0][0]).toBe('/root')
         expect(readConfig.mock.calls[0][0]).toBe('/root/tsconfig.json')
         expect(parseConfig.mock.calls[0][0]).toEqual(
@@ -667,13 +674,13 @@ describe('readTsConfig', () => {
         )
         expect(parseConfig.mock.calls[0][2]).toBe('/root')
         expect(parseConfig.mock.calls[0][4]).toBe('/root/tsconfig.json')
-        expect(conf.resolved.options.allowSyntheticDefaultImports).toEqual(true)
-        expect(conf.resolved.errors).toMatchSnapshot()
+        expect(conf.options.allowSyntheticDefaultImports).toEqual(true)
+        expect(conf.errors).toMatchSnapshot()
       })
 
       it('should use given tsconfig path', () => {
         const conf = cs.readTsConfig(undefined, '/foo/tsconfig.bar.json')
-        expect(conf.input.path).toBe('/foo/tsconfig.bar.json')
+        expect(conf.options.path).toBe('/foo/tsconfig.bar.json')
         expect(findConfig).not.toBeCalled()
         expect(readConfig.mock.calls[0][0]).toBe('/foo/tsconfig.bar.json')
         expect(parseConfig.mock.calls[0][0]).toEqual(
@@ -683,7 +690,7 @@ describe('readTsConfig', () => {
         )
         expect(parseConfig.mock.calls[0][2]).toBe('/foo')
         expect(parseConfig.mock.calls[0][4]).toBe('/foo/tsconfig.bar.json')
-        expect(conf.resolved.errors).toMatchSnapshot()
+        expect(conf.errors).toMatchSnapshot()
       })
     })
 
@@ -699,13 +706,14 @@ describe('readTsConfig', () => {
           errors: [],
         }))
       })
+
       afterEach(() => {
         parseConfig.mockClear()
       })
 
       it('should use correct paths when searching', () => {
         const conf = cs.readTsConfig()
-        expect(conf.input.path).toBe('/root/tsconfig.json')
+        expect(conf.options.path).toBe('/root/tsconfig.json')
         expect(findConfig.mock.calls[0][0]).toBe('/root')
         expect(readConfig.mock.calls[0][0]).toBe('/root/tsconfig.json')
         expect(parseConfig.mock.calls[0][0]).toEqual(
@@ -715,18 +723,18 @@ describe('readTsConfig', () => {
         )
         expect(parseConfig.mock.calls[0][2]).toBe('/root')
         expect(parseConfig.mock.calls[0][4]).toBe('/root/tsconfig.json')
-        expect(conf.resolved.options.allowSyntheticDefaultImports).toEqual(true)
-        expect(conf.resolved.errors).toMatchSnapshot()
+        expect(conf.options.allowSyntheticDefaultImports).toEqual(true)
+        expect(conf.errors).toMatchSnapshot()
       })
 
       it('should use given tsconfig path', () => {
         const conf = cs.readTsConfig(undefined, '/foo/tsconfig.bar.json')
-        expect(conf.input.path).toBe('/foo/tsconfig.bar.json')
+        expect(conf.options.path).toBe('/foo/tsconfig.bar.json')
         expect(findConfig).not.toBeCalled()
         expect(readConfig.mock.calls[0][0]).toBe('/foo/tsconfig.bar.json')
         expect(parseConfig.mock.calls[0][2]).toBe('/foo')
         expect(parseConfig.mock.calls[0][4]).toBe('/foo/tsconfig.bar.json')
-        expect(conf.resolved.errors).toMatchSnapshot()
+        expect(conf.errors).toMatchSnapshot()
       })
     })
 
@@ -742,13 +750,14 @@ describe('readTsConfig', () => {
           errors: [],
         }))
       })
+
       afterEach(() => {
         parseConfig.mockClear()
       })
 
       it('should use correct paths when searching', () => {
         const conf = cs.readTsConfig()
-        expect(conf.input.path).toBe('/root/tsconfig.json')
+        expect(conf.options.path).toBe('/root/tsconfig.json')
         expect(findConfig.mock.calls[0][0]).toBe('/root')
         expect(readConfig.mock.calls[0][0]).toBe('/root/tsconfig.json')
         expect(parseConfig.mock.calls[0][0]).toEqual(
@@ -758,13 +767,13 @@ describe('readTsConfig', () => {
         )
         expect(parseConfig.mock.calls[0][2]).toBe('/root')
         expect(parseConfig.mock.calls[0][4]).toBe('/root/tsconfig.json')
-        expect(conf.resolved.options.allowSyntheticDefaultImports).toBeUndefined()
-        expect(conf.resolved.errors).toEqual([])
+        expect(conf.options.allowSyntheticDefaultImports).toBeUndefined()
+        expect(conf.errors).toEqual([])
       })
 
       it('should use given tsconfig path', () => {
         const conf = cs.readTsConfig(undefined, '/foo/tsconfig.bar.json')
-        expect(conf.input.path).toBe('/foo/tsconfig.bar.json')
+        expect(conf.options.path).toBe('/foo/tsconfig.bar.json')
         expect(findConfig).not.toBeCalled()
         expect(readConfig.mock.calls[0][0]).toBe('/foo/tsconfig.bar.json')
         expect(parseConfig.mock.calls[0][0]).toEqual(
@@ -774,7 +783,7 @@ describe('readTsConfig', () => {
         )
         expect(parseConfig.mock.calls[0][2]).toBe('/foo')
         expect(parseConfig.mock.calls[0][4]).toBe('/foo/tsconfig.bar.json')
-        expect(conf.resolved.errors).toEqual([])
+        expect(conf.errors).toEqual([])
       })
     })
 
@@ -790,13 +799,14 @@ describe('readTsConfig', () => {
           errors: [],
         }))
       })
+
       afterEach(() => {
         parseConfig.mockClear()
       })
 
       it('should use correct paths when searching', () => {
         const conf = cs.readTsConfig()
-        expect(conf.input.path).toBe('/root/tsconfig.json')
+        expect(conf.options.path).toBe('/root/tsconfig.json')
         expect(findConfig.mock.calls[0][0]).toBe('/root')
         expect(readConfig.mock.calls[0][0]).toBe('/root/tsconfig.json')
         expect(parseConfig.mock.calls[0][0]).toEqual(
@@ -806,13 +816,13 @@ describe('readTsConfig', () => {
         )
         expect(parseConfig.mock.calls[0][2]).toBe('/root')
         expect(parseConfig.mock.calls[0][4]).toBe('/root/tsconfig.json')
-        expect(conf.resolved.errors).toEqual([])
-        expect(conf.resolved.options.allowSyntheticDefaultImports).toEqual(true)
+        expect(conf.errors).toEqual([])
+        expect(conf.options.allowSyntheticDefaultImports).toEqual(true)
       })
 
       it('should use given tsconfig path', () => {
         const conf = cs.readTsConfig(undefined, '/foo/tsconfig.bar.json')
-        expect(conf.input.path).toBe('/foo/tsconfig.bar.json')
+        expect(conf.options.path).toBe('/foo/tsconfig.bar.json')
         expect(findConfig).not.toBeCalled()
         expect(readConfig.mock.calls[0][0]).toBe('/foo/tsconfig.bar.json')
         expect(parseConfig.mock.calls[0][0]).toEqual(
@@ -822,8 +832,8 @@ describe('readTsConfig', () => {
         )
         expect(parseConfig.mock.calls[0][2]).toBe('/foo')
         expect(parseConfig.mock.calls[0][4]).toBe('/foo/tsconfig.bar.json')
-        expect(conf.resolved.errors).toEqual([])
-        expect(conf.resolved.options.allowSyntheticDefaultImports).toEqual(true)
+        expect(conf.errors).toEqual([])
+        expect(conf.options.allowSyntheticDefaultImports).toEqual(true)
       })
     })
   })

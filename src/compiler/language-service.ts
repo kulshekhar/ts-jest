@@ -37,7 +37,7 @@ export const initializeLanguageServiceInstance = (
   const ts = configs.compilerModule
   const cwd = configs.cwd
   const cacheDir = configs.tsCacheDir
-  const { options, projectReferences, fileNames } = configs.typescript
+  const { options, projectReferences, fileNames } = configs.parsedTsConfig
   const serviceHostTraceCtx = {
     namespace: 'ts:serviceHost',
     call: null,

@@ -28,11 +28,11 @@ describe('configFor', () => {
 describe('process', () => {
   let tr: TsJestTransformer
   let babel: any
-  let typescript: ParsedCommandLine
+  let parsedTsConfig: ParsedCommandLine
   let args: [string, string, any, any]
   const config = {
-    get typescript() {
-      return typescript
+    get parsedTsConfig() {
+      return parsedTsConfig
     },
     shouldStringifyContent: jest.fn(),
     get babelJestTransformer() {
@@ -56,7 +56,7 @@ describe('process', () => {
     config.shouldStringifyContent.mockImplementation(() => false).mockClear()
     babel = null
     config.tsCompiler.compile.mockImplementation(s => `ts:${s}`).mockClear()
-    typescript = { options: {} } as any
+    parsedTsConfig = { options: {} } as any
   })
 
   it('should process ts input without babel', () => {
@@ -79,7 +79,7 @@ Array [
   })
 
   it('should process js input without babel', () => {
-    typescript.options.allowJs = true
+    parsedTsConfig.options.allowJs = true
     args[1] = '/foo/bar.js'
     expect(process()).toBe(`ts:${INPUT}`)
     expect(config.shouldStringifyContent.mock.calls).toMatchInlineSnapshot(`
@@ -132,7 +132,7 @@ Array [
   })
 
   it('should process js input with babel', () => {
-    typescript.options.allowJs = true
+    parsedTsConfig.options.allowJs = true
     babel = { process: jest.fn(s => `babel:${s}`) }
     args[1] = '/foo/bar.js'
     expect(process()).toBe(`babel:ts:${INPUT}`)
@@ -172,7 +172,7 @@ Array [
 
   it('should warn when trying to process js but allowJs is false', () => {
     args[1] = '/foo/bar.js'
-    typescript.options.allowJs = false
+    parsedTsConfig.options.allowJs = false
     const logs = logTargetMock()
     logs.clear()
     expect(process()).toBe(INPUT)
