@@ -12,6 +12,8 @@ module.exports = {
         "plugin:prettier/recommended",
     ],
     "ignorePatterns": [
+        "e2e/__helpers__",
+        "e2e/__tests__",
         "dist/",
         "node_modules/",
         "e2e/__cases__/",
