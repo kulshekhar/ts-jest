@@ -1,4 +1,4 @@
-// tslint:disable:curly
+// eslint:disable:curly
 // take care of including ONLY TYPES here, for the rest use `ts`
 import { LogContexts, LogLevels } from 'bs-logger'
 import {
@@ -136,11 +136,10 @@ export function factory(cs: ConfigSet) {
   }
 
   // returns the transformer factory
-  return (ctx: TransformationContext): Transformer<SourceFile> => {
-    return logger.wrap(
+  return (ctx: TransformationContext): Transformer<SourceFile> =>
+    logger.wrap(
       { [LogContexts.logLevel]: LogLevels.debug, call: null },
       'visitSourceFileNode(): hoisting',
       (sf: SourceFile) => ts.visitNode(sf, createVisitor(ctx, sf)),
     )
-  }
 }

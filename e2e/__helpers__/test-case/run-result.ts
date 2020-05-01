@@ -10,7 +10,7 @@ import { cacheDir } from '../../../scripts/lib/paths'
 import ProcessedFileIo from './processed-file-io'
 import { escapeRegex, normalizeJestOutput, stripAnsiColors } from './utils'
 
-// tslint:disable-next-line:no-default-export
+// eslint:disable-next-line:no-default-export
 export default class RunResult {
   constructor(
     readonly cwd: string,

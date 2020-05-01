@@ -59,7 +59,7 @@ export class Importer {
     let name: string
     let loaded: RequireResult<true> | undefined
     const tries = [moduleName, ...fallbacks]
-    // tslint:disable-next-line:no-conditional-assignment
+    // eslint:disable-next-line:no-conditional-assignment
     while ((name = tries.shift() as string) !== undefined) {
       const req = requireWrapper(name)
 
@@ -132,9 +132,7 @@ export class Importer {
       installTip = [{ module: installTip, label: `install "${installTip}"` }]
     }
     const fix = installTip
-      .map(tip => {
-        return `    ${installTip.length === 1 ? '↳' : '•'} ${interpolate(Helps.FixMissingModule, tip)}`
-      })
+      .map(tip => `    ${installTip.length === 1 ? '↳' : '•'} ${interpolate(Helps.FixMissingModule, tip)}`)
       .join('\n')
 
     throw new Error(

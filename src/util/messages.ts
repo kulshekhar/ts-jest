@@ -1,4 +1,4 @@
-// tslint:disable:max-line-length
+// eslint:disable:max-line-length
 
 /**
  * @internal

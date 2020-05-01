@@ -9,7 +9,7 @@ export function relativeToRoot(path: string) {
 }
 
 export function tempDir(ns: string) {
-  const dir = join(tmpdir(), `ts-jest-unit-tests`, ns, parseInt((Math.random() * 1e17) as any, 10).toString(36))
+  const dir = join(tmpdir(), 'ts-jest-unit-tests', ns, parseInt((Math.random() * 1e17) as any, 10).toString(36))
   ensureDirSync(dir)
   return dir
 }

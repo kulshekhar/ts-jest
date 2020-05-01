@@ -91,17 +91,17 @@ export const run: CliCommand = async (args: Arguments /* , logger: Logger */) =>
     if (jestPreset) {
       content.push(`  preset: '${preset.name}',`)
     } else {
-      content.push(`  ...tsjPreset,`)
+      content.push('  ...tsjPreset,')
     }
-    if (!jsdom) content.push(`  testEnvironment: 'node',`)
+    if (!jsdom) content.push("  testEnvironment: 'node',")
 
     if (tsconfig || shouldPostProcessWithBabel) {
-      content.push(`  globals: {`)
-      content.push(`    'ts-jest': {`)
+      content.push('  globals: {')
+      content.push("    'ts-jest': {")
       if (tsconfig) content.push(`      tsconfig: ${stringifyJson5(tsconfig)},`)
-      if (shouldPostProcessWithBabel) content.push(`      babelConfig: true,`)
-      content.push(`    },`)
-      content.push(`  },`)
+      if (shouldPostProcessWithBabel) content.push('      babelConfig: true,')
+      content.push('    },')
+      content.push('  },')
     }
     content.push('};')
 
