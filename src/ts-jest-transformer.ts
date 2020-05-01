@@ -112,7 +112,7 @@ export class TsJestTransformer implements Transformer {
     } else if (isDefinitionFile) {
       // do not try to compile declaration files
       result = ''
-    } else if (!configs.typescript.options.allowJs && isJsFile) {
+    } else if (!configs.parsedTsConfig.options.allowJs && isJsFile) {
       // we've got a '.js' but the compiler option `allowJs` is not set or set to false
       this.logger.warn({ fileName: filePath }, interpolate(Errors.GotJsFileButAllowJsFalse, { path: filePath }))
 

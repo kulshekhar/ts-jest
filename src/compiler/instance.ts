@@ -71,7 +71,7 @@ const compileAndCacheResult = (
 export const createCompilerInstance = (configs: ConfigSet): TsCompiler => {
   const logger = configs.logger.child({ namespace: 'ts-compiler' })
   const {
-    typescript: { options: compilerOptions },
+    parsedTsConfig: { options: compilerOptions },
     tsJest,
   } = configs
   const cacheDir = configs.tsCacheDir
@@ -96,7 +96,7 @@ export const createCompilerInstance = (configs: ConfigSet): TsCompiler => {
     } catch (e) {}
   }
   // Initialize memory cache for typescript compiler
-  configs.typescript.fileNames.forEach(fileName => {
+  configs.parsedTsConfig.fileNames.forEach(fileName => {
     memoryCache.files.set(fileName, {
       version: 0,
     })

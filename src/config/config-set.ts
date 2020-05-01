@@ -51,13 +51,6 @@ import { TSError } from '../util/ts-error'
 
 const logger = rootLogger.child({ namespace: 'config' })
 
-interface ReadTsConfigResult {
-  // what we get from reading the config file if any, or inline options
-  input?: any
-  // parsed config with all resolved options
-  resolved: ParsedCommandLine
-}
-
 /**
  * @internal
  */
@@ -318,8 +311,8 @@ export class ConfigSet {
   /**
    * @internal
    */
-  get typescript(): ParsedCommandLine {
-    return this._typescript.resolved
+  get parsedTsConfig(): ParsedCommandLine {
+    return this._parsedTsConfig
   }
 
   /**
@@ -346,7 +339,7 @@ export class ConfigSet {
    * @internal
    */
   @Memoize()
-  private get _typescript(): ReadTsConfigResult {
+  private get _parsedTsConfig(): ParsedCommandLine {
     const {
       tsJest: { tsConfig },
     } = this
@@ -357,9 +350,10 @@ export class ConfigSet {
       tsConfig == null,
     )
     // throw errors if any matching wanted diagnostics
-    this.raiseDiagnostics(result.resolved.errors, configFilePath)
+    this.raiseDiagnostics(result.errors, configFilePath)
 
     this.logger.debug({ tsconfig: result }, 'normalized typescript config')
+
     return result
   }
 
@@ -577,7 +571,7 @@ export class ConfigSet {
         digest: this.tsJestDigest,
         dependencies: this.projectDependencies,
         compiler: this.tsJest.compiler,
-        compilerOptions: this.typescript.options,
+        compilerOptions: this.parsedTsConfig.options,
         isolatedModules: this.tsJest.isolatedModules,
         diagnostics: this.tsJest.diagnostics,
       }),
@@ -667,7 +661,7 @@ export class ConfigSet {
       jest,
       tsJest: this.tsJest,
       babel: this.babel,
-      tsconfig: this.typescript.options,
+      tsconfig: this.parsedTsConfig.options,
     })
   }
 
@@ -716,16 +710,13 @@ export class ConfigSet {
     compilerOptions?: object,
     resolvedConfigFile?: string | null,
     noProject?: boolean | null,
-  ): ReadTsConfigResult {
+  ): ParsedCommandLine {
     let config = { compilerOptions: {}, include: [] }
     let basePath = normalizeSlashes(this.rootDir)
     let configFileName: string | undefined
     const ts = this.compilerModule
-    let input: any
 
-    if (noProject) {
-      input = { compilerOptions: { ...compilerOptions } }
-    } else {
+    if (!noProject) {
       // Read project configuration when available.
       configFileName = resolvedConfigFile
         ? normalizeSlashes(resolvedConfigFile)
@@ -737,23 +728,13 @@ export class ConfigSet {
 
         // Return diagnostics.
         if (result.error) {
-          return {
-            resolved: { errors: [result.error], fileNames: [], options: {} },
-          }
+          return { errors: [result.error], fileNames: [], options: {} }
         }
 
         config = result.config
-        input = {
-          ...result.config,
-          compilerOptions: {
-            ...(result.config && result.config.compilerOptions),
-            ...compilerOptions,
-          },
-        }
         basePath = normalizeSlashes(dirname(configFileName))
       }
     }
-
     // Override default configuration options `ts-jest` requires.
     config.compilerOptions = {
       ...config.compilerOptions,
@@ -813,7 +794,7 @@ export class ConfigSet {
       }
     }
 
-    return { input, resolved: result }
+    return result
   }
 
   /**

@@ -16,7 +16,7 @@ export const initializeTranspilerInstance = (
 ): CompilerInstance => {
   logger.debug('initializeTranspilerInstance(): create typescript compiler')
 
-  const { options, projectReferences, fileNames } = configs.typescript
+  const { options, projectReferences, fileNames } = configs.parsedTsConfig
   const ts = configs.compilerModule
   const program = projectReferences
     ? ts.createProgram({
