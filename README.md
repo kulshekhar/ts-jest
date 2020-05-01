@@ -7,6 +7,7 @@
 [![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=kulshekhar/ts-jest)](https://dependabot.com)
 [![Build Status](https://travis-ci.com/kulshekhar/ts-jest.svg?branch=master)](https://travis-ci.com/kulshekhar/ts-jest)
 [![doc-generator](https://github.com/kulshekhar/ts-jest/workflows/doc-generator/badge.svg)](https://github.com/kulshekhar/ts-jest/actions)
+[![release-and-publish](https://github.com/kulshekhar/ts-jest/workflows/release-and-publish/badge.svg)](https://github.com/kulshekhar/ts-jest/actions)
 
 <img src="./icon.png" align="right" title="ts-jest Logo" width="128" height="128">
 

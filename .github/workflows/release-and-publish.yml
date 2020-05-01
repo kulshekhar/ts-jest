@@ -1,0 +1,84 @@
+# This is a workflow to create github release for a tag and publish the package
+# to npm repo
+
+name: release-and-publish
+
+# Controls when the action will run. Triggers the workflow on push of tag
+# request events but only tags matching the configured regex
+on:
+  push:
+    tags:
+      # patterns to match for tag creation. Here all tags similar to v1.0 or
+      # v1.2.0 will trigger this action
+      - 'v[0-9]+.[0-9]+.[0-9]+*'
+
+# A workflow run is made up of one or more jobs that can run sequentially or in
+# parallel
+jobs:
+  # For more information on setting outputs and reading them have a look at
+  # https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjobs_idoutputs
+  setup_variables:
+    runs-on: ubuntu-latest
+    outputs:
+      isLatest: ${{ steps.release_type.outputs.latest }}
+    steps:
+      - id: release_type
+        name: Identify release type
+        # For understanding how to set output read:
+        # https://help.github.com/en/actions/reference/workflow-commands-for-github-actions#setting-an-output-parameter
+        run: echo "::set-output name=latest::$LATEST"
+        env:
+          LATEST: ${{ contains(github.ref, '-alpha') != true && contains(github.ref, '-beta') != true && contains(github.ref, '-rc') != true }}
+  create_release:
+    needs: [setup_variables]
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the
+    # job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access
+      # it
+      - name: Checkout code
+        # https://github.com/marketplace/actions/checkout
+        uses: actions/checkout@v2
+
+        # Runs a single command using the runners shell
+      - name: Create release for tag
+        uses: actions/create-release@latest
+        env:
+          # this is provided by github, you don't need to do anything here
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: ${{ github.ref }}
+          draft: false
+          prerelease: ${{ needs.setup_variables.outputs.isLatest != 'true' }}
+
+  publish_to_npm:
+    needs: [setup_variables, create_release]
+    runs-on: ubuntu-latest
+
+    steps:
+      # https://github.com/marketplace/actions/checkout
+      - uses: actions/checkout@v2
+      # https://github.com/marketplace/actions/setup-node-js-environment
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12
+          registry-url: https://registry.npmjs.org/
+      - name: Check lock file
+        # runs npm install using package-lock.json and verifies
+        # if dependencies are matching with package.json or not
+        run: npm ci
+        # This will tell npm to publish your scoped package with public access
+      - name: Publish with latest tag
+        if: ${{ needs.setup_variables.outputs.isLatest == 'true' }}
+        run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
+      - name: Publish with next tag
+        if: ${{ needs.setup_variables.outputs.isLatest != 'true' }}
+        run: npm publish --access public --tag next
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
