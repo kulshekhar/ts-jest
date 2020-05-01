@@ -28,7 +28,7 @@ export interface VersionChecker {
 /**
  * @internal
  */
-// tslint:disable-next-line:variable-name
+// eslint:disable-next-line:variable-name
 export const VersionCheckers = {
   jest: createVersionChecker('jest', ExpectedVersions.Jest),
   typescript: createVersionChecker('typescript', ExpectedVersions.TypeScript),

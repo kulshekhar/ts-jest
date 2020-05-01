@@ -1,7 +1,7 @@
 import { main } from './main'
 
 test('main', () => {
-  // tslint:disable-next-line:no-console
+  // eslint:disable-next-line:no-console
   const mockLog = console.log = jest.fn()
 
   main()

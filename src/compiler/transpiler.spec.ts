@@ -89,7 +89,7 @@ describe('Transpiler', () => {
   })
 
   it('should compile tsx file for jsx preserve', () => {
-    const fileName = `foo.tsx`
+    const fileName = 'foo.tsx'
     const compiler = makeCompiler({
       tsJestConfig: {
         ...baseTsJestConfig,
@@ -113,7 +113,7 @@ describe('Transpiler', () => {
   })
 
   it('should compile tsx file for other jsx options', () => {
-    const fileName = `foo.tsx`
+    const fileName = 'foo.tsx'
     const compiler = makeCompiler({
       tsJestConfig: {
         ...baseTsJestConfig,

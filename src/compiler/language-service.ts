@@ -50,7 +50,7 @@ export const initializeLanguageServiceInstance = (
   // Set the file contents into cache.
   /* istanbul ignore next (cover by e2e) */
   const updateMemoryCache = (contents: string, fileName: string) => {
-    logger.debug({ fileName }, `updateMemoryCache(): update memory cache for language service`)
+    logger.debug({ fileName }, 'updateMemoryCache(): update memory cache for language service')
 
     let shouldIncrementProjectVersion = false
     const hit = isFileInCache(fileName)
@@ -101,7 +101,7 @@ export const initializeLanguageServiceInstance = (
       const normalizedFileName = normalize(fileName)
       const hit = memoryCache.files.has(normalizedFileName) && memoryCache.files.get(normalizedFileName)!.version !== 0
 
-      logger.trace({ normalizedFileName, cacheHit: hit }, `getScriptSnapshot():`, 'cache', hit ? 'hit' : 'miss')
+      logger.trace({ normalizedFileName, cacheHit: hit }, 'getScriptSnapshot():', 'cache', hit ? 'hit' : 'miss')
 
       // Read contents from TypeScript memory cache.
       if (!hit) {
@@ -152,7 +152,7 @@ export const initializeLanguageServiceInstance = (
       } else {
         const output: _ts.EmitOutput = service.getEmitOutput(fileName)
         // Do type checking by getting TypeScript diagnostics
-        logger.debug({ fileName }, `compileFn(): computing diagnostics using language service`)
+        logger.debug({ fileName }, 'compileFn(): computing diagnostics using language service')
 
         doTypeChecking(configs, fileName, service, logger)
         /**
@@ -163,22 +163,21 @@ export const initializeLanguageServiceInstance = (
             cacheResolvedModules(fileName, code, memoryCache, service.getProgram()!, cacheDir, logger)
           } else {
             Object.entries(memoryCache.resolvedModules)
-              .filter(entry => {
-                /**
-                 * When imported modules change, we only need to check whether the test file is compiled previously or not
-                 * base on memory cache. By checking memory cache, we can avoid repeatedly doing type checking against
-                 * test file for 1st time run after clearing cache because
-                 */
-                return (
-                  entry[1].modulePaths.find(modulePath => modulePath === fileName) && !memoryCache.files.has(entry[0])
-                )
-              })
+              .filter(
+                entry =>
+                  /**
+                   * When imported modules change, we only need to check whether the test file is compiled previously or not
+                   * base on memory cache. By checking memory cache, we can avoid repeatedly doing type checking against
+                   * test file for 1st time run after clearing cache because
+                   */
+                  entry[1].modulePaths.find(modulePath => modulePath === fileName) && !memoryCache.files.has(entry[0]),
+              )
               .forEach(entry => {
                 const testFileName = entry[0]
                 const testFileContent = entry[1].testFileContent
                 logger.debug(
                   { fileName },
-                  `compileFn(): computing diagnostics for test file that imports this module using language service`,
+                  'compileFn(): computing diagnostics for test file that imports this module using language service',
                 )
 
                 updateMemoryCache(testFileContent, testFileName)

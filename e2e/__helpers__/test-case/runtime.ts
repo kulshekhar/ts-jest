@@ -44,7 +44,7 @@ describe.skip('__eval', () => {
 eval(process.env.__TS_JEST_EVAL);
 `
 
-// tslint:disable-next-line:variable-name
+// eslint:disable-next-line:variable-name
 let __hooksSource: string
 function hooksSourceWith(vars: Record<string, any>): string {
   if (!__hooksSource) {

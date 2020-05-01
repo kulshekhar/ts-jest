@@ -3,7 +3,7 @@ import { Config } from '@jest/types'
 
 import ProcessedSource from '../../../src/__helpers__/processed-source'
 
-// tslint:disable-next-line:no-default-export
+// eslint:disable-next-line:no-default-export
 export default class ProcessedFileIo extends ProcessedSource {
   constructor(
     cwd: string,

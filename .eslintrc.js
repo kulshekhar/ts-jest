@@ -15,6 +15,7 @@ module.exports = {
         "e2e/__helpers__",
         "e2e/__tests__",
         "dist/",
+        "utils/",
         "node_modules/",
         "e2e/__cases__/",
         "e2e/__workdir_synlink__/",

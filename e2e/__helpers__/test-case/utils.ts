@@ -18,8 +18,8 @@ export function templateNameForPath(path: string): string {
 const PASS_MARKS = ['√', '✓']
 const FAIL_MARKS = ['×', '✕']
 const normalizeTestMark = (mark: string): string => {
-  if (PASS_MARKS.includes(mark)) return PASS_MARKS[0]; // tslint:disable-line
-  if (FAIL_MARKS.includes(mark)) return FAIL_MARKS[0]; // tslint:disable-line
+  if (PASS_MARKS.includes(mark)) return PASS_MARKS[0]; // eslint:disable-line
+  if (FAIL_MARKS.includes(mark)) return FAIL_MARKS[0]; // eslint:disable-line
   return '?'
 }
 

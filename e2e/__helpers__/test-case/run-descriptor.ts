@@ -6,7 +6,7 @@ import RunResult from './run-result'
 import { run } from './runtime'
 import { RunTestOptions, RunWithTemplateIteratorContext, RunWithTemplatesIterator, TestRunResultsMap } from './types'
 
-// tslint:disable-next-line:no-default-export
+// eslint:disable-next-line:no-default-export
 export default class RunDescriptor {
   protected _options: RunTestOptions
   protected _sourcePackageJson: any
@@ -46,7 +46,7 @@ export default class RunDescriptor {
       template: this.templateName,
     })
     if (logUnlessStatus != null && logUnlessStatus !== result.status) {
-      // tslint:disable-next-line:no-console
+      // eslint:disable-next-line:no-console
       console.log(
         '='.repeat(70),
         '\n',

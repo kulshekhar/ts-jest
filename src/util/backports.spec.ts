@@ -20,11 +20,11 @@ describe('backportJestConfig', () => {
         set(original, oldPath, val)
       })
       describe(`with "${oldPath}" set to ${inspect(val)}`, () => {
-        it(`should wran the user`, () => {
+        it('should wran the user', () => {
           backportJestConfig(logger, original)
           expect(logTarget.lines.warn).toMatchSnapshot()
         }) // should warn the user
-        it(`should have changed the config correctly`, () => {
+        it('should have changed the config correctly', () => {
           expect(original).toMatchSnapshot('before')
           expect(backportJestConfig(logger, original)).toMatchSnapshot('migrated')
         }) // should have changed the config

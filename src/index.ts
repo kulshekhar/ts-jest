@@ -23,7 +23,7 @@ export const createJestPreset = helperMoved('createJestPreset', createJestPreset
 /** @deprecated */
 export const pathsToModuleNameMapper = helperMoved('pathsToModuleNameMapper', pathsToModuleNameMapperCore)
 
-// tslint:disable-next-line:no-var-requires
+// eslint:disable-next-line:no-var-requires
 export const version: string = require('../package.json').version
 export const digest: string = readFileSync(resolve(__dirname, '..', '.ts-jest-digest'), 'utf8')
 
@@ -61,12 +61,12 @@ const jestPreset = createJestPresetCore()
  * @internal
  */
 // for tests
-// tslint:disable-next-line:variable-name
+// eslint:disable-next-line:variable-name
 export const __singleton = () => transformer
 /**
  * @internal
  */
-// tslint:disable-next-line:variable-name
+// eslint:disable-next-line:variable-name
 export const __resetModule = () => (transformer = undefined as any)
 
 export {

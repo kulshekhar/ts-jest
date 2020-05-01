@@ -79,13 +79,11 @@ const enum DiagnosticCodes {
   ConfigModuleOption,
 }
 
-const normalizeRegex = (pattern: string | RegExp | undefined): string | undefined => {
-  return pattern ? (typeof pattern === 'string' ? pattern : pattern.source) : undefined
-}
+const normalizeRegex = (pattern: string | RegExp | undefined): string | undefined =>
+  pattern ? (typeof pattern === 'string' ? pattern : pattern.source) : undefined
 
-const toDiagnosticCode = (code: any): number | undefined => {
-  return code ? parseInt(`${code}`.trim().replace(/^TS/, ''), 10) || undefined : undefined
-}
+const toDiagnosticCode = (code: any): number | undefined =>
+  code ? parseInt(`${code}`.trim().replace(/^TS/, ''), 10) || undefined : undefined
 
 const toDiagnosticCodeList = (items: any, into: number[] = []): number[] => {
   if (!Array.isArray(items)) items = [items]
@@ -191,13 +189,14 @@ export class ConfigSet {
    */
   @Memoize()
   get testMatchPatterns(): (string | RegExp)[] {
-    const matchablePatterns = [...this.jest.testMatch, ...this.jest.testRegex].filter(pattern => {
-      /**
-       * jest config testRegex doesn't always deliver the correct RegExp object
-       * See https://github.com/facebook/jest/issues/9778
-       */
-      return pattern instanceof RegExp || typeof pattern === 'string'
-    })
+    const matchablePatterns = [...this.jest.testMatch, ...this.jest.testRegex].filter(
+      pattern =>
+        /**
+         * jest config testRegex doesn't always deliver the correct RegExp object
+         * See https://github.com/facebook/jest/issues/9778
+         */
+        pattern instanceof RegExp || typeof pattern === 'string',
+    )
     if (!matchablePatterns.length) {
       matchablePatterns.push(...DEFAULT_JEST_TEST_MATCH)
     }
@@ -495,7 +494,7 @@ export class ConfigSet {
           return false
         }
 
-        return ignoreCodes.indexOf(diagnostic.code) === -1
+        return !ignoreCodes.includes(diagnostic.code)
       })
     }
   }
@@ -534,7 +533,7 @@ export class ConfigSet {
    * @internal
    */
   @Memoize()
-  get createTsError(): (diagnostics: ReadonlyArray<Diagnostic>) => TSError {
+  get createTsError(): (diagnostics: readonly Diagnostic[]) => TSError {
     const {
       diagnostics: { pretty },
     } = this.tsJest
@@ -549,7 +548,7 @@ export class ConfigSet {
       getCanonicalFileName: path => path,
     }
 
-    return (diagnostics: ReadonlyArray<Diagnostic>) => {
+    return (diagnostics: readonly Diagnostic[]) => {
       const diagnosticText = formatDiagnostics(diagnostics, diagnosticHost)
       const diagnosticCodes = diagnostics.map(x => x.code)
       return new TSError(diagnosticText, diagnosticCodes)
@@ -758,7 +757,7 @@ export class ConfigSet {
     }
 
     // check the module interoperability
-    const target = finalOptions.target!
+    const target = finalOptions.target
     // compute the default if not set
     const defaultModule = [ts.ScriptTarget.ES3, ts.ScriptTarget.ES5].includes(target)
       ? ts.ModuleKind.CommonJS
