@@ -6,7 +6,6 @@ import RunResult from './run-result'
 import { run } from './runtime'
 import { RunTestOptions, RunWithTemplateIteratorContext, RunWithTemplatesIterator, TestRunResultsMap } from './types'
 
-// eslint:disable-next-line:no-default-export
 export default class RunDescriptor {
   protected _options: RunTestOptions
   protected _sourcePackageJson: any
@@ -46,8 +45,7 @@ export default class RunDescriptor {
       template: this.templateName,
     })
     if (logUnlessStatus != null && logUnlessStatus !== result.status) {
-      // eslint:disable-next-line:no-console
-      console.log(
+          console.log(
         '='.repeat(70),
         '\n',
         `Test exited with unexpected status in "${this.name}" using template "${this.templateName}" (exit code: ${result.status}):\n`,

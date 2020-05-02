@@ -69,7 +69,6 @@ describe('Language service', () => {
   })
 
   it('should cache resolved modules for test file with testMatchPatterns from jest config when match', () => {
-    // eslint:disable-next-line:no-empty
     const spy = jest.spyOn(compilerUtils, 'cacheResolvedModules').mockImplementationOnce(() => {})
     const tmp = tempDir('compiler')
     const compiler = makeCompiler({
@@ -91,7 +90,6 @@ export const thing: Thing = { a: 1 }`
   })
 
   it("shouldn't cache resolved modules for test file with testMatchPatterns from jest config when not match", () => {
-    // eslint:disable-next-line:no-empty
     jest.spyOn(compilerUtils, 'cacheResolvedModules').mockImplementationOnce(() => {})
     const tmp = tempDir('compiler')
     const compiler = makeCompiler({

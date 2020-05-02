@@ -1,4 +1,3 @@
-// eslint:disable:max-line-length
 import { mocked } from '../../utils'
 import { logTargetMock } from '../__helpers__/mocks'
 

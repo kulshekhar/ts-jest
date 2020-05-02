@@ -4,7 +4,6 @@ import { RawSourceMap } from 'source-map'
 import { ROOT } from './path'
 import { ParsedSourceWithMaps, parseSource, relativisePaths, rewriteSourceMaps } from './source-maps'
 
-// eslint:disable-next-line:no-default-export
 export default class ProcessedSource {
   readonly filename: string
 

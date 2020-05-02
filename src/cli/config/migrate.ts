@@ -110,7 +110,6 @@ Visit https://kulshekhar.github.io/ts-jest/user/config/#jest-preset for more inf
     Object.keys(migratedConfig.transform).forEach(key => {
       const val = (migratedConfig.transform as any)[key]
       if (typeof val === 'string' && /\/?ts-jest(?:\/preprocessor\.js)?$/.test(val)) {
-        // eslint:disable-next-line:semicolon
         ;(migratedConfig.transform as any)[key] = 'ts-jest'
       }
     })

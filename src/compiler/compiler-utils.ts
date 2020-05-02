@@ -193,7 +193,6 @@ export function getCompileResultFromReferencedProject(
   const relativeJSFileName = configs.resolvePath(jsFileName)
   if (!configs.compilerModule.sys.fileExists(jsFileName)) {
     throw new Error(
-      // eslint:disable-next-line:prefer-template
       'Could not find output JavaScript file for input ' +
         `${relativeFilePath} (looked at ${relativeJSFileName}).\n` +
         'The input file is part of a project reference located at ' +

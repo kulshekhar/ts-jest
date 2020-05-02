@@ -59,7 +59,6 @@ export class Importer {
     let name: string
     let loaded: RequireResult<true> | undefined
     const tries = [moduleName, ...fallbacks]
-    // eslint:disable-next-line:no-conditional-assignment
     while ((name = tries.shift() as string) !== undefined) {
       const req = requireWrapper(name)
 

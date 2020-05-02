@@ -1,5 +1,3 @@
-// eslint:disable:max-line-length
-
 /**
  * @internal
  */
