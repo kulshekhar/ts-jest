@@ -45,6 +45,7 @@ export default class RunDescriptor {
       template: this.templateName,
     })
     if (logUnlessStatus != null && logUnlessStatus !== result.status) {
+          // eslint-disable-next-line no-console
           console.log(
         '='.repeat(70),
         '\n',
@@ -70,7 +71,7 @@ export default class RunDescriptor {
       throw new RangeError(`There must be at least one template to run the test case with.`)
     }
 
-    if (!templates.every((t, i) => templates.indexOf(t, i + 1) === -1)) {
+    if (!templates.every((t, i) => !templates.includes(t, i + 1))) {
       throw new Error(`Each template must be unique. Given ${templates.join(', ')}`)
     }
     return templates.reduce((map, template) => {
@@ -78,9 +79,7 @@ export default class RunDescriptor {
         ...this._options,
         template,
       })
-      const runTest = () => {
-        return (map[template] = desc.run(expectedStatus))
-      }
+      const runTest = () => (map[template] = desc.run(expectedStatus))
       if (iterator) {
         iterator(runTest, createIteratorContext(template, expectedStatus))
       } else {

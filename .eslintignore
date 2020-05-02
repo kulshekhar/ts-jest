@@ -2,11 +2,7 @@ dist/
 node_modules/
 e2e/__cases__/
 e2e/__workdir_synlink__/
-e2e/__external-repos__
-e2e/__templates__
-e2e/__helpers__
-e2e/__tests__
-utils/
+e2e/__external-repos__/
 coverage/
 docs/
 *.config.js

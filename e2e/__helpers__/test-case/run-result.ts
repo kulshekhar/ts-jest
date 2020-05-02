@@ -111,8 +111,6 @@ export default class RunResult {
 
     return map
       .sort((a, b) => ((b.from as any).length || Infinity) - ((a.from as any).length || Infinity))
-      .reduce((str, { from, to }) => {
-        return str.replace(typeof from === 'string' ? new RegExp(`${escapeRegex(from)}`, 'g') : from, to)
-      }, str)
+      .reduce((str, { from, to }) => str.replace(typeof from === 'string' ? new RegExp(`${escapeRegex(from)}`, 'g') : from, to), str)
   }
 }

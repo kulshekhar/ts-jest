@@ -36,7 +36,8 @@
     "e2e/__serializers__",
     "e2e/__tests__",
     "scripts/",
-    "src",
+    "src/",
+    "utils/",
     "presets",
     "./*.js"
   ],
