@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 'use strict'
 
+// eslint-disable-next-line jest/no-jest-import
 const jest = require('jest')
 const { spawnSync } = require('./lib/spawn-sync')
 const fs = require('fs-extra')

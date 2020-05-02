@@ -1,9 +1,10 @@
+/* eslint-disable jest/no-mocks-import */
 import { Transformer } from '@jest/transform'
 import { Config } from '@jest/types'
 import { testing } from 'bs-logger'
 import { readFileSync } from 'fs'
 import json5 = require('json5')
-import { resolve } from 'path' // eslint:disable-next-line:no-duplicate-imports
+import { resolve } from 'path'
 import * as ts from 'typescript'
 
 import * as _myModule from '..'
@@ -198,13 +199,6 @@ describe('tsJest', () => {
         value: undefined,
       }
       expect(getTsJest().packageJson).toEqual(EXPECTED)
-    })
-
-    it('should be correct when packageJson is true', () => {
-      const EXPECTED = {
-        kind: 'file',
-        value: undefined,
-      }
       expect(getTsJest({ packageJson: true }).packageJson).toEqual(EXPECTED)
     })
 

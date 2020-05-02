@@ -64,6 +64,7 @@ const compileAndCacheResult = (
 
 /**
  * Register TypeScript compiler instance.
+ *
  * @internal
  */
 export const createCompilerInstance = (configs: ConfigSet): TsCompiler => {

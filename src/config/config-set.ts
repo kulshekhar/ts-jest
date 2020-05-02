@@ -703,6 +703,7 @@ export class ConfigSet {
   /**
    * Load TypeScript configuration. Returns the parsed TypeScript config and
    * any `tsConfig` options specified in ts-jest tsConfig
+   *
    * @internal
    */
   readTsConfig(
