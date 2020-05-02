@@ -220,7 +220,7 @@ module.exports = {
         "@typescript-eslint/class-name-casing": "error",
         "@typescript-eslint/prefer-regexp-exec": "warn",
         "@typescript-eslint/prefer-string-starts-ends-with": "warn",
-        "@typescript-eslint/unbound-method": "off",
+        "@typescript-eslint/unbound-method": "warn",
         "@typescript-eslint/no-unused-vars": "warn",
         "@typescript-eslint/prefer-includes": "warn", 
         "@typescript-eslint/consistent-type-assertions": "error",
