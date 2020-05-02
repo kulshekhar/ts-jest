@@ -55,7 +55,18 @@ exports[`Hoisting jest.disableAutomock() should pass using template "with-babel-
   ===[ FILE: disable-automock.spec.ts ]===========================================
   "use strict";
   
-  jest.disableAutomock();
+  _getJestObj().disableAutomock();
+  
+  function _getJestObj() {
+    const {
+      jest
+    } = require("@jest/globals");
+  
+    _getJestObj = () => jest;
+  
+    return jest;
+  }
+  
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
@@ -67,10 +78,10 @@ exports[`Hoisting jest.disableAutomock() should pass using template "with-babel-
     // even if we set the automocking in a jest configuration
     expect(disable_automock_1.default()).toBe('hi!');
   });
-  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJtYXBwaW5ncyI6Ijs7QUFFQSxJQUFJLENBQUMsZUFBTDs7Ozs7QUFGQSxJQUFBLGtCQUFBLEdBQUEsT0FBQSxDQUFBLG9CQUFBLENBQUE7O0FBSUEsSUFBSSxDQUFDLHlCQUFELEVBQTRCLFlBQUE7QUFDOUI7QUFDQTtBQUNBLEVBQUEsTUFBTSxDQUFDLGtCQUFBLENBQUEsT0FBQSxFQUFELENBQU4sQ0FBZ0IsSUFBaEIsQ0FBcUIsS0FBckI7QUFDRCxDQUpHLENBQUoiLCJuYW1lcyI6W10sInNvdXJjZXMiOlsiPGN3ZD4vZGlzYWJsZS1hdXRvbW9jay5zcGVjLnRzIl0sInNvdXJjZXNDb250ZW50IjpbImltcG9ydCBoZWxsbyBmcm9tICcuL2Rpc2FibGUtYXV0b21vY2snXG5cbmplc3QuZGlzYWJsZUF1dG9tb2NrKClcblxudGVzdCgnb3JpZ2luYWwgaW1wbGVtZW50YXRpb24nLCAoKSA9PiB7XG4gIC8vIG5vdyB3ZSBoYXZlIHRoZSBvcmlnaW5hbCBpbXBsZW1lbnRhdGlvbixcbiAgLy8gZXZlbiBpZiB3ZSBzZXQgdGhlIGF1dG9tb2NraW5nIGluIGEgamVzdCBjb25maWd1cmF0aW9uXG4gIGV4cGVjdChoZWxsbygpKS50b0JlKCdoaSEnKVxufSlcbiJdLCJ2ZXJzaW9uIjozfQ==
+  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJtYXBwaW5ncyI6Ijs7QUFFQSxjQUFLLGVBQUw7Ozs7Ozs7Ozs7Ozs7Ozs7QUFGQSxJQUFBLGtCQUFBLEdBQUEsT0FBQSxDQUFBLG9CQUFBLENBQUE7O0FBSUEsSUFBSSxDQUFDLHlCQUFELEVBQTRCLFlBQUE7QUFDOUI7QUFDQTtBQUNBLEVBQUEsTUFBTSxDQUFDLGtCQUFBLENBQUEsT0FBQSxFQUFELENBQU4sQ0FBZ0IsSUFBaEIsQ0FBcUIsS0FBckI7QUFDRCxDQUpHLENBQUoiLCJuYW1lcyI6W10sInNvdXJjZXMiOlsiPGN3ZD4vZGlzYWJsZS1hdXRvbW9jay5zcGVjLnRzIl0sInNvdXJjZXNDb250ZW50IjpbImltcG9ydCBoZWxsbyBmcm9tICcuL2Rpc2FibGUtYXV0b21vY2snXG5cbmplc3QuZGlzYWJsZUF1dG9tb2NrKClcblxudGVzdCgnb3JpZ2luYWwgaW1wbGVtZW50YXRpb24nLCAoKSA9PiB7XG4gIC8vIG5vdyB3ZSBoYXZlIHRoZSBvcmlnaW5hbCBpbXBsZW1lbnRhdGlvbixcbiAgLy8gZXZlbiBpZiB3ZSBzZXQgdGhlIGF1dG9tb2NraW5nIGluIGEgamVzdCBjb25maWd1cmF0aW9uXG4gIGV4cGVjdChoZWxsbygpKS50b0JlKCdoaSEnKVxufSlcbiJdLCJ2ZXJzaW9uIjozfQ==
   ===[ INLINE SOURCE MAPS ]=======================================================
   mappings: >-
-    ;;AAEA,IAAI,CAAC,eAAL;;;;;AAFA,IAAA,kBAAA,GAAA,OAAA,CAAA,oBAAA,CAAA;;AAIA,IAAI,CAAC,yBAAD,EAA4B,YAAA;AAC9B;AACA;AACA,EAAA,MAAM,CAAC,kBAAA,CAAA,OAAA,EAAD,CAAN,CAAgB,IAAhB,CAAqB,KAArB;AACD,CAJG,CAAJ
+    ;;AAEA,cAAK,eAAL;;;;;;;;;;;;;;;;AAFA,IAAA,kBAAA,GAAA,OAAA,CAAA,oBAAA,CAAA;;AAIA,IAAI,CAAC,yBAAD,EAA4B,YAAA;AAC9B;AACA;AACA,EAAA,MAAM,CAAC,kBAAA,CAAA,OAAA,EAAD,CAAN,CAAgB,IAAhB,CAAqB,KAArB;AACD,CAJG,CAAJ
   names: []
   sources:
     - <cwd>/disable-automock.spec.ts
@@ -110,7 +121,18 @@ exports[`Hoisting jest.disableAutomock() should pass using template "with-babel-
   ===[ FILE: disable-automock.spec.ts ]===========================================
   "use strict";
   
-  jest.disableAutomock();
+  _getJestObj().disableAutomock();
+  
+  function _getJestObj() {
+    const {
+      jest
+    } = require("@jest/globals");
+  
+    _getJestObj = () => jest;
+  
+    return jest;
+  }
+  
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
@@ -122,10 +144,10 @@ exports[`Hoisting jest.disableAutomock() should pass using template "with-babel-
     // even if we set the automocking in a jest configuration
     expect(disable_automock_1.default()).toBe('hi!');
   });
-  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJtYXBwaW5ncyI6Ijs7QUFFQSxJQUFJLENBQUMsZUFBTDs7Ozs7QUFGQSxJQUFBLGtCQUFBLEdBQUEsT0FBQSxDQUFBLG9CQUFBLENBQUE7O0FBSUEsSUFBSSxDQUFDLHlCQUFELEVBQTRCLFlBQUE7QUFDOUI7QUFDQTtBQUNBLEVBQUEsTUFBTSxDQUFDLGtCQUFBLENBQUEsT0FBQSxFQUFELENBQU4sQ0FBZ0IsSUFBaEIsQ0FBcUIsS0FBckI7QUFDRCxDQUpHLENBQUoiLCJuYW1lcyI6W10sInNvdXJjZXMiOlsiPGN3ZD4vZGlzYWJsZS1hdXRvbW9jay5zcGVjLnRzIl0sInNvdXJjZXNDb250ZW50IjpbImltcG9ydCBoZWxsbyBmcm9tICcuL2Rpc2FibGUtYXV0b21vY2snXG5cbmplc3QuZGlzYWJsZUF1dG9tb2NrKClcblxudGVzdCgnb3JpZ2luYWwgaW1wbGVtZW50YXRpb24nLCAoKSA9PiB7XG4gIC8vIG5vdyB3ZSBoYXZlIHRoZSBvcmlnaW5hbCBpbXBsZW1lbnRhdGlvbixcbiAgLy8gZXZlbiBpZiB3ZSBzZXQgdGhlIGF1dG9tb2NraW5nIGluIGEgamVzdCBjb25maWd1cmF0aW9uXG4gIGV4cGVjdChoZWxsbygpKS50b0JlKCdoaSEnKVxufSlcbiJdLCJ2ZXJzaW9uIjozfQ==
+  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJtYXBwaW5ncyI6Ijs7QUFFQSxjQUFLLGVBQUw7Ozs7Ozs7Ozs7Ozs7Ozs7QUFGQSxJQUFBLGtCQUFBLEdBQUEsT0FBQSxDQUFBLG9CQUFBLENBQUE7O0FBSUEsSUFBSSxDQUFDLHlCQUFELEVBQTRCLFlBQUE7QUFDOUI7QUFDQTtBQUNBLEVBQUEsTUFBTSxDQUFDLGtCQUFBLENBQUEsT0FBQSxFQUFELENBQU4sQ0FBZ0IsSUFBaEIsQ0FBcUIsS0FBckI7QUFDRCxDQUpHLENBQUoiLCJuYW1lcyI6W10sInNvdXJjZXMiOlsiPGN3ZD4vZGlzYWJsZS1hdXRvbW9jay5zcGVjLnRzIl0sInNvdXJjZXNDb250ZW50IjpbImltcG9ydCBoZWxsbyBmcm9tICcuL2Rpc2FibGUtYXV0b21vY2snXG5cbmplc3QuZGlzYWJsZUF1dG9tb2NrKClcblxudGVzdCgnb3JpZ2luYWwgaW1wbGVtZW50YXRpb24nLCAoKSA9PiB7XG4gIC8vIG5vdyB3ZSBoYXZlIHRoZSBvcmlnaW5hbCBpbXBsZW1lbnRhdGlvbixcbiAgLy8gZXZlbiBpZiB3ZSBzZXQgdGhlIGF1dG9tb2NraW5nIGluIGEgamVzdCBjb25maWd1cmF0aW9uXG4gIGV4cGVjdChoZWxsbygpKS50b0JlKCdoaSEnKVxufSlcbiJdLCJ2ZXJzaW9uIjozfQ==
   ===[ INLINE SOURCE MAPS ]=======================================================
   mappings: >-
-    ;;AAEA,IAAI,CAAC,eAAL;;;;;AAFA,IAAA,kBAAA,GAAA,OAAA,CAAA,oBAAA,CAAA;;AAIA,IAAI,CAAC,yBAAD,EAA4B,YAAA;AAC9B;AACA;AACA,EAAA,MAAM,CAAC,kBAAA,CAAA,OAAA,EAAD,CAAN,CAAgB,IAAhB,CAAqB,KAArB;AACD,CAJG,CAAJ
+    ;;AAEA,cAAK,eAAL;;;;;;;;;;;;;;;;AAFA,IAAA,kBAAA,GAAA,OAAA,CAAA,oBAAA,CAAA;;AAIA,IAAI,CAAC,yBAAD,EAA4B,YAAA;AAC9B;AACA;AACA,EAAA,MAAM,CAAC,kBAAA,CAAA,OAAA,EAAD,CAAN,CAAgB,IAAhB,CAAqB,KAArB;AACD,CAJG,CAAJ
   names: []
   sources:
     - <cwd>/disable-automock.spec.ts
@@ -216,7 +238,18 @@ exports[`Hoisting jest.enableAutomock() should pass using template "with-babel-7
   ===[ FILE: enable-automock.spec.ts ]============================================
   "use strict";
   
-  jest.enableAutomock();
+  _getJestObj().enableAutomock();
+  
+  function _getJestObj() {
+    const {
+      jest
+    } = require("@jest/globals");
+  
+    _getJestObj = () => jest;
+  
+    return jest;
+  }
+  
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
@@ -228,10 +261,10 @@ exports[`Hoisting jest.enableAutomock() should pass using template "with-babel-7
     // @ts-ignore
     expect(enable_automock_1.default._isMockFunction).toBeTruthy();
   });
-  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJtYXBwaW5ncyI6Ijs7QUFBQSxJQUFJLENBQUMsY0FBTDs7Ozs7QUFFQSxJQUFBLGlCQUFBLEdBQUEsT0FBQSxDQUFBLG1CQUFBLENBQUE7O0FBRUEsSUFBSSxDQUFDLHlCQUFELEVBQTRCLFlBQUE7QUFDOUI7QUFDQTtBQUNBLEVBQUEsTUFBTSxDQUFDLGlCQUFBLENBQUEsT0FBQSxDQUFNLGVBQVAsQ0FBTixDQUE4QixVQUE5QjtBQUNELENBSkcsQ0FBSiIsIm5hbWVzIjpbXSwic291cmNlcyI6WyI8Y3dkPi9lbmFibGUtYXV0b21vY2suc3BlYy50cyJdLCJzb3VyY2VzQ29udGVudCI6WyJqZXN0LmVuYWJsZUF1dG9tb2NrKClcblxuaW1wb3J0IGhlbGxvIGZyb20gJy4vZW5hYmxlLWF1dG9tb2NrJ1xuXG50ZXN0KCdvcmlnaW5hbCBpbXBsZW1lbnRhdGlvbicsICgpID0+IHtcbiAgLy8gbm93IHdlIGhhdmUgdGhlIG1vY2tlZCBpbXBsZW1lbnRhdGlvbixcbiAgLy8gQHRzLWlnbm9yZVxuICBleHBlY3QoaGVsbG8uX2lzTW9ja0Z1bmN0aW9uKS50b0JlVHJ1dGh5KClcbn0pXG4iXSwidmVyc2lvbiI6M30=
+  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJtYXBwaW5ncyI6Ijs7QUFBQSxjQUFLLGNBQUw7Ozs7Ozs7Ozs7Ozs7Ozs7QUFFQSxJQUFBLGlCQUFBLEdBQUEsT0FBQSxDQUFBLG1CQUFBLENBQUE7O0FBRUEsSUFBSSxDQUFDLHlCQUFELEVBQTRCLFlBQUE7QUFDOUI7QUFDQTtBQUNBLEVBQUEsTUFBTSxDQUFDLGlCQUFBLENBQUEsT0FBQSxDQUFNLGVBQVAsQ0FBTixDQUE4QixVQUE5QjtBQUNELENBSkcsQ0FBSiIsIm5hbWVzIjpbXSwic291cmNlcyI6WyI8Y3dkPi9lbmFibGUtYXV0b21vY2suc3BlYy50cyJdLCJzb3VyY2VzQ29udGVudCI6WyJqZXN0LmVuYWJsZUF1dG9tb2NrKClcblxuaW1wb3J0IGhlbGxvIGZyb20gJy4vZW5hYmxlLWF1dG9tb2NrJ1xuXG50ZXN0KCdvcmlnaW5hbCBpbXBsZW1lbnRhdGlvbicsICgpID0+IHtcbiAgLy8gbm93IHdlIGhhdmUgdGhlIG1vY2tlZCBpbXBsZW1lbnRhdGlvbixcbiAgLy8gQHRzLWlnbm9yZVxuICBleHBlY3QoaGVsbG8uX2lzTW9ja0Z1bmN0aW9uKS50b0JlVHJ1dGh5KClcbn0pXG4iXSwidmVyc2lvbiI6M30=
   ===[ INLINE SOURCE MAPS ]=======================================================
   mappings: >-
-    ;;AAAA,IAAI,CAAC,cAAL;;;;;AAEA,IAAA,iBAAA,GAAA,OAAA,CAAA,mBAAA,CAAA;;AAEA,IAAI,CAAC,yBAAD,EAA4B,YAAA;AAC9B;AACA;AACA,EAAA,MAAM,CAAC,iBAAA,CAAA,OAAA,CAAM,eAAP,CAAN,CAA8B,UAA9B;AACD,CAJG,CAAJ
+    ;;AAAA,cAAK,cAAL;;;;;;;;;;;;;;;;AAEA,IAAA,iBAAA,GAAA,OAAA,CAAA,mBAAA,CAAA;;AAEA,IAAI,CAAC,yBAAD,EAA4B,YAAA;AAC9B;AACA;AACA,EAAA,MAAM,CAAC,iBAAA,CAAA,OAAA,CAAM,eAAP,CAAN,CAA8B,UAA9B;AACD,CAJG,CAAJ
   names: []
   sources:
     - <cwd>/enable-automock.spec.ts
@@ -271,7 +304,18 @@ exports[`Hoisting jest.enableAutomock() should pass using template "with-babel-7
   ===[ FILE: enable-automock.spec.ts ]============================================
   "use strict";
   
-  jest.enableAutomock();
+  _getJestObj().enableAutomock();
+  
+  function _getJestObj() {
+    const {
+      jest
+    } = require("@jest/globals");
+  
+    _getJestObj = () => jest;
+  
+    return jest;
+  }
+  
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
@@ -283,10 +327,10 @@ exports[`Hoisting jest.enableAutomock() should pass using template "with-babel-7
     // @ts-ignore
     expect(enable_automock_1.default._isMockFunction).toBeTruthy();
   });
-  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJtYXBwaW5ncyI6Ijs7QUFBQSxJQUFJLENBQUMsY0FBTDs7Ozs7QUFFQSxJQUFBLGlCQUFBLEdBQUEsT0FBQSxDQUFBLG1CQUFBLENBQUE7O0FBRUEsSUFBSSxDQUFDLHlCQUFELEVBQTRCLFlBQUE7QUFDOUI7QUFDQTtBQUNBLEVBQUEsTUFBTSxDQUFDLGlCQUFBLENBQUEsT0FBQSxDQUFNLGVBQVAsQ0FBTixDQUE4QixVQUE5QjtBQUNELENBSkcsQ0FBSiIsIm5hbWVzIjpbXSwic291cmNlcyI6WyI8Y3dkPi9lbmFibGUtYXV0b21vY2suc3BlYy50cyJdLCJzb3VyY2VzQ29udGVudCI6WyJqZXN0LmVuYWJsZUF1dG9tb2NrKClcblxuaW1wb3J0IGhlbGxvIGZyb20gJy4vZW5hYmxlLWF1dG9tb2NrJ1xuXG50ZXN0KCdvcmlnaW5hbCBpbXBsZW1lbnRhdGlvbicsICgpID0+IHtcbiAgLy8gbm93IHdlIGhhdmUgdGhlIG1vY2tlZCBpbXBsZW1lbnRhdGlvbixcbiAgLy8gQHRzLWlnbm9yZVxuICBleHBlY3QoaGVsbG8uX2lzTW9ja0Z1bmN0aW9uKS50b0JlVHJ1dGh5KClcbn0pXG4iXSwidmVyc2lvbiI6M30=
+  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJtYXBwaW5ncyI6Ijs7QUFBQSxjQUFLLGNBQUw7Ozs7Ozs7Ozs7Ozs7Ozs7QUFFQSxJQUFBLGlCQUFBLEdBQUEsT0FBQSxDQUFBLG1CQUFBLENBQUE7O0FBRUEsSUFBSSxDQUFDLHlCQUFELEVBQTRCLFlBQUE7QUFDOUI7QUFDQTtBQUNBLEVBQUEsTUFBTSxDQUFDLGlCQUFBLENBQUEsT0FBQSxDQUFNLGVBQVAsQ0FBTixDQUE4QixVQUE5QjtBQUNELENBSkcsQ0FBSiIsIm5hbWVzIjpbXSwic291cmNlcyI6WyI8Y3dkPi9lbmFibGUtYXV0b21vY2suc3BlYy50cyJdLCJzb3VyY2VzQ29udGVudCI6WyJqZXN0LmVuYWJsZUF1dG9tb2NrKClcblxuaW1wb3J0IGhlbGxvIGZyb20gJy4vZW5hYmxlLWF1dG9tb2NrJ1xuXG50ZXN0KCdvcmlnaW5hbCBpbXBsZW1lbnRhdGlvbicsICgpID0+IHtcbiAgLy8gbm93IHdlIGhhdmUgdGhlIG1vY2tlZCBpbXBsZW1lbnRhdGlvbixcbiAgLy8gQHRzLWlnbm9yZVxuICBleHBlY3QoaGVsbG8uX2lzTW9ja0Z1bmN0aW9uKS50b0JlVHJ1dGh5KClcbn0pXG4iXSwidmVyc2lvbiI6M30=
   ===[ INLINE SOURCE MAPS ]=======================================================
   mappings: >-
-    ;;AAAA,IAAI,CAAC,cAAL;;;;;AAEA,IAAA,iBAAA,GAAA,OAAA,CAAA,mBAAA,CAAA;;AAEA,IAAI,CAAC,yBAAD,EAA4B,YAAA;AAC9B;AACA;AACA,EAAA,MAAM,CAAC,iBAAA,CAAA,OAAA,CAAM,eAAP,CAAN,CAA8B,UAA9B;AACD,CAJG,CAAJ
+    ;;AAAA,cAAK,cAAL;;;;;;;;;;;;;;;;AAEA,IAAA,iBAAA,GAAA,OAAA,CAAA,mBAAA,CAAA;;AAEA,IAAI,CAAC,yBAAD,EAA4B,YAAA;AAC9B;AACA;AACA,EAAA,MAAM,CAAC,iBAAA,CAAA,OAAA,CAAM,eAAP,CAAN,CAA8B,UAA9B;AACD,CAJG,CAAJ
   names: []
   sources:
     - <cwd>/enable-automock.spec.ts
@@ -385,7 +429,18 @@ exports[`Hoisting jest.mock() & jest.unmock() should pass using template "with-b
   ===[ FILE: mock-unmock.spec.ts ]================================================
   "use strict";
   
-  jest.mock('./mock-unmock');
+  _getJestObj().mock('./mock-unmock');
+  
+  function _getJestObj() {
+    const {
+      jest
+    } = require("@jest/globals");
+  
+    _getJestObj = () => jest;
+  
+    return jest;
+  }
+  
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
@@ -394,21 +449,22 @@ exports[`Hoisting jest.mock() & jest.unmock() should pass using template "with-b
   
   var original = jest.requireActual('./mock-unmock').default;
   it('should have been mocked', function () {
-    jest.mock('foo', function () {
+    _getJestObj().mock('foo', function () {
       return 'bar';
     }, {
       virtual: true
     });
+  
     var msg = mock_unmock_1.default();
     expect(mock_unmock_1.default).not.toBe(original);
     expect(msg).toBeUndefined();
     expect(mock_unmock_1.default).toHaveProperty('mock');
     expect(require('foo')).toBe('bar');
   });
-  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJtYXBwaW5ncyI6Ijs7QUFFQSxJQUFJLENBQUMsSUFBTCxDQUFVLGVBQVY7Ozs7O0FBRkEsSUFBQSxhQUFBLEdBQUEsT0FBQSxDQUFBLGVBQUEsQ0FBQTs7QUFJQSxJQUFNLFFBQVEsR0FBRyxJQUFJLENBQUMsYUFBTCxDQUFtQixlQUFuQixFQUFvQyxPQUFyRDtBQUNBLEVBQUUsQ0FBQyx5QkFBRCxFQUE0QixZQUFBO0FBTTVCLEVBQUEsSUFBSSxDQUFDLElBQUwsQ0FBVSxLQUFWLEVBQWlCLFlBQUE7QUFBTSxXQUFBLEtBQUE7QUFBSyxHQUE1QixFQUE4QjtBQUFFLElBQUEsT0FBTyxFQUFFO0FBQVgsR0FBOUI7QUFMQSxNQUFNLEdBQUcsR0FBRyxhQUFBLENBQUEsT0FBQSxFQUFaO0FBQ0EsRUFBQSxNQUFNLENBQUMsYUFBQSxDQUFBLE9BQUQsQ0FBTixDQUFjLEdBQWQsQ0FBa0IsSUFBbEIsQ0FBdUIsUUFBdkI7QUFDQSxFQUFBLE1BQU0sQ0FBQyxHQUFELENBQU4sQ0FBWSxhQUFaO0FBQ0EsRUFBQSxNQUFNLENBQUMsYUFBQSxDQUFBLE9BQUQsQ0FBTixDQUFjLGNBQWQsQ0FBNkIsTUFBN0I7QUFDQSxFQUFBLE1BQU0sQ0FBQyxPQUFPLENBQUMsS0FBRCxDQUFSLENBQU4sQ0FBdUIsSUFBdkIsQ0FBNEIsS0FBNUI7QUFFRCxDQVBDLENBQUYiLCJuYW1lcyI6W10sInNvdXJjZXMiOlsiPGN3ZD4vbW9jay11bm1vY2suc3BlYy50cyJdLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgaGVsbG8gZnJvbSAnLi9tb2NrLXVubW9jaydcblxuamVzdC5tb2NrKCcuL21vY2stdW5tb2NrJylcblxuY29uc3Qgb3JpZ2luYWwgPSBqZXN0LnJlcXVpcmVBY3R1YWwoJy4vbW9jay11bm1vY2snKS5kZWZhdWx0XG5pdCgnc2hvdWxkIGhhdmUgYmVlbiBtb2NrZWQnLCAoKSA9PiB7XG4gIGNvbnN0IG1zZyA9IGhlbGxvKClcbiAgZXhwZWN0KGhlbGxvKS5ub3QudG9CZShvcmlnaW5hbClcbiAgZXhwZWN0KG1zZykudG9CZVVuZGVmaW5lZCgpXG4gIGV4cGVjdChoZWxsbykudG9IYXZlUHJvcGVydHkoJ21vY2snKVxuICBleHBlY3QocmVxdWlyZSgnZm9vJykpLnRvQmUoJ2JhcicpXG4gIGplc3QubW9jaygnZm9vJywgKCkgPT4gJ2JhcicsIHsgdmlydHVhbDogdHJ1ZSB9KVxufSlcbiJdLCJ2ZXJzaW9uIjozfQ==
+  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJtYXBwaW5ncyI6Ijs7QUFFQSxjQUFLLElBQUwsQ0FBVSxlQUFWOzs7Ozs7Ozs7Ozs7Ozs7O0FBRkEsSUFBQSxhQUFBLEdBQUEsT0FBQSxDQUFBLGVBQUEsQ0FBQTs7QUFJQSxJQUFNLFFBQVEsR0FBRyxJQUFJLENBQUMsYUFBTCxDQUFtQixlQUFuQixFQUFvQyxPQUFyRDtBQUNBLEVBQUUsQ0FBQyx5QkFBRCxFQUE0QixZQUFBO0FBTTVCLGdCQUFLLElBQUwsQ0FBVSxLQUFWLEVBQWlCLFlBQUE7QUFBTSxXQUFBLEtBQUE7QUFBSyxHQUE1QixFQUE4QjtBQUFFLElBQUEsT0FBTyxFQUFFO0FBQVgsR0FBOUI7O0FBTEEsTUFBTSxHQUFHLEdBQUcsYUFBQSxDQUFBLE9BQUEsRUFBWjtBQUNBLEVBQUEsTUFBTSxDQUFDLGFBQUEsQ0FBQSxPQUFELENBQU4sQ0FBYyxHQUFkLENBQWtCLElBQWxCLENBQXVCLFFBQXZCO0FBQ0EsRUFBQSxNQUFNLENBQUMsR0FBRCxDQUFOLENBQVksYUFBWjtBQUNBLEVBQUEsTUFBTSxDQUFDLGFBQUEsQ0FBQSxPQUFELENBQU4sQ0FBYyxjQUFkLENBQTZCLE1BQTdCO0FBQ0EsRUFBQSxNQUFNLENBQUMsT0FBTyxDQUFDLEtBQUQsQ0FBUixDQUFOLENBQXVCLElBQXZCLENBQTRCLEtBQTVCO0FBRUQsQ0FQQyxDQUFGIiwibmFtZXMiOltdLCJzb3VyY2VzIjpbIjxjd2Q+L21vY2stdW5tb2NrLnNwZWMudHMiXSwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IGhlbGxvIGZyb20gJy4vbW9jay11bm1vY2snXG5cbmplc3QubW9jaygnLi9tb2NrLXVubW9jaycpXG5cbmNvbnN0IG9yaWdpbmFsID0gamVzdC5yZXF1aXJlQWN0dWFsKCcuL21vY2stdW5tb2NrJykuZGVmYXVsdFxuaXQoJ3Nob3VsZCBoYXZlIGJlZW4gbW9ja2VkJywgKCkgPT4ge1xuICBjb25zdCBtc2cgPSBoZWxsbygpXG4gIGV4cGVjdChoZWxsbykubm90LnRvQmUob3JpZ2luYWwpXG4gIGV4cGVjdChtc2cpLnRvQmVVbmRlZmluZWQoKVxuICBleHBlY3QoaGVsbG8pLnRvSGF2ZVByb3BlcnR5KCdtb2NrJylcbiAgZXhwZWN0KHJlcXVpcmUoJ2ZvbycpKS50b0JlKCdiYXInKVxuICBqZXN0Lm1vY2soJ2ZvbycsICgpID0+ICdiYXInLCB7IHZpcnR1YWw6IHRydWUgfSlcbn0pXG4iXSwidmVyc2lvbiI6M30=
   ===[ INLINE SOURCE MAPS ]=======================================================
   mappings: >-
-    ;;AAEA,IAAI,CAAC,IAAL,CAAU,eAAV;;;;;AAFA,IAAA,aAAA,GAAA,OAAA,CAAA,eAAA,CAAA;;AAIA,IAAM,QAAQ,GAAG,IAAI,CAAC,aAAL,CAAmB,eAAnB,EAAoC,OAArD;AACA,EAAE,CAAC,yBAAD,EAA4B,YAAA;AAM5B,EAAA,IAAI,CAAC,IAAL,CAAU,KAAV,EAAiB,YAAA;AAAM,WAAA,KAAA;AAAK,GAA5B,EAA8B;AAAE,IAAA,OAAO,EAAE;AAAX,GAA9B;AALA,MAAM,GAAG,GAAG,aAAA,CAAA,OAAA,EAAZ;AACA,EAAA,MAAM,CAAC,aAAA,CAAA,OAAD,CAAN,CAAc,GAAd,CAAkB,IAAlB,CAAuB,QAAvB;AACA,EAAA,MAAM,CAAC,GAAD,CAAN,CAAY,aAAZ;AACA,EAAA,MAAM,CAAC,aAAA,CAAA,OAAD,CAAN,CAAc,cAAd,CAA6B,MAA7B;AACA,EAAA,MAAM,CAAC,OAAO,CAAC,KAAD,CAAR,CAAN,CAAuB,IAAvB,CAA4B,KAA5B;AAED,CAPC,CAAF
+    ;;AAEA,cAAK,IAAL,CAAU,eAAV;;;;;;;;;;;;;;;;AAFA,IAAA,aAAA,GAAA,OAAA,CAAA,eAAA,CAAA;;AAIA,IAAM,QAAQ,GAAG,IAAI,CAAC,aAAL,CAAmB,eAAnB,EAAoC,OAArD;AACA,EAAE,CAAC,yBAAD,EAA4B,YAAA;AAM5B,gBAAK,IAAL,CAAU,KAAV,EAAiB,YAAA;AAAM,WAAA,KAAA;AAAK,GAA5B,EAA8B;AAAE,IAAA,OAAO,EAAE;AAAX,GAA9B;;AALA,MAAM,GAAG,GAAG,aAAA,CAAA,OAAA,EAAZ;AACA,EAAA,MAAM,CAAC,aAAA,CAAA,OAAD,CAAN,CAAc,GAAd,CAAkB,IAAlB,CAAuB,QAAvB;AACA,EAAA,MAAM,CAAC,GAAD,CAAN,CAAY,aAAZ;AACA,EAAA,MAAM,CAAC,aAAA,CAAA,OAAD,CAAN,CAAc,cAAd,CAA6B,MAA7B;AACA,EAAA,MAAM,CAAC,OAAO,CAAC,KAAD,CAAR,CAAN,CAAuB,IAAvB,CAA4B,KAA5B;AAED,CAPC,CAAF
   names: []
   sources:
     - <cwd>/mock-unmock.spec.ts
@@ -452,7 +508,18 @@ exports[`Hoisting jest.mock() & jest.unmock() should pass using template "with-b
   ===[ FILE: mock-unmock.spec.ts ]================================================
   "use strict";
   
-  jest.mock('./mock-unmock');
+  _getJestObj().mock('./mock-unmock');
+  
+  function _getJestObj() {
+    const {
+      jest
+    } = require("@jest/globals");
+  
+    _getJestObj = () => jest;
+  
+    return jest;
+  }
+  
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
@@ -461,21 +528,22 @@ exports[`Hoisting jest.mock() & jest.unmock() should pass using template "with-b
   
   var original = jest.requireActual('./mock-unmock').default;
   it('should have been mocked', function () {
-    jest.mock('foo', function () {
+    _getJestObj().mock('foo', function () {
       return 'bar';
     }, {
       virtual: true
     });
+  
     var msg = mock_unmock_1.default();
     expect(mock_unmock_1.default).not.toBe(original);
     expect(msg).toBeUndefined();
     expect(mock_unmock_1.default).toHaveProperty('mock');
     expect(require('foo')).toBe('bar');
   });
-  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJtYXBwaW5ncyI6Ijs7QUFFQSxJQUFJLENBQUMsSUFBTCxDQUFVLGVBQVY7Ozs7O0FBRkEsSUFBQSxhQUFBLEdBQUEsT0FBQSxDQUFBLGVBQUEsQ0FBQTs7QUFJQSxJQUFNLFFBQVEsR0FBRyxJQUFJLENBQUMsYUFBTCxDQUFtQixlQUFuQixFQUFvQyxPQUFyRDtBQUNBLEVBQUUsQ0FBQyx5QkFBRCxFQUE0QixZQUFBO0FBTTVCLEVBQUEsSUFBSSxDQUFDLElBQUwsQ0FBVSxLQUFWLEVBQWlCLFlBQUE7QUFBTSxXQUFBLEtBQUE7QUFBSyxHQUE1QixFQUE4QjtBQUFFLElBQUEsT0FBTyxFQUFFO0FBQVgsR0FBOUI7QUFMQSxNQUFNLEdBQUcsR0FBRyxhQUFBLENBQUEsT0FBQSxFQUFaO0FBQ0EsRUFBQSxNQUFNLENBQUMsYUFBQSxDQUFBLE9BQUQsQ0FBTixDQUFjLEdBQWQsQ0FBa0IsSUFBbEIsQ0FBdUIsUUFBdkI7QUFDQSxFQUFBLE1BQU0sQ0FBQyxHQUFELENBQU4sQ0FBWSxhQUFaO0FBQ0EsRUFBQSxNQUFNLENBQUMsYUFBQSxDQUFBLE9BQUQsQ0FBTixDQUFjLGNBQWQsQ0FBNkIsTUFBN0I7QUFDQSxFQUFBLE1BQU0sQ0FBQyxPQUFPLENBQUMsS0FBRCxDQUFSLENBQU4sQ0FBdUIsSUFBdkIsQ0FBNEIsS0FBNUI7QUFFRCxDQVBDLENBQUYiLCJuYW1lcyI6W10sInNvdXJjZXMiOlsiPGN3ZD4vbW9jay11bm1vY2suc3BlYy50cyJdLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgaGVsbG8gZnJvbSAnLi9tb2NrLXVubW9jaydcblxuamVzdC5tb2NrKCcuL21vY2stdW5tb2NrJylcblxuY29uc3Qgb3JpZ2luYWwgPSBqZXN0LnJlcXVpcmVBY3R1YWwoJy4vbW9jay11bm1vY2snKS5kZWZhdWx0XG5pdCgnc2hvdWxkIGhhdmUgYmVlbiBtb2NrZWQnLCAoKSA9PiB7XG4gIGNvbnN0IG1zZyA9IGhlbGxvKClcbiAgZXhwZWN0KGhlbGxvKS5ub3QudG9CZShvcmlnaW5hbClcbiAgZXhwZWN0KG1zZykudG9CZVVuZGVmaW5lZCgpXG4gIGV4cGVjdChoZWxsbykudG9IYXZlUHJvcGVydHkoJ21vY2snKVxuICBleHBlY3QocmVxdWlyZSgnZm9vJykpLnRvQmUoJ2JhcicpXG4gIGplc3QubW9jaygnZm9vJywgKCkgPT4gJ2JhcicsIHsgdmlydHVhbDogdHJ1ZSB9KVxufSlcbiJdLCJ2ZXJzaW9uIjozfQ==
+  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJtYXBwaW5ncyI6Ijs7QUFFQSxjQUFLLElBQUwsQ0FBVSxlQUFWOzs7Ozs7Ozs7Ozs7Ozs7O0FBRkEsSUFBQSxhQUFBLEdBQUEsT0FBQSxDQUFBLGVBQUEsQ0FBQTs7QUFJQSxJQUFNLFFBQVEsR0FBRyxJQUFJLENBQUMsYUFBTCxDQUFtQixlQUFuQixFQUFvQyxPQUFyRDtBQUNBLEVBQUUsQ0FBQyx5QkFBRCxFQUE0QixZQUFBO0FBTTVCLGdCQUFLLElBQUwsQ0FBVSxLQUFWLEVBQWlCLFlBQUE7QUFBTSxXQUFBLEtBQUE7QUFBSyxHQUE1QixFQUE4QjtBQUFFLElBQUEsT0FBTyxFQUFFO0FBQVgsR0FBOUI7O0FBTEEsTUFBTSxHQUFHLEdBQUcsYUFBQSxDQUFBLE9BQUEsRUFBWjtBQUNBLEVBQUEsTUFBTSxDQUFDLGFBQUEsQ0FBQSxPQUFELENBQU4sQ0FBYyxHQUFkLENBQWtCLElBQWxCLENBQXVCLFFBQXZCO0FBQ0EsRUFBQSxNQUFNLENBQUMsR0FBRCxDQUFOLENBQVksYUFBWjtBQUNBLEVBQUEsTUFBTSxDQUFDLGFBQUEsQ0FBQSxPQUFELENBQU4sQ0FBYyxjQUFkLENBQTZCLE1BQTdCO0FBQ0EsRUFBQSxNQUFNLENBQUMsT0FBTyxDQUFDLEtBQUQsQ0FBUixDQUFOLENBQXVCLElBQXZCLENBQTRCLEtBQTVCO0FBRUQsQ0FQQyxDQUFGIiwibmFtZXMiOltdLCJzb3VyY2VzIjpbIjxjd2Q+L21vY2stdW5tb2NrLnNwZWMudHMiXSwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IGhlbGxvIGZyb20gJy4vbW9jay11bm1vY2snXG5cbmplc3QubW9jaygnLi9tb2NrLXVubW9jaycpXG5cbmNvbnN0IG9yaWdpbmFsID0gamVzdC5yZXF1aXJlQWN0dWFsKCcuL21vY2stdW5tb2NrJykuZGVmYXVsdFxuaXQoJ3Nob3VsZCBoYXZlIGJlZW4gbW9ja2VkJywgKCkgPT4ge1xuICBjb25zdCBtc2cgPSBoZWxsbygpXG4gIGV4cGVjdChoZWxsbykubm90LnRvQmUob3JpZ2luYWwpXG4gIGV4cGVjdChtc2cpLnRvQmVVbmRlZmluZWQoKVxuICBleHBlY3QoaGVsbG8pLnRvSGF2ZVByb3BlcnR5KCdtb2NrJylcbiAgZXhwZWN0KHJlcXVpcmUoJ2ZvbycpKS50b0JlKCdiYXInKVxuICBqZXN0Lm1vY2soJ2ZvbycsICgpID0+ICdiYXInLCB7IHZpcnR1YWw6IHRydWUgfSlcbn0pXG4iXSwidmVyc2lvbiI6M30=
   ===[ INLINE SOURCE MAPS ]=======================================================
   mappings: >-
-    ;;AAEA,IAAI,CAAC,IAAL,CAAU,eAAV;;;;;AAFA,IAAA,aAAA,GAAA,OAAA,CAAA,eAAA,CAAA;;AAIA,IAAM,QAAQ,GAAG,IAAI,CAAC,aAAL,CAAmB,eAAnB,EAAoC,OAArD;AACA,EAAE,CAAC,yBAAD,EAA4B,YAAA;AAM5B,EAAA,IAAI,CAAC,IAAL,CAAU,KAAV,EAAiB,YAAA;AAAM,WAAA,KAAA;AAAK,GAA5B,EAA8B;AAAE,IAAA,OAAO,EAAE;AAAX,GAA9B;AALA,MAAM,GAAG,GAAG,aAAA,CAAA,OAAA,EAAZ;AACA,EAAA,MAAM,CAAC,aAAA,CAAA,OAAD,CAAN,CAAc,GAAd,CAAkB,IAAlB,CAAuB,QAAvB;AACA,EAAA,MAAM,CAAC,GAAD,CAAN,CAAY,aAAZ;AACA,EAAA,MAAM,CAAC,aAAA,CAAA,OAAD,CAAN,CAAc,cAAd,CAA6B,MAA7B;AACA,EAAA,MAAM,CAAC,OAAO,CAAC,KAAD,CAAR,CAAN,CAAuB,IAAvB,CAA4B,KAA5B;AAED,CAPC,CAAF
+    ;;AAEA,cAAK,IAAL,CAAU,eAAV;;;;;;;;;;;;;;;;AAFA,IAAA,aAAA,GAAA,OAAA,CAAA,eAAA,CAAA;;AAIA,IAAM,QAAQ,GAAG,IAAI,CAAC,aAAL,CAAmB,eAAnB,EAAoC,OAArD;AACA,EAAE,CAAC,yBAAD,EAA4B,YAAA;AAM5B,gBAAK,IAAL,CAAU,KAAV,EAAiB,YAAA;AAAM,WAAA,KAAA;AAAK,GAA5B,EAA8B;AAAE,IAAA,OAAO,EAAE;AAAX,GAA9B;;AALA,MAAM,GAAG,GAAG,aAAA,CAAA,OAAA,EAAZ;AACA,EAAA,MAAM,CAAC,aAAA,CAAA,OAAD,CAAN,CAAc,GAAd,CAAkB,IAAlB,CAAuB,QAAvB;AACA,EAAA,MAAM,CAAC,GAAD,CAAN,CAAY,aAAZ;AACA,EAAA,MAAM,CAAC,aAAA,CAAA,OAAD,CAAN,CAAc,cAAd,CAA6B,MAA7B;AACA,EAAA,MAAM,CAAC,OAAO,CAAC,KAAD,CAAR,CAAN,CAAuB,IAAvB,CAA4B,KAA5B;AAED,CAPC,CAAF
   names: []
   sources:
     - <cwd>/mock-unmock.spec.ts

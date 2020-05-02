@@ -3,11 +3,11 @@
   "version": "0.0.0-tmpl.0",
   "private": true,
   "devDependencies": {
-    "@babel/core": "7.9.0",
+    "@babel/core": "7.9.6",
     "@types/jest": "25.2.1",
-    "@types/node": "12.12.36",
-    "babel-jest": "25.4.0",
-    "jest": "25.4.0",
+    "@types/node": "12.12.37",
+    "babel-jest": "25.5.1",
+    "jest": "25.5.4",
     "typescript": "3.8.3"
   },
   "wantedDependencies": {
