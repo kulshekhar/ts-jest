@@ -1,4 +1,3 @@
-// eslint:disable:curly
 // take care of including ONLY TYPES here, for the rest use `ts`
 import { LogContexts, LogLevels } from 'bs-logger'
 import {
