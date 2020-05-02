@@ -393,7 +393,7 @@ export class ConfigSet {
     } = this
     if (babelConfig == null) {
       this.logger.debug('babel is disabled')
-      return
+      return undefined
     }
     let base: BabelConfig = { cwd: this.cwd }
     if (babelConfig.kind === 'file') {
@@ -432,7 +432,7 @@ export class ConfigSet {
   @Memoize()
   get babelJestTransformer(): BabelJestTransformer | undefined {
     const { babel } = this
-    if (!babel) return
+    if (!babel) return undefined
     this.logger.debug('creating babel-jest transformer')
     return importer.babelJest(ImportReasons.BabelJest).createTransformer(babel) as BabelJestTransformer
   }
@@ -562,7 +562,7 @@ export class ConfigSet {
   get tsCacheDir(): string | undefined {
     if (!this.jest.cache) {
       logger.debug('file caching disabled')
-      return
+      return undefined
     }
     const cacheSuffix = sha1(
       stringify({
@@ -634,6 +634,7 @@ export class ConfigSet {
    * Use by e2e, don't mark as internal
    */
   @Memoize()
+  // eslint-disable-next-line class-methods-use-this
   get tsJestDigest(): string {
     return MY_DIGEST
   }

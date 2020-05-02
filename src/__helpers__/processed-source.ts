@@ -30,7 +30,7 @@ export default class ProcessedSource {
   get normalizedOutputSourceMaps(): RawSourceMap | undefined {
     const maps = this.outputSourceMaps
     if (maps) return this.sourceMapsNormalizer(maps)
-    return
+    return undefined
   }
   get sourceMapsNormalizer() {
     return (maps: RawSourceMap): RawSourceMap => relativisePaths(maps, this.cwd, '<cwd>/')

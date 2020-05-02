@@ -8,9 +8,9 @@ module.exports = {
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
     'plugin:@typescript-eslint/recommended-requiring-type-checking',
-    'plugin:jest/recommended',
     'prettier/@typescript-eslint', // Uses eslint-config-prettier to disable ESLint rules from @typescript-eslint/eslint-plugin that would conflict with prettier
-    'plugin:prettier/recommended',
+    'plugin:jest/recommended',
+    'plugin:prettier/recommended'
   ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
@@ -24,11 +24,10 @@ module.exports = {
   },
   plugins: ['@typescript-eslint', 'jest', 'jsdoc'],
   rules: {
-    'no-console': 'warn',
-    indent: 'off',
+    'prettier/prettier': 'error',    
+    'no-unused-vars': 'off', // let typescript-eslint handle this
+    'no-console': 'error',
     'linebreak-style': 'off',
-    quotes: ['warn', 'single'],
-    semi: ['warn', 'never'],
     'comma-dangle': 'off',
     'constructor-super': 'error',
     'for-direction': ['error'],
@@ -88,6 +87,7 @@ module.exports = {
     'require-yield': ['error'],
     'use-isnan': 'error',
     'valid-typeof': 'off',
+    '@typescript-eslint/no-unused-vars': ["error", { "argsIgnorePattern": "^_" }],
     '@typescript-eslint/adjacent-overload-signatures': 'error',
     '@typescript-eslint/array-type': [
       'warn',
@@ -123,8 +123,7 @@ module.exports = {
     '@typescript-eslint/class-name-casing': 'error',
     '@typescript-eslint/prefer-regexp-exec': 'warn',
     '@typescript-eslint/prefer-string-starts-ends-with': 'warn',
-    '@typescript-eslint/unbound-method': 'warn',
-    '@typescript-eslint/no-unused-vars': 'warn',
+    '@typescript-eslint/unbound-method': 'off',
     '@typescript-eslint/prefer-includes': 'warn',
     '@typescript-eslint/consistent-type-assertions': 'error',
     '@typescript-eslint/consistent-type-definitions': 'error',
@@ -134,7 +133,6 @@ module.exports = {
         accessibility: 'no-public',
       },
     ],
-    '@typescript-eslint/indent': 'off',
     '@typescript-eslint/interface-name-prefix': 'off',
     '@typescript-eslint/member-delimiter-style': [
       'error',
@@ -149,9 +147,9 @@ module.exports = {
         },
       },
     ],
-    '@typescript-eslint/require-await': 'warn',
-    '@typescript-eslint/ban-ts-ignore': 'warn',
-    '@typescript-eslint/no-empty-function': 'warn',
+    '@typescript-eslint/require-await': 'off',
+    '@typescript-eslint/ban-ts-ignore': 'off',
+    '@typescript-eslint/no-empty-function': ['error', { 'allow': ['arrowFunctions']}],
     '@typescript-eslint/no-empty-interface': 'off',
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
@@ -159,7 +157,7 @@ module.exports = {
     '@typescript-eslint/no-inferrable-types': 'error',
     '@typescript-eslint/no-misused-new': 'error',
     '@typescript-eslint/no-namespace': 'warn',
-    '@typescript-eslint/no-null-assertion': 'off',
+    '@typescript-eslint/no-non-null-assertion': 'off',
     '@typescript-eslint/no-parameter-properties': 'off',
     '@typescript-eslint/no-unnecessary-boolean-literal-compare': 'error',
     '@typescript-eslint/no-use-before-define': 'off',
@@ -168,8 +166,6 @@ module.exports = {
     '@typescript-eslint/prefer-function-type': 'error',
     '@typescript-eslint/prefer-namespace-keyword': 'error',
     '@typescript-eslint/prefer-readonly': 'error',
-    '@typescript-eslint/quotes': 'off',
-    '@typescript-eslint/semi': ['warn', 'never'],
     '@typescript-eslint/triple-slash-reference': [
       'error',
       {

@@ -92,7 +92,9 @@ export class Importer {
   }
 
   tryTheseOr<T>(moduleNames: [string, ...string[]] | string, missingResult: T, allowLoadError?: boolean): T
+  // eslint-disable-next-line no-dupe-class-members
   tryTheseOr<T>(moduleNames: [string, ...string[]] | string, missingResult?: T, allowLoadError?: boolean): T | undefined
+  // eslint-disable-next-line no-dupe-class-members
   tryTheseOr<T>(moduleNames: [string, ...string[]] | string, missingResult?: T, allowLoadError = false): T | undefined {
     const args: [string, ...string[]] = Array.isArray(moduleNames) ? moduleNames : [moduleNames]
     const result = this.tryThese(...args)

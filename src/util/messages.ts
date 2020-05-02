@@ -53,5 +53,6 @@ export const enum ImportReasons {
  * @internal
  */
 export function interpolate(msg: string, vars: Record<string, any> = {}): string {
+  // eslint-disable-next-line no-useless-escape
   return msg.replace(/\{\{([^\}]+)\}\}/g, (_, key) => (key in vars ? vars[key] : _))
 }
