@@ -49,23 +49,22 @@ const compileAndCacheResult = (
   compileFn: CompileFn,
   getExtension: (fileName: string) => string,
   logger: Logger,
-) => {
-  return (code: string, fileName: string, lineOffset?: number) => {
-    logger.debug({ fileName }, 'compileAndCacheResult(): get compile output')
+) => (code: string, fileName: string, lineOffset?: number) => {
+  logger.debug({ fileName }, 'compileAndCacheResult(): get compile output')
 
-    const [value, sourceMap] = compileFn(code, fileName, lineOffset)
-    const output = updateOutput(value, fileName, sourceMap, getExtension)
-    memoryCache.files.set(fileName, {
-      ...memoryCache.files.get(fileName)!,
-      output,
-    })
+  const [value, sourceMap] = compileFn(code, fileName, lineOffset)
+  const output = updateOutput(value, fileName, sourceMap, getExtension)
+  memoryCache.files.set(fileName, {
+    ...memoryCache.files.get(fileName)!,
+    output,
+  })
 
-    return output
-  }
+  return output
 }
 
 /**
  * Register TypeScript compiler instance.
+ *
  * @internal
  */
 export const createCompilerInstance = (configs: ConfigSet): TsCompiler => {

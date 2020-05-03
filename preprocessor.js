@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-console
 console.warn(
   'ts-jest[main] (WARN) Replace any occurrences of "ts-jest/dist/preprocessor.js" or ' +
     ' "<rootDir>/node_modules/ts-jest/preprocessor.js"' +

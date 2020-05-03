@@ -32,6 +32,7 @@ const definePreset = (fullName: string): TsJestPresetDescriptor => ({
       : fullName
           .split('/')
           .pop()!
+          // eslint-disable-next-line no-useless-escape
           .replace(/\-([a-z])/g, (_, l) => l.toUpperCase())
   },
   get value() {

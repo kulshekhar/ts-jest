@@ -1,3 +1,4 @@
+/* eslint-disable no-redeclare */
 import stableStringify = require('fast-json-stable-stringify')
 
 const UNDEFINED = 'undefined'
@@ -38,7 +39,7 @@ export function normalize(input: string, { parse: parser = parse }: NormalizeOpt
 /**
  * @internal
  */
-// tslint:disable-next-line:no-namespace
+// eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace normalize {
   export const cache = new Map<string, string | undefined>()
 }

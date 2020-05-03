@@ -78,7 +78,7 @@ export class TsJestTransformer implements Transformer {
     const jestConfigObj: Config.ProjectConfig = jestConfig
 
     // create the new record in the index
-    this.logger.info(`no matching config-set found, creating a new one`)
+    this.logger.info('no matching config-set found, creating a new one')
 
     const configSet = new ConfigSet(jestConfigObj, this.options, this.logger)
     TsJestTransformer._configSetsIndex.push({

@@ -31,7 +31,7 @@ async function cli(args: string[]): Promise<void> {
 
   // deprecated
   if (parsedArgv.allowJs != null) {
-    if (parsedArgv.js) throw new Error(`The 'allowJs' and 'js' options cannot be set together.`)
+    if (parsedArgv.js) throw new Error("The 'allowJs' and 'js' options cannot be set together.")
     parsedArgv.js = parsedArgv.allowJs ? 'ts' : undefined
   }
 
@@ -41,7 +41,6 @@ async function cli(args: string[]): Promise<void> {
 
   if (!VALID_COMMANDS.includes(command)) command = 'help'
 
-  // tslint:disable-next-line:no-var-requires
   const { run, help }: { run: CliCommand; help: CliCommand } = require(`./${command.replace(/:/g, '/')}`)
 
   const cmd = isHelp && command !== 'help' ? help : run

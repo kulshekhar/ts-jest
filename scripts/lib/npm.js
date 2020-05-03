@@ -3,15 +3,13 @@ const { satisfies } = require('semver')
 const memoize = require('lodash.memoize')
 const { join } = require('path')
 
-const version = memoize(() => {
-  return spawnSync(['-s', '--version'])
+const version = memoize(() =>
+  spawnSync(['-s', '--version'])
     .stdout.toString()
     .trim()
-})
+)
 
-const spawnSync = (args, options = {}) => {
-  return spawn('npm', args, options)
-}
+const spawnSync = (args, options = {}) => spawn('npm', args, options)
 
 const can = {
   ci: memoize(() => satisfies(version(), '>=5.7.0')),

@@ -167,7 +167,7 @@ Array [
 
   it('should return stringified version of file', () => {
     config.shouldStringifyContent.mockImplementation(() => true)
-    expect(process()).toMatchInlineSnapshot(`"module.exports=\\"export default \\\\\\"foo\\\\\\"\\""`)
+    expect(process()).toMatchInlineSnapshot('"module.exports=\\"export default \\\\\\"foo\\\\\\"\\""')
   })
 
   it('should warn when trying to process js but allowJs is false', () => {

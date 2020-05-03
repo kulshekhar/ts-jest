@@ -20,6 +20,7 @@ export interface ParsedSourceWithMaps {
 }
 export function parseSource(source: string): ParsedSourceWithMaps {
   const [comment, b64Maps]: [string, string | undefined] =
+    // eslint-disable-next-line @typescript-eslint/prefer-regexp-exec
     (source.match(/[\n^]\/\/#\s*sourceMappingURL=data:application\/json;(?:charset=utf-8;)?base64,(\S+)\s*$/) as any) ||
     []
   if (b64Maps) {

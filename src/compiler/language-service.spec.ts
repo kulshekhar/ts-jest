@@ -69,7 +69,6 @@ describe('Language service', () => {
   })
 
   it('should cache resolved modules for test file with testMatchPatterns from jest config when match', () => {
-    // tslint:disable-next-line:no-empty
     const spy = jest.spyOn(compilerUtils, 'cacheResolvedModules').mockImplementationOnce(() => {})
     const tmp = tempDir('compiler')
     const compiler = makeCompiler({
@@ -90,8 +89,7 @@ export const thing: Thing = { a: 1 }`
     spy.mockRestore()
   })
 
-  it(`shouldn't cache resolved modules for test file with testMatchPatterns from jest config when not match`, () => {
-    // tslint:disable-next-line:no-empty
+  it("shouldn't cache resolved modules for test file with testMatchPatterns from jest config when not match", () => {
     jest.spyOn(compilerUtils, 'cacheResolvedModules').mockImplementationOnce(() => {})
     const tmp = tempDir('compiler')
     const compiler = makeCompiler({
@@ -109,7 +107,7 @@ export const thing: Thing = { a: 1 }`
   })
 
   it('should compile js file for allowJs true with outDir', () => {
-    const fileName = `test-allow-js-with-outDir.js`
+    const fileName = 'test-allow-js-with-outDir.js'
     const compiler = makeCompiler({
       tsJestConfig: { tsConfig: { allowJs: true, outDir: '$$foo$$' } },
     })
@@ -124,7 +122,7 @@ export const thing: Thing = { a: 1 }`
   })
 
   it('should compile js file for allowJs true without outDir', () => {
-    const fileName = `test-allow-js-no-outDir.js`
+    const fileName = 'test-allow-js-no-outDir.js'
     const compiler = makeCompiler({
       tsJestConfig: { tsConfig: { allowJs: true } },
     })

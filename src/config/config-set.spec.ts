@@ -1,9 +1,10 @@
+/* eslint-disable jest/no-mocks-import */
 import { Transformer } from '@jest/transform'
 import { Config } from '@jest/types'
 import { testing } from 'bs-logger'
 import { readFileSync } from 'fs'
 import json5 = require('json5')
-import { resolve } from 'path' // tslint:disable-next-line:no-duplicate-imports
+import { resolve } from 'path'
 import * as ts from 'typescript'
 
 import * as _myModule from '..'
@@ -83,7 +84,7 @@ describe('projectPackageJson', () => {
     ).toEqual(json5.parse(readFileSync(EXPECTED, 'utf8')))
   })
 
-  it(`should return value from root packageJson when provided value to tsJest config is undefined`, () => {
+  it('should return value from root packageJson when provided value to tsJest config is undefined', () => {
     expect(
       createConfigSet({
         tsJestConfig: { packageJson: undefined },
@@ -92,7 +93,7 @@ describe('projectPackageJson', () => {
     ).toEqual('ts-jest')
   })
 
-  it(`should return empty object when config file path doesn't exist and print loggings`, () => {
+  it("should return empty object when config file path doesn't exist and print loggings", () => {
     const logger = testing.createLoggerMock()
     expect(
       createConfigSet({
@@ -113,7 +114,7 @@ describe('projectPackageJson', () => {
     logger.target.clear()
   })
 
-  it(`should return value from root packageJson when real path rootDir is the same as tsJest root`, () => {
+  it('should return value from root packageJson when real path rootDir is the same as tsJest root', () => {
     expect(
       createConfigSet({
         resolve: null,
@@ -198,13 +199,6 @@ describe('tsJest', () => {
         value: undefined,
       }
       expect(getTsJest().packageJson).toEqual(EXPECTED)
-    })
-
-    it('should be correct when packageJson is true', () => {
-      const EXPECTED = {
-        kind: 'file',
-        value: undefined,
-      }
       expect(getTsJest({ packageJson: true }).packageJson).toEqual(EXPECTED)
     })
 
@@ -1008,7 +1002,7 @@ describe('cacheKey', () => {
     cs.jsonValue.value = val
     // digest is mocked in src/__mocks__/index.ts
     expect(cs.cacheKey).toMatchInlineSnapshot(
-      `"{\\"digest\\":\\"a0d51ca854194df8191d0e65c0ca4730f510f332\\",\\"jest\\":{\\"__backported\\":true,\\"globals\\":{}},\\"projectDepVersions\\":{\\"dev\\":\\"1.2.5\\",\\"opt\\":\\"1.2.3\\",\\"peer\\":\\"1.2.4\\",\\"std\\":\\"1.2.6\\"},\\"transformers\\":[\\"hoisting-jest-mock@1\\"],\\"tsJest\\":{\\"compiler\\":\\"typescript\\",\\"diagnostics\\":{\\"ignoreCodes\\":[6059,18002,18003],\\"pretty\\":true,\\"throws\\":true},\\"isolatedModules\\":false,\\"packageJson\\":{\\"kind\\":\\"file\\"},\\"transformers\\":[]},\\"tsconfig\\":{\\"declaration\\":false,\\"inlineSourceMap\\":false,\\"inlineSources\\":true,\\"module\\":1,\\"noEmit\\":false,\\"removeComments\\":false,\\"sourceMap\\":true,\\"target\\":1}}"`,
+      '"{\\"digest\\":\\"a0d51ca854194df8191d0e65c0ca4730f510f332\\",\\"jest\\":{\\"__backported\\":true,\\"globals\\":{}},\\"projectDepVersions\\":{\\"dev\\":\\"1.2.5\\",\\"opt\\":\\"1.2.3\\",\\"peer\\":\\"1.2.4\\",\\"std\\":\\"1.2.6\\"},\\"transformers\\":[\\"hoisting-jest-mock@1\\"],\\"tsJest\\":{\\"compiler\\":\\"typescript\\",\\"diagnostics\\":{\\"ignoreCodes\\":[6059,18002,18003],\\"pretty\\":true,\\"throws\\":true},\\"isolatedModules\\":false,\\"packageJson\\":{\\"kind\\":\\"file\\"},\\"transformers\\":[]},\\"tsconfig\\":{\\"declaration\\":false,\\"inlineSourceMap\\":false,\\"inlineSources\\":true,\\"module\\":1,\\"noEmit\\":false,\\"removeComments\\":false,\\"sourceMap\\":true,\\"target\\":1}}"',
     )
   })
 }) // cacheKey
@@ -1048,7 +1042,7 @@ describe('raiseDiagnostics', () => {
     it('should throw when warnOnly is false', () => {
       const { raiseDiagnostics } = createConfigSet({ createTsError, filterDiagnostics })
       expect(() => raiseDiagnostics([])).not.toThrow()
-      expect(() => raiseDiagnostics([makeDiagnostic()])).toThrowErrorMatchingInlineSnapshot(`"[TS9999] foo"`)
+      expect(() => raiseDiagnostics([makeDiagnostic()])).toThrowErrorMatchingInlineSnapshot('"[TS9999] foo"')
       expect(() => raiseDiagnostics([makeDiagnostic({ category: ts.DiagnosticCategory.Message })])).not.toThrow()
     })
 
@@ -1071,13 +1065,13 @@ describe('raiseDiagnostics', () => {
     })
   })
 
-  describe(`diagnostics don't contain source file`, () => {
+  describe("diagnostics don't contain source file", () => {
     const makeDiagnostic = ({
       messageText = 'foo',
       code = 9999,
       category = ts.DiagnosticCategory.Warning,
     }: Partial<ts.Diagnostic> = {}): ts.Diagnostic => ({ messageText, code, category } as any)
-    it(`should throw when diagnostics contains file path and pathRegex config matches file path`, () => {
+    it('should throw when diagnostics contains file path and pathRegex config matches file path', () => {
       const { raiseDiagnostics } = createConfigSet({
         createTsError,
         logger,
@@ -1085,12 +1079,12 @@ describe('raiseDiagnostics', () => {
       })
       logger.target.clear()
       expect(() => raiseDiagnostics([makeDiagnostic()], 'src/__mocks__/index.ts')).toThrowErrorMatchingInlineSnapshot(
-        `"[TS9999] foo"`,
+        '"[TS9999] foo"',
       )
-      expect(logger.target.lines).toMatchInlineSnapshot(`Array []`)
+      expect(logger.target.lines).toMatchInlineSnapshot('Array []')
     })
 
-    it(`should not throw when diagnostics contains file path and pathRegex config doesn't match file path`, () => {
+    it("should not throw when diagnostics contains file path and pathRegex config doesn't match file path", () => {
       const { raiseDiagnostics } = createConfigSet({
         createTsError,
         logger,
@@ -1098,7 +1092,7 @@ describe('raiseDiagnostics', () => {
       })
       logger.target.clear()
       expect(() => raiseDiagnostics([makeDiagnostic()], 'src/__mocks__/index.ts')).not.toThrow()
-      expect(logger.target.lines).toMatchInlineSnapshot(`Array []`)
+      expect(logger.target.lines).toMatchInlineSnapshot('Array []')
     })
   })
 
@@ -1115,7 +1109,7 @@ describe('raiseDiagnostics', () => {
       category = ts.DiagnosticCategory.Warning,
       file = program.getSourceFiles().find(sourceFile => sourceFile.fileName === 'src/__mocks__/index.ts'),
     }: Partial<ts.Diagnostic> = {}): ts.Diagnostic => ({ messageText, code, category, file } as any)
-    it(`should not throw when pathRegex config doesn't match source file path`, () => {
+    it("should not throw when pathRegex config doesn't match source file path", () => {
       const { raiseDiagnostics } = createConfigSet({
         createTsError,
         logger,
@@ -1123,18 +1117,18 @@ describe('raiseDiagnostics', () => {
       })
       logger.target.clear()
       expect(() => raiseDiagnostics([makeDiagnostic()])).not.toThrow()
-      expect(logger.target.lines).toMatchInlineSnapshot(`Array []`)
+      expect(logger.target.lines).toMatchInlineSnapshot('Array []')
     })
 
-    it(`should throw when pathRegex config doesn't match source file path`, () => {
+    it("should throw when pathRegex config doesn't match source file path", () => {
       const { raiseDiagnostics } = createConfigSet({
         createTsError,
         logger,
         tsJestConfig: { diagnostics: { pathRegex: 'src/__mocks__/index.ts' } },
       })
       logger.target.clear()
-      expect(() => raiseDiagnostics([makeDiagnostic()])).toThrowErrorMatchingInlineSnapshot(`"[TS9999] foo"`)
-      expect(logger.target.lines).toMatchInlineSnapshot(`Array []`)
+      expect(() => raiseDiagnostics([makeDiagnostic()])).toThrowErrorMatchingInlineSnapshot('"[TS9999] foo"')
+      expect(logger.target.lines).toMatchInlineSnapshot('Array []')
     })
   })
 }) // raiseDiagnostics

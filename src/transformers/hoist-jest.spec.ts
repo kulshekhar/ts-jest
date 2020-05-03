@@ -37,9 +37,7 @@ const func2 = () => {
 }
 `
 const logger = testing.createLoggerMock()
-const createFactory = () => {
-  return hoist.factory({ logger, compilerModule: tsc } as any)
-}
+const createFactory = () => hoist.factory({ logger, compilerModule: tsc } as any)
 const transpile = (source: string) => tsc.transpileModule(source, { transformers: { before: [createFactory()] } })
 
 describe('hoisting', () => {

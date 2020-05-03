@@ -10,7 +10,6 @@ import { cacheDir } from '../../../scripts/lib/paths'
 import ProcessedFileIo from './processed-file-io'
 import { escapeRegex, normalizeJestOutput, stripAnsiColors } from './utils'
 
-// tslint:disable-next-line:no-default-export
 export default class RunResult {
   constructor(
     readonly cwd: string,
@@ -112,8 +111,6 @@ export default class RunResult {
 
     return map
       .sort((a, b) => ((b.from as any).length || Infinity) - ((a.from as any).length || Infinity))
-      .reduce((str, { from, to }) => {
-        return str.replace(typeof from === 'string' ? new RegExp(`${escapeRegex(from)}`, 'g') : from, to)
-      }, str)
+      .reduce((str, { from, to }) => str.replace(typeof from === 'string' ? new RegExp(`${escapeRegex(from)}`, 'g') : from, to), str)
   }
 }

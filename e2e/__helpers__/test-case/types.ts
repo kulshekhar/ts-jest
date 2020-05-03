@@ -24,7 +24,7 @@ export interface RunWithTemplateIteratorContext {
   testLabel: string
 }
 
-// tslint:disable-next-line:interface-over-type-literal
+
 export type TestRunResultsMap<T extends string = string> = { [key in T]: RunResult }
 
 export interface PreparedTest {

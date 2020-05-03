@@ -31,11 +31,14 @@
       "react"
     ]
   },
-  "include": [],
-  "exclude": [
-    "e2e/__cases__",
-    "e2e/__templates__",
-    "e2e/__workdir_synlink__",
-    "node_modules"
-  ]
+  "include": [
+    "e2e/__helpers__",
+    "e2e/__serializers__",
+    "e2e/__tests__",
+    "scripts/",
+    "src/",
+    "utils/",
+    "presets",
+    "./*.js"
+  ],
 }

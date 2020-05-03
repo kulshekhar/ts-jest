@@ -8,13 +8,12 @@ import { configureTestCase } from '../../__helpers__/test-case'
 // ES2015 = 5,
 // ESNext = 6
 
-const testCaseForCompilerOpt = (config: any) => {
-  return configureTestCase('module-kinds', {
+const testCaseForCompilerOpt = (config: any) => configureTestCase('module-kinds', {
     tsJestConfig: { tsConfig: config, diagnostics: { warnOnly: true } },
     noCache: true,
   })
-}
 
+// eslint-disable-next-line jest/no-export
 export const runTestForOptions = (options: {
   module: string
   allowSyntheticDefaultImports?: boolean

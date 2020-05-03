@@ -44,12 +44,12 @@ describe.skip('__eval', () => {
 eval(process.env.__TS_JEST_EVAL);
 `
 
-// tslint:disable-next-line:variable-name
 let __hooksSource: string
 function hooksSourceWith(vars: Record<string, any>): string {
   if (!__hooksSource) {
     __hooksSource = readFileSync(join(__dirname, '__hooks-source__.js.hbs'), 'utf8')
   }
+  // eslint-disable-next-line no-useless-escape
   return __hooksSource.replace(/\{\{([^\}]+)\}\}/g, (_, key) => JSON.stringify(vars[key]))
 }
 
@@ -122,6 +122,7 @@ export function run(name: string, options: RunTestOptions = {}): RunResult {
 
   // write final config
   // FIXME: sounds like the json fail to be encoded as an arg
+  // eslint-disable-next-line no-constant-condition
   if (false /* enableOptimizations() */) {
     cmdArgs.push('--config', JSON.stringify(finalConfig))
   } else if (Object.keys(extraConfig).length !== 0) {
@@ -191,11 +192,9 @@ execFile(cmd, args, options)
 
       copySync(wrkDir, srcDir, {
         overwrite: false,
-        filter: from => {
-          return relative(sourceDir, from)
+        filter: from => relative(sourceDir, from)
             .split(sep)
-            .includes('__snapshots__')
-        },
+            .includes('__snapshots__'),
       })
     })
   }

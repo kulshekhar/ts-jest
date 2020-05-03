@@ -1,4 +1,3 @@
-// tslint:disable:max-line-length
 import * as fakers from '../__helpers__/fakers'
 
 import { Importer, __requireModule } from './importer'

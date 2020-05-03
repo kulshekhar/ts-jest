@@ -15,7 +15,7 @@ export const backportJestConfig = <T extends Config.InitialOptions | Config.Proj
   logger.debug({ ...context, config }, 'backporting config')
 
   const { globals = {} } = (config || {}) as any
-  const { 'ts-jest': tsJest = {} } = globals as any
+  const { 'ts-jest': tsJest = {} } = globals
   const mergeTsJest: any = {}
   let hadWarnings = false
   const warnConfig = (oldPath: string, newPath: string, note?: string) => {
@@ -120,7 +120,7 @@ export const backportTsJestDebugEnvVar = (logger: Logger) => {
     const shouldLog = !/^\s*(?:0|f(?:alse)?|no?|disabled?|off|)\s*$/i.test(process.env.TS_JEST_DEBUG || '')
     delete process.env.TS_JEST_DEBUG
     if (shouldLog) {
-      process.env.TS_JEST_LOG = `ts-jest.log,stderr:warn`
+      process.env.TS_JEST_LOG = 'ts-jest.log,stderr:warn'
     }
     logger.warn(
       context,
