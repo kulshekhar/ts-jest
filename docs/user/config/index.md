@@ -181,6 +181,23 @@ module.exports = {
 
 </div></div>
 
+#### IDE `ts-jest` config suggestion
+
+To ultilize IDE suggestion, you can use `JSDOC` to provide suggested `ts-jest` configs for your Jest config:
+
+```js
+/** @type {import('@jest/types').Config.InitialOptions} */
+/** @typedef {import('ts-jest')} */
+module.exports = {
+  // [...]
+  globals: {
+    'ts-jest': {
+      // ts-jest configuration goes here and your IDE will suggest which configs when typing
+    }
+  }
+};
+```
+
 ### Options
 
 All options have default values which should fit most of the projects. Click on the option's name to see details and example(s).

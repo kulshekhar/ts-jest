@@ -11,6 +11,15 @@ import { Deprecateds, interpolate } from './util/messages'
 import { mocked as mockedCore } from './util/testing'
 import { VersionCheckers } from './util/version-checkers'
 
+declare module '@jest/types' {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
+  namespace Config {
+    interface ConfigGlobals {
+      'ts-jest': TsJestGlobalOptions
+    }
+  }
+}
+
 // deprecate helpers
 const warn = rootLogger.child({ [LogContexts.logLevel]: LogLevels.warn })
 const helperMoved = <T extends (...args: any[]) => any>(name: string, helper: T) =>
