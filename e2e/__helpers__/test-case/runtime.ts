@@ -92,7 +92,7 @@ export function run(name: string, options: RunTestOptions = {}): RunResult {
     merge(extraConfig, options.jestConfig)
   }
   if (options.tsJestConfig) {
-    const globalConfig: any = extraConfig.globals || (extraConfig.globals = {})
+    const globalConfig: any = extraConfig.globals || (extraConfig.globals = {'ts-jest': {}})
     const tsJestConfig = globalConfig['ts-jest'] || (globalConfig['ts-jest'] = {})
     merge(tsJestConfig, options.tsJestConfig)
   }
