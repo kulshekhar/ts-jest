@@ -1,3 +1,45 @@
+<a name="25.5.0"></a>
+# [25.5.0](https://github.com/kulshekhar/ts-jest/compare/v25.4.0...v25.5.0) (2020-05-05)
+
+
+### Bug Fixes
+
+* **compiler:** make `projectReferences` work with `isolatedModules: false` ([#1541](https://github.com/kulshekhar/ts-jest/issues/1541)) ([3e8efbe](https://github.com/kulshekhar/ts-jest/commit/3e8efbe))
+* **compiler:** allow using `files` provided by `tsconfig` ([#1562](https://github.com/kulshekhar/ts-jest/issues/1562)) ([a9f02bd](https://github.com/kulshekhar/ts-jest/commit/a9f02bd))
+* **config:** verify `testMatchPatterns` contain RegExp instance or string type values ([#1569](https://github.com/kulshekhar/ts-jest/issues/1569)) ([7f85bab](https://github.com/kulshekhar/ts-jest/commit/7f85bab))
+
+
+### Features
+
+* **config:** add `tsconfig` alias to `tsConfig` option ([#1565](https://github.com/kulshekhar/ts-jest/issues/1565)) ([c10eb6d](https://github.com/kulshekhar/ts-jest/commit/c10eb6d))
+* **config:** define 'ts-jest' on `ConfigGlobals` interface of `@jest/types` ([#1592](https://github.com/kulshekhar/ts-jest/issues/1592)) ([4526392](https://github.com/kulshekhar/ts-jest/commit/4526392))
+
+
+### Performance Improvements
+
+* **compiler:** don’t write compile output to file system but rely on jest cache ([#1561](https://github.com/kulshekhar/ts-jest/issues/1561)) ([d11a4ea](https://github.com/kulshekhar/ts-jest/commit/d11a4ea))
+* **compiler:** improve performance for `isolatedModules: false` ([#1558](https://github.com/kulshekhar/ts-jest/issues/1558)) ([85c09e3](https://github.com/kulshekhar/ts-jest/commit/85c09e3))
+
+
+### BREAKING CHANGES
+
+* Any custom typing files or files which are needed to be compiled and intended to use with `jest` need to be defined in `files` option of `tsconfig`.
+
+For example:
+```
+// tsconfig.json
+{
+   // ...other configs
+   "files": [
+       "my-custom-typings.d.ts".
+       "my-global-module.ts"
+   ]
+}
+```
+* **compiler:** `incremental` and `compilerHost` options are no longer available. Please remove it from your `ts-jest` config.
+
+
+
 <a name="25.5.0-beta.0"></a>
 # [25.5.0-beta.0](https://github.com/kulshekhar/ts-jest/compare/v25.5.0-alpha.0...v25.5.0-beta.0) (2020-04-29)
 
