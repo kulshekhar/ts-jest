@@ -56,7 +56,7 @@ export function cacheResolvedModules(
  * @internal
  */
 export function isTestFile(testMatchPatterns: (string | RegExp)[], fileName: string) {
-  return testMatchPatterns.some(pattern =>
+  return testMatchPatterns.some((pattern) =>
     typeof pattern === 'string' ? micromatch.isMatch(fileName, pattern) : pattern.test(fileName),
   )
 }
@@ -95,7 +95,7 @@ function getProjectReferenceForFile(
     return (
       program &&
       getResolvedProjectReferences(program)!.find(
-        ref => (ref && ref.commandLine.fileNames.some(file => normalize(file) === filePath)) || false,
+        (ref) => (ref && ref.commandLine.fileNames.some((file) => normalize(file) === filePath)) || false,
       )
     )
   }

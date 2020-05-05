@@ -20,7 +20,7 @@ export const print = (val: ProcessedSource, _: any, indent: any) => {
       : []),
     '='.repeat(80),
   ]
-    .map(l => indent(l))
+    .map((l) => indent(l))
     .join('\n')
   return `${out}`
 }

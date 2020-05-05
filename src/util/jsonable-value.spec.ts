@@ -7,7 +7,7 @@ jest.mock('./json')
 
 const { stringify } = mocked(_json)
 
-stringify.mockImplementation(v => JSON.stringify(v))
+stringify.mockImplementation((v) => JSON.stringify(v))
 
 beforeEach(() => {
   jest.clearAllMocks()

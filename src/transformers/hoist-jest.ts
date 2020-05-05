@@ -107,7 +107,7 @@ export function factory(cs: ConfigSet) {
      *
      * @param node The node to be visited
      */
-    const visitor: Visitor = node => {
+    const visitor: Visitor = (node) => {
       // enter this level
       enter()
 
@@ -119,7 +119,7 @@ export function factory(cs: ConfigSet) {
         // re-order children so that hoisted ones appear first
         // this is actually the main job of this transformer
         const hoistedStmts = hoisted[level]
-        const otherStmts = (resultNode as Block).statements.filter(s => !hoistedStmts.includes(s))
+        const otherStmts = (resultNode as Block).statements.filter((s) => !hoistedStmts.includes(s))
         const newNode = ts.getMutableClone(resultNode) as Block
         newNode.statements = ts.createNodeArray([...hoistedStmts, ...otherStmts])
         resultNode = newNode

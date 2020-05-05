@@ -13,7 +13,7 @@ const spawnSync = (...args) => {
     if (res && res.stderr) msgs.push(res.stderr.toString('utf8').trim())
     if (res && res.stdout) msgs.push(res.stdout.toString('utf8').trim())
     msgs.push('unknown error')
-    throw new Error(msgs.find(s => s))
+    throw new Error(msgs.find((s) => s))
   }
   return res
 }

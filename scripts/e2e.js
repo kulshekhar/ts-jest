@@ -17,20 +17,20 @@ const configFile = path.join(Paths.e2eRootDir, 'jest.config.js')
 let parentArgs = process.argv.slice(2)
 if (parentArgs.includes('--coverage')) {
   logger.warn('Coverages cannot be activated for e2e tests (but can in each e2e test).')
-  parentArgs = parentArgs.filter(a => a !== '--coverage')
+  parentArgs = parentArgs.filter((a) => a !== '--coverage')
 }
 if (!parentArgs.includes('--runInBand')) parentArgs.push('--runInBand')
 const prepareOnly = parentArgs.includes('--prepareOnly')
 
 function getDirectories(rootDir) {
-  return fs.readdirSync(rootDir).filter(function(file) {
+  return fs.readdirSync(rootDir).filter(function (file) {
     return fs.statSync(path.join(rootDir, file)).isDirectory()
   })
 }
 
 function sha1(...data) {
   const hash = createHash('sha1')
-  data.forEach(item => hash.update(item))
+  data.forEach((item) => hash.update(item))
   return hash.digest('hex').toString()
 }
 
@@ -57,7 +57,7 @@ function setupE2e() {
   }
 
   // cleanup files related to old test run
-  getDirectories(Paths.e2eWorkDir).forEach(name => {
+  getDirectories(Paths.e2eWorkDir).forEach((name) => {
     const dir = path.join(Paths.e2eWorkDir, name)
     if (dir === Paths.e2eWorkTemplatesDir) return
     log('cleaning old artifacts in', name)
@@ -66,7 +66,7 @@ function setupE2e() {
 
   // install with `npm ci` in each template, this is the fastest but needs a package lock file,
   // that is why we end with the npm install of our bundle
-  getDirectories(Paths.e2eTemplatesDir).forEach(name => {
+  getDirectories(Paths.e2eTemplatesDir).forEach((name) => {
     log('checking template', name)
     const sourceDir = path.join(Paths.e2eTemplatesDir, name)
     const dir = path.join(Paths.e2eWorkTemplatesDir, name)
@@ -80,7 +80,7 @@ function setupE2e() {
       let deps = npm.directDepsPkg(dir)
       Object.keys(deps)
         .sort()
-        .forEach(name => {
+        .forEach((name) => {
           log('      -', `${name}${' '.repeat(20 - name.length)}`, deps[name].version)
         })
       deps = null
@@ -89,7 +89,7 @@ function setupE2e() {
     // remove all files expect node_modules
     if (fs.existsSync(dir)) {
       log(`  [template: ${name}]`, 'removing old files')
-      fs.readdirSync(dir).forEach(file => {
+      fs.readdirSync(dir).forEach((file) => {
         if (file !== 'node_modules') {
           fs.unlinkSync(path.join(dir, file))
         }

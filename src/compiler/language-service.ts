@@ -164,15 +164,16 @@ export const initializeLanguageServiceInstance = (
           } else {
             Object.entries(memoryCache.resolvedModules)
               .filter(
-                entry =>
+                (entry) =>
                   /**
                    * When imported modules change, we only need to check whether the test file is compiled previously or not
                    * base on memory cache. By checking memory cache, we can avoid repeatedly doing type checking against
                    * test file for 1st time run after clearing cache because
                    */
-                  entry[1].modulePaths.find(modulePath => modulePath === fileName) && !memoryCache.files.has(entry[0]),
+                  entry[1].modulePaths.find((modulePath) => modulePath === fileName) &&
+                  !memoryCache.files.has(entry[0]),
               )
-              .forEach(entry => {
+              .forEach((entry) => {
                 const testFileName = entry[0]
                 const testFileContent = entry[1].testFileContent
                 logger.debug(

@@ -50,7 +50,7 @@ function createConfigSet({
   if (resolve) {
     cs.resolvePath = resolve
   }
-  Object.keys(others).forEach(key => {
+  Object.keys(others).forEach((key) => {
     Object.defineProperty(cs, key, { value: others[key] })
   })
 
@@ -178,7 +178,7 @@ describe('testMatchPatterns', () => {
         testRegex: ['**/?(*.)+(foo|bar).[tj]s?(x)'],
       } as any,
     },
-  ])('should return an array of patterns based on testRegex and testMatch from jestConfig', config => {
+  ])('should return an array of patterns based on testRegex and testMatch from jestConfig', (config) => {
     expect(createConfigSet(config).testMatchPatterns).toMatchSnapshot()
   })
 })
@@ -631,8 +631,8 @@ describe('readTsConfig', () => {
   describe('resolve configFileName normally', () => {
     beforeEach(() => {
       cs = createConfigSet({ jestConfig: { rootDir: '/root', cwd: '/cwd' } as any })
-      findConfig.mockImplementation(p => `${p}/tsconfig.json`)
-      readConfig.mockImplementation(p => ({ config: { path: p, compilerOptions: {} } }))
+      findConfig.mockImplementation((p) => `${p}/tsconfig.json`)
+      readConfig.mockImplementation((p) => ({ config: { path: p, compilerOptions: {} } }))
     })
 
     afterEach(() => {
@@ -1028,11 +1028,11 @@ describe('jsonValue', () => {
 
 describe('raiseDiagnostics', () => {
   const createTsError = jest.fn(
-    (list: ts.Diagnostic[]) => new Error(list.map(d => `[TS${d.code}] ${d.messageText}`).join('\n')),
+    (list: ts.Diagnostic[]) => new Error(list.map((d) => `[TS${d.code}] ${d.messageText}`).join('\n')),
   )
   const logger = testing.createLoggerMock()
   describe('with warnOnly config', () => {
-    const filterDiagnostics = jest.fn(list => list)
+    const filterDiagnostics = jest.fn((list) => list)
     const makeDiagnostic = ({
       messageText = 'foo',
       code = 9999,
@@ -1107,7 +1107,7 @@ describe('raiseDiagnostics', () => {
       messageText = 'foo',
       code = 9999,
       category = ts.DiagnosticCategory.Warning,
-      file = program.getSourceFiles().find(sourceFile => sourceFile.fileName === 'src/__mocks__/index.ts'),
+      file = program.getSourceFiles().find((sourceFile) => sourceFile.fileName === 'src/__mocks__/index.ts'),
     }: Partial<ts.Diagnostic> = {}): ts.Diagnostic => ({ messageText, code, category, file } as any)
     it("should not throw when pathRegex config doesn't match source file path", () => {
       const { raiseDiagnostics } = createConfigSet({

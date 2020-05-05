@@ -30,10 +30,10 @@ function computePackageDigest(noWriteFile = false) {
     ignore: readFileSync(join(rootDir, '.npmignore'))
       .toString('utf8')
       .split(/\n/g)
-      .filter(l => l && !/^(\s*#.+|\s*)$/.test(l)),
+      .filter((l) => l && !/^(\s*#.+|\s*)$/.test(l)),
   })
   const hash = createHash('sha1')
-  files.sort().forEach(file => {
+  files.sort().forEach((file) => {
     if (file === pkgDigestFile || statSync(file).isDirectory()) return
     hash.update(readFileSync(resolve(file)))
     hash.update('\x00')

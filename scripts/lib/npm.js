@@ -3,11 +3,7 @@ const { satisfies } = require('semver')
 const memoize = require('lodash.memoize')
 const { join } = require('path')
 
-const version = memoize(() =>
-  spawnSync(['-s', '--version'])
-    .stdout.toString()
-    .trim()
-)
+const version = memoize(() => spawnSync(['-s', '--version']).stdout.toString().trim())
 
 const spawnSync = (args, options = {}) => spawn('npm', args, options)
 
@@ -20,9 +16,9 @@ function directDepsPkg(dir) {
   const main = require(join(dir, 'package.json'))
   const res = {}
   Object.keys(main.dependencies || {}).forEach(
-    key => (res[key] = require(join(dir, 'node_modules', key, 'package.json')))
+    (key) => (res[key] = require(join(dir, 'node_modules', key, 'package.json')))
   )
-  Object.keys(main.devDependencies || {}).forEach(key => {
+  Object.keys(main.devDependencies || {}).forEach((key) => {
     if (res[key]) return
     res[key] = require(join(dir, 'node_modules', key, 'package.json'))
   })
