@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 'use strict'
 
+// eslint-disable-next-line jest/no-jest-import
 const jest = require('jest')
 const { spawnSync } = require('./lib/spawn-sync')
 const fs = require('fs-extra')
@@ -15,21 +16,14 @@ const configFile = path.join(Paths.e2eRootDir, 'jest.config.js')
 
 let parentArgs = process.argv.slice(2)
 if (parentArgs.includes('--coverage')) {
-  logger.warn(
-    'Coverages cannot be activated for e2e tests (but can in each e2e test).'
-  )
+  logger.warn('Coverages cannot be activated for e2e tests (but can in each e2e test).')
   parentArgs = parentArgs.filter(a => a !== '--coverage')
 }
 if (!parentArgs.includes('--runInBand')) parentArgs.push('--runInBand')
 const prepareOnly = parentArgs.includes('--prepareOnly')
 
-// eslint-disable-next-line no-unused-vars
-function enableOptimizations() {
-  return !!process.env.TS_JEST_E2E_OPTIMIZATIONS
-}
-
 function getDirectories(rootDir) {
-  return fs.readdirSync(rootDir).filter(function (file) {
+  return fs.readdirSync(rootDir).filter(function(file) {
     return fs.statSync(path.join(rootDir, file)).isDirectory()
   })
 }
@@ -47,11 +41,7 @@ function log(...msg) {
 function setupE2e() {
   // kept on top so that the build is triggered beforehand (pack => prepublish => clean-build => build)
   const bundle = createBundle(log)
-  log(
-    'bundle created:',
-    path.relative(Paths.rootDir, bundle),
-    '; computing digest'
-  )
+  log('bundle created:', path.relative(Paths.rootDir, bundle), '; computing digest')
 
   // get the hash of the bundle (to know if we should install it again or not)
   const bundleHash = readPackageDigest()
@@ -63,10 +53,7 @@ function setupE2e() {
   // link locally so we could find it easily
   if (!process.env.CI && !fs.existsSync(Paths.e2eWotkDirLink)) {
     fs.symlinkSync(Paths.e2eWorkDir, Paths.e2eWotkDirLink, 'dir')
-    log(
-      'symbolic link to the work directory created at: ',
-      Paths.e2eWotkDirLink
-    )
+    log('symbolic link to the work directory created at: ', Paths.e2eWotkDirLink)
   }
 
   // cleanup files related to old test run
@@ -94,11 +81,7 @@ function setupE2e() {
       Object.keys(deps)
         .sort()
         .forEach(name => {
-          log(
-            '      -',
-            `${name}${' '.repeat(20 - name.length)}`,
-            deps[name].version
-          )
+          log('      -', `${name}${' '.repeat(20 - name.length)}`, deps[name].version)
         })
       deps = null
     }
@@ -128,16 +111,13 @@ function setupE2e() {
     const pkgLockHash = sha1(fs.readFileSync(pkgLockFile))
     const e2eData = fs.existsSync(e2eFile) ? fs.readJsonSync(e2eFile) : {}
     let bundleOk = e2eData.bundleHash === bundleHash
-    let packagesOk = e2eData.packageLockHash === pkgLockHash
+    const packagesOk = e2eData.packageLockHash === pkgLockHash
 
     if (fs.existsSync(nodeModulesDir)) {
       log(`  [template: ${name}]`, 'bundle: ', bundleOk ? 'OK' : 'CHANGED')
       log(`  [template: ${name}]`, 'packages: ', packagesOk ? 'OK' : 'CHANGED')
       if (bundleOk && packagesOk) {
-        log(
-          `  [template: ${name}]`,
-          'bundle and packages unchanged, nothing to do'
-        )
+        log(`  [template: ${name}]`, 'bundle and packages unchanged, nothing to do')
         logPackageVersions()
         return
       }

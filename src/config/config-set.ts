@@ -51,13 +51,6 @@ import { TSError } from '../util/ts-error'
 
 const logger = rootLogger.child({ namespace: 'config' })
 
-interface ReadTsConfigResult {
-  // what we get from reading the config file if any, or inline options
-  input?: any
-  // parsed config with all resolved options
-  resolved: ParsedCommandLine
-}
-
 /**
  * @internal
  */
@@ -86,13 +79,11 @@ const enum DiagnosticCodes {
   ConfigModuleOption,
 }
 
-const normalizeRegex = (pattern: string | RegExp | undefined): string | undefined => {
-  return pattern ? (typeof pattern === 'string' ? pattern : pattern.source) : undefined
-}
+const normalizeRegex = (pattern: string | RegExp | undefined): string | undefined =>
+  pattern ? (typeof pattern === 'string' ? pattern : pattern.source) : undefined
 
-const toDiagnosticCode = (code: any): number | undefined => {
-  return code ? parseInt(`${code}`.trim().replace(/^TS/, ''), 10) || undefined : undefined
-}
+const toDiagnosticCode = (code: any): number | undefined =>
+  code ? parseInt(`${code}`.trim().replace(/^TS/, ''), 10) || undefined : undefined
 
 const toDiagnosticCodeList = (items: any, into: number[] = []): number[] => {
   if (!Array.isArray(items)) items = [items]
@@ -198,13 +189,14 @@ export class ConfigSet {
    */
   @Memoize()
   get testMatchPatterns(): (string | RegExp)[] {
-    const matchablePatterns = [...this.jest.testMatch, ...this.jest.testRegex].filter(pattern => {
-      /**
-       * jest config testRegex doesn't always deliver the correct RegExp object
-       * See https://github.com/facebook/jest/issues/9778
-       */
-      return pattern instanceof RegExp || typeof pattern === 'string'
-    })
+    const matchablePatterns = [...this.jest.testMatch, ...this.jest.testRegex].filter(
+      pattern =>
+        /**
+         * jest config testRegex doesn't always deliver the correct RegExp object
+         * See https://github.com/facebook/jest/issues/9778
+         */
+        pattern instanceof RegExp || typeof pattern === 'string',
+    )
     if (!matchablePatterns.length) {
       matchablePatterns.push(...DEFAULT_JEST_TEST_MATCH)
     }
@@ -318,8 +310,8 @@ export class ConfigSet {
   /**
    * @internal
    */
-  get typescript(): ParsedCommandLine {
-    return this._typescript.resolved
+  get parsedTsConfig(): ParsedCommandLine {
+    return this._parsedTsConfig
   }
 
   /**
@@ -346,7 +338,7 @@ export class ConfigSet {
    * @internal
    */
   @Memoize()
-  private get _typescript(): ReadTsConfigResult {
+  private get _parsedTsConfig(): ParsedCommandLine {
     const {
       tsJest: { tsConfig },
     } = this
@@ -357,9 +349,10 @@ export class ConfigSet {
       tsConfig == null,
     )
     // throw errors if any matching wanted diagnostics
-    this.raiseDiagnostics(result.resolved.errors, configFilePath)
+    this.raiseDiagnostics(result.errors, configFilePath)
 
     this.logger.debug({ tsconfig: result }, 'normalized typescript config')
+
     return result
   }
 
@@ -400,7 +393,7 @@ export class ConfigSet {
     } = this
     if (babelConfig == null) {
       this.logger.debug('babel is disabled')
-      return
+      return undefined
     }
     let base: BabelConfig = { cwd: this.cwd }
     if (babelConfig.kind === 'file') {
@@ -439,7 +432,7 @@ export class ConfigSet {
   @Memoize()
   get babelJestTransformer(): BabelJestTransformer | undefined {
     const { babel } = this
-    if (!babel) return
+    if (!babel) return undefined
     this.logger.debug('creating babel-jest transformer')
     return importer.babelJest(ImportReasons.BabelJest).createTransformer(babel) as BabelJestTransformer
   }
@@ -501,7 +494,7 @@ export class ConfigSet {
           return false
         }
 
-        return ignoreCodes.indexOf(diagnostic.code) === -1
+        return !ignoreCodes.includes(diagnostic.code)
       })
     }
   }
@@ -540,7 +533,7 @@ export class ConfigSet {
    * @internal
    */
   @Memoize()
-  get createTsError(): (diagnostics: ReadonlyArray<Diagnostic>) => TSError {
+  get createTsError(): (diagnostics: readonly Diagnostic[]) => TSError {
     const {
       diagnostics: { pretty },
     } = this.tsJest
@@ -555,7 +548,7 @@ export class ConfigSet {
       getCanonicalFileName: path => path,
     }
 
-    return (diagnostics: ReadonlyArray<Diagnostic>) => {
+    return (diagnostics: readonly Diagnostic[]) => {
       const diagnosticText = formatDiagnostics(diagnostics, diagnosticHost)
       const diagnosticCodes = diagnostics.map(x => x.code)
       return new TSError(diagnosticText, diagnosticCodes)
@@ -569,7 +562,7 @@ export class ConfigSet {
   get tsCacheDir(): string | undefined {
     if (!this.jest.cache) {
       logger.debug('file caching disabled')
-      return
+      return undefined
     }
     const cacheSuffix = sha1(
       stringify({
@@ -577,7 +570,7 @@ export class ConfigSet {
         digest: this.tsJestDigest,
         dependencies: this.projectDependencies,
         compiler: this.tsJest.compiler,
-        compilerOptions: this.typescript.options,
+        compilerOptions: this.parsedTsConfig.options,
         isolatedModules: this.tsJest.isolatedModules,
         diagnostics: this.tsJest.diagnostics,
       }),
@@ -641,6 +634,7 @@ export class ConfigSet {
    * Use by e2e, don't mark as internal
    */
   @Memoize()
+  // eslint-disable-next-line class-methods-use-this
   get tsJestDigest(): string {
     return MY_DIGEST
   }
@@ -667,7 +661,7 @@ export class ConfigSet {
       jest,
       tsJest: this.tsJest,
       babel: this.babel,
-      tsconfig: this.typescript.options,
+      tsconfig: this.parsedTsConfig.options,
     })
   }
 
@@ -710,22 +704,20 @@ export class ConfigSet {
   /**
    * Load TypeScript configuration. Returns the parsed TypeScript config and
    * any `tsConfig` options specified in ts-jest tsConfig
+   *
    * @internal
    */
   readTsConfig(
     compilerOptions?: object,
     resolvedConfigFile?: string | null,
     noProject?: boolean | null,
-  ): ReadTsConfigResult {
-    let config = { compilerOptions: {} }
+  ): ParsedCommandLine {
+    let config = { compilerOptions: {}, include: [] }
     let basePath = normalizeSlashes(this.rootDir)
     let configFileName: string | undefined
     const ts = this.compilerModule
-    let input: any
 
-    if (noProject) {
-      input = { compilerOptions: { ...compilerOptions } }
-    } else {
+    if (!noProject) {
       // Read project configuration when available.
       configFileName = resolvedConfigFile
         ? normalizeSlashes(resolvedConfigFile)
@@ -737,28 +729,23 @@ export class ConfigSet {
 
         // Return diagnostics.
         if (result.error) {
-          return {
-            resolved: { errors: [result.error], fileNames: [], options: {} },
-          }
+          return { errors: [result.error], fileNames: [], options: {} }
         }
 
         config = result.config
-        input = {
-          ...result.config,
-          compilerOptions: {
-            ...(result.config && result.config.compilerOptions),
-            ...compilerOptions,
-          },
-        }
         basePath = normalizeSlashes(dirname(configFileName))
       }
     }
-
     // Override default configuration options `ts-jest` requires.
     config.compilerOptions = {
       ...config.compilerOptions,
       ...compilerOptions,
     }
+    /**
+     * Always set include to empty array so fileNames after parseJsonConfigFileContent only contains the least minimum initial
+     * files to utilize LanguageService incremental feature
+     */
+    config.include = []
 
     // parse json, merge config extending others, ...
     const result = ts.parseJsonConfigFileContent(config, ts.sys, basePath, undefined, configFileName)
@@ -772,7 +759,7 @@ export class ConfigSet {
     }
 
     // check the module interoperability
-    const target = finalOptions.target!
+    const target = finalOptions.target
     // compute the default if not set
     const defaultModule = [ts.ScriptTarget.ES3, ts.ScriptTarget.ES5].includes(target)
       ? ts.ModuleKind.CommonJS
@@ -808,7 +795,7 @@ export class ConfigSet {
       }
     }
 
-    return { input, resolved: result }
+    return result
   }
 
   /**

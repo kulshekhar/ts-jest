@@ -15,6 +15,7 @@ const jestArgs = process.argv.slice(3)
 let gitUrl = false
 const externalRepoPath = 'e2e/__external-repos__'
 const PROJECTS_TO_RUN = [
+  `${externalRepoPath}/custom-typings`,
   `${externalRepoPath}/simple/with-dependency`,
   `${externalRepoPath}/simple-project-references`,
   `${externalRepoPath}/yarn-workspace-composite`,
@@ -37,33 +38,18 @@ const executeTest = (monorepoRealPath, bundle) => {
   if (!projectPkg.version) projectPkg.version = 'unknown'
 
   logger.log()
-  logger.log(
-    '='.repeat(20),
-    `${projectPkg.name}@${projectPkg.version}`,
-    'in',
-    monorepoRealPath,
-    '='.repeat(20)
-  )
+  logger.log('='.repeat(20), `${projectPkg.name}@${projectPkg.version}`, 'in', monorepoRealPath, '='.repeat(20))
   logger.log()
 
   // then we install it in the repo
   logger.log('ensuring all depedencies of target project are installed')
-  npm.spawnSync(
-    ['install', '--no-package-lock', '--no-shrinkwrap', '--no-save'],
-    { cwd: monorepoRealPath }
-  )
+  npm.spawnSync(['install', '--no-package-lock', '--no-shrinkwrap', '--no-save'], { cwd: monorepoRealPath })
   logger.log('installing bundled version of ts-jest')
-  npm.spawnSync(
-    ['install', '--no-package-lock', '--no-shrinkwrap', '--no-save', bundle],
-    { cwd: monorepoRealPath }
-  )
+  npm.spawnSync(['install', '--no-package-lock', '--no-shrinkwrap', '--no-save', bundle], { cwd: monorepoRealPath })
 
   // then we can run the tests
   const useYarn = existsSync(join(monorepoRealPath, 'yarn.lock'))
-  const cmdLine =
-    projectPkg.scripts && projectPkg.scripts.test
-      ? [(useYarn ? 'yarn' : 'npm'), 'test']
-      : ['jest']
+  const cmdLine = projectPkg.scripts && projectPkg.scripts.test ? [useYarn ? 'yarn' : 'npm', 'test'] : ['jest']
   if (jestArgs.length) {
     cmdLine.push('--')
     cmdLine.push(...jestArgs)
@@ -75,9 +61,7 @@ const executeTest = (monorepoRealPath, bundle) => {
   spawnSync(cmdLine.shift(), cmdLine, {
     cwd: monorepoRealPath,
     stdio: 'inherit',
-    env: Object.assign({}, process.env, {
-      TS_JEST_IGNORE_DIAGNOSTICS: '5023,5024',
-    }),
+    env: { ...process.env, TS_JEST_IGNORE_DIAGNOSTICS: '5023,5024' },
   })
 }
 
@@ -96,11 +80,7 @@ if (/^((https|ssh|git):\/\/|[a-z0-9]+@[a-z0-9.]+:).+$/.test(projectPath)) {
       } catch (e) {
         monorepoRealPath = undefined
       }
-      if (
-        !monorepoRealPath ||
-        !existsSync(join(monorepoRealPath, 'package.json')) ||
-        monorepoRealPath === rootDir
-      ) {
+      if (!monorepoRealPath || !existsSync(join(monorepoRealPath, 'package.json')) || monorepoRealPath === rootDir) {
         logger.error('First argument must be the path to a project or a git URL')
         process.exit(1)
       } else {

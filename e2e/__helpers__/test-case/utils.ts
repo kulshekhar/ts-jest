@@ -3,6 +3,7 @@ import { join } from 'path'
 
 // from https://stackoverflow.com/questions/25245716/remove-all-ansi-colors-styles-from-strings
 export function stripAnsiColors(stringToStrip: string): string {
+  // eslint-disable-next-line no-control-regex
   return stringToStrip.replace(/[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g, '')
 }
 
@@ -18,8 +19,8 @@ export function templateNameForPath(path: string): string {
 const PASS_MARKS = ['√', '✓']
 const FAIL_MARKS = ['×', '✕']
 const normalizeTestMark = (mark: string): string => {
-  if (PASS_MARKS.includes(mark)) return PASS_MARKS[0]; // tslint:disable-line
-  if (FAIL_MARKS.includes(mark)) return FAIL_MARKS[0]; // tslint:disable-line
+  if (PASS_MARKS.includes(mark)) return PASS_MARKS[0]
+  if (FAIL_MARKS.includes(mark)) return FAIL_MARKS[0]
   return '?'
 }
 
@@ -27,15 +28,14 @@ export function normalizeJestOutput(output: string): string {
   let out: string = output
     .trim()
     // removes total and estimated times
-    .replace(/^(\s*Time\s*:\s*)[\d.]+m?s(?:(,\s*estimated\s+)[\d.]+m?s)?$/gm, (_, start) => {
-      return `${start}XXs`
-    })
+    .replace(/^(\s*Time\s*:\s*)[\d.]+m?s(?:(,\s*estimated\s+)[\d.]+m?s)?$/gm, (_, start) => `${start}XXs`)
     // remove times after PASS/FAIL path/to/file (xxxs)
     .replace(/^\s*((?:PASS|FAIL) .+) \([\d.]+m?s\)$/gm, (_, start) => `${start}`)
     // removes each test time values
     .replace(
+      // eslint-disable-next-line no-useless-escape
       /^(\s*)(✕|×|✓|√)(\s+[^\(]+)(\s+\([\d.]+m?s\))?$/gm,
-      (_, start, mark, mid /*, time */) => `${start}${normalizeTestMark(mark)}${mid}`,
+      (_, start, mark, mid /* , time */) => `${start}${normalizeTestMark(mark)}${mid}`,
     )
   // TODO: improves this...
   if (process.platform === 'win32') {
@@ -45,6 +45,7 @@ export function normalizeJestOutput(output: string): string {
 }
 
 export function escapeRegex(s: string) {
+  // eslint-disable-next-line no-useless-escape
   return s.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')
 }
 

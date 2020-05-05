@@ -1,47 +1,16 @@
-import { LogLevels } from 'bs-logger'
 import { removeSync, writeFileSync } from 'fs-extra'
 import * as _ts from 'typescript'
 
 import { makeCompiler } from '../__helpers__/fakers'
-import { logTargetMock } from '../__helpers__/mocks'
 import ProcessedSource from '../__helpers__/processed-source'
 import { TS_JEST_OUT_DIR } from '../config/config-set'
 
 import * as compilerUtils from './compiler-utils'
 
-const logTarget = logTargetMock()
-
 describe('Transpiler', () => {
   const baseTsJestConfig = {
     isolatedModules: true,
   }
-
-  beforeEach(() => {
-    logTarget.clear()
-  })
-
-  it('should compile using transpileModule and not use cache', () => {
-    const compiler = makeCompiler({ tsJestConfig: { ...baseTsJestConfig, tsConfig: false } })
-    const spy = jest.spyOn(_ts, 'transpileModule')
-
-    logTarget.clear()
-    const compiled = compiler.compile('export default 42', __filename)
-
-    expect(new ProcessedSource(compiled, __filename)).toMatchSnapshot()
-    expect(spy).toHaveBeenCalled()
-    expect(logTarget.filteredLines(LogLevels.debug, Infinity)).toMatchInlineSnapshot(`
-      Array [
-        "[level:20] readThrough(): no cache
-      ",
-        "[level:20] compileFn(): compiling as isolated module
-      ",
-        "[level:20] visitSourceFileNode(): hoisting
-      ",
-      ]
-    `)
-
-    spy.mockRestore()
-  })
 
   it(
     'should call createProgram() with projectReferences, call getAndCacheProjectReference()' +
@@ -120,7 +89,7 @@ describe('Transpiler', () => {
   })
 
   it('should compile tsx file for jsx preserve', () => {
-    const fileName = `foo.tsx`
+    const fileName = 'foo.tsx'
     const compiler = makeCompiler({
       tsJestConfig: {
         ...baseTsJestConfig,
@@ -144,7 +113,7 @@ describe('Transpiler', () => {
   })
 
   it('should compile tsx file for other jsx options', () => {
-    const fileName = `foo.tsx`
+    const fileName = 'foo.tsx'
     const compiler = makeCompiler({
       tsJestConfig: {
         ...baseTsJestConfig,
@@ -170,14 +139,18 @@ describe('Transpiler', () => {
   it('should have correct source maps', () => {
     const compiler = makeCompiler({ tsJestConfig: { ...baseTsJestConfig, tsConfig: false } })
     const source = 'const f = (v: number) => v\nconst t: number = f(5)'
+    const fileName = 'test-source-map-transpiler.ts'
+    writeFileSync(fileName, source, 'utf8')
 
-    const compiled = compiler.compile(source, __filename)
+    const compiled = compiler.compile(source, fileName)
 
-    expect(new ProcessedSource(compiled, __filename).outputSourceMaps).toMatchObject({
-      file: __filename,
-      sources: [__filename],
+    expect(new ProcessedSource(compiled, fileName).outputSourceMaps).toMatchObject({
+      file: fileName,
+      sources: [fileName],
       sourcesContent: [source],
     })
+
+    removeSync(fileName)
   })
 
   it('should not report diagnostics related to typings', () => {

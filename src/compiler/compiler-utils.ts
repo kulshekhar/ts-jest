@@ -12,18 +12,15 @@ import { sha1 } from '../util/sha1'
 /**
  * @internal
  */
-export const hasOwn = Object.prototype.hasOwnProperty
-/**
- * @internal
- */
-export function getResolvedModulesCache(cachedir: string): string {
-  return join(cachedir, sha1('ts-jest-resolved-modules', '\x00'))
+export function getResolvedModulesCache(cacheDir: string): string {
+  return join(cacheDir, sha1('ts-jest-resolved-modules', '\x00'))
 }
 
 /**
  * @internal
  * Get resolved modules of a test file and put into memory cache
  */
+/* istanbul ignore next (we leave this for e2e) */
 export function cacheResolvedModules(
   fileName: string,
   fileContent: string,
@@ -38,17 +35,17 @@ export function cacheResolvedModules(
    * Ugly trick while waiting for https://github.com/microsoft/TypeScript/issues/33994
    */
   if (importReferences.length) {
-    logger.debug({ fileName }, `cacheResolvedModules(): get resolved modules of test file ${fileName}`)
+    logger.debug({ fileName }, 'cacheResolvedModules(): get resolved modules')
 
     memoryCache.resolvedModules[fileName] = Object.create(null)
     memoryCache.resolvedModules[fileName].modulePaths = importReferences
       .filter((importReference: any) => importReference.parent.parent.resolvedModules?.get(importReference.text))
-      .map((importReference: any) => {
-        return normalize(
+      .map((importReference: any) =>
+        normalize(
           (importReference.parent.parent.resolvedModules.get(importReference.text) as _ts.ResolvedModule)
             .resolvedFileName,
-        )
-      })
+        ),
+      )
       .reduce((a: any, b: any) => a.concat(b), [])
     memoryCache.resolvedModules[fileName].testFileContent = fileContent
     writeFileSync(getResolvedModulesCache(cacheDir), JSON.stringify(memoryCache.resolvedModules))
@@ -67,7 +64,7 @@ export function isTestFile(testMatchPatterns: (string | RegExp)[], fileName: str
 /* istanbul ignore next (we leave this for e2e) */
 function isUsingProjectReferences(
   program: _ts.Program,
-  projectReferences: ReadonlyArray<_ts.ProjectReference> | undefined,
+  projectReferences: readonly _ts.ProjectReference[] | undefined,
 ) {
   if (projectReferences && !!program.getProjectReferences) {
     return Boolean(program && program.getProjectReferences())
@@ -79,8 +76,8 @@ function isUsingProjectReferences(
 /* istanbul ignore next (we leave this for e2e) */
 function getResolvedProjectReferences(
   program: _ts.Program,
-): ReadonlyArray<_ts.ResolvedProjectReference | undefined> | undefined {
-  const getProjectReferences = program.getResolvedProjectReferences || program.getProjectReferences
+): readonly (_ts.ResolvedProjectReference | undefined)[] | undefined {
+  const getProjectReferences = program.getResolvedProjectReferences ?? program.getProjectReferences
   if (getProjectReferences) {
     return getProjectReferences()
   }
@@ -92,7 +89,7 @@ function getResolvedProjectReferences(
 function getProjectReferenceForFile(
   filePath: string,
   program: _ts.Program,
-  projectReferences: ReadonlyArray<_ts.ProjectReference> | undefined,
+  projectReferences: readonly _ts.ProjectReference[] | undefined,
 ) {
   if (isUsingProjectReferences(program, projectReferences)) {
     return (
@@ -114,10 +111,10 @@ export function getAndCacheProjectReference(
   filePath: string,
   program: _ts.Program,
   files: TSFiles,
-  projectReferences: ReadonlyArray<_ts.ProjectReference> | undefined,
+  projectReferences: readonly _ts.ProjectReference[] | undefined,
 ) {
   const file = files.get(filePath)
-  if (file !== undefined && file.projectReference) {
+  if (file?.projectReference) {
     return file.projectReference.project
   }
 
@@ -156,13 +153,13 @@ function getAndCacheOutputJSFileName(
   files: TSFiles,
 ) {
   const file = files.get(inputFileName)
-  if (file && file.projectReference && file.projectReference.outputFileName) {
+  if (file?.projectReference?.outputFileName) {
     return file.projectReference.outputFileName
   }
 
   const outputFileName = getOutputJavaScriptFileName(inputFileName, projectReference)
   if (file !== undefined) {
-    file.projectReference = file.projectReference || {
+    file.projectReference = file.projectReference ?? {
       project: projectReference,
     }
     file.projectReference.outputFileName = outputFileName
@@ -188,7 +185,7 @@ export function getCompileResultFromReferencedProject(
   if (referencedProject.commandLine.options.outFile !== undefined) {
     throw new Error(
       `The referenced project at ${relativeProjectConfigPath} is using ` +
-        `the outFile' option, which is not supported with ts-jest.`,
+        "the outFile' option, which is not supported with ts-jest.",
     )
   }
 
@@ -196,10 +193,9 @@ export function getCompileResultFromReferencedProject(
   const relativeJSFileName = configs.resolvePath(jsFileName)
   if (!configs.compilerModule.sys.fileExists(jsFileName)) {
     throw new Error(
-      // tslint:disable-next-line:prefer-template
-      `Could not find output JavaScript file for input ` +
+      'Could not find output JavaScript file for input ' +
         `${relativeFilePath} (looked at ${relativeJSFileName}).\n` +
-        `The input file is part of a project reference located at ` +
+        'The input file is part of a project reference located at ' +
         `${relativeProjectConfigPath}, so ts-jest is looking for the ` +
         'project’s pre-built output on disk. Try running `tsc --build` ' +
         'to build project references.',

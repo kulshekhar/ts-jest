@@ -34,6 +34,7 @@ export interface TsJestGlobalOptions {
    * - `false`: do NOT use default config file
    * - `path/to/tsconfig.json`: path to a specific tsconfig file (<rootDir> can be used)
    * - `{...}`: an object with inline compiler options
+   *
    * @default undefined uses the default tsconfig file
    * @alias tsconfig
    */
@@ -45,6 +46,7 @@ export interface TsJestGlobalOptions {
    * - `false`: do NOT use default config file
    * - `path/to/tsconfig.json`: path to a specific tsconfig file (<rootDir> can be used)
    * - `{...}`: an object with inline compiler options
+   *
    * @default undefined uses the default tsconfig file
    * @alias tsConfig
    */
@@ -55,18 +57,21 @@ export interface TsJestGlobalOptions {
    * - `true` (or `undefined`, it's the default): use default package.json file
    * - `path/to/package.json`: path to a specific package.json file (<rootDir> can be used)
    * - `{...}`: contents of a package.json
+   *
    * @default undefined uses the default package.json file
    */
   packageJson?: boolean | string | object
 
   /**
    * Compiles files as isolated modules (disables some features and type-checking)
+   *
    * @default undefined (disabled)
    */
   isolatedModules?: boolean
 
   /**
    * Compiler to use
+   *
    * @default 'typescript'
    */
   compiler?: string
@@ -81,6 +86,7 @@ export interface TsJestGlobalOptions {
    * - `true` (or `undefined`, it's the default): show all diagnostics
    * - `false`: hide diagnostics of all files (kind of useless)
    * - `{...}`: an inline object with fine grained settings
+   *
    * @default undefined shows all diagnostics
    */
   diagnostics?:
@@ -88,12 +94,14 @@ export interface TsJestGlobalOptions {
     | {
         /**
          * Enables colorful and pretty output of errors
+         *
          * @default undefined (enabled)
          */
         pretty?: boolean
         /**
          * List of TypeScript diagnostic error codes to ignore
          * [here](https://github.com/Microsoft/TypeScript/blob/master/src/compiler/diagnosticMessages.json).
+         *
          * @see https://github.com/Microsoft/TypeScript/blob/master/src/compiler/diagnosticMessages.json
          * @default [6059,18002,18003]
          */
@@ -105,6 +113,7 @@ export interface TsJestGlobalOptions {
         pathRegex?: RegExp | string
         /**
          * Logs TypeScript errors to stderr instead of throwing exceptions
+         *
          * @default undefined (disabled)
          */
         warnOnly?: boolean
@@ -116,6 +125,7 @@ export interface TsJestGlobalOptions {
    * - `true`: use babel using default babelrc file
    * - `path/to/.babelrc`: path to a babelrc file (<rootDir> can be used)
    * - `{...}`: an object with inline babel options
+   *
    * @default undefined does NOT use babel
    */
   babelConfig?: boolean | string | BabelConfig
@@ -202,18 +212,17 @@ export interface TsCompiler {
 
 /**
  * Internal source output.
+ *
  * @internal
  */
 export type SourceOutput = [string, string]
 
 /**
  * Track the project information.
+ *
  * @internal
  */
 export interface MemoryCache {
-  contents: { [filePath: string]: string | undefined }
-  versions: { [filePath: string]: number }
-  outputs: { [filePath: string]: string }
   resolvedModules: {
     [testFilePath: string]: {
       testFileContent: string
@@ -245,6 +254,7 @@ export interface AstTransformerDesc {
 export type TSFiles = Map<string, TSFile>
 export interface TSFile {
   text?: string
+  output?: string
   version: number
   projectReference?: {
     /**

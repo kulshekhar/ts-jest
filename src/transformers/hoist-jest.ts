@@ -1,4 +1,3 @@
-// tslint:disable:curly
 // take care of including ONLY TYPES here, for the rest use `ts`
 import { LogContexts, LogLevels } from 'bs-logger'
 import {
@@ -31,6 +30,7 @@ export const version = 1
 
 /**
  * The factory of hoisting transformer factory
+ *
  * @param cs Current jest configuration-set
  * @internal
  */
@@ -54,6 +54,7 @@ export function factory(cs: ConfigSet) {
 
   /**
    * Checks whether given node is a statement that we need to hoist
+   *
    * @param node The node to test
    */
   function shouldHoistNode(node: Node): node is ExpressionStatement {
@@ -62,6 +63,7 @@ export function factory(cs: ConfigSet) {
 
   /**
    * Create a source file visitor which will visit all nodes in a source file
+   *
    * @param ctx The typescript transformation context
    * @param sf The owning source file
    */
@@ -90,6 +92,7 @@ export function factory(cs: ConfigSet) {
     const exit = () => level--
     /**
      * Adds a node to the list of nodes to be hoisted in the current level
+     *
      * @param node The node to hoist
      */
     const hoist = (node: Statement) => {
@@ -101,6 +104,7 @@ export function factory(cs: ConfigSet) {
     }
     /**
      * Our main visitor, which will be called recursively for each node in the source file's AST
+     *
      * @param node The node to be visited
      */
     const visitor: Visitor = node => {
@@ -136,11 +140,10 @@ export function factory(cs: ConfigSet) {
   }
 
   // returns the transformer factory
-  return (ctx: TransformationContext): Transformer<SourceFile> => {
-    return logger.wrap(
+  return (ctx: TransformationContext): Transformer<SourceFile> =>
+    logger.wrap(
       { [LogContexts.logLevel]: LogLevels.debug, call: null },
       'visitSourceFileNode(): hoisting',
       (sf: SourceFile) => ts.visitNode(sf, createVisitor(ctx, sf)),
     )
-  }
 }

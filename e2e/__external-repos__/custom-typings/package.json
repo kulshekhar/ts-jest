@@ -1,0 +1,16 @@
+{
+  "name": "custom-typings",
+  "private": true,
+  "scripts": {
+    "test": "jest"
+  },
+  "dependencies": {
+    "jquery": "^3.5.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^25.2.1",
+    "@types/jquery": "^3.3.35",
+    "jest": "^25.4.0",
+    "typescript": "^3.8.3"
+  }
+}

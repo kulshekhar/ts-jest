@@ -11,6 +11,15 @@ import { Deprecateds, interpolate } from './util/messages'
 import { mocked as mockedCore } from './util/testing'
 import { VersionCheckers } from './util/version-checkers'
 
+declare module '@jest/types' {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
+  namespace Config {
+    interface ConfigGlobals {
+      'ts-jest': TsJestGlobalOptions
+    }
+  }
+}
+
 // deprecate helpers
 const warn = rootLogger.child({ [LogContexts.logLevel]: LogLevels.warn })
 const helperMoved = <T extends (...args: any[]) => any>(name: string, helper: T) =>
@@ -23,7 +32,6 @@ export const createJestPreset = helperMoved('createJestPreset', createJestPreset
 /** @deprecated */
 export const pathsToModuleNameMapper = helperMoved('pathsToModuleNameMapper', pathsToModuleNameMapperCore)
 
-// tslint:disable-next-line:no-var-requires
 export const version: string = require('../package.json').version
 export const digest: string = readFileSync(resolve(__dirname, '..', '.ts-jest-digest'), 'utf8')
 
@@ -61,12 +69,10 @@ const jestPreset = createJestPresetCore()
  * @internal
  */
 // for tests
-// tslint:disable-next-line:variable-name
 export const __singleton = () => transformer
 /**
  * @internal
  */
-// tslint:disable-next-line:variable-name
 export const __resetModule = () => (transformer = undefined as any)
 
 export {

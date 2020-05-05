@@ -26,7 +26,7 @@ describe('TS_JEST_LOG', () => {
     it(`should pass and create log file when using template "${templateName}"`, () => {
       const result = runTest()
       expect(result.status).toBe(0)
-      expect(existsSync(result.logFilePath))
+      expect(existsSync(result.logFilePath)).toBe(true)
       const filteredEntries = result.logFileEntries
         // keep only debug and above
         .filter(m => (m.context[LogContexts.logLevel] || 0) >= LogLevels.debug)

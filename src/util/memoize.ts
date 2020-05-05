@@ -39,7 +39,7 @@ function memoize(
   return function(this: any, ...args: any[]): any {
     const cache = ensureChildCache(this, namespace)
     const key = keyBuilder.apply(this, args)
-    if (cache.has(key)) return cache.get(key) as any // tslint:disable-line
+    if (cache.has(key)) return cache.get(key)
     const res: any = func.apply(this, args)
     cache.set(key, res)
     return res

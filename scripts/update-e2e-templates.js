@@ -13,15 +13,10 @@ const templateDirs = fs
   .filter(f => fs.statSync(path.join(Paths.e2eTemplatesDir, f)).isDirectory())
 templateDirs.forEach((tmpl, i) => {
   const tmplPath = path.join(Paths.e2eTemplatesDir, tmpl)
-  logger.log(
-    `[${i + 1}/${templateDirs.length}] updating dependencies of ${tmpl}:`
-  )
+  logger.log(`[${i + 1}/${templateDirs.length}] updating dependencies of ${tmpl}:`)
   process.chdir(tmplPath)
   const wanted = require(path.join(tmplPath, 'package.json')).wantedDependencies
-  if (!wanted)
-    throw new Error(
-      'The package.json must have a "wantedDependencies" section.'
-    )
+  if (!wanted) throw new Error('The package.json must have a "wantedDependencies" section.')
 
   let args = []
   Object.keys(wanted).forEach(key => {

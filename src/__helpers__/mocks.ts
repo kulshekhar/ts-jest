@@ -29,14 +29,12 @@ export const mockObject = <T, M>(obj: T, newProps: M): T & M & { mockRestore: ()
   })
 }
 
-export const mockWriteStream = () => {
-  return {
-    written: [] as string[],
-    write(text: string) {
-      this.written.push(text)
-    },
-    clear() {
-      this.written = []
-    },
-  }
-}
+export const mockWriteStream = () => ({
+  written: [] as string[],
+  write(text: string) {
+    this.written.push(text)
+  },
+  clear() {
+    this.written = []
+  },
+})

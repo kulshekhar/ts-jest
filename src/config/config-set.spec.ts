@@ -1,9 +1,10 @@
+/* eslint-disable jest/no-mocks-import */
 import { Transformer } from '@jest/transform'
 import { Config } from '@jest/types'
 import { testing } from 'bs-logger'
 import { readFileSync } from 'fs'
 import json5 = require('json5')
-import { resolve } from 'path' // tslint:disable-next-line:no-duplicate-imports
+import { resolve } from 'path'
 import * as ts from 'typescript'
 
 import * as _myModule from '..'
@@ -52,6 +53,7 @@ function createConfigSet({
   Object.keys(others).forEach(key => {
     Object.defineProperty(cs, key, { value: others[key] })
   })
+
   return cs
 }
 
@@ -82,7 +84,7 @@ describe('projectPackageJson', () => {
     ).toEqual(json5.parse(readFileSync(EXPECTED, 'utf8')))
   })
 
-  it(`should return value from root packageJson when provided value to tsJest config is undefined`, () => {
+  it('should return value from root packageJson when provided value to tsJest config is undefined', () => {
     expect(
       createConfigSet({
         tsJestConfig: { packageJson: undefined },
@@ -91,7 +93,7 @@ describe('projectPackageJson', () => {
     ).toEqual('ts-jest')
   })
 
-  it(`should return empty object when config file path doesn't exist and print loggings`, () => {
+  it("should return empty object when config file path doesn't exist and print loggings", () => {
     const logger = testing.createLoggerMock()
     expect(
       createConfigSet({
@@ -112,7 +114,7 @@ describe('projectPackageJson', () => {
     logger.target.clear()
   })
 
-  it(`should return value from root packageJson when real path rootDir is the same as tsJest root`, () => {
+  it('should return value from root packageJson when real path rootDir is the same as tsJest root', () => {
     expect(
       createConfigSet({
         resolve: null,
@@ -197,13 +199,6 @@ describe('tsJest', () => {
         value: undefined,
       }
       expect(getTsJest().packageJson).toEqual(EXPECTED)
-    })
-
-    it('should be correct when packageJson is true', () => {
-      const EXPECTED = {
-        kind: 'file',
-        value: undefined,
-      }
       expect(getTsJest({ packageJson: true }).packageJson).toEqual(EXPECTED)
     })
 
@@ -470,12 +465,11 @@ describe('makeDiagnostic', () => {
 
 describe('typescript', () => {
   const get = (tsJest?: TsJestGlobalOptions, parentConfig?: TsJestGlobalOptions) =>
-    createConfigSet({ tsJestConfig: tsJest, parentConfig }).typescript
+    createConfigSet({ tsJestConfig: tsJest, parentConfig }).parsedTsConfig
 
   it('should read file list from default tsconfig', () => {
-    // since the default is to lookup for tsconfig,
-    // we should have this file in the list
-    expect(get().fileNames).toContain(normalizeSlashes(__filename))
+    // since the default is to lookup for tsconfig, but we set include to [] so we should not have this file in the list
+    expect(get().fileNames).toEqual([])
   })
 
   it.each(['tsConfig', 'tsconfig'])('should include compiler config from `%s` option key', (key: string) => {
@@ -502,7 +496,7 @@ describe('typescript', () => {
       tsJestConfig: { tsConfig: 'tsconfig.build.json' },
       resolve: null,
     })
-    expect(cs.typescript.options).toMatchObject({
+    expect(cs.parsedTsConfig.options).toMatchObject({
       module: ts.ModuleKind.CommonJS,
       rootDir: normalizeSlashes(resolve(__dirname, '..')),
       skipLibCheck: true,
@@ -519,7 +513,7 @@ describe('typescript', () => {
       },
       resolve: null,
     })
-    expect(cs.typescript.options).toMatchObject({
+    expect(cs.parsedTsConfig.options).toMatchObject({
       module: ts.ModuleKind.CommonJS,
       allowSyntheticDefaultImports: true,
       esModuleInterop: false,
@@ -541,11 +535,11 @@ describe('typescript', () => {
       },
       resolve: null,
     })
-    expect(cs.typescript.options).toMatchObject({
+    expect(cs.parsedTsConfig.options).toMatchObject({
       module: ts.ModuleKind.AMD,
       esModuleInterop: false,
     })
-    expect(cs.typescript.options.allowSyntheticDefaultImports).toBeFalsy()
+    expect(cs.parsedTsConfig.options.allowSyntheticDefaultImports).toBeFalsy()
     expect(target.lines.warn).toHaveLength(0)
   })
 }) // typescript
@@ -582,11 +576,13 @@ describe('readTsConfig', () => {
   let readConfig!: jest.SpyInstance<{ config?: any; error?: ts.Diagnostic }>
   let parseConfig!: jest.SpyInstance<ts.ParsedCommandLine>
   let cs!: ConfigSet
+
   beforeAll(() => {
     findConfig = jest.spyOn(ts, 'findConfigFile')
     readConfig = jest.spyOn(ts, 'readConfigFile')
     parseConfig = jest.spyOn(ts, 'parseJsonConfigFileContent')
   })
+
   afterAll(() => {
     findConfig.mockRestore()
     readConfig.mockRestore()
@@ -603,6 +599,7 @@ describe('readTsConfig', () => {
         } as any,
       })
     })
+
     afterEach(() => {
       findConfig.mockClear()
       readConfig.mockClear()
@@ -611,14 +608,20 @@ describe('readTsConfig', () => {
 
     it('should use correct paths when searching', () => {
       const conf = cs.readTsConfig()
-      expect(conf.input).toBeUndefined()
+      expect(conf.options.configFilePath).toBeUndefined()
       expect(readConfig).not.toHaveBeenCalled()
+      expect(parseConfig.mock.calls[0][0]).toEqual(
+        expect.objectContaining({
+          include: [],
+        }),
+      )
       expect(parseConfig.mock.calls[0][2]).toBe('/root')
       expect(parseConfig.mock.calls[0][4]).toBeUndefined()
     })
+
     it('should use given tsconfig path', () => {
       const conf = cs.readTsConfig(undefined, '/foo/tsconfig.bar.json')
-      expect(conf.input).toBeUndefined()
+      expect(conf.options.configFilePath).toBeUndefined()
       expect(findConfig).not.toBeCalled()
       expect(readConfig.mock.calls[0][0]).toBe('/foo/tsconfig.bar.json')
       expect(parseConfig).not.toHaveBeenCalled()
@@ -631,10 +634,12 @@ describe('readTsConfig', () => {
       findConfig.mockImplementation(p => `${p}/tsconfig.json`)
       readConfig.mockImplementation(p => ({ config: { path: p, compilerOptions: {} } }))
     })
+
     afterEach(() => {
       findConfig.mockClear()
       readConfig.mockClear()
     })
+
     describe('module in tsConfig is not the same as forced module and esModuleInterop is not in tsConfig', () => {
       beforeEach(() => {
         parseConfig.mockImplementation((conf: any) => ({
@@ -646,28 +651,40 @@ describe('readTsConfig', () => {
           errors: [],
         }))
       })
+
       afterEach(() => {
         parseConfig.mockClear()
       })
 
       it('should use correct paths when searching', () => {
         const conf = cs.readTsConfig()
-        expect(conf.input.path).toBe('/root/tsconfig.json')
+        expect(conf.options.path).toBe('/root/tsconfig.json')
         expect(findConfig.mock.calls[0][0]).toBe('/root')
         expect(readConfig.mock.calls[0][0]).toBe('/root/tsconfig.json')
+        expect(parseConfig.mock.calls[0][0]).toEqual(
+          expect.objectContaining({
+            include: [],
+          }),
+        )
         expect(parseConfig.mock.calls[0][2]).toBe('/root')
         expect(parseConfig.mock.calls[0][4]).toBe('/root/tsconfig.json')
-        expect(conf.resolved.options.allowSyntheticDefaultImports).toEqual(true)
-        expect(conf.resolved.errors).toMatchSnapshot()
+        expect(conf.options.allowSyntheticDefaultImports).toEqual(true)
+        expect(conf.errors).toMatchSnapshot()
       })
+
       it('should use given tsconfig path', () => {
         const conf = cs.readTsConfig(undefined, '/foo/tsconfig.bar.json')
-        expect(conf.input.path).toBe('/foo/tsconfig.bar.json')
+        expect(conf.options.path).toBe('/foo/tsconfig.bar.json')
         expect(findConfig).not.toBeCalled()
         expect(readConfig.mock.calls[0][0]).toBe('/foo/tsconfig.bar.json')
+        expect(parseConfig.mock.calls[0][0]).toEqual(
+          expect.objectContaining({
+            include: [],
+          }),
+        )
         expect(parseConfig.mock.calls[0][2]).toBe('/foo')
         expect(parseConfig.mock.calls[0][4]).toBe('/foo/tsconfig.bar.json')
-        expect(conf.resolved.errors).toMatchSnapshot()
+        expect(conf.errors).toMatchSnapshot()
       })
     })
 
@@ -683,28 +700,35 @@ describe('readTsConfig', () => {
           errors: [],
         }))
       })
+
       afterEach(() => {
         parseConfig.mockClear()
       })
 
       it('should use correct paths when searching', () => {
         const conf = cs.readTsConfig()
-        expect(conf.input.path).toBe('/root/tsconfig.json')
+        expect(conf.options.path).toBe('/root/tsconfig.json')
         expect(findConfig.mock.calls[0][0]).toBe('/root')
         expect(readConfig.mock.calls[0][0]).toBe('/root/tsconfig.json')
+        expect(parseConfig.mock.calls[0][0]).toEqual(
+          expect.objectContaining({
+            include: [],
+          }),
+        )
         expect(parseConfig.mock.calls[0][2]).toBe('/root')
         expect(parseConfig.mock.calls[0][4]).toBe('/root/tsconfig.json')
-        expect(conf.resolved.options.allowSyntheticDefaultImports).toEqual(true)
-        expect(conf.resolved.errors).toMatchSnapshot()
+        expect(conf.options.allowSyntheticDefaultImports).toEqual(true)
+        expect(conf.errors).toMatchSnapshot()
       })
+
       it('should use given tsconfig path', () => {
         const conf = cs.readTsConfig(undefined, '/foo/tsconfig.bar.json')
-        expect(conf.input.path).toBe('/foo/tsconfig.bar.json')
+        expect(conf.options.path).toBe('/foo/tsconfig.bar.json')
         expect(findConfig).not.toBeCalled()
         expect(readConfig.mock.calls[0][0]).toBe('/foo/tsconfig.bar.json')
         expect(parseConfig.mock.calls[0][2]).toBe('/foo')
         expect(parseConfig.mock.calls[0][4]).toBe('/foo/tsconfig.bar.json')
-        expect(conf.resolved.errors).toMatchSnapshot()
+        expect(conf.errors).toMatchSnapshot()
       })
     })
 
@@ -720,28 +744,40 @@ describe('readTsConfig', () => {
           errors: [],
         }))
       })
+
       afterEach(() => {
         parseConfig.mockClear()
       })
 
       it('should use correct paths when searching', () => {
         const conf = cs.readTsConfig()
-        expect(conf.input.path).toBe('/root/tsconfig.json')
+        expect(conf.options.path).toBe('/root/tsconfig.json')
         expect(findConfig.mock.calls[0][0]).toBe('/root')
         expect(readConfig.mock.calls[0][0]).toBe('/root/tsconfig.json')
+        expect(parseConfig.mock.calls[0][0]).toEqual(
+          expect.objectContaining({
+            include: [],
+          }),
+        )
         expect(parseConfig.mock.calls[0][2]).toBe('/root')
         expect(parseConfig.mock.calls[0][4]).toBe('/root/tsconfig.json')
-        expect(conf.resolved.options.allowSyntheticDefaultImports).toBeUndefined()
-        expect(conf.resolved.errors).toEqual([])
+        expect(conf.options.allowSyntheticDefaultImports).toBeUndefined()
+        expect(conf.errors).toEqual([])
       })
+
       it('should use given tsconfig path', () => {
         const conf = cs.readTsConfig(undefined, '/foo/tsconfig.bar.json')
-        expect(conf.input.path).toBe('/foo/tsconfig.bar.json')
+        expect(conf.options.path).toBe('/foo/tsconfig.bar.json')
         expect(findConfig).not.toBeCalled()
         expect(readConfig.mock.calls[0][0]).toBe('/foo/tsconfig.bar.json')
+        expect(parseConfig.mock.calls[0][0]).toEqual(
+          expect.objectContaining({
+            include: [],
+          }),
+        )
         expect(parseConfig.mock.calls[0][2]).toBe('/foo')
         expect(parseConfig.mock.calls[0][4]).toBe('/foo/tsconfig.bar.json')
-        expect(conf.resolved.errors).toEqual([])
+        expect(conf.errors).toEqual([])
       })
     })
 
@@ -757,29 +793,41 @@ describe('readTsConfig', () => {
           errors: [],
         }))
       })
+
       afterEach(() => {
         parseConfig.mockClear()
       })
 
       it('should use correct paths when searching', () => {
         const conf = cs.readTsConfig()
-        expect(conf.input.path).toBe('/root/tsconfig.json')
+        expect(conf.options.path).toBe('/root/tsconfig.json')
         expect(findConfig.mock.calls[0][0]).toBe('/root')
         expect(readConfig.mock.calls[0][0]).toBe('/root/tsconfig.json')
+        expect(parseConfig.mock.calls[0][0]).toEqual(
+          expect.objectContaining({
+            include: [],
+          }),
+        )
         expect(parseConfig.mock.calls[0][2]).toBe('/root')
         expect(parseConfig.mock.calls[0][4]).toBe('/root/tsconfig.json')
-        expect(conf.resolved.errors).toEqual([])
-        expect(conf.resolved.options.allowSyntheticDefaultImports).toEqual(true)
+        expect(conf.errors).toEqual([])
+        expect(conf.options.allowSyntheticDefaultImports).toEqual(true)
       })
+
       it('should use given tsconfig path', () => {
         const conf = cs.readTsConfig(undefined, '/foo/tsconfig.bar.json')
-        expect(conf.input.path).toBe('/foo/tsconfig.bar.json')
+        expect(conf.options.path).toBe('/foo/tsconfig.bar.json')
         expect(findConfig).not.toBeCalled()
         expect(readConfig.mock.calls[0][0]).toBe('/foo/tsconfig.bar.json')
+        expect(parseConfig.mock.calls[0][0]).toEqual(
+          expect.objectContaining({
+            include: [],
+          }),
+        )
         expect(parseConfig.mock.calls[0][2]).toBe('/foo')
         expect(parseConfig.mock.calls[0][4]).toBe('/foo/tsconfig.bar.json')
-        expect(conf.resolved.errors).toEqual([])
-        expect(conf.resolved.options.allowSyntheticDefaultImports).toEqual(true)
+        expect(conf.errors).toEqual([])
+        expect(conf.options.allowSyntheticDefaultImports).toEqual(true)
       })
     })
   })
@@ -875,7 +923,9 @@ describe('shouldReportDiagnostic', () => {
 
 describe('tsCompiler', () => {
   it('should be a compiler object', () => {
-    const cs = createConfigSet({ tsJestConfig: { tsConfig: false } as any })
+    const cs = createConfigSet({
+      tsJestConfig: { tsConfig: false } as any,
+    })
     const compiler = cs.tsCompiler
     expect(compiler.cwd).toBe(cs.cwd)
     expect(typeof compiler.compile).toBe('function')
@@ -952,7 +1002,7 @@ describe('cacheKey', () => {
     cs.jsonValue.value = val
     // digest is mocked in src/__mocks__/index.ts
     expect(cs.cacheKey).toMatchInlineSnapshot(
-      `"{\\"digest\\":\\"a0d51ca854194df8191d0e65c0ca4730f510f332\\",\\"jest\\":{\\"__backported\\":true,\\"globals\\":{}},\\"projectDepVersions\\":{\\"dev\\":\\"1.2.5\\",\\"opt\\":\\"1.2.3\\",\\"peer\\":\\"1.2.4\\",\\"std\\":\\"1.2.6\\"},\\"transformers\\":[\\"hoisting-jest-mock@1\\"],\\"tsJest\\":{\\"compiler\\":\\"typescript\\",\\"diagnostics\\":{\\"ignoreCodes\\":[6059,18002,18003],\\"pretty\\":true,\\"throws\\":true},\\"isolatedModules\\":false,\\"packageJson\\":{\\"kind\\":\\"file\\"},\\"transformers\\":[]},\\"tsconfig\\":{\\"declaration\\":false,\\"inlineSourceMap\\":false,\\"inlineSources\\":true,\\"module\\":1,\\"noEmit\\":false,\\"removeComments\\":false,\\"sourceMap\\":true,\\"target\\":1}}"`,
+      '"{\\"digest\\":\\"a0d51ca854194df8191d0e65c0ca4730f510f332\\",\\"jest\\":{\\"__backported\\":true,\\"globals\\":{}},\\"projectDepVersions\\":{\\"dev\\":\\"1.2.5\\",\\"opt\\":\\"1.2.3\\",\\"peer\\":\\"1.2.4\\",\\"std\\":\\"1.2.6\\"},\\"transformers\\":[\\"hoisting-jest-mock@1\\"],\\"tsJest\\":{\\"compiler\\":\\"typescript\\",\\"diagnostics\\":{\\"ignoreCodes\\":[6059,18002,18003],\\"pretty\\":true,\\"throws\\":true},\\"isolatedModules\\":false,\\"packageJson\\":{\\"kind\\":\\"file\\"},\\"transformers\\":[]},\\"tsconfig\\":{\\"declaration\\":false,\\"inlineSourceMap\\":false,\\"inlineSources\\":true,\\"module\\":1,\\"noEmit\\":false,\\"removeComments\\":false,\\"sourceMap\\":true,\\"target\\":1}}"',
     )
   })
 }) // cacheKey
@@ -992,7 +1042,7 @@ describe('raiseDiagnostics', () => {
     it('should throw when warnOnly is false', () => {
       const { raiseDiagnostics } = createConfigSet({ createTsError, filterDiagnostics })
       expect(() => raiseDiagnostics([])).not.toThrow()
-      expect(() => raiseDiagnostics([makeDiagnostic()])).toThrowErrorMatchingInlineSnapshot(`"[TS9999] foo"`)
+      expect(() => raiseDiagnostics([makeDiagnostic()])).toThrowErrorMatchingInlineSnapshot('"[TS9999] foo"')
       expect(() => raiseDiagnostics([makeDiagnostic({ category: ts.DiagnosticCategory.Message })])).not.toThrow()
     })
 
@@ -1015,13 +1065,13 @@ describe('raiseDiagnostics', () => {
     })
   })
 
-  describe(`diagnostics don't contain source file`, () => {
+  describe("diagnostics don't contain source file", () => {
     const makeDiagnostic = ({
       messageText = 'foo',
       code = 9999,
       category = ts.DiagnosticCategory.Warning,
     }: Partial<ts.Diagnostic> = {}): ts.Diagnostic => ({ messageText, code, category } as any)
-    it(`should throw when diagnostics contains file path and pathRegex config matches file path`, () => {
+    it('should throw when diagnostics contains file path and pathRegex config matches file path', () => {
       const { raiseDiagnostics } = createConfigSet({
         createTsError,
         logger,
@@ -1029,12 +1079,12 @@ describe('raiseDiagnostics', () => {
       })
       logger.target.clear()
       expect(() => raiseDiagnostics([makeDiagnostic()], 'src/__mocks__/index.ts')).toThrowErrorMatchingInlineSnapshot(
-        `"[TS9999] foo"`,
+        '"[TS9999] foo"',
       )
-      expect(logger.target.lines).toMatchInlineSnapshot(`Array []`)
+      expect(logger.target.lines).toMatchInlineSnapshot('Array []')
     })
 
-    it(`should not throw when diagnostics contains file path and pathRegex config doesn't match file path`, () => {
+    it("should not throw when diagnostics contains file path and pathRegex config doesn't match file path", () => {
       const { raiseDiagnostics } = createConfigSet({
         createTsError,
         logger,
@@ -1042,7 +1092,7 @@ describe('raiseDiagnostics', () => {
       })
       logger.target.clear()
       expect(() => raiseDiagnostics([makeDiagnostic()], 'src/__mocks__/index.ts')).not.toThrow()
-      expect(logger.target.lines).toMatchInlineSnapshot(`Array []`)
+      expect(logger.target.lines).toMatchInlineSnapshot('Array []')
     })
   })
 
@@ -1059,7 +1109,7 @@ describe('raiseDiagnostics', () => {
       category = ts.DiagnosticCategory.Warning,
       file = program.getSourceFiles().find(sourceFile => sourceFile.fileName === 'src/__mocks__/index.ts'),
     }: Partial<ts.Diagnostic> = {}): ts.Diagnostic => ({ messageText, code, category, file } as any)
-    it(`should not throw when pathRegex config doesn't match source file path`, () => {
+    it("should not throw when pathRegex config doesn't match source file path", () => {
       const { raiseDiagnostics } = createConfigSet({
         createTsError,
         logger,
@@ -1067,18 +1117,18 @@ describe('raiseDiagnostics', () => {
       })
       logger.target.clear()
       expect(() => raiseDiagnostics([makeDiagnostic()])).not.toThrow()
-      expect(logger.target.lines).toMatchInlineSnapshot(`Array []`)
+      expect(logger.target.lines).toMatchInlineSnapshot('Array []')
     })
 
-    it(`should throw when pathRegex config doesn't match source file path`, () => {
+    it("should throw when pathRegex config doesn't match source file path", () => {
       const { raiseDiagnostics } = createConfigSet({
         createTsError,
         logger,
         tsJestConfig: { diagnostics: { pathRegex: 'src/__mocks__/index.ts' } },
       })
       logger.target.clear()
-      expect(() => raiseDiagnostics([makeDiagnostic()])).toThrowErrorMatchingInlineSnapshot(`"[TS9999] foo"`)
-      expect(logger.target.lines).toMatchInlineSnapshot(`Array []`)
+      expect(() => raiseDiagnostics([makeDiagnostic()])).toThrowErrorMatchingInlineSnapshot('"[TS9999] foo"')
+      expect(logger.target.lines).toMatchInlineSnapshot('Array []')
     })
   })
 }) // raiseDiagnostics

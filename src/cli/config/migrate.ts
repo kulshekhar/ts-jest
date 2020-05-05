@@ -13,7 +13,7 @@ import { JestPresetNames, TsJestPresetDescriptor, allPresets, defaults } from '.
 /**
  * @internal
  */
-export const run: CliCommand = async (args: Arguments /*, logger: Logger*/) => {
+export const run: CliCommand = async (args: Arguments /* , logger: Logger*/) => {
   const nullLogger = createLogger({ targets: [] })
   const file = args._[0]
   const filePath = resolve(process.cwd(), file)
@@ -110,7 +110,6 @@ Visit https://kulshekhar.github.io/ts-jest/user/config/#jest-preset for more inf
     Object.keys(migratedConfig.transform).forEach(key => {
       const val = (migratedConfig.transform as any)[key]
       if (typeof val === 'string' && /\/?ts-jest(?:\/preprocessor\.js)?$/.test(val)) {
-        // tslint:disable-next-line:semicolon
         ;(migratedConfig.transform as any)[key] = 'ts-jest'
       }
     })
@@ -136,8 +135,8 @@ No migration needed for given Jest configuration
     return
   }
 
-  const stringify = /\.json$/.test(file) ? JSON.stringify : stringifyJson5
-  const prefix = /\.json$/.test(file) ? '"jest": ' : 'module.exports = '
+  const stringify = file.endsWith('.json') ? JSON.stringify : stringifyJson5
+  const prefix = file.endsWith('.json') ? '"jest": ' : 'module.exports = '
 
   // if we are using preset, inform the user that he might be able to remove some section(s)
   // we couldn't check for equality

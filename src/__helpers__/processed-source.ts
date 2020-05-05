@@ -4,7 +4,6 @@ import { RawSourceMap } from 'source-map'
 import { ROOT } from './path'
 import { ParsedSourceWithMaps, parseSource, relativisePaths, rewriteSourceMaps } from './source-maps'
 
-// tslint:disable-next-line:no-default-export
 export default class ProcessedSource {
   readonly filename: string
 
@@ -30,7 +29,7 @@ export default class ProcessedSource {
   get normalizedOutputSourceMaps(): RawSourceMap | undefined {
     const maps = this.outputSourceMaps
     if (maps) return this.sourceMapsNormalizer(maps)
-    return
+    return undefined
   }
   get sourceMapsNormalizer() {
     return (maps: RawSourceMap): RawSourceMap => relativisePaths(maps, this.cwd, '<cwd>/')
