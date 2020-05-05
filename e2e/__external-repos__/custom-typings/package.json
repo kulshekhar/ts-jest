@@ -10,7 +10,7 @@
   "devDependencies": {
     "@types/jest": "^25.2.1",
     "@types/jquery": "^3.3.35",
-    "jest": "^25.4.0",
+    "jest": "^26.0.1",
     "typescript": "^3.8.3"
   }
 }

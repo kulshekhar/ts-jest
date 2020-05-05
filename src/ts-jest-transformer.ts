@@ -61,12 +61,12 @@ export class TsJestTransformer implements Transformer {
    */
   configsFor(jestConfig: Config.ProjectConfig): ConfigSet {
     let csi: ConfigSetIndexItem | undefined = TsJestTransformer._configSetsIndex.find(
-      cs => cs.jestConfig.value === jestConfig,
+      (cs) => cs.jestConfig.value === jestConfig,
     )
     if (csi) return csi.configSet
     // try to look-it up by stringified version
     const serialized = stringify(jestConfig)
-    csi = TsJestTransformer._configSetsIndex.find(cs => cs.jestConfig.serialized === serialized)
+    csi = TsJestTransformer._configSetsIndex.find((cs) => cs.jestConfig.serialized === serialized)
     if (csi) {
       // update the object so that we can find it later
       // this happens because jest first calls getCacheKey with stringified version of

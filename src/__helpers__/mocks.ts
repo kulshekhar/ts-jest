@@ -7,7 +7,7 @@ export const logTargetMock = () => (rootLogger as testing.LoggerMock).target
 export const mockObject = <T, M>(obj: T, newProps: M): T & M & { mockRestore: () => T } => {
   const backup: any = Object.create(null)
 
-  Object.keys(newProps).forEach(key => {
+  Object.keys(newProps).forEach((key) => {
     const desc = (backup[key] = Object.getOwnPropertyDescriptor(obj, key))
     const newDesc: any = { ...desc }
     if (newDesc.get) {
@@ -20,7 +20,7 @@ export const mockObject = <T, M>(obj: T, newProps: M): T & M & { mockRestore: ()
   if ((obj as any).mockRestore) backup.mockRestore = Object.getOwnPropertyDescriptor(obj, 'mockRestore')
   return Object.defineProperty(obj, 'mockRestore', {
     value() {
-      Object.keys(backup).forEach(key => {
+      Object.keys(backup).forEach((key) => {
         Object.defineProperty(obj, key, backup[key])
       })
       return obj

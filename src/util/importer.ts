@@ -103,7 +103,7 @@ export class Importer {
     throw result.error
   }
 
-  @Memoize(name => name)
+  @Memoize((name) => name)
   protected _patch<T>(name: string, unpatched: T): T {
     if (name in this._patches) {
       logger.debug('patching', name)
@@ -128,12 +128,12 @@ export class Importer {
 
     // if it couldn't load, build a nice error message so the user can fix it by himself
     const msg = alternatives.length ? Errors.UnableToLoadAnyModule : Errors.UnableToLoadOneModule
-    const loadModule = [moduleName, ...alternatives].map(m => `"${m}"`).join(', ')
+    const loadModule = [moduleName, ...alternatives].map((m) => `"${m}"`).join(', ')
     if (typeof installTip === 'string') {
       installTip = [{ module: installTip, label: `install "${installTip}"` }]
     }
     const fix = installTip
-      .map(tip => `    ${installTip.length === 1 ? '↳' : '•'} ${interpolate(Helps.FixMissingModule, tip)}`)
+      .map((tip) => `    ${installTip.length === 1 ? '↳' : '•'} ${interpolate(Helps.FixMissingModule, tip)}`)
       .join('\n')
 
     throw new Error(

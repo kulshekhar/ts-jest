@@ -190,7 +190,7 @@ export class ConfigSet {
   @Memoize()
   get testMatchPatterns(): (string | RegExp)[] {
     const matchablePatterns = [...this.jest.testMatch, ...this.jest.testRegex].filter(
-      pattern =>
+      (pattern) =>
         /**
          * jest config testRegex doesn't always deliver the correct RegExp object
          * See https://github.com/facebook/jest/issues/9778
@@ -244,7 +244,7 @@ export class ConfigSet {
     }
 
     // transformers
-    const transformers = (options.astTransformers || []).map(mod => this.resolvePath(mod, { nodeResolve: true }))
+    const transformers = (options.astTransformers || []).map((mod) => this.resolvePath(mod, { nodeResolve: true }))
 
     // babel jest
     const { babelConfig: babelConfigOpt } = options
@@ -376,7 +376,7 @@ export class ConfigSet {
       const error = createTsError(filteredDiagnostics)
       // only throw if `warnOnly` and it is a warning or error
       const importantCategories = [DiagnosticCategory.Warning, DiagnosticCategory.Error]
-      if (throws && filteredDiagnostics.some(d => importantCategories.includes(d.category))) {
+      if (throws && filteredDiagnostics.some((d) => importantCategories.includes(d.category))) {
         throw error
       }
       logger.warn({ error }, error.message)
@@ -447,7 +447,7 @@ export class ConfigSet {
    */
   @Memoize()
   private get astTransformers(): AstTransformerDesc[] {
-    return [...internalAstTransformers, ...this.tsJest.transformers.map(m => require(m))]
+    return [...internalAstTransformers, ...this.tsJest.transformers.map((m) => require(m))]
   }
 
   /**
@@ -456,7 +456,7 @@ export class ConfigSet {
   @Memoize()
   get tsCustomTransformers(): CustomTransformers {
     return {
-      before: this.astTransformers.map(t => t.factory(this)),
+      before: this.astTransformers.map((t) => t.factory(this)),
     }
   }
 
@@ -489,7 +489,7 @@ export class ConfigSet {
     return (diagnostics: Diagnostic[], filePath?: string): Diagnostic[] => {
       if (filePath && !shouldReportDiagnostic(filePath)) return []
 
-      return diagnostics.filter(diagnostic => {
+      return diagnostics.filter((diagnostic) => {
         if (diagnostic.file?.fileName && !shouldReportDiagnostic(diagnostic.file.fileName)) {
           return false
         }
@@ -509,7 +509,7 @@ export class ConfigSet {
     } = this.tsJest
     if (pathRegex) {
       const regex = new RegExp(pathRegex)
-      return file => regex.test(file)
+      return (file) => regex.test(file)
     } else {
       return () => true
     }
@@ -523,7 +523,7 @@ export class ConfigSet {
     const { stringifyContentPathRegex } = this.tsJest
     if (stringifyContentPathRegex) {
       const regex = new RegExp(stringifyContentPathRegex)
-      return file => regex.test(file)
+      return (file) => regex.test(file)
     } else {
       return () => false
     }
@@ -545,12 +545,12 @@ export class ConfigSet {
     const diagnosticHost: FormatDiagnosticsHost = {
       getNewLine: () => '\n',
       getCurrentDirectory: () => this.cwd,
-      getCanonicalFileName: path => path,
+      getCanonicalFileName: (path) => path,
     }
 
     return (diagnostics: readonly Diagnostic[]) => {
       const diagnosticText = formatDiagnostics(diagnostics, diagnosticHost)
-      const diagnosticCodes = diagnostics.map(x => x.code)
+      const diagnosticCodes = diagnostics.map((x) => x.code)
       return new TSError(diagnosticText, diagnosticCodes)
     }
   }
@@ -657,7 +657,7 @@ export class ConfigSet {
       versions: this.versions,
       projectDepVersions: this.projectDependencies,
       digest: this.tsJestDigest,
-      transformers: this.astTransformers.map(t => `${t.name}@${t.version}`),
+      transformers: this.astTransformers.map((t) => `${t.name}@${t.version}`),
       jest,
       tsJest: this.tsJest,
       babel: this.babel,

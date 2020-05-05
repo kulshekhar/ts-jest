@@ -55,7 +55,7 @@ describe('process', () => {
       .mockClear()
     config.shouldStringifyContent.mockImplementation(() => false).mockClear()
     babel = null
-    config.tsCompiler.compile.mockImplementation(s => `ts:${s}`).mockClear()
+    config.tsCompiler.compile.mockImplementation((s) => `ts:${s}`).mockClear()
     parsedTsConfig = { options: {} } as any
   })
 
@@ -100,7 +100,7 @@ Array [
   })
 
   it('should process ts input with babel', () => {
-    babel = { process: jest.fn(s => `babel:${s}`) }
+    babel = { process: jest.fn((s) => `babel:${s}`) }
     expect(process()).toBe(`babel:ts:${INPUT}`)
     expect(config.shouldStringifyContent.mock.calls).toMatchInlineSnapshot(`
 Array [
@@ -133,7 +133,7 @@ Array [
 
   it('should process js input with babel', () => {
     parsedTsConfig.options.allowJs = true
-    babel = { process: jest.fn(s => `babel:${s}`) }
+    babel = { process: jest.fn((s) => `babel:${s}`) }
     args[1] = '/foo/bar.js'
     expect(process()).toBe(`babel:ts:${INPUT}`)
     expect(config.shouldStringifyContent.mock.calls).toMatchInlineSnapshot(`
@@ -203,7 +203,7 @@ Array [
 ]
 `)
     logs.clear()
-    babel = { process: jest.fn(s => `babel:${s}`) }
+    babel = { process: jest.fn((s) => `babel:${s}`) }
     expect(process()).toBe(`babel:${INPUT}`)
     expect(logs.lines.warn).toMatchInlineSnapshot(`
 Array [
@@ -214,7 +214,7 @@ Array [
   })
 
   it('should not pass the instrument option to babel-jest', () => {
-    babel = { process: jest.fn(s => `babel:${s}`) }
+    babel = { process: jest.fn((s) => `babel:${s}`) }
     args[3] = { instrument: true }
     expect(process()).toBe(`babel:ts:${INPUT}`)
     expect(config.babelJestTransformer.process.mock.calls).toMatchInlineSnapshot(`
@@ -237,7 +237,7 @@ describe('getCacheKey', () => {
     const tr = new TsJestTransformer()
     jest
       .spyOn(tr, 'configsFor')
-      .mockImplementation(jestConfigStr => (({ cacheKey: JSON.stringify(jestConfigStr) } as unknown) as ConfigSet))
+      .mockImplementation((jestConfigStr) => (({ cacheKey: JSON.stringify(jestConfigStr) } as unknown) as ConfigSet))
     const input = {
       fileContent: 'export default "foo"',
       fileName: 'foo.ts',

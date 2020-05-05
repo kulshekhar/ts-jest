@@ -13,7 +13,7 @@ beforeEach(() => {
 
 describe('backportJestConfig', () => {
   const makeTestsFor = (oldPath: string, _: string, values: any[]) => {
-    values.forEach(val => {
+    values.forEach((val) => {
       let original: any
       beforeEach(() => {
         original = {}

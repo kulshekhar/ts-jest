@@ -25,7 +25,7 @@ export function sha1(...data: DataItem[]): string {
   // we use SHA1 because it's the fastest provided by node
   // and we are not concerned about security here
   const hash = createHash('sha1')
-  data.forEach(item => {
+  data.forEach((item) => {
     if (typeof item === 'string') hash.update(item, 'utf8')
     else hash.update(item)
   })

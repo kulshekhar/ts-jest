@@ -65,12 +65,12 @@
     "make-error": "1.x",
     "micromatch": "4.x",
     "mkdirp": "0.x",
-    "semver": "6.x",
+    "semver": "7.x",
     "yargs-parser": "18.x"
   },
   "peerDependencies": {
-    "jest": ">=25 <26",
-    "typescript": ">=3.4 <4.0"
+    "jest": ">=26 <27",
+    "typescript": ">=3.8 <4.0"
   },
   "husky": {
     "hooks": {
@@ -110,16 +110,16 @@
     "eslint-plugin-jest": "latest",
     "eslint-plugin-jsdoc": "latest",
     "eslint-plugin-prettier": "latest",
-    "fs-extra": "8.x",
+    "fs-extra": "9.x",
     "glob-gitignore": "latest",
-    "husky": "3.x",
-    "jest": "25.x",
+    "husky": "4.x",
+    "jest": "26.x",
     "js-yaml": "latest",
     "lint-staged": "latest",
     "lodash.merge": "4.x",
     "lodash.set": "4.x",
     "npm-run-all": "latest",
-    "prettier": "1.x",
+    "prettier": "2.x",
     "source-map": "latest",
     "typescript": "3.x"
   },
@@ -134,6 +134,6 @@
     ]
   },
   "engines": {
-    "node": ">= 8"
+    "node": ">= 10"
   }
 }

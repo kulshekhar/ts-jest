@@ -130,7 +130,7 @@ exports[`With unsupported version test should pass using template "with-unsuppor
   ===[ STDOUT ]===================================================================
   
   ===[ STDERR ]===================================================================
-  ts-jest[versions] (WARN) Version 3.3.4000 of typescript installed has not been tested with ts-jest. If you're experiencing issues, consider using a supported version (>=3.4.0 <4.0.0). Please do not report issues in ts-jest if you are using unsupported versions.
+  ts-jest[versions] (WARN) Version 3.3.4000 of typescript installed has not been tested with ts-jest. If you're experiencing issues, consider using a supported version (>=3.8.0 <4.0.0-0). Please do not report issues in ts-jest if you are using unsupported versions.
   PASS ./Hello.spec.ts
     Hello Class
       √ should create a new Hello

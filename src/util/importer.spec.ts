@@ -8,8 +8,8 @@ const moduleNotFound = (mod: string) => {
   throw err
 }
 const fakeFullPath = (mod: string) => `/root/${mod}.js`
-const requireModule = jest.fn(mod => (mod in modules ? modules[mod]() : moduleNotFound(mod)))
-const resolveModule = jest.fn(mod => (mod in modules ? fakeFullPath(mod) : moduleNotFound(mod)))
+const requireModule = jest.fn((mod) => (mod in modules ? modules[mod]() : moduleNotFound(mod)))
+const resolveModule = jest.fn((mod) => (mod in modules ? fakeFullPath(mod) : moduleNotFound(mod)))
 __requireModule(requireModule as any, resolveModule)
 
 let modules!: { [key: string]: () => any }
@@ -86,8 +86,8 @@ describe('tryTheseOr', () => {
 })
 
 describe('patcher', () => {
-  const patch1 = jest.fn(mod => ({ ...mod, p1: true }))
-  const patch2 = jest.fn(mod => ({ ...mod, p2: true }))
+  const patch1 = jest.fn((mod) => ({ ...mod, p1: true }))
+  const patch2 = jest.fn((mod) => ({ ...mod, p2: true }))
 
   it('should apply patches correctly', () => {
     const imp = new Importer({ foo: [patch1, patch2] })
