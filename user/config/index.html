@@ -326,6 +326,22 @@ In this case you’ll need to use the JavaScript version of Jest config (comment
 
   </div></div>
 
+<h4 id="ide-ts-jest-config-suggestion">IDE <code class="language-plaintext highlighter-rouge">ts-jest</code> config suggestion</h4>
+
+<p>To ultilize IDE suggestion, you can use <code class="language-plaintext highlighter-rouge">JSDOC</code> to provide suggested <code class="language-plaintext highlighter-rouge">ts-jest</code> configs for your Jest config:</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/** @type {import('@jest/types').Config.InitialOptions} */</span>
+<span class="cm">/** @typedef {import('ts-jest')} */</span>
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="c1">// [...]</span>
+  <span class="na">globals</span><span class="p">:</span> <span class="p">{</span>
+    <span class="dl">'</span><span class="s1">ts-jest</span><span class="dl">'</span><span class="p">:</span> <span class="p">{</span>
+      <span class="c1">// ts-jest configuration goes here and your IDE will suggest which configs when typing</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
 <h3 id="options">Options</h3>
 
 <p>All options have default values which should fit most of the projects. Click on the option’s name to see details and example(s).</p>
