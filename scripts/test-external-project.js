@@ -73,7 +73,7 @@ if (/^((https|ssh|git):\/\/|[a-z0-9]+@[a-z0-9.]+:).+$/.test(projectPath)) {
     const cwd = process.cwd()
     // first we need to create a bundle
     const bundle = createBundle()
-    PROJECTS_TO_RUN.forEach(monorepoPath => {
+    PROJECTS_TO_RUN.forEach((monorepoPath) => {
       let monorepoRealPath
       try {
         monorepoRealPath = realpathSync(resolve(cwd, monorepoPath))

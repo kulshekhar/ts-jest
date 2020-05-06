@@ -95,7 +95,7 @@ export const createCompilerInstance = (configs: ConfigSet): TsCompiler => {
     } catch (e) {}
   }
   // Initialize memory cache for typescript compiler
-  configs.parsedTsConfig.fileNames.forEach(fileName => {
+  configs.parsedTsConfig.fileNames.forEach((fileName) => {
     memoryCache.files.set(fileName, {
       version: 0,
     })

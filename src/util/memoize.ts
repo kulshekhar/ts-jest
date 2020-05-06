@@ -36,7 +36,7 @@ function memoize(
   func: (...args: any[]) => any,
   keyBuilder: (...args: any[]) => any,
 ): (...args: any[]) => any {
-  return function(this: any, ...args: any[]): any {
+  return function (this: any, ...args: any[]): any {
     const cache = ensureChildCache(this, namespace)
     const key = keyBuilder.apply(this, args)
     if (cache.has(key)) return cache.get(key)

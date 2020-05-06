@@ -3,7 +3,7 @@ language: node_js
 jobs:
   include:
     - os: windows
-      node_js: 8
+      node_js: 10
       env: TS_JEST_E2E_WORKDIR=\%APPDATA%\ts-jest-e2e-workdir TS_JEST_E2E_OPTIMIZATIONS=1
       cache:
         npm: true
@@ -14,7 +14,7 @@ jobs:
         - npm run clean -- --when-ci-commit-message
         - npm run test:unit -- --runInBand
     - os: windows
-      node_js: 12
+      node_js: 14
       env: TS_JEST_E2E_WORKDIR=\%APPDATA%\ts-jest-e2e-workdir TS_JEST_E2E_OPTIMIZATIONS=1
       cache:
         npm: true
@@ -27,7 +27,7 @@ jobs:
         - npm run clean -- --when-ci-commit-message
         - npm run test:external-repos
     - os: linux
-      node_js: 10
+      node_js: 12
       env: TS_JEST_E2E_WORKDIR=/tmp/ts-jest-e2e-workdir TS_JEST_E2E_OPTIMIZATIONS=1
       before_install:
         # Disabled, randomly works :-/

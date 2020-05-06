@@ -107,7 +107,7 @@ Visit https://kulshekhar.github.io/ts-jest/user/config/#jest-preset for more inf
 
   // migrate the transform
   if (migratedConfig.transform) {
-    Object.keys(migratedConfig.transform).forEach(key => {
+    Object.keys(migratedConfig.transform).forEach((key) => {
       const val = (migratedConfig.transform as any)[key]
       if (typeof val === 'string' && /\/?ts-jest(?:\/preprocessor\.js)?$/.test(val)) {
         ;(migratedConfig.transform as any)[key] = 'ts-jest'
@@ -198,7 +198,7 @@ function cleanupConfig(config: Config.InitialOptions): void {
 
 function dedupSort(arr: any[]) {
   return arr
-    .filter((s, i, a) => a.findIndex(e => s.toString() === e.toString()) === i)
+    .filter((s, i, a) => a.findIndex((e) => s.toString() === e.toString()) === i)
     .sort((a, b) => (a.toString() > b.toString() ? 1 : a.toString() < b.toString() ? -1 : 0))
 }
 

@@ -6,8 +6,8 @@
     "@babel/core": "7.9.6",
     "@types/jest": "25.2.1",
     "@types/node": "12.12.37",
-    "babel-jest": "25.5.1",
-    "jest": "25.5.4",
+    "babel-jest": "26.0.0",
+    "jest": "26.0.0",
     "typescript": "3.8.3"
   },
   "wantedDependencies": {

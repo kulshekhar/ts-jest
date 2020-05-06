@@ -14,10 +14,10 @@ jest.mock('./get-package-version')
 
 const pv = mocked(_pv)
 
-describeChecker(VersionCheckers.jest, 'jest', ['25.0.0'], [undefined, '23.6.0', '24.1.0', '26.0.0'])
-describeChecker(VersionCheckers.babelJest, 'babel-jest', ['25.0.0'], [undefined, '23.6.0', '24.1.0', '26.0.0'])
+describeChecker(VersionCheckers.jest, 'jest', ['26.0.0'], [undefined, '23.6.0', '24.1.0', '27.0.0'])
+describeChecker(VersionCheckers.babelJest, 'babel-jest', ['26.0.0'], [undefined, '23.6.0', '24.1.0', '27.0.0'])
 describeChecker(VersionCheckers.babelCore, '@babel/core', ['7.0.0'], [undefined, '6.0.0', '8.0.0'])
-describeChecker(VersionCheckers.typescript, 'typescript', ['3.4.0', '3.8.0'], [undefined, '3.3.0', '4.0.1'])
+describeChecker(VersionCheckers.typescript, 'typescript', ['3.8.0', '3.8.3'], [undefined, '3.3.0', '4.0.1'])
 
 function describeChecker(
   checker: VersionChecker,
@@ -30,10 +30,10 @@ function describeChecker(
       checker.forget()
     })
 
-    unsupportedVersions.forEach(testVersion => {
+    unsupportedVersions.forEach((testVersion) => {
       describe(`unsupported version (${testVersion})`, () => {
         beforeEach(() => {
-          pv.getPackageVersion.mockImplementation(name => (name === moduleName ? testVersion : undefined))
+          pv.getPackageVersion.mockImplementation((name) => (name === moduleName ? testVersion : undefined))
         })
 
         it('should log with warn()', () => {
@@ -55,10 +55,10 @@ function describeChecker(
       }) // describe unsupported version
     }) // unsupported versions loop
 
-    supportedVersions.forEach(testVersion => {
+    supportedVersions.forEach((testVersion) => {
       describe(`supported version (${testVersion})`, () => {
         beforeEach(() => {
-          pv.getPackageVersion.mockImplementation(name => (name === moduleName ? testVersion : undefined))
+          pv.getPackageVersion.mockImplementation((name) => (name === moduleName ? testVersion : undefined))
         })
         it('should not log with warn()', () => {
           checker.warn()
