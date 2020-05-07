@@ -468,8 +468,9 @@ describe('typescript', () => {
     createConfigSet({ tsJestConfig: tsJest, parentConfig }).parsedTsConfig
 
   it('should read file list from default tsconfig', () => {
-    // since the default is to lookup for tsconfig, but we set include to [] so we should not have this file in the list
-    expect(get().fileNames).toEqual([])
+    // since the default is to lookup for tsconfig,
+    // we should have this file in the list
+    expect(get().fileNames).toContain(normalizeSlashes(__filename))
   })
 
   it.each(['tsConfig', 'tsconfig'])('should include compiler config from `%s` option key', (key: string) => {
@@ -610,11 +611,6 @@ describe('readTsConfig', () => {
       const conf = cs.readTsConfig()
       expect(conf.options.configFilePath).toBeUndefined()
       expect(readConfig).not.toHaveBeenCalled()
-      expect(parseConfig.mock.calls[0][0]).toEqual(
-        expect.objectContaining({
-          include: [],
-        }),
-      )
       expect(parseConfig.mock.calls[0][2]).toBe('/root')
       expect(parseConfig.mock.calls[0][4]).toBeUndefined()
     })
@@ -661,11 +657,6 @@ describe('readTsConfig', () => {
         expect(conf.options.path).toBe('/root/tsconfig.json')
         expect(findConfig.mock.calls[0][0]).toBe('/root')
         expect(readConfig.mock.calls[0][0]).toBe('/root/tsconfig.json')
-        expect(parseConfig.mock.calls[0][0]).toEqual(
-          expect.objectContaining({
-            include: [],
-          }),
-        )
         expect(parseConfig.mock.calls[0][2]).toBe('/root')
         expect(parseConfig.mock.calls[0][4]).toBe('/root/tsconfig.json')
         expect(conf.options.allowSyntheticDefaultImports).toEqual(true)
@@ -677,11 +668,6 @@ describe('readTsConfig', () => {
         expect(conf.options.path).toBe('/foo/tsconfig.bar.json')
         expect(findConfig).not.toBeCalled()
         expect(readConfig.mock.calls[0][0]).toBe('/foo/tsconfig.bar.json')
-        expect(parseConfig.mock.calls[0][0]).toEqual(
-          expect.objectContaining({
-            include: [],
-          }),
-        )
         expect(parseConfig.mock.calls[0][2]).toBe('/foo')
         expect(parseConfig.mock.calls[0][4]).toBe('/foo/tsconfig.bar.json')
         expect(conf.errors).toMatchSnapshot()
@@ -710,11 +696,6 @@ describe('readTsConfig', () => {
         expect(conf.options.path).toBe('/root/tsconfig.json')
         expect(findConfig.mock.calls[0][0]).toBe('/root')
         expect(readConfig.mock.calls[0][0]).toBe('/root/tsconfig.json')
-        expect(parseConfig.mock.calls[0][0]).toEqual(
-          expect.objectContaining({
-            include: [],
-          }),
-        )
         expect(parseConfig.mock.calls[0][2]).toBe('/root')
         expect(parseConfig.mock.calls[0][4]).toBe('/root/tsconfig.json')
         expect(conf.options.allowSyntheticDefaultImports).toEqual(true)
@@ -754,11 +735,6 @@ describe('readTsConfig', () => {
         expect(conf.options.path).toBe('/root/tsconfig.json')
         expect(findConfig.mock.calls[0][0]).toBe('/root')
         expect(readConfig.mock.calls[0][0]).toBe('/root/tsconfig.json')
-        expect(parseConfig.mock.calls[0][0]).toEqual(
-          expect.objectContaining({
-            include: [],
-          }),
-        )
         expect(parseConfig.mock.calls[0][2]).toBe('/root')
         expect(parseConfig.mock.calls[0][4]).toBe('/root/tsconfig.json')
         expect(conf.options.allowSyntheticDefaultImports).toBeUndefined()
@@ -770,11 +746,6 @@ describe('readTsConfig', () => {
         expect(conf.options.path).toBe('/foo/tsconfig.bar.json')
         expect(findConfig).not.toBeCalled()
         expect(readConfig.mock.calls[0][0]).toBe('/foo/tsconfig.bar.json')
-        expect(parseConfig.mock.calls[0][0]).toEqual(
-          expect.objectContaining({
-            include: [],
-          }),
-        )
         expect(parseConfig.mock.calls[0][2]).toBe('/foo')
         expect(parseConfig.mock.calls[0][4]).toBe('/foo/tsconfig.bar.json')
         expect(conf.errors).toEqual([])
@@ -803,11 +774,6 @@ describe('readTsConfig', () => {
         expect(conf.options.path).toBe('/root/tsconfig.json')
         expect(findConfig.mock.calls[0][0]).toBe('/root')
         expect(readConfig.mock.calls[0][0]).toBe('/root/tsconfig.json')
-        expect(parseConfig.mock.calls[0][0]).toEqual(
-          expect.objectContaining({
-            include: [],
-          }),
-        )
         expect(parseConfig.mock.calls[0][2]).toBe('/root')
         expect(parseConfig.mock.calls[0][4]).toBe('/root/tsconfig.json')
         expect(conf.errors).toEqual([])
@@ -819,11 +785,6 @@ describe('readTsConfig', () => {
         expect(conf.options.path).toBe('/foo/tsconfig.bar.json')
         expect(findConfig).not.toBeCalled()
         expect(readConfig.mock.calls[0][0]).toBe('/foo/tsconfig.bar.json')
-        expect(parseConfig.mock.calls[0][0]).toEqual(
-          expect.objectContaining({
-            include: [],
-          }),
-        )
         expect(parseConfig.mock.calls[0][2]).toBe('/foo')
         expect(parseConfig.mock.calls[0][4]).toBe('/foo/tsconfig.bar.json')
         expect(conf.errors).toEqual([])
