@@ -31,7 +31,7 @@ For example:
 {
    // ...other configs
    "files": [
-       "my-custom-typings.d.ts".
+       "my-custom-typings.d.ts",
        "my-global-module.ts"
    ]
 }
