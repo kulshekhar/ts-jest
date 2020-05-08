@@ -1,5 +1,4 @@
-import { LogContexts, LogLevels, Logger } from 'bs-logger'
-import memoize = require('lodash.memoize')
+import { LogContexts, Logger, LogLevels } from 'bs-logger'
 import { basename, normalize, relative } from 'path'
 import * as _ts from 'typescript'
 
@@ -8,12 +7,8 @@ import { LINE_FEED } from '../constants'
 import { CompilerInstance, MemoryCache, SourceOutput } from '../types'
 import { Errors, interpolate } from '../util/messages'
 
-import {
-  cacheResolvedModules,
-  getAndCacheProjectReference,
-  getCompileResultFromReferencedProject,
-  isTestFile,
-} from './compiler-utils'
+import { cacheResolvedModules, isTestFile } from './compiler-utils'
+import memoize = require('lodash.memoize')
 
 function doTypeChecking(configs: ConfigSet, fileName: string, service: _ts.LanguageService, logger: Logger) {
   if (configs.shouldReportDiagnostic(fileName)) {
@@ -37,7 +32,7 @@ export const initializeLanguageServiceInstance = (
   const ts = configs.compilerModule
   const cwd = configs.cwd
   const cacheDir = configs.tsCacheDir
-  const { options, projectReferences, fileNames } = configs.parsedTsConfig
+  const { options, fileNames } = configs.parsedTsConfig
   const serviceHostTraceCtx = {
     namespace: 'ts:serviceHost',
     call: null,
@@ -84,7 +79,6 @@ export const initializeLanguageServiceInstance = (
   }
   const serviceHost: _ts.LanguageServiceHost = {
     getProjectVersion: () => String(projectVersion),
-    getProjectReferences: () => projectReferences,
     getScriptFileNames: () => [...memoryCache.files.keys()],
     getScriptVersion: (fileName: string) => {
       const normalizedFileName = normalize(fileName)
@@ -139,67 +133,55 @@ export const initializeLanguageServiceInstance = (
 
       // Must set memory cache before attempting to read file.
       updateMemoryCache(code, fileName)
-      const referencedProject = getAndCacheProjectReference(
-        fileName,
-        service.getProgram()!,
-        memoryCache.files,
-        projectReferences,
-      )
-      if (referencedProject !== undefined) {
-        logger.debug({ fileName }, 'compileFn(): get compile result from referenced project')
+      const output: _ts.EmitOutput = service.getEmitOutput(fileName)
+      // Do type checking by getting TypeScript diagnostics
+      logger.debug({ fileName }, 'compileFn(): computing diagnostics using language service')
 
-        return getCompileResultFromReferencedProject(fileName, configs, memoryCache.files, referencedProject)
-      } else {
-        const output: _ts.EmitOutput = service.getEmitOutput(fileName)
-        // Do type checking by getting TypeScript diagnostics
-        logger.debug({ fileName }, 'compileFn(): computing diagnostics using language service')
-
-        doTypeChecking(configs, fileName, service, logger)
-        /**
-         * We don't need the following logic with no cache run because no cache always gives correct typing
-         */
-        if (cacheDir) {
-          if (isTestFile(configs.testMatchPatterns, fileName)) {
-            cacheResolvedModules(fileName, code, memoryCache, service.getProgram()!, cacheDir, logger)
-          } else {
-            Object.entries(memoryCache.resolvedModules)
-              .filter(
-                entry =>
-                  /**
-                   * When imported modules change, we only need to check whether the test file is compiled previously or not
-                   * base on memory cache. By checking memory cache, we can avoid repeatedly doing type checking against
-                   * test file for 1st time run after clearing cache because
-                   */
-                  entry[1].modulePaths.find(modulePath => modulePath === fileName) && !memoryCache.files.has(entry[0]),
+      doTypeChecking(configs, fileName, service, logger)
+      /**
+       * We don't need the following logic with no cache run because no cache always gives correct typing
+       */
+      if (cacheDir) {
+        if (isTestFile(configs.testMatchPatterns, fileName)) {
+          cacheResolvedModules(fileName, code, memoryCache, service.getProgram()!, cacheDir, logger)
+        } else {
+          Object.entries(memoryCache.resolvedModules)
+            .filter(
+              entry =>
+                /**
+                 * When imported modules change, we only need to check whether the test file is compiled previously or not
+                 * base on memory cache. By checking memory cache, we can avoid repeatedly doing type checking against
+                 * test file for 1st time run after clearing cache because
+                 */
+                entry[1].modulePaths.find(modulePath => modulePath === fileName) && !memoryCache.files.has(entry[0]),
+            )
+            .forEach(entry => {
+              const testFileName = entry[0]
+              const testFileContent = entry[1].testFileContent
+              logger.debug(
+                { fileName },
+                'compileFn(): computing diagnostics for test file that imports this module using language service',
               )
-              .forEach(entry => {
-                const testFileName = entry[0]
-                const testFileContent = entry[1].testFileContent
-                logger.debug(
-                  { fileName },
-                  'compileFn(): computing diagnostics for test file that imports this module using language service',
-                )
 
-                updateMemoryCache(testFileContent, testFileName)
-                doTypeChecking(configs, testFileName, service, logger)
-              })
-          }
+              updateMemoryCache(testFileContent, testFileName)
+              doTypeChecking(configs, testFileName, service, logger)
+            })
         }
-        /* istanbul ignore next (this should never happen but is kept for security) */
-        if (output.emitSkipped) {
-          throw new TypeError(`${relative(cwd, fileName)}: Emit skipped for language service`)
-        }
-        // Throw an error when requiring `.d.ts` files.
-        if (!output.outputFiles.length) {
-          throw new TypeError(
-            interpolate(Errors.UnableToRequireDefinitionFile, {
-              file: basename(fileName),
-            }),
-          )
-        }
-
-        return [output.outputFiles[1].text, output.outputFiles[0].text]
       }
+      /* istanbul ignore next (this should never happen but is kept for security) */
+      if (output.emitSkipped) {
+        throw new TypeError(`${relative(cwd, fileName)}: Emit skipped for language service`)
+      }
+      // Throw an error when requiring `.d.ts` files.
+      if (!output.outputFiles.length) {
+        throw new TypeError(
+          interpolate(Errors.UnableToRequireDefinitionFile, {
+            file: basename(fileName),
+          }),
+        )
+      }
+
+      return [output.outputFiles[1].text, output.outputFiles[0].text]
     },
     program: service.getProgram(),
   }
