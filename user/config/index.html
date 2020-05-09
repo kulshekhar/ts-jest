@@ -330,9 +330,9 @@ In this case you’ll need to use the JavaScript version of Jest config (comment
 
 <p>To ultilize IDE suggestion, you can use <code class="language-plaintext highlighter-rouge">JSDOC</code> to provide suggested <code class="language-plaintext highlighter-rouge">ts-jest</code> configs for your Jest config:</p>
 
-<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/** @type {import('@jest/types').Config.InitialOptions} */</span>
-<span class="cm">/** @typedef {import('ts-jest')} */</span>
-<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/** @typedef {import('ts-jest')} */</span>
+<span class="cm">/** @type {import('@jest/types').Config.InitialOptions} */</span>
+<span class="kd">const</span> <span class="nx">config</span> <span class="o">=</span> <span class="p">{</span>
   <span class="c1">// [...]</span>
   <span class="na">globals</span><span class="p">:</span> <span class="p">{</span>
     <span class="dl">'</span><span class="s1">ts-jest</span><span class="dl">'</span><span class="p">:</span> <span class="p">{</span>
@@ -340,6 +340,8 @@ In this case you’ll need to use the JavaScript version of Jest config (comment
     <span class="p">}</span>
   <span class="p">}</span>
 <span class="p">};</span>
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">config</span><span class="p">;</span>
 </code></pre></div></div>
 
 <h3 id="options">Options</h3>
