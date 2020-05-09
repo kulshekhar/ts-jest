@@ -17,57 +17,6 @@ describe('Language service', () => {
     logTarget.clear()
   })
 
-  it('should get compile result from referenced project when there is a built reference project', () => {
-    const tmp = tempDir('compiler')
-    const compiler = makeCompiler({
-      jestConfig: { cache: true, cacheDirectory: tmp },
-      tsJestConfig: { tsConfig: false },
-    })
-    const source = 'console.log("hello")'
-    const fileName = 'test-reference-project.ts'
-    const getAndCacheProjectReferenceSpy = jest
-      .spyOn(compilerUtils, 'getAndCacheProjectReference')
-      .mockReturnValueOnce({} as any)
-    jest
-      .spyOn(compilerUtils, 'getCompileResultFromReferencedProject')
-      .mockImplementationOnce(() => [
-        source,
-        '{"version":3,"file":"test-reference-project.js","sourceRoot":"","sources":["test-reference-project.ts"],"names":[],"mappings":"AAAA,OAAO,CAAC,GAAG,CAAC,OAAO,CAAC,CAAA","sourcesContent":["console.log(\\"hello\\")"]}',
-      ])
-    writeFileSync(fileName, source, 'utf8')
-
-    compiler.compile(source, fileName)
-
-    expect(getAndCacheProjectReferenceSpy).toHaveBeenCalled()
-    expect(compilerUtils.getCompileResultFromReferencedProject).toHaveBeenCalled()
-
-    jest.restoreAllMocks()
-    removeSync(fileName)
-  })
-
-  it('should get compile result from language service when there is no referenced project', () => {
-    const tmp = tempDir('compiler')
-    const compiler = makeCompiler({
-      jestConfig: { cache: true, cacheDirectory: tmp },
-      tsJestConfig: { tsConfig: false },
-    })
-    const source = 'console.log("hello")'
-    const fileName = 'test-no-reference-project.ts'
-    const getAndCacheProjectReferenceSpy = jest
-      .spyOn(compilerUtils, 'getAndCacheProjectReference')
-      .mockReturnValueOnce(undefined)
-    jest.spyOn(compilerUtils, 'getCompileResultFromReferencedProject')
-    writeFileSync(fileName, source, 'utf8')
-
-    compiler.compile(source, fileName)
-
-    expect(getAndCacheProjectReferenceSpy).toHaveBeenCalled()
-    expect(compilerUtils.getCompileResultFromReferencedProject).not.toHaveBeenCalled()
-
-    jest.restoreAllMocks()
-    removeSync(fileName)
-  })
-
   it('should cache resolved modules for test file with testMatchPatterns from jest config when match', () => {
     const spy = jest.spyOn(compilerUtils, 'cacheResolvedModules').mockImplementationOnce(() => {})
     const tmp = tempDir('compiler')

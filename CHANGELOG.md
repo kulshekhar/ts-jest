@@ -1,3 +1,14 @@
+<a name="25.5.1"></a>
+## [25.5.1](https://github.com/kulshekhar/ts-jest/compare/v25.5.0...v25.5.1) (2020-05-09)
+
+
+### Bug Fixes
+
+* **compiler:** don't resolve files from build folder for `projectReferences` ([#1614](https://github.com/kulshekhar/ts-jest/issues/1614)) ([74b92d3](https://github.com/kulshekhar/ts-jest/commit/74b92d3))
+* **config:** don't set `include` value of `tsconfig` to empty array ([#1606](https://github.com/kulshekhar/ts-jest/issues/1606)) ([8a29aaa](https://github.com/kulshekhar/ts-jest/commit/8a29aaa))
+
+
+
 <a name="25.5.0"></a>
 # [25.5.0](https://github.com/kulshekhar/ts-jest/compare/v25.4.0...v25.5.0) (2020-05-05)
 
@@ -31,7 +42,7 @@ For example:
 {
    // ...other configs
    "files": [
-       "my-custom-typings.d.ts".
+       "my-custom-typings.d.ts",
        "my-global-module.ts"
    ]
 }

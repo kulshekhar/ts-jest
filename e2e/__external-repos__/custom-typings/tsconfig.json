@@ -3,8 +3,5 @@
     "target": "es5",
     "module": "commonjs",
     "esModuleInterop": true
-  },
-  "files": [
-    "jquery.d.ts"
-  ]
+  }
 }
