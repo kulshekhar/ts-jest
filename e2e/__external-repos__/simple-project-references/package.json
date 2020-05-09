@@ -1,8 +1,7 @@
 {
   "private": true,
   "scripts": {
-    "build": "yarn tsc -b -f tsconfig.json",
-    "test": "yarn build && jest"
+    "test": "jest"
   },
   "devDependencies": {
     "@types/jest": "^25.2.1",

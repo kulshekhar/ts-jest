@@ -6,7 +6,7 @@
     "packages/*"
   ],
   "scripts": {
-    "test": "yarn tsc -b packages/my-app/tsconfig.json && jest --no-cache"
+    "test": "jest --no-cache"
   },
   "devDependencies": {
     "@types/jest": "^25.2.1",
