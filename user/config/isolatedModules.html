@@ -178,6 +178,33 @@ That’s what the <code class="language-plaintext highlighter-rouge">isolatedMod
 
   </div></div>
 
+<h1 id="performance">Performance</h1>
+
+<p>Using <code class="language-plaintext highlighter-rouge">isolatedModules: false</code> comes with a cost of performance comparing to <code class="language-plaintext highlighter-rouge">isolatedModules: true</code>. There is a way
+to improve the performance when using this mode by changing the value of <code class="language-plaintext highlighter-rouge">include</code> in <code class="language-plaintext highlighter-rouge">tsconfig</code> which is used by <code class="language-plaintext highlighter-rouge">ts-jest</code>.
+The least amount of files which are provided in <code class="language-plaintext highlighter-rouge">include</code>, the more performance the test run can gain.</p>
+
+<h3 id="example-1">Example</h3>
+
+<pre><code class="language-json5">// tsconfig.json
+{
+  // ...other configs
+  include: [
+    "my-typings/*",
+    "my-global-modules/*",
+  ]
+}
+</code></pre>
+
+<h2 id="caveats">Caveats</h2>
+
+<p>Limiting the amount of files loaded via <code class="language-plaintext highlighter-rouge">include</code> can greatly boost performance when running tests. However, the trade off 
+is <code class="language-plaintext highlighter-rouge">ts-jest</code> might not recognize all files which are intended to use with <code class="language-plaintext highlighter-rouge">jest</code>. One can run into issues with custom typings,
+global modules, etc…</p>
+
+<p>The suggested solution is what is needed for the test environment should be captured by 
+glob patterns in <code class="language-plaintext highlighter-rouge">include</code>, to gain both performance boost and avoid breaking behaviors.</p>
+
   </section>
 
 </article>
