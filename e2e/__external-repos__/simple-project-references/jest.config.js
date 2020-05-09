@@ -1,3 +1,6 @@
+/** @type {import('@jest/types').Config.InitialOptions} */
+/** @typedef {import('ts-jest')} */
+
 module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
@@ -7,6 +10,7 @@ module.exports = {
   globals: {
     'ts-jest': {
       isolatedModules: true,
+      tsConfig: 'tsconfig-tests.json'
     },
   },
 }
