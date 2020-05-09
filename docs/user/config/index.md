@@ -220,7 +220,7 @@ You can use the `config:migrate` tool of `ts-jest` CLI if you're coming from an 
 
 <div class="row"><div class="col-md-6" markdown="block">
 
-_If you're using `jest.config.json`:_
+_If you're using `jest.config.js`:_
 
 ```sh
 npx ts-jest config:migrate jest.config.js
