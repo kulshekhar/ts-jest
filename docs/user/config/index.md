@@ -186,9 +186,9 @@ module.exports = {
 To ultilize IDE suggestion, you can use `JSDOC` to provide suggested `ts-jest` configs for your Jest config:
 
 ```js
-/** @type {import('@jest/types').Config.InitialOptions} */
 /** @typedef {import('ts-jest')} */
-module.exports = {
+/** @type {import('@jest/types').Config.InitialOptions} */
+const config = {
   // [...]
   globals: {
     'ts-jest': {
@@ -196,6 +196,8 @@ module.exports = {
     }
   }
 };
+
+module.exports = config;
 ```
 
 ### Options
