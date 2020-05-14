@@ -82,7 +82,7 @@ export const initializeLanguageServiceInstance = (
     getScriptFileNames: () => [...memoryCache.files.keys()],
     getScriptVersion: (fileName: string) => {
       const normalizedFileName = normalize(fileName)
-      const version = memoryCache.files.get(normalizedFileName)!.version
+      const version = memoryCache.files.get(normalizedFileName)?.version
 
       // We need to return `undefined` and not a string here because TypeScript will use
       // `getScriptVersion` and compare against their own version - which can be `undefined`.
