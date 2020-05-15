@@ -1,6 +1,6 @@
 {
   "name": "ts-jest",
-  "version": "25.5.1",
+  "version": "26.0.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "bin": "cli.js",
@@ -64,7 +64,7 @@
     "lodash.memoize": "4.x",
     "make-error": "1.x",
     "micromatch": "4.x",
-    "mkdirp": "0.x",
+    "mkdirp": "1.x",
     "semver": "7.x",
     "yargs-parser": "18.x"
   },
@@ -105,7 +105,7 @@
     "@typescript-eslint/parser": "latest",
     "conventional-changelog-cli": "2.x",
     "cross-spawn": "latest",
-    "eslint": "latest",
+    "eslint": "6.x",
     "eslint-config-prettier": "latest",
     "eslint-plugin-jest": "latest",
     "eslint-plugin-jsdoc": "latest",
