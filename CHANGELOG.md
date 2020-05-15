@@ -1,3 +1,23 @@
+<a name="26.0.0"></a>
+# [26.0.0](https://github.com/kulshekhar/ts-jest/compare/v25.5.1...v26.0.0) (2020-05-15)
+
+
+### Bug Fixes
+
+* **compiler:** return `undefined` for `getScriptVersion` when a file doesn't exist in memory cache ([#1641](https://github.com/kulshekhar/ts-jest/issues/1641)) ([6851b8e](https://github.com/kulshekhar/ts-jest/commit/6851b8e))
+
+
+### Features
+
+* support Jest v26 ([#1602](https://github.com/kulshekhar/ts-jest/issues/1602)) ([23b7741](https://github.com/kulshekhar/ts-jest/commit/23b7741))
+
+
+### BREAKING CHANGES
+
+* Requires a minimum of TypeScript v3.8
+* Drop support for Node 8 
+
+
 <a name="25.5.1"></a>
 ## [25.5.1](https://github.com/kulshekhar/ts-jest/compare/v25.5.0...v25.5.1) (2020-05-09)
 
