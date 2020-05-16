@@ -7,6 +7,6 @@
     "@types/jest": "^25.2.1",
     "@types/lodash": "^4.14.116",
     "jest": "^26.0.1",
-    "typescript": "^3.8.3"
+    "typescript": "~3.9.2"
   }
 }
