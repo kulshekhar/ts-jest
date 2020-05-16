@@ -2,7 +2,7 @@
   "name": "dependency",
   "version": "0.0.1",
   "peerDependencies": {
-    "typescript": "^3.8.3"
+    "typescript": "~3.9.2"
   },
   "main": "./index.ts"
 }

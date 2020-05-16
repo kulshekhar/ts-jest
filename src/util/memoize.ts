@@ -1,4 +1,4 @@
-const cacheProp = Symbol.for('[memoize]')
+const cacheProp = Symbol.for('[memoize]') as any
 
 /**
  * @internal
@@ -13,21 +13,34 @@ export function Memoize(keyBuilder?: (...args: any[]) => any) {
   }
 }
 
-function ensureCache<T extends any>(target: T, reset = false): { [key in keyof T]?: Map<any, any> } {
+// See https://github.com/microsoft/TypeScript/issues/1863#issuecomment-579541944
+/* eslint-disable-next-line  @typescript-eslint/ban-types */
+function ensureCache<T extends Object & { [key: string]: any }>(
+  target: T,
+  reset = false,
+): { [key in keyof T]?: Map<any, any> } {
   if (reset || !target[cacheProp]) {
     Object.defineProperty(target, cacheProp, {
       value: Object.create(null),
       configurable: true,
     })
   }
+
   return target[cacheProp]
 }
 
-function ensureChildCache<T extends any>(target: T, key: keyof T, reset = false): Map<any, any> {
+// See https://github.com/microsoft/TypeScript/issues/1863#issuecomment-579541944
+/* eslint-disable-next-line  @typescript-eslint/ban-types */
+function ensureChildCache<T extends Object & { [key: string]: any }>(
+  target: T,
+  key: keyof T,
+  reset = false,
+): Map<any, any> {
   const dict = ensureCache(target)
   if (reset || !dict[key]) {
     dict[key] = new Map<any, any>()
   }
+
   return dict[key] as Map<any, any>
 }
 
