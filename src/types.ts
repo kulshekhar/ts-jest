@@ -23,7 +23,7 @@ export type BabelJestTransformer = {
   [K in Exclude<keyof Transformer, 'createTransformer'>]: Exclude<Transformer[K], undefined>
 }
 /**
- * @internal
+ * Don't mark as internal because it is used in TsJestGlobalOptions which is an exposed type
  */
 export type BabelConfig = _babel.TransformOptions
 
