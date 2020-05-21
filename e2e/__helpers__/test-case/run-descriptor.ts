@@ -14,20 +14,23 @@ export default class RunDescriptor {
     this._options = { ...options }
   }
 
-  get sourceDir() {
+  get sourceDir(): string {
     return join(Paths.e2eSourceDir, this.name)
   }
-  get templateWorkdir() {
+
+  get templateWorkdir(): string {
     return join(Paths.e2eWorkTemplatesDir, this.name)
   }
-  get workdir() {
+
+  get workdir(): string {
     return join(Paths.e2eWorkDir, this.templateName, this.name)
   }
 
-  get sourcePackageJson() {
+  get sourcePackageJson(): any {
     try {
       return this._sourcePackageJson || (this._sourcePackageJson = require(join(this.sourceDir, 'package.json')))
     } catch (err) {}
+
     return {}
   }
 
@@ -36,6 +39,7 @@ export default class RunDescriptor {
       // read the template from the package field if it is not given
       this._options.template = this.sourcePackageJson.e2eTemplate || 'default'
     }
+
     return this._options.template as string
   }
 
@@ -59,6 +63,7 @@ export default class RunDescriptor {
         '\n',
       )
     }
+
     return result
   }
 
@@ -70,10 +75,10 @@ export default class RunDescriptor {
     if (templates.length < 1) {
       throw new RangeError(`There must be at least one template to run the test case with.`)
     }
-
     if (!templates.every((t, i) => !templates.includes(t, i + 1))) {
       throw new Error(`Each template must be unique. Given ${templates.join(', ')}`)
     }
+
     return templates.reduce((map, template) => {
       const desc = new RunDescriptor(this.name, {
         ...this._options,
@@ -85,6 +90,7 @@ export default class RunDescriptor {
       } else {
         runTest()
       }
+
       return map
     }, {} as TestRunResultsMap<T>)
   }
@@ -97,6 +103,7 @@ function createIteratorContext(templateName: string, expectedStatus?: number): R
     }
     return status === 0 ? 'pass' : 'fail'
   }
+
   return {
     templateName,
     describeLabel: `with template "${templateName}"`,

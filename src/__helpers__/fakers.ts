@@ -3,7 +3,7 @@ import { resolve } from 'path'
 
 import { createCompilerInstance } from '../compiler/instance'
 import { ConfigSet } from '../config/config-set'
-import { BabelConfig, TsJestConfig, TsJestGlobalOptions } from '../types'
+import { BabelConfig, TsCompiler, TsJestConfig, TsJestGlobalOptions } from '../types'
 import { ImportReasons } from '../util/messages'
 
 export function filePath(relPath: string): string {
@@ -61,7 +61,7 @@ export function makeCompiler({
   jestConfig?: Partial<Config.ProjectConfig>
   tsJestConfig?: TsJestGlobalOptions
   parentConfig?: TsJestGlobalOptions
-} = {}) {
+} = {}): TsCompiler {
   tsJestConfig = { ...tsJestConfig }
   tsJestConfig.diagnostics = {
     ...(tsJestConfig.diagnostics as any),

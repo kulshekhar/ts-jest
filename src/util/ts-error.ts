@@ -31,7 +31,7 @@ export class TSError extends BaseError {
   }
 
   /* istanbul ignore next */
-  [INSPECT_CUSTOM]() {
+  [INSPECT_CUSTOM](): string {
     return this.diagnosticText
   }
 }

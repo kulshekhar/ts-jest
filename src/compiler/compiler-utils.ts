@@ -26,7 +26,8 @@ export function cacheResolvedModules(
   program: _ts.Program,
   cacheDir: string,
   logger: Logger,
-) {
+): void {
+  /* eslint-disable-next-line  @typescript-eslint/ban-ts-comment */
   // @ts-ignore
   const importReferences = program.getSourceFile(fileName)!.imports
   /**
@@ -53,7 +54,7 @@ export function cacheResolvedModules(
 /**
  * @internal
  */
-export function isTestFile(testMatchPatterns: (string | RegExp)[], fileName: string) {
+export function isTestFile(testMatchPatterns: (string | RegExp)[], fileName: string): boolean {
   return testMatchPatterns.some((pattern) =>
     typeof pattern === 'string' ? micromatch.isMatch(fileName, pattern) : pattern.test(fileName),
   )

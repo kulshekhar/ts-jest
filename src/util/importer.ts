@@ -27,7 +27,7 @@ const passThru = (action: () => void) => (input: any) => {
  */
 export class Importer {
   @Memoize()
-  static get instance() {
+  static get instance(): Importer {
     logger.debug('creating Importer singleton')
     // here we can define patches to apply to modules.
     // it could be fixes that are not deployed, or
@@ -55,7 +55,7 @@ export class Importer {
   }
 
   @Memoize((...args: string[]) => args.join(':'))
-  tryThese(moduleName: string, ...fallbacks: string[]) {
+  tryThese(moduleName: string, ...fallbacks: string[]): RequireResult<true> | undefined {
     let name: string
     let loaded: RequireResult<true> | undefined
     const tries = [moduleName, ...fallbacks]
@@ -191,7 +191,7 @@ let resolveModule = (mod: string) => require.resolve(mod, { paths: [process.cwd(
  * @internal
  */
 // so that we can test easier
-export function __requireModule(localRequire: typeof requireModule, localResolve: typeof resolveModule) {
+export function __requireModule(localRequire: typeof requireModule, localResolve: typeof resolveModule): void {
   requireModule = localRequire
   resolveModule = localResolve
 }

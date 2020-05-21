@@ -3,7 +3,7 @@ import { Arguments } from 'yargs'
 /**
  * @internal
  */
-export const run = async (_: Arguments) => {
+export const run = async (_: Arguments): Promise<void> => {
   process.stdout.write(`
 Usage:
   ts-jest command [options] [...args]

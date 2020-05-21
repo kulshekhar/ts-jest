@@ -23,43 +23,55 @@ export default class RunResult {
       digest: string
     }>,
   ) {}
-  get logFilePath() {
+
+  get logFilePath(): string {
     return resolve(this.cwd, 'ts-jest.log')
   }
-  get logFileContent() {
+
+  get logFileContent(): string {
     return readFileSync(this.logFilePath).toString('utf8')
   }
+
   get logFileEntries(): LogMessage[] {
     const lines = this.logFileContent.split(/\n/g)
     // remove last, empty line
     lines.pop()
     return lines.map(s => JSON.parse(s))
   }
-  get isPass() {
+
+  get isPass(): boolean {
     return this.status === 0
   }
-  get isFail() {
+
+  get isFail(): boolean {
     return !this.isPass
   }
-  get status() {
+
+  get status(): number | null {
     return this.result.status
   }
-  get output() {
+
+  get output(): string {
     return this.normalize(stripAnsiColors(this.result.output ? this.result.output.join('\n\n') : ''))
   }
-  get stderr() {
+
+  get stderr(): string {
     return this.normalize(stripAnsiColors((this.result.stderr || '').toString()))
   }
-  get normalizedStderr() {
+
+  get normalizedStderr(): string {
     return normalizeJestOutput(this.stderr)
   }
-  get stdout() {
+
+  get stdout(): string {
     return this.normalize(stripAnsiColors((this.result.stdout || '').toString()))
   }
-  get normalizedStdout() {
+
+  get normalizedStdout(): string {
     return normalizeJestOutput(this.stdout)
   }
-  get cmdLine() {
+
+  get cmdLine(): string {
     const args = [this.context.cmd, ...this.context.args].filter(
       a => !['-u', '--updateSnapshot', '--runInBand', '--'].includes(a),
     )
@@ -67,6 +79,7 @@ export default class RunResult {
     if (configIndex !== -1) {
       args.splice(configIndex, 2)
     }
+
     return this.normalize(args.join(' '))
   }
 
@@ -80,10 +93,11 @@ export default class RunResult {
     } catch (err) {
       io.out = `/*\nts-jest after hook has not been called!\n${err}\noutput:\n${this.output}*/`
     }
+
     return new ProcessedFileIo(this.cwd, relFilePath, io.in, io.out)
   }
 
-  normalize(str: string) {
+  normalize(str: string): string {
     // TODO: clean this!
     const cwd = this.cwd
     const realCwd = realpathSync(cwd)

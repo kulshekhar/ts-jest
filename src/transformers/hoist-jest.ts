@@ -34,7 +34,7 @@ export const version = 1
  * @param cs Current jest configuration-set
  * @internal
  */
-export function factory(cs: ConfigSet) {
+export function factory(cs: ConfigSet): (ctx: TransformationContext) => Transformer<SourceFile> {
   const logger = cs.logger.child({ namespace: 'ts-hoisting' })
   /**
    * Our compiler (typescript, or a module with typescript-like interface)

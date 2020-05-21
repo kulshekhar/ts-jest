@@ -52,7 +52,7 @@ export class TsJestTransformer implements Transformer {
    * @internal
    */
   /* istanbul ignore next */
-  [INSPECT_CUSTOM]() {
+  [INSPECT_CUSTOM](): string {
     return `[object TsJestTransformer<#${this.id}>]`
   }
 
