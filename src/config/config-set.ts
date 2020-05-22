@@ -509,9 +509,10 @@ export class ConfigSet {
     } = this.tsJest
     if (pathRegex) {
       const regex = new RegExp(pathRegex)
-      return (file) => regex.test(file)
+
+      return (file: string): boolean => regex.test(file)
     } else {
-      return () => true
+      return (): true => true
     }
   }
 
@@ -523,9 +524,10 @@ export class ConfigSet {
     const { stringifyContentPathRegex } = this.tsJest
     if (stringifyContentPathRegex) {
       const regex = new RegExp(stringifyContentPathRegex)
-      return (file) => regex.test(file)
+
+      return (file: string): boolean => regex.test(file)
     } else {
-      return () => false
+      return (): false => false
     }
   }
 
@@ -545,12 +547,13 @@ export class ConfigSet {
     const diagnosticHost: FormatDiagnosticsHost = {
       getNewLine: () => '\n',
       getCurrentDirectory: () => this.cwd,
-      getCanonicalFileName: (path) => path,
+      getCanonicalFileName: (path: string) => path,
     }
 
-    return (diagnostics: readonly Diagnostic[]) => {
+    return (diagnostics: readonly Diagnostic[]): TSError => {
       const diagnosticText = formatDiagnostics(diagnostics, diagnosticHost)
       const diagnosticCodes = diagnostics.map((x) => x.code)
+
       return new TSError(diagnosticText, diagnosticCodes)
     }
   }
@@ -643,7 +646,7 @@ export class ConfigSet {
    * @internal
    */
   @Memoize()
-  get jsonValue() {
+  get jsonValue(): JsonableValue {
     const jest = { ...this.jest }
     const globals = (jest.globals = { ...jest.globals } as any)
     // we need to remove some stuff from jest config
@@ -708,7 +711,7 @@ export class ConfigSet {
    * @internal
    */
   readTsConfig(
-    compilerOptions?: object,
+    compilerOptions?: Record<string, unknown>,
     resolvedConfigFile?: string | null,
     noProject?: boolean | null,
   ): ParsedCommandLine {
@@ -831,7 +834,7 @@ export class ConfigSet {
   /**
    * @internal
    */
-  toJSON() {
+  toJSON(): any {
     return this.jsonValue.value
   }
 }

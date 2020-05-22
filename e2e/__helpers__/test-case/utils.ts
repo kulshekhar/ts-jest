@@ -44,11 +44,11 @@ export function normalizeJestOutput(output: string): string {
   return out
 }
 
-export function escapeRegex(s: string) {
+export function escapeRegex(s: string): string {
   // eslint-disable-next-line no-useless-escape
   return s.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')
 }
 
-export function enableOptimizations() {
+export function enableOptimizations(): boolean {
   return !!process.env.TS_JEST_E2E_OPTIMIZATIONS
 }

@@ -2,8 +2,8 @@ import { safeDump } from 'js-yaml'
 
 import ProcessedSource from '../__helpers__/processed-source'
 
-export const test = (val: any) => val && val instanceof ProcessedSource
-export const print = (val: ProcessedSource, _: any, indent: any) => {
+export const test = (val: unknown): boolean => val && val instanceof ProcessedSource
+export const print = (val: ProcessedSource, _: unknown, indent: (str: string) => any): string => {
   const sourceMaps = val.normalizedOutputSourceMaps
   const out = [
     `===[ FILE: ${val.filename.replace(/\\/g, '/')} ]${'='.repeat(67 - val.filename.length)}`,
@@ -22,5 +22,6 @@ export const print = (val: ProcessedSource, _: any, indent: any) => {
   ]
     .map((l) => indent(l))
     .join('\n')
+
   return `${out}`
 }

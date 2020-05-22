@@ -18,7 +18,7 @@ export const runTestForOptions = (options: {
   module: string
   allowSyntheticDefaultImports?: boolean
   esModuleInterop?: boolean
-}) => {
+}): void => {
   test(`run with options: ${JSON.stringify(options)}`, () => {
     expect(testCaseForCompilerOpt(options).run()).toMatchSnapshot()
   })

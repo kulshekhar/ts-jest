@@ -115,7 +115,7 @@ export const backportJestConfig = <T extends Config.InitialOptions | Config.Proj
 /**
  * @internal
  */
-export const backportTsJestDebugEnvVar = (logger: Logger) => {
+export const backportTsJestDebugEnvVar = (logger: Logger): void => {
   if ('TS_JEST_DEBUG' in process.env) {
     const shouldLog = !/^\s*(?:0|f(?:alse)?|no?|disabled?|off|)\s*$/i.test(process.env.TS_JEST_DEBUG || '')
     delete process.env.TS_JEST_DEBUG

@@ -6,7 +6,7 @@ import RunResult from './run-result'
 
 export interface RunTestOptions {
   template?: string
-  env?: {}
+  env?: Record<string, unknown>
   inject?: (() => any) | string
   writeIo?: boolean
   jestConfig?: Config.ProjectConfig | any

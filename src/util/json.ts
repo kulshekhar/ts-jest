@@ -6,7 +6,7 @@ const UNDEFINED = 'undefined'
 /**
  * @internal
  */
-export function stringify(input: any): string {
+export function stringify(input: unknown): string {
   return input === undefined ? UNDEFINED : stableStringify(input)
 }
 

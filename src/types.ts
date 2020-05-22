@@ -60,7 +60,7 @@ export interface TsJestGlobalOptions {
    *
    * @default undefined uses the default package.json file
    */
-  packageJson?: boolean | string | object
+  packageJson?: boolean | string | Record<string, unknown>
 
   /**
    * Compiles files as isolated modules (disables some features and type-checking)

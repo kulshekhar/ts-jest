@@ -15,6 +15,7 @@ export class JsonableValue<V = any> {
     this._value = value
     this._serialized = stringify(value)
   }
+
   get value(): V {
     return this._value
   }
@@ -27,7 +28,7 @@ export class JsonableValue<V = any> {
     return this._value
   }
 
-  toString() {
+  toString(): string {
     return this._serialized
   }
 }

@@ -2,7 +2,7 @@ import { testing } from 'bs-logger'
 
 import { rootLogger } from '../util/logger'
 
-export const logTargetMock = () => (rootLogger as testing.LoggerMock).target
+export const logTargetMock = (): testing.LogTargetMock => (rootLogger as testing.LoggerMock).target
 
 export const mockObject = <T, M>(obj: T, newProps: M): T & M & { mockRestore: () => T } => {
   const backup: any = Object.create(null)
@@ -18,6 +18,7 @@ export const mockObject = <T, M>(obj: T, newProps: M): T & M & { mockRestore: ()
     Object.defineProperty(obj, key, newDesc)
   })
   if ((obj as any).mockRestore) backup.mockRestore = Object.getOwnPropertyDescriptor(obj, 'mockRestore')
+
   return Object.defineProperty(obj, 'mockRestore', {
     value() {
       Object.keys(backup).forEach((key) => {
@@ -29,12 +30,18 @@ export const mockObject = <T, M>(obj: T, newProps: M): T & M & { mockRestore: ()
   })
 }
 
-export const mockWriteStream = () => ({
+interface MockWriteStream {
+  written: string[]
+  write(text: string): void
+  clear(): void
+}
+
+export const mockWriteStream = (): MockWriteStream => ({
   written: [] as string[],
-  write(text: string) {
+  write(text: string): void {
     this.written.push(text)
   },
-  clear() {
+  clear(): void {
     this.written = []
   },
 })

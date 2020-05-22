@@ -162,5 +162,6 @@ if (!prepareOnly) {
   // spawnSync('jest', ['--clearCache'])
 
   log('running tests')
+  // eslint-disable-next-line @typescript-eslint/no-floating-promises
   jest.run(['--config', configFile, ...parentArgs])
 }

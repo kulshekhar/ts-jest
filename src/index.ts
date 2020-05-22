@@ -40,8 +40,9 @@ function defaultTransformer(): TsJestTransformer {
   return transformer || (transformer = createTransformer())
 }
 
-export function createTransformer(baseConfig?: TsJestGlobalOptions) {
+export function createTransformer(baseConfig?: TsJestGlobalOptions): TsJestTransformer {
   VersionCheckers.jest.warn()
+
   return new TsJestTransformer(baseConfig)
 }
 /**
@@ -69,11 +70,11 @@ const jestPreset = createJestPresetCore()
  * @internal
  */
 // for tests
-export const __singleton = () => transformer
+export const __singleton = (): TsJestTransformer => transformer
 /**
  * @internal
  */
-export const __resetModule = () => (transformer = undefined as any)
+export const __resetModule = (): any => (transformer = undefined as any)
 
 export {
   // extra ==================

@@ -4,7 +4,8 @@ const cacheProp = Symbol.for('[memoize]') as any
  * @internal
  */
 export function Memoize(keyBuilder?: (...args: any[]) => any) {
-  return (_: object, propertyKey: string, descriptor: TypedPropertyDescriptor<any>) => {
+  /* eslint-disable-next-line  @typescript-eslint/ban-types */
+  return (_: object, propertyKey: string, descriptor: TypedPropertyDescriptor<any>): void => {
     if (descriptor.value != null) {
       descriptor.value = memoize(propertyKey, descriptor.value, keyBuilder || ((v: any) => v))
     } else if (descriptor.get != null) {
@@ -15,7 +16,7 @@ export function Memoize(keyBuilder?: (...args: any[]) => any) {
 
 // See https://github.com/microsoft/TypeScript/issues/1863#issuecomment-579541944
 /* eslint-disable-next-line  @typescript-eslint/ban-types */
-function ensureCache<T extends Object & { [key: string]: any }>(
+function ensureCache<T extends Record<string, unknown> & { [key: string]: any }>(
   target: T,
   reset = false,
 ): { [key in keyof T]?: Map<any, any> } {
@@ -31,7 +32,7 @@ function ensureCache<T extends Object & { [key: string]: any }>(
 
 // See https://github.com/microsoft/TypeScript/issues/1863#issuecomment-579541944
 /* eslint-disable-next-line  @typescript-eslint/ban-types */
-function ensureChildCache<T extends Object & { [key: string]: any }>(
+function ensureChildCache<T extends Record<string, unknown> & { [key: string]: any }>(
   target: T,
   key: keyof T,
   reset = false,

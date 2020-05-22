@@ -6,3 +6,4 @@ e2e/__external-repos__/
 coverage/
 docs/
 *.config.js
+.eslintrc.js
