@@ -4,11 +4,7 @@ import { rootLogger } from '../util/logger'
 
 const logger = rootLogger.child({ namespace: 'jest-preset' })
 
-export interface TsJestPresets {
-  transform: Config.InitialOptions['transform']
-  testMatch?: string[]
-  moduleFileExtensions?: string[]
-}
+export type TsJestPresets = Pick<Config.InitialOptions, 'moduleFileExtensions' | 'transform' | 'testMatch'>
 
 export interface CreateJestPresetOptions {
   allowJs?: boolean
@@ -19,6 +15,7 @@ export function createJestPreset(
   from: Config.InitialOptions = {},
 ): TsJestPresets {
   logger.debug({ allowJs }, 'creating jest presets', allowJs ? 'handling' : 'not handling', 'JavaScript files')
+
   return {
     transform: {
       ...from.transform,
