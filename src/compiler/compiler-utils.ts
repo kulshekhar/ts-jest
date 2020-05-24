@@ -28,7 +28,7 @@ export function cacheResolvedModules(
   logger: Logger,
 ): void {
   /* eslint-disable-next-line  @typescript-eslint/ban-ts-comment */
-  // @ts-ignore
+  // @ts-expect-error
   const importReferences = program.getSourceFile(fileName)!.imports
   /**
    * Ugly trick while waiting for https://github.com/microsoft/TypeScript/issues/33994
