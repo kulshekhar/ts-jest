@@ -155,7 +155,6 @@ module.exports = {
         default: 'array',
       },
     ],
-    '@typescript-eslint/ban-ts-ignore': 'off',
     '@typescript-eslint/ban-types': [
       'error',
       {
@@ -229,6 +228,7 @@ module.exports = {
     '@typescript-eslint/prefer-function-type': 'error',
     '@typescript-eslint/prefer-namespace-keyword': 'error',
     '@typescript-eslint/prefer-readonly': 'error',
+    '@typescript-eslint/prefer-ts-expect-error': 'error',
     '@typescript-eslint/restrict-template-expressions': 'off',
     '@typescript-eslint/require-await': 'off',
     '@typescript-eslint/triple-slash-reference': [

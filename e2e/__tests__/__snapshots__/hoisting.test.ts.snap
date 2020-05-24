@@ -191,14 +191,14 @@ exports[`Hoisting jest.enableAutomock() should pass using template "default": io
   var enable_automock_1 = require("./enable-automock");
   test('original implementation', function () {
       // now we have the mocked implementation,
-      // @ts-ignore
+      // @ts-expect-error
       expect(enable_automock_1.default._isMockFunction).toBeTruthy();
   });
-  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoiPGN3ZD4vZW5hYmxlLWF1dG9tb2NrLnNwZWMudHMiLCJtYXBwaW5ncyI6Ijs7QUFBQSxJQUFJLENBQUMsY0FBYyxFQUFFLENBQUE7QUFFckIscURBQXFDO0FBRXJDLElBQUksQ0FBQyx5QkFBeUIsRUFBRTtJQUM5Qix5Q0FBeUM7SUFDekMsYUFBYTtJQUNiLE1BQU0sQ0FBQyx5QkFBSyxDQUFDLGVBQWUsQ0FBQyxDQUFDLFVBQVUsRUFBRSxDQUFBO0FBQzVDLENBQUMsQ0FBQyxDQUFBIiwibmFtZXMiOltdLCJzb3VyY2VzIjpbIjxjd2Q+L2VuYWJsZS1hdXRvbW9jay5zcGVjLnRzIl0sInNvdXJjZXNDb250ZW50IjpbImplc3QuZW5hYmxlQXV0b21vY2soKVxuXG5pbXBvcnQgaGVsbG8gZnJvbSAnLi9lbmFibGUtYXV0b21vY2snXG5cbnRlc3QoJ29yaWdpbmFsIGltcGxlbWVudGF0aW9uJywgKCkgPT4ge1xuICAvLyBub3cgd2UgaGF2ZSB0aGUgbW9ja2VkIGltcGxlbWVudGF0aW9uLFxuICAvLyBAdHMtaWdub3JlXG4gIGV4cGVjdChoZWxsby5faXNNb2NrRnVuY3Rpb24pLnRvQmVUcnV0aHkoKVxufSlcbiJdLCJ2ZXJzaW9uIjozfQ==
+  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoiPGN3ZD4vZW5hYmxlLWF1dG9tb2NrLnNwZWMudHMiLCJtYXBwaW5ncyI6Ijs7QUFBQSxJQUFJLENBQUMsY0FBYyxFQUFFLENBQUE7QUFFckIscURBQXFDO0FBRXJDLElBQUksQ0FBQyx5QkFBeUIsRUFBRTtJQUM5Qix5Q0FBeUM7SUFDekMsbUJBQW1CO0lBQ25CLE1BQU0sQ0FBQyx5QkFBSyxDQUFDLGVBQWUsQ0FBQyxDQUFDLFVBQVUsRUFBRSxDQUFBO0FBQzVDLENBQUMsQ0FBQyxDQUFBIiwibmFtZXMiOltdLCJzb3VyY2VzIjpbIjxjd2Q+L2VuYWJsZS1hdXRvbW9jay5zcGVjLnRzIl0sInNvdXJjZXNDb250ZW50IjpbImplc3QuZW5hYmxlQXV0b21vY2soKVxuXG5pbXBvcnQgaGVsbG8gZnJvbSAnLi9lbmFibGUtYXV0b21vY2snXG5cbnRlc3QoJ29yaWdpbmFsIGltcGxlbWVudGF0aW9uJywgKCkgPT4ge1xuICAvLyBub3cgd2UgaGF2ZSB0aGUgbW9ja2VkIGltcGxlbWVudGF0aW9uLFxuICAvLyBAdHMtZXhwZWN0LWVycm9yXG4gIGV4cGVjdChoZWxsby5faXNNb2NrRnVuY3Rpb24pLnRvQmVUcnV0aHkoKVxufSlcbiJdLCJ2ZXJzaW9uIjozfQ==
   ===[ INLINE SOURCE MAPS ]=======================================================
   file: <cwd>/enable-automock.spec.ts
   mappings: >-
-    ;;AAAA,IAAI,CAAC,cAAc,EAAE,CAAA;AAErB,qDAAqC;AAErC,IAAI,CAAC,yBAAyB,EAAE;IAC9B,yCAAyC;IACzC,aAAa;IACb,MAAM,CAAC,yBAAK,CAAC,eAAe,CAAC,CAAC,UAAU,EAAE,CAAA;AAC5C,CAAC,CAAC,CAAA
+    ;;AAAA,IAAI,CAAC,cAAc,EAAE,CAAA;AAErB,qDAAqC;AAErC,IAAI,CAAC,yBAAyB,EAAE;IAC9B,yCAAyC;IACzC,mBAAmB;IACnB,MAAM,CAAC,yBAAK,CAAC,eAAe,CAAC,CAAC,UAAU,EAAE,CAAA;AAC5C,CAAC,CAAC,CAAA
   names: []
   sources:
     - <cwd>/enable-automock.spec.ts
@@ -210,7 +210,7 @@ exports[`Hoisting jest.enableAutomock() should pass using template "default": io
   
       test('original implementation', () => {
         // now we have the mocked implementation,
-        // @ts-ignore
+        // @ts-expect-error
         expect(hello._isMockFunction).toBeTruthy()
       })
   version: 3
@@ -258,10 +258,10 @@ exports[`Hoisting jest.enableAutomock() should pass using template "with-babel-7
   
   test('original implementation', function () {
     // now we have the mocked implementation,
-    // @ts-ignore
+    // @ts-expect-error
     expect(enable_automock_1.default._isMockFunction).toBeTruthy();
   });
-  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJtYXBwaW5ncyI6Ijs7QUFBQSxjQUFLLGNBQUw7Ozs7Ozs7Ozs7Ozs7Ozs7QUFFQSxJQUFBLGlCQUFBLEdBQUEsT0FBQSxDQUFBLG1CQUFBLENBQUE7O0FBRUEsSUFBSSxDQUFDLHlCQUFELEVBQTRCLFlBQUE7QUFDOUI7QUFDQTtBQUNBLEVBQUEsTUFBTSxDQUFDLGlCQUFBLENBQUEsT0FBQSxDQUFNLGVBQVAsQ0FBTixDQUE4QixVQUE5QjtBQUNELENBSkcsQ0FBSiIsIm5hbWVzIjpbXSwic291cmNlcyI6WyI8Y3dkPi9lbmFibGUtYXV0b21vY2suc3BlYy50cyJdLCJzb3VyY2VzQ29udGVudCI6WyJqZXN0LmVuYWJsZUF1dG9tb2NrKClcblxuaW1wb3J0IGhlbGxvIGZyb20gJy4vZW5hYmxlLWF1dG9tb2NrJ1xuXG50ZXN0KCdvcmlnaW5hbCBpbXBsZW1lbnRhdGlvbicsICgpID0+IHtcbiAgLy8gbm93IHdlIGhhdmUgdGhlIG1vY2tlZCBpbXBsZW1lbnRhdGlvbixcbiAgLy8gQHRzLWlnbm9yZVxuICBleHBlY3QoaGVsbG8uX2lzTW9ja0Z1bmN0aW9uKS50b0JlVHJ1dGh5KClcbn0pXG4iXSwidmVyc2lvbiI6M30=
+  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJtYXBwaW5ncyI6Ijs7QUFBQSxjQUFLLGNBQUw7Ozs7Ozs7Ozs7Ozs7Ozs7QUFFQSxJQUFBLGlCQUFBLEdBQUEsT0FBQSxDQUFBLG1CQUFBLENBQUE7O0FBRUEsSUFBSSxDQUFDLHlCQUFELEVBQTRCLFlBQUE7QUFDOUI7QUFDQTtBQUNBLEVBQUEsTUFBTSxDQUFDLGlCQUFBLENBQUEsT0FBQSxDQUFNLGVBQVAsQ0FBTixDQUE4QixVQUE5QjtBQUNELENBSkcsQ0FBSiIsIm5hbWVzIjpbXSwic291cmNlcyI6WyI8Y3dkPi9lbmFibGUtYXV0b21vY2suc3BlYy50cyJdLCJzb3VyY2VzQ29udGVudCI6WyJqZXN0LmVuYWJsZUF1dG9tb2NrKClcblxuaW1wb3J0IGhlbGxvIGZyb20gJy4vZW5hYmxlLWF1dG9tb2NrJ1xuXG50ZXN0KCdvcmlnaW5hbCBpbXBsZW1lbnRhdGlvbicsICgpID0+IHtcbiAgLy8gbm93IHdlIGhhdmUgdGhlIG1vY2tlZCBpbXBsZW1lbnRhdGlvbixcbiAgLy8gQHRzLWV4cGVjdC1lcnJvclxuICBleHBlY3QoaGVsbG8uX2lzTW9ja0Z1bmN0aW9uKS50b0JlVHJ1dGh5KClcbn0pXG4iXSwidmVyc2lvbiI6M30=
   ===[ INLINE SOURCE MAPS ]=======================================================
   mappings: >-
     ;;AAAA,cAAK,cAAL;;;;;;;;;;;;;;;;AAEA,IAAA,iBAAA,GAAA,OAAA,CAAA,mBAAA,CAAA;;AAEA,IAAI,CAAC,yBAAD,EAA4B,YAAA;AAC9B;AACA;AACA,EAAA,MAAM,CAAC,iBAAA,CAAA,OAAA,CAAM,eAAP,CAAN,CAA8B,UAA9B;AACD,CAJG,CAAJ
@@ -276,7 +276,7 @@ exports[`Hoisting jest.enableAutomock() should pass using template "with-babel-7
   
       test('original implementation', () => {
         // now we have the mocked implementation,
-        // @ts-ignore
+        // @ts-expect-error
         expect(hello._isMockFunction).toBeTruthy()
       })
   version: 3
@@ -324,10 +324,10 @@ exports[`Hoisting jest.enableAutomock() should pass using template "with-babel-7
   
   test('original implementation', function () {
     // now we have the mocked implementation,
-    // @ts-ignore
+    // @ts-expect-error
     expect(enable_automock_1.default._isMockFunction).toBeTruthy();
   });
-  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJtYXBwaW5ncyI6Ijs7QUFBQSxjQUFLLGNBQUw7Ozs7Ozs7Ozs7Ozs7Ozs7QUFFQSxJQUFBLGlCQUFBLEdBQUEsT0FBQSxDQUFBLG1CQUFBLENBQUE7O0FBRUEsSUFBSSxDQUFDLHlCQUFELEVBQTRCLFlBQUE7QUFDOUI7QUFDQTtBQUNBLEVBQUEsTUFBTSxDQUFDLGlCQUFBLENBQUEsT0FBQSxDQUFNLGVBQVAsQ0FBTixDQUE4QixVQUE5QjtBQUNELENBSkcsQ0FBSiIsIm5hbWVzIjpbXSwic291cmNlcyI6WyI8Y3dkPi9lbmFibGUtYXV0b21vY2suc3BlYy50cyJdLCJzb3VyY2VzQ29udGVudCI6WyJqZXN0LmVuYWJsZUF1dG9tb2NrKClcblxuaW1wb3J0IGhlbGxvIGZyb20gJy4vZW5hYmxlLWF1dG9tb2NrJ1xuXG50ZXN0KCdvcmlnaW5hbCBpbXBsZW1lbnRhdGlvbicsICgpID0+IHtcbiAgLy8gbm93IHdlIGhhdmUgdGhlIG1vY2tlZCBpbXBsZW1lbnRhdGlvbixcbiAgLy8gQHRzLWlnbm9yZVxuICBleHBlY3QoaGVsbG8uX2lzTW9ja0Z1bmN0aW9uKS50b0JlVHJ1dGh5KClcbn0pXG4iXSwidmVyc2lvbiI6M30=
+  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJtYXBwaW5ncyI6Ijs7QUFBQSxjQUFLLGNBQUw7Ozs7Ozs7Ozs7Ozs7Ozs7QUFFQSxJQUFBLGlCQUFBLEdBQUEsT0FBQSxDQUFBLG1CQUFBLENBQUE7O0FBRUEsSUFBSSxDQUFDLHlCQUFELEVBQTRCLFlBQUE7QUFDOUI7QUFDQTtBQUNBLEVBQUEsTUFBTSxDQUFDLGlCQUFBLENBQUEsT0FBQSxDQUFNLGVBQVAsQ0FBTixDQUE4QixVQUE5QjtBQUNELENBSkcsQ0FBSiIsIm5hbWVzIjpbXSwic291cmNlcyI6WyI8Y3dkPi9lbmFibGUtYXV0b21vY2suc3BlYy50cyJdLCJzb3VyY2VzQ29udGVudCI6WyJqZXN0LmVuYWJsZUF1dG9tb2NrKClcblxuaW1wb3J0IGhlbGxvIGZyb20gJy4vZW5hYmxlLWF1dG9tb2NrJ1xuXG50ZXN0KCdvcmlnaW5hbCBpbXBsZW1lbnRhdGlvbicsICgpID0+IHtcbiAgLy8gbm93IHdlIGhhdmUgdGhlIG1vY2tlZCBpbXBsZW1lbnRhdGlvbixcbiAgLy8gQHRzLWV4cGVjdC1lcnJvclxuICBleHBlY3QoaGVsbG8uX2lzTW9ja0Z1bmN0aW9uKS50b0JlVHJ1dGh5KClcbn0pXG4iXSwidmVyc2lvbiI6M30=
   ===[ INLINE SOURCE MAPS ]=======================================================
   mappings: >-
     ;;AAAA,cAAK,cAAL;;;;;;;;;;;;;;;;AAEA,IAAA,iBAAA,GAAA,OAAA,CAAA,mBAAA,CAAA;;AAEA,IAAI,CAAC,yBAAD,EAA4B,YAAA;AAC9B;AACA;AACA,EAAA,MAAM,CAAC,iBAAA,CAAA,OAAA,CAAM,eAAP,CAAN,CAA8B,UAA9B;AACD,CAJG,CAAJ
@@ -342,7 +342,7 @@ exports[`Hoisting jest.enableAutomock() should pass using template "with-babel-7
   
       test('original implementation', () => {
         // now we have the mocked implementation,
-        // @ts-ignore
+        // @ts-expect-error
         expect(hello._isMockFunction).toBeTruthy()
       })
   version: 3
