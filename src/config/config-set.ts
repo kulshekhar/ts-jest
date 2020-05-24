@@ -104,6 +104,7 @@ const toDiagnosticCodeList = (items: any, into: number[] = []): number[] => {
     const code = toDiagnosticCode(item)
     if (code && !into.includes(code)) into.push(code)
   }
+
   return into
 }
 
@@ -156,6 +157,7 @@ export class ConfigSet {
       ...pkg.devDependencies,
       ...pkg.dependencies,
     })
+
     return names.reduce((map, name) => {
       const version = getPackageVersion(name)
       if (version) map[name] = version
@@ -393,6 +395,7 @@ export class ConfigSet {
     } = this
     if (babelConfig == null) {
       this.logger.debug('babel is disabled')
+
       return undefined
     }
     let base: BabelConfig = { cwd: this.cwd }
@@ -434,6 +437,7 @@ export class ConfigSet {
     const { babel } = this
     if (!babel) return undefined
     this.logger.debug('creating babel-jest transformer')
+
     return importer.babelJest(ImportReasons.BabelJest).createTransformer(babel) as BabelJestTransformer
   }
 
@@ -471,6 +475,7 @@ export class ConfigSet {
 
       return importer.tryTheseOr(hooksFile, {})
     }
+
     return {}
   }
 
@@ -565,6 +570,7 @@ export class ConfigSet {
   get tsCacheDir(): string | undefined {
     if (!this.jest.cache) {
       logger.debug('file caching disabled')
+
       return undefined
     }
     const cacheSuffix = sha1(
@@ -580,6 +586,7 @@ export class ConfigSet {
     )
     const res = join(this.jest.cacheDirectory, 'ts-jest', cacheSuffix.substr(0, 2), cacheSuffix.substr(2))
     logger.debug({ cacheDirectory: res }, 'will use file caching')
+
     return res
   }
 
@@ -694,6 +701,7 @@ export class ConfigSet {
     options: { category?: DiagnosticCategory; file?: SourceFile; start?: number; length?: number } = {},
   ): Diagnostic {
     const { category = this.compilerModule.DiagnosticCategory.Warning, file, start, length } = options
+
     return {
       code,
       messageText,
@@ -828,6 +836,7 @@ export class ConfigSet {
       throw new Error(interpolate(Errors.FileNotFound, { inputPath, resolvedPath: path }))
     }
     this.logger.debug({ fromPath: inputPath, toPath: path }, 'resolved path from', inputPath, 'to', path)
+
     return path
   }
 

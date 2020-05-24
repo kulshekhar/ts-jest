@@ -36,6 +36,7 @@ export default class RunResult {
     const lines = this.logFileContent.split(/\n/g)
     // remove last, empty line
     lines.pop()
+
     return lines.map(s => JSON.parse(s))
   }
 

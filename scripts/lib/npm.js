@@ -22,6 +22,7 @@ function directDepsPkg(dir) {
     if (res[key]) return
     res[key] = require(join(dir, 'node_modules', key, 'package.json'))
   })
+
   return res
 }
 

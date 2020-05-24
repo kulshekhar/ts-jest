@@ -49,6 +49,7 @@ function hooksSourceWith(vars: Record<string, any>): string {
   if (!__hooksSource) {
     __hooksSource = readFileSync(join(__dirname, '__hooks-source__.js.hbs'), 'utf8')
   }
+
   // eslint-disable-next-line no-useless-escape
   return __hooksSource.replace(/\{\{([^\}]+)\}\}/g, (_, key) => JSON.stringify(vars[key]))
 }
@@ -253,6 +254,7 @@ export function prepareTest(name: string, template: string, options: RunTestOpti
           segments.pop()
         }
         snapshotDirs[segments.join(sep)] = 0
+
         return false
       } else if (relPath === 'jest.config.js') {
         // extend base if it's a function
@@ -263,8 +265,10 @@ export function prepareTest(name: string, template: string, options: RunTestOpti
         const mod = require(src)
         if (typeof mod === 'function') {
           writeFileSync(dest, `module.exports = ${JSON.stringify(mod(baseConfig, configUtils))}`)
+
           return false
         }
+
         return true
       } else {
         return true

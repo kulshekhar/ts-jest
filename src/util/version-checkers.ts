@@ -71,6 +71,7 @@ function checkVersion(
     logger.fatal(message)
     throw new RangeError(message)
   }
+
   return success
 }
 
@@ -82,9 +83,11 @@ function createVersionChecker(moduleName: string, expectedVersion: string): Vers
   let memo: boolean | undefined
   const warn = () => {
     if (memo !== undefined) return memo
+
     return (memo = checkVersion(moduleName, expectedVersion, 'warn'))
   }
   const raise = () => checkVersion(moduleName, expectedVersion, 'throw')
+
   return {
     raise,
     warn,

@@ -49,8 +49,10 @@ export const run: CliCommand = async (args: Arguments /* , logger: Logger*/) => 
           let transformer: string = (migratedConfig.transform as any)[pattern]
           if (/\bbabel-jest\b/.test(transformer)) transformer = 'babel-jest'
           else if (/\ts-jest\b/.test(transformer)) transformer = 'ts-jest'
+
           return [...list, transformer]
         }
+
         return list
       }, [] as string[])
       // depending on the transformer found, we use one or the other preset
@@ -132,6 +134,7 @@ Visit https://kulshekhar.github.io/ts-jest/user/config/#jest-preset for more inf
     process.stderr.write(`
 No migration needed for given Jest configuration
     `)
+
     return
   }
 

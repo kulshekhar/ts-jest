@@ -12,6 +12,7 @@ export function templateNameForPath(path: string): string {
   if (existsSync(e2eFile)) {
     return require(e2eFile).template || 'default'
   }
+
   return 'default'
 }
 
@@ -21,6 +22,7 @@ const FAIL_MARKS = ['×', '✕']
 const normalizeTestMark = (mark: string): string => {
   if (PASS_MARKS.includes(mark)) return PASS_MARKS[0]
   if (FAIL_MARKS.includes(mark)) return FAIL_MARKS[0]
+
   return '?'
 }
 
@@ -41,6 +43,7 @@ export function normalizeJestOutput(output: string): string {
   if (process.platform === 'win32') {
     out = out.replace(/\\/g, '/')
   }
+
   return out
 }
 

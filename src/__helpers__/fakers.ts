@@ -37,6 +37,7 @@ export function getJestConfig<T extends Config.ProjectConfig>(
   if (tsJestOptions) {
     res.globals['ts-jest'] = tsJestOptions
   }
+
   return res
 }
 

@@ -56,6 +56,7 @@ function memoize(
     if (cache.has(key)) return cache.get(key)
     const res: any = func.apply(this, args)
     cache.set(key, res)
+
     return res
   }
 }

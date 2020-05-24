@@ -49,5 +49,6 @@ export const pathsToModuleNameMapper = (
       continue
     }
   }
+
   return jestMap
 }

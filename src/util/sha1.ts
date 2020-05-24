@@ -34,5 +34,6 @@ export function sha1(...data: DataItem[]): string {
   if (canCache) {
     cache[cacheKey] = res
   }
+
   return res
 }

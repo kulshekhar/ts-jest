@@ -24,6 +24,7 @@ export const mockObject = <T, M>(obj: T, newProps: M): T & M & { mockRestore: ()
       Object.keys(backup).forEach((key) => {
         Object.defineProperty(obj, key, backup[key])
       })
+
       return obj
     },
     configurable: true,
