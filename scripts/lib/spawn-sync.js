@@ -15,6 +15,7 @@ const spawnSync = (...args) => {
     msgs.push('unknown error')
     throw new Error(msgs.find((s) => s))
   }
+
   return res
 }
 

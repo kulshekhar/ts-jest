@@ -21,6 +21,7 @@ const runCli = async (
   mockedProcess.argv.splice(2, mockedProcess.argv.length - 2, ...args)
   lastExitCode = undefined
   await processArgv()
+
   return {
     exitCode: lastExitCode,
     stdout: mockedProcess.stdout.written.join('\n'),

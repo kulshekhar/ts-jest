@@ -25,12 +25,14 @@ export function parseSource(source: string): ParsedSourceWithMaps {
     []
   if (b64Maps) {
     const map = base64ToSourceMaps(b64Maps)
+
     return {
       source: source.substr(0, -comment.length),
       comment: comment.trim(),
       sourceMaps: map,
     }
   }
+
   return { source }
 }
 
@@ -47,6 +49,7 @@ export function relativisePaths(map: RawSourceMap, fromPath: string, newPrefix =
   if (res.sourceRoot) res.sourceRoot = remap(res.sourceRoot)
   if (res.sources) res.sources = res.sources.map(remap)
   if (res.file) res.file = remap(res.file)
+
   return res
 }
 
@@ -56,6 +59,7 @@ export function rewriteSourceMaps(source: string, sourceMapsTransformer: (maps: 
     (_, before, base64, after) => {
       let map = base64ToSourceMaps(base64)
       map = sourceMapsTransformer(map)
+
       return `${before}${sourceMapsToBase64(map)}${after}`
     },
   )

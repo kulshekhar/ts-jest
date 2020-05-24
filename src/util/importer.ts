@@ -19,6 +19,7 @@ interface ImportOptions {
 
 const passThru = (action: () => void) => (input: any) => {
   action()
+
   return input
 }
 
@@ -29,6 +30,7 @@ export class Importer {
   @Memoize()
   static get instance(): Importer {
     logger.debug('creating Importer singleton')
+
     // here we can define patches to apply to modules.
     // it could be fixes that are not deployed, or
     // abstractions so that multiple versions work the same
@@ -107,8 +109,10 @@ export class Importer {
   protected _patch<T>(name: string, unpatched: T): T {
     if (name in this._patches) {
       logger.debug('patching', name)
+
       return this._patches[name].reduce((mod, patcher) => patcher(mod), unpatched)
     }
+
     return unpatched
   }
 
@@ -181,6 +185,7 @@ function requireWrapper(moduleName: string): RequireResult {
       result.error = error
     }
   }
+
   return result
 }
 

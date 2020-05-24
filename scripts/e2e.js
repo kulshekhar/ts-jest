@@ -31,6 +31,7 @@ function getDirectories(rootDir) {
 function sha1(...data) {
   const hash = createHash('sha1')
   data.forEach((item) => hash.update(item))
+
   return hash.digest('hex').toString()
 }
 
@@ -105,6 +106,7 @@ function setupE2e() {
     // no package-lock.json => this template doesn't provide any package-set
     if (!fs.existsSync(pkgLockFile)) {
       log(`  [template: ${name}]`, 'not a package-set template, nothing to do')
+
       return
     }
 
@@ -119,6 +121,7 @@ function setupE2e() {
       if (bundleOk && packagesOk) {
         log(`  [template: ${name}]`, 'bundle and packages unchanged, nothing to do')
         logPackageVersions()
+
         return
       }
     }

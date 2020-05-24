@@ -33,6 +33,7 @@ export function normalize(input: string, { parse: parser = parse }: NormalizeOpt
     if (result === input) result = undefined
     normalize.cache.set(input, result)
   }
+
   return result === undefined ? input : result
 }
 

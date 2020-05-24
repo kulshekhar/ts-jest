@@ -101,6 +101,7 @@ function createIteratorContext(templateName: string, expectedStatus?: number): R
     if (status == null) {
       return 'run'
     }
+
     return status === 0 ? 'pass' : 'fail'
   }
 

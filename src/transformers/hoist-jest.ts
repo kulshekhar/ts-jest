@@ -136,6 +136,7 @@ export function factory(cs: ConfigSet): (ctx: TransformationContext) => Transfor
       // finally returns the currently visited node
       return resultNode
     }
+
     return visitor
   }
 

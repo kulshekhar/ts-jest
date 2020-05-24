@@ -42,6 +42,7 @@ function computePackageDigest(noWriteFile = false) {
   if (!noWriteFile) {
     writeFileSync(pkgDigestFile, digest, 'utf8')
   }
+
   return digest
 }
 

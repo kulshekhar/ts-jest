@@ -10,6 +10,7 @@ jest.mock('./ts-jest-transformer', () => {
     getCacheKey: jest.Mock = jest.fn()
     constructor(public opt?: any) {}
   }
+
   return { TsJestTransformer }
 })
 jest.mock('./config/create-jest-preset', () => ({

@@ -24,6 +24,7 @@ async function cli(args: string[]): Promise<void> {
       js(val: string) {
         const res = val.trim().toLowerCase()
         if (!['babel', 'ts'].includes(res)) throw new Error(`The 'js' option must be 'babel' or 'ts', given: '${val}'.`)
+
         return res
       },
     },
