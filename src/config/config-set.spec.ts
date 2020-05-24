@@ -1,7 +1,7 @@
 /* eslint-disable jest/no-mocks-import */
 import { Transformer } from '@jest/transform'
 import { Config } from '@jest/types'
-import { testing } from 'bs-logger'
+import { LogLevels, testing } from 'bs-logger'
 import { readFileSync } from 'fs'
 import json5 = require('json5')
 import { resolve } from 'path'
@@ -791,6 +791,59 @@ describe('readTsConfig', () => {
         expect(conf.options.allowSyntheticDefaultImports).toEqual(true)
       })
     })
+  })
+
+  describe('mismatch nodejs version and typescript target', () => {
+    const logTarget = logTargetMock()
+
+    beforeEach(() => {
+      logTarget.clear()
+      cs = createConfigSet({ jestConfig: { rootDir: '/root', cwd: '/cwd' } as any })
+      findConfig.mockImplementation((p) => `${p}/tsconfig.json`)
+    })
+
+    afterEach(() => {
+      findConfig.mockClear()
+    })
+
+    function mismatchTestCaseContent(tsTarget: string, scriptTarget: ts.ScriptTarget) {
+      parseConfig.mockImplementation((conf: any) => ({
+        options: {
+          ...conf,
+          target: scriptTarget,
+        },
+        fileNames: [],
+        errors: [],
+      }))
+      readConfig.mockImplementation((p) => ({ config: { path: p, compilerOptions: { target: tsTarget } } }))
+
+      cs.readTsConfig()
+
+      // expect.toEqual gives weird result here so toContain is workaround for it.
+      expect(logTarget.filteredLines(LogLevels.warn, Infinity)[0]).toContain(
+        '[level:40] There is a mismatch between your ' +
+          `NodeJs version ${process.version} and your TypeScript target ${tsTarget}. This might lead to some unexpected errors ` +
+          'when running tests with `ts-jest`. To fix this, you can check https://github.com/microsoft/TypeScript/wiki/Node-Target-Mapping',
+      )
+
+      parseConfig.mockClear()
+      readConfig.mockClear()
+    }
+
+    /**
+     * It seems like not possible to mock process.version so the condition here is needed
+     */
+    if (process.version.startsWith('v10')) {
+      // eslint-disable-next-line jest/expect-expect
+      it('should show warning message when nodejs version is 10 and typescript target is higher than es2018', () => {
+        mismatchTestCaseContent('es2019', ts.ScriptTarget.ES2019)
+      })
+    } else {
+      // eslint-disable-next-line jest/expect-expect
+      it('should show warning message when nodejs version is 12 and typescript target is higher than es2019', () => {
+        mismatchTestCaseContent('es2020', ts.ScriptTarget.ES2020)
+      })
+    }
   })
 }) // readTsConfig
 
