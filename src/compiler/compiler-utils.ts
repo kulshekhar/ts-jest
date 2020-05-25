@@ -29,7 +29,7 @@ export function cacheResolvedModules(
 ): void {
   /* eslint-disable-next-line  @typescript-eslint/ban-ts-comment */
   // @ts-expect-error
-  const importReferences = program.getSourceFile(fileName)!.imports
+  const importReferences = program.getSourceFile(fileName)!.imports // eslint-disable-line @typescript-eslint/no-non-null-assertion
   /**
    * Ugly trick while waiting for https://github.com/microsoft/TypeScript/issues/33994
    */

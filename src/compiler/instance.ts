@@ -55,7 +55,7 @@ const compileAndCacheResult = (
   const [value, sourceMap] = compileFn(code, fileName, lineOffset)
   const output = updateOutput(value, fileName, sourceMap, getExtension)
   memoryCache.files.set(fileName, {
-    ...memoryCache.files.get(fileName)!,
+    ...memoryCache.files.get(fileName)!, // eslint-disable-line @typescript-eslint/no-non-null-assertion
     output,
   })
 
