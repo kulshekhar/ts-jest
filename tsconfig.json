@@ -30,15 +30,5 @@
       "node",
       "react"
     ]
-  },
-  "include": [
-    "e2e/__helpers__",
-    "e2e/__serializers__",
-    "e2e/__tests__",
-    "scripts/",
-    "src/",
-    "utils/",
-    "presets",
-    "./*.js"
-  ]
+  }
 }

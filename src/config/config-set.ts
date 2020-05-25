@@ -20,6 +20,7 @@ import {
   DiagnosticCategory,
   FormatDiagnosticsHost,
   ParsedCommandLine,
+  ScriptTarget,
   SourceFile,
 } from 'typescript'
 
@@ -31,11 +32,11 @@ import {
   AstTransformerDesc,
   BabelConfig,
   BabelJestTransformer,
-  TTypeScript,
   TsCompiler,
   TsJestConfig,
   TsJestGlobalOptions,
   TsJestHooksMap,
+  TTypeScript,
 } from '../types'
 import { backportJestConfig } from '../util/backports'
 import { getPackageVersion } from '../util/get-package-version'
@@ -723,7 +724,7 @@ export class ConfigSet {
     resolvedConfigFile?: string | null,
     noProject?: boolean | null,
   ): ParsedCommandLine {
-    let config = { compilerOptions: {} }
+    let config = { compilerOptions: Object.create(null) }
     let basePath = normalizeSlashes(this.rootDir)
     let configFileName: string | undefined
     const ts = this.compilerModule
@@ -799,6 +800,22 @@ export class ConfigSet {
       } else {
         finalOptions[key] = val
       }
+    }
+    /**
+     * See https://github.com/microsoft/TypeScript/wiki/Node-Target-Mapping
+     * Every time this page is updated, we also need to update here. Here we only show warning message for Node LTS versions
+     */
+    const nodeJsVer = process.version
+    const compilationTarget = result.options.target!
+    if (
+      (nodeJsVer.startsWith('v10') && compilationTarget > ScriptTarget.ES2018) ||
+      (nodeJsVer.startsWith('v12') && compilationTarget > ScriptTarget.ES2019)
+    ) {
+      const message = interpolate(Errors.MismatchNodeTargetMapping, {
+        nodeJsVer: process.version,
+        compilationTarget: config.compilerOptions.target,
+      })
+      logger.warn(message)
     }
 
     return result
