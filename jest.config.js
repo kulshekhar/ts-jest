@@ -1,9 +1,10 @@
+const baseConfig = require('./jest-base')
+
+/** @type {import('@jest/types').Config.InitialOptions} */
 module.exports = {
+  ...baseConfig,
   rootDir: '.',
   setupFilesAfterEnv: ['<rootDir>/src/__helpers__/setup.ts'],
-  transform: {
-    '\\.ts$': '<rootDir>/dist/index.js',
-  },
   testMatch: ['<rootDir>/src/**/*.spec.ts'],
   testPathIgnorePatterns: ['<rootDir>/src/__mocks__/*'],
   collectCoverageFrom: [
@@ -14,8 +15,6 @@ module.exports = {
     '!<rootDir>/src/**/__*__/*',
     '!<rootDir>/src/util/testing.ts',
   ],
-  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json'],
-  testEnvironment: 'node',
   snapshotSerializers: ['<rootDir>/src/__serializers__/processed-source.ts'],
   cacheDirectory: '<rootDir>/.cache/unit',
 }

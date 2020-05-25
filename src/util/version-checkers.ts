@@ -9,7 +9,7 @@ const logger = rootLogger.child({ namespace: 'versions' })
 /**
  * @internal
  */
-export const enum ExpectedVersions {
+const enum ExpectedVersions {
   Jest = '>=26 <27',
   TypeScript = '>=3.8 <4',
   BabelJest = '>=26 <27',
@@ -49,6 +49,7 @@ function checkVersion(
 ): boolean | never {
   const version = getPackageVersion(name)
   const success = !!version && satisfies(version, expectedRange)
+
   logger.debug(
     {
       actualVersion: version,
@@ -58,6 +59,7 @@ function checkVersion(
     name,
     success ? 'OK' : 'NOT OK',
   )
+
   if (!action || success) return success
 
   const message = interpolate(version ? Errors.UntestedDependencyVersion : Errors.MissingDependency, {
