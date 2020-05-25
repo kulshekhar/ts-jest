@@ -634,7 +634,7 @@ describe('readTsConfig', () => {
   describe('resolve configFileName normally', () => {
     beforeEach(() => {
       cs = createConfigSet({ jestConfig: { rootDir: '/root', cwd: '/cwd' } as any })
-      findConfig.mockImplementation((p) => `${p}/tsconfig.json`)
+      findConfig.mockImplementation((p: string) => `${p}/tsconfig.json`)
       readConfig.mockImplementation((p) => ({ config: { path: p, compilerOptions: {} } }))
     })
 
@@ -806,7 +806,7 @@ describe('readTsConfig', () => {
     beforeEach(() => {
       logTarget.clear()
       cs = createConfigSet({ jestConfig: { rootDir: '/root', cwd: '/cwd' } as any })
-      findConfig.mockImplementation((p) => `${p}/tsconfig.json`)
+      findConfig.mockImplementation((p: string) => `${p}/tsconfig.json`)
     })
 
     afterEach(() => {
@@ -1047,6 +1047,7 @@ describe('jsonValue', () => {
 
 describe('raiseDiagnostics', () => {
   const createTsError = jest.fn(
+    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
     (list: ts.Diagnostic[]) => new Error(list.map((d) => `[TS${d.code}] ${d.messageText}`).join('\n')),
   )
   const logger = testing.createLoggerMock()

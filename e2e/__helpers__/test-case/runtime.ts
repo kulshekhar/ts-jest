@@ -104,6 +104,7 @@ export function run(name: string, options: RunTestOptions = {}): RunResult {
     extraConfig.cacheDirectory = undefined
   } else if (!(baseConfig.cacheDirectory || extraConfig.cacheDirectory)) {
     // force the cache directory if not set
+    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
     extraConfig.cacheDirectory = join(Paths.cacheDir, `e2e-${template}`)
   }
 

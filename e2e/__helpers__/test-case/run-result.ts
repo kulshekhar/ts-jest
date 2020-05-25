@@ -92,6 +92,7 @@ export default class RunResult {
     try {
       io = require(`${this.context.ioDir}/${relFilePath}.json`)
     } catch (err) {
+      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
       io.out = `/*\nts-jest after hook has not been called!\n${err}\noutput:\n${this.output}*/`
     }
 

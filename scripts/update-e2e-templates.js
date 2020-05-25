@@ -20,7 +20,7 @@ templateDirs.forEach((tmpl, i) => {
 
   let args = []
   Object.keys(wanted).forEach((key) => {
-    args.push(`${key}@${wanted[key]}`)
+    args.push(`${key}@${wanted[key]}`) // eslint-disable-line @typescript-eslint/restrict-template-expressions
   })
   args = ['i', '-s', '-D', '-E'].concat(args)
   logger.log(`    ↳ npm ${args.filter((a) => a !== '-s').join(' ')}`)

@@ -18,14 +18,6 @@ export default class RunDescriptor {
     return join(Paths.e2eSourceDir, this.name)
   }
 
-  get templateWorkdir(): string {
-    return join(Paths.e2eWorkTemplatesDir, this.name)
-  }
-
-  get workdir(): string {
-    return join(Paths.e2eWorkDir, this.templateName, this.name)
-  }
-
   get sourcePackageJson(): any {
     try {
       return this._sourcePackageJson || (this._sourcePackageJson = require(join(this.sourceDir, 'package.json')))
@@ -53,6 +45,7 @@ export default class RunDescriptor {
           console.log(
         '='.repeat(70),
         '\n',
+        // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
         `Test exited with unexpected status in "${this.name}" using template "${this.templateName}" (exit code: ${result.status}):\n`,
         result.context.cmd,
         result.context.args.join(' '),

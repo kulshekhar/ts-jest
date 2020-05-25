@@ -56,7 +56,7 @@ export function relativisePaths(map: RawSourceMap, fromPath: string, newPrefix =
 export function rewriteSourceMaps(source: string, sourceMapsTransformer: (maps: RawSourceMap) => RawSourceMap): string {
   return source.replace(
     /([\n^]\/\/#\s*sourceMappingURL=data:application\/json;(?:charset=utf-8;)?base64,)(\S+)(\s*)$/,
-    (_, before, base64, after) => {
+    (_, before: string, base64: string, after: string) => {
       let map = base64ToSourceMaps(base64)
       map = sourceMapsTransformer(map)
 
