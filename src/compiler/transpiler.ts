@@ -42,6 +42,7 @@ export const initializeTranspilerInstance = (
         configs.raiseDiagnostics(result.diagnostics, fileName, logger)
       }
 
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       return [result.outputText, result.sourceMapText!]
     },
     program,

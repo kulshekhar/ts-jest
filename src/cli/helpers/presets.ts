@@ -24,12 +24,14 @@ const definePreset = (fullName: string): TsJestPresetDescriptor => ({
     return this.isDefault ? 'ts-jest' : fullName
   },
   get label() {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     return fullName.split('/').pop()!
   },
   get jsVarName() {
     return this.isDefault
       ? 'defaults'
-      : fullName
+      : // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        fullName
           .split('/')
           .pop()!
           // eslint-disable-next-line no-useless-escape

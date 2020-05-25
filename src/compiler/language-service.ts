@@ -39,6 +39,7 @@ export const initializeLanguageServiceInstance = (
     [LogContexts.logLevel]: LogLevels.trace,
   }
   function isFileInCache(fileName: string) {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     return memoryCache.files.has(fileName) && memoryCache.files.get(fileName)!.version !== 0
   }
   let projectVersion = 1
@@ -56,12 +57,13 @@ export const initializeLanguageServiceInstance = (
       })
       shouldIncrementProjectVersion = true
     } else {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       const previousContents = memoryCache.files.get(fileName)!.text
       // Avoid incrementing cache when nothing has changed.
       if (previousContents !== contents) {
         memoryCache.files.set(fileName, {
           text: contents,
-          version: memoryCache.files.get(fileName)!.version + 1,
+          version: memoryCache.files.get(fileName)!.version + 1, // eslint-disable-line @typescript-eslint/no-non-null-assertion
         })
         // Only bump project version when file is modified in cache, not when discovered for the first time
         if (hit) shouldIncrementProjectVersion = true
@@ -93,6 +95,7 @@ export const initializeLanguageServiceInstance = (
     },
     getScriptSnapshot(fileName: string) {
       const normalizedFileName = normalize(fileName)
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       const hit = memoryCache.files.has(normalizedFileName) && memoryCache.files.get(normalizedFileName)!.version !== 0
 
       logger.trace({ normalizedFileName, cacheHit: hit }, 'getScriptSnapshot():', 'cache', hit ? 'hit' : 'miss')
@@ -115,7 +118,7 @@ export const initializeLanguageServiceInstance = (
     readDirectory: memoize(ts.sys.readDirectory),
     getDirectories: memoize(ts.sys.getDirectories),
     directoryExists: memoize(ts.sys.directoryExists),
-    realpath: memoize(ts.sys.realpath!),
+    realpath: memoize(ts.sys.realpath!), // eslint-disable-line @typescript-eslint/no-non-null-assertion
     getNewLine: () => LINE_FEED,
     getCurrentDirectory: () => cwd,
     getCompilationSettings: () => options,
@@ -143,6 +146,7 @@ export const initializeLanguageServiceInstance = (
        */
       if (cacheDir) {
         if (isTestFile(configs.testMatchPatterns, fileName)) {
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           cacheResolvedModules(fileName, code, memoryCache, service.getProgram()!, cacheDir, logger)
         } else {
           Object.entries(memoryCache.resolvedModules)

@@ -258,6 +258,7 @@ describe('tsJest', () => {
         resolve: null,
       })
       logger.target.clear()
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       expect(cs.tsJest.babelConfig!.kind).toEqual('file')
       expect(cs.babel).toMatchInlineSnapshot(`
         Object {
@@ -280,7 +281,9 @@ describe('tsJest', () => {
         resolve: null,
       })
       logger.target.clear()
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       expect(cs.tsJest.babelConfig!.kind).toEqual('file')
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       expect(cs.tsJest.babelConfig!.value).toContain('.babelrc-foo')
       expect(cs.babel).toEqual(expect.objectContaining(json5.parse(readFileSync(FILE, 'utf8'))))
       expect(logger.target.lines[3]).toMatchInlineSnapshot(`
@@ -298,7 +301,9 @@ describe('tsJest', () => {
         resolve: null,
       })
       logger.target.clear()
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       expect(cs.tsJest.babelConfig!.kind).toEqual('file')
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       expect(cs.tsJest.babelConfig!.value).toContain('babel-foo.config.js')
       expect(cs.babel).toEqual(expect.objectContaining(require('../__mocks__/babel-foo.config')))
       expect(logger.target.lines[3]).toMatchInlineSnapshot(`
@@ -317,6 +322,7 @@ describe('tsJest', () => {
         resolve: null,
       })
       logger.target.clear()
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       expect(cs.tsJest.babelConfig!.kind).toEqual('inline')
       expect(cs.babel).toEqual(expect.objectContaining(babelConfig))
       expect(logger.target.lines[2]).toMatchInlineSnapshot(`
@@ -335,6 +341,7 @@ describe('tsJest', () => {
         logger,
       })
       logger.target.clear()
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       expect(cs.tsJest.babelConfig!.kind).toEqual('inline')
       expect(cs.babel).toEqual(expect.objectContaining(CONFIG))
       expect(logger.target.lines[2]).toMatchInlineSnapshot(`
