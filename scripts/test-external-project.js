@@ -38,6 +38,7 @@ const executeTest = (monorepoRealPath, bundle) => {
   if (!projectPkg.version) projectPkg.version = 'unknown'
 
   logger.log()
+  // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
   logger.log('='.repeat(20), `${projectPkg.name}@${projectPkg.version}`, 'in', monorepoRealPath, '='.repeat(20))
   logger.log()
 

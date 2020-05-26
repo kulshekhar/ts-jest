@@ -32,6 +32,7 @@ describe('ts-jest logging', () => {
           // keep only debug and above
           .filter(m => (m.context[LogContexts.logLevel] || 0) >= LogLevels.debug)
           // simplify entires
+          // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
           .map(e => result.normalize(`[level:${e.context[LogContexts.logLevel]}] ${e.message}`))
         expect(filteredEntries).toMatchSnapshot()
       })
@@ -62,6 +63,7 @@ describe('ts-jest logging', () => {
             // keep only debug and above
             .filter(m => (m.context[LogContexts.logLevel] || 0) === LogLevels.warn)
             // simplify entires
+            // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
             .map(e => result.normalize(`[level:${e.context[LogContexts.logLevel]}] ${e.message}`))
           expect(filteredEntries).toMatchSnapshot()
         })

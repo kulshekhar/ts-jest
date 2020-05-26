@@ -84,6 +84,7 @@ const normalizeRegex = (pattern: string | RegExp | undefined): string | undefine
   pattern ? (typeof pattern === 'string' ? pattern : pattern.source) : undefined
 
 const toDiagnosticCode = (code: any): number | undefined =>
+  // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
   code ? parseInt(`${code}`.trim().replace(/^TS/, ''), 10) || undefined : undefined
 
 const toDiagnosticCodeList = (items: any, into: number[] = []): number[] => {
@@ -268,7 +269,7 @@ export class ConfigSet {
     let diagnostics: TsJestConfig['diagnostics']
     const { diagnostics: diagnosticsOpt = true } = options
     // messy list of stuff to ignore (will be casted later)
-    const ignoreList: any[] = [IGNORE_DIAGNOSTIC_CODES, process.env.TS_JEST_IGNORE_DIAGNOSTICS]
+    const ignoreList: unknown[] = [IGNORE_DIAGNOSTIC_CODES, process.env.TS_JEST_IGNORE_DIAGNOSTICS]
 
     if (diagnosticsOpt === true || diagnosticsOpt == null) {
       diagnostics = { ignoreCodes: [], pretty: true, throws: true }
@@ -806,6 +807,7 @@ export class ConfigSet {
      * Every time this page is updated, we also need to update here. Here we only show warning message for Node LTS versions
      */
     const nodeJsVer = process.version
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const compilationTarget = result.options.target!
     if (
       (nodeJsVer.startsWith('v10') && compilationTarget > ScriptTarget.ES2018) ||

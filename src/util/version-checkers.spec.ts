@@ -30,7 +30,7 @@ function describeChecker(
       checker.forget()
     })
 
-    unsupportedVersions.forEach((testVersion) => {
+    unsupportedVersions.forEach((testVersion: string) => {
       describe(`unsupported version (${testVersion})`, () => {
         beforeEach(() => {
           pv.getPackageVersion.mockImplementation((name) => (name === moduleName ? testVersion : undefined))

@@ -30,14 +30,14 @@ export function normalizeJestOutput(output: string): string {
   let out: string = output
     .trim()
     // removes total and estimated times
-    .replace(/^(\s*Time\s*:\s*)[\d.]+ m?s(?:(,\s*estimated\s+)[\d.]+ m?s)?$/gm, (_, start) => `${start}XXs`)
+    .replace(/^(\s*Time\s*:\s*)[\d.]+ m?s(?:(,\s*estimated\s+)[\d.]+ m?s)?$/gm, (_, start: string) => `${start}XXs`)
     // remove times after PASS/FAIL path/to/file (xxxs)
-    .replace(/^\s*((?:PASS|FAIL) .+) \([\d.]+m?s\)$/gm, (_, start) => `${start}`)
+    .replace(/^\s*((?:PASS|FAIL) .+) \([\d.]+m?s\)$/gm, (_, start: string) => `${start}`)
     // removes each test time values
     .replace(
       // eslint-disable-next-line no-useless-escape
       /^(\s*)(✕|×|✓|√)(\s+[^\(]+)(\s+\([\d.]+ m?s\))?$/gm,
-      (_, start, mark, mid /* , time */) => `${start}${normalizeTestMark(mark)}${mid}`,
+      (_, start: string, mark: string, mid: string /* , time */) => `${start}${normalizeTestMark(mark)}${mid}`,
     )
   // TODO: improves this...
   if (process.platform === 'win32') {
