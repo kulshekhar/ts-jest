@@ -3,8 +3,8 @@
   "version": "0.0.0-tmpl.0",
   "private": true,
   "devDependencies": {
-    "@types/jest": "25.2.2",
-    "@types/node": "12.12.39",
+    "@types/jest": "25.2.3",
+    "@types/node": "12.12.42",
     "jest": "26.0.1",
     "typescript": "3.3.4000"
   },

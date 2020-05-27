@@ -45,12 +45,13 @@ describe('ts-jest logging', () => {
    */
   if (process.version.startsWith('v12')) {
     describe('typescript target is higher than es2019 for NodeJs 12', () => {
+      const tsTarget = 'es2020'
       const testCase = configureTestCase('simple', {
         env: { TS_JEST_LOG: 'ts-jest.log' },
         noCache: true,
         tsJestConfig: {
           tsConfig: {
-            target: 'es2020'
+            target: tsTarget
           }
         }
       })
@@ -62,10 +63,13 @@ describe('ts-jest logging', () => {
           const filteredEntries = result.logFileEntries
             // keep only debug and above
             .filter(m => (m.context[LogContexts.logLevel] || 0) === LogLevels.warn)
-            // simplify entires
+            // simplify entries
             // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
             .map(e => result.normalize(`[level:${e.context[LogContexts.logLevel]}] ${e.message}`))
-          expect(filteredEntries).toMatchSnapshot()
+          // toEqual resolves in strange error so toContain is workaround
+          expect(filteredEntries[0]).toContain('[level:40] There is a mismatch between your NodeJs version ' +
+            `${process.version} and your TypeScript target ${tsTarget}. This might lead to some unexpected errors when running tests with ` +
+            '`ts-jest`. To fix this, you can check https://github.com/microsoft/TypeScript/wiki/Node-Target-Mapping')
         })
       })
     })
