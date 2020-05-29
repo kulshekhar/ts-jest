@@ -11,6 +11,19 @@
     "rootDir": "./src/",
     "types": [],
     "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": [
+        "src/nested/*",
+        "src/nested/src/*"
+      ],
+      "~": [
+        "src/math/divide.ts"
+      ],
+      "~/*": [
+        "src/math/*"
+      ]
+    }
   }
 }
