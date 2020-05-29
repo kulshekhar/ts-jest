@@ -26,24 +26,18 @@ export const pathsToModuleNameMapper = (
     if (toPaths.length === 0) {
       logger.warn(interpolate(Errors.NotMappingPathWithEmptyMap, { path: fromPath }))
       continue
-    } else if (toPaths.length > 1) {
-      logger.warn(
-        interpolate(Errors.MappingOnlyFirstTargetOfPath, {
-          path: fromPath,
-          count: toPaths.length,
-        }),
-      )
     }
-    const target = toPaths[0]
 
     // split with '*'
     const segments = fromPath.split(/\*/g)
     if (segments.length === 1) {
+      const paths = toPaths.map((target) => `${prefix}${target}`)
       pattern = `^${escapeRegex(fromPath)}$`
-      jestMap[pattern] = `${prefix}${target}`
+      jestMap[pattern] = paths.length === 1 ? paths[0] : paths
     } else if (segments.length === 2) {
+      const paths = toPaths.map((target) => `${prefix}${target.replace(/\*/g, '$1')}`)
       pattern = `^${escapeRegex(segments[0])}(.*)${escapeRegex(segments[1])}$`
-      jestMap[pattern] = `${prefix}${target.replace(/\*/g, '$1')}`
+      jestMap[pattern] = paths.length === 1 ? paths[0] : paths
     } else {
       logger.warn(interpolate(Errors.NotMappingMultiStarPath, { path: fromPath }))
       continue
