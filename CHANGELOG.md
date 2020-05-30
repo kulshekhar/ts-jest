@@ -1,3 +1,20 @@
+<a name="26.1.0"></a>
+# [26.1.0](https://github.com/kulshekhar/ts-jest/compare/v26.0.0...v26.1.0) (2020-05-30)
+
+
+### Bug Fixes
+
+* **typing:** don't mark `BabelConfig` as internal type ([#1667](https://github.com/kulshekhar/ts-jest/issues/1667)) ([558c307](https://github.com/kulshekhar/ts-jest/commit/558c307)), closes [#1666](https://github.com/kulshekhar/ts-jest/issues/1666)
+
+
+### Features
+
+* **config:** show a warning message when TypeScript `target` version doesn't match with recommended NodeJs version ([#1678](https://github.com/kulshekhar/ts-jest/issues/1678)) ([085bdf5](https://github.com/kulshekhar/ts-jest/commit/085bdf5))
+* **config:** support multiple paths for `pathsToModuleNameMapper` ([#1690](https://github.com/kulshekhar/ts-jest/issues/1690)) ([a727bd5](https://github.com/kulshekhar/ts-jest/commit/a727bd5))
+* support TypeScript 3.9 ([#1653](https://github.com/kulshekhar/ts-jest/issues/1653)) ([fc3d5ad](https://github.com/kulshekhar/ts-jest/commit/fc3d5ad))
+
+
+
 <a name="26.0.0"></a>
 # [26.0.0](https://github.com/kulshekhar/ts-jest/compare/v25.5.1...v26.0.0) (2020-05-15)
 
