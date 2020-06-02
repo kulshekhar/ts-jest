@@ -3,15 +3,15 @@
  <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
-<title>Isolated Modules option | ts-jest</title>
+<title>AST transformers option | ts-jest</title>
 <meta name="generator" content="Jekyll v3.8.5" />
-<meta property="og:title" content="Isolated Modules option" />
+<meta property="og:title" content="AST transformers option" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="ts-jest is a TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript." />
 <meta property="og:description" content="ts-jest is a TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript." />
 <meta property="og:site_name" content="ts-jest" />
 <script type="application/ld+json">
-{"@type":"WebPage","url":"/ts-jest/user/config/isolatedModules.html","headline":"Isolated Modules option","description":"ts-jest is a TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript.","@context":"https://schema.org"}</script>
+{"@type":"WebPage","url":"/ts-jest/user/config/astTransformers.html","headline":"AST transformers option","description":"ts-jest is a TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript.","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 <link rel="stylesheet" href="/ts-jest/assets/css/main.css"><link type="application/atom+xml" rel="alternate" href="/ts-jest/feed.xml" title="ts-jest" /><script src="/ts-jest/assets/js/bootstrap/jquery.min.js"></script>
   <script src="/ts-jest/assets/js/bootstrap/bootstrap.bundle.min.js"></script>
@@ -134,19 +134,16 @@
           <article>
 
   <header>
-    <h1>Isolated Modules option</h1>
+    <h1>AST transformers option</h1>
   </header>
 
   <section>
-    <p>By default <code class="language-plaintext highlighter-rouge">ts-jest</code> uses TypeScript compiler in the context of a project (yours), with full type-checking and features.
-But it can also be used to compile each file separately, what TypeScript calls an ‘isolated module’.
-That’s what the <code class="language-plaintext highlighter-rouge">isolatedModules</code> option (which defaults to <code class="language-plaintext highlighter-rouge">false</code>) does.</p>
+    <p><code class="language-plaintext highlighter-rouge">ts-jest</code> by default does hoisting for a few <code class="language-plaintext highlighter-rouge">jest</code> methods via a TypeScript AST transformer. One can also create custom
+TypeScript AST transformers and provide them to <code class="language-plaintext highlighter-rouge">ts-jest</code> to include into compilation process.</p>
 
-<p>You’ll lose type-checking ability and some features such as <code class="language-plaintext highlighter-rouge">const enum</code>, but in the case you plan on using Jest with the cache disabled (<code class="language-plaintext highlighter-rouge">jest --no-cache</code>), your tests will then run much faster.</p>
+<p>The option is <code class="language-plaintext highlighter-rouge">astTransformers</code> and it allows ones to specify which TypeScript AST transformers to use with <code class="language-plaintext highlighter-rouge">ts-jest</code>.</p>
 
-<p>Here is how to disable type-checking and compile each file as an isolated module:</p>
-
-<h3 id="example">Example</h3>
+<h3 id="examples">Examples</h3>
 
 <div class="row"><div class="col-md-6">
 
@@ -155,7 +152,7 @@ That’s what the <code class="language-plaintext highlighter-rouge">isolatedMod
   <span class="c1">// [...]</span>
   <span class="na">globals</span><span class="p">:</span> <span class="p">{</span>
     <span class="dl">'</span><span class="s1">ts-jest</span><span class="dl">'</span><span class="p">:</span> <span class="p">{</span>
-      <span class="na">isolatedModules</span><span class="p">:</span> <span class="kc">true</span>
+      <span class="na">astTransformers</span><span class="p">:</span> <span class="p">[</span><span class="dl">'</span><span class="s1">my-custom-transformer</span><span class="dl">'</span><span class="p">],</span>
     <span class="p">}</span>
   <span class="p">}</span>
 <span class="p">};</span>
@@ -169,7 +166,7 @@ That’s what the <code class="language-plaintext highlighter-rouge">isolatedMod
   <span class="dl">"</span><span class="s2">jest</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
     <span class="dl">"</span><span class="s2">globals</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
       <span class="dl">"</span><span class="s2">ts-jest</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
-        <span class="dl">"</span><span class="s2">isolatedModules</span><span class="dl">"</span><span class="p">:</span> <span class="kc">true</span>
+        <span class="nl">astTransformers</span><span class="p">:</span> <span class="p">[</span><span class="dl">'</span><span class="s1">my-custom-transformer</span><span class="dl">'</span><span class="p">],</span>
       <span class="p">}</span>
     <span class="p">}</span>
   <span class="p">}</span>
@@ -178,32 +175,10 @@ That’s what the <code class="language-plaintext highlighter-rouge">isolatedMod
 
   </div></div>
 
-<h1 id="performance">Performance</h1>
+<h3 id="writing-custom-typescript-ast-transformers">Writing custom TypeScript AST transformers</h3>
 
-<p>Using <code class="language-plaintext highlighter-rouge">isolatedModules: false</code> comes with a cost of performance comparing to <code class="language-plaintext highlighter-rouge">isolatedModules: true</code>. There is a way
-to improve the performance when using this mode by changing the value of <code class="language-plaintext highlighter-rouge">include</code> in <code class="language-plaintext highlighter-rouge">tsconfig</code> which is used by <code class="language-plaintext highlighter-rouge">ts-jest</code>.
-The least amount of files which are provided in <code class="language-plaintext highlighter-rouge">include</code>, the more performance the test run can gain.</p>
-
-<h3 id="example-1">Example</h3>
-
-<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// tsconfig.json</span>
-<span class="p">{</span>
-  <span class="c1">// ...other configs</span>
-  <span class="nl">include</span><span class="p">:</span> <span class="p">[</span>
-    <span class="dl">"</span><span class="s2">my-typings/*</span><span class="dl">"</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">my-global-modules/*</span><span class="dl">"</span><span class="p">,</span>
-  <span class="p">]</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<h2 id="caveats">Caveats</h2>
-
-<p>Limiting the amount of files loaded via <code class="language-plaintext highlighter-rouge">include</code> can greatly boost performance when running tests. However, the trade off 
-is <code class="language-plaintext highlighter-rouge">ts-jest</code> might not recognize all files which are intended to use with <code class="language-plaintext highlighter-rouge">jest</code>. One can run into issues with custom typings,
-global modules, etc…</p>
-
-<p>The suggested solution is what is needed for the test environment should be captured by 
-glob patterns in <code class="language-plaintext highlighter-rouge">include</code>, to gain both performance boost and avoid breaking behaviors.</p>
+<p>To write a custom TypeScript AST transformers, one can take a look at the one that <code class="language-plaintext highlighter-rouge">ts-jest</code> is using at
+https://github.com/kulshekhar/ts-jest/tree/master/src/transformers</p>
 
   </section>
 
@@ -214,7 +189,7 @@ glob patterns in <code class="language-plaintext highlighter-rouge">include</cod
   <div class="container">
     <div class="row">
       <div class="col-sm text-right">
-        <a href="https://github.com/kulshekhar/ts-jest/tree/master/docs/user/config/isolatedModules.md">
+        <a href="https://github.com/kulshekhar/ts-jest/tree/master/docs/user/config/astTransformers.md">
           edit this page <i class="far fa-edit"></i>
         </a>
       </div>
