@@ -52,7 +52,7 @@ The least amount of files which are provided in `include`, the more performance 
 
 ### Example
 
-```json5
+```js
 // tsconfig.json
 {
   // ...other configs

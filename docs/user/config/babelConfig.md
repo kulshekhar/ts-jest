@@ -30,7 +30,7 @@ module.exports = {
 
 </div><div class="col-md-6" markdown="block">
 
-```json5
+```js
 // OR package.json
 {
   // [...]
@@ -76,7 +76,7 @@ module.exports = {
 ```
 </div><div class="col-md-6" markdown="block">
 
-```json5
+```js
 // OR package.json
 {
   // [...]
@@ -115,7 +115,7 @@ module.exports = {
 
 </div><div class="col-md-6" markdown="block">
 
-```json5
+```js
 // OR package.json
 {
   // [...]
