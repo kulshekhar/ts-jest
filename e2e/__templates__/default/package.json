@@ -4,9 +4,9 @@
   "private": true,
   "devDependencies": {
     "@types/jest": "25.2.3",
-    "@types/node": "12.12.42",
+    "@types/node": "12.12.44",
     "jest": "26.0.1",
-    "typescript": "3.9.3"
+    "typescript": "3.9.5"
   },
   "wantedDependencies": {
     "@types/jest": "latest",
