@@ -4,14 +4,16 @@
   "private": true,
   "devDependencies": {
     "@babel/core": "7.10.2",
-    "@types/jest": "25.2.3",
-    "@types/node": "12.12.44",
+    "@babel/preset-env": "7.10.2",
+    "@types/jest": "26.0.0",
+    "@types/node": "12.12.47",
     "babel-jest": "26.0.1",
     "jest": "26.0.1",
     "typescript": "3.9.5"
   },
   "wantedDependencies": {
     "@babel/core": "7",
+    "@babel/preset-env": "7",
     "@types/jest": "latest",
     "@types/node": "12",
     "babel-jest": "latest",
