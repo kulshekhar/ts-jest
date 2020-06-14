@@ -70,6 +70,13 @@ export const IGNORE_DIAGNOSTIC_CODES = [
  */
 export const TS_JEST_OUT_DIR = '$$ts-jest$$'
 
+const TARGET_TO_VERSION_MAPPING: Record<number, string> = {
+  [ScriptTarget.ES2018]: 'es2018',
+  [ScriptTarget.ES2019]: 'es2019',
+  [ScriptTarget.ES2020]: 'es2020',
+  [ScriptTarget.ESNext]: 'ESNext',
+}
+
 /**
  * @internal
  */
@@ -810,12 +817,13 @@ export class ConfigSet {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const compilationTarget = result.options.target!
     if (
-      (nodeJsVer.startsWith('v10') && compilationTarget > ScriptTarget.ES2018) ||
-      (nodeJsVer.startsWith('v12') && compilationTarget > ScriptTarget.ES2019)
+      !this.tsJest.babelConfig &&
+      ((nodeJsVer.startsWith('v10') && compilationTarget > ScriptTarget.ES2018) ||
+        (nodeJsVer.startsWith('v12') && compilationTarget > ScriptTarget.ES2019))
     ) {
       const message = interpolate(Errors.MismatchNodeTargetMapping, {
         nodeJsVer: process.version,
-        compilationTarget: config.compilerOptions.target,
+        compilationTarget: config.compilerOptions.target ?? TARGET_TO_VERSION_MAPPING[compilationTarget],
       })
       logger.warn(message)
     }
