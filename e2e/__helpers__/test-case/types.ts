@@ -10,7 +10,7 @@ export interface RunTestOptions {
   inject?: (() => any) | string
   writeIo?: boolean
   jestConfig?: Config.ProjectConfig | any
-  tsJestConfig?: TsJestConfig | any
+  tsJestConfig?: Partial<TsJestConfig> | any
   noCache?: boolean
   jestConfigPath?: string
 }
@@ -23,7 +23,6 @@ export interface RunWithTemplateIteratorContext {
   itLabel: string
   testLabel: string
 }
-
 
 export type TestRunResultsMap<T extends string = string> = { [key in T]: RunResult }
 

@@ -353,9 +353,9 @@ export class ConfigSet {
     const {
       tsJest: { tsConfig },
     } = this
-    const configFilePath = tsConfig && tsConfig.kind === 'file' ? tsConfig.value : undefined
+    const configFilePath = tsConfig?.kind === 'file' ? tsConfig.value : undefined
     const result = this.readTsConfig(
-      tsConfig && tsConfig.kind === 'inline' ? tsConfig.value : undefined,
+      tsConfig?.kind === 'inline' ? tsConfig.value : undefined,
       configFilePath,
       tsConfig == null,
     )
@@ -728,7 +728,7 @@ export class ConfigSet {
    * @internal
    */
   readTsConfig(
-    compilerOptions?: Record<string, unknown>,
+    compilerOptions?: CompilerOptions,
     resolvedConfigFile?: string | null,
     noProject?: boolean | null,
   ): ParsedCommandLine {

@@ -2,13 +2,14 @@ import { join } from 'path'
 
 import { allValidPackageSets } from '../__helpers__/templates'
 import { configureTestCase } from '../__helpers__/test-case'
+import { TsJestConfig } from '../../src/types'
 
-describe('Source map', () => {
+function runSourceMapTests(tsJestConfig: Partial<TsJestConfig> | any) {
   const testCase = configureTestCase('source-maps', {
     writeIo: true,
     // TS5023 - unrecognized compiler option
     // TS7027 - unreachable code
-    tsJestConfig: { diagnostics: { ignoreCodes: [5023, 7027] } },
+    tsJestConfig,
   })
 
   testCase.runWithTemplates(allValidPackageSets, 1, (runTest, { templateName }) => {
@@ -33,6 +34,23 @@ describe('Source map', () => {
           version: 3,
         })
       })
+    })
+  })
+}
+
+const BASE_CONFIG = { diagnostics: { ignoreCodes: [5023, 7027], pretty: true, throws: false } }
+
+describe('Source map', () => {
+  describe('without tsconfig mapRoot', () => {
+    runSourceMapTests(BASE_CONFIG)
+  })
+
+  describe('with tsconfig mapRoot', () => {
+    runSourceMapTests({
+      ...BASE_CONFIG,
+      tsConfig: {
+        mapRoot: './'
+      }
     })
   })
 })
