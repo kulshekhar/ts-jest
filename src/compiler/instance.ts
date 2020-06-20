@@ -1,7 +1,6 @@
 import { Logger } from 'bs-logger'
 import { readFileSync } from 'fs'
 import mkdirp = require('mkdirp')
-import { basename, extname } from 'path'
 
 import { ConfigSet } from '../config/config-set'
 import { CompileFn, CompilerInstance, MemoryCache, TSFile, TsCompiler } from '../types'
@@ -11,21 +10,21 @@ import { initializeLanguageServiceInstance } from './language-service'
 import { initializeTranspilerInstance } from './transpiler'
 
 /**
+ * Rely on TypeScript compiled output generation which contains this prefix to point to sourcemap location.
+ */
+const SOURCE_MAPPING_PREFIX = 'sourceMappingURL='
+
+/**
  * Update the output remapping the source map.
  */
-function updateOutput(
-  outputText: string,
-  normalizedFileName: string,
-  sourceMap: string,
-  getExtension: (fileName: string) => string,
-) {
-  const base = basename(normalizedFileName)
+function updateOutput(outputText: string, normalizedFileName: string, sourceMap: string) {
   const base64Map = Buffer.from(updateSourceMap(sourceMap, normalizedFileName), 'utf8').toString('base64')
   const sourceMapContent = `data:application/json;charset=utf-8;base64,${base64Map}`
-  const sourceMapLength =
-    `${base}.map`.length + (getExtension(normalizedFileName).length - extname(normalizedFileName).length)
 
-  return outputText.slice(0, -sourceMapLength) + sourceMapContent
+  // sourceMappingURL= prefix is always at the end of compiledOutput, using lastIndexOf should be the safest way to substring
+  return (
+    outputText.slice(0, outputText.lastIndexOf(SOURCE_MAPPING_PREFIX) + SOURCE_MAPPING_PREFIX.length) + sourceMapContent
+  )
 }
 
 /**
@@ -44,16 +43,15 @@ const updateSourceMap = (sourceMapText: string, normalizedFileName: string): str
  * Compile files which are provided by jest via transform config and cache the result in file system if users run with
  * cache mode
  */
-const compileAndCacheResult = (
-  memoryCache: MemoryCache,
-  compileFn: CompileFn,
-  getExtension: (fileName: string) => string,
-  logger: Logger,
-) => (code: string, fileName: string, lineOffset?: number) => {
+const compileAndCacheResult = (memoryCache: MemoryCache, compileFn: CompileFn, logger: Logger) => (
+  code: string,
+  fileName: string,
+  lineOffset?: number,
+) => {
   logger.debug({ fileName }, 'compileAndCacheResult(): get compile output')
 
   const [value, sourceMap] = compileFn(code, fileName, lineOffset)
-  const output = updateOutput(value, fileName, sourceMap, getExtension)
+  const output = updateOutput(value, fileName, sourceMap)
   memoryCache.files.set(fileName, {
     ...memoryCache.files.get(fileName)!, // eslint-disable-line @typescript-eslint/no-non-null-assertion
     output,
@@ -74,7 +72,6 @@ export const createCompilerInstance = (configs: ConfigSet): TsCompiler => {
     tsJest,
   } = configs
   const cacheDir = configs.tsCacheDir
-  const ts = configs.compilerModule // Require the TypeScript compiler and configuration.
   const extensions = ['.ts', '.tsx']
   const memoryCache: MemoryCache = {
     files: new Map<string, TSFile>(),
@@ -100,13 +97,6 @@ export const createCompilerInstance = (configs: ConfigSet): TsCompiler => {
       version: 0,
     })
   })
-  /**
-   * Get the extension for a transpiled file.
-   */
-  const getExtension =
-    compilerOptions.jsx === ts.JsxEmit.Preserve
-      ? (path: string) => (/\.[tj]sx$/.test(path) ? '.jsx' : '.js')
-      : (_: string) => '.js'
   let compilerInstance: CompilerInstance
   if (!tsJest.isolatedModules) {
     // Use language services by default
@@ -114,7 +104,7 @@ export const createCompilerInstance = (configs: ConfigSet): TsCompiler => {
   } else {
     compilerInstance = initializeTranspilerInstance(configs, memoryCache, logger)
   }
-  const compile = compileAndCacheResult(memoryCache, compilerInstance.compileFn, getExtension, logger)
+  const compile = compileAndCacheResult(memoryCache, compilerInstance.compileFn, logger)
 
   return { cwd: configs.cwd, compile, program: compilerInstance.program }
 }
