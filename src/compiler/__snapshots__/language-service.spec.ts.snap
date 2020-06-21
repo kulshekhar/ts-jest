@@ -1,54 +1,56 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Language service should compile js file for allowJs true with outDir 1`] = `
-  ===[ FILE: test-allow-js-with-outDir.js ]=======================================
+exports[`Language service allowJs option should compile js file for allowJs true with outDir 1`] = `
+  ===[ FILE: test-allow-js.js ]===================================================
   "use strict";
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.default = 42;
-  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoidGVzdC1hbGxvdy1qcy13aXRoLW91dERpci5qcyIsIm1hcHBpbmdzIjoiOztBQUFBLGtCQUFlLEVBQUUsQ0FBQSIsIm5hbWVzIjpbXSwic291cmNlcyI6WyJ0ZXN0LWFsbG93LWpzLXdpdGgtb3V0RGlyLmpzIl0sInNvdXJjZXNDb250ZW50IjpbImV4cG9ydCBkZWZhdWx0IDQyIl0sInZlcnNpb24iOjN9
+  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoidGVzdC1hbGxvdy1qcy5qcyIsIm1hcHBpbmdzIjoiOztBQUFBLGtCQUFlLEVBQUUsQ0FBQSIsIm5hbWVzIjpbXSwic291cmNlcyI6WyJ0ZXN0LWFsbG93LWpzLmpzIl0sInNvdXJjZXNDb250ZW50IjpbImV4cG9ydCBkZWZhdWx0IDQyIl0sInZlcnNpb24iOjN9
   ===[ INLINE SOURCE MAPS ]=======================================================
-  file: test-allow-js-with-outDir.js
+  file: test-allow-js.js
   mappings: ';;AAAA,kBAAe,EAAE,CAAA'
   names: []
   sources:
-    - test-allow-js-with-outDir.js
+    - test-allow-js.js
   sourcesContent:
     - export default 42
   version: 3
   ================================================================================
 `;
 
-exports[`Language service should compile js file for allowJs true without outDir 1`] = `
-  ===[ FILE: test-allow-js-no-outDir.js ]=========================================
+exports[`Language service allowJs option should compile js file for allowJs true without outDir 1`] = `
+  ===[ FILE: test-allow-js.js ]===================================================
   "use strict";
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.default = 42;
-  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoidGVzdC1hbGxvdy1qcy1uby1vdXREaXIuanMiLCJtYXBwaW5ncyI6Ijs7QUFBQSxrQkFBZSxFQUFFLENBQUEiLCJuYW1lcyI6W10sInNvdXJjZXMiOlsidGVzdC1hbGxvdy1qcy1uby1vdXREaXIuanMiXSwic291cmNlc0NvbnRlbnQiOlsiZXhwb3J0IGRlZmF1bHQgNDIiXSwidmVyc2lvbiI6M30=
+  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoidGVzdC1hbGxvdy1qcy5qcyIsIm1hcHBpbmdzIjoiOztBQUFBLGtCQUFlLEVBQUUsQ0FBQSIsIm5hbWVzIjpbXSwic291cmNlcyI6WyJ0ZXN0LWFsbG93LWpzLmpzIl0sInNvdXJjZXNDb250ZW50IjpbImV4cG9ydCBkZWZhdWx0IDQyIl0sInZlcnNpb24iOjN9
   ===[ INLINE SOURCE MAPS ]=======================================================
-  file: test-allow-js-no-outDir.js
+  file: test-allow-js.js
   mappings: ';;AAAA,kBAAe,EAAE,CAAA'
   names: []
   sources:
-    - test-allow-js-no-outDir.js
+    - test-allow-js.js
   sourcesContent:
     - export default 42
   version: 3
   ================================================================================
 `;
 
-exports[`Language service should compile tsx file for jsx preserve 1`] = `
-  ===[ FILE: test-jsx-preserve.tsx ]==============================================
+exports[`Language service diagnostics should report diagnostics related to typings with pathRegex config matches file name 1`] = `"test-diagnostics.ts(3,7): error TS2322: Type 'number' is not assignable to type 'string'."`;
+
+exports[`Language service jsx option should compile tsx file for jsx preserve 1`] = `
+  ===[ FILE: test-jsx.tsx ]=======================================================
   "use strict";
   var App = function () {
       return <>Test</>;
   };
-  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoidGVzdC1qc3gtcHJlc2VydmUudHN4IiwibWFwcGluZ3MiOiI7QUFDUSxJQUFNLEdBQUcsR0FBRztJQUNWLE9BQU8sRUFBRSxJQUFJLEdBQUcsQ0FBQTtBQUNsQixDQUFDLENBQUEiLCJuYW1lcyI6W10sInNvdXJjZXMiOlsidGVzdC1qc3gtcHJlc2VydmUudHN4Il0sInNvdXJjZXNDb250ZW50IjpbIlxuICAgICAgICBjb25zdCBBcHAgPSAoKSA9PiB7XG4gICAgICAgICAgcmV0dXJuIDw+VGVzdDwvPlxuICAgICAgICB9XG4gICAgICAiXSwidmVyc2lvbiI6M30=
+  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoidGVzdC1qc3gudHN4IiwibWFwcGluZ3MiOiI7QUFDUSxJQUFNLEdBQUcsR0FBRztJQUNWLE9BQU8sRUFBRSxJQUFJLEdBQUcsQ0FBQTtBQUNsQixDQUFDLENBQUEiLCJuYW1lcyI6W10sInNvdXJjZXMiOlsidGVzdC1qc3gudHN4Il0sInNvdXJjZXNDb250ZW50IjpbIlxuICAgICAgICBjb25zdCBBcHAgPSAoKSA9PiB7XG4gICAgICAgICAgcmV0dXJuIDw+VGVzdDwvPlxuICAgICAgICB9XG4gICAgICAiXSwidmVyc2lvbiI6M30=
   ===[ INLINE SOURCE MAPS ]=======================================================
-  file: test-jsx-preserve.tsx
+  file: test-jsx.tsx
   mappings: ';AACQ,IAAM,GAAG,GAAG;IACV,OAAO,EAAE,IAAI,GAAG,CAAA;AAClB,CAAC,CAAA'
   names: []
   sources:
-    - test-jsx-preserve.tsx
+    - test-jsx.tsx
   sourcesContent:
     - |2-
   
@@ -60,19 +62,19 @@ exports[`Language service should compile tsx file for jsx preserve 1`] = `
   ================================================================================
 `;
 
-exports[`Language service should compile tsx file for other jsx options 1`] = `
-  ===[ FILE: test-jsx-options.tsx ]===============================================
+exports[`Language service jsx option should compile tsx file for other jsx options 1`] = `
+  ===[ FILE: test-jsx.tsx ]=======================================================
   "use strict";
   var App = function () {
       return React.createElement(React.Fragment, null, "Test");
   };
-  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoidGVzdC1qc3gtb3B0aW9ucy50c3giLCJtYXBwaW5ncyI6IjtBQUNRLElBQU0sR0FBRyxHQUFHO0lBQ1YsT0FBTyxpREFBUyxDQUFBO0FBQ2xCLENBQUMsQ0FBQSIsIm5hbWVzIjpbXSwic291cmNlcyI6WyJ0ZXN0LWpzeC1vcHRpb25zLnRzeCJdLCJzb3VyY2VzQ29udGVudCI6WyJcbiAgICAgICAgY29uc3QgQXBwID0gKCkgPT4ge1xuICAgICAgICAgIHJldHVybiA8PlRlc3Q8Lz5cbiAgICAgICAgfVxuICAgICAgIl0sInZlcnNpb24iOjN9
+  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoidGVzdC1qc3gudHN4IiwibWFwcGluZ3MiOiI7QUFDUSxJQUFNLEdBQUcsR0FBRztJQUNWLE9BQU8saURBQVMsQ0FBQTtBQUNsQixDQUFDLENBQUEiLCJuYW1lcyI6W10sInNvdXJjZXMiOlsidGVzdC1qc3gudHN4Il0sInNvdXJjZXNDb250ZW50IjpbIlxuICAgICAgICBjb25zdCBBcHAgPSAoKSA9PiB7XG4gICAgICAgICAgcmV0dXJuIDw+VGVzdDwvPlxuICAgICAgICB9XG4gICAgICAiXSwidmVyc2lvbiI6M30=
   ===[ INLINE SOURCE MAPS ]=======================================================
-  file: test-jsx-options.tsx
+  file: test-jsx.tsx
   mappings: ';AACQ,IAAM,GAAG,GAAG;IACV,OAAO,iDAAS,CAAA;AAClB,CAAC,CAAA'
   names: []
   sources:
-    - test-jsx-options.tsx
+    - test-jsx.tsx
   sourcesContent:
     - |2-
   
@@ -85,8 +87,6 @@ exports[`Language service should compile tsx file for other jsx options 1`] = `
 `;
 
 exports[`Language service should do type check for the test file when imported module has changed 1`] = `"src/__mocks__/changed-modules/main.spec.ts(3,14): error TS2741: Property 'b' is missing in type '{ a: number; }' but required in type 'Thing'."`;
-
-exports[`Language service should report diagnostics related to typings with pathRegex config matches file name 1`] = `"test-match-regex-diagnostics.ts(3,7): error TS2322: Type 'number' is not assignable to type 'string'."`;
 
 exports[`Language service should throw error when cannot compile 1`] = `
 "Unable to require \`.d.ts\` file for file: test-cannot-compile.d.ts.

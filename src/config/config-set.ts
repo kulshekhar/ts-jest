@@ -134,6 +134,7 @@ export class ConfigSet {
       if (existsSync(path)) {
         return require(path)
       }
+
       this.logger.warn(Errors.UnableToFindProjectRoot)
 
       return {}
@@ -149,6 +150,7 @@ export class ConfigSet {
         return require(pkgPath)
       }
     }
+
     this.logger.warn(Errors.UnableToFindProjectRoot)
 
     return {}
@@ -313,6 +315,7 @@ export class ConfigSet {
       transformers,
       stringifyContentPathRegex,
     }
+
     this.logger.debug({ tsJestConfig: res }, 'normalized ts-jest config')
 
     return res
@@ -425,6 +428,7 @@ export class ConfigSet {
     } else if (babelConfig.kind === 'inline') {
       base = { ...base, ...babelConfig.value }
     }
+
     this.logger.debug({ babelConfig: base }, 'normalized babel config via ts-jest option')
 
     return base
@@ -445,6 +449,7 @@ export class ConfigSet {
   get babelJestTransformer(): BabelJestTransformer | undefined {
     const { babel } = this
     if (!babel) return undefined
+
     this.logger.debug('creating babel-jest transformer')
 
     return importer.babelJest(ImportReasons.BabelJest).createTransformer(babel) as BabelJestTransformer
@@ -594,6 +599,7 @@ export class ConfigSet {
       }),
     )
     const res = join(this.jest.cacheDirectory, 'ts-jest', cacheSuffix.substr(0, 2), cacheSuffix.substr(2))
+
     logger.debug({ cacheDirectory: res }, 'will use file caching')
 
     return res
@@ -862,6 +868,7 @@ export class ConfigSet {
     if (throwIfMissing && !existsSync(path)) {
       throw new Error(interpolate(Errors.FileNotFound, { inputPath, resolvedPath: path }))
     }
+
     this.logger.debug({ fromPath: inputPath, toPath: path }, 'resolved path from', inputPath, 'to', path)
 
     return path

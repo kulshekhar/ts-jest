@@ -51,7 +51,7 @@ describe('ts-jest logging', () => {
         noCache: true,
         tsJestConfig: {
           tsConfig: {
-            target: tsTarget
+            target: 'es2020' as any
           }
         }
       })
