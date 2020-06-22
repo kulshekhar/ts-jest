@@ -1,3 +1,14 @@
+<a name="26.1.1"></a>
+## [26.1.1](https://github.com/kulshekhar/ts-jest/compare/v26.1.0...v26.1.1) (2020-06-21)
+
+
+### Bug Fixes
+
+* **compiler:** generate source map correctly when tsconfig `mapRoot` is set ([#1741](https://github.com/kulshekhar/ts-jest/issues/1741)) ([01ac417](https://github.com/kulshekhar/ts-jest/commit/01ac417)), closes [#1718](https://github.com/kulshekhar/ts-jest/issues/1718)
+* **config:** show version warning when using ts-jest without babel ([#1729](https://github.com/kulshekhar/ts-jest/issues/1729)) ([e512bc0](https://github.com/kulshekhar/ts-jest/commit/e512bc0)), fixes [#1678-issuecomment-641930332](https://github.com//github.com/kulshekhar/ts-jest/pull/1678/issues/issuecomment-641930332), [#1678-issuecomment-639528993](https://github.com//github.com/kulshekhar/ts-jest/pull/1678/issues/issuecomment-639528993)
+
+
+
 <a name="26.1.0"></a>
 # [26.1.0](https://github.com/kulshekhar/ts-jest/compare/v26.0.0...v26.1.0) (2020-05-30)
 
