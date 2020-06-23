@@ -2,6 +2,14 @@
 
 exports[`cacheKey should be a string 1`] = `"{\\"digest\\":\\"a0d51ca854194df8191d0e65c0ca4730f510f332\\",\\"jest\\":{\\"__backported\\":true,\\"globals\\":{}},\\"projectDepVersions\\":{\\"dev\\":\\"1.2.5\\",\\"opt\\":\\"1.2.3\\",\\"peer\\":\\"1.2.4\\",\\"std\\":\\"1.2.6\\"},\\"transformers\\":[\\"hoisting-jest-mock@1\\"],\\"tsJest\\":{\\"compiler\\":\\"typescript\\",\\"diagnostics\\":{\\"ignoreCodes\\":[6059,18002,18003],\\"pretty\\":true,\\"throws\\":true},\\"isolatedModules\\":false,\\"packageJson\\":{\\"kind\\":\\"file\\"},\\"transformers\\":[]},\\"tsconfig\\":{\\"declaration\\":false,\\"inlineSourceMap\\":false,\\"inlineSources\\":true,\\"module\\":1,\\"noEmit\\":false,\\"removeComments\\":false,\\"sourceMap\\":true,\\"target\\":1}}"`;
 
+exports[`isTestFile should return a boolean value whether the file matches test pattern 1`] = `true`;
+
+exports[`isTestFile should return a boolean value whether the file matches test pattern 2`] = `true`;
+
+exports[`isTestFile should return a boolean value whether the file matches test pattern 3`] = `true`;
+
+exports[`isTestFile should return a boolean value whether the file matches test pattern 4`] = `true`;
+
 exports[`jest should merge parent config if any with globals is an empty object 1`] = `
 Object {
   "__backported": true,
@@ -125,32 +133,6 @@ Array [
     "messageText": "If you have issues related to imports, you should consider setting \`esModuleInterop\` to \`true\` in your TypeScript configuration file (usually \`tsconfig.json\`). See https://blogs.msdn.microsoft.com/typescript/2018/01/31/announcing-typescript-2-7/#easier-ecmascript-module-interoperability for more information.",
     "start": undefined,
   },
-]
-`;
-
-exports[`testMatchPatterns should return an array of patterns based on testRegex and testMatch from jestConfig 1`] = `
-Array [
-  "**/__tests__/**/*.[jt]s?(x)",
-  "**/?(*.)+(spec|test).[jt]s?(x)",
-]
-`;
-
-exports[`testMatchPatterns should return an array of patterns based on testRegex and testMatch from jestConfig 2`] = `
-Array [
-  /\\.\\*\\\\\\.\\(spec\\|test\\)\\\\\\.\\[jt\\]sx\\?\\$/,
-]
-`;
-
-exports[`testMatchPatterns should return an array of patterns based on testRegex and testMatch from jestConfig 3`] = `
-Array [
-  "**/?(*.)+(spec|test).[tj]s?(x)",
-]
-`;
-
-exports[`testMatchPatterns should return an array of patterns based on testRegex and testMatch from jestConfig 4`] = `
-Array [
-  "**/?(*.)+(spec|test).[tj]s?(x)",
-  "**/?(*.)+(foo|bar).[tj]s?(x)",
 ]
 `;
 

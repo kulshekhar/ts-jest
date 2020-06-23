@@ -152,7 +152,7 @@ describe('jest', () => {
   })
 })
 
-describe('testMatchPatterns', () => {
+describe('isTestFile', () => {
   it.each([
     {
       jestConfig: {
@@ -178,8 +178,8 @@ describe('testMatchPatterns', () => {
         testRegex: ['**/?(*.)+(foo|bar).[tj]s?(x)'],
       } as any,
     },
-  ])('should return an array of patterns based on testRegex and testMatch from jestConfig', (config) => {
-    expect(createConfigSet(config).testMatchPatterns).toMatchSnapshot()
+  ])('should return a boolean value whether the file matches test pattern', (config) => {
+    expect(createConfigSet(config).isTestFile('foo.spec.ts')).toMatchSnapshot()
   })
 })
 
