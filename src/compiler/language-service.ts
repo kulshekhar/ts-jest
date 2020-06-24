@@ -7,7 +7,7 @@ import { LINE_FEED } from '../constants'
 import { CompilerInstance, MemoryCache, SourceOutput } from '../types'
 import { Errors, interpolate } from '../util/messages'
 
-import { cacheResolvedModules, isTestFile } from './compiler-utils'
+import { cacheResolvedModules } from './compiler-utils'
 import memoize = require('lodash.memoize')
 
 function doTypeChecking(configs: ConfigSet, fileName: string, service: _ts.LanguageService, logger: Logger) {
@@ -145,7 +145,7 @@ export const initializeLanguageServiceInstance = (
        * We don't need the following logic with no cache run because no cache always gives correct typing
        */
       if (cacheDir) {
-        if (isTestFile(configs.testMatchPatterns, fileName)) {
+        if (configs.isTestFile(fileName)) {
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           cacheResolvedModules(fileName, code, memoryCache, service.getProgram()!, cacheDir, logger)
         } else {

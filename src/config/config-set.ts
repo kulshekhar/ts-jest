@@ -11,6 +11,7 @@
 import { Config } from '@jest/types'
 import { LogContexts, Logger } from 'bs-logger'
 import { existsSync, readFileSync, realpathSync } from 'fs'
+import { globsToMatcher } from 'jest-util'
 import json5 = require('json5')
 import { dirname, extname, isAbsolute, join, normalize, resolve } from 'path'
 import {
@@ -200,8 +201,7 @@ export class ConfigSet {
   /**
    * @internal
    */
-  @Memoize()
-  get testMatchPatterns(): (string | RegExp)[] {
+  get isTestFile(): (fileName: string) => boolean {
     const matchablePatterns = [...this.jest.testMatch, ...this.jest.testRegex].filter(
       (pattern) =>
         /**
@@ -213,8 +213,11 @@ export class ConfigSet {
     if (!matchablePatterns.length) {
       matchablePatterns.push(...DEFAULT_JEST_TEST_MATCH)
     }
+    const stringPatterns = matchablePatterns.filter((pattern: any) => typeof pattern === 'string') as string[]
+    const isMatch = globsToMatcher(stringPatterns)
 
-    return matchablePatterns
+    return (fileName: string) =>
+      matchablePatterns.some((pattern) => (typeof pattern === 'string' ? isMatch(fileName) : pattern.test(fileName)))
   }
 
   /**

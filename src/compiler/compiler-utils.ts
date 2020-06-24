@@ -1,6 +1,5 @@
 import { Logger } from 'bs-logger'
 import { writeFileSync } from 'fs'
-import micromatch = require('micromatch')
 import { join, normalize } from 'path'
 import * as _ts from 'typescript'
 
@@ -49,13 +48,4 @@ export function cacheResolvedModules(
     memoryCache.resolvedModules[fileName].testFileContent = fileContent
     writeFileSync(getResolvedModulesCache(cacheDir), JSON.stringify(memoryCache.resolvedModules))
   }
-}
-
-/**
- * @internal
- */
-export function isTestFile(testMatchPatterns: (string | RegExp)[], fileName: string): boolean {
-  return testMatchPatterns.some((pattern) =>
-    typeof pattern === 'string' ? micromatch.isMatch(fileName, pattern) : pattern.test(fileName),
-  )
 }
