@@ -1,5 +1,3 @@
-import { removeSync, writeFileSync } from 'fs-extra'
-
 import { makeCompiler } from '../__helpers__/fakers'
 import ProcessedSource from '../__helpers__/processed-source'
 import { TS_JEST_OUT_DIR } from '../config/config-set'
@@ -10,18 +8,15 @@ describe('Transpiler', () => {
   }
 
   it('should compile js file for allowJs true', () => {
-    const fileName = `${__filename}.test.js`
+    const fileName = 'foo.js'
     const compiler = makeCompiler({
       tsJestConfig: { ...baseTsJestConfig, tsConfig: { allowJs: true, outDir: TS_JEST_OUT_DIR } },
     })
     const source = 'export default 42'
 
-    writeFileSync(fileName, source, 'utf8')
     const compiled = compiler.compile(source, fileName)
 
     expect(new ProcessedSource(compiled, fileName)).toMatchSnapshot()
-
-    removeSync(fileName)
   })
 
   describe('jsx option', () => {
@@ -31,14 +26,6 @@ describe('Transpiler', () => {
           return <>Test</>
         }
       `
-
-    beforeEach(() => {
-      writeFileSync(fileName, source, 'utf8')
-    })
-
-    afterEach(() => {
-      removeSync(fileName)
-    })
 
     it('should compile tsx file for jsx preserve', () => {
       const compiler = makeCompiler({
@@ -72,14 +59,6 @@ describe('Transpiler', () => {
   describe('source maps', () => {
     const source = 'const f = (v: number) => v\nconst t: number = f(5)'
     const fileName = 'test-source-map-transpiler.ts'
-
-    beforeEach(() => {
-      writeFileSync(fileName, source, 'utf8')
-    })
-
-    afterEach(() => {
-      removeSync(fileName)
-    })
 
     it('should have correct source maps without mapRoot', () => {
       const compiler = makeCompiler({ tsJestConfig: { ...baseTsJestConfig, tsConfig: false } })
