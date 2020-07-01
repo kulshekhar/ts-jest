@@ -101,14 +101,14 @@ export class TsJestTransformer implements Transformer {
     const source: string = input
     const configs = this.configsFor(jestConfig)
     const { hooks } = configs
-    const stringify = configs.shouldStringifyContent(filePath)
-    const babelJest = stringify ? undefined : configs.babelJestTransformer
+    const shouldStringifyContent = configs.shouldStringifyContent(filePath)
+    const babelJest = shouldStringifyContent ? undefined : configs.babelJestTransformer
     const isDefinitionFile = filePath.endsWith('.d.ts')
     const isJsFile = JS_JSX_REGEX.test(filePath)
     const isTsFile = !isDefinitionFile && TS_TSX_REGEX.test(filePath)
-    if (stringify) {
+    if (shouldStringifyContent) {
       // handles here what we should simply stringify
-      result = `module.exports=${JSON.stringify(source)}`
+      result = `module.exports=${stringify(source)}`
     } else if (isDefinitionFile) {
       // do not try to compile declaration files
       result = ''

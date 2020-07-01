@@ -8,6 +8,7 @@ import { CompileFn, CompilerInstance, MemoryCache, TSFile, TsCompiler } from '..
 import { getResolvedModulesCache } from './compiler-utils'
 import { initializeLanguageServiceInstance } from './language-service'
 import { initializeTranspilerInstance } from './transpiler'
+import { stringify } from '../util/json'
 
 /**
  * Rely on TypeScript compiled output generation which contains this prefix to point to sourcemap location.
@@ -36,7 +37,7 @@ const updateSourceMap = (sourceMapText: string, normalizedFileName: string): str
   sourceMap.sources = [normalizedFileName]
   delete sourceMap.sourceRoot
 
-  return JSON.stringify(sourceMap)
+  return stringify(sourceMap)
 }
 
 /**

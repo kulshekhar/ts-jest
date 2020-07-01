@@ -5,6 +5,7 @@ import * as _ts from 'typescript'
 
 import { MemoryCache } from '../types'
 import { sha1 } from '../util/sha1'
+import { stringify } from '../util/json'
 
 /**
  * @internal
@@ -46,6 +47,6 @@ export function cacheResolvedModules(
       )
       .reduce((a: any, b: any) => a.concat(b), [])
     memoryCache.resolvedModules[fileName].testFileContent = fileContent
-    writeFileSync(getResolvedModulesCache(cacheDir), JSON.stringify(memoryCache.resolvedModules))
+    writeFileSync(getResolvedModulesCache(cacheDir), stringify(memoryCache.resolvedModules))
   }
 }
