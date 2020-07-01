@@ -53,17 +53,17 @@ exports[`Transpiler jsx option should compile tsx file for other jsx options 1`]
 `;
 
 exports[`Transpiler should compile js file for allowJs true 1`] = `
-  ===[ FILE: src/compiler/transpiler.spec.ts.test.js ]============================
+  ===[ FILE: foo.js ]=============================================================
   "use strict";
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.default = 42;
-  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoiPGN3ZD4vc3JjL2NvbXBpbGVyL3RyYW5zcGlsZXIuc3BlYy50cy50ZXN0LmpzIiwibWFwcGluZ3MiOiI7O0FBQUEsa0JBQWUsRUFBRSxDQUFBIiwibmFtZXMiOltdLCJzb3VyY2VzIjpbIjxjd2Q+L3NyYy9jb21waWxlci90cmFuc3BpbGVyLnNwZWMudHMudGVzdC5qcyJdLCJzb3VyY2VzQ29udGVudCI6WyJleHBvcnQgZGVmYXVsdCA0MiJdLCJ2ZXJzaW9uIjozfQ==
+  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoiZm9vLmpzIiwibWFwcGluZ3MiOiI7O0FBQUEsa0JBQWUsRUFBRSxDQUFBIiwibmFtZXMiOltdLCJzb3VyY2VzIjpbImZvby5qcyJdLCJzb3VyY2VzQ29udGVudCI6WyJleHBvcnQgZGVmYXVsdCA0MiJdLCJ2ZXJzaW9uIjozfQ==
   ===[ INLINE SOURCE MAPS ]=======================================================
-  file: <cwd>/src/compiler/transpiler.spec.ts.test.js
+  file: foo.js
   mappings: ';;AAAA,kBAAe,EAAE,CAAA'
   names: []
   sources:
-    - <cwd>/src/compiler/transpiler.spec.ts.test.js
+    - foo.js
   sourcesContent:
     - export default 42
   version: 3
