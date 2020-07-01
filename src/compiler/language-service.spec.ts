@@ -1,6 +1,6 @@
 import { LogLevels } from 'bs-logger'
 import { readFileSync } from 'fs'
-import { removeSync, writeFileSync } from 'fs-extra'
+import { writeFileSync } from 'fs-extra'
 
 import { makeCompiler } from '../__helpers__/fakers'
 import { logTargetMock } from '../__helpers__/mocks'
@@ -62,14 +62,6 @@ export const thing: Thing = { a: 1 }`
     const fileName = 'test-allow-js.js'
     const source = 'export default 42'
 
-    beforeEach(() => {
-      writeFileSync(fileName, source, 'utf8')
-    })
-
-    afterEach(() => {
-      removeSync(fileName)
-    })
-
     it('should compile js file for allowJs true with outDir', () => {
       const compiler = makeCompiler({
         tsJestConfig: { tsConfig: { allowJs: true, outDir: '$$foo$$' } },
@@ -97,14 +89,6 @@ export const thing: Thing = { a: 1 }`
           return <>Test</>
         }
       `
-
-    beforeEach(() => {
-      writeFileSync(fileName, source, 'utf8')
-    })
-
-    afterEach(() => {
-      removeSync(fileName)
-    })
 
     it('should compile tsx file for jsx preserve', () => {
       const compiler = makeCompiler({
@@ -137,14 +121,6 @@ export const thing: Thing = { a: 1 }`
   describe('source maps', () => {
     const source = 'const gsm = (v: number) => v\nconst h: number = gsm(5)'
     const fileName = 'test-source-map.ts'
-
-    beforeEach(() => {
-      writeFileSync(fileName, source, 'utf8')
-    })
-
-    afterEach(() => {
-      removeSync(fileName)
-    })
 
     it('should have correct source maps without mapRoot', () => {
       const compiler = makeCompiler({ tsJestConfig: { tsConfig: false } })
@@ -239,13 +215,6 @@ export const thing: Thing = { a: 1 }`
 const g = (v: number) => v
 const x: string = g(5)
 `
-    beforeEach(() => {
-      writeFileSync(fileName, source, 'utf8')
-    })
-
-    afterEach(() => {
-      removeSync(fileName)
-    })
 
     it('should report diagnostics related to typings with pathRegex config matches file name', () => {
       const compiler = makeCompiler({
@@ -274,10 +243,7 @@ const x: string = g(5)
     const compiler = makeCompiler({
       tsJestConfig: { tsConfig: false },
     })
-    writeFileSync(fileName, source, 'utf8')
 
     expect(() => compiler.compile(source, fileName)).toThrowErrorMatchingSnapshot()
-
-    removeSync(fileName)
   })
 })
