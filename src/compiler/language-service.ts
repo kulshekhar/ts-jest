@@ -1,13 +1,15 @@
 import { LogContexts, Logger, LogLevels } from 'bs-logger'
+import { readFileSync } from 'fs'
 import { basename, normalize, relative } from 'path'
+import mkdirp = require('mkdirp')
 import * as _ts from 'typescript'
 
 import { ConfigSet } from '../config/config-set'
 import { LINE_FEED } from '../constants'
-import { CompilerInstance, MemoryCache, SourceOutput } from '../types'
+import { CompilerInstance, MemoryCache, SourceOutput, TSFile } from '../types'
 import { Errors, interpolate } from '../util/messages'
 
-import { cacheResolvedModules } from './compiler-utils'
+import { cacheResolvedModules, getResolvedModulesCache } from './compiler-utils'
 import memoize = require('lodash.memoize')
 
 function doTypeChecking(configs: ConfigSet, fileName: string, service: _ts.LanguageService, logger: Logger) {
@@ -22,22 +24,37 @@ function doTypeChecking(configs: ConfigSet, fileName: string, service: _ts.Langu
 /**
  * @internal
  */
-export const initializeLanguageServiceInstance = (
-  configs: ConfigSet,
-  memoryCache: MemoryCache,
-  logger: Logger,
-): CompilerInstance => {
+export const initializeLanguageServiceInstance = (configs: ConfigSet, logger: Logger): CompilerInstance => {
   logger.debug('initializeLanguageServiceInstance(): create typescript compiler')
 
   const ts = configs.compilerModule
   const cwd = configs.cwd
   const cacheDir = configs.tsCacheDir
   const { options, fileNames } = configs.parsedTsConfig
+  const memoryCache: MemoryCache = {
+    files: new Map<string, TSFile>(),
+    resolvedModules: Object.create(null),
+  }
   const serviceHostTraceCtx = {
     namespace: 'ts:serviceHost',
     call: null,
     [LogContexts.logLevel]: LogLevels.trace,
   }
+  if (cacheDir) {
+    // Make sure the cache directory exists before continuing.
+    mkdirp.sync(cacheDir)
+    try {
+      const fsMemoryCache = readFileSync(getResolvedModulesCache(cacheDir), 'utf-8')
+      /* istanbul ignore next (covered by e2e) */
+      memoryCache.resolvedModules = JSON.parse(fsMemoryCache)
+    } catch (e) {}
+  }
+  // Initialize memory cache for typescript compiler
+  configs.parsedTsConfig.fileNames.forEach((fileName) => {
+    memoryCache.files.set(fileName, {
+      version: 0,
+    })
+  })
   function isFileInCache(fileName: string) {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     return memoryCache.files.has(fileName) && memoryCache.files.get(fileName)!.version !== 0
@@ -96,7 +113,7 @@ export const initializeLanguageServiceInstance = (
     getScriptSnapshot(fileName: string) {
       const normalizedFileName = normalize(fileName)
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      const hit = memoryCache.files.has(normalizedFileName) && memoryCache.files.get(normalizedFileName)!.version !== 0
+      const hit = isFileInCache(normalizedFileName)
 
       logger.trace({ normalizedFileName, cacheHit: hit }, 'getScriptSnapshot():', 'cache', hit ? 'hit' : 'miss')
 
@@ -184,6 +201,10 @@ export const initializeLanguageServiceInstance = (
           }),
         )
       }
+      memoryCache.files.set(fileName, {
+        ...memoryCache.files.get(fileName)!, // eslint-disable-line @typescript-eslint/no-non-null-assertion
+        output: output.outputFiles[1].text,
+      })
 
       return [output.outputFiles[1].text, output.outputFiles[0].text]
     },
