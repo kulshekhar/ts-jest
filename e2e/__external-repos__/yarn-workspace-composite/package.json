@@ -9,6 +9,11 @@
     "test": "jest --no-cache"
   },
   "devDependencies": {
+    "@types/jest": "^26.0.3",
+    "jest": "^26.1.0",
+    "typescript": "^3.9.6"
+  },
+  "wantedDependencies": {
     "@types/jest": "latest",
     "jest": "latest",
     "typescript": "latest"

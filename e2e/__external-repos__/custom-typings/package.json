@@ -4,10 +4,15 @@
   "scripts": {
     "test": "jest"
   },
-  "dependencies": {
-    "jquery": "latest"
-  },
   "devDependencies": {
+    "@types/jest": "^26.0.3",
+    "@types/jquery": "^3.5.0",
+    "jest": "^26.1.0",
+    "jquery": "^3.5.1",
+    "typescript": "^3.9.6"
+  },
+  "wantedDependencies": {
+    "jquery": "latest",
     "@types/jest": "latest",
     "@types/jquery": "latest",
     "jest": "latest",
