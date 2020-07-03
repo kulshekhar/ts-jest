@@ -217,6 +217,16 @@ export interface TsCompiler {
  */
 export type SourceOutput = [string, string]
 
+/** where key is filepath */
+type TSFiles = Map<string, TSFile>
+/**
+ * @internal
+ */
+export interface TSFile {
+  text?: string
+  output?: string
+  version: number
+}
 /**
  * Track the project information.
  *
@@ -249,19 +259,4 @@ export interface AstTransformerDesc {
   name: string
   version: number
   factory(cs: ConfigSet): _ts.TransformerFactory<_ts.SourceFile>
-}
-/** where key is filepath */
-export type TSFiles = Map<string, TSFile>
-export interface TSFile {
-  text?: string
-  output?: string
-  version: number
-  projectReference?: {
-    /**
-     * Undefined here means we’ve already checked and confirmed there is no
-     * project reference for the file. Don’t bother checking again.
-     */
-    project?: _ts.ResolvedProjectReference
-    outputFileName?: string
-  }
 }
