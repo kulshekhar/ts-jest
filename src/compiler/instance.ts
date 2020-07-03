@@ -1,11 +1,8 @@
 import { Logger } from 'bs-logger'
-import { readFileSync } from 'fs'
-import mkdirp = require('mkdirp')
 
 import { ConfigSet } from '../config/config-set'
-import { CompileFn, CompilerInstance, MemoryCache, TSFile, TsCompiler } from '../types'
+import { CompileFn, CompilerInstance, TsCompiler } from '../types'
 
-import { getResolvedModulesCache } from './compiler-utils'
 import { initializeLanguageServiceInstance } from './language-service'
 import { initializeTranspilerInstance } from './transpiler'
 import { stringify } from '../util/json'
@@ -44,21 +41,16 @@ const updateSourceMap = (sourceMapText: string, normalizedFileName: string): str
  * Compile files which are provided by jest via transform config and cache the result in file system if users run with
  * cache mode
  */
-const compileAndCacheResult = (memoryCache: MemoryCache, compileFn: CompileFn, logger: Logger) => (
+const compileAndUpdateOutput = (compileFn: CompileFn, logger: Logger) => (
   code: string,
   fileName: string,
   lineOffset?: number,
 ) => {
-  logger.debug({ fileName }, 'compileAndCacheResult(): get compile output')
+  logger.debug({ fileName }, 'compileAndUpdateOutput(): get compile output')
 
   const [value, sourceMap] = compileFn(code, fileName, lineOffset)
-  const output = updateOutput(value, fileName, sourceMap)
-  memoryCache.files.set(fileName, {
-    ...memoryCache.files.get(fileName)!, // eslint-disable-line @typescript-eslint/no-non-null-assertion
-    output,
-  })
 
-  return output
+  return updateOutput(value, fileName, sourceMap)
 }
 
 /**
@@ -72,40 +64,16 @@ export const createCompilerInstance = (configs: ConfigSet): TsCompiler => {
     parsedTsConfig: { options: compilerOptions },
     tsJest,
   } = configs
-  const cacheDir = configs.tsCacheDir
   const extensions = ['.ts', '.tsx']
-  const memoryCache: MemoryCache = {
-    files: new Map<string, TSFile>(),
-    resolvedModules: Object.create(null),
-  }
   // Enable `allowJs` when flag is set.
   if (compilerOptions.allowJs) {
     extensions.push('.js')
     extensions.push('.jsx')
   }
-  if (cacheDir) {
-    // Make sure the cache directory exists before continuing.
-    mkdirp.sync(cacheDir)
-    try {
-      const fsMemoryCache = readFileSync(getResolvedModulesCache(cacheDir), 'utf-8')
-      /* istanbul ignore next (covered by e2e) */
-      memoryCache.resolvedModules = JSON.parse(fsMemoryCache)
-    } catch (e) {}
-  }
-  // Initialize memory cache for typescript compiler
-  configs.parsedTsConfig.fileNames.forEach((fileName) => {
-    memoryCache.files.set(fileName, {
-      version: 0,
-    })
-  })
-  let compilerInstance: CompilerInstance
-  if (!tsJest.isolatedModules) {
-    // Use language services by default
-    compilerInstance = initializeLanguageServiceInstance(configs, memoryCache, logger)
-  } else {
-    compilerInstance = initializeTranspilerInstance(configs, memoryCache, logger)
-  }
-  const compile = compileAndCacheResult(memoryCache, compilerInstance.compileFn, logger)
+  const compilerInstance: CompilerInstance = !tsJest.isolatedModules
+    ? initializeLanguageServiceInstance(configs, logger) // Use language services by default
+    : initializeTranspilerInstance(configs, logger)
+  const compile = compileAndUpdateOutput(compilerInstance.compileFn, logger)
 
   return { cwd: configs.cwd, compile, program: compilerInstance.program }
 }

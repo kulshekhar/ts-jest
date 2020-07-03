@@ -168,7 +168,7 @@ export const thing: Thing = { a: 1 }`
 
     expect(logTarget.filteredLines(LogLevels.debug, Infinity)).toMatchInlineSnapshot(`
       Array [
-        "[level:20] compileAndCacheResult(): get compile output
+        "[level:20] compileAndUpdateOutput(): get compile output
       ",
         "[level:20] compileFn(): compiling using language service
       ",
