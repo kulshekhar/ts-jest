@@ -5,12 +5,12 @@
     "test": "jest"
   },
   "dependencies": {
-    "jquery": "^3.5.0"
+    "jquery": "latest"
   },
   "devDependencies": {
-    "@types/jest": "^25.2.1",
-    "@types/jquery": "^3.3.35",
-    "jest": "^26.0.1",
-    "typescript": "~3.9.2"
+    "@types/jest": "latest",
+    "@types/jquery": "latest",
+    "jest": "latest",
+    "typescript": "latest"
   }
 }
