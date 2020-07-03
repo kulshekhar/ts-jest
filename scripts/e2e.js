@@ -52,9 +52,9 @@ function setupE2e() {
   fs.mkdirpSync(Paths.e2eWorkTemplatesDir)
 
   // link locally so we could find it easily
-  if (!process.env.CI && !fs.existsSync(Paths.e2eWotkDirLink)) {
-    fs.symlinkSync(Paths.e2eWorkDir, Paths.e2eWotkDirLink, 'dir')
-    log('symbolic link to the work directory created at: ', Paths.e2eWotkDirLink)
+  if (!process.env.CI && !fs.existsSync(Paths.e2eWorkDirLink)) {
+    fs.symlinkSync(Paths.e2eWorkDir, Paths.e2eWorkDirLink, 'dir')
+    log('symbolic link to the work directory created at: ', Paths.e2eWorkDirLink)
   }
 
   // cleanup files related to old test run

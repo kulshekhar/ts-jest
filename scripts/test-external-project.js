@@ -4,7 +4,7 @@
 const { spawnSync } = require('./lib/spawn-sync')
 const { resolve, join } = require('path')
 const { tmpdir } = require('os')
-const { rootDir } = require('./lib/paths')
+const { rootDir, projectsToRun } = require('./lib/paths')
 const { existsSync, realpathSync } = require('fs')
 const logger = require('./lib/logger')
 const { createBundle } = require('./lib/bundle')
@@ -13,13 +13,6 @@ const npm = require('./lib/npm')
 let projectPath = process.argv[2]
 const jestArgs = process.argv.slice(3)
 let gitUrl = false
-const externalRepoPath = 'e2e/__external-repos__'
-const PROJECTS_TO_RUN = [
-  `${externalRepoPath}/custom-typings`,
-  `${externalRepoPath}/simple/with-dependency`,
-  `${externalRepoPath}/simple-project-references`,
-  `${externalRepoPath}/yarn-workspace-composite`,
-]
 
 const randomStr = () => parseInt(Math.random() * 1e17, 10).toString(36)
 const executeTest = (monorepoRealPath, bundle) => {
@@ -74,7 +67,7 @@ if (/^((https|ssh|git):\/\/|[a-z0-9]+@[a-z0-9.]+:).+$/.test(projectPath)) {
     const cwd = process.cwd()
     // first we need to create a bundle
     const bundle = createBundle()
-    PROJECTS_TO_RUN.forEach((monorepoPath) => {
+    projectsToRun.forEach((monorepoPath) => {
       let monorepoRealPath
       try {
         monorepoRealPath = realpathSync(resolve(cwd, monorepoPath))

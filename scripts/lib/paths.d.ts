@@ -6,10 +6,11 @@ declare const e2eRootDir: string
 declare const e2eWorkDir: string
 declare const e2eWorkTemplatesDir: string
 declare const e2eTemplatesDir: string
-declare const e2eWotkDirLink: string
+declare const e2eWorkDirLink: string
 declare const distDir: string
 declare const testsRootDir: string
 declare const e2eTestsDir: string
+declare const projectsToRun: string[]
 
 export {
   rootDir,
@@ -20,8 +21,9 @@ export {
   e2eWorkDir,
   e2eWorkTemplatesDir,
   e2eTemplatesDir,
-  e2eWotkDirLink,
+  e2eWorkDirLink,
   distDir,
   testsRootDir,
   e2eTestsDir,
+  projectsToRun,
 }

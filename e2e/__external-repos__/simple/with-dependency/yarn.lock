@@ -547,7 +547,7 @@
     "@types/istanbul-lib-coverage" "*"
     "@types/istanbul-lib-report" "*"
 
-"@types/jest@latest":
+"@types/jest@^26.0.3":
   version "26.0.3"
   resolved "https://registry.yarnpkg.com/@types/jest/-/jest-26.0.3.tgz#79534e0e94857171c0edc596db0ebe7cb7863251"
   integrity sha512-v89ga1clpVL/Y1+YI0eIu1VMW+KU7Xl8PhylVtDKVWaSUHBHYPLXMQGBdrpHewaKoTvlXkksbYqPgz8b4cmRZg==
@@ -2195,7 +2195,7 @@ jest-worker@^26.1.0:
     merge-stream "^2.0.0"
     supports-color "^7.0.0"
 
-jest@latest:
+jest@^26.1.0:
   version "26.1.0"
   resolved "https://registry.yarnpkg.com/jest/-/jest-26.1.0.tgz#2f3aa7bcffb9bfd025473f83bbbf46a3af026263"
   integrity sha512-LIti8jppw5BcQvmNJe4w2g1N/3V68HUfAv9zDVm7v+VAtQulGhH0LnmmiVkbNE4M4I43Bj2fXPiBGKt26k9tHw==
@@ -3368,7 +3368,7 @@ typedarray-to-buffer@^3.1.5:
   dependencies:
     is-typedarray "^1.0.0"
 
-typescript@latest:
+typescript@^3.9.6:
   version "3.9.6"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.9.6.tgz#8f3e0198a34c3ae17091b35571d3afd31999365a"
   integrity sha512-Pspx3oKAPJtjNwE92YS05HQoY7z2SFyOpHo9MqJor3BXAGNaPUs83CuVp9VISFkSjyRfiTpmKuAYGJB7S7hOxw==
