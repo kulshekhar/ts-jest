@@ -233,12 +233,7 @@ export interface TSFile {
  * @internal
  */
 export interface MemoryCache {
-  resolvedModules: {
-    [testFilePath: string]: {
-      testFileContent: string
-      modulePaths: string[]
-    }
-  }
+  resolvedModules: Map<string, string[]>
   files: TSFiles
 }
 /**

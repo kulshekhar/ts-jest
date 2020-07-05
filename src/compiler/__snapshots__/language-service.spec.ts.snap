@@ -36,7 +36,84 @@ exports[`Language service allowJs option should compile js file for allowJs true
   ================================================================================
 `;
 
-exports[`Language service diagnostics should report diagnostics related to typings with pathRegex config matches file name 1`] = `"test-diagnostics.ts(3,7): error TS2322: Type 'number' is not assignable to type 'string'."`;
+exports[`Language service diagnostics should only report diagnostics for imported modules but not test files without cache 1`] = `
+Array [
+  "[level:20] compileAndUpdateOutput(): get compile output
+",
+  "[level:20] compileFn(): compiling using language service
+",
+  "[level:20] updateMemoryCache(): update memory cache for language service
+",
+  "[level:20] visitSourceFileNode(): hoisting
+",
+  "[level:20] compileFn(): computing diagnostics using language service
+",
+]
+`;
+
+exports[`Language service diagnostics should report diagnostics for imported modules as well as test files which use imported modules with cache 1`] = `
+Array [
+  "[level:20] compileAndUpdateOutput(): get compile output
+",
+  "[level:20] compileFn(): compiling using language service
+",
+  "[level:20] updateMemoryCache(): update memory cache for language service
+",
+  "[level:20] visitSourceFileNode(): hoisting
+",
+  "[level:20] compileFn(): computing diagnostics using language service
+",
+  "[level:20] updateMemoryCache(): update memory cache for language service
+",
+  "[level:20] compileFn(): computing diagnostics using language service for test file which uses the module
+",
+]
+`;
+
+exports[`Language service diagnostics should throw error when cannot compile 1`] = `
+"Unable to require \`.d.ts\` file for file: test-cannot-compile.d.ts.
+This is usually the result of a faulty configuration or import. Make sure there is a \`.js\`, \`.json\` or another executable extension available alongside \`test-cannot-compile.d.ts\`."
+`;
+
+exports[`Language service diagnostics shouldn't report diagnostic when processing file isn't used by any test files 1`] = `
+Array [
+  "[level:20] compileAndUpdateOutput(): get compile output
+",
+  "[level:20] compileFn(): compiling using language service
+",
+  "[level:20] updateMemoryCache(): update memory cache for language service
+",
+  "[level:20] visitSourceFileNode(): hoisting
+",
+  "[level:20] compileFn(): computing diagnostics using language service
+",
+]
+`;
+
+exports[`Language service diagnostics shouldn't report diagnostics for test file name that has been type checked before 1`] = `
+Array [
+  "[level:20] compileAndUpdateOutput(): get compile output
+",
+  "[level:20] compileFn(): compiling using language service
+",
+  "[level:20] updateMemoryCache(): update memory cache for language service
+",
+  "[level:20] visitSourceFileNode(): hoisting
+",
+  "[level:20] compileFn(): computing diagnostics using language service
+",
+  "[level:20] compileAndUpdateOutput(): get compile output
+",
+  "[level:20] compileFn(): compiling using language service
+",
+  "[level:20] updateMemoryCache(): update memory cache for language service
+",
+  "[level:20] visitSourceFileNode(): hoisting
+",
+  "[level:20] compileFn(): computing diagnostics using language service
+",
+]
+`;
 
 exports[`Language service jsx option should compile tsx file for jsx preserve 1`] = `
   ===[ FILE: test-jsx.tsx ]=======================================================
@@ -84,11 +161,4 @@ exports[`Language service jsx option should compile tsx file for other jsx optio
             
   version: 3
   ================================================================================
-`;
-
-exports[`Language service should do type check for the test file when imported module has changed 1`] = `"src/__mocks__/changed-modules/main.spec.ts(3,14): error TS2741: Property 'b' is missing in type '{ a: number; }' but required in type 'Thing'."`;
-
-exports[`Language service should throw error when cannot compile 1`] = `
-"Unable to require \`.d.ts\` file for file: test-cannot-compile.d.ts.
-This is usually the result of a faulty configuration or import. Make sure there is a \`.js\`, \`.json\` or another executable extension available alongside \`test-cannot-compile.d.ts\`."
 `;

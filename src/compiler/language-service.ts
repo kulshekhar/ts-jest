@@ -1,21 +1,29 @@
 import { LogContexts, Logger, LogLevels } from 'bs-logger'
-import { readFileSync } from 'fs'
-import { basename, normalize, relative } from 'path'
+import { readFileSync, writeFile } from 'fs'
+import { basename, normalize, relative, join } from 'path'
+import memoize = require('lodash.memoize')
 import mkdirp = require('mkdirp')
 import * as _ts from 'typescript'
 
-import { ConfigSet } from '../config/config-set'
+import type { ConfigSet } from '../config/config-set'
 import { LINE_FEED } from '../constants'
 import { CompilerInstance, MemoryCache, SourceOutput, TSFile } from '../types'
 import { Errors, interpolate } from '../util/messages'
 
-import { cacheResolvedModules, getResolvedModulesCache } from './compiler-utils'
-import memoize = require('lodash.memoize')
+import { parse, stringify } from '../util/json'
+import { sha1 } from '../util/sha1'
 
-function doTypeChecking(configs: ConfigSet, fileName: string, service: _ts.LanguageService, logger: Logger) {
+function doTypeChecking(
+  configs: ConfigSet,
+  diagnosedFiles: string[],
+  fileName: string,
+  service: _ts.LanguageService,
+  logger: Logger,
+): void {
   if (configs.shouldReportDiagnostic(fileName)) {
     // Get the relevant diagnostics - this is 3x faster than `getPreEmitDiagnostics`.
     const diagnostics = service.getSemanticDiagnostics(fileName).concat(service.getSyntacticDiagnostics(fileName))
+    diagnosedFiles.push(fileName)
     // will raise or just warn diagnostics depending on config
     configs.raiseDiagnostics(diagnostics, fileName, logger)
   }
@@ -31,22 +39,25 @@ export const initializeLanguageServiceInstance = (configs: ConfigSet, logger: Lo
   const cwd = configs.cwd
   const cacheDir = configs.tsCacheDir
   const { options, fileNames } = configs.parsedTsConfig
-  const memoryCache: MemoryCache = {
-    files: new Map<string, TSFile>(),
-    resolvedModules: Object.create(null),
-  }
+  const diagnosedFiles: string[] = []
   const serviceHostTraceCtx = {
     namespace: 'ts:serviceHost',
     call: null,
     [LogContexts.logLevel]: LogLevels.trace,
   }
+  const memoryCache: MemoryCache = {
+    files: new Map<string, TSFile>(),
+    resolvedModules: new Map<string, string[]>(),
+  }
+  let tsResolvedModulesCachePath: string | undefined
   if (cacheDir) {
     // Make sure the cache directory exists before continuing.
     mkdirp.sync(cacheDir)
+    tsResolvedModulesCachePath = join(cacheDir, sha1('ts-jest-resolved-modules', '\x00'))
     try {
-      const fsMemoryCache = readFileSync(getResolvedModulesCache(cacheDir), 'utf-8')
-      /* istanbul ignore next (covered by e2e) */
-      memoryCache.resolvedModules = JSON.parse(fsMemoryCache)
+      /* istanbul ignore next (already covered with unit test) */
+      const cachedTSResolvedModules = readFileSync(tsResolvedModulesCachePath, 'utf-8')
+      memoryCache.resolvedModules = new Map(parse(cachedTSResolvedModules))
     } catch (e) {}
   }
   // Initialize memory cache for typescript compiler
@@ -55,10 +66,39 @@ export const initializeLanguageServiceInstance = (configs: ConfigSet, logger: Lo
       version: 0,
     })
   })
-  function isFileInCache(fileName: string) {
+  function isFileInCache(fileName: string): boolean {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     return memoryCache.files.has(fileName) && memoryCache.files.get(fileName)!.version !== 0
   }
+  const cacheReadFile = logger.wrap(serviceHostTraceCtx, 'readFile', memoize(ts.sys.readFile))
+  /* istanbul ignore next */
+  const moduleResolutionHost: _ts.ModuleResolutionHost = {
+    fileExists: memoize(ts.sys.fileExists),
+    readFile: cacheReadFile,
+    directoryExists: memoize(ts.sys.directoryExists),
+    getCurrentDirectory: () => cwd,
+    realpath: ts.sys.realpath && memoize(ts.sys.realpath),
+    getDirectories: memoize(ts.sys.getDirectories),
+  }
+  function resolveModuleNames(moduleNames: string[], containingFile: string): (_ts.ResolvedModuleFull | undefined)[] {
+    const normalizedContainingFile = normalize(containingFile)
+    const currentResolvedModules = memoryCache.resolvedModules.get(normalizedContainingFile) ?? []
+
+    return moduleNames.map((moduleName) => {
+      const resolveModuleName = ts.resolveModuleName(moduleName, containingFile, options, moduleResolutionHost)
+      const resolvedModule = resolveModuleName.resolvedModule
+      if (configs.isTestFile(normalizedContainingFile) && resolvedModule) {
+        const normalizedResolvedFileName = normalize(resolvedModule.resolvedFileName)
+        if (!currentResolvedModules.includes(normalizedResolvedFileName)) {
+          currentResolvedModules.push(normalizedResolvedFileName)
+          memoryCache.resolvedModules.set(normalizedContainingFile, currentResolvedModules)
+        }
+      }
+
+      return resolvedModule
+    })
+  }
+
   let projectVersion = 1
   // Set the file contents into cache.
   /* istanbul ignore next (cover by e2e) */
@@ -112,7 +152,6 @@ export const initializeLanguageServiceInstance = (configs: ConfigSet, logger: Lo
     },
     getScriptSnapshot(fileName: string) {
       const normalizedFileName = normalize(fileName)
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       const hit = isFileInCache(normalizedFileName)
 
       logger.trace({ normalizedFileName, cacheHit: hit }, 'getScriptSnapshot():', 'cache', hit ? 'hit' : 'miss')
@@ -120,7 +159,7 @@ export const initializeLanguageServiceInstance = (configs: ConfigSet, logger: Lo
       // Read contents from TypeScript memory cache.
       if (!hit) {
         memoryCache.files.set(normalizedFileName, {
-          text: ts.sys.readFile(normalizedFileName),
+          text: cacheReadFile(normalizedFileName),
           version: 1,
         })
       }
@@ -131,7 +170,7 @@ export const initializeLanguageServiceInstance = (configs: ConfigSet, logger: Lo
       return ts.ScriptSnapshot.fromString(contents)
     },
     fileExists: memoize(ts.sys.fileExists),
-    readFile: logger.wrap(serviceHostTraceCtx, 'readFile', memoize(ts.sys.readFile)),
+    readFile: cacheReadFile,
     readDirectory: memoize(ts.sys.readDirectory),
     getDirectories: memoize(ts.sys.getDirectories),
     directoryExists: memoize(ts.sys.directoryExists),
@@ -141,6 +180,7 @@ export const initializeLanguageServiceInstance = (configs: ConfigSet, logger: Lo
     getCompilationSettings: () => options,
     getDefaultLibFileName: () => ts.getDefaultLibFilePath(options),
     getCustomTransformers: () => configs.tsCustomTransformers,
+    resolveModuleNames,
   }
 
   logger.debug('initializeLanguageServiceInstance(): creating language service')
@@ -151,42 +191,45 @@ export const initializeLanguageServiceInstance = (configs: ConfigSet, logger: Lo
     compileFn: (code: string, fileName: string): SourceOutput => {
       logger.debug({ fileName }, 'compileFn(): compiling using language service')
 
-      // Must set memory cache before attempting to read file.
+      // Must set memory cache before attempting to compile
       updateMemoryCache(code, fileName)
       const output: _ts.EmitOutput = service.getEmitOutput(fileName)
-      // Do type checking by getting TypeScript diagnostics
-      logger.debug({ fileName }, 'compileFn(): computing diagnostics using language service')
-
-      doTypeChecking(configs, fileName, service, logger)
+      /* istanbul ignore next */
+      if (tsResolvedModulesCachePath) {
+        // Cache resolved modules to disk so next run can reuse it
+        void (async () => {
+          // eslint-disable-next-line @typescript-eslint/await-thenable
+          await writeFile(tsResolvedModulesCachePath, stringify([...memoryCache.resolvedModules]), () => {})
+        })()
+      }
       /**
-       * We don't need the following logic with no cache run because no cache always gives correct typing
+       * There might be a chance that test files are type checked even before jest executes them, we don't need to do
+       * type check again
        */
-      if (cacheDir) {
-        if (configs.isTestFile(fileName)) {
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          cacheResolvedModules(fileName, code, memoryCache, service.getProgram()!, cacheDir, logger)
-        } else {
-          Object.entries(memoryCache.resolvedModules)
-            .filter(
-              (entry) =>
-                /**
-                 * When imported modules change, we only need to check whether the test file is compiled previously or not
-                 * base on memory cache. By checking memory cache, we can avoid repeatedly doing type checking against
-                 * test file for 1st time run after clearing cache because
-                 */
-                entry[1].modulePaths.find((modulePath) => modulePath === fileName) && !memoryCache.files.has(entry[0]),
-            )
-            .forEach((entry) => {
-              const testFileName = entry[0]
-              const testFileContent = entry[1].testFileContent
-              logger.debug(
-                { fileName },
-                'compileFn(): computing diagnostics for test file that imports this module using language service',
-              )
+      if (!diagnosedFiles.includes(fileName)) {
+        logger.debug({ fileName }, 'compileFn(): computing diagnostics using language service')
 
-              updateMemoryCache(testFileContent, testFileName)
-              doTypeChecking(configs, testFileName, service, logger)
-            })
+        doTypeChecking(configs, diagnosedFiles, fileName, service, logger)
+      }
+      /* istanbul ignore next (already covered with unit tests) */
+      if (!configs.isTestFile(fileName)) {
+        for (const [testFileName, resolvedModules] of memoryCache.resolvedModules.entries()) {
+          // Only do type checking for test files which haven't been type checked before
+          if (resolvedModules.includes(fileName) && !diagnosedFiles.includes(testFileName)) {
+            const testFileContent = memoryCache.files.get(testFileName)?.text
+            if (!testFileContent) {
+              // Must set memory cache before attempting to get diagnostics
+              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+              updateMemoryCache(cacheReadFile(testFileName)!, testFileName)
+            }
+
+            logger.debug(
+              { testFileName },
+              'compileFn(): computing diagnostics using language service for test file which uses the module',
+            )
+
+            doTypeChecking(configs, diagnosedFiles, testFileName, service, logger)
+          }
         }
       }
       /* istanbul ignore next (this should never happen but is kept for security) */

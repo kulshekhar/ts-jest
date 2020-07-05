@@ -1,6 +1,5 @@
 /* eslint-disable jest/no-mocks-import */
 import { Transformer } from '@jest/transform'
-import { Config } from '@jest/types'
 import { LogLevels, testing } from 'bs-logger'
 import { readFileSync } from 'fs'
 import json5 = require('json5')
@@ -8,8 +7,8 @@ import { resolve } from 'path'
 import * as ts from 'typescript'
 
 import * as _myModule from '..'
-import * as fakers from '../__helpers__/fakers'
 import { logTargetMock } from '../__helpers__/mocks'
+import { createConfigSet, defaultResolve } from '../__helpers__/fakers'
 import { TsJestGlobalOptions } from '../types'
 import * as _backports from '../util/backports'
 import { getPackageVersion } from '../util/get-package-version'
@@ -30,32 +29,7 @@ backports.backportJestConfig.mockImplementation((_, config) => ({
   __backported: true,
 }))
 
-const defaultResolve = (path: string) => `resolved:${path}`
 const pkgVersion = (pkgName: string) => require(`${pkgName}/package.json`).version || '????'
-
-function createConfigSet({
-  jestConfig,
-  tsJestConfig,
-  parentConfig,
-  resolve = defaultResolve,
-  ...others
-}: {
-  jestConfig?: Config.ProjectConfig
-  tsJestConfig?: TsJestGlobalOptions
-  parentConfig?: TsJestGlobalOptions
-  resolve?: ((path: string) => string) | null
-  [key: string]: any
-} = {}) {
-  const cs = new ConfigSet(fakers.getJestConfig(jestConfig, tsJestConfig), parentConfig)
-  if (resolve) {
-    cs.resolvePath = resolve
-  }
-  Object.keys(others).forEach((key) => {
-    Object.defineProperty(cs, key, { value: others[key] })
-  })
-
-  return cs
-}
 
 beforeEach(() => {
   jest.clearAllMocks()
