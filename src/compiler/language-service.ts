@@ -135,7 +135,7 @@ export const initializeLanguageServiceInstance = (configs: ConfigSet, logger: Lo
     readDirectory: memoize(ts.sys.readDirectory),
     getDirectories: memoize(ts.sys.getDirectories),
     directoryExists: memoize(ts.sys.directoryExists),
-    realpath: memoize(ts.sys.realpath!), // eslint-disable-line @typescript-eslint/no-non-null-assertion
+    realpath: ts.sys.realpath && memoize(ts.sys.realpath),
     getNewLine: () => LINE_FEED,
     getCurrentDirectory: () => cwd,
     getCompilationSettings: () => options,
