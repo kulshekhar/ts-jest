@@ -10,6 +10,8 @@ import ProcessedSource from '../__helpers__/processed-source'
 const logTarget = logTargetMock()
 
 describe('Language service', () => {
+  const baseTsJestConfig = { tsConfig: require.resolve('../../tsconfig.spec.json') }
+
   beforeEach(() => {
     logTarget.clear()
   })
@@ -107,10 +109,26 @@ describe('Language service', () => {
     })
   })
 
+  describe('module resolution', () => {
+    it(`should use moduleResolutionCache`, () => {
+      jest.unmock('typescript')
+      const ts = require('typescript')
+      const moduleResolutionCacheMock = (ts.createModuleResolutionCache = jest.fn().mockImplementation(() => {}))
+
+      makeCompiler({
+        tsJestConfig: baseTsJestConfig,
+      })
+
+      expect(moduleResolutionCacheMock).toHaveBeenCalled()
+      expect(moduleResolutionCacheMock.mock.calls[0].length).toBe(3)
+
+      moduleResolutionCacheMock.mockRestore()
+    })
+  })
+
   describe('diagnostics', () => {
     const importedFileName = require.resolve('../__mocks__/thing.ts')
     const importedFileContent = readFileSync(importedFileName, 'utf-8')
-    const baseTsJestConfig = { tsConfig: require.resolve('../../tsconfig.spec.json') }
 
     it(`should report diagnostics for imported modules as well as test files which use imported modules with cache`, async () => {
       const testFileName = require.resolve('../__mocks__/thing1.spec.ts')
