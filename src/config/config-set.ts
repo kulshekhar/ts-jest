@@ -438,7 +438,7 @@ export class ConfigSet {
   }
 
   /**
-   * @internal
+   * This API can be used by custom transformers
    */
   @Memoize()
   get compilerModule(): TTypeScript {
