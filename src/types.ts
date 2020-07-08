@@ -8,9 +8,6 @@ import { ConfigSet } from './config/config-set'
  * @internal
  */
 export type TBabelCore = typeof _babel
-/**
- * @internal
- */
 export type TTypeScript = typeof _ts
 /**
  * @internal
