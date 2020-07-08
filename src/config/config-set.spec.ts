@@ -15,7 +15,9 @@ import { getPackageVersion } from '../util/get-package-version'
 import { normalizeSlashes } from '../util/normalize-slashes'
 import { mocked } from '../util/testing'
 
-import { ConfigSet, IGNORE_DIAGNOSTIC_CODES, MATCH_NOTHING, TS_JEST_OUT_DIR } from './config-set'
+import { IGNORE_DIAGNOSTIC_CODES, MATCH_NOTHING, TS_JEST_OUT_DIR } from './config-set'
+// eslint-disable-next-line no-duplicate-imports
+import type { ConfigSet } from './config-set'
 
 jest.mock('../util/backports')
 jest.mock('../index')
@@ -795,6 +797,7 @@ describe('readTsConfig', () => {
       { jestConfig: { rootDir: '/root', cwd: '/cwd' } as any },
     ])('toggle warning message for users who are using ts-jest with babel or without babel', (config) => {
       const shouldAction = config.tsJestConfig?.babelConfig ? `shouldn't` : 'should'
+
       beforeEach(() => {
         logTarget.clear()
         cs = createConfigSet(config)
@@ -974,6 +977,10 @@ describe('shouldReportDiagnostic', () => {
 describe('tsCompiler', () => {
   it('should be a compiler object', () => {
     const cs = createConfigSet({
+      jestConfig: {
+        testRegex: [],
+        testMatch: [],
+      },
       tsJestConfig: { tsConfig: false } as any,
     })
     const compiler = cs.tsCompiler

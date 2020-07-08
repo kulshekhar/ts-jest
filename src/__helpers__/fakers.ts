@@ -68,13 +68,6 @@ export function createConfigSet({
   resolve?: ((path: string) => string) | null
   [key: string]: any
 } = {}): ConfigSet {
-  const defaultTestRegex = ['(/__tests__/.*|(\\\\.|/)(test|spec))\\\\.[jt]sx?$']
-  const defaultTestMatch = ['**/__tests__/**/*.[jt]s?(x)', '**/?(*.)+(spec|test).[jt]s?(x)']
-  jestConfig = {
-    ...jestConfig,
-    testMatch: jestConfig?.testMatch ? [...jestConfig.testMatch, ...defaultTestMatch] : defaultTestMatch,
-    testRegex: jestConfig?.testRegex ? [...defaultTestRegex, ...jestConfig.testRegex] : defaultTestRegex,
-  }
   const cs = new ConfigSet(getJestConfig(jestConfig, tsJestConfig), parentConfig)
   if (resolve) {
     cs.resolvePath = resolve
@@ -100,6 +93,13 @@ export function makeCompiler({
   tsJestConfig.diagnostics = {
     ...(tsJestConfig.diagnostics as any),
     pretty: false,
+  }
+  const defaultTestRegex = ['(/__tests__/.*|(\\\\.|/)(test|spec))\\\\.[jt]sx?$']
+  const defaultTestMatch = ['**/__tests__/**/*.[jt]s?(x)', '**/?(*.)+(spec|test).[jt]s?(x)']
+  jestConfig = {
+    ...jestConfig,
+    testMatch: jestConfig?.testMatch ? [...jestConfig.testMatch, ...defaultTestMatch] : defaultTestMatch,
+    testRegex: jestConfig?.testRegex ? [...defaultTestRegex, ...jestConfig.testRegex] : defaultTestRegex,
   }
   const cs = createConfigSet({ jestConfig, tsJestConfig, parentConfig, resolve: null })
 

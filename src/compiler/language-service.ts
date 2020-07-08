@@ -80,12 +80,19 @@ export const initializeLanguageServiceInstance = (configs: ConfigSet, logger: Lo
     realpath: ts.sys.realpath && memoize(ts.sys.realpath),
     getDirectories: memoize(ts.sys.getDirectories),
   }
+  const moduleResolutionCache = ts.createModuleResolutionCache(cwd, (x) => x, options)
   function resolveModuleNames(moduleNames: string[], containingFile: string): (_ts.ResolvedModuleFull | undefined)[] {
     const normalizedContainingFile = normalize(containingFile)
     const currentResolvedModules = memoryCache.resolvedModules.get(normalizedContainingFile) ?? []
 
     return moduleNames.map((moduleName) => {
-      const resolveModuleName = ts.resolveModuleName(moduleName, containingFile, options, moduleResolutionHost)
+      const resolveModuleName = ts.resolveModuleName(
+        moduleName,
+        containingFile,
+        options,
+        moduleResolutionHost,
+        moduleResolutionCache,
+      )
       const resolvedModule = resolveModuleName.resolvedModule
       if (configs.isTestFile(normalizedContainingFile) && resolvedModule) {
         const normalizedResolvedFileName = normalize(resolvedModule.resolvedFileName)

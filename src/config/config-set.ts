@@ -210,7 +210,6 @@ export class ConfigSet {
          */
         pattern instanceof RegExp || typeof pattern === 'string',
     )
-    /* istanbul ignore next */
     if (!matchablePatterns.length) {
       matchablePatterns.push(...DEFAULT_JEST_TEST_MATCH)
     }
