@@ -689,7 +689,10 @@ export class ConfigSet {
       jest,
       tsJest: this.tsJest,
       babel: this.babel,
-      tsconfig: this.parsedTsConfig.options,
+      tsconfig: {
+        options: this.parsedTsConfig.options,
+        raw: this.parsedTsConfig.raw,
+      },
     })
   }
 
@@ -699,6 +702,7 @@ export class ConfigSet {
   get cacheKey(): string {
     return this.jsonValue.serialized
   }
+
   readonly logger: Logger
   /**
    * @internal
@@ -713,7 +717,7 @@ export class ConfigSet {
   /**
    * @internal
    */
-  makeDiagnostic(
+  private makeDiagnostic(
     code: number,
     messageText: string,
     options: { category?: DiagnosticCategory; file?: SourceFile; start?: number; length?: number } = {},

@@ -417,35 +417,6 @@ describe('tsJest', () => {
   }) // compiler
 }) // tsJest
 
-describe('makeDiagnostic', () => {
-  const cs = createConfigSet()
-  it('should create diagnostic with defaults', () => {
-    expect(cs.makeDiagnostic(1234, 'foo is not bar')).toMatchInlineSnapshot(`
-      Object {
-        "category": 0,
-        "code": 1234,
-        "file": undefined,
-        "length": undefined,
-        "messageText": "foo is not bar",
-        "start": undefined,
-      }
-    `)
-  })
-  it('should set category', () => {
-    expect(cs.makeDiagnostic(4321, 'foo might be bar', { category: ts.DiagnosticCategory.Error }))
-      .toMatchInlineSnapshot(`
-      Object {
-        "category": 1,
-        "code": 4321,
-        "file": undefined,
-        "length": undefined,
-        "messageText": "foo might be bar",
-        "start": undefined,
-      }
-    `)
-  })
-}) // makeDiagnostic
-
 describe('typescript', () => {
   const get = (tsJest?: TsJestGlobalOptions, parentConfig?: TsJestGlobalOptions) =>
     createConfigSet({ tsJestConfig: tsJest, parentConfig }).parsedTsConfig
@@ -1045,19 +1016,26 @@ describe('projectDependencies', () => {
 describe('cacheKey', () => {
   it('should be a string', () => {
     const cs = createConfigSet({
-      tsJestConfig: { tsConfig: false } as any,
+      tsJestConfig: { tsConfig: require.resolve('../__mocks__/tsconfig-src.json') },
       projectDependencies: {
         opt: '1.2.3',
         peer: '1.2.4',
         dev: '1.2.5',
         std: '1.2.6',
       },
+      resolve: null,
     })
     // we tested those and don't want the snapshot to change all the time we upgrade
     const val = cs.jsonValue.value
     delete val.versions
+    // we don't need to verify configFilePath and tsConfig value here
+    val.tsconfig.options.configFilePath = ''
+    val.tsJest.tsConfig.value = ''
     cs.jsonValue.value = val
-    // digest is mocked in src/__mocks__/index.ts
+    /**
+     * digest is mocked in src/__mocks__/index.ts
+     * we don't want to save snapshot with real paths of tsconfig so we replace real path with empty string
+     */
     expect(cs.cacheKey).toMatchSnapshot()
   })
 }) // cacheKey
@@ -1065,16 +1043,20 @@ describe('cacheKey', () => {
 describe('jsonValue', () => {
   it('should create jsonValue based on each config and version', () => {
     const cs = createConfigSet({
-      tsJestConfig: { tsConfig: false } as any,
+      tsJestConfig: { tsConfig: require.resolve('../__mocks__/tsconfig-src.json') },
       projectDependencies: {
         'some-module': '1.2.3',
       },
+      resolve: null,
     })
     const val = cs.jsonValue.valueOf()
     expect(cs.toJSON()).toEqual(val)
     // it will change each time we upgrade – we tested those in the `version` block
     expect(val.versions).toEqual(cs.versions)
     delete val.versions
+    // we don't need to verify configFilePath and tsConfig value here
+    val.tsconfig.options.configFilePath = ''
+    val.tsJest.tsConfig.value = ''
 
     // digest is mocked in src/__mocks__/index.ts
     expect(val).toMatchSnapshot()

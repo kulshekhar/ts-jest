@@ -3,5 +3,11 @@
     "composite": true,
     "declaration": true,
     "types": []
-  }
+  },
+  "include": [
+    "bar/**/*"
+  ],
+  "exclude": [
+    "foo/**/*"
+  ]
 }
