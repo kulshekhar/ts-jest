@@ -1,5 +1,3 @@
-interface Thing {
-  a: number
-}
+import { Thing } from './thing'
 
 export const thing: Thing = { a: 1 }

@@ -2,7 +2,9 @@ import { allValidPackageSets } from '../__helpers__/templates'
 import { configureTestCase } from '../__helpers__/test-case'
 
 describe('With diagnostics throw', () => {
-  const testCase = configureTestCase('diagnostics/throw')
+  const testCase = configureTestCase('diagnostics', {
+    noCache: true, // warnings shown only on first compilation
+  })
 
   testCase.runWithTemplates(allValidPackageSets, 1, (runTest, { testLabel }) => {
     it(testLabel, () => {
@@ -14,7 +16,7 @@ describe('With diagnostics throw', () => {
 })
 
 describe('With diagnostics warn only', () => {
-  const testCase = configureTestCase('diagnostics/warn', {
+  const testCase = configureTestCase('diagnostics', {
     tsJestConfig: {
       diagnostics: { warnOnly: true },
     },

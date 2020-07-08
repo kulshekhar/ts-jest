@@ -1,6 +1,6 @@
 import { mocked } from 'ts-jest'
-import { foo } from './to-mock'
-jest.mock('./to-mock')
+import { foo } from './pass-to-mock'
+jest.mock('./pass-to-mock')
 
 test('foo', () => {
   foo()

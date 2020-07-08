@@ -1,61 +1,17 @@
 import { LogLevels } from 'bs-logger'
 import { readFileSync } from 'fs'
-import { writeFileSync } from 'fs-extra'
+import { removeSync } from 'fs-extra'
+import { join } from 'path'
 
 import { makeCompiler } from '../__helpers__/fakers'
 import { logTargetMock } from '../__helpers__/mocks'
-import { tempDir } from '../__helpers__/path'
 import ProcessedSource from '../__helpers__/processed-source'
-import { normalizeSlashes } from '../util/normalize-slashes'
-
-import * as compilerUtils from './compiler-utils'
 
 const logTarget = logTargetMock()
 
 describe('Language service', () => {
   beforeEach(() => {
     logTarget.clear()
-  })
-
-  describe('cache resolved modules', () => {
-    let spy: jest.SpyInstance<any>
-    const tmp = tempDir('compiler')
-    const fileName = 'src/__mocks__/unchanged-modules/main.spec.ts'
-    const source = `import { Thing } from './main'
-
-export const thing: Thing = { a: 1 }`
-
-    beforeEach(() => {
-      spy = jest.spyOn(compilerUtils, 'cacheResolvedModules').mockImplementation(() => {})
-    })
-
-    afterEach(() => {
-      spy.mockRestore()
-    })
-
-    it('should cache resolved modules for test file with testMatchPatterns from jest config when match', () => {
-      const compiler = makeCompiler({
-        jestConfig: { cache: true, cacheDirectory: tmp, testRegex: [/.*\.(spec|test)\.[jt]sx?$/] as any[] },
-        tsJestConfig: { tsConfig: false },
-      })
-
-      compiler.compile(source, fileName)
-
-      expect(spy).toHaveBeenCalled()
-      expect(spy.mock.calls[0][0]).toEqual(normalizeSlashes(fileName))
-      expect(spy.mock.calls[0][1]).toEqual(source)
-    })
-
-    it("shouldn't cache resolved modules for test file with testMatchPatterns from jest config when not match", () => {
-      const compiler = makeCompiler({
-        jestConfig: { cache: true, cacheDirectory: tmp, testRegex: [/.*\.(foo|bar)\.[jt]sx?$/] as any[] },
-        tsJestConfig: { tsConfig: false },
-      })
-
-      compiler.compile(source, fileName)
-
-      expect(compilerUtils.cacheResolvedModules).not.toHaveBeenCalled()
-    })
   })
 
   describe('allowJs option', () => {
@@ -123,7 +79,7 @@ export const thing: Thing = { a: 1 }`
     const fileName = 'test-source-map.ts'
 
     it('should have correct source maps without mapRoot', () => {
-      const compiler = makeCompiler({ tsJestConfig: { tsConfig: false } })
+      const compiler = makeCompiler({ tsJestConfig: { tsConfig: require.resolve('../../tsconfig.spec.json') } })
       const compiled = compiler.compile(source, fileName)
 
       expect(new ProcessedSource(compiled, fileName).outputSourceMaps).toMatchObject({
@@ -151,99 +107,122 @@ export const thing: Thing = { a: 1 }`
     })
   })
 
-  it('should not do type check for the test file which is already finished type checking before', () => {
-    const tmp = tempDir('compiler')
-    const testFileName = 'src/__mocks__/unchanged-modules/main.spec.ts'
-    const testFileSrc = readFileSync(testFileName, 'utf-8')
-    const importedModuleSrc = readFileSync('src/__mocks__/unchanged-modules/main.ts', 'utf-8')
-
-    const compiler = makeCompiler({
-      jestConfig: { cache: true, cacheDirectory: tmp, testMatch: ['src/__mocks__/unchanged-modules/*.spec.ts'] },
-      tsJestConfig: { tsConfig: false },
-    })
-
-    compiler.compile(testFileSrc, testFileName)
-    logTarget.clear()
-    compiler.compile(importedModuleSrc, require.resolve('../__mocks__/unchanged-modules/main.ts'))
-
-    expect(logTarget.filteredLines(LogLevels.debug, Infinity)).toMatchInlineSnapshot(`
-      Array [
-        "[level:20] compileAndUpdateOutput(): get compile output
-      ",
-        "[level:20] compileFn(): compiling using language service
-      ",
-        "[level:20] updateMemoryCache(): update memory cache for language service
-      ",
-        "[level:20] visitSourceFileNode(): hoisting
-      ",
-        "[level:20] compileFn(): computing diagnostics using language service
-      ",
-      ]
-    `)
-  })
-
-  it('should do type check for the test file when imported module has changed', () => {
-    const tmp = tempDir('compiler')
-    const testFileName = 'src/__mocks__/changed-modules/main.spec.ts'
-    const testFileSrc = readFileSync(testFileName, 'utf-8')
-    const importedModulePath = 'src/__mocks__/changed-modules/main.ts'
-    const importedModuleSrc = readFileSync(importedModulePath, 'utf-8')
-    const newImportedModuleSrc = 'export interface Thing { a: number, b: number }'
-
-    const compiler1 = makeCompiler({
-      jestConfig: { cache: true, cacheDirectory: tmp, testMatch: ['src/__mocks__/changed-modules/*.spec.ts'] },
-      tsJestConfig: { tsConfig: false },
-    })
-    compiler1.compile(testFileSrc, testFileName)
-
-    writeFileSync(importedModulePath, 'export interface Thing { a: number, b: number }')
-    const compiler2 = makeCompiler({
-      jestConfig: { cache: true, cacheDirectory: tmp, testMatch: ['src/__mocks__/changed-modules/*.spec.ts'] },
-      tsJestConfig: { tsConfig: false },
-    })
-
-    expect(() =>
-      compiler2.compile(newImportedModuleSrc, require.resolve('../__mocks__/changed-modules/main.ts')),
-    ).toThrowErrorMatchingSnapshot()
-
-    writeFileSync(importedModulePath, importedModuleSrc)
-  })
-
   describe('diagnostics', () => {
-    const fileName = 'test-diagnostics.ts'
-    const source = `
-const g = (v: number) => v
-const x: string = g(5)
-`
+    const importedFileName = require.resolve('../__mocks__/thing.ts')
+    const importedFileContent = readFileSync(importedFileName, 'utf-8')
+    const baseTsJestConfig = { tsConfig: require.resolve('../../tsconfig.spec.json') }
 
-    it('should report diagnostics related to typings with pathRegex config matches file name', () => {
-      const compiler = makeCompiler({
-        tsJestConfig: { tsConfig: false, diagnostics: { pathRegex: fileName } },
+    it(`should report diagnostics for imported modules as well as test files which use imported modules with cache`, async () => {
+      const testFileName = require.resolve('../__mocks__/thing1.spec.ts')
+      const testFileContent = readFileSync(testFileName, 'utf-8')
+      const cacheDir = join(process.cwd(), 'tmp')
+      /**
+       * Run the 1st compilation with Promise resolve setTimeout to stimulate 2 different test runs to test cached
+       * resolved modules
+       */
+      async function firstCompile() {
+        return new Promise((resolve) => {
+          const compiler1 = makeCompiler({
+            jestConfig: {
+              cache: true,
+              cacheDirectory: cacheDir,
+            },
+            tsJestConfig: baseTsJestConfig,
+          })
+
+          logTarget.clear()
+          compiler1.compile(testFileContent, testFileName)
+
+          // probably 300ms is enough to stimulate 2 separated runs after each other
+          setTimeout(() => resolve(), 300)
+        })
+      }
+
+      await firstCompile()
+
+      const compiler2 = makeCompiler({
+        jestConfig: {
+          cache: true,
+          cacheDirectory: cacheDir,
+        },
+        tsJestConfig: baseTsJestConfig,
       })
+      logTarget.clear()
 
-      expect(() => compiler.compile(source, fileName)).toThrowErrorMatchingSnapshot()
+      compiler2.compile(importedFileContent, importedFileName)
+
+      expect(logTarget.filteredLines(LogLevels.debug, Infinity)).toMatchSnapshot()
+
+      removeSync(cacheDir)
     })
 
-    it('should not report diagnostics related to typings with pathRegex config does not match file name', () => {
+    it(`should only report diagnostics for imported modules but not test files without cache`, () => {
+      const testFileName = require.resolve('../__mocks__/thing1.spec.ts')
+      const testFileContent = readFileSync(testFileName, 'utf-8')
+      const compiler1 = makeCompiler({
+        tsJestConfig: baseTsJestConfig,
+      })
+      logTarget.clear()
+      compiler1.compile(testFileContent, testFileName)
+
+      const compiler2 = makeCompiler({
+        tsJestConfig: baseTsJestConfig,
+      })
+      logTarget.clear()
+
+      compiler2.compile(importedFileContent, importedFileName)
+
+      expect(logTarget.filteredLines(LogLevels.debug, Infinity)).toMatchSnapshot()
+    })
+
+    it(`shouldn't report diagnostics for test file name that has been type checked before`, () => {
+      const testFileName = require.resolve('../__mocks__/thing1.spec.ts')
+      const testFileContent = readFileSync(testFileName, 'utf-8')
+      const compiler1 = makeCompiler({
+        tsJestConfig: baseTsJestConfig,
+      })
+      logTarget.clear()
+
+      compiler1.compile(testFileContent, testFileName)
+      compiler1.compile(importedFileContent, importedFileName)
+
+      expect(logTarget.filteredLines(LogLevels.debug, Infinity)).toMatchSnapshot()
+    })
+
+    it(`shouldn't report diagnostics when file name doesn't match diagnostic file pattern`, () => {
       const compiler = makeCompiler({
-        tsJestConfig: { tsConfig: false, diagnostics: { pathRegex: 'bar.ts' } },
+        tsJestConfig: {
+          ...baseTsJestConfig,
+          diagnostics: { pathRegex: 'foo.spec.ts' },
+        },
       })
 
-      expect(() => compiler.compile(source, fileName)).not.toThrowError()
+      expect(() => compiler.compile(importedFileContent, importedFileName)).not.toThrowError()
     })
-  })
 
-  it('should throw error when cannot compile', () => {
-    const fileName = 'test-cannot-compile.d.ts'
-    const source = `
+    it(`shouldn't report diagnostic when processing file isn't used by any test files`, () => {
+      const compiler = makeCompiler({
+        tsJestConfig: baseTsJestConfig,
+      })
+      logTarget.clear()
+
+      compiler.compile(importedFileContent, 'foo.ts')
+
+      expect(logTarget.filteredLines(LogLevels.debug, Infinity)).toMatchSnapshot()
+    })
+
+    it('should throw error when cannot compile', () => {
+      const fileName = 'test-cannot-compile.d.ts'
+      const source = `
         interface Foo {
           a: string
         }
       `
-    const compiler = makeCompiler({
-      tsJestConfig: { tsConfig: false },
-    })
+      const compiler = makeCompiler({
+        tsJestConfig: baseTsJestConfig,
+      })
 
-    expect(() => compiler.compile(source, fileName)).toThrowErrorMatchingSnapshot()
+      expect(() => compiler.compile(source, fileName)).toThrowErrorMatchingSnapshot()
+    })
   })
 })

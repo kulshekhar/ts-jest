@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`With diagnostics throw should fail using template "default" 1`] = `
-  × jest
+  × jest --no-cache
   ↳ exit code: 1
   ===[ STDOUT ]===================================================================
   
@@ -28,7 +28,7 @@ exports[`With diagnostics throw should fail using template "default" 1`] = `
 `;
 
 exports[`With diagnostics throw should fail using template "with-babel-7" 1`] = `
-  × jest
+  × jest --no-cache
   ↳ exit code: 1
   ===[ STDOUT ]===================================================================
   
@@ -55,7 +55,7 @@ exports[`With diagnostics throw should fail using template "with-babel-7" 1`] = 
 `;
 
 exports[`With diagnostics throw should fail using template "with-babel-7-string-config" 1`] = `
-  × jest
+  × jest --no-cache
   ↳ exit code: 1
   ===[ STDOUT ]===================================================================
   
