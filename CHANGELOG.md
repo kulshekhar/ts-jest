@@ -1,3 +1,19 @@
+## [26.1.2](https://github.com/kulshekhar/ts-jest/compare/v26.1.1...v26.1.2) (2020-07-13)
+
+
+### Bug Fixes
+
+* **compiler:** use `resolveModuleNames` TypeScript API to get resolved modules for test files ([#1784](https://github.com/kulshekhar/ts-jest/issues/1784)) ([5f26054](https://github.com/kulshekhar/ts-jest/commit/5f2605457e94b548bd7b9b28fc968554f7eefa91)), closes [#1747](https://github.com/kulshekhar/ts-jest/issues/1747)
+* **config:** invalidate cache when other options in `tsconfig` change ([#1788](https://github.com/kulshekhar/ts-jest/issues/1788)) ([6948855](https://github.com/kulshekhar/ts-jest/commit/69488552eca2846f3fc6ba86ab49d7893caaf521))
+
+
+### Performance Improvements
+
+* **compiler:** cache module resolution for `isolatedModules: false` ([#1786](https://github.com/kulshekhar/ts-jest/issues/1786)) ([7f731ed](https://github.com/kulshekhar/ts-jest/commit/7f731ed8a02755aeb41ecb27df4eaf16db2ddd95))
+* **compiler:** use `globsToMatcher` from `jest-util` ([#1754](https://github.com/kulshekhar/ts-jest/issues/1754)) ([44f3913](https://github.com/kulshekhar/ts-jest/commit/44f3913c2a017734ed87346b1c5fbec639d02062))
+
+
+
 <a name="26.1.1"></a>
 ## [26.1.1](https://github.com/kulshekhar/ts-jest/compare/v26.1.0...v26.1.1) (2020-06-21)
 
