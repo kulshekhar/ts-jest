@@ -5,8 +5,8 @@ import { CompilerOptions } from 'typescript'
 import { rootLogger } from '../util/logger'
 import { Errors, interpolate } from '../util/messages'
 
-type TsPathMapping = Exclude<CompilerOptions['paths'], undefined>
-type JestPathMapping = Config.InitialOptions['moduleNameMapper']
+export type TsPathMapping = Exclude<CompilerOptions['paths'], undefined>
+export type JestPathMapping = Config.InitialOptions['moduleNameMapper']
 
 // we don't need to escape all chars, so commented out is the real one
 // const escapeRegex = (str: string) => str.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')
@@ -14,9 +14,13 @@ const escapeRegex = (str: string) => str.replace(/[-\\^$*+?.()|[\]{}]/g, '\\$&')
 
 const logger = rootLogger.child({ [LogContexts.namespace]: 'path-mapper' })
 
+export interface ModuleNameMapperOpts {
+  prefix?: string
+}
+
 export const pathsToModuleNameMapper = (
   mapping: TsPathMapping,
-  { prefix = '' }: { prefix?: string } = {},
+  { prefix = '' }: ModuleNameMapperOpts = {},
 ): JestPathMapping => {
   const jestMap: JestPathMapping = {}
   for (const fromPath of Object.keys(mapping)) {

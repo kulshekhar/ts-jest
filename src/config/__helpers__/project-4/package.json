@@ -1,0 +1,4 @@
+{
+    "name": "@ts-jest/project-4",
+    "main": "dist/someDir/index.js"
+}
