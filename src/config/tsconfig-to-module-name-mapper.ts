@@ -1,20 +1,10 @@
-import * as path from 'path'
+import { pathsToModuleNameMapper, ModuleNameMapperOpts, JestPathMapping } from './paths-to-module-name-mapper'
+import { projectsToModuleNameMapper } from './projects-to-module-name-mapper'
+import { rootLogger } from '../util/logger'
+import { LogContexts } from 'bs-logger'
+import { getTsConfig } from './getTsConfig'
 
-import {
-  TsPathMapping,
-  pathsToModuleNameMapper,
-  ModuleNameMapperOpts,
-  JestPathMapping,
-} from './paths-to-module-name-mapper'
-import { ProjectReference, projectsToModuleNameMapper } from './projects-to-module-name-mapper'
-import { getJson } from './getJson'
-
-interface TsConfig {
-  compilerOptions: {
-    paths: TsPathMapping
-  }
-  references: ProjectReference[]
-}
+export const logger = rootLogger.child({ [LogContexts.namespace]: 'path-mapper' })
 
 /**
  * A convenience mapper, that reads a project's tsconfig and
@@ -28,14 +18,19 @@ interface TsConfig {
  * @param opts The options to use for generating 'paths' mappings. Doesn't affect project reference mappings.
  */
 export const tsConfigToModuleNameMapper = (tsConfigDir: string, opts: ModuleNameMapperOpts = {}): JestPathMapping => {
-  const tsConfigJsonPath = path.join(tsConfigDir, 'tsconfig.json')
-  const tsConfigJson: TsConfig = getJson(tsConfigJsonPath)
+  const config = getTsConfig(tsConfigDir)
 
-  const { compilerOptions, references } = tsConfigJson
-  const { paths } = compilerOptions || {}
+  if (!config) {
+    logger.warn(`Couldn't find parent 'tsconfig.json' from dir:`, tsConfigDir)
+
+    return {}
+  }
+
+  const { options, projectReferences } = config
+  const { paths } = options || {}
 
   return {
     ...(paths ? pathsToModuleNameMapper(paths, opts) : {}),
-    ...(references ? projectsToModuleNameMapper(tsConfigDir, references) : {}),
+    ...(projectReferences ? projectsToModuleNameMapper(tsConfigDir, projectReferences) : {}),
   }
 }

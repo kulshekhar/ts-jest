@@ -1,5 +1,6 @@
 import { parse } from 'json5'
 import { readFileSync } from 'fs'
+import { join } from 'path'
 
 /**
  * A fault-tolerant way to load json files, that
@@ -8,8 +9,9 @@ import { readFileSync } from 'fs'
  *
  * @param path The path of the json file to load.
  */
-export const getJson = (path: string) => {
-  const str = readFileSync(path, 'utf-8')
+export const getPackageJson = (dir: string): { main: string; name: string } => {
+  const packageJsonPath = join(dir, 'package.json')
+  const str = readFileSync(packageJsonPath, 'utf-8')
 
   return parse(str)
 }
