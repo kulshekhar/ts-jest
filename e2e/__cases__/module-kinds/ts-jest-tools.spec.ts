@@ -14,7 +14,7 @@ test('presets', () => {
 })
 
 test('utils', () => {
-  expect(Object.keys(utils)).toEqual(['mocked', 'createJestPreset', 'pathsToModuleNameMapper'])
+  expect(Object.keys(utils)).toEqual(['mocked', 'createJestPreset', 'pathsToModuleNameMapper', 'projectsToModuleNameMapper', 'tsConfigToModuleNameMapper'])
   expect(typeof utils.mocked).toBe('function')
   expect(typeof utils.createJestPreset).toBe('function')
   expect(typeof utils.pathsToModuleNameMapper).toBe('function')
