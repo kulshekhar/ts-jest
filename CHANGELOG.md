@@ -1,3 +1,12 @@
+## [26.1.3](https://github.com/kulshekhar/ts-jest/compare/v26.1.2...v26.1.3) (2020-07-16)
+
+
+### Bug Fixes
+
+* revert [#1793](https://github.com/kulshekhar/ts-jest/issues/1793) ([#1804](https://github.com/kulshekhar/ts-jest/issues/1804)) ([5095525](https://github.com/kulshekhar/ts-jest/commit/5095525333c8579c9c5e7f3149294b31f28d6774))
+
+
+
 ## [26.1.2](https://github.com/kulshekhar/ts-jest/compare/v26.1.1...v26.1.2) (2020-07-13)
 
 
