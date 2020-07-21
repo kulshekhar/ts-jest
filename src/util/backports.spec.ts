@@ -20,7 +20,7 @@ describe('backportJestConfig', () => {
         set(original, oldPath, val)
       })
       describe(`with "${oldPath}" set to ${inspect(val)}`, () => {
-        it('should wran the user', () => {
+        it('should warn the user', () => {
           backportJestConfig(logger, original)
           expect(logTarget.lines.warn).toMatchSnapshot()
         }) // should warn the user

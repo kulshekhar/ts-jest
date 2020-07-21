@@ -47,31 +47,34 @@ function checkVersion(
   expectedRange: string,
   action: CheckVersionAction | undefined = 'warn',
 ): boolean | never {
-  const version = getPackageVersion(name)
-  const success = !!version && satisfies(version, expectedRange)
+  let success = true
+  if (!('TS_JEST_DISABLE_VER_CHECKER' in process.env)) {
+    const version = getPackageVersion(name)
+    success = !!version && satisfies(version, expectedRange)
 
-  logger.debug(
-    {
-      actualVersion: version,
-      expectedVersion: expectedRange,
-    },
-    'checking version of %s: %s',
-    name,
-    success ? 'OK' : 'NOT OK',
-  )
+    logger.debug(
+      {
+        actualVersion: version,
+        expectedVersion: expectedRange,
+      },
+      'checking version of %s: %s',
+      name,
+      success ? 'OK' : 'NOT OK',
+    )
 
-  if (!action || success) return success
+    if (!action || success) return success
 
-  const message = interpolate(version ? Errors.UntestedDependencyVersion : Errors.MissingDependency, {
-    module: name,
-    actualVersion: version || '??',
-    expectedVersion: rangeToHumanString(expectedRange),
-  })
-  if (action === 'warn') {
-    logger.warn(message)
-  } else if (action === 'throw') {
-    logger.fatal(message)
-    throw new RangeError(message)
+    const message = interpolate(version ? Errors.UntestedDependencyVersion : Errors.MissingDependency, {
+      module: name,
+      actualVersion: version || '??',
+      expectedVersion: rangeToHumanString(expectedRange),
+    })
+    if (action === 'warn') {
+      logger.warn(message)
+    } else if (action === 'throw') {
+      logger.fatal(message)
+      throw new RangeError(message)
+    }
   }
 
   return success

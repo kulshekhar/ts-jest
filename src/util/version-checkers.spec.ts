@@ -42,15 +42,28 @@ function describeChecker(
           expect(warnings).toHaveLength(1)
           expect(warnings[0].message).toMatch(testVersion ? 'has not been tested with ts-jest' : 'is not installed')
         })
+
         it('should log only once with warn()', () => {
           checker.warn()
           checker.warn()
           expect(logTarget.messages.warn).toHaveLength(1)
         })
+
         it('should throw with raise()', () => {
           expect(checker.raise).toThrow()
           // adds another time as it should throw all the time even if already called
           expect(checker.raise).toThrow()
+        })
+
+        it('should not log or throw when TS_JEST_DISABLE_VER_CHECKER is set in process.env', () => {
+          process.env.TS_JEST_DISABLE_VER_CHECKER = 'true'
+
+          checker.warn()
+
+          expect(logTarget.messages.warn).toHaveLength(0)
+          expect(checker.raise).not.toThrow()
+
+          delete process.env.TS_JEST_DISABLE_VER_CHECKER
         })
       }) // describe unsupported version
     }) // unsupported versions loop
@@ -60,10 +73,12 @@ function describeChecker(
         beforeEach(() => {
           pv.getPackageVersion.mockImplementation((name) => (name === moduleName ? testVersion : undefined))
         })
+
         it('should not log with warn()', () => {
           checker.warn()
           expect(logTarget.messages.warn).toHaveLength(0)
         })
+
         it('should not throw with raise()', () => {
           expect(checker.raise).not.toThrow()
         })
