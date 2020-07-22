@@ -1,7 +1,12 @@
 import * as path from 'path'
 
-export const getOsPath = (...paths: string[]): string => {
+const MatchWinSeparator = /(?<!\\)(\\)(?!\\)/gm
+
+export const getWinPath = (...paths: string[]): string => {
   const joinedPath = path.join(...paths)
 
-  return process.platform === 'win32' ? joinedPath.replace('\\', '\\\\') : joinedPath
+  return joinedPath.replace(MatchWinSeparator, '\\\\')
 }
+
+export const getOsPath = (...paths: string[]): string =>
+  process.platform === 'win32' ? getWinPath(...paths) : path.join(...paths)
