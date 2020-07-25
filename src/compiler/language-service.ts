@@ -1,5 +1,5 @@
 import { LogContexts, Logger, LogLevels } from 'bs-logger'
-import { readFileSync, writeFile } from 'fs'
+import { existsSync, readFileSync, writeFile } from 'fs'
 import { basename, normalize, relative, join } from 'path'
 import memoize = require('lodash.memoize')
 import mkdirp = require('mkdirp')
@@ -221,8 +221,12 @@ export const initializeLanguageServiceInstance = (configs: ConfigSet, logger: Lo
       /* istanbul ignore next (already covered with unit tests) */
       if (!configs.isTestFile(fileName)) {
         for (const [testFileName, resolvedModules] of memoryCache.resolvedModules.entries()) {
-          // Only do type checking for test files which haven't been type checked before
-          if (resolvedModules.includes(fileName) && !diagnosedFiles.includes(testFileName)) {
+          // Only do type checking for test files which haven't been type checked before as well as the file must exist
+          if (
+            resolvedModules.includes(fileName) &&
+            !diagnosedFiles.includes(testFileName) &&
+            existsSync(testFileName)
+          ) {
             const testFileContent = memoryCache.files.get(testFileName)?.text
             if (!testFileContent) {
               // Must set memory cache before attempting to get diagnostics

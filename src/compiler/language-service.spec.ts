@@ -1,5 +1,5 @@
 import { LogLevels } from 'bs-logger'
-import { readFileSync } from 'fs'
+import { readFileSync, renameSync } from 'fs'
 import { removeSync } from 'fs-extra'
 import { join } from 'path'
 
@@ -171,6 +171,54 @@ describe('Language service', () => {
 
       expect(logTarget.filteredLines(LogLevels.debug, Infinity)).toMatchSnapshot()
 
+      removeSync(cacheDir)
+    })
+
+    it(`should not report diagnostics for test file which doesn't exist when compiling import module file`, async () => {
+      const testFileName = require.resolve('../__mocks__/thing.spec.ts')
+      const testFileContent = readFileSync(testFileName, 'utf-8')
+      const cacheDir = join(process.cwd(), 'tmp')
+      /**
+       * Run the 1st compilation with Promise resolve setTimeout to stimulate 2 different test runs to test cached
+       * resolved modules
+       */
+      async function firstCompile() {
+        return new Promise((resolve) => {
+          const compiler1 = makeCompiler({
+            jestConfig: {
+              cache: true,
+              cacheDirectory: cacheDir,
+            },
+            tsJestConfig: baseTsJestConfig,
+          })
+
+          logTarget.clear()
+          compiler1.compile(testFileContent, testFileName)
+
+          // probably 300ms is enough to stimulate 2 separated runs after each other
+          setTimeout(() => resolve(), 300)
+        })
+      }
+
+      await firstCompile()
+
+      const newTestFileName = testFileName.replace('thing', 'thing2')
+      renameSync(testFileName, newTestFileName)
+
+      const compiler2 = makeCompiler({
+        jestConfig: {
+          cache: true,
+          cacheDirectory: cacheDir,
+        },
+        tsJestConfig: baseTsJestConfig,
+      })
+      logTarget.clear()
+
+      compiler2.compile(importedFileContent, importedFileName)
+
+      expect(logTarget.filteredLines(LogLevels.debug, Infinity)).toMatchSnapshot()
+
+      renameSync(newTestFileName, testFileName)
       removeSync(cacheDir)
     })
 
