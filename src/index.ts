@@ -7,7 +7,7 @@ import { pathsToModuleNameMapper as pathsToModuleNameMapperCore } from './config
 import { TsJestTransformer } from './ts-jest-transformer'
 import { TsJestGlobalOptions } from './types'
 import { rootLogger } from './util/logger'
-import { Deprecateds, interpolate } from './util/messages'
+import { Deprecations, interpolate } from './util/messages'
 import { mocked as mockedCore } from './util/testing'
 import { VersionCheckers } from './util/version-checkers'
 
@@ -23,7 +23,7 @@ declare module '@jest/types' {
 // deprecate helpers
 const warn = rootLogger.child({ [LogContexts.logLevel]: LogLevels.warn })
 const helperMoved = <T extends (...args: any[]) => any>(name: string, helper: T) =>
-  warn.wrap(interpolate(Deprecateds.HelperMovedToUtils, { helper: name }), helper)
+  warn.wrap(interpolate(Deprecations.HelperMovedToUtils, { helper: name }), helper)
 
 /** @deprecated */
 export const mocked = helperMoved('mocked', mockedCore)

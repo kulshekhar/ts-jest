@@ -47,7 +47,7 @@ describe('ts-jest logging', () => {
         const filteredEntries = result.logFileEntries
           // keep only debug and above
           .filter(m => (m.context[LogContexts.logLevel] || 0) >= LogLevels.debug)
-          // simplify entires
+          // simplify entries
           // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
           .map(e => result.normalize(`[level:${e.context[LogContexts.logLevel]}] ${e.message}`))
         expect(filteredEntries).toMatchSnapshot()
@@ -90,4 +90,38 @@ describe('ts-jest logging', () => {
       })
     })
   }
+
+  describe('deprecation warning', () => {
+    describe('with astTransformers config as string array', () => {
+      const testCase = configureTestCase('simple', {
+        tsJestConfig: {
+          astTransformers: []
+        }
+      })
+
+      testCase.runWithTemplates(allValidPackageSets, 0, (runTest, { testLabel }) => {
+        it(testLabel, () => {
+          const result = runTest()
+          expect(result.status).toBe(0)
+          expect(result).toMatchSnapshot()
+        })
+      })
+    })
+
+    describe('with astTransformers config as an object', () => {
+      const testCase = configureTestCase('simple', {
+        tsJestConfig: {
+          astTransformers: {}
+        }
+      })
+
+      testCase.runWithTemplates(allValidPackageSets, 0, (runTest, { testLabel }) => {
+        it(testLabel, () => {
+          const result = runTest()
+          expect(result.status).toBe(0)
+          expect(result).toMatchSnapshot()
+        })
+      })
+    })
+  })
 })
