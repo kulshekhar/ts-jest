@@ -1,3 +1,12 @@
+## [26.1.4](https://github.com/kulshekhar/ts-jest/compare/v26.1.3...v26.1.4) (2020-07-28)
+
+
+### Bug Fixes
+
+* **compiler:** check if test file exists before doing type check ([#1827](https://github.com/kulshekhar/ts-jest/issues/1827)) ([cc89d5b](https://github.com/kulshekhar/ts-jest/commit/cc89d5b1f912975cd29114c5b3b0bf18426816da)), closes [#1506](https://github.com/kulshekhar/ts-jest/issues/1506)
+
+
+
 ## [26.1.3](https://github.com/kulshekhar/ts-jest/compare/v26.1.2...v26.1.3) (2020-07-16)
 
 
