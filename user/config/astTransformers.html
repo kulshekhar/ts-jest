@@ -141,7 +141,14 @@
     <p><code class="language-plaintext highlighter-rouge">ts-jest</code> by default does hoisting for a few <code class="language-plaintext highlighter-rouge">jest</code> methods via a TypeScript AST transformer. One can also create custom
 TypeScript AST transformers and provide them to <code class="language-plaintext highlighter-rouge">ts-jest</code> to include into compilation process.</p>
 
-<p>The option is <code class="language-plaintext highlighter-rouge">astTransformers</code> and it allows ones to specify which TypeScript AST transformers to use with <code class="language-plaintext highlighter-rouge">ts-jest</code>.</p>
+<p>The option is <code class="language-plaintext highlighter-rouge">astTransformers</code> and it allows ones to specify which 3 types of TypeScript AST transformers to use with <code class="language-plaintext highlighter-rouge">ts-jest</code>:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">before</code> means your transformers get run before TS ones, which means your transformers will get raw TS syntax 
+instead of transpiled syntax (e.g <code class="language-plaintext highlighter-rouge">import</code> instead of <code class="language-plaintext highlighter-rouge">require</code> or <code class="language-plaintext highlighter-rouge">define</code> ).</li>
+  <li><code class="language-plaintext highlighter-rouge">after</code> means your transformers get run after TS ones, which gets transpiled syntax.</li>
+  <li><code class="language-plaintext highlighter-rouge">afterDeclarations</code> means your transformers get run during <code class="language-plaintext highlighter-rouge">d.ts</code> generation phase, allowing you to transform output type declarations.</li>
+</ul>
 
 <h3 id="examples">Examples</h3>
 
@@ -152,7 +159,9 @@ TypeScript AST transformers and provide them to <code class="language-plaintext 
   <span class="c1">// [...]</span>
   <span class="na">globals</span><span class="p">:</span> <span class="p">{</span>
     <span class="dl">'</span><span class="s1">ts-jest</span><span class="dl">'</span><span class="p">:</span> <span class="p">{</span>
-      <span class="na">astTransformers</span><span class="p">:</span> <span class="p">[</span><span class="dl">'</span><span class="s1">my-custom-transformer</span><span class="dl">'</span><span class="p">],</span>
+      <span class="na">astTransformers</span><span class="p">:</span> <span class="p">{</span>
+        <span class="na">before</span><span class="p">:</span> <span class="p">[</span><span class="dl">'</span><span class="s1">my-custom-transformer</span><span class="dl">'</span><span class="p">],</span>
+      <span class="p">},</span>
     <span class="p">}</span>
   <span class="p">}</span>
 <span class="p">};</span>
@@ -166,7 +175,9 @@ TypeScript AST transformers and provide them to <code class="language-plaintext 
   <span class="dl">"</span><span class="s2">jest</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
     <span class="dl">"</span><span class="s2">globals</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
       <span class="dl">"</span><span class="s2">ts-jest</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
-        <span class="nl">astTransformers</span><span class="p">:</span> <span class="p">[</span><span class="dl">'</span><span class="s1">my-custom-transformer</span><span class="dl">'</span><span class="p">],</span>
+        <span class="nl">astTransformers</span><span class="p">:</span> <span class="p">{</span>
+          <span class="dl">"</span><span class="s2">before</span><span class="dl">"</span><span class="p">:</span> <span class="p">[</span><span class="dl">"</span><span class="s2">my-custom-transformer</span><span class="dl">"</span><span class="p">]</span>
+        <span class="p">}</span>
       <span class="p">}</span>
     <span class="p">}</span>
   <span class="p">}</span>
@@ -177,8 +188,7 @@ TypeScript AST transformers and provide them to <code class="language-plaintext 
 
 <h3 id="writing-custom-typescript-ast-transformers">Writing custom TypeScript AST transformers</h3>
 
-<p>To write a custom TypeScript AST transformers, one can take a look at the one that <code class="language-plaintext highlighter-rouge">ts-jest</code> is using at
-https://github.com/kulshekhar/ts-jest/tree/master/src/transformers</p>
+<p>To write a custom TypeScript AST transformers, one can take a look at <a href="https://github.com/kulshekhar/ts-jest/tree/master/src/transformers">the one</a> that <code class="language-plaintext highlighter-rouge">ts-jest</code> is using.</p>
 
   </section>
 
