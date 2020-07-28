@@ -36,6 +36,21 @@ exports[`Language service allowJs option should compile js file for allowJs true
   ================================================================================
 `;
 
+exports[`Language service diagnostics should not report diagnostics for test file which doesn't exist when compiling import module file 1`] = `
+Array [
+  "[level:20] compileAndUpdateOutput(): get compile output
+",
+  "[level:20] compileFn(): compiling using language service
+",
+  "[level:20] updateMemoryCache(): update memory cache for language service
+",
+  "[level:20] visitSourceFileNode(): hoisting
+",
+  "[level:20] compileFn(): computing diagnostics using language service
+",
+]
+`;
+
 exports[`Language service diagnostics should only report diagnostics for imported modules but not test files without cache 1`] = `
 Array [
   "[level:20] compileAndUpdateOutput(): get compile output
