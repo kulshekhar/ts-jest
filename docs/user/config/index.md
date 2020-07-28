@@ -147,7 +147,7 @@ module.exports = {
 
 ### Introduction
 
-All configuration of `ts-jest` specific options are located under `globals.ts-jest` path of your Jest config:
+All configuration of `ts-jest` specific options locate under `globals.ts-jest` path of your Jest config:
 
 <div class="row"><div class="col-md-6" markdown="block">
 
@@ -183,7 +183,7 @@ module.exports = {
 
 #### IDE `ts-jest` config suggestion
 
-To ultilize IDE suggestion, you can use `JSDOC` to provide suggested `ts-jest` configs for your Jest config:
+To utilize IDE suggestion, you can use `JSDOC` to provide suggested `ts-jest` configs for your Jest config:
 
 ```js
 /** @typedef {import('ts-jest')} */
@@ -215,7 +215,29 @@ All options have default values which should fit most of the projects. Click on 
 | [**`stringifyContentPathRegex`**][stringifyContentPathRegex] | [Files which will become modules returning self content.][stringifyContentPathRegex] | `string`\|`RegExp` | _disabled_ |
 | [**`packageJson`**][packageJson] | [Package metadata.][packageJson] | `string`\|`object`\|`boolean` | _auto_ |
 
-### Upgrading
+## Version checking
+
+By default, `ts-jest` supports a range of versions for `jest`/`typescript`. One uses incompatible versions will receive a warning
+message while running tests. This warning message can be opt-out by setting environment variable `TS_JEST_DISABLE_VER_CHECKER`:
+
+**Linux/MacOS**
+
+```
+export TS_JEST_DISABLE_VER_CHECKER=true
+```
+
+**Windows**
+
+```
+set TS_JEST_DISABLE_VER_CHECKER=true
+```
+
+### Note
+
+As long as the environment variable `TS_JEST_DISABLE_VER_CHECKER` stays, the warning message will no longer show.
+This can lead to unexpected errors due to the usage of incompatible versions' dependencies. Use this environment variable with precautions.
+
+## Upgrading
 
 You can use the `config:migrate` tool of `ts-jest` CLI if you're coming from an older version to help you migrate your Jest configuration.
 

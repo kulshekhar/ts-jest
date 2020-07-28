@@ -16,7 +16,7 @@ export function tsJestConfig(options?: Partial<TsJestConfig>): TsJestConfig {
   return {
     isolatedModules: false,
     compiler: 'typescript',
-    transformers: [],
+    transformers: options?.transformers ?? Object.create(null),
     babelConfig: undefined,
     tsConfig: undefined,
     packageJson: undefined,

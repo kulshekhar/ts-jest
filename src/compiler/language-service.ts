@@ -7,11 +7,25 @@ import * as _ts from 'typescript'
 
 import type { ConfigSet } from '../config/config-set'
 import { LINE_FEED } from '../constants'
-import { CompilerInstance, MemoryCache, SourceOutput, TSFile } from '../types'
+import { CompilerInstance, SourceOutput } from '../types'
 import { Errors, interpolate } from '../util/messages'
 
 import { parse, stringify } from '../util/json'
 import { sha1 } from '../util/sha1'
+
+/** where key is filepath */
+type TSFiles = Map<string, TSFile>
+
+interface TSFile {
+  text?: string
+  output?: string
+  version: number
+}
+
+interface MemoryCache {
+  resolvedModules: Map<string, string[]>
+  files: TSFiles
+}
 
 function doTypeChecking(
   configs: ConfigSet,

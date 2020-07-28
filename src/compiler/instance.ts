@@ -15,7 +15,7 @@ const SOURCE_MAPPING_PREFIX = 'sourceMappingURL='
 /**
  * Update the output remapping the source map.
  */
-function updateOutput(outputText: string, normalizedFileName: string, sourceMap: string) {
+function updateOutput(outputText: string, normalizedFileName: string, sourceMap: string): string {
   const base64Map = Buffer.from(updateSourceMap(sourceMap, normalizedFileName), 'utf8').toString('base64')
   const sourceMapContent = `data:application/json;charset=utf-8;base64,${base64Map}`
 
@@ -45,7 +45,7 @@ const compileAndUpdateOutput = (compileFn: CompileFn, logger: Logger) => (
   code: string,
   fileName: string,
   lineOffset?: number,
-) => {
+): string => {
   logger.debug({ fileName }, 'compileAndUpdateOutput(): get compile output')
 
   const [value, sourceMap] = compileFn(code, fileName, lineOffset)

@@ -8,11 +8,27 @@ describe('ts-jest logging', () => {
   describe('with unsupported version test', () => {
     const testCase = configureTestCase('simple')
 
-    testCase.runWithTemplates([PackageSets.unsupportedVersion], 0, (runTest, { testLabel }) => {
-      it(testLabel, () => {
-        const result = runTest()
-        expect(result.status).toBe(0)
-        expect(result).toMatchSnapshot()
+    describe('with TS_JEST_DISABLE_VER_CHECKER is set in process.env', () => {
+      testCase.runWithTemplates([PackageSets.unsupportedVersion], 0, (runTest, { testLabel }) => {
+        it(testLabel, () => {
+          process.env.TS_JEST_DISABLE_VER_CHECKER = 'true'
+
+          const result = runTest()
+          expect(result.status).toBe(0)
+          expect(result).toMatchSnapshot()
+
+          delete process.env.TS_JEST_DISABLE_VER_CHECKER
+        })
+      })
+    })
+
+    describe('with TS_JEST_DISABLE_VER_CHECKER is not set in process.env', () => {
+      testCase.runWithTemplates([PackageSets.unsupportedVersion], 0, (runTest, { testLabel }) => {
+        it(testLabel, () => {
+          const result = runTest()
+          expect(result.status).toBe(0)
+          expect(result).toMatchSnapshot()
+        })
       })
     })
   })
@@ -31,7 +47,7 @@ describe('ts-jest logging', () => {
         const filteredEntries = result.logFileEntries
           // keep only debug and above
           .filter(m => (m.context[LogContexts.logLevel] || 0) >= LogLevels.debug)
-          // simplify entires
+          // simplify entries
           // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
           .map(e => result.normalize(`[level:${e.context[LogContexts.logLevel]}] ${e.message}`))
         expect(filteredEntries).toMatchSnapshot()
@@ -74,4 +90,38 @@ describe('ts-jest logging', () => {
       })
     })
   }
+
+  describe('deprecation warning', () => {
+    describe('with astTransformers config as string array', () => {
+      const testCase = configureTestCase('simple', {
+        tsJestConfig: {
+          astTransformers: []
+        }
+      })
+
+      testCase.runWithTemplates(allValidPackageSets, 0, (runTest, { testLabel }) => {
+        it(testLabel, () => {
+          const result = runTest()
+          expect(result.status).toBe(0)
+          expect(result).toMatchSnapshot()
+        })
+      })
+    })
+
+    describe('with astTransformers config as an object', () => {
+      const testCase = configureTestCase('simple', {
+        tsJestConfig: {
+          astTransformers: {}
+        }
+      })
+
+      testCase.runWithTemplates(allValidPackageSets, 0, (runTest, { testLabel }) => {
+        it(testLabel, () => {
+          const result = runTest()
+          expect(result.status).toBe(0)
+          expect(result).toMatchSnapshot()
+        })
+      })
+    })
+  })
 })

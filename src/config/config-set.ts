@@ -15,6 +15,7 @@ import { globsToMatcher } from 'jest-util'
 import json5 = require('json5')
 import { dirname, extname, isAbsolute, join, normalize, resolve } from 'path'
 import {
+  Bundle,
   CompilerOptions,
   CustomTransformers,
   Diagnostic,
@@ -23,6 +24,7 @@ import {
   ParsedCommandLine,
   ScriptTarget,
   SourceFile,
+  TransformerFactory,
 } from 'typescript'
 
 import { digest as MY_DIGEST, version as MY_VERSION } from '..'
@@ -33,6 +35,7 @@ import {
   AstTransformerDesc,
   BabelConfig,
   BabelJestTransformer,
+  ConfigCustomTransformer,
   TsCompiler,
   TsJestConfig,
   TsJestGlobalOptions,
@@ -46,12 +49,18 @@ import { stringify } from '../util/json'
 import { JsonableValue } from '../util/jsonable-value'
 import { rootLogger } from '../util/logger'
 import { Memoize } from '../util/memoize'
-import { Errors, ImportReasons, interpolate } from '../util/messages'
+import { Deprecations, Errors, ImportReasons, interpolate } from '../util/messages'
 import { normalizeSlashes } from '../util/normalize-slashes'
 import { sha1 } from '../util/sha1'
 import { TSError } from '../util/ts-error'
 
 const logger = rootLogger.child({ namespace: 'config' })
+
+interface AstTransformer {
+  before: AstTransformerDesc[]
+  after?: AstTransformerDesc[]
+  afterDeclarations?: AstTransformerDesc[]
+}
 
 /**
  * @internal
@@ -260,7 +269,41 @@ export class ConfigSet {
     }
 
     // transformers
-    const transformers = (options.astTransformers || []).map((mod) => this.resolvePath(mod, { nodeResolve: true }))
+    let transformers: ConfigCustomTransformer = Object.create(null)
+    const { astTransformers } = options
+    if (astTransformers) {
+      if (Array.isArray(astTransformers)) {
+        this.logger.warn(Deprecations.AstTransformerArrayConfig)
+
+        transformers = {
+          before: astTransformers.map((transformerPath) => this.resolvePath(transformerPath, { nodeResolve: true })),
+        }
+      } else {
+        if (astTransformers.before) {
+          transformers = {
+            before: astTransformers.before.map((transformerPath: string) =>
+              this.resolvePath(transformerPath, { nodeResolve: true }),
+            ),
+          }
+        }
+        if (astTransformers.after) {
+          transformers = {
+            ...transformers,
+            after: astTransformers.after.map((transformerPath: string) =>
+              this.resolvePath(transformerPath, { nodeResolve: true }),
+            ),
+          }
+        }
+        if (astTransformers.afterDeclarations) {
+          transformers = {
+            ...transformers,
+            afterDeclarations: astTransformers.afterDeclarations.map((transformerPath: string) =>
+              this.resolvePath(transformerPath, { nodeResolve: true }),
+            ),
+          }
+        }
+      }
+    }
 
     // babel jest
     const { babelConfig: babelConfigOpt } = options
@@ -467,8 +510,35 @@ export class ConfigSet {
    * @internal
    */
   @Memoize()
-  private get astTransformers(): AstTransformerDesc[] {
-    return [...internalAstTransformers, ...this.tsJest.transformers.map((m) => require(m))]
+  private get astTransformers(): AstTransformer {
+    let astTransformers: AstTransformer = {
+      before: [...internalAstTransformers],
+    }
+    const { transformers } = this.tsJest
+    if (transformers.before) {
+      astTransformers = {
+        before: [
+          ...astTransformers.before,
+          ...transformers.before.map((transformerFilePath: string) => require(transformerFilePath)),
+        ],
+      }
+    }
+    if (transformers.after) {
+      astTransformers = {
+        ...astTransformers,
+        after: transformers.after.map((transformerFilePath: string) => require(transformerFilePath)),
+      }
+    }
+    if (transformers.afterDeclarations) {
+      astTransformers = {
+        ...astTransformers,
+        afterDeclarations: transformers.afterDeclarations.map((transformerFilePath: string) =>
+          require(transformerFilePath),
+        ),
+      }
+    }
+
+    return astTransformers
   }
 
   /**
@@ -476,9 +546,25 @@ export class ConfigSet {
    */
   @Memoize()
   get tsCustomTransformers(): CustomTransformers {
-    return {
-      before: this.astTransformers.map((t) => t.factory(this)),
+    let customTransformers: CustomTransformers = {
+      before: this.astTransformers.before.map((t) => t.factory(this)) as TransformerFactory<SourceFile>[],
     }
+    if (this.astTransformers.after) {
+      customTransformers = {
+        ...customTransformers,
+        after: this.astTransformers.after.map((t) => t.factory(this)) as TransformerFactory<SourceFile>[],
+      }
+    }
+    if (this.astTransformers.afterDeclarations) {
+      customTransformers = {
+        ...customTransformers,
+        afterDeclarations: this.astTransformers.afterDeclarations.map((t) => t.factory(this)) as TransformerFactory<
+          Bundle | SourceFile
+        >[],
+      }
+    }
+
+    return customTransformers
   }
 
   /**
@@ -685,7 +771,9 @@ export class ConfigSet {
       versions: this.versions,
       projectDepVersions: this.projectDependencies,
       digest: this.tsJestDigest,
-      transformers: this.astTransformers.map((t) => `${t.name}@${t.version}`),
+      transformers: Object.values(this.astTransformers)
+        .reduce((acc, val) => acc.concat(val), [])
+        .map((t: AstTransformerDesc) => `${t.name}@${t.version}`),
       jest,
       tsJest: this.tsJest,
       babel: this.babel,

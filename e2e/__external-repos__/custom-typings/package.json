@@ -5,11 +5,11 @@
     "test": "jest"
   },
   "devDependencies": {
-    "@types/jest": "^26.0.3",
+    "@types/jest": "^26.0.5",
     "@types/jquery": "^3.5.0",
     "jest": "^26.1.0",
     "jquery": "^3.5.1",
-    "typescript": "^3.9.6"
+    "typescript": "^3.9.7"
   },
   "wantedDependencies": {
     "jquery": "latest",

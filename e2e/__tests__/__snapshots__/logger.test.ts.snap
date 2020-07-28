@@ -124,13 +124,142 @@ Array [
 ]
 `;
 
-exports[`ts-jest logging with unsupported version test should pass using template "with-unsupported-version" 1`] = `
+exports[`ts-jest logging deprecation warning with astTransformers config as an object should pass using template "default" 1`] = `
+  √ jest
+  ↳ exit code: 0
+  ===[ STDOUT ]===================================================================
+  
+  ===[ STDERR ]===================================================================
+  PASS ./Hello.spec.ts
+    Hello Class
+      √ should create a new Hello
+  
+  Test Suites: 1 passed, 1 total
+  Tests:       1 passed, 1 total
+  Snapshots:   0 total
+  Time:        XXs
+  Ran all test suites.
+  ================================================================================
+`;
+
+exports[`ts-jest logging deprecation warning with astTransformers config as an object should pass using template "with-babel-7" 1`] = `
+  √ jest
+  ↳ exit code: 0
+  ===[ STDOUT ]===================================================================
+  
+  ===[ STDERR ]===================================================================
+  PASS ./Hello.spec.ts
+    Hello Class
+      √ should create a new Hello
+  
+  Test Suites: 1 passed, 1 total
+  Tests:       1 passed, 1 total
+  Snapshots:   0 total
+  Time:        XXs
+  Ran all test suites.
+  ================================================================================
+`;
+
+exports[`ts-jest logging deprecation warning with astTransformers config as an object should pass using template "with-babel-7-string-config" 1`] = `
+  √ jest
+  ↳ exit code: 0
+  ===[ STDOUT ]===================================================================
+  
+  ===[ STDERR ]===================================================================
+  PASS ./Hello.spec.ts
+    Hello Class
+      √ should create a new Hello
+  
+  Test Suites: 1 passed, 1 total
+  Tests:       1 passed, 1 total
+  Snapshots:   0 total
+  Time:        XXs
+  Ran all test suites.
+  ================================================================================
+`;
+
+exports[`ts-jest logging deprecation warning with astTransformers config as string array should pass using template "default" 1`] = `
+  √ jest
+  ↳ exit code: 0
+  ===[ STDOUT ]===================================================================
+  
+  ===[ STDERR ]===================================================================
+  ts-jest[config] (WARN) The configuration for astTransformers as string[] is deprecated and will be removed in ts-jest 27. Please define your custom AST transformers in a form of an object. More information you can check online documentation https://kulshekhar.github.io/ts-jest/user/config/astTransformers
+  PASS ./Hello.spec.ts
+    Hello Class
+      √ should create a new Hello
+  
+  Test Suites: 1 passed, 1 total
+  Tests:       1 passed, 1 total
+  Snapshots:   0 total
+  Time:        XXs
+  Ran all test suites.
+  ================================================================================
+`;
+
+exports[`ts-jest logging deprecation warning with astTransformers config as string array should pass using template "with-babel-7" 1`] = `
+  √ jest
+  ↳ exit code: 0
+  ===[ STDOUT ]===================================================================
+  
+  ===[ STDERR ]===================================================================
+  ts-jest[config] (WARN) The configuration for astTransformers as string[] is deprecated and will be removed in ts-jest 27. Please define your custom AST transformers in a form of an object. More information you can check online documentation https://kulshekhar.github.io/ts-jest/user/config/astTransformers
+  PASS ./Hello.spec.ts
+    Hello Class
+      √ should create a new Hello
+  
+  Test Suites: 1 passed, 1 total
+  Tests:       1 passed, 1 total
+  Snapshots:   0 total
+  Time:        XXs
+  Ran all test suites.
+  ================================================================================
+`;
+
+exports[`ts-jest logging deprecation warning with astTransformers config as string array should pass using template "with-babel-7-string-config" 1`] = `
+  √ jest
+  ↳ exit code: 0
+  ===[ STDOUT ]===================================================================
+  
+  ===[ STDERR ]===================================================================
+  ts-jest[config] (WARN) The configuration for astTransformers as string[] is deprecated and will be removed in ts-jest 27. Please define your custom AST transformers in a form of an object. More information you can check online documentation https://kulshekhar.github.io/ts-jest/user/config/astTransformers
+  PASS ./Hello.spec.ts
+    Hello Class
+      √ should create a new Hello
+  
+  Test Suites: 1 passed, 1 total
+  Tests:       1 passed, 1 total
+  Snapshots:   0 total
+  Time:        XXs
+  Ran all test suites.
+  ================================================================================
+`;
+
+exports[`ts-jest logging with unsupported version test with TS_JEST_DISABLE_VER_CHECKER is not set in process.env should pass using template "with-unsupported-version" 1`] = `
   √ jest
   ↳ exit code: 0
   ===[ STDOUT ]===================================================================
   
   ===[ STDERR ]===================================================================
   ts-jest[versions] (WARN) Version 3.3.4000 of typescript installed has not been tested with ts-jest. If you're experiencing issues, consider using a supported version (>=3.8.0 <4.0.0-0). Please do not report issues in ts-jest if you are using unsupported versions.
+  PASS ./Hello.spec.ts
+    Hello Class
+      √ should create a new Hello
+  
+  Test Suites: 1 passed, 1 total
+  Tests:       1 passed, 1 total
+  Snapshots:   0 total
+  Time:        XXs
+  Ran all test suites.
+  ================================================================================
+`;
+
+exports[`ts-jest logging with unsupported version test with TS_JEST_DISABLE_VER_CHECKER is set in process.env should pass using template "with-unsupported-version" 1`] = `
+  √ jest
+  ↳ exit code: 0
+  ===[ STDOUT ]===================================================================
+  
+  ===[ STDERR ]===================================================================
   PASS ./Hello.spec.ts
     Hello Class
       √ should create a new Hello

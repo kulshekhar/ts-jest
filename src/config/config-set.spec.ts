@@ -18,6 +18,7 @@ import { mocked } from '../util/testing'
 import { IGNORE_DIAGNOSTIC_CODES, MATCH_NOTHING, TS_JEST_OUT_DIR } from './config-set'
 // eslint-disable-next-line no-duplicate-imports
 import type { ConfigSet } from './config-set'
+import { Deprecations } from '../util/messages'
 
 jest.mock('../util/backports')
 jest.mock('../index')
@@ -205,6 +206,61 @@ describe('tsJest', () => {
       expect(getTsJest({ packageJson: CONFIG as any }).packageJson).toEqual(EXPECTED)
     })
   })
+
+  describe('transformers', () => {
+    const logger = testing.createLoggerMock()
+
+    it('should display deprecation warning message when config transformers is string array', () => {
+      const cs = createConfigSet({
+        jestConfig: {
+          rootDir: 'src',
+          cwd: 'src',
+          globals: {
+            'ts-jest': {
+              astTransformers: ['dummy-transformer'],
+            },
+          },
+        } as any,
+        logger,
+        resolve: null,
+      })
+      logger.target.clear()
+
+      expect(Object.keys(cs.tsJest.transformers)).toHaveLength(1)
+      expect(logger.target.lines[1]).toMatchSnapshot()
+    })
+
+    it.each([
+      {},
+      {
+        before: ['dummy-transformer'],
+      },
+      {
+        after: ['dummy-transformer'],
+      },
+      {
+        afterDeclarations: ['dummy-transformer'],
+      },
+    ])('should not display deprecation warning message when config transformers is an object', (data) => {
+      const cs = createConfigSet({
+        jestConfig: {
+          rootDir: 'src',
+          cwd: 'src',
+          globals: {
+            'ts-jest': {
+              astTransformers: data,
+            },
+          },
+        } as any,
+        logger,
+        resolve: null,
+      })
+      logger.target.clear()
+
+      expect(Object.keys(cs.tsJest.transformers)).toHaveLength(Object.keys(data).length)
+      expect(logger.target.lines[1]).not.toContain(Deprecations.AstTransformerArrayConfig)
+    })
+  }) // custom AST transformers
 
   describe('babelConfig', () => {
     const logger = testing.createLoggerMock()
@@ -417,7 +473,7 @@ describe('tsJest', () => {
   }) // compiler
 }) // tsJest
 
-describe('typescript', () => {
+describe('parsedTsConfig', () => {
   const get = (tsJest?: TsJestGlobalOptions, parentConfig?: TsJestGlobalOptions) =>
     createConfigSet({ tsJestConfig: tsJest, parentConfig }).parsedTsConfig
 
@@ -497,7 +553,7 @@ describe('typescript', () => {
     expect(cs.parsedTsConfig.options.allowSyntheticDefaultImports).toBeFalsy()
     expect(target.lines.warn).toHaveLength(0)
   })
-}) // typescript
+}) // parsedTsConfig
 
 describe('resolvePath', () => {
   it('should resolve paths', () => {
@@ -959,6 +1015,36 @@ describe('tsCompiler', () => {
     expect(typeof compiler.compile).toBe('function')
   })
 }) // tsCompiler
+
+describe('tsCustomTransformers', () => {
+  it.each([
+    {},
+    {
+      before: ['dummy-transformer'],
+    },
+    {
+      after: ['dummy-transformer'],
+    },
+    {
+      afterDeclarations: ['dummy-transformer'],
+    },
+  ])('should return an object containing all resolved transformers', (data) => {
+    const cs = createConfigSet({
+      jestConfig: {
+        rootDir: 'src',
+        cwd: 'src',
+        globals: {
+          'ts-jest': {
+            astTransformers: data,
+          },
+        },
+      } as any,
+      resolve: null,
+    })
+
+    expect(cs.tsCustomTransformers).toMatchSnapshot()
+  })
+})
 
 describe('hooks', () => {
   it('should return empty object when environment variable TS_JEST_HOOKS is undefined', () => {
