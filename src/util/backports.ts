@@ -1,7 +1,7 @@
 import { Config } from '@jest/types'
 import { LogContexts, Logger } from 'bs-logger'
 
-import { Deprecateds, Helps, interpolate } from './messages'
+import { Deprecations, Helps, interpolate } from './messages'
 
 const context = { [LogContexts.namespace]: 'backports' }
 
@@ -22,7 +22,7 @@ export const backportJestConfig = <T extends Config.InitialOptions | Config.Proj
     hadWarnings = true
     logger.warn(
       context,
-      interpolate(note ? Deprecateds.ConfigOptionWithNote : Deprecateds.ConfigOption, {
+      interpolate(note ? Deprecations.ConfigOptionWithNote : Deprecations.ConfigOption, {
         oldPath,
         newPath,
         note,
@@ -72,7 +72,7 @@ export const backportJestConfig = <T extends Config.InitialOptions | Config.Proj
   }
 
   if ('useBabelrc' in tsJest) {
-    warnConfig('globals.ts-jest.useBabelrc', 'globals.ts-jest.babelConfig', Deprecateds.ConfigOptionUseBabelRcNote)
+    warnConfig('globals.ts-jest.useBabelrc', 'globals.ts-jest.babelConfig', Deprecations.ConfigOptionUseBabelRcNote)
     if (tsJest.useBabelrc != null) {
       mergeTsJest.babelConfig = tsJest.useBabelrc ? true : {}
     }
@@ -124,7 +124,7 @@ export const backportTsJestDebugEnvVar = (logger: Logger): void => {
     }
     logger.warn(
       context,
-      interpolate(Deprecateds.EnvVar, {
+      interpolate(Deprecations.EnvVar, {
         old: 'TS_JEST_DEBUG',
         new: 'TS_JEST_LOG',
       }),

@@ -1,9 +1,11 @@
-import { ModulePatcher, TBabelCore, TBabelJest, TTypeScript } from '../types'
+import { TBabelCore, TBabelJest, TTypeScript } from '../types'
 
 import { rootLogger } from './logger'
 import { Memoize } from './memoize'
 import { Errors, Helps, ImportReasons, interpolate } from './messages'
 import { VersionCheckers } from './version-checkers'
+
+type ModulePatcher<T = any> = (module: T) => T
 
 const logger = rootLogger.child({ namespace: 'Importer' })
 
@@ -11,7 +13,6 @@ const logger = rootLogger.child({ namespace: 'Importer' })
 // create a new method in Importer. Thus uses the importer.yourMethod(ImportReasons.TheReason)
 // in the relevant code, so that the user knows why it needs it and how to install it in the
 // case it can't import.
-
 interface ImportOptions {
   alternatives?: string[]
   installTip?: string | { module: string; label: string }[]

@@ -1,6 +1,6 @@
 import { TransformedSource, Transformer } from '@jest/transform'
 import * as _babel from 'babel__core'
-import * as _ts from 'typescript'
+import type * as _ts from 'typescript'
 
 import { ConfigSet } from './config/config-set'
 
@@ -23,6 +23,12 @@ export type BabelJestTransformer = {
  * Don't mark as internal because it is used in TsJestGlobalOptions which is an exposed type
  */
 export type BabelConfig = _babel.TransformOptions
+
+export interface ConfigCustomTransformer {
+  before?: string[]
+  after?: string[]
+  afterDeclarations?: string[]
+}
 
 export interface TsJestGlobalOptions {
   /**
@@ -76,7 +82,7 @@ export interface TsJestGlobalOptions {
   /**
    * Custom transformers (mostly used by jest presets)
    */
-  astTransformers?: string[]
+  astTransformers?: string[] | ConfigCustomTransformer
 
   /**
    * TS diagnostics - less to be reported if `isolatedModules` is `true`. It can be:
@@ -179,7 +185,7 @@ export interface TsJestConfig {
   compiler: string
   diagnostics: TsJestConfig$diagnostics
   babelConfig: TsJestConfig$babelConfig
-  transformers: string[]
+  transformers: ConfigCustomTransformer
   // to deprecate / deprecated === === ===
   stringifyContentPathRegex: TsJestConfig$stringifyContentPathRegex
 }
@@ -189,11 +195,6 @@ export interface TsJestConfig {
 export interface TsJestHooksMap {
   afterProcess?(args: any[], result: string | TransformedSource): string | TransformedSource | void
 }
-
-/**
- * @internal
- */
-export type ModulePatcher<T = any> = (module: T) => T
 
 export interface TsCompiler {
   /**
@@ -206,33 +207,12 @@ export interface TsCompiler {
   compile(code: string, fileName: string, lineOffset?: number): string
   program: _ts.Program | undefined
 }
-
 /**
  * Internal source output.
  *
  * @internal
  */
 export type SourceOutput = [string, string]
-
-/** where key is filepath */
-type TSFiles = Map<string, TSFile>
-/**
- * @internal
- */
-export interface TSFile {
-  text?: string
-  output?: string
-  version: number
-}
-/**
- * Track the project information.
- *
- * @internal
- */
-export interface MemoryCache {
-  resolvedModules: Map<string, string[]>
-  files: TSFiles
-}
 /**
  * @internal
  */
@@ -250,5 +230,5 @@ export interface CompilerInstance {
 export interface AstTransformerDesc {
   name: string
   version: number
-  factory(cs: ConfigSet): _ts.TransformerFactory<_ts.SourceFile>
+  factory(cs: ConfigSet): _ts.TransformerFactory<_ts.SourceFile> | _ts.TransformerFactory<_ts.Bundle | _ts.SourceFile>
 }
