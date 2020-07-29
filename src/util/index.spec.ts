@@ -1,7 +1,7 @@
 import { createJestPreset } from '../config/create-jest-preset'
 import { pathsToModuleNameMapper } from '../config/paths-to-module-name-mapper'
 
-import * as subject from './exported'
+import * as subject from './index'
 import { mocked } from './testing'
 
 describe('exported helpers', () => {

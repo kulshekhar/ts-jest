@@ -1,1 +1,1 @@
-module.exports = require('../dist/util/exported')
+module.exports = require('../dist/util')
