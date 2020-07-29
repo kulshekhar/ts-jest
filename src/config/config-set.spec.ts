@@ -3,7 +3,7 @@ import { Transformer } from '@jest/transform'
 import { LogLevels, testing } from 'bs-logger'
 import { readFileSync } from 'fs'
 import json5 = require('json5')
-import { resolve } from 'path'
+import { join, resolve } from 'path'
 import * as ts from 'typescript'
 
 import * as _myModule from '..'
@@ -18,7 +18,7 @@ import { mocked } from '../util/testing'
 import { IGNORE_DIAGNOSTIC_CODES, MATCH_NOTHING, TS_JEST_OUT_DIR } from './config-set'
 // eslint-disable-next-line no-duplicate-imports
 import type { ConfigSet } from './config-set'
-import { Deprecations } from '../util/messages'
+import { Deprecations, Errors, interpolate } from '../util/messages'
 
 jest.mock('../util/backports')
 jest.mock('../index')
@@ -36,68 +36,6 @@ const pkgVersion = (pkgName: string) => require(`${pkgName}/package.json`).versi
 
 beforeEach(() => {
   jest.clearAllMocks()
-})
-
-describe('projectPackageJson', () => {
-  it('should return value from inline config when projectPackageJson config is inline', () => {
-    const EXPECTED = {
-      name: 'foo',
-    }
-    expect(
-      createConfigSet({
-        tsJestConfig: { packageJson: EXPECTED },
-        resolve: null,
-      }).projectPackageJson,
-    ).toEqual(EXPECTED)
-  })
-
-  it('should return value from config file when projectPackageJson config is file', () => {
-    const EXPECTED = 'src/__mocks__/package-foo.json'
-    expect(
-      createConfigSet({
-        tsJestConfig: { packageJson: EXPECTED },
-        resolve: null,
-      }).projectPackageJson,
-    ).toEqual(json5.parse(readFileSync(EXPECTED, 'utf8')))
-  })
-
-  it('should return value from root packageJson when provided value to tsJest config is undefined', () => {
-    expect(
-      createConfigSet({
-        tsJestConfig: { packageJson: undefined },
-        resolve: null,
-      }).projectPackageJson.name,
-    ).toEqual('ts-jest')
-  })
-
-  it("should return empty object when config file path doesn't exist and print loggings", () => {
-    const logger = testing.createLoggerMock()
-    expect(
-      createConfigSet({
-        logger,
-        tsJestConfig: { packageJson: 'src/__mocks__/not-exist.json' },
-      }).projectPackageJson,
-    ).toEqual({})
-    expect(logger.target.lines).toMatchInlineSnapshot(`
-      Array [
-        "[level:20] normalized jest config
-      ",
-        "[level:20] normalized ts-jest config
-      ",
-        "[level:40] Unable to find the root of the project where ts-jest has been installed.
-      ",
-      ]
-    `)
-    logger.target.clear()
-  })
-
-  it('should return value from root packageJson when real path rootDir is the same as tsJest root', () => {
-    expect(
-      createConfigSet({
-        resolve: null,
-      }).projectPackageJson.name,
-    ).toEqual('ts-jest')
-  })
 })
 
 describe('jest', () => {
@@ -944,9 +882,11 @@ describe('versions', () => {
 
   describe('package version can be resolved', () => {
     let mock: jest.MockInstance<string | undefined, [string]>
+
     beforeEach(() => {
       mock = mocked(getPackageVersion).mockImplementation(pkgVersion)
     })
+
     afterEach(() => {
       mock.mockRestore()
     })
@@ -989,6 +929,132 @@ describe('shouldStringifyContent', () => {
     expect(cs.shouldStringifyContent('/foo/bar.ts')).toBe(false)
   })
 }) // shouldStringifyContent
+
+describe('tsCacheDir', () => {
+  const cacheName = 'configSetTmp'
+  const cacheDir = join(process.cwd(), cacheName)
+  const partialTsJestCacheDir = join(cacheDir, 'ts-jest')
+
+  it.each([
+    { packageJson: undefined },
+    { packageJson: { name: 'foo' } },
+    { packageJson: 'src/__mocks__/package-foo.json' },
+  ])(
+    'should return value from which is the combination of ts jest config and jest config when running test with cache' +
+      ' and package.json exists',
+    (data) => {
+      expect(
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        createConfigSet({
+          jestConfig: {
+            cache: true,
+            cacheDirectory: cacheDir,
+          },
+          tsJestConfig: data,
+          resolve: null,
+        }).tsCacheDir!.indexOf(partialTsJestCacheDir),
+      ).toEqual(0)
+    },
+  )
+
+  it('should throw error when running test with cache and cannot resolve package.json path', () => {
+    const packageJsonPath = 'src/__mocks__/not-exist.json'
+
+    expect(
+      () =>
+        createConfigSet({
+          jestConfig: {
+            cache: true,
+            cacheDirectory: cacheDir,
+          },
+          tsJestConfig: { packageJson: packageJsonPath },
+          resolve: null,
+        }).tsCacheDir,
+    ).toThrowError(
+      new Error(
+        interpolate(Errors.FileNotFound, {
+          inputPath: 'src/__mocks__/not-exist.json',
+          resolvedPath: join(process.cwd(), packageJsonPath),
+        }),
+      ),
+    )
+  })
+
+  it(
+    'should return value and show warning when running test with cache and package.json path is' +
+      ' resolved but the path does not exist',
+    () => {
+      const packageJsonPath = 'src/__mocks__/not-exist.json'
+      const logger = testing.createLoggerMock()
+
+      expect(
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        createConfigSet({
+          jestConfig: {
+            cache: true,
+            cacheDirectory: cacheDir,
+          },
+          logger,
+          tsJestConfig: { packageJson: packageJsonPath },
+        }).tsCacheDir!.indexOf(partialTsJestCacheDir),
+      ).toEqual(0)
+      expect(logger.target.lines[2]).toMatchInlineSnapshot(`
+        "[level:40] Unable to find the root of the project where ts-jest has been installed.
+        "
+      `)
+
+      logger.target.clear()
+    },
+  )
+
+  it('should return value from root packageJson when running test with cache and real path rootDir is the same as tsJest root', () => {
+    expect(
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      createConfigSet({
+        jestConfig: {
+          cache: true,
+          cacheDirectory: cacheDir,
+        },
+        resolve: null,
+      }).tsCacheDir!.indexOf(partialTsJestCacheDir),
+    ).toEqual(0)
+  })
+
+  it('should return undefined when running test without cache', () => {
+    expect(createConfigSet({ resolve: null }).tsCacheDir).toBeUndefined()
+  })
+
+  it('return value with the real version of dependencies in package.json when running test with cache', () => {
+    const pkg = {
+      optionalDependencies: { opt: '1.2.3' },
+      peerDependencies: { peer: '1.2.4' },
+      devDependencies: { dev: '1.2.5' },
+      dependencies: { std: '1.2.6' },
+    }
+    const realVersions: any = {
+      peer: '0.1.0',
+      dev: '4.3.2',
+      std: '9.10.2',
+      opt: '2.0.2',
+    }
+    const mock: jest.MockInstance<string | undefined, [string]> = mocked(getPackageVersion).mockImplementation(
+      (moduleName: string) => realVersions[moduleName],
+    )
+    const cs = createConfigSet({
+      jestConfig: {
+        cache: true,
+        cacheDirectory: cacheDir,
+      },
+      tsJestConfig: { tsConfig: false } as any,
+      projectPackageJson: pkg,
+    })
+
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    expect(cs.tsCacheDir!.indexOf(partialTsJestCacheDir)).toEqual(0)
+
+    mock.mockRestore()
+  })
+})
 
 describe('shouldReportDiagnostic', () => {
   it('should return correct value', () => {
@@ -1069,35 +1135,6 @@ describe('babelJestTransformer', () => {
     expect(typeof babelJest.process).toBe('function')
   })
 }) // babelJestTransformer
-
-describe('projectDependencies', () => {
-  const pkg = {
-    optionalDependencies: { opt: '1.2.3' },
-    peerDependencies: { peer: '1.2.4' },
-    devDependencies: { dev: '1.2.5' },
-    dependencies: { std: '1.2.6' },
-  }
-  const realVersions: any = {
-    peer: '0.1.0',
-    dev: '4.3.2',
-    std: '9.10.2',
-    opt: '2.0.2',
-  }
-  let mock: jest.MockInstance<string | undefined, [string]>
-  beforeEach(() => {
-    mock = mocked(getPackageVersion).mockImplementation((moduleName: string) => realVersions[moduleName])
-  })
-  afterEach(() => {
-    mock.mockRestore()
-  })
-  it('should list all deps with their real version', () => {
-    const cs = createConfigSet({
-      tsJestConfig: { tsConfig: false } as any,
-      projectPackageJson: pkg,
-    })
-    expect(cs.projectDependencies).toEqual(realVersions)
-  })
-}) // projectDependencies
 
 describe('cacheKey', () => {
   it('should be a string', () => {

@@ -132,22 +132,23 @@ export class ConfigSet {
    * @internal
    */
   @Memoize()
-  get projectPackageJson(): Record<string, any> {
+  private get projectPackageJson(): Record<string, any> {
     const {
       tsJest: { packageJson },
     } = this
-    if (packageJson && packageJson.kind === 'inline') {
-      return packageJson.value
-    }
-    if (packageJson && packageJson.kind === 'file' && packageJson.value) {
-      const path = this.resolvePath(packageJson.value)
-      if (existsSync(path)) {
-        return require(path)
+    if (packageJson) {
+      if (packageJson.kind === 'inline') {
+        return packageJson.value
+      } else if (packageJson.kind === 'file' && packageJson.value) {
+        const path = this.resolvePath(packageJson.value)
+        if (existsSync(path)) {
+          return require(path)
+        }
+
+        this.logger.warn(Errors.UnableToFindProjectRoot)
+
+        return {}
       }
-
-      this.logger.warn(Errors.UnableToFindProjectRoot)
-
-      return {}
     }
     const tsJestRoot = resolve(__dirname, '..', '..')
     let pkgPath = resolve(tsJestRoot, '..', '..', 'package.json')
@@ -170,7 +171,7 @@ export class ConfigSet {
    * @internal
    */
   @Memoize()
-  get projectDependencies(): Record<string, string> {
+  private get projectDependencies(): Record<string, string> {
     const { projectPackageJson: pkg } = this
     const names = Object.keys({
       ...pkg.optionalDependencies,
@@ -643,7 +644,7 @@ export class ConfigSet {
    * @internal
    */
   @Memoize()
-  get createTsError(): (diagnostics: readonly Diagnostic[]) => TSError {
+  private get createTsError(): (diagnostics: readonly Diagnostic[]) => TSError {
     const {
       diagnostics: { pretty },
     } = this.tsJest
