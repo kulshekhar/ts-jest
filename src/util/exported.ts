@@ -1,3 +1,5 @@
 export { mocked } from './testing'
 export { createJestPreset } from '../config/create-jest-preset'
 export { pathsToModuleNameMapper } from '../config/paths-to-module-name-mapper'
+export { projectsToModuleNameMapper } from '../config/projects-to-module-name-mapper'
+export { tsConfigToModuleNameMapper } from '../config/tsconfig-to-module-name-mapper'

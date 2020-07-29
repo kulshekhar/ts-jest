@@ -2,7 +2,7 @@ import { logTargetMock } from '../__helpers__/mocks'
 
 import { pathsToModuleNameMapper } from './paths-to-module-name-mapper'
 
-const tsconfigMap = {
+const tsConfigPaths = {
   log: ['src/util/log'],
   server: ['src/server'],
   client: ['src/client', 'src/client/index'],
@@ -15,7 +15,7 @@ const tsconfigMap = {
 
 describe('pathsToModuleNameMapper', () => {
   it('should convert tsconfig mapping', () => {
-    expect(pathsToModuleNameMapper(tsconfigMap)).toMatchInlineSnapshot(`
+    expect(pathsToModuleNameMapper(tsConfigPaths)).toMatchInlineSnapshot(`
 Object {
   "^api/(.*)$": "src/api/$1",
   "^client$": Array [
@@ -36,7 +36,7 @@ Object {
   })
 
   it('should use the given prefix', () => {
-    expect(pathsToModuleNameMapper(tsconfigMap, { prefix: '<rootDir>/' })).toMatchInlineSnapshot(`
+    expect(pathsToModuleNameMapper(tsConfigPaths, { prefix: '<rootDir>/' })).toMatchInlineSnapshot(`
 Object {
   "^api/(.*)$": "<rootDir>/src/api/$1",
   "^client$": Array [

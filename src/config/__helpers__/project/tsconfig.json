@@ -1,0 +1,46 @@
+{
+    "compilerOptions": {
+        "paths": {
+            "log": [
+                "src/util/log"
+            ],
+            "server": [
+                "src/server"
+            ],
+            "client": [
+                "src/client",
+                "src/client/index"
+            ],
+            "util/*": [
+                "src/util/*"
+            ],
+            "api/*": [
+                "src/api/*"
+            ],
+            "test/*": [
+                "test/*"
+            ],
+            "mocks/*": [
+                "test/mocks/*"
+            ],
+            "test/*/mock": [
+                "test/mocks/*",
+                "test/__mocks__/*"
+            ]
+        }
+    },
+    "references": [
+        {
+            "path": "./../project-1"
+        },
+        {
+            "path": "../project-2"
+        },
+        {
+            "path": "../project-3"
+        },
+        {
+            "path": "../project-4"
+        }
+    ]
+}
