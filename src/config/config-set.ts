@@ -211,6 +211,7 @@ export class ConfigSet {
   /**
    * @internal
    */
+  @Memoize()
   get isTestFile(): (fileName: string) => boolean {
     const matchablePatterns = [...this.jest.testMatch, ...this.jest.testRegex].filter(
       (pattern) =>
