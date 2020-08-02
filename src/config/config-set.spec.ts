@@ -38,35 +38,6 @@ beforeEach(() => {
   jest.clearAllMocks()
 })
 
-describe('jest', () => {
-  it('should return correct config and go thru backports', () => {
-    expect(createConfigSet().jest).toMatchSnapshot()
-    expect(backports.backportJestConfig).toHaveBeenCalledTimes(1)
-  })
-
-  it('should merge parent config if any with globals is an empty object', () => {
-    expect(
-      createConfigSet({
-        jestConfig: {
-          globals: {},
-        } as any,
-        parentConfig: { __parent: true } as any,
-      }).jest,
-    ).toMatchSnapshot()
-  })
-
-  it('should merge parent config if any with globals is undefined', () => {
-    expect(
-      createConfigSet({
-        jestConfig: {
-          globals: undefined,
-        } as any,
-        parentConfig: { __parent: true } as any,
-      }).jest,
-    ).toMatchSnapshot()
-  })
-})
-
 describe('isTestFile', () => {
   it.each([
     {
@@ -102,9 +73,33 @@ describe('tsJest', () => {
   const getConfigSet = (tsJest?: TsJestGlobalOptions) => createConfigSet({ tsJestConfig: tsJest })
   const getTsJest = (tsJest?: TsJestGlobalOptions) => getConfigSet(tsJest).tsJest
 
-  it('should return correct defaults', () => {
-    expect(getConfigSet().jest.globals).toEqual({})
-    expect(getTsJest()).toMatchSnapshot()
+  describe('jest', () => {
+    it('should return correct config and go thru backports', () => {
+      expect(createConfigSet().tsJest).toMatchSnapshot()
+      expect(backports.backportJestConfig).toHaveBeenCalledTimes(1)
+    })
+
+    it('should merge parent config if any with globals is an empty object', () => {
+      expect(
+        createConfigSet({
+          jestConfig: {
+            globals: {},
+          } as any,
+          parentConfig: { __parent: true } as any,
+        }).tsJest,
+      ).toMatchSnapshot()
+    })
+
+    it('should merge parent config if any with globals is undefined', () => {
+      expect(
+        createConfigSet({
+          jestConfig: {
+            globals: undefined,
+          } as any,
+          parentConfig: { __parent: true } as any,
+        }).tsJest,
+      ).toMatchSnapshot()
+    })
   })
 
   describe('packageJson', () => {
@@ -936,12 +931,13 @@ describe('tsCacheDir', () => {
   const partialTsJestCacheDir = join(cacheDir, 'ts-jest')
 
   it.each([
-    { packageJson: undefined },
-    { packageJson: { name: 'foo' } },
-    { packageJson: 'src/__mocks__/package-foo.json' },
+    undefined,
+    Object.create(null),
+    { 'ts-jest': { packageJson: undefined } },
+    { 'ts-jest': { packageJson: { name: 'foo' } } },
+    { 'ts-jest': { packageJson: 'src/__mocks__/package-foo.json' } },
   ])(
-    'should return value from which is the combination of ts jest config and jest config when running test with cache' +
-      ' and package.json exists',
+    'should return value from which is the combination of ts jest config and jest config when running test with cache',
     (data) => {
       expect(
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -949,8 +945,8 @@ describe('tsCacheDir', () => {
           jestConfig: {
             cache: true,
             cacheDirectory: cacheDir,
+            globals: data,
           },
-          tsJestConfig: data,
           resolve: null,
         }).tsCacheDir!.indexOf(partialTsJestCacheDir),
       ).toEqual(0)
@@ -966,8 +962,10 @@ describe('tsCacheDir', () => {
           jestConfig: {
             cache: true,
             cacheDirectory: cacheDir,
+            globals: {
+              'ts-jest': { packageJson: packageJsonPath },
+            },
           },
-          tsJestConfig: { packageJson: packageJsonPath },
           resolve: null,
         }).tsCacheDir,
     ).toThrowError(
@@ -993,9 +991,11 @@ describe('tsCacheDir', () => {
           jestConfig: {
             cache: true,
             cacheDirectory: cacheDir,
+            globals: {
+              'ts-jest': { packageJson: packageJsonPath },
+            },
           },
           logger,
-          tsJestConfig: { packageJson: packageJsonPath },
         }).tsCacheDir!.indexOf(partialTsJestCacheDir),
       ).toEqual(0)
       expect(logger.target.lines[2]).toMatchInlineSnapshot(`
@@ -1044,8 +1044,10 @@ describe('tsCacheDir', () => {
       jestConfig: {
         cache: true,
         cacheDirectory: cacheDir,
+        globals: {
+          'ts-jest': { tsConfig: false },
+        },
       },
-      tsJestConfig: { tsConfig: false } as any,
       projectPackageJson: pkg,
     })
 
