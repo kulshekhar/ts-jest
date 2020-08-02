@@ -1,5 +1,5 @@
 import { LogContexts, Logger } from 'bs-logger'
-import { Arguments } from 'yargs'
+import type { Arguments } from 'yargs'
 import * as yargsParser from 'yargs-parser'
 
 import { rootLogger } from '../util/logger'

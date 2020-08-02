@@ -1,6 +1,6 @@
 // take care of including ONLY TYPES here, for the rest use `ts`
 import { LogContexts, LogLevels } from 'bs-logger'
-import {
+import type {
   Block,
   ExpressionStatement,
   Node,
@@ -11,7 +11,7 @@ import {
   Visitor,
 } from 'typescript'
 
-import { ConfigSet } from '../config/config-set'
+import type { ConfigSet } from '../config/config-set'
 
 /**
  * What methods of `jest` should we hoist

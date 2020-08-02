@@ -1,4 +1,4 @@
-import { Config } from '@jest/types'
+import type { Config } from '@jest/types'
 import { LogContexts, Logger } from 'bs-logger'
 
 import { Deprecations, Helps, interpolate } from './messages'

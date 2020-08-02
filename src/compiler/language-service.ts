@@ -3,11 +3,11 @@ import { existsSync, readFileSync, writeFile } from 'fs'
 import { basename, normalize, relative, join } from 'path'
 import memoize = require('lodash.memoize')
 import mkdirp = require('mkdirp')
-import * as _ts from 'typescript'
+import type * as _ts from 'typescript'
 
 import type { ConfigSet } from '../config/config-set'
 import { LINE_FEED } from '../constants'
-import { CompilerInstance, SourceOutput } from '../types'
+import type { CompilerInstance, SourceOutput } from '../types'
 import { Errors, interpolate } from '../util/messages'
 
 import { parse, stringify } from '../util/json'

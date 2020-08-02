@@ -2,9 +2,9 @@ import { join } from 'path'
 
 import * as Paths from '../../../scripts/lib/paths'
 
-import RunResult from './run-result'
+import type RunResult from './run-result'
 import { run } from './runtime'
-import { RunTestOptions, RunWithTemplateIteratorContext, RunWithTemplatesIterator, TestRunResultsMap } from './types'
+import type { RunTestOptions, RunWithTemplateIteratorContext, RunWithTemplatesIterator, TestRunResultsMap } from './types'
 
 export default class RunDescriptor {
   protected _options: RunTestOptions

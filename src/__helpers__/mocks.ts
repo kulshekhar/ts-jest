@@ -1,4 +1,4 @@
-import { testing } from 'bs-logger'
+import type { testing } from 'bs-logger'
 
 import { rootLogger } from '../util/logger'
 

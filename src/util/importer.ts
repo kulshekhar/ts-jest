@@ -1,4 +1,4 @@
-import { TBabelCore, TBabelJest, TTypeScript } from '../types'
+import type { TBabelCore, TBabelJest, TTypeScript } from '../types'
 
 import { rootLogger } from './logger'
 import { Memoize } from './memoize'

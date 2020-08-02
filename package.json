@@ -9,7 +9,6 @@
     "prebuild": "node scripts/clean-dist.js",
     "build": "tsc -p tsconfig.build.json",
     "postbuild": "node scripts/post-build.js",
-    "build:watch": "tsc -p tsconfig.build.json -w",
     "clean": "node scripts/clean.js",
     "pretest": "npm run lint",
     "test": "run-s -s test:e2e \"test:unit -- {@}\" --",

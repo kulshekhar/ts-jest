@@ -1,8 +1,8 @@
-import { Config } from '@jest/types'
+import type { Config } from '@jest/types'
 
-import { TsJestGlobalOptions } from '../../../src/types'
+import type { TsJestGlobalOptions } from '../../../src/types'
 
-import RunResult from './run-result'
+import type RunResult from './run-result'
 
 export interface RunTestOptions {
   template?: string
