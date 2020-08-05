@@ -31,8 +31,13 @@ export const mocked = helperMoved('mocked', mockedCore)
 export const createJestPreset = helperMoved('createJestPreset', createJestPresetCore)
 /** @deprecated */
 export const pathsToModuleNameMapper = helperMoved('pathsToModuleNameMapper', pathsToModuleNameMapperCore)
-
+/**
+ * @internal
+ */
 export const version: string = require('../package.json').version
+/**
+ * @internal
+ */
 export const digest: string = readFileSync(resolve(__dirname, '..', '.ts-jest-digest'), 'utf8')
 
 let transformer!: TsJestTransformer
