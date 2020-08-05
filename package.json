@@ -56,6 +56,7 @@
   },
   "homepage": "https://kulshekhar.github.io/ts-jest",
   "dependencies": {
+    "@types/jest": "26.x",
     "bs-logger": "0.x",
     "buffer-from": "1.x",
     "fast-json-stable-stringify": "2.x",
@@ -87,7 +88,6 @@
     "@types/buffer-from": "latest",
     "@types/cross-spawn": "latest",
     "@types/fs-extra": "latest",
-    "@types/jest": "26.x",
     "@types/js-yaml": "latest",
     "@types/json5": "latest",
     "@types/lodash.memoize": "4.x",
