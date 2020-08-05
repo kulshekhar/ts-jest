@@ -192,11 +192,10 @@ export class ConfigSet {
    * @internal
    */
   @Memoize()
-  get jest(): Config.ProjectConfig {
+  private get jest(): Config.ProjectConfig {
     const config = backportJestConfig(this.logger, this._jestConfig)
     if (this.parentOptions) {
-      const globals: any = config.globals ?? {}
-      // TODO: implement correct deep merging instead
+      const globals: Config.ConfigGlobals = config.globals ?? Object.create(null)
       globals['ts-jest'] = {
         ...this.parentOptions,
         ...globals['ts-jest'],
