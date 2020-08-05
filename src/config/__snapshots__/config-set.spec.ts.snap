@@ -10,31 +10,6 @@ exports[`isTestFile should return a boolean value whether the file matches test 
 
 exports[`isTestFile should return a boolean value whether the file matches test pattern 4`] = `true`;
 
-exports[`jest should merge parent config if any with globals is an empty object 1`] = `
-Object {
-  "__backported": true,
-  "globals": Object {
-    "ts-jest": Object {
-      "__parent": true,
-    },
-  },
-}
-`;
-
-exports[`jest should merge parent config if any with globals is undefined 1`] = `
-Object {
-  "__backported": true,
-  "globals": undefined,
-}
-`;
-
-exports[`jest should return correct config and go thru backports 1`] = `
-Object {
-  "__backported": true,
-  "globals": Object {},
-}
-`;
-
 exports[`jsonValue should create jsonValue based on each config and version 1`] = `
 Object {
   "babel": undefined,
@@ -195,7 +170,61 @@ Object {
 }
 `;
 
-exports[`tsJest should return correct defaults 1`] = `
+exports[`tsJest jest should merge parent config if any with globals is an empty object 1`] = `
+Object {
+  "babelConfig": undefined,
+  "compiler": "typescript",
+  "diagnostics": Object {
+    "ignoreCodes": Array [
+      6059,
+      18002,
+      18003,
+    ],
+    "pretty": true,
+    "throws": true,
+  },
+  "isolatedModules": false,
+  "packageJson": Object {
+    "kind": "file",
+    "value": undefined,
+  },
+  "stringifyContentPathRegex": undefined,
+  "transformers": Object {},
+  "tsConfig": Object {
+    "kind": "file",
+    "value": undefined,
+  },
+}
+`;
+
+exports[`tsJest jest should merge parent config if any with globals is undefined 1`] = `
+Object {
+  "babelConfig": undefined,
+  "compiler": "typescript",
+  "diagnostics": Object {
+    "ignoreCodes": Array [
+      6059,
+      18002,
+      18003,
+    ],
+    "pretty": true,
+    "throws": true,
+  },
+  "isolatedModules": false,
+  "packageJson": Object {
+    "kind": "file",
+    "value": undefined,
+  },
+  "stringifyContentPathRegex": undefined,
+  "transformers": Object {},
+  "tsConfig": Object {
+    "kind": "file",
+    "value": undefined,
+  },
+}
+`;
+
+exports[`tsJest jest should return correct config and go thru backports 1`] = `
 Object {
   "babelConfig": undefined,
   "compiler": "typescript",
