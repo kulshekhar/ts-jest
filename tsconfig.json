@@ -7,11 +7,12 @@
     "experimentalDecorators": true,
     "importHelpers": false,
     "inlineSourceMap": true,
+    "target": "es5",
+    "module": "commonjs",
     "lib": [
       "es2015",
       "es2016.array.include"
     ],
-    "module": "commonjs",
     "moduleResolution": "node",
     "noEmitOnError": true,
     "noFallthroughCasesInSwitch": true,
@@ -24,7 +25,7 @@
     "skipLibCheck": true,
     "sourceMap": false,
     "strict": true,
-    "target": "es5",
+    "importsNotUsedAsValues": "error",
     "types": [
       "jest",
       "node",

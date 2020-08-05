@@ -1,7 +1,7 @@
-import { Logger } from 'bs-logger'
+import type { Logger } from 'bs-logger'
 
-import { ConfigSet } from '../config/config-set'
-import { CompileFn, CompilerInstance, TsCompiler } from '../types'
+import type { ConfigSet } from '../config/config-set'
+import type { CompileFn, CompilerInstance, TsCompiler } from '../types'
 
 import { initializeLanguageServiceInstance } from './language-service'
 import { initializeTranspilerInstance } from './transpiler'

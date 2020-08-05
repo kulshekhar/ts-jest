@@ -1,10 +1,10 @@
-import { Config } from '@jest/types'
+import type { Config } from '@jest/types'
 import { resolve } from 'path'
 
 import { createCompilerInstance } from '../compiler/instance'
 import { ConfigSet } from '../config/config-set'
-import { BabelConfig, TsCompiler, TsJestConfig, TsJestGlobalOptions } from '../types'
-import { ImportReasons } from '../util/messages'
+import type { BabelConfig, TsCompiler, TsJestConfig, TsJestGlobalOptions } from '../types'
+import type { ImportReasons } from '../util/messages'
 
 export function filePath(relPath: string): string {
   return resolve(__dirname, '..', '..', relPath)

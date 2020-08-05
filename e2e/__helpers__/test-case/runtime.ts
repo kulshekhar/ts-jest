@@ -1,4 +1,4 @@
-import { Config } from '@jest/types'
+import type { Config } from '@jest/types'
 import { sync as spawnSync } from 'cross-spawn'
 import { createHash } from 'crypto'
 import stringifyJson = require('fast-json-stable-stringify')
@@ -26,7 +26,7 @@ import { join, relative, resolve, sep } from 'path'
 import * as Paths from '../../../scripts/lib/paths'
 
 import RunResult from './run-result'
-import { PreparedTest, RunTestOptions } from './types'
+import type { PreparedTest, RunTestOptions } from './types'
 import { enableOptimizations, templateNameForPath } from './utils'
 
 const TEMPLATE_EXCLUDED_ITEMS = ['node_modules', 'package-lock.json']

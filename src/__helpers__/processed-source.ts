@@ -1,5 +1,5 @@
 import { isAbsolute, relative } from 'path'
-import { RawSourceMap } from 'source-map'
+import type { RawSourceMap } from 'source-map'
 
 import { ROOT } from './path'
 import { ParsedSourceWithMaps, parseSource, relativisePaths, rewriteSourceMaps } from './source-maps'

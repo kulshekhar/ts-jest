@@ -7,9 +7,9 @@
 import { existsSync, readFileSync, writeFileSync } from 'fs'
 import { stringify as stringifyJson5 } from 'json5'
 import { basename, join } from 'path'
-import { Arguments } from 'yargs'
+import type { Arguments } from 'yargs'
 
-import { CliCommand } from '..'
+import type { CliCommand } from '..'
 import { TsJestPresetDescriptor, defaults, jsWIthBabel, jsWithTs } from '../helpers/presets'
 
 /**

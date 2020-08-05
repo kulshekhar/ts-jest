@@ -1,8 +1,8 @@
-import { Logger } from 'bs-logger'
-import * as _ts from 'typescript'
+import type { Logger } from 'bs-logger'
+import type * as _ts from 'typescript'
 
-import { ConfigSet } from '../config/config-set'
-import { CompilerInstance, SourceOutput } from '../types'
+import type { ConfigSet } from '../config/config-set'
+import type { CompilerInstance, SourceOutput } from '../types'
 
 /**
  * @internal

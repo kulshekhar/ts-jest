@@ -8,7 +8,7 @@
  * version of the `jest.ProjectConfig`, and then later it calls `process()`
  * with the complete, object version of it.
  */
-import { Config } from '@jest/types'
+import type { Config } from '@jest/types'
 import { LogContexts, Logger } from 'bs-logger'
 import { existsSync, readFileSync, realpathSync } from 'fs'
 import { globsToMatcher } from 'jest-util'
@@ -31,7 +31,7 @@ import { digest as MY_DIGEST, version as MY_VERSION } from '..'
 import { createCompilerInstance } from '../compiler/instance'
 import { DEFAULT_JEST_TEST_MATCH } from '../constants'
 import { internals as internalAstTransformers } from '../transformers'
-import {
+import type {
   AstTransformerDesc,
   BabelConfig,
   BabelJestTransformer,

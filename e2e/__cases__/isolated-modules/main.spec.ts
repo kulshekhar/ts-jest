@@ -1,4 +1,4 @@
-import { Thing } from "./main";
+import type { Thing } from "./main";
 
 // See the Thing definition.  Changing the type definition should result in a compile failure here.
 export const thing: Thing = { a: 1 };

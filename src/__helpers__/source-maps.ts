@@ -3,7 +3,7 @@ import bufferFrom = require('buffer-from')
 import stableStringify = require('fast-json-stable-stringify')
 import { realpathSync } from 'fs'
 import { isAbsolute, relative } from 'path'
-import { RawSourceMap } from 'source-map'
+import type { RawSourceMap } from 'source-map'
 
 export function base64ToSourceMaps(base64: string): RawSourceMap {
   return JSON.parse(bufferFrom(base64, 'base64').toString('utf8'))

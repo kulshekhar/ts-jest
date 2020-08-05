@@ -1,9 +1,9 @@
-import { Config } from '@jest/types'
+import type { Config } from '@jest/types'
 import { sep } from 'path'
-import { ParsedCommandLine } from 'typescript'
+import type { ParsedCommandLine } from 'typescript'
 
 import { logTargetMock } from './__helpers__/mocks'
-import { ConfigSet } from './config/config-set'
+import type { ConfigSet } from './config/config-set'
 import { TsJestTransformer } from './ts-jest-transformer'
 
 describe('configFor', () => {

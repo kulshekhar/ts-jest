@@ -1,4 +1,4 @@
-import { TsJestPresets } from '../../config/create-jest-preset'
+import type { TsJestPresets } from '../../config/create-jest-preset'
 
 /** @internal */
 export const enum JestPresetNames {

@@ -1,6 +1,6 @@
-import { Config } from '@jest/types'
+import type { Config } from '@jest/types'
 import { LogContexts } from 'bs-logger'
-import { CompilerOptions } from 'typescript'
+import type { CompilerOptions } from 'typescript'
 
 import { rootLogger } from '../util/logger'
 import { Errors, interpolate } from '../util/messages'

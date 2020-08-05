@@ -1,5 +1,5 @@
 /* eslint-disable jest/no-mocks-import */
-import { Transformer } from '@jest/transform'
+import type { Transformer } from '@jest/transform'
 import { LogLevels, testing } from 'bs-logger'
 import { readFileSync } from 'fs'
 import json5 = require('json5')
@@ -9,7 +9,7 @@ import * as ts from 'typescript'
 import * as _myModule from '..'
 import { logTargetMock } from '../__helpers__/mocks'
 import { createConfigSet, defaultResolve } from '../__helpers__/fakers'
-import { TsJestGlobalOptions } from '../types'
+import type { TsJestGlobalOptions } from '../types'
 import * as _backports from '../util/backports'
 import { getPackageVersion } from '../util/get-package-version'
 import { normalizeSlashes } from '../util/normalize-slashes'

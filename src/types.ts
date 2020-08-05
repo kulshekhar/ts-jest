@@ -1,8 +1,8 @@
-import { TransformedSource, Transformer } from '@jest/transform'
-import * as _babel from 'babel__core'
+import type { TransformedSource, Transformer } from '@jest/transform'
+import type * as _babel from 'babel__core'
 import type * as _ts from 'typescript'
 
-import { ConfigSet } from './config/config-set'
+import type { ConfigSet } from './config/config-set'
 
 /**
  * @internal

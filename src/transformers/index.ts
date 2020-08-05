@@ -1,4 +1,4 @@
-import { AstTransformerDesc } from '../types'
+import type { AstTransformerDesc } from '../types'
 
 import * as hoisting from './hoist-jest'
 
