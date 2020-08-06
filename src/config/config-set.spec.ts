@@ -1,8 +1,6 @@
 /* eslint-disable jest/no-mocks-import */
 import type { Transformer } from '@jest/transform'
 import { LogLevels, testing } from 'bs-logger'
-import { readFileSync } from 'fs'
-import json5 = require('json5')
 import { join, resolve } from 'path'
 import * as ts from 'typescript'
 
@@ -13,7 +11,7 @@ import type { TsJestGlobalOptions } from '../types'
 import * as _backports from '../util/backports'
 import { getPackageVersion } from '../util/get-package-version'
 import { normalizeSlashes } from '../util/normalize-slashes'
-import { mocked } from '../util/testing'
+import { mocked } from '../util'
 
 import { IGNORE_DIAGNOSTIC_CODES, MATCH_NOTHING, TS_JEST_OUT_DIR } from './config-set'
 // eslint-disable-next-line no-duplicate-imports
@@ -194,127 +192,6 @@ describe('tsJest', () => {
       expect(logger.target.lines[1]).not.toContain(Deprecations.AstTransformerArrayConfig)
     })
   }) // custom AST transformers
-
-  describe('babelConfig', () => {
-    const logger = testing.createLoggerMock()
-
-    it('should be correct for default value', () => {
-      const cs = createConfigSet({
-        jestConfig: { rootDir: 'src', cwd: 'src' } as any,
-        logger,
-        resolve: null,
-      })
-      logger.target.clear()
-      expect(cs.tsJest.babelConfig).toBeUndefined()
-      expect(cs.babel).toBeUndefined()
-      expect(logger.target.lines[2]).toMatchInlineSnapshot(`
-        "[level:20] babel is disabled
-        "
-      `)
-    })
-
-    it('should be correct for true', () => {
-      const cs = createConfigSet({
-        jestConfig: { rootDir: 'src', cwd: 'src' } as any,
-        tsJestConfig: {
-          babelConfig: true,
-        },
-        logger,
-        resolve: null,
-      })
-      logger.target.clear()
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      expect(cs.tsJest.babelConfig!.kind).toEqual('file')
-      expect(cs.babel).toMatchInlineSnapshot(`
-        Object {
-          "cwd": "src",
-        }
-      `)
-      expect(logger.target.lines[2]).toMatchInlineSnapshot(`
-        "[level:20] normalized babel config via ts-jest option
-        "
-      `)
-    })
-
-    it('should be correct for given non javascript file path', () => {
-      const FILE = 'src/__mocks__/.babelrc-foo'
-      const cs = createConfigSet({
-        tsJestConfig: {
-          babelConfig: FILE,
-        },
-        logger,
-        resolve: null,
-      })
-      logger.target.clear()
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      expect(cs.tsJest.babelConfig!.kind).toEqual('file')
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      expect(cs.tsJest.babelConfig!.value).toContain('.babelrc-foo')
-      expect(cs.babel).toEqual(expect.objectContaining(json5.parse(readFileSync(FILE, 'utf8'))))
-      expect(logger.target.lines[3]).toMatchInlineSnapshot(`
-        "[level:20] normalized babel config via ts-jest option
-        "
-      `)
-    })
-
-    it('should be correct for given javascript file path', () => {
-      const cs = createConfigSet({
-        tsJestConfig: {
-          babelConfig: 'src/__mocks__/babel-foo.config.js',
-        },
-        logger,
-        resolve: null,
-      })
-      logger.target.clear()
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      expect(cs.tsJest.babelConfig!.kind).toEqual('file')
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      expect(cs.tsJest.babelConfig!.value).toContain('babel-foo.config.js')
-      expect(cs.babel).toEqual(expect.objectContaining(require('../__mocks__/babel-foo.config')))
-      expect(logger.target.lines[3]).toMatchInlineSnapshot(`
-        "[level:20] normalized babel config via ts-jest option
-        "
-      `)
-    })
-
-    it('should be correct for imported javascript file', () => {
-      const babelConfig = require('../__mocks__/babel-foo.config')
-      const cs = createConfigSet({
-        tsJestConfig: {
-          babelConfig,
-        },
-        logger,
-        resolve: null,
-      })
-      logger.target.clear()
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      expect(cs.tsJest.babelConfig!.kind).toEqual('inline')
-      expect(cs.babel).toEqual(expect.objectContaining(babelConfig))
-      expect(logger.target.lines[2]).toMatchInlineSnapshot(`
-        "[level:20] normalized babel config via ts-jest option
-        "
-      `)
-    })
-
-    it('should be correct for inline config', () => {
-      const CONFIG = { comments: true }
-      const cs = createConfigSet({
-        tsJestConfig: {
-          babelConfig: CONFIG,
-        },
-        resolve: null,
-        logger,
-      })
-      logger.target.clear()
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      expect(cs.tsJest.babelConfig!.kind).toEqual('inline')
-      expect(cs.babel).toEqual(expect.objectContaining(CONFIG))
-      expect(logger.target.lines[2]).toMatchInlineSnapshot(`
-        "[level:20] normalized babel config via ts-jest option
-        "
-      `)
-    })
-  }) // babelConfig
 
   describe('diagnostics', () => {
     it('should be correct for default value', () => {
@@ -1128,11 +1005,168 @@ describe('hooks', () => {
 }) // hooks
 
 describe('babelJestTransformer', () => {
-  it('should return a babel-jest transformer', () => {
-    let cs = createConfigSet({ tsJestConfig: { tsConfig: false } as any })
-    expect(cs.babelJestTransformer).toBeUndefined()
-    cs = createConfigSet({ tsJestConfig: { tsConfig: false, babelConfig: {} } as any })
+  const logger = testing.createLoggerMock()
+
+  it('should return babelJestTransformer without babelConfig option', () => {
+    const cs = createConfigSet({
+      jestConfig: { rootDir: 'src', cwd: 'src' },
+      logger,
+      resolve: null,
+    })
+    logger.target.clear()
     const babelJest = cs.babelJestTransformer as Transformer
+
+    expect(cs.tsJest.babelConfig).toBeUndefined()
+    expect(logger.target.lines[2]).toMatchInlineSnapshot(`
+        "[level:20] babel is disabled
+        "
+      `)
+    expect(babelJest).toBeUndefined()
+  })
+
+  it('should return babelJestTransformer with babalConfig is true', () => {
+    const cs = createConfigSet({
+      jestConfig: {
+        rootDir: 'src',
+        cwd: 'src',
+        globals: {
+          'ts-jest': {
+            babelConfig: true,
+          },
+        },
+      },
+      logger,
+      resolve: null,
+    })
+    logger.target.clear()
+    const babelJest = cs.babelJestTransformer as Transformer
+
+    expect(cs.tsJest.babelConfig?.kind).toEqual('file')
+    expect(cs.tsJest.babelConfig?.value).toBeUndefined()
+    expect(logger.target.lines[2]).toMatchInlineSnapshot(`
+        "[level:20] normalized babel config via ts-jest option
+        "
+      `)
+    expect(babelJest.canInstrument).toBe(true)
+    expect(babelJest.createTransformer).toBeUndefined()
+    expect(typeof babelJest.getCacheKey).toBe('function')
+    expect(typeof babelJest.process).toBe('function')
+  })
+
+  it('should return babelJestTransformer with non javascript file path', () => {
+    const FILE = 'src/__mocks__/.babelrc-foo'
+    const cs = createConfigSet({
+      jestConfig: {
+        globals: {
+          'ts-jest': {
+            babelConfig: FILE,
+          },
+        },
+      },
+      logger,
+      resolve: null,
+    })
+    logger.target.clear()
+    const babelJest = cs.babelJestTransformer as Transformer
+
+    expect(cs.tsJest.babelConfig?.kind).toEqual('file')
+    expect(cs.tsJest.babelConfig?.value).toEqual(join(process.cwd(), FILE))
+    expect(logger.target.lines[3]).toMatchInlineSnapshot(`
+        "[level:20] normalized babel config via ts-jest option
+        "
+      `)
+    expect(babelJest.canInstrument).toBe(true)
+    expect(babelJest.createTransformer).toBeUndefined()
+    expect(typeof babelJest.getCacheKey).toBe('function')
+    expect(typeof babelJest.process).toBe('function')
+  })
+
+  it('should return babelJestTransformer with javascript file path', () => {
+    const FILE = 'src/__mocks__/babel-foo.config.js'
+    const cs = createConfigSet({
+      jestConfig: {
+        globals: {
+          'ts-jest': {
+            babelConfig: FILE,
+          },
+        },
+      },
+      logger,
+      resolve: null,
+    })
+    logger.target.clear()
+    const babelJest = cs.babelJestTransformer as Transformer
+
+    expect(cs.tsJest.babelConfig?.kind).toEqual('file')
+    expect(cs.tsJest.babelConfig?.value).toEqual(join(process.cwd(), FILE))
+    expect(logger.target.lines[3]).toMatchInlineSnapshot(`
+        "[level:20] normalized babel config via ts-jest option
+        "
+      `)
+    expect(babelJest.canInstrument).toBe(true)
+    expect(babelJest.createTransformer).toBeUndefined()
+    expect(typeof babelJest.getCacheKey).toBe('function')
+    expect(typeof babelJest.process).toBe('function')
+  })
+
+  it('should return babelJestTransformer with loaded config object', () => {
+    const babelConfig = require('../__mocks__/babel-foo.config')
+    const cs = createConfigSet({
+      jestConfig: {
+        globals: {
+          'ts-jest': {
+            babelConfig,
+          },
+        },
+      },
+      logger,
+      resolve: null,
+    })
+    logger.target.clear()
+    const babelJest = cs.babelJestTransformer as Transformer
+
+    expect(cs.tsJest.babelConfig?.kind).toEqual('inline')
+    expect(cs.tsJest.babelConfig?.value).toMatchInlineSnapshot(`
+      Object {
+        "presets": Array [
+          "@babel/preset-env",
+          "@babel/preset-typescript",
+          "@babel/preset-react",
+        ],
+      }
+    `)
+    expect(logger.target.lines[2]).toMatchInlineSnapshot(`
+        "[level:20] normalized babel config via ts-jest option
+        "
+      `)
+    expect(babelJest.canInstrument).toBe(true)
+    expect(babelJest.createTransformer).toBeUndefined()
+    expect(typeof babelJest.getCacheKey).toBe('function')
+    expect(typeof babelJest.process).toBe('function')
+  })
+
+  it('should return babelJestTransformer with inline config', () => {
+    const CONFIG = { comments: true }
+    const cs = createConfigSet({
+      jestConfig: {
+        globals: {
+          'ts-jest': {
+            babelConfig: CONFIG,
+          },
+        },
+      },
+      resolve: null,
+      logger,
+    })
+    logger.target.clear()
+    const babelJest = cs.babelJestTransformer as Transformer
+
+    expect(cs.tsJest.babelConfig?.kind).toEqual('inline')
+    expect(cs.tsJest.babelConfig?.value).toEqual(CONFIG)
+    expect(logger.target.lines[2]).toMatchInlineSnapshot(`
+        "[level:20] normalized babel config via ts-jest option
+        "
+      `)
     expect(babelJest.canInstrument).toBe(true)
     expect(babelJest.createTransformer).toBeUndefined()
     expect(typeof babelJest.getCacheKey).toBe('function')
