@@ -177,7 +177,9 @@ interface TsJestConfig$packageJson$inline {
 }
 type TsJestConfig$packageJson = TsJestConfig$packageJson$file | TsJestConfig$packageJson$inline | undefined
 type TsJestConfig$stringifyContentPathRegex = string | undefined
-
+/**
+ * @internal
+ */
 export interface TsJestConfig {
   tsConfig: TsJestConfig$tsConfig
   packageJson: TsJestConfig$packageJson

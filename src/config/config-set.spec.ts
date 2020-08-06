@@ -849,9 +849,11 @@ describe('readTsConfig', () => {
 describe('versions', () => {
   describe('package version cannot be resolved', () => {
     let mock: jest.MockInstance<string | undefined, [string]>
+
     beforeEach(() => {
       mock = mocked(getPackageVersion).mockReturnValue(undefined)
     })
+
     afterEach(() => {
       mock.mockRestore()
     })
