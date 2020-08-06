@@ -448,7 +448,7 @@ export class ConfigSet {
    * @internal
    */
   @Memoize()
-  get babel(): BabelConfig | undefined {
+  private get babel(): BabelConfig | undefined {
     const {
       tsJest: { babelConfig },
     } = this
@@ -587,7 +587,7 @@ export class ConfigSet {
    * @internal
    */
   @Memoize()
-  get filterDiagnostics(): (diagnostics: Diagnostic[], filePath?: string) => Diagnostic[] {
+  private get filterDiagnostics(): (diagnostics: Diagnostic[], filePath?: string) => Diagnostic[] {
     const {
       tsJest: {
         diagnostics: { ignoreCodes },
