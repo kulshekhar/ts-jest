@@ -1,3 +1,18 @@
+# [26.2.0](https://github.com/kulshekhar/ts-jest/compare/v26.1.4...v26.2.0) (2020-08-11)
+
+
+### Bug Fixes
+
+* move `@types/jest` to dependencies to work well with yarn 2 ([#1859](https://github.com/kulshekhar/ts-jest/issues/1859)) ([5eb1389](https://github.com/kulshekhar/ts-jest/commit/5eb1389caaa0431e49ae6ca26b18e290208e0a0a)), closes [#1857](https://github.com/kulshekhar/ts-jest/issues/1857)
+
+
+### Features
+
+* **config:** support `after` and `afterDeclarations` AST transformers ([#1831](https://github.com/kulshekhar/ts-jest/issues/1831)) ([be20a7c](https://github.com/kulshekhar/ts-jest/commit/be20a7c78c97027b33aec178da0f533095790871))
+* allow opt-out version warning message by environment variable `TS_JEST_DISABLE_VER_CHECKER` ([#1821](https://github.com/kulshekhar/ts-jest/issues/1821)) ([e6b42fc](https://github.com/kulshekhar/ts-jest/commit/e6b42fcd7a75c7b14e636a45cda04de18a46908b)), closes [#1774](https://github.com/kulshekhar/ts-jest/issues/1774)
+
+
+
 ## [26.1.4](https://github.com/kulshekhar/ts-jest/compare/v26.1.3...v26.1.4) (2020-07-28)
 
 
