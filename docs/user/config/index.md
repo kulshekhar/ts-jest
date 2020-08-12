@@ -209,7 +209,7 @@ All options have default values which should fit most of the projects. Click on 
 | [**`compiler`**][compiler] | [TypeScript module to use as compiler.][compiler] | `string` | `"typescript"` |
 | [**`tsConfig` or `tsconfig`**][tsConfig] | [TypeScript compiler related configuration.][tsConfig] | `string`\|`object`\|`boolean` | _auto_ |
 | [**`isolatedModules`**][isolatedModules] | [Disable type-checking][isolatedModules] | `boolean` | _disabled_ |
-| [**`astTransformers`**][astTransformers] | [Custom TypeScript AST transformers][astTransformers] | `string[]` | _auto_ |
+| [**`astTransformers`**][astTransformers] | [Custom TypeScript AST transformers][astTransformers] | `object` | _auto_ |
 | [**`diagnostics`**][diagnostics] | [Diagnostics related configuration.][diagnostics] | `boolean`\|`object` | _enabled_ |
 | [**`babelConfig`**][babelConfig] | [Babel(Jest) related configuration.][babelConfig] | `boolean`\|`string`\|`object` | _disabled_ |
 | [**`stringifyContentPathRegex`**][stringifyContentPathRegex] | [Files which will become modules returning self content.][stringifyContentPathRegex] | `string`\|`RegExp` | _disabled_ |
