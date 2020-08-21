@@ -763,8 +763,8 @@ export class ConfigSet {
     const globals = (jest.globals = { ...jest.globals } as any)
     // we need to remove some stuff from jest config
     // this which does not depend on config
-    delete jest.name
-    delete jest.cacheDirectory
+    jest.name = undefined as any
+    jest.cacheDirectory = undefined as any
     // we do not need this since its normalized version is in tsJest
     delete globals['ts-jest']
 

@@ -1,5 +1,7 @@
 {
   "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
     "declaration": false,
     "noEmit": true,
     "downlevelIteration": true,
@@ -7,25 +9,21 @@
     "experimentalDecorators": true,
     "importHelpers": false,
     "inlineSourceMap": true,
-    "target": "es5",
-    "module": "commonjs",
     "lib": [
       "es2015",
       "es2016.array.include"
     ],
     "moduleResolution": "node",
+    "resolveJsonModule": true,
     "noEmitOnError": true,
     "noFallthroughCasesInSwitch": true,
-    "noImplicitAny": true,
-    "noImplicitReturns": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "removeComments": true,
-    "resolveJsonModule": true,
+    "noImplicitReturns": true,
+    "importsNotUsedAsValues": "error",
+    "strict": true,
     "skipLibCheck": true,
     "sourceMap": false,
-    "strict": true,
-    "importsNotUsedAsValues": "error",
     "types": [
       "jest",
       "node",

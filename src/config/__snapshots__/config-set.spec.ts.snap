@@ -16,7 +16,9 @@ Object {
   "digest": "a0d51ca854194df8191d0e65c0ca4730f510f332",
   "jest": Object {
     "__backported": true,
+    "cacheDirectory": undefined,
     "globals": Object {},
+    "name": undefined,
   },
   "projectDepVersions": Object {
     "some-module": "1.2.3",
