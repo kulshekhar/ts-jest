@@ -4,10 +4,10 @@
     "test": "jest"
   },
   "devDependencies": {
-    "@types/jest": "^26.0.9",
+    "@types/jest": "^26.0.10",
     "@types/lodash": "^4.14.159",
-    "jest": "^26.3.0",
-    "typescript": "^3.9.7"
+    "jest": "^26.4.1",
+    "typescript": "^4.0.2"
   },
   "wantedDependencies": {
     "@types/jest": "latest",

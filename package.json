@@ -70,7 +70,7 @@
   },
   "peerDependencies": {
     "jest": ">=26 <27",
-    "typescript": ">=3.8 <4.0"
+    "typescript": ">=3.8 <5.0"
   },
   "husky": {
     "hooks": {
@@ -80,8 +80,8 @@
     }
   },
   "devDependencies": {
-    "@commitlint/cli": "9.x",
-    "@commitlint/config-conventional": "9.x",
+    "@commitlint/cli": "10.x",
+    "@commitlint/config-conventional": "10.x",
     "@jest/transform": "26.x",
     "@jest/types": "26.x",
     "@types/babel__core": "7.x",
@@ -120,7 +120,7 @@
     "npm-run-all": "latest",
     "prettier": "2.x",
     "source-map": "latest",
-    "typescript": "3.x"
+    "typescript": "4.x"
   },
   "lint-staged": {
     "*.{ts,tsx,js,jsx}": [

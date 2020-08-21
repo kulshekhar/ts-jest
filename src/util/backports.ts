@@ -79,14 +79,6 @@ export const backportJestConfig = <T extends Config.InitialOptions | Config.Proj
     delete tsJest.useBabelrc
   }
 
-  // if ('babelConfig' in tsJest) {
-  //   warnConfig('globals.ts-jest.babelConfig', 'globals.ts-jest.babelConfig')
-  //   if (tsJest.babelConfig != null) {
-  //     mergeTsJest.babelConfig = tsJest.babelConfig
-  //   }
-  //   delete tsJest.babelConfig
-  // }
-
   if ('skipBabel' in tsJest) {
     warnConfig('globals.ts-jest.skipBabel', 'globals.ts-jest.babelConfig')
     if (tsJest.skipBabel === false && !mergeTsJest.babelConfig) {

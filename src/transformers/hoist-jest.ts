@@ -121,8 +121,10 @@ export function factory(cs: ConfigSet): (ctx: TransformationContext) => Transfor
         const hoistedStmts = hoisted[level]
         const otherStmts = (resultNode as Block).statements.filter((s) => !hoistedStmts.includes(s))
         const newNode = ts.getMutableClone(resultNode) as Block
-        newNode.statements = ts.createNodeArray([...hoistedStmts, ...otherStmts])
-        resultNode = newNode
+        resultNode = {
+          ...newNode,
+          statements: ts.createNodeArray([...hoistedStmts, ...otherStmts]),
+        } as Statement
       }
 
       // exit the level

@@ -17,7 +17,7 @@ const pv = mocked(_pv)
 describeChecker(VersionCheckers.jest, 'jest', ['26.0.0'], [undefined, '23.6.0', '24.1.0', '27.0.0'])
 describeChecker(VersionCheckers.babelJest, 'babel-jest', ['26.0.0'], [undefined, '23.6.0', '24.1.0', '27.0.0'])
 describeChecker(VersionCheckers.babelCore, '@babel/core', ['7.0.0'], [undefined, '6.0.0', '8.0.0'])
-describeChecker(VersionCheckers.typescript, 'typescript', ['3.8.0', '3.8.3'], [undefined, '3.3.0', '4.0.1'])
+describeChecker(VersionCheckers.typescript, 'typescript', ['3.8.0', '3.8.3'], [undefined, '3.3.0', '5.0.0'])
 
 function describeChecker(
   checker: VersionChecker,
