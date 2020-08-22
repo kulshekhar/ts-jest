@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`cacheKey should be a string 1`] = `"{\\"digest\\":\\"a0d51ca854194df8191d0e65c0ca4730f510f332\\",\\"jest\\":{\\"__backported\\":true,\\"globals\\":{}},\\"projectDepVersions\\":{\\"dev\\":\\"1.2.5\\",\\"opt\\":\\"1.2.3\\",\\"peer\\":\\"1.2.4\\",\\"std\\":\\"1.2.6\\"},\\"transformers\\":[\\"hoisting-jest-mock@1\\"],\\"tsJest\\":{\\"compiler\\":\\"typescript\\",\\"diagnostics\\":{\\"ignoreCodes\\":[6059,18002,18003],\\"pretty\\":true,\\"throws\\":true},\\"isolatedModules\\":false,\\"packageJson\\":{\\"kind\\":\\"file\\"},\\"transformers\\":{},\\"tsConfig\\":{\\"kind\\":\\"file\\",\\"value\\":\\"\\"}},\\"tsconfig\\":{\\"options\\":{\\"configFilePath\\":\\"\\",\\"declaration\\":false,\\"inlineSourceMap\\":false,\\"inlineSources\\":true,\\"module\\":1,\\"noEmit\\":false,\\"removeComments\\":false,\\"sourceMap\\":true,\\"target\\":1,\\"types\\":[]},\\"raw\\":{\\"compileOnSave\\":false,\\"compilerOptions\\":{\\"composite\\":true,\\"declaration\\":true,\\"types\\":[]},\\"exclude\\":[\\"foo/**/*\\"],\\"include\\":[\\"bar/**/*\\"]}}}"`;
+exports[`cacheKey should be a string 1`] = `"{\\"digest\\":\\"a0d51ca854194df8191d0e65c0ca4730f510f332\\",\\"jest\\":{\\"__backported\\":true,\\"globals\\":{}},\\"transformers\\":[\\"hoisting-jest-mock@1\\"],\\"tsJest\\":{\\"compiler\\":\\"typescript\\",\\"diagnostics\\":{\\"ignoreCodes\\":[6059,18002,18003],\\"pretty\\":true,\\"throws\\":true},\\"isolatedModules\\":false,\\"packageJson\\":{\\"kind\\":\\"file\\"},\\"transformers\\":{},\\"tsConfig\\":{\\"kind\\":\\"file\\",\\"value\\":\\"\\"}},\\"tsconfig\\":{\\"options\\":{\\"configFilePath\\":\\"\\",\\"declaration\\":false,\\"inlineSourceMap\\":false,\\"inlineSources\\":true,\\"module\\":1,\\"noEmit\\":false,\\"removeComments\\":false,\\"sourceMap\\":true,\\"target\\":1,\\"types\\":[]},\\"raw\\":{\\"compileOnSave\\":false,\\"compilerOptions\\":{\\"composite\\":true,\\"declaration\\":true,\\"types\\":[]},\\"exclude\\":[\\"foo/**/*\\"],\\"include\\":[\\"bar/**/*\\"]}}}"`;
 
 exports[`isTestFile should return a boolean value whether the file matches test pattern 1`] = `true`;
 
@@ -19,9 +19,6 @@ Object {
     "cacheDirectory": undefined,
     "globals": Object {},
     "name": undefined,
-  },
-  "projectDepVersions": Object {
-    "some-module": "1.2.3",
   },
   "transformers": Array [
     "hoisting-jest-mock@1",

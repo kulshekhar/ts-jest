@@ -16,7 +16,7 @@ import { mocked } from '../util'
 import { IGNORE_DIAGNOSTIC_CODES, MATCH_NOTHING, TS_JEST_OUT_DIR } from './config-set'
 // eslint-disable-next-line no-duplicate-imports
 import type { ConfigSet } from './config-set'
-import { Deprecations, Errors, interpolate } from '../util/messages'
+import { Deprecations } from '../util/messages'
 
 jest.mock('../util/backports')
 jest.mock('../index')
@@ -809,13 +809,7 @@ describe('tsCacheDir', () => {
   const cacheDir = join(process.cwd(), cacheName)
   const partialTsJestCacheDir = join(cacheDir, 'ts-jest')
 
-  it.each([
-    undefined,
-    Object.create(null),
-    { 'ts-jest': { packageJson: undefined } },
-    { 'ts-jest': { packageJson: { name: 'foo' } } },
-    { 'ts-jest': { packageJson: 'src/__mocks__/package-foo.json' } },
-  ])(
+  it.each([undefined, Object.create(null)])(
     'should return value from which is the combination of ts jest config and jest config when running test with cache',
     (data) => {
       expect(
@@ -831,73 +825,6 @@ describe('tsCacheDir', () => {
       ).toEqual(0)
     },
   )
-
-  it('should throw error when running test with cache and cannot resolve package.json path', () => {
-    const packageJsonPath = 'src/__mocks__/not-exist.json'
-
-    expect(
-      () =>
-        createConfigSet({
-          jestConfig: {
-            cache: true,
-            cacheDirectory: cacheDir,
-            globals: {
-              'ts-jest': { packageJson: packageJsonPath },
-            },
-          },
-          resolve: null,
-        }).tsCacheDir,
-    ).toThrowError(
-      new Error(
-        interpolate(Errors.FileNotFound, {
-          inputPath: 'src/__mocks__/not-exist.json',
-          resolvedPath: join(process.cwd(), packageJsonPath),
-        }),
-      ),
-    )
-  })
-
-  it(
-    'should return value and show warning when running test with cache and package.json path is' +
-      ' resolved but the path does not exist',
-    () => {
-      const packageJsonPath = 'src/__mocks__/not-exist.json'
-      const logger = testing.createLoggerMock()
-
-      expect(
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        createConfigSet({
-          jestConfig: {
-            cache: true,
-            cacheDirectory: cacheDir,
-            globals: {
-              'ts-jest': { packageJson: packageJsonPath },
-            },
-          },
-          logger,
-        }).tsCacheDir!.indexOf(partialTsJestCacheDir),
-      ).toEqual(0)
-      expect(logger.target.lines[2]).toMatchInlineSnapshot(`
-        "[level:40] Unable to find the root of the project where ts-jest has been installed.
-        "
-      `)
-
-      logger.target.clear()
-    },
-  )
-
-  it('should return value from root packageJson when running test with cache and real path rootDir is the same as tsJest root', () => {
-    expect(
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      createConfigSet({
-        jestConfig: {
-          cache: true,
-          cacheDirectory: cacheDir,
-        },
-        resolve: null,
-      }).tsCacheDir!.indexOf(partialTsJestCacheDir),
-    ).toEqual(0)
-  })
 
   it('should return undefined when running test without cache', () => {
     expect(createConfigSet({ resolve: null }).tsCacheDir).toBeUndefined()
