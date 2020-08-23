@@ -1139,9 +1139,6 @@ describe('jsonValue', () => {
     })
     const val = cs.jsonValue.valueOf()
     expect(cs.toJSON()).toEqual(val)
-    // it will change each time we upgrade – we tested those in the `version` block
-    expect(val.versions).toEqual(cs.versions)
-    delete val.versions
     // we don't need to verify configFilePath and tsConfig value here
     val.tsconfig.options.configFilePath = ''
     val.tsJest.tsConfig.value = ''
