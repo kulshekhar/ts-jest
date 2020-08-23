@@ -708,7 +708,6 @@ export class ConfigSet {
     delete globals['ts-jest']
 
     return new JsonableValue({
-      versions: this.versions,
       digest: this.tsJestDigest,
       transformers: Object.values(this.astTransformers)
         .reduce((acc, val) => acc.concat(val), [])
