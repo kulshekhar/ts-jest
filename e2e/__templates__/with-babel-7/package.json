@@ -8,7 +8,7 @@
     "@types/jest": "26.0.10",
     "@types/node": "12.12.54",
     "babel-jest": "26.3.0",
-    "jest": "26.4.1",
+    "jest": "26.4.2",
     "typescript": "4.0.2"
   },
   "wantedDependencies": {

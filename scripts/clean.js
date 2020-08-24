@@ -1,8 +1,9 @@
 #!/usr/bin/env node
 
 const { removeSync } = require('fs-extra')
-const Paths = require('./lib/paths')
 const { join } = require('path')
+
+const Paths = require('./lib/paths')
 
 if (process.argv.includes('--when-ci-commit-message')) {
   let msg = process.env.TRAVIS_COMMIT_MESSAGE || process.env.APPVEYOR_REPO_COMMIT_MESSAGE
