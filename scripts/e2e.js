@@ -1,13 +1,14 @@
 #!/usr/bin/env node
 'use strict'
 
+const { createHash } = require('crypto')
+const execa = require('execa')
+const fs = require('fs-extra')
 // eslint-disable-next-line jest/no-jest-import
 const jest = require('jest')
-const { spawnSync } = require('./lib/spawn-sync')
-const fs = require('fs-extra')
 const path = require('path')
+
 const Paths = require('./lib/paths')
-const { createHash } = require('crypto')
 const logger = require('./lib/logger')
 const { createBundle, readPackageDigest } = require('./lib/bundle')
 const npm = require('./lib/npm')
@@ -42,18 +43,20 @@ function log(...msg) {
 function setupE2e() {
   // kept on top so that the build is triggered beforehand (pack => prepublish => clean-build => build)
   const bundle = createBundle(log)
+
   log('bundle created:', path.relative(Paths.rootDir, bundle), '; computing digest')
 
   // get the hash of the bundle (to know if we should install it again or not)
   const bundleHash = readPackageDigest()
+
   log('ts-jest digest:', bundleHash)
 
   // ensure directory exists before copying over
   fs.mkdirpSync(Paths.e2eWorkTemplatesDir)
-
   // link locally so we could find it easily
   if (!process.env.CI && !fs.existsSync(Paths.e2eWorkDirLink)) {
     fs.symlinkSync(Paths.e2eWorkDir, Paths.e2eWorkDirLink, 'dir')
+
     log('symbolic link to the work directory created at: ', Paths.e2eWorkDirLink)
   }
 
@@ -62,6 +65,7 @@ function setupE2e() {
     const dir = path.join(Paths.e2eWorkDir, name)
     if (dir === Paths.e2eWorkTemplatesDir) return
     log('cleaning old artifacts in', name)
+
     fs.removeSync(dir)
   })
 
@@ -78,6 +82,7 @@ function setupE2e() {
     // log installed versions
     const logPackageVersions = () => {
       log(`  [template: ${name}]`, 'installed direct dependencies:')
+
       let deps = npm.directDepsPkg(dir)
       Object.keys(deps)
         .sort()
@@ -90,6 +95,7 @@ function setupE2e() {
     // remove all files expect node_modules
     if (fs.existsSync(dir)) {
       log(`  [template: ${name}]`, 'removing old files')
+
       fs.readdirSync(dir).forEach((file) => {
         if (file !== 'node_modules') {
           fs.unlinkSync(path.join(dir, file))
@@ -101,8 +107,8 @@ function setupE2e() {
 
     // copy files from template
     log(`  [template: ${name}]`, 'copying files from template source')
-    fs.copySync(sourceDir, dir)
 
+    fs.copySync(sourceDir, dir)
     // no package-lock.json => this template doesn't provide any package-set
     if (!fs.existsSync(pkgLockFile)) {
       log(`  [template: ${name}]`, 'not a package-set template, nothing to do')
@@ -118,6 +124,7 @@ function setupE2e() {
     if (fs.existsSync(nodeModulesDir)) {
       log(`  [template: ${name}]`, 'bundle: ', bundleOk ? 'OK' : 'CHANGED')
       log(`  [template: ${name}]`, 'packages: ', packagesOk ? 'OK' : 'CHANGED')
+
       if (bundleOk && packagesOk) {
         log(`  [template: ${name}]`, 'bundle and packages unchanged, nothing to do')
         logPackageVersions()
@@ -129,19 +136,17 @@ function setupE2e() {
     if (!packagesOk) {
       // faster to remove them first
       log(`  [template: ${name}]`, 'removing `node_modules` directory')
+
       fs.removeSync(path.join(dir, 'node_modules'))
-      if (npm.can.ci()) {
-        log(`  [template: ${name}]`, 'installing packages using "npm ci"')
-        spawnSync('npm', ['ci'], { cwd: dir })
-      } else {
-        log(`  [template: ${name}]`, 'installing packages using "npm install"')
-        spawnSync('npm', ['i'], { cwd: dir })
-      }
+      log(`  [template: ${name}]`, 'installing packages using "npm ci"')
+
+      execa.sync('npm', ['ci'], { cwd: dir })
       bundleOk = false
     }
     if (!bundleOk) {
       log(`  [template: ${name}]`, 'installing bundle')
-      spawnSync('npm', ['i', '-D', bundle], { cwd: dir })
+
+      execa.sync('npm', ['i', '-D', bundle], { cwd: dir })
     }
 
     logPackageVersions()
@@ -149,7 +154,9 @@ function setupE2e() {
     // write our data
     e2eData.bundleHash = bundleHash
     e2eData.packageLockHash = pkgLockHash
+
     log(`  [template: ${name}]`, 'writing manifest')
+
     fs.outputJsonSync(e2eFile, e2eData, { space: 2 })
   })
 }
@@ -161,9 +168,6 @@ setupE2e()
 log('templates are ready')
 
 if (!prepareOnly) {
-  // log('clearing Jest cache')
-  // spawnSync('jest', ['--clearCache'])
-
   log('running tests')
   // eslint-disable-next-line @typescript-eslint/no-floating-promises
   jest.run(['--config', configFile, ...parentArgs])

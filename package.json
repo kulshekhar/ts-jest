@@ -109,6 +109,7 @@
     "eslint-plugin-jest": "latest",
     "eslint-plugin-jsdoc": "latest",
     "eslint-plugin-prettier": "latest",
+    "execa": "latest",
     "fs-extra": "9.x",
     "glob-gitignore": "latest",
     "husky": "4.x",

@@ -1,21 +1,17 @@
-const npm = require('./npm')
+const execa = require('execa')
+const { createHash } = require('crypto')
+const { readFileSync, statSync, writeFileSync, existsSync } = require('fs-extra')
+const { sync: globIgnore } = require('glob-gitignore')
+const { join, resolve } = require('path')
+
 const logger = require('./logger')
 const { rootDir, pkgDigestFile } = require('./paths')
-const { join, resolve } = require('path')
-const { readFileSync, statSync, writeFileSync, existsSync } = require('fs-extra')
-const { createHash } = require('crypto')
-const { sync: globIgnore } = require('glob-gitignore')
 
 // This will trigger the build as well (not using yarn since yarn pack is buggy)
-// Except that on npm < 4.0.0 the prepare doesn't exists
-
 function createBundle(log = logger.log.bind(logger)) {
-  if (!npm.can.prepare()) {
-    log('building ts-jest')
-    npm.spawnSync(['-s', 'run', 'build'], { cwd: rootDir })
-  }
   log('creating ts-jest bundle')
-  const res = npm.spawnSync(['-s', 'pack'], { cwd: rootDir })
+
+  const res = execa.sync('npm', ['-s', 'pack'], { cwd: rootDir })
 
   return join(rootDir, res.stdout.toString().trim())
 }

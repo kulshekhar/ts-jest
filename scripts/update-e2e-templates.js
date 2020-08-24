@@ -1,10 +1,11 @@
 #!/usr/bin/env node
 'use strict'
 
-const { spawnSync } = require('./lib/spawn-sync')
-const { projectsToRun } = require('./lib/paths')
+const execa = require('execa')
 const fs = require('fs-extra')
 const path = require('path')
+
+const { projectsToRun } = require('./lib/paths')
 const Paths = require('./lib/paths')
 const logger = require('./lib/logger')
 
@@ -17,7 +18,7 @@ const prepareAndExecuteCmd = (tmplPath, wantedDependencies, useNpm) => {
 
   logger.log(`    ↳ ${useNpm ? 'npm' : 'yarn'} ${args.filter((a) => a !== '-s').join(' ')}`)
 
-  spawnSync(`${useNpm ? 'npm' : 'yarn'}`, args, { cwd: tmplPath })
+  execa.sync(`${useNpm ? 'npm' : 'yarn'}`, args, { cwd: tmplPath })
 
   logger.log('    cleaning-up')
 
