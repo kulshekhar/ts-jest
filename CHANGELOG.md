@@ -1,3 +1,17 @@
+# [26.3.0](https://github.com/kulshekhar/ts-jest/compare/v26.2.0...v26.3.0) (2020-08-25)
+
+
+### Bug Fixes
+
+* **config:** compute cache key without reading `package.json` ([#1893](https://github.com/kulshekhar/ts-jest/issues/1893)) ([4875a58](https://github.com/kulshekhar/ts-jest/commit/4875a58345666e0407f9f5b3f95049ae2c9d056d)), closes [#1892](https://github.com/kulshekhar/ts-jest/issues/1892)
+
+
+### Features
+
+* support TypeScript 4.0 ([#1889](https://github.com/kulshekhar/ts-jest/issues/1889)) ([f070e93](https://github.com/kulshekhar/ts-jest/commit/f070e9334a9cf31fa6f0d73b3f69d805be72601d))
+
+
+
 # [26.2.0](https://github.com/kulshekhar/ts-jest/compare/v26.1.4...v26.2.0) (2020-08-11)
 
 
