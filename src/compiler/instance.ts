@@ -5,7 +5,7 @@ import type { CompileFn, CompilerInstance, TsCompiler } from '../types'
 
 import { initializeLanguageServiceInstance } from './language-service'
 import { initializeTranspilerInstance } from './transpiler'
-import { stringify } from '../util/json'
+import { stringify } from '../utils/json'
 
 /**
  * Rely on TypeScript compiled output generation which contains this prefix to point to sourcemap location.

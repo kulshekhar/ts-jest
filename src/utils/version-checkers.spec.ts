@@ -1,4 +1,4 @@
-import { mocked } from '../../utils'
+import { mocked } from './'
 import { logTargetMock } from '../__helpers__/mocks'
 
 import * as _pv from './get-package-version'

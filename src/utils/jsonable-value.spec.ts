@@ -1,4 +1,4 @@
-import { mocked } from '../../utils'
+import { mocked } from './'
 
 import * as _json from './json'
 import { JsonableValue } from './jsonable-value'

@@ -8,10 +8,10 @@ import type * as _ts from 'typescript'
 import type { ConfigSet } from '../config/config-set'
 import { LINE_FEED } from '../constants'
 import type { CompilerInstance, SourceOutput } from '../types'
-import { Errors, interpolate } from '../util/messages'
+import { Errors, interpolate } from '../utils/messages'
 
-import { parse, stringify } from '../util/json'
-import { sha1 } from '../util/sha1'
+import { parse, stringify } from '../utils/json'
+import { sha1 } from '../utils/sha1'
 
 /** where key is filepath */
 type TSFiles = Map<string, TSFile>
