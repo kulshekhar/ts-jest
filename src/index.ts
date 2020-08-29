@@ -6,10 +6,10 @@ import { createJestPreset as createJestPresetCore } from './config/create-jest-p
 import { pathsToModuleNameMapper as pathsToModuleNameMapperCore } from './config/paths-to-module-name-mapper'
 import { TsJestTransformer } from './ts-jest-transformer'
 import type { TsJestGlobalOptions } from './types'
-import { rootLogger } from './util/logger'
-import { Deprecations, interpolate } from './util/messages'
-import { mocked as mockedCore } from './util/testing'
-import { VersionCheckers } from './util/version-checkers'
+import { rootLogger } from './utils/logger'
+import { Deprecations, interpolate } from './utils/messages'
+import { mocked as mockedCore } from './utils/testing'
+import { VersionCheckers } from './utils/version-checkers'
 
 declare module '@jest/types' {
   // eslint-disable-next-line @typescript-eslint/no-namespace

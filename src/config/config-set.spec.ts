@@ -8,19 +8,19 @@ import * as _myModule from '..'
 import { logTargetMock } from '../__helpers__/mocks'
 import { createConfigSet, defaultResolve } from '../__helpers__/fakers'
 import type { TsJestGlobalOptions } from '../types'
-import * as _backports from '../util/backports'
-import { getPackageVersion } from '../util/get-package-version'
-import { normalizeSlashes } from '../util/normalize-slashes'
-import { mocked } from '../util'
+import * as _backports from '../utils/backports'
+import { getPackageVersion } from '../utils/get-package-version'
+import { normalizeSlashes } from '../utils/normalize-slashes'
+import { mocked } from '../utils'
 
 import { IGNORE_DIAGNOSTIC_CODES, MATCH_NOTHING, TS_JEST_OUT_DIR } from './config-set'
 // eslint-disable-next-line no-duplicate-imports
 import type { ConfigSet } from './config-set'
-import { Deprecations } from '../util/messages'
+import { Deprecations } from '../utils/messages'
 
-jest.mock('../util/backports')
+jest.mock('../utils/backports')
 jest.mock('../index')
-jest.mock('../util/get-package-version')
+jest.mock('../utils/get-package-version')
 
 const backports = mocked(_backports)
 const myModule = mocked(_myModule)

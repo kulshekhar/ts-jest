@@ -1,6 +1,6 @@
 import type { Config } from '@jest/types'
 
-import { rootLogger } from '../util/logger'
+import { rootLogger } from '../utils/logger'
 
 const logger = rootLogger.child({ namespace: 'jest-preset' })
 

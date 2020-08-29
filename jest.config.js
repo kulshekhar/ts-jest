@@ -13,7 +13,7 @@ module.exports = {
     '!<rootDir>/src/**/*.spec.ts',
     '!<rootDir>/src/**/*.test.ts',
     '!<rootDir>/src/**/__*__/*',
-    '!<rootDir>/src/util/testing.ts',
+    '!<rootDir>/src/utils/testing.ts',
   ],
   snapshotSerializers: ['<rootDir>/src/__serializers__/processed-source.ts'],
   cacheDirectory: '<rootDir>/.cache/unit',

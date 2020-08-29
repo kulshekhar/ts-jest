@@ -4,7 +4,7 @@ import { resolve } from 'path'
 import { createCompilerInstance } from '../compiler/instance'
 import { ConfigSet } from '../config/config-set'
 import type { BabelConfig, TsCompiler, TsJestConfig, TsJestGlobalOptions } from '../types'
-import type { ImportReasons } from '../util/messages'
+import type { ImportReasons } from '../utils/messages'
 
 export function filePath(relPath: string): string {
   return resolve(__dirname, '..', '..', relPath)

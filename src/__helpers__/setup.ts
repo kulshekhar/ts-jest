@@ -1,1 +1,1 @@
-jest.mock('../util/logger')
+jest.mock('../utils/logger')

@@ -42,17 +42,17 @@ import type {
   TsJestHooksMap,
   TTypeScript,
 } from '../types'
-import { backportJestConfig } from '../util/backports'
-import { getPackageVersion } from '../util/get-package-version'
-import { importer } from '../util/importer'
-import { stringify } from '../util/json'
-import { JsonableValue } from '../util/jsonable-value'
-import { rootLogger } from '../util/logger'
-import { Memoize } from '../util/memoize'
-import { Deprecations, Errors, ImportReasons, interpolate } from '../util/messages'
-import { normalizeSlashes } from '../util/normalize-slashes'
-import { sha1 } from '../util/sha1'
-import { TSError } from '../util/ts-error'
+import { backportJestConfig } from '../utils/backports'
+import { getPackageVersion } from '../utils/get-package-version'
+import { importer } from '../utils/importer'
+import { stringify } from '../utils/json'
+import { JsonableValue } from '../utils/jsonable-value'
+import { rootLogger } from '../utils/logger'
+import { Memoize } from '../utils/memoize'
+import { Deprecations, Errors, ImportReasons, interpolate } from '../utils/messages'
+import { normalizeSlashes } from '../utils/normalize-slashes'
+import { sha1 } from '../utils/sha1'
+import { TSError } from '../utils/ts-error'
 
 const logger = rootLogger.child({ namespace: 'config' })
 

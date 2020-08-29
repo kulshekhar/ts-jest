@@ -2,8 +2,8 @@ import type { Config } from '@jest/types'
 import { LogContexts } from 'bs-logger'
 import type { CompilerOptions } from 'typescript'
 
-import { rootLogger } from '../util/logger'
-import { Errors, interpolate } from '../util/messages'
+import { rootLogger } from '../utils/logger'
+import { Errors, interpolate } from '../utils/messages'
 
 type TsPathMapping = Exclude<CompilerOptions['paths'], undefined>
 type JestPathMapping = Config.InitialOptions['moduleNameMapper']

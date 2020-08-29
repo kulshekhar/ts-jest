@@ -7,7 +7,7 @@ import { basename, resolve } from 'path'
 import type { Arguments } from 'yargs'
 
 import type { CliCommand } from '..'
-import { backportJestConfig } from '../../util/backports'
+import { backportJestConfig } from '../../utils/backports'
 import { JestPresetNames, TsJestPresetDescriptor, allPresets, defaults } from '../helpers/presets'
 
 /**
