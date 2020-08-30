@@ -6,7 +6,7 @@ const logger = rootLogger.child({ namespace: 'jest-preset' })
 
 export type TsJestPresets = Pick<Config.InitialOptions, 'moduleFileExtensions' | 'transform' | 'testMatch'>
 
-export interface CreateJestPresetOptions {
+interface CreateJestPresetOptions {
   allowJs?: boolean
 }
 

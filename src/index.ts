@@ -2,7 +2,7 @@ import { LogContexts, LogLevels } from 'bs-logger'
 import { readFileSync } from 'fs'
 import { resolve } from 'path'
 
-import { createJestPreset as createJestPresetCore } from './config/create-jest-preset'
+import { createJestPreset as createJestPresetCore } from './presets/create-jest-preset'
 import { pathsToModuleNameMapper as pathsToModuleNameMapperCore } from './config/paths-to-module-name-mapper'
 import { TsJestTransformer } from './ts-jest-transformer'
 import type { TsJestGlobalOptions } from './types'

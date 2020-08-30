@@ -3,6 +3,7 @@
 exports[`ts-jest logging TS_JEST_LOG should pass and create log file when using template "default" 1`] = `
 Array [
   "[level:20] creating jest presets not handling JavaScript files",
+  "[level:20] creating jest presets not handling JavaScript files",
   "[level:20] creating Importer singleton",
   "[level:20] creating jest presets not handling JavaScript files",
   "[level:20] checking version of jest: OK",
@@ -39,6 +40,7 @@ Array [
 
 exports[`ts-jest logging TS_JEST_LOG should pass and create log file when using template "with-babel-7" 1`] = `
 Array [
+  "[level:20] creating jest presets not handling JavaScript files",
   "[level:20] creating jest presets not handling JavaScript files",
   "[level:20] creating Importer singleton",
   "[level:20] creating jest presets not handling JavaScript files",
@@ -82,6 +84,7 @@ Array [
 
 exports[`ts-jest logging TS_JEST_LOG should pass and create log file when using template "with-babel-7-string-config" 1`] = `
 Array [
+  "[level:20] creating jest presets not handling JavaScript files",
   "[level:20] creating jest presets not handling JavaScript files",
   "[level:20] creating Importer singleton",
   "[level:20] creating jest presets not handling JavaScript files",

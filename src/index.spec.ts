@@ -13,7 +13,7 @@ jest.mock('./ts-jest-transformer', () => {
 
   return { TsJestTransformer }
 })
-jest.mock('./config/create-jest-preset', () => ({
+jest.mock('./presets/create-jest-preset', () => ({
   createJestPreset: () => ({ jestPreset: true }),
 }))
 
