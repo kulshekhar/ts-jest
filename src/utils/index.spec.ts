@@ -1,4 +1,4 @@
-import { createJestPreset } from '../config/create-jest-preset'
+import { createJestPreset } from '../presets/create-jest-preset'
 import { pathsToModuleNameMapper } from '../config/paths-to-module-name-mapper'
 
 import * as subject from './index'

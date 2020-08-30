@@ -7,7 +7,6 @@ exports[`run with options: {"module":"es2015","allowSyntheticDefaultImports":fal
   
   ===[ STDERR ]===================================================================
   ts-jest[config] (WARN) message TS151001: If you have issues related to imports, you should consider setting \`esModuleInterop\` to \`true\` in your TypeScript configuration file (usually \`tsconfig.json\`). See https://blogs.msdn.microsoft.com/typescript/2018/01/31/announcing-typescript-2-7/#easier-ecmascript-module-interoperability for more information.
-  PASS ./ts-jest-tools.spec.ts
   PASS ./import-legacy.spec.ts
   PASS ./import-star.spec.ts
   ts-jest[ts-compiler] (WARN) import-default.spec.ts:1:8 - error TS1259: Module '"<cwd>/lib"' can only be default-imported using the 'esModuleInterop' flag
@@ -37,8 +36,8 @@ exports[`run with options: {"module":"es2015","allowSyntheticDefaultImports":fal
   
         at Object.<anonymous> (import-default.spec.ts:4:22)
   
-  Test Suites: 1 failed, 3 passed, 4 total
-  Tests:       1 failed, 4 passed, 5 total
+  Test Suites: 1 failed, 2 passed, 3 total
+  Tests:       1 failed, 2 passed, 3 total
   Snapshots:   0 total
   Time:        XXs
   Ran all test suites.
@@ -51,7 +50,6 @@ exports[`run with options: {"module":"es2015","allowSyntheticDefaultImports":tru
   ===[ STDOUT ]===================================================================
   
   ===[ STDERR ]===================================================================
-  PASS ./ts-jest-tools.spec.ts
   PASS ./import-legacy.spec.ts
   PASS ./import-star.spec.ts
   FAIL ./import-default.spec.ts
@@ -72,8 +70,8 @@ exports[`run with options: {"module":"es2015","allowSyntheticDefaultImports":tru
   
         at Object.<anonymous> (import-default.spec.ts:4:22)
   
-  Test Suites: 1 failed, 3 passed, 4 total
-  Tests:       1 failed, 4 passed, 5 total
+  Test Suites: 1 failed, 2 passed, 3 total
+  Tests:       1 failed, 2 passed, 3 total
   Snapshots:   0 total
   Time:        XXs
   Ran all test suites.
@@ -87,7 +85,6 @@ exports[`run with options: {"module":"es2015","esModuleInterop":false} 1`] = `
   
   ===[ STDERR ]===================================================================
   ts-jest[config] (WARN) message TS151001: If you have issues related to imports, you should consider setting \`esModuleInterop\` to \`true\` in your TypeScript configuration file (usually \`tsconfig.json\`). See https://blogs.msdn.microsoft.com/typescript/2018/01/31/announcing-typescript-2-7/#easier-ecmascript-module-interoperability for more information.
-  PASS ./ts-jest-tools.spec.ts
   PASS ./import-legacy.spec.ts
   PASS ./import-star.spec.ts
   FAIL ./import-default.spec.ts
@@ -108,8 +105,8 @@ exports[`run with options: {"module":"es2015","esModuleInterop":false} 1`] = `
   
         at Object.<anonymous> (import-default.spec.ts:4:22)
   
-  Test Suites: 1 failed, 3 passed, 4 total
-  Tests:       1 failed, 4 passed, 5 total
+  Test Suites: 1 failed, 2 passed, 3 total
+  Tests:       1 failed, 2 passed, 3 total
   Snapshots:   0 total
   Time:        XXs
   Ran all test suites.
@@ -122,7 +119,6 @@ exports[`run with options: {"module":"es2015","esModuleInterop":true} 1`] = `
   ===[ STDOUT ]===================================================================
   
   ===[ STDERR ]===================================================================
-  PASS ./ts-jest-tools.spec.ts
   PASS ./import-legacy.spec.ts
   ts-jest[ts-compiler] (WARN) import-star.spec.ts:5:10 - error TS2349: This expression is not callable.
     Type 'typeof lib' has no call signatures.
@@ -154,8 +150,8 @@ exports[`run with options: {"module":"es2015","esModuleInterop":true} 1`] = `
   
   PASS ./import-default.spec.ts
   
-  Test Suites: 1 failed, 3 passed, 4 total
-  Tests:       1 failed, 4 passed, 5 total
+  Test Suites: 1 failed, 2 passed, 3 total
+  Tests:       1 failed, 2 passed, 3 total
   Snapshots:   0 total
   Time:        XXs
   Ran all test suites.
@@ -169,7 +165,6 @@ exports[`run with options: {"module":"es2015"} 1`] = `
   
   ===[ STDERR ]===================================================================
   ts-jest[config] (WARN) message TS151001: If you have issues related to imports, you should consider setting \`esModuleInterop\` to \`true\` in your TypeScript configuration file (usually \`tsconfig.json\`). See https://blogs.msdn.microsoft.com/typescript/2018/01/31/announcing-typescript-2-7/#easier-ecmascript-module-interoperability for more information.
-  PASS ./ts-jest-tools.spec.ts
   PASS ./import-legacy.spec.ts
   PASS ./import-star.spec.ts
   FAIL ./import-default.spec.ts
@@ -190,8 +185,8 @@ exports[`run with options: {"module":"es2015"} 1`] = `
   
         at Object.<anonymous> (import-default.spec.ts:4:22)
   
-  Test Suites: 1 failed, 3 passed, 4 total
-  Tests:       1 failed, 4 passed, 5 total
+  Test Suites: 1 failed, 2 passed, 3 total
+  Tests:       1 failed, 2 passed, 3 total
   Snapshots:   0 total
   Time:        XXs
   Ran all test suites.
