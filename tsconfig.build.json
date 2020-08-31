@@ -6,6 +6,7 @@
     "inlineSourceMap": false,
     "noEmit": false,
     "declaration": true,
+    "removeComments": true,
     "stripInternal": true,
     "outDir": "dist",
     "rootDir": "src"
