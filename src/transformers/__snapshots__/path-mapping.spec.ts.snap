@@ -1,0 +1,67 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`path-mapping should replace alias path with relative path which is resolved from paths tsconfig with custom extensions 1`] = `
+"\\"use strict\\";
+Object.defineProperty(exports, \\"__esModule\\", { value: true });
+var app_css_1 = require(\\"../utils/json.css\\");
+console.log(app_css_1.default);
+"
+`;
+
+exports[`path-mapping should replace alias path with relative path which is resolved from paths tsconfig with custom extensions 2`] = `
+"\\"use strict\\";
+Object.defineProperty(exports, \\"__esModule\\", { value: true });
+var data_json_1 = require(\\"../utils/json.json\\");
+console.log(data_json_1.default);
+"
+`;
+
+exports[`path-mapping should replace alias path with relative path which is resolved from paths tsconfig with custom extensions 3`] = `
+"\\"use strict\\";
+Object.defineProperty(exports, \\"__esModule\\", { value: true });
+var component_vue_1 = require(\\"../utils/json.vue\\");
+console.log(component_vue_1.default);
+"
+`;
+
+exports[`path-mapping should replace alias path with relative path which is resolved from paths tsconfig with js/ts extension 1`] = `
+"\\"use strict\\";
+Object.defineProperty(exports, \\"__esModule\\", { value: true });
+exports.jsonUtils = void 0;
+var json_1 = require(\\"./src/utils/json.ts\\");
+var json = require(\\"./src/utils/json.ts\\");
+exports.jsonUtils = require(\\"./src/utils/json.ts\\");
+var stringify = require(\\"./src/utils/json.ts\\").stringify;
+var foo = require(\\"./src/utils/json.ts\\");
+Promise.resolve().then(function () { return require(\\"./src/utils/json.ts\\"); }).then(function (module) {
+    module.parse('{foo:1}');
+});
+var json_2 = require(\\"./src/utils/json.ts\\");
+stringify({ foo: 1 });
+json_1.parse('{foo:1}');
+console.log(json);
+console.log(foo);
+var bar = { foo: 2 };
+"
+`;
+
+exports[`path-mapping should replace alias path with relative path which is resolved from paths tsconfig with js/ts extension 2`] = `
+"\\"use strict\\";
+Object.defineProperty(exports, \\"__esModule\\", { value: true });
+exports.jsonUtils = void 0;
+var json_1 = require(\\"./src/utils/json.ts\\");
+var json = require(\\"./src/utils/json.ts\\");
+exports.jsonUtils = require(\\"./src/utils/json.ts\\");
+var stringify = require(\\"./src/utils/json.ts\\").stringify;
+var foo = require(\\"./src/utils/json.ts\\");
+Promise.resolve().then(function () { return require(\\"./src/utils/json.ts\\"); }).then(function (module) {
+    module.parse('{foo:1}');
+});
+var json_2 = require(\\"./src/utils/json.ts\\");
+stringify({ foo: 1 });
+json_1.parse('{foo:1}');
+console.log(json);
+console.log(foo);
+var bar = { foo: 2 };
+"
+`;

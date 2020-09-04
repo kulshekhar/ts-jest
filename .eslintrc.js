@@ -41,6 +41,8 @@ module.exports = {
     'getter-return': 'warn',
     'guard-for-in': 'error',
     'id-match': 'error',
+    'jest/valid-title': 'off',
+    'jest/no-conditional-expect': 'off',
     'jsdoc/check-alignment': 'error',
     'jsdoc/check-indentation': 'error',
     'jsdoc/newline-after-description': 'warn',
