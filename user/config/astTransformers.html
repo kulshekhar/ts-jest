@@ -186,6 +186,53 @@ instead of transpiled syntax (e.g <code class="language-plaintext highlighter-ro
 
   </div></div>
 
+<h3 id="public-transformers">Public transformers</h3>
+
+<p><code class="language-plaintext highlighter-rouge">ts-jest</code> is able to expose transformers for public usage to provide the possibility to opt-in/out for users. Currently
+the exposed transformers are:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">path-mapping</code> convert alias import/export to relative import/export path base on <code class="language-plaintext highlighter-rouge">paths</code> in <code class="language-plaintext highlighter-rouge">tsconfig</code>. 
+This transformer works similar to <code class="language-plaintext highlighter-rouge">moduleNameMapper</code> in <code class="language-plaintext highlighter-rouge">jest.config.js</code>. When using this transformer, one might not need
+<code class="language-plaintext highlighter-rouge">moduleNameMapper</code> anymore.</li>
+</ul>
+
+<h4 id="example-of-opt-in-transformers">Example of opt-in transformers</h4>
+
+<div class="row"><div class="col-md-6">
+
+    <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// jest.config.js</span>
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="c1">// [...]</span>
+  <span class="na">globals</span><span class="p">:</span> <span class="p">{</span>
+    <span class="dl">'</span><span class="s1">ts-jest</span><span class="dl">'</span><span class="p">:</span> <span class="p">{</span>
+      <span class="na">astTransformers</span><span class="p">:</span> <span class="p">{</span>
+        <span class="na">before</span><span class="p">:</span> <span class="p">[</span><span class="dl">'</span><span class="s1">ts-jest/dist/transformers/path-mapping</span><span class="dl">'</span><span class="p">],</span>
+      <span class="p">},</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div>    </div>
+
+  </div><div class="col-md-6">
+
+    <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// OR package.json</span>
+<span class="p">{</span>
+  <span class="c1">// [...]</span>
+  <span class="dl">"</span><span class="s2">jest</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+    <span class="dl">"</span><span class="s2">globals</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+      <span class="dl">"</span><span class="s2">ts-jest</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nl">astTransformers</span><span class="p">:</span> <span class="p">{</span>
+          <span class="dl">"</span><span class="s2">before</span><span class="dl">"</span><span class="p">:</span> <span class="p">[</span><span class="dl">"</span><span class="s2">ts-jest/dist/transformers/path-mapping</span><span class="dl">"</span><span class="p">]</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>    </div>
+
+  </div></div>
+
 <h3 id="writing-custom-typescript-ast-transformers">Writing custom TypeScript AST transformers</h3>
 
 <p>To write a custom TypeScript AST transformers, one can take a look at <a href="https://github.com/kulshekhar/ts-jest/tree/master/src/transformers">the one</a> that <code class="language-plaintext highlighter-rouge">ts-jest</code> is using.</p>
