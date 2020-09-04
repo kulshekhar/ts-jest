@@ -1,0 +1,14 @@
+{
+  "name": "ts-jest-example",
+  "version": "1.0.0",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/jest": "26.x",
+    "jest": "26.x",
+    "ts-jest": "26.x",
+    "typescript": "~4.0.2"
+  },
+  "scripts": {
+    "test": "jest"
+  }
+}
