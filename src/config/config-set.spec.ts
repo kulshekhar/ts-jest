@@ -13,7 +13,7 @@ import { getPackageVersion } from '../utils/get-package-version'
 import { normalizeSlashes } from '../utils/normalize-slashes'
 import { mocked } from '../utils'
 
-import { IGNORE_DIAGNOSTIC_CODES, MATCH_NOTHING, TS_JEST_OUT_DIR } from './config-set'
+import { IGNORE_DIAGNOSTIC_CODES, TS_JEST_OUT_DIR } from './config-set'
 // eslint-disable-next-line no-duplicate-imports
 import type { ConfigSet } from './config-set'
 import { Deprecations } from '../utils/messages'
@@ -81,8 +81,8 @@ describe('tsJest', () => {
       expect(
         createConfigSet({
           jestConfig: {
-            globals: {},
-          } as any,
+            globals: Object.create(null),
+          },
           parentConfig: { __parent: true } as any,
         }).tsJest,
       ).toMatchSnapshot()
@@ -206,9 +206,8 @@ describe('tsJest', () => {
 
     it('should be correct for false', () => {
       const EXPECTED = {
-        ignoreCodes: IGNORE_DIAGNOSTIC_CODES,
+        ignoreCodes: [],
         pretty: true,
-        pathRegex: MATCH_NOTHING.source,
         throws: false,
       }
       expect(getTsJest({ diagnostics: false }).diagnostics).toEqual(EXPECTED)
@@ -240,6 +239,7 @@ describe('tsJest', () => {
         }).diagnostics,
       ).toEqual(EXPECTED)
     })
+
     it('should have correct throws value', () => {
       const EXPECTED = {
         ignoreCodes: IGNORE_DIAGNOSTIC_CODES,
@@ -247,6 +247,24 @@ describe('tsJest', () => {
       }
       expect(getTsJest({ diagnostics: { warnOnly: true } }).diagnostics).toEqual({ ...EXPECTED, throws: false })
       expect(getTsJest({ diagnostics: { warnOnly: false } }).diagnostics).toEqual({ ...EXPECTED, throws: true })
+    })
+
+    it.each([
+      '10',
+      10,
+      'TS2571',
+      '1009, TS2571, 4072',
+      [1009, 'TS2571', '6031', 'TS6031, 10', NaN, 'undefined', 'null', ''],
+      '',
+      NaN,
+    ])('should be correct for various kinds of ignoreCodes', (ignoreCodes) => {
+      expect(
+        getTsJest({
+          diagnostics: {
+            ignoreCodes,
+          },
+        }).diagnostics,
+      ).toMatchSnapshot()
     })
   }) // diagnostics
 

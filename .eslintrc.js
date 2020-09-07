@@ -114,7 +114,10 @@ module.exports = {
     'no-trailing-spaces': 'off',
     'no-undef-init': 'error',
     'no-underscore-dangle': 'off',
-    'no-unused-expressions': 'error',
+    'no-unused-expressions': [
+      'error',
+      { allowTernary: true },
+    ],
     'no-undef': ['error'],
     'no-unexpected-multiline': ['error'],
     'no-unreachable': ['error'],
