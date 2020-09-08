@@ -148,8 +148,8 @@ module.exports = {
 All TypeScript error codes can be found [there](https://github.com/Microsoft/TypeScript/blob/master/src/compiler/diagnosticMessages.json). The `ignoreCodes` option accepts this values:
 
 1. A single `number` (example: `1009`): unique error code to ignore
-2. A `string` with a code (example `"1009"`, `"TS1009"` or `"ts1009"`)
-3. A `string` with a list of the above (example: `"1009, TS2571, 4072 ,ts6031 "`)
+2. A `string` with a code (example `"1009"`, `"TS1009"` or `"TS1009"`)
+3. A `string` with a list of the above (example: `"1009, TS2571, 4072"`)
 4. An `array` of one or more from `1` or `3` (example: `[1009, "TS2571", "6031"]`)
 
 <div class="row"><div class="col-md-6" markdown="block">

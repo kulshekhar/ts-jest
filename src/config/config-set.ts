@@ -61,12 +61,6 @@ interface AstTransformer {
   after?: AstTransformerDesc[]
   afterDeclarations?: AstTransformerDesc[]
 }
-
-/**
- * @internal
- */
-// this regex MUST match nothing, it's the goal ;-)
-export const MATCH_NOTHING = /a^/
 /**
  * @internal
  */
@@ -102,16 +96,11 @@ const normalizeRegex = (pattern: string | RegExp | undefined): string | undefine
 
 const toDiagnosticCode = (code: any): number | undefined =>
   // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-  code ? parseInt(`${code}`.trim().replace(/^TS/, ''), 10) || undefined : undefined
+  code ? parseInt(`${code}`.trim().replace(/^TS/, ''), 10) ?? undefined : undefined
 
-const toDiagnosticCodeList = (items: any, into: number[] = []): number[] => {
-  if (!Array.isArray(items)) items = [items]
+const toDiagnosticCodeList = (items: (string | number)[], into: number[] = []): number[] => {
   for (let item of items) {
-    if (!item) continue
-    if (Array.isArray(item)) {
-      toDiagnosticCodeList(item, into)
-      continue
-    } else if (typeof item === 'string') {
+    if (typeof item === 'string') {
       const children = item.trim().split(/\s*,\s*/g)
       if (children.length > 1) {
         toDiagnosticCodeList(children, into)
@@ -229,34 +218,28 @@ export class ConfigSet {
 
     // diagnostics
     let diagnostics: TsJestConfig['diagnostics']
-    const { diagnostics: diagnosticsOpt = true } = options
-    // messy list of stuff to ignore (will be casted later)
-    const ignoreList: unknown[] = [IGNORE_DIAGNOSTIC_CODES, process.env.TS_JEST_IGNORE_DIAGNOSTICS]
-
-    if (diagnosticsOpt === true || diagnosticsOpt == null) {
-      diagnostics = { ignoreCodes: [], pretty: true, throws: true }
-    } else if (diagnosticsOpt === false) {
-      diagnostics = {
-        throws: false,
-        pretty: true,
-        ignoreCodes: [],
-        pathRegex: MATCH_NOTHING.source, // matches nothing
+    const diagnosticsOpt = options.diagnostics ?? true
+    const ignoreList: (string | number)[] = [...IGNORE_DIAGNOSTIC_CODES]
+    if (typeof diagnosticsOpt === 'object') {
+      const { ignoreCodes } = diagnosticsOpt
+      if (ignoreCodes) {
+        Array.isArray(ignoreCodes) ? ignoreList.push(...ignoreCodes) : ignoreList.push(ignoreCodes)
       }
-    } else {
-      ignoreList.push(diagnosticsOpt.ignoreCodes)
       diagnostics = {
-        pretty: diagnosticsOpt.pretty == null ? true : !!diagnosticsOpt.pretty,
-        ignoreCodes: [],
+        pretty: diagnosticsOpt.pretty ?? true,
+        ignoreCodes: toDiagnosticCodeList(ignoreList),
         pathRegex: normalizeRegex(diagnosticsOpt.pathRegex),
         throws: !diagnosticsOpt.warnOnly,
       }
+    } else {
+      diagnostics = {
+        ignoreCodes: diagnosticsOpt ? toDiagnosticCodeList(ignoreList) : [],
+        pretty: true,
+        throws: diagnosticsOpt,
+      }
     }
-    // now we clean and flatten the list
-    diagnostics.ignoreCodes = toDiagnosticCodeList(ignoreList)
-
     // stringifyContentPathRegex option
     const stringifyContentPathRegex = normalizeRegex(options.stringifyContentPathRegex)
-
     // parsed options
     const res: TsJestConfig = {
       tsConfig,

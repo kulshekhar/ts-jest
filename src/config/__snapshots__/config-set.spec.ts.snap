@@ -169,6 +169,107 @@ Object {
 }
 `;
 
+exports[`tsJest diagnostics should be correct for various kinds of ignoreCodes 1`] = `
+Object {
+  "ignoreCodes": Array [
+    6059,
+    18002,
+    18003,
+    10,
+  ],
+  "pathRegex": undefined,
+  "pretty": true,
+  "throws": true,
+}
+`;
+
+exports[`tsJest diagnostics should be correct for various kinds of ignoreCodes 2`] = `
+Object {
+  "ignoreCodes": Array [
+    6059,
+    18002,
+    18003,
+    10,
+  ],
+  "pathRegex": undefined,
+  "pretty": true,
+  "throws": true,
+}
+`;
+
+exports[`tsJest diagnostics should be correct for various kinds of ignoreCodes 3`] = `
+Object {
+  "ignoreCodes": Array [
+    6059,
+    18002,
+    18003,
+    2571,
+  ],
+  "pathRegex": undefined,
+  "pretty": true,
+  "throws": true,
+}
+`;
+
+exports[`tsJest diagnostics should be correct for various kinds of ignoreCodes 4`] = `
+Object {
+  "ignoreCodes": Array [
+    6059,
+    18002,
+    18003,
+    1009,
+    2571,
+    4072,
+  ],
+  "pathRegex": undefined,
+  "pretty": true,
+  "throws": true,
+}
+`;
+
+exports[`tsJest diagnostics should be correct for various kinds of ignoreCodes 5`] = `
+Object {
+  "ignoreCodes": Array [
+    6059,
+    18002,
+    18003,
+    1009,
+    2571,
+    6031,
+    10,
+  ],
+  "pathRegex": undefined,
+  "pretty": true,
+  "throws": true,
+}
+`;
+
+exports[`tsJest diagnostics should be correct for various kinds of ignoreCodes 6`] = `
+Object {
+  "ignoreCodes": Array [
+    6059,
+    18002,
+    18003,
+  ],
+  "pathRegex": undefined,
+  "pretty": true,
+  "throws": true,
+}
+`;
+
+exports[`tsJest diagnostics should be correct for various kinds of ignoreCodes 7`] = `
+Object {
+  "ignoreCodes": Array [
+    6059,
+    18002,
+    18003,
+  ],
+  "pathRegex": undefined,
+  "pretty": true,
+  "throws": true,
+}
+`;
+
 exports[`tsJest jest should merge parent config if any with globals is an empty object 1`] = `
 Object {
   "babelConfig": undefined,

@@ -56,7 +56,7 @@ const executeTest = (monorepoRealPath, bundle) => {
   execa.sync(cmdLine.shift(), cmdLine, {
     cwd: monorepoRealPath,
     stdio: 'inherit',
-    env: { ...process.env, TS_JEST_IGNORE_DIAGNOSTICS: '5023,5024' },
+    env: process.env,
   })
 }
 
