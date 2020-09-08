@@ -180,34 +180,12 @@ export class ConfigSet {
     const options: TsJestGlobalOptions = { ...globals['ts-jest'] }
 
     // tsconfig
-    const tsConfigOpt = options.tsConfig ?? options.tsconfig ?? true
-    let tsConfig: TsJestConfig['tsConfig']
-    if (typeof tsConfigOpt === 'string' || tsConfigOpt === true) {
-      tsConfig = {
-        kind: 'file',
-        value: typeof tsConfigOpt === 'string' ? this.resolvePath(tsConfigOpt) : undefined,
-      }
-    } else if (typeof tsConfigOpt === 'object') {
-      tsConfig = {
-        kind: 'inline',
-        value: tsConfigOpt,
-      }
-    }
+    const tsConfig: TsJestConfig['tsConfig'] = this.getInlineOrFileConfigOpt(
+      options.tsConfig ?? options.tsconfig ?? true,
+    )
 
     // packageJson
-    const { packageJson: packageJsonOpt } = options
-    let packageJson: TsJestConfig['packageJson']
-    if (typeof packageJsonOpt === 'string' || packageJsonOpt == null || packageJsonOpt === true) {
-      packageJson = {
-        kind: 'file',
-        value: typeof packageJsonOpt === 'string' ? this.resolvePath(packageJsonOpt) : undefined,
-      }
-    } else if (typeof packageJsonOpt === 'object') {
-      packageJson = {
-        kind: 'inline',
-        value: packageJsonOpt,
-      }
-    }
+    const packageJson: TsJestConfig['packageJson'] = this.getInlineOrFileConfigOpt(options.packageJson ?? true)
 
     // transformers
     let transformers: ConfigCustomTransformer = Object.create(null)
@@ -246,20 +224,8 @@ export class ConfigSet {
       }
     }
 
-    // babel jest
-    const { babelConfig: babelConfigOpt } = options
-    let babelConfig: TsJestConfig['babelConfig']
-    if (typeof babelConfigOpt === 'string' || babelConfigOpt === true) {
-      babelConfig = {
-        kind: 'file',
-        value: babelConfigOpt === true ? undefined : this.resolvePath(babelConfigOpt as string),
-      }
-    } else if (babelConfigOpt) {
-      babelConfig = {
-        kind: 'inline',
-        value: babelConfigOpt,
-      }
-    }
+    // babel config (for babel-jest) default is undefined so we don't need to have fallback like tsConfig or packageJson
+    const babelConfig: TsJestConfig['babelConfig'] = this.getInlineOrFileConfigOpt(options.babelConfig)
 
     // diagnostics
     let diagnostics: TsJestConfig['diagnostics']
@@ -758,6 +724,27 @@ export class ConfigSet {
       start,
       length,
     }
+  }
+
+  /**
+   * @internal
+   */
+  private getInlineOrFileConfigOpt(
+    configOpt: string | boolean | Record<string, any> | undefined,
+  ): { kind: 'inline' | 'file'; value: any } | undefined {
+    if (typeof configOpt === 'string' || configOpt === true) {
+      return {
+        kind: 'file',
+        value: typeof configOpt === 'string' ? this.resolvePath(configOpt) : undefined,
+      }
+    } else if (typeof configOpt === 'object') {
+      return {
+        kind: 'inline',
+        value: configOpt,
+      }
+    }
+
+    return
   }
 
   /**
