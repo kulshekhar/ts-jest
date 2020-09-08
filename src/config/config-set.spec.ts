@@ -2,7 +2,7 @@
 import type { Transformer } from '@jest/transform'
 import { LogLevels, testing } from 'bs-logger'
 import { join, resolve } from 'path'
-import * as ts from 'typescript'
+import ts from 'typescript'
 
 import * as _myModule from '..'
 import { logTargetMock } from '../__helpers__/mocks'

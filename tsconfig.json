@@ -5,9 +5,8 @@
     "declaration": false,
     "noEmit": true,
     "downlevelIteration": true,
-    "esModuleInterop": false,
+    "esModuleInterop": true,
     "experimentalDecorators": true,
-    "importHelpers": false,
     "inlineSourceMap": true,
     "lib": [
       "es2015",
