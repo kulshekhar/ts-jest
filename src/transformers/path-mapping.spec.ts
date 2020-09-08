@@ -1,6 +1,6 @@
 import { testing } from 'bs-logger'
 import { join } from 'path'
-import * as tsc from 'typescript'
+import tsc from 'typescript'
 
 import * as pathMapping from './path-mapping'
 import { createConfigSet } from '../__helpers__/fakers'

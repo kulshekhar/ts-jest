@@ -1,6 +1,6 @@
 import { createJestPreset, TsJestPresets } from './create-jest-preset'
 
-export = {
+const tsJestPresets = {
   get defaults(): TsJestPresets {
     return createJestPreset()
   },
@@ -18,3 +18,5 @@ export = {
     )
   },
 }
+
+export = tsJestPresets
