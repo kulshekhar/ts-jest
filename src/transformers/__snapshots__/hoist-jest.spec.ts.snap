@@ -1,0 +1,49 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`hoisting should hoist correctly jest methods 1`] = `
+"\\"use strict\\";
+Object.defineProperty(exports, \\"__esModule\\", { value: true });
+// These will all be hoisted above imports
+jest.deepUnmock('./__test_modules__/Unmocked');
+jest.unmock('./__test_modules__/c').unmock('./__test_modules__/d');
+jest.unmock('./__test_modules__/' + 'a');
+var Unmocked_1 = require(\\"./__test_modules__/Unmocked\\");
+var a_1 = require(\\"./__test_modules__/a\\");
+var b_1 = require(\\"./__test_modules__/b\\");
+var c_1 = require(\\"./__test_modules__/c\\");
+var d_1 = require(\\"./__test_modules__/d\\");
+// These will not be hoisted
+jest.unmock('./__test_modules__/a').dontMock('./__test_modules__/b');
+console.log(Unmocked_1.default);
+console.log(a_1.default);
+console.log(b_1.default);
+console.log(c_1.default);
+console.log(d_1.default);
+"
+`;
+
+exports[`hoisting should hoist correctly jest methods 2`] = `
+"\\"use strict\\";
+Object.defineProperty(exports, \\"__esModule\\", { value: true });
+var globals_1 = require(\\"@jest/globals\\");
+var globals_2 = require(\\"@jest/globals\\");
+var JestGlobals = require(\\"@jest/globals\\");
+// These will be hoisted above imports
+globals_1.jest.unmock('../__test_modules__/a');
+var a_1 = require(\\"../__test_modules__/a\\");
+var b_1 = require(\\"../__test_modules__/b\\");
+var c_1 = require(\\"../__test_modules__/c\\");
+var d_1 = require(\\"../__test_modules__/d\\");
+globals_2.jest.unmock('../__test_modules__/b');
+JestGlobals.jest.unmock('../__test_modules__/c');
+// These will not be hoisted above imports
+{
+    jest_1.unmock('../__test_modules__/d');
+    var jest_1 = { unmock: function () { } };
+}
+console.log(a_1.default);
+console.log(b_1.default);
+console.log(c_1.default);
+console.log(d_1.default);
+"
+`;
