@@ -5,6 +5,7 @@ describe('Hoisting', () => {
   const testCase = configureTestCase('hoisting', {
     writeIo: true,
     jestConfig: {
+      testEnvironment: 'node',
       automock: true,
     },
   })

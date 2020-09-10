@@ -4,21 +4,71 @@ exports[`hoisting should hoist correctly jest methods 1`] = `
 "\\"use strict\\";
 Object.defineProperty(exports, \\"__esModule\\", { value: true });
 // These will all be hoisted above imports
-jest.deepUnmock('./__test_modules__/Unmocked');
-jest.unmock('./__test_modules__/c').unmock('./__test_modules__/d');
-jest.unmock('./__test_modules__/' + 'a');
-var Unmocked_1 = require(\\"./__test_modules__/Unmocked\\");
-var a_1 = require(\\"./__test_modules__/a\\");
-var b_1 = require(\\"./__test_modules__/b\\");
-var c_1 = require(\\"./__test_modules__/c\\");
-var d_1 = require(\\"./__test_modules__/d\\");
+jest.unmock('react');
+jest.deepUnmock('../__test_modules__/Unmocked');
+jest.unmock('../__test_modules__/c').unmock('../__test_modules__/d');
+jest.mock('../__test_modules__/f', function () {
+    if (!global.CALLS) {
+        global.CALLS = 0;
+    }
+    global.CALLS++;
+    return {
+        _isMock: true,
+        fn: function () {
+            // The \`jest.mock\` transform will allow require, built-ins and globals.
+            var path = require('path');
+            var array = new Array(3);
+            array[0] = path.sep;
+            return jest.fn(function () { return array; });
+        },
+    };
+});
+jest.mock(\\"../__test_modules__/jestBackticks\\");
+jest.mock('virtual-module', function () { return 'kiwi'; }, { virtual: true });
+// This has types that should be ignored by the out-of-scope variables check.
+jest.mock('has-flow-types', function () { return function (props) { return 3; }; }, {
+    virtual: true,
+});
+jest.unmock('../__test_modules__/' + 'a');
+jest.mock('../__test_modules__/f', function () { return MockMethods; });
+var Unmocked_1 = require(\\"../__test_modules__/Unmocked\\");
+var Mocked_1 = require(\\"../__test_modules__/Mocked\\");
+var a_1 = require(\\"../__test_modules__/a\\");
+var b_1 = require(\\"../__test_modules__/b\\");
+var c_1 = require(\\"../__test_modules__/c\\");
+var d_1 = require(\\"../__test_modules__/d\\");
+var jestBackticks_1 = require(\\"../__test_modules__/jestBackticks\\");
+// The virtual mock call below will be hoisted above this \`require\` call.
+var virtualModule = require('virtual-module');
+var e;
+(function () {
+    // hoisted to the top of the function scope
+    jest.unmock('../__test_modules__/e');
+    var _getJestObj = 42;
+    e = require('../__test_modules__/e').default;
+})();
 // These will not be hoisted
-jest.unmock('./__test_modules__/a').dontMock('./__test_modules__/b');
+jest.unmock('../__test_modules__/a').dontMock('../__test_modules__/b');
+jest.dontMock('../__test_modules__/Mocked');
+{
+    // Would error (used before initialization) if hoisted to the top of the scope
+    jest.unmock('../__test_modules__/a');
+    var jest = { unmock: function () { } };
+}
+// This must not throw an error
+var myObject = { mock: function () { } };
+myObject.mock('apple', 27);
+// Variable names prefixed with \`mock\` (ignore case) should not throw as out-of-scope
+var MockMethods = function () { };
 console.log(Unmocked_1.default);
+console.log(Mocked_1.default);
 console.log(a_1.default);
 console.log(b_1.default);
 console.log(c_1.default);
 console.log(d_1.default);
+console.log(e);
+console.log(virtualModule);
+console.log(jestBackticks_1.default);
 "
 `;
 
@@ -30,12 +80,12 @@ var globals_2 = require(\\"@jest/globals\\");
 var JestGlobals = require(\\"@jest/globals\\");
 // These will be hoisted above imports
 globals_1.jest.unmock('../__test_modules__/a');
+globals_2.jest.unmock('../__test_modules__/b');
+JestGlobals.jest.unmock('../__test_modules__/c');
 var a_1 = require(\\"../__test_modules__/a\\");
 var b_1 = require(\\"../__test_modules__/b\\");
 var c_1 = require(\\"../__test_modules__/c\\");
 var d_1 = require(\\"../__test_modules__/d\\");
-globals_2.jest.unmock('../__test_modules__/b');
-JestGlobals.jest.unmock('../__test_modules__/c');
 // These will not be hoisted above imports
 {
     jest_1.unmock('../__test_modules__/d');

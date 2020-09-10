@@ -1,8 +1,8 @@
-// take care of including ONLY TYPES here, for the rest use `ts`
 import { LogContexts, LogLevels } from 'bs-logger'
 import type {
   Block,
   ExpressionStatement,
+  ImportDeclaration,
   Node,
   SourceFile,
   Statement,
@@ -14,20 +14,22 @@ import type {
 import type { ConfigSet } from '../config/config-set'
 
 /**
- * What methods of `jest` should we hoist
+ * What methods of `jest` we should hoist
  */
 const HOIST_METHODS = ['mock', 'unmock', 'enableAutomock', 'disableAutomock', 'deepUnmock']
-const JEST_GLOBAL_NAME = 'jest'
 const JEST_GLOBALS_MODULE_NAME = '@jest/globals'
+const JEST_GLOBAL_NAME = 'jest'
+const ROOT_LEVEL_AST = 1
 /**
  * @internal
  */
 export const name = 'hoisting-jest-mock'
-// increment this each time the code is modified
 /**
+ * Please increment this each time the code is modified
+ *
  * @internal
  */
-export const version = 2
+export const version = 3
 
 /**
  * The factory of hoisting transformer factory
@@ -41,16 +43,33 @@ export function factory(cs: ConfigSet): (ctx: TransformationContext) => Transfor
    * To access Program or TypeChecker, do: cs.tsCompiler.program or cs.tsCompiler.program.getTypeChecker()
    */
   const ts = cs.compilerModule
+  const importNames: string[] = []
 
-  function shouldHoistExpression(expression: Node): boolean {
-    return (
-      ts.isCallExpression(expression) &&
-      ts.isPropertyAccessExpression(expression.expression) &&
-      HOIST_METHODS.includes(expression.expression.name.text) &&
-      ((ts.isIdentifier(expression.expression.expression) &&
-        expression.expression.expression.text === JEST_GLOBAL_NAME) ||
-        shouldHoistExpression(expression.expression.expression))
-    )
+  function shouldHoistExpression(node: Node): boolean {
+    if (
+      ts.isCallExpression(node) &&
+      ts.isPropertyAccessExpression(node.expression) &&
+      HOIST_METHODS.includes(node.expression.name.text)
+    ) {
+      if (importNames.length) {
+        // @jest/globals is in used
+        return (
+          (ts.isIdentifier(node.expression.expression) && importNames.includes(node.expression.expression.text)) ||
+          (ts.isPropertyAccessExpression(node.expression.expression) &&
+            ts.isIdentifier(node.expression.expression.expression) &&
+            importNames.includes(node.expression.expression.expression.text)) ||
+          shouldHoistExpression(node.expression.expression)
+        )
+      } else {
+        // @jest/globals is not in used
+        return (
+          (ts.isIdentifier(node.expression.expression) && node.expression.expression.text === JEST_GLOBAL_NAME) ||
+          shouldHoistExpression(node.expression.expression)
+        )
+      }
+    }
+
+    return false
   }
 
   /**
@@ -60,7 +79,7 @@ export function factory(cs: ConfigSet): (ctx: TransformationContext) => Transfor
     return ts.isExpressionStatement(node) && shouldHoistExpression(node.expression)
   }
 
-  function isJestGlobalImport(node: Statement): boolean {
+  function isJestGlobalImport(node: Node): node is ImportDeclaration {
     return (
       ts.isImportDeclaration(node) &&
       ts.isStringLiteral(node.moduleSpecifier) &&
@@ -115,6 +134,23 @@ export function factory(cs: ConfigSet): (ctx: TransformationContext) => Transfor
 
       // visit each child
       let resultNode = ts.visitEachChild(node, visitor, ctx)
+      /**
+       * Gather all possible import names, from different types of import syntax including:
+       * - named import, e.g. `import { jest } from '@jest/globals'`
+       * - aliased named import, e.g. `import {jest as aliasedJest} from '@jest/globals'`
+       * - namespace import, e.g `import * as JestGlobals from '@jest/globals'`
+       */
+      if (
+        isJestGlobalImport(resultNode) &&
+        resultNode.importClause?.namedBindings &&
+        (ts.isNamespaceImport(resultNode.importClause.namedBindings) ||
+          ts.isNamedImports(resultNode.importClause.namedBindings))
+      ) {
+        const { namedBindings } = resultNode.importClause
+        importNames.push(
+          ts.isNamespaceImport(namedBindings) ? namedBindings.name.text : namedBindings.elements[0].name.text,
+        )
+      }
       // check if we have something to hoist in this level
       if (hoisted[level] && hoisted[level].length) {
         // re-order children so that hoisted ones appear first
@@ -125,8 +161,9 @@ export function factory(cs: ConfigSet): (ctx: TransformationContext) => Transfor
         )
         const newNode = ts.getMutableClone(resultNode) as Block
         const newStatements = [...hoistedStmts, ...otherStmts]
-        if (level === 1) {
+        if (level === ROOT_LEVEL_AST) {
           const jestGlobalsImportStmts = (resultNode as Block).statements.filter((s) => isJestGlobalImport(s))
+          // jest methods should not be hoisted higher than import `@jest/globals`
           resultNode = {
             ...newNode,
             statements: ts.createNodeArray([...jestGlobalsImportStmts, ...newStatements]),
