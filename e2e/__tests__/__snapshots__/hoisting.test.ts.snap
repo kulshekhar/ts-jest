@@ -10,7 +10,7 @@ exports[`Hoisting should pass using template "default": should pass using templa
   PASS ./import-jest.spec.ts
   
   Test Suites: 2 passed, 2 total
-  Tests:       5 passed, 5 total
+  Tests:       8 passed, 8 total
   Snapshots:   0 total
   Time:        XXs
   Ran all test suites.
@@ -27,7 +27,7 @@ exports[`Hoisting should pass using template "with-babel-7": should pass using t
   PASS ./import-jest.spec.ts
   
   Test Suites: 2 passed, 2 total
-  Tests:       5 passed, 5 total
+  Tests:       8 passed, 8 total
   Snapshots:   0 total
   Time:        XXs
   Ran all test suites.
@@ -44,7 +44,7 @@ exports[`Hoisting should pass using template "with-babel-7-string-config": shoul
   PASS ./import-jest.spec.ts
   
   Test Suites: 2 passed, 2 total
-  Tests:       5 passed, 5 total
+  Tests:       8 passed, 8 total
   Snapshots:   0 total
   Time:        XXs
   Ran all test suites.
