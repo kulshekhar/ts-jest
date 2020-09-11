@@ -10,9 +10,8 @@ import type { CompilerInstance, SourceOutput } from '../types'
 export const initializeTranspilerInstance = (configs: ConfigSet, logger: Logger): CompilerInstance => {
   logger.debug('initializeTranspilerInstance(): create typescript compiler')
 
-  const { options, fileNames } = configs.parsedTsConfig
+  const { options } = configs.parsedTsConfig
   const ts = configs.compilerModule
-  const program = ts.createProgram(fileNames, options)
 
   return {
     compileFn: (code: string, fileName: string): SourceOutput => {
@@ -31,6 +30,6 @@ export const initializeTranspilerInstance = (configs: ConfigSet, logger: Logger)
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       return [result.outputText, result.sourceMapText!]
     },
-    program,
+    program: undefined,
   }
 }
