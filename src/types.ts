@@ -24,10 +24,15 @@ export type BabelJestTransformer = {
  */
 export type BabelConfig = _babel.TransformOptions
 
+export interface AstTransformer<T = Record<string, unknown>> {
+  path: string
+  options?: T
+}
+
 export interface ConfigCustomTransformer {
-  before?: string[]
-  after?: string[]
-  afterDeclarations?: string[]
+  before?: (string | AstTransformer)[]
+  after?: (string | AstTransformer)[]
+  afterDeclarations?: (string | AstTransformer)[]
 }
 
 export interface TsJestGlobalOptions {
@@ -229,8 +234,11 @@ export interface CompilerInstance {
 /**
  * @internal
  */
-export interface AstTransformerDesc {
+export interface AstTransformerDesc<T = Record<string, unknown>> {
   name: string
   version: number
-  factory(cs: ConfigSet): _ts.TransformerFactory<_ts.SourceFile> | _ts.TransformerFactory<_ts.Bundle | _ts.SourceFile>
+  factory(
+    cs: ConfigSet,
+    opts?: T,
+  ): _ts.TransformerFactory<_ts.SourceFile> | _ts.TransformerFactory<_ts.Bundle | _ts.SourceFile>
 }
