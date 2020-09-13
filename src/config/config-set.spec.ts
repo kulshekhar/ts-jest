@@ -161,6 +161,37 @@ describe('tsJest', () => {
       expect(logger.target.lines[1]).toMatchSnapshot()
     })
 
+    it('should support transformers with options', () => {
+      const cs = createConfigSet({
+        jestConfig: {
+          rootDir: 'src',
+          cwd: 'src',
+          globals: {
+            'ts-jest': {
+              astTransformers: {
+                before: [
+                  {
+                    path: 'dummy-transformer',
+                    options: {
+                      foo: 1,
+                    },
+                  },
+                ],
+              },
+            },
+          },
+        } as any,
+        logger,
+        resolve: null,
+      })
+
+      expect(cs.tsJest.transformers.before).toMatchSnapshot([
+        {
+          path: expect.any(String),
+        },
+      ])
+    })
+
     it.each([
       {},
       {

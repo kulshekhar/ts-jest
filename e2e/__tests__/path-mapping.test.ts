@@ -13,7 +13,7 @@ function executeTest(rootDirs?: string[]) {
       },
       astTransformers: {
         before: [
-          {path: 'ts-jest/dist/transformers/path-mapping'}
+          'ts-jest/dist/transformers/path-mapping'
         ],
       },
     },
