@@ -3,6 +3,7 @@
 exports[`hoisting should hoist correctly jest methods 1`] = `
 "\\"use strict\\";
 Object.defineProperty(exports, \\"__esModule\\", { value: true });
+var globals_1 = require(\\"@jest/globals\\");
 // These will all be hoisted above imports
 jest.unmock('react');
 jest.deepUnmock('../__test_modules__/Unmocked');
@@ -69,6 +70,7 @@ console.log(d_1.default);
 console.log(e);
 console.log(virtualModule);
 console.log(jestBackticks_1.default);
+console.log(globals_1.it);
 "
 `;
 
@@ -95,5 +97,6 @@ console.log(a_1.default);
 console.log(b_1.default);
 console.log(c_1.default);
 console.log(d_1.default);
+console.log(globals_1.it);
 "
 `;
