@@ -57,7 +57,7 @@ import { TSError } from '../utils/ts-error'
 const logger = rootLogger.child({ namespace: 'config' })
 
 interface AstTransformerObj<T = Record<string, unknown>> {
-  module: AstTransformerDesc
+  transformModule: AstTransformerDesc
   options?: T
 }
 
@@ -432,7 +432,7 @@ export class ConfigSet {
     let astTransformers: AstTransformer = {
       before: [
         ...internalAstTransformers.map((transformer) => ({
-          module: transformer,
+          transformModule: transformer,
         })),
       ],
     }
@@ -444,10 +444,10 @@ export class ConfigSet {
           ...transformers.before.map((transformer) =>
             typeof transformer === 'string'
               ? {
-                  module: require(transformer),
+                  transformModule: require(transformer),
                 }
               : {
-                  module: require(transformer.path),
+                  transformModule: require(transformer.path),
                   options: transformer.options,
                 },
           ),
@@ -460,10 +460,10 @@ export class ConfigSet {
         after: transformers.after.map((transformer) =>
           typeof transformer === 'string'
             ? {
-                module: require(transformer),
+                transformModule: require(transformer),
               }
             : {
-                module: require(transformer.path),
+                transformModule: require(transformer.path),
                 options: transformer.options,
               },
         ),
@@ -475,10 +475,10 @@ export class ConfigSet {
         afterDeclarations: transformers.afterDeclarations.map((transformer) =>
           typeof transformer === 'string'
             ? {
-                module: require(transformer),
+                transformModule: require(transformer),
               }
             : {
-                module: require(transformer.path),
+                transformModule: require(transformer.path),
                 options: transformer.options,
               },
         ),
@@ -494,14 +494,14 @@ export class ConfigSet {
   @Memoize()
   get tsCustomTransformers(): CustomTransformers {
     let customTransformers: CustomTransformers = {
-      before: this.astTransformers.before.map((t) => t.module.factory(this, t.options)) as TransformerFactory<
+      before: this.astTransformers.before.map((t) => t.transformModule.factory(this, t.options)) as TransformerFactory<
         SourceFile
       >[],
     }
     if (this.astTransformers.after) {
       customTransformers = {
         ...customTransformers,
-        after: this.astTransformers.after.map((t) => t.module.factory(this, t.options)) as TransformerFactory<
+        after: this.astTransformers.after.map((t) => t.transformModule.factory(this, t.options)) as TransformerFactory<
           SourceFile
         >[],
       }
@@ -510,7 +510,7 @@ export class ConfigSet {
       customTransformers = {
         ...customTransformers,
         afterDeclarations: this.astTransformers.afterDeclarations.map((t) =>
-          t.module.factory(this, t.options),
+          t.transformModule.factory(this, t.options),
         ) as TransformerFactory<Bundle | SourceFile>[],
       }
     }

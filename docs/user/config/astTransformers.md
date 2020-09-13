@@ -14,6 +14,46 @@ The option is `astTransformers` and it allows ones to specify which 3 types of T
 
 ### Examples
 
+#### Basic Transformers
+
+<div class="row"><div class="col-md-6" markdown="block">
+
+```js
+// jest.config.js
+module.exports = {
+  // [...]
+  globals: {
+    'ts-jest': {
+      astTransformers: {
+        before: ['my-custom-transformer'],
+      },
+    },
+  },
+}
+```
+
+</div><div class="col-md-6" markdown="block">
+
+```js
+// OR package.json
+{
+  // [...]
+  "jest": {
+    "globals": {
+      "ts-jest": {
+        astTransformers: {
+          "before": ["my-custom-transformer"]
+        }
+      }
+    }
+  }
+}
+```
+
+</div></div>
+
+#### Configuring transformers with options
+
 <div class="row"><div class="col-md-6" markdown="block">
 
 ```js
@@ -24,7 +64,6 @@ module.exports = {
     'ts-jest': {
       astTransformers: {
         before: [
-          'my-custom-transformer',
           {
             path: 'my-custom-transformer-that-needs-extra-opts',
             options: {},
@@ -46,7 +85,7 @@ module.exports = {
     "globals": {
       "ts-jest": {
         astTransformers: {
-          "before": ["my-custom-transformer", {
+          "before": [{
             path: 'my-custom-transformer-that-needs-extra-opts',
             options: {}
           }]

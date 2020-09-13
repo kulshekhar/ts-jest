@@ -355,3 +355,14 @@ exports[`tsJest transformers should display deprecation warning message when con
 "[level:40] The configuration for astTransformers as string[] is deprecated and will be removed in ts-jest 27. Please define your custom AST transformers in a form of an object. More information you can check online documentation https://kulshekhar.github.io/ts-jest/user/config/astTransformers
 "
 `;
+
+exports[`tsJest transformers should support transformers with options 1`] = `
+Array [
+  Object {
+    "options": Object {
+      "foo": 1,
+    },
+    "path": Any<String>,
+  },
+]
+`;
