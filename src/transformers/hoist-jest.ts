@@ -29,7 +29,7 @@ export const name = 'hoisting-jest-mock'
  *
  * @internal
  */
-export const version = 3
+export const version = 4
 
 /**
  * The factory of hoisting transformer factory
@@ -147,9 +147,14 @@ export function factory(cs: ConfigSet): (ctx: TransformationContext) => Transfor
           ts.isNamedImports(resultNode.importClause.namedBindings))
       ) {
         const { namedBindings } = resultNode.importClause
-        importNames.push(
-          ts.isNamespaceImport(namedBindings) ? namedBindings.name.text : namedBindings.elements[0].name.text,
-        )
+        const jestImportName = ts.isNamespaceImport(namedBindings)
+          ? namedBindings.name.text
+          : namedBindings.elements.find(
+              (element) => element.name.text === JEST_GLOBAL_NAME || element.propertyName?.text === JEST_GLOBAL_NAME,
+            )?.name.text
+        if (jestImportName) {
+          importNames.push(jestImportName)
+        }
       }
       // check if we have something to hoist in this level
       if (hoisted[level] && hoisted[level].length) {

@@ -7,6 +7,7 @@ const CODE_WITH_HOISTING_NO_JEST_GLOBALS = `
 import React from 'react'
 import Unmocked from '../__test_modules__/Unmocked'
 import Mocked from '../__test_modules__/Mocked'
+import {it} from '@jest/globals'
 import a from '../__test_modules__/a'
 import b from '../__test_modules__/b'
 import c from '../__test_modules__/c'
@@ -81,12 +82,13 @@ console.log(d)
 console.log(e)
 console.log(virtualModule)
 console.log(jestBackticks)
+console.log(it)
 `
 const CODE_WITH_HOISTING_HAS_JEST_GLOBALS = `
   import a from '../__test_modules__/a'
   import b from '../__test_modules__/b'
 
-  import {jest} from '@jest/globals'
+  import {it, jest} from '@jest/globals'
   import {jest as aliasedJest} from '@jest/globals'
   import * as JestGlobals from '@jest/globals'
 
@@ -110,6 +112,7 @@ const CODE_WITH_HOISTING_HAS_JEST_GLOBALS = `
   console.log(b)
   console.log(c)
   console.log(d)
+  console.log(it)
 `
 
 const logger = testing.createLoggerMock()

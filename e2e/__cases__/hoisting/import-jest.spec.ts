@@ -1,4 +1,4 @@
-import {jest} from '@jest/globals'
+import {test,jest} from '@jest/globals'
 import {jest as aliasedJest} from '@jest/globals'
 import * as JestGlobals from '@jest/globals'
 
