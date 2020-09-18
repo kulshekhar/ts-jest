@@ -56,10 +56,15 @@ import { TSError } from '../utils/ts-error'
 
 const logger = rootLogger.child({ namespace: 'config' })
 
+interface AstTransformerObj<T = Record<string, unknown>> {
+  transformModule: AstTransformerDesc
+  options?: T
+}
+
 interface AstTransformer {
-  before: AstTransformerDesc[]
-  after?: AstTransformerDesc[]
-  afterDeclarations?: AstTransformerDesc[]
+  before: AstTransformerObj[]
+  after?: AstTransformerObj[]
+  afterDeclarations?: AstTransformerObj[]
 }
 /**
  * @internal
@@ -184,29 +189,52 @@ export class ConfigSet {
         this.logger.warn(Deprecations.AstTransformerArrayConfig)
 
         transformers = {
-          before: astTransformers.map((transformerPath) => this.resolvePath(transformerPath, { nodeResolve: true })),
+          before: astTransformers.map((transformerPath) => ({
+            path: this.resolvePath(transformerPath, { nodeResolve: true }),
+          })),
         }
       } else {
         if (astTransformers.before) {
           transformers = {
-            before: astTransformers.before.map((transformerPath: string) =>
-              this.resolvePath(transformerPath, { nodeResolve: true }),
+            before: astTransformers.before.map((transformer) =>
+              typeof transformer === 'string'
+                ? {
+                    path: this.resolvePath(transformer, { nodeResolve: true }),
+                  }
+                : {
+                    ...transformer,
+                    path: this.resolvePath(transformer.path, { nodeResolve: true }),
+                  },
             ),
           }
         }
         if (astTransformers.after) {
           transformers = {
             ...transformers,
-            after: astTransformers.after.map((transformerPath: string) =>
-              this.resolvePath(transformerPath, { nodeResolve: true }),
+            after: astTransformers.after.map((transformer) =>
+              typeof transformer === 'string'
+                ? {
+                    path: this.resolvePath(transformer, { nodeResolve: true }),
+                  }
+                : {
+                    ...transformer,
+                    path: this.resolvePath(transformer.path, { nodeResolve: true }),
+                  },
             ),
           }
         }
         if (astTransformers.afterDeclarations) {
           transformers = {
             ...transformers,
-            afterDeclarations: astTransformers.afterDeclarations.map((transformerPath: string) =>
-              this.resolvePath(transformerPath, { nodeResolve: true }),
+            afterDeclarations: astTransformers.afterDeclarations.map((transformer) =>
+              typeof transformer === 'string'
+                ? {
+                    path: this.resolvePath(transformer, { nodeResolve: true }),
+                  }
+                : {
+                    ...transformer,
+                    path: this.resolvePath(transformer.path, { nodeResolve: true }),
+                  },
             ),
           }
         }
@@ -402,28 +430,57 @@ export class ConfigSet {
   @Memoize()
   private get astTransformers(): AstTransformer {
     let astTransformers: AstTransformer = {
-      before: [...internalAstTransformers],
+      before: [
+        ...internalAstTransformers.map((transformer) => ({
+          transformModule: transformer,
+        })),
+      ],
     }
     const { transformers } = this.tsJest
     if (transformers.before) {
       astTransformers = {
         before: [
           ...astTransformers.before,
-          ...transformers.before.map((transformerFilePath: string) => require(transformerFilePath)),
+          ...transformers.before.map((transformer) =>
+            typeof transformer === 'string'
+              ? {
+                  transformModule: require(transformer),
+                }
+              : {
+                  transformModule: require(transformer.path),
+                  options: transformer.options,
+                },
+          ),
         ],
       }
     }
     if (transformers.after) {
       astTransformers = {
         ...astTransformers,
-        after: transformers.after.map((transformerFilePath: string) => require(transformerFilePath)),
+        after: transformers.after.map((transformer) =>
+          typeof transformer === 'string'
+            ? {
+                transformModule: require(transformer),
+              }
+            : {
+                transformModule: require(transformer.path),
+                options: transformer.options,
+              },
+        ),
       }
     }
     if (transformers.afterDeclarations) {
       astTransformers = {
         ...astTransformers,
-        afterDeclarations: transformers.afterDeclarations.map((transformerFilePath: string) =>
-          require(transformerFilePath),
+        afterDeclarations: transformers.afterDeclarations.map((transformer) =>
+          typeof transformer === 'string'
+            ? {
+                transformModule: require(transformer),
+              }
+            : {
+                transformModule: require(transformer.path),
+                options: transformer.options,
+              },
         ),
       }
     }
@@ -437,20 +494,24 @@ export class ConfigSet {
   @Memoize()
   get tsCustomTransformers(): CustomTransformers {
     let customTransformers: CustomTransformers = {
-      before: this.astTransformers.before.map((t) => t.factory(this)) as TransformerFactory<SourceFile>[],
+      before: this.astTransformers.before.map((t) => t.transformModule.factory(this, t.options)) as TransformerFactory<
+        SourceFile
+      >[],
     }
     if (this.astTransformers.after) {
       customTransformers = {
         ...customTransformers,
-        after: this.astTransformers.after.map((t) => t.factory(this)) as TransformerFactory<SourceFile>[],
+        after: this.astTransformers.after.map((t) => t.transformModule.factory(this, t.options)) as TransformerFactory<
+          SourceFile
+        >[],
       }
     }
     if (this.astTransformers.afterDeclarations) {
       customTransformers = {
         ...customTransformers,
-        afterDeclarations: this.astTransformers.afterDeclarations.map((t) => t.factory(this)) as TransformerFactory<
-          Bundle | SourceFile
-        >[],
+        afterDeclarations: this.astTransformers.afterDeclarations.map((t) =>
+          t.transformModule.factory(this, t.options),
+        ) as TransformerFactory<Bundle | SourceFile>[],
       }
     }
 
@@ -660,7 +721,7 @@ export class ConfigSet {
       digest: this.tsJestDigest,
       transformers: Object.values(this.astTransformers)
         .reduce((acc, val) => acc.concat(val), [])
-        .map((t: AstTransformerDesc) => `${t.name}@${t.version}`),
+        .map(({ transformModule }: AstTransformerObj) => `${transformModule.name}@${transformModule.version}`),
       jest,
       tsJest: this.tsJest,
       babel: this.babel,

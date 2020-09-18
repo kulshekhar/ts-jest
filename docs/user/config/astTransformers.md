@@ -7,12 +7,14 @@ TypeScript AST transformers and provide them to `ts-jest` to include into compil
 
 The option is `astTransformers` and it allows ones to specify which 3 types of TypeScript AST transformers to use with `ts-jest`:
 
-- `before` means your transformers get run before TS ones, which means your transformers will get raw TS syntax 
-instead of transpiled syntax (e.g `import` instead of `require` or `define` ).
+- `before` means your transformers get run before TS ones, which means your transformers will get raw TS syntax
+  instead of transpiled syntax (e.g `import` instead of `require` or `define` ).
 - `after` means your transformers get run after TS ones, which gets transpiled syntax.
 - `afterDeclarations` means your transformers get run during `d.ts` generation phase, allowing you to transform output type declarations.
 
 ### Examples
+
+#### Basic Transformers
 
 <div class="row"><div class="col-md-6" markdown="block">
 
@@ -25,9 +27,9 @@ module.exports = {
       astTransformers: {
         before: ['my-custom-transformer'],
       },
-    }
-  }
-};
+    },
+  },
+}
 ```
 
 </div><div class="col-md-6" markdown="block">
@@ -50,14 +52,60 @@ module.exports = {
 
 </div></div>
 
+#### Configuring transformers with options
+
+<div class="row"><div class="col-md-6" markdown="block">
+
+```js
+// jest.config.js
+module.exports = {
+  // [...]
+  globals: {
+    'ts-jest': {
+      astTransformers: {
+        before: [
+          {
+            path: 'my-custom-transformer-that-needs-extra-opts',
+            options: {}, // extra options to pass to transformers here
+          },
+        ],
+      },
+    },
+  },
+}
+```
+
+</div><div class="col-md-6" markdown="block">
+
+```js
+// OR package.json
+{
+  // [...]
+  "jest": {
+    "globals": {
+      "ts-jest": {
+        astTransformers: {
+          "before": [{
+            path: 'my-custom-transformer-that-needs-extra-opts',
+            options: {} // extra options to pass to transformers here
+          }]
+        }
+      }
+    }
+  }
+}
+```
+
+</div></div>
+
 ### Public transformers
 
 `ts-jest` is able to expose transformers for public usage to provide the possibility to opt-in/out for users. Currently
 the exposed transformers are:
 
-- `path-mapping` convert alias import/export to relative import/export path base on `paths` in `tsconfig`. 
-This transformer works similar to `moduleNameMapper` in `jest.config.js`. When using this transformer, one might not need
-`moduleNameMapper` anymore.
+- `path-mapping` convert alias import/export to relative import/export path base on `paths` in `tsconfig`.
+  This transformer works similar to `moduleNameMapper` in `jest.config.js`. When using this transformer, one might not need
+  `moduleNameMapper` anymore.
 
 #### Example of opt-in transformers
 
@@ -72,9 +120,9 @@ module.exports = {
       astTransformers: {
         before: ['ts-jest/dist/transformers/path-mapping'],
       },
-    }
-  }
-};
+    },
+  },
+}
 ```
 
 </div><div class="col-md-6" markdown="block">
@@ -96,7 +144,6 @@ module.exports = {
 ```
 
 </div></div>
-
 
 ### Writing custom TypeScript AST transformers
 
