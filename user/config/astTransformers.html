@@ -144,13 +144,15 @@ TypeScript AST transformers and provide them to <code class="language-plaintext 
 <p>The option is <code class="language-plaintext highlighter-rouge">astTransformers</code> and it allows ones to specify which 3 types of TypeScript AST transformers to use with <code class="language-plaintext highlighter-rouge">ts-jest</code>:</p>
 
 <ul>
-  <li><code class="language-plaintext highlighter-rouge">before</code> means your transformers get run before TS ones, which means your transformers will get raw TS syntax 
+  <li><code class="language-plaintext highlighter-rouge">before</code> means your transformers get run before TS ones, which means your transformers will get raw TS syntax
 instead of transpiled syntax (e.g <code class="language-plaintext highlighter-rouge">import</code> instead of <code class="language-plaintext highlighter-rouge">require</code> or <code class="language-plaintext highlighter-rouge">define</code> ).</li>
   <li><code class="language-plaintext highlighter-rouge">after</code> means your transformers get run after TS ones, which gets transpiled syntax.</li>
   <li><code class="language-plaintext highlighter-rouge">afterDeclarations</code> means your transformers get run during <code class="language-plaintext highlighter-rouge">d.ts</code> generation phase, allowing you to transform output type declarations.</li>
 </ul>
 
 <h3 id="examples">Examples</h3>
+
+<h4 id="basic-transformers">Basic Transformers</h4>
 
 <div class="row"><div class="col-md-6">
 
@@ -162,9 +164,9 @@ instead of transpiled syntax (e.g <code class="language-plaintext highlighter-ro
       <span class="na">astTransformers</span><span class="p">:</span> <span class="p">{</span>
         <span class="na">before</span><span class="p">:</span> <span class="p">[</span><span class="dl">'</span><span class="s1">my-custom-transformer</span><span class="dl">'</span><span class="p">],</span>
       <span class="p">},</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
-<span class="p">};</span>
+    <span class="p">},</span>
+  <span class="p">},</span>
+<span class="p">}</span>
 </code></pre></div>    </div>
 
   </div><div class="col-md-6">
@@ -186,13 +188,57 @@ instead of transpiled syntax (e.g <code class="language-plaintext highlighter-ro
 
   </div></div>
 
+<h4 id="configuring-transformers-with-options">Configuring transformers with options</h4>
+
+<div class="row"><div class="col-md-6">
+
+    <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// jest.config.js</span>
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="c1">// [...]</span>
+  <span class="na">globals</span><span class="p">:</span> <span class="p">{</span>
+    <span class="dl">'</span><span class="s1">ts-jest</span><span class="dl">'</span><span class="p">:</span> <span class="p">{</span>
+      <span class="na">astTransformers</span><span class="p">:</span> <span class="p">{</span>
+        <span class="na">before</span><span class="p">:</span> <span class="p">[</span>
+          <span class="p">{</span>
+            <span class="na">path</span><span class="p">:</span> <span class="dl">'</span><span class="s1">my-custom-transformer-that-needs-extra-opts</span><span class="dl">'</span><span class="p">,</span>
+            <span class="na">options</span><span class="p">:</span> <span class="p">{},</span> <span class="c1">// extra options to pass to transformers here</span>
+          <span class="p">},</span>
+        <span class="p">],</span>
+      <span class="p">},</span>
+    <span class="p">},</span>
+  <span class="p">},</span>
+<span class="p">}</span>
+</code></pre></div>    </div>
+
+  </div><div class="col-md-6">
+
+    <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// OR package.json</span>
+<span class="p">{</span>
+  <span class="c1">// [...]</span>
+  <span class="dl">"</span><span class="s2">jest</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+    <span class="dl">"</span><span class="s2">globals</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+      <span class="dl">"</span><span class="s2">ts-jest</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nl">astTransformers</span><span class="p">:</span> <span class="p">{</span>
+          <span class="dl">"</span><span class="s2">before</span><span class="dl">"</span><span class="p">:</span> <span class="p">[{</span>
+            <span class="na">path</span><span class="p">:</span> <span class="dl">'</span><span class="s1">my-custom-transformer-that-needs-extra-opts</span><span class="dl">'</span><span class="p">,</span>
+            <span class="na">options</span><span class="p">:</span> <span class="p">{}</span> <span class="c1">// extra options to pass to transformers here</span>
+          <span class="p">}]</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>    </div>
+
+  </div></div>
+
 <h3 id="public-transformers">Public transformers</h3>
 
 <p><code class="language-plaintext highlighter-rouge">ts-jest</code> is able to expose transformers for public usage to provide the possibility to opt-in/out for users. Currently
 the exposed transformers are:</p>
 
 <ul>
-  <li><code class="language-plaintext highlighter-rouge">path-mapping</code> convert alias import/export to relative import/export path base on <code class="language-plaintext highlighter-rouge">paths</code> in <code class="language-plaintext highlighter-rouge">tsconfig</code>. 
+  <li><code class="language-plaintext highlighter-rouge">path-mapping</code> convert alias import/export to relative import/export path base on <code class="language-plaintext highlighter-rouge">paths</code> in <code class="language-plaintext highlighter-rouge">tsconfig</code>.
 This transformer works similar to <code class="language-plaintext highlighter-rouge">moduleNameMapper</code> in <code class="language-plaintext highlighter-rouge">jest.config.js</code>. When using this transformer, one might not need
 <code class="language-plaintext highlighter-rouge">moduleNameMapper</code> anymore.</li>
 </ul>
@@ -209,9 +255,9 @@ This transformer works similar to <code class="language-plaintext highlighter-ro
       <span class="na">astTransformers</span><span class="p">:</span> <span class="p">{</span>
         <span class="na">before</span><span class="p">:</span> <span class="p">[</span><span class="dl">'</span><span class="s1">ts-jest/dist/transformers/path-mapping</span><span class="dl">'</span><span class="p">],</span>
       <span class="p">},</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
-<span class="p">};</span>
+    <span class="p">},</span>
+  <span class="p">},</span>
+<span class="p">}</span>
 </code></pre></div>    </div>
 
   </div><div class="col-md-6">
