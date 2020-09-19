@@ -1,12 +1,78 @@
-import { configureTestCase } from '../__helpers__/test-case'
-import { allValidPackageSets } from '../__helpers__/templates'
-import { existsSync } from "fs"
 import { LogContexts, LogLevels } from 'bs-logger'
 
+import { configureTestCase } from '../__helpers__/test-case'
+import { allValidPackageSets } from '../__helpers__/templates'
+
 describe('AST transformers', () => {
+  describe('hoisting', () => {
+    const testCase = configureTestCase('ast-transformers/hoisting', {
+      jestConfig: {
+        testEnvironment: 'node',
+        automock: true,
+      },
+    })
+
+    testCase.runWithTemplates(allValidPackageSets, 0, (runTest, { testLabel }) => {
+      it(testLabel, () => {
+        const result = runTest()
+        expect(result.status).toBe(0)
+      })
+    })
+  })
+
+  describe('path mapping', () => {
+    const tsJestConfig = {
+      tsConfig: {
+        baseUrl: '.',
+        paths: {
+          '@share/*': ['share/*']
+        }
+      },
+      astTransformers: {
+        before: [
+          'ts-jest/dist/transformers/path-mapping'
+        ],
+      },
+    }
+
+    describe('without rootDirs', () => {
+      const testCase = configureTestCase('ast-transformers/path-mapping', {
+        env: { TS_JEST_LOG: 'ts-jest.log' },
+        tsJestConfig,
+      })
+
+      testCase.runWithTemplates(allValidPackageSets, 0, (runTest, { testLabel }) => {
+        it(testLabel, () => {
+          const result = runTest()
+          expect(result.status).toBe(0)
+        })
+      })
+    })
+
+    describe('with rootDirs', () => {
+      const testCase = configureTestCase('ast-transformers/path-mapping', {
+        tsJestConfig: {
+          ...tsJestConfig,
+          tsConfig: {
+            ...tsJestConfig.tsConfig,
+            rootDirs: ['./'],
+          },
+        },
+      })
+
+      testCase.runWithTemplates(allValidPackageSets, 0, (runTest, { testLabel }) => {
+        it(testLabel, () => {
+          const result = runTest()
+          expect(result.status).toBe(0)
+        })
+      })
+    })
+  })
+
   describe('with extra options', () => {
     const testCase = configureTestCase('ast-transformers/with-extra-options', {
       env: { TS_JEST_LOG: 'ts-jest.log' },
+      noCache: true, // no cache is required when testing against logging otherwise other tests will clear logging
       tsJestConfig: {
         astTransformers: {
           before: [{
@@ -23,7 +89,6 @@ describe('AST transformers', () => {
       it(testLabel, () => {
         const result = runTest()
         expect(result.status).toBe(0)
-        expect(existsSync(result.logFilePath)).toBe(true)
         const filteredEntries = result.logFileEntries
           // keep only debug and above
           .filter(m => (m.context[LogContexts.logLevel] || 0) >= LogLevels.debug)

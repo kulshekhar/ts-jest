@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "baseUrl": ".",
+    "baseUrl": "./",
     "paths": {
       "@share/*": ["share/*"]
     }
