@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "baseUrl": "src",
+    "target": "ES5",
+    "module": "CommonJS",
+    "resolveJsonModule": true,
+    "paths": {
+      "foo/*": ["foo/*"]
+    }
+  },
+  "exclude": [
+    "node_modules"
+  ]
+}

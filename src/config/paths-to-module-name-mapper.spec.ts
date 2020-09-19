@@ -14,7 +14,7 @@ const tsconfigMap = {
 }
 
 describe('pathsToModuleNameMapper', () => {
-  it('should convert tsconfig mapping', () => {
+  it('should convert tsconfig mapping with no given prefix', () => {
     expect(pathsToModuleNameMapper(tsconfigMap)).toMatchInlineSnapshot(`
       Object {
         "^api/(.*)$": "src/api/$1",
@@ -35,25 +35,8 @@ describe('pathsToModuleNameMapper', () => {
     `)
   })
 
-  it('should use the given prefix', () => {
-    expect(pathsToModuleNameMapper(tsconfigMap, { prefix: '<rootDir>/' })).toMatchInlineSnapshot(`
-      Object {
-        "^api/(.*)$": "<rootDir>/src/api/$1",
-        "^client$": Array [
-          "<rootDir>/src/client",
-          "<rootDir>/src/client/index",
-        ],
-        "^log$": "<rootDir>/src/utils/log",
-        "^mocks/(.*)$": "<rootDir>/test/mocks/$1",
-        "^server$": "<rootDir>/src/server",
-        "^test/(.*)$": "<rootDir>/test/$1",
-        "^test/(.*)/mock$": Array [
-          "<rootDir>/test/mocks/$1",
-          "<rootDir>/test/__mocks__/$1",
-        ],
-        "^util/(.*)$": "<rootDir>/src/utils/$1",
-      }
-    `)
+  it.each(['<rootDir>/', 'foo'])('should convert tsconfig mapping with given prefix', (prefix) => {
+    expect(pathsToModuleNameMapper(tsconfigMap, { prefix })).toMatchSnapshot(prefix)
   })
 
   it('should warn about mapping it cannot handle', () => {
