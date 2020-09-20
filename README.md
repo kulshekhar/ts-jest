@@ -4,7 +4,6 @@
 [![NPM downloads](https://img.shields.io/npm/dm/ts-jest.svg?style=flat)](https://npmjs.org/package/ts-jest)
 [![Known Vulnerabilities](https://snyk.io/test/github/kulshekhar/ts-jest/badge.svg)](https://snyk.io/test/github/kulshekhar/ts-jest)
 [![Coverage Status](https://coveralls.io/repos/github/kulshekhar/ts-jest/badge.svg?branch=master)](https://coveralls.io/github/kulshekhar/ts-jest?branch=master)
-[![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=kulshekhar/ts-jest)](https://dependabot.com)
 [![Build Status](https://travis-ci.com/kulshekhar/ts-jest.svg?branch=master)](https://travis-ci.com/kulshekhar/ts-jest)
 [![doc-generator](https://github.com/kulshekhar/ts-jest/workflows/doc-generator/badge.svg)](https://github.com/kulshekhar/ts-jest/actions)
 [![release-and-publish](https://github.com/kulshekhar/ts-jest/workflows/release-and-publish/badge.svg)](https://github.com/kulshekhar/ts-jest/actions)
