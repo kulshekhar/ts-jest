@@ -1,3 +1,25 @@
+# [26.4.0](https://github.com/kulshekhar/ts-jest/compare/v26.3.0...v26.4.0) (2020-09-20)
+
+
+### Bug Fixes
+
+* **utils:** `pathsToModuleNameMapper` resolve path mapping with `path.join` ([#1969](https://github.com/kulshekhar/ts-jest/issues/1969)) ([81fce4c](https://github.com/kulshekhar/ts-jest/commit/81fce4c090811a1cc071579a99dc193fb976b117)), closes [#1968](https://github.com/kulshekhar/ts-jest/issues/1968)
+* set minimum `jest-util` version at 26.1.0 ([#1914](https://github.com/kulshekhar/ts-jest/issues/1914)) ([f00414c](https://github.com/kulshekhar/ts-jest/commit/f00414c6fbf8fc5413fd33d0a271c4a164c50d45)), closes [#1913](https://github.com/kulshekhar/ts-jest/issues/1913)
+
+
+### Features
+
+* **config:** allow custom options in custom transformers ([#1966](https://github.com/kulshekhar/ts-jest/issues/1966)) ([1452ce4](https://github.com/kulshekhar/ts-jest/commit/1452ce4afcd36049cddd0db0861f1ac26b66f8c1)), closes [#1942](https://github.com/kulshekhar/ts-jest/issues/1942)
+* **transformers:** support hoisting when using `@jest/globals` ([#1937](https://github.com/kulshekhar/ts-jest/issues/1937)) ([0e5be15](https://github.com/kulshekhar/ts-jest/commit/0e5be1597d755fed11869f67df05eeea54b3106f)), closes [#1593](https://github.com/kulshekhar/ts-jest/issues/1593)
+* **transformers:** add `path-mapping` custom AST transformer ([#1927](https://github.com/kulshekhar/ts-jest/issues/1927)) ([3325186](https://github.com/kulshekhar/ts-jest/commit/3325186b6e55f41eb9bf7d81e092a358fc402b13))
+
+
+### Performance Improvements
+
+* **compiler:** remove `createProgram` for `isolatedModules: true` to boost startup speed ([#1941](https://github.com/kulshekhar/ts-jest/issues/1941)) ([dd84534](https://github.com/kulshekhar/ts-jest/commit/dd8453401840862186f991e2d514e0d328a67987))
+
+
+
 # [26.3.0](https://github.com/kulshekhar/ts-jest/compare/v26.2.0...v26.3.0) (2020-08-25)
 
 
