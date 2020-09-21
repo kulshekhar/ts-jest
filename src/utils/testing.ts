@@ -11,7 +11,7 @@ interface MockWithArgs<T extends MockableFunction> extends jest.MockInstance<Ret
 
 type MaybeMockedConstructor<T> = T extends new (...args: any[]) => infer R
   ? jest.MockInstance<R, ConstructorArgumentsOf<T>>
-  : {} // eslint-disable-line @typescript-eslint/ban-types
+  : T
 type MockedFunction<T extends MockableFunction> = MockWithArgs<T> & { [K in keyof T]: T[K] }
 type MockedFunctionDeep<T extends MockableFunction> = MockWithArgs<T> & MockedObjectDeep<T>
 type MockedObject<T> = MaybeMockedConstructor<T> &
