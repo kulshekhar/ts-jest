@@ -44,18 +44,6 @@ export interface TsJestGlobalOptions {
    * - `{...}`: an object with inline compiler options
    *
    * @default undefined uses the default tsconfig file
-   * @alias tsconfig
-   */
-  tsConfig?: boolean | string | _ts.CompilerOptions
-
-  /**
-   * Compiler options. It can be:
-   * - `true` (or `undefined`, it's the default): use default tsconfig file
-   * - `false`: do NOT use default config file
-   * - `path/to/tsconfig.json`: path to a specific tsconfig file (<rootDir> can be used)
-   * - `{...}`: an object with inline compiler options
-   *
-   * @default undefined uses the default tsconfig file
    * @alias tsConfig
    */
   tsconfig?: boolean | string | _ts.CompilerOptions
