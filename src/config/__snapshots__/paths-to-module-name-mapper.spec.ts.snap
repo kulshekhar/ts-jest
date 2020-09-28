@@ -2,6 +2,7 @@
 
 exports[`pathsToModuleNameMapper should convert tsconfig mapping with given prefix: <rootDir>/ 1`] = `
 Object {
+  "^@foo\\\\-bar/common$": "<rootDir>/../common/dist/library",
   "^api/(.*)$": "<rootDir>/src/api/$1",
   "^client$": Array [
     "<rootDir>/src/client",
@@ -21,6 +22,7 @@ Object {
 
 exports[`pathsToModuleNameMapper should convert tsconfig mapping with given prefix: foo 1`] = `
 Object {
+  "^@foo\\\\-bar/common$": "foo/../common/dist/library",
   "^api/(.*)$": "foo/src/api/$1",
   "^client$": Array [
     "foo/src/client",

@@ -4,8 +4,6 @@ import type { CompilerOptions } from 'typescript'
 
 import { rootLogger } from '../utils/logger'
 import { Errors, interpolate } from '../utils/messages'
-import { join } from 'path'
-import { normalizeSlashes } from '../utils/normalize-slashes'
 
 type TsPathMapping = Exclude<CompilerOptions['paths'], undefined>
 type JestPathMapping = Config.InitialOptions['moduleNameMapper']
@@ -18,7 +16,7 @@ const logger = rootLogger.child({ [LogContexts.namespace]: 'path-mapper' })
 
 export const pathsToModuleNameMapper = (
   mapping: TsPathMapping,
-  { prefix = '' }: { prefix?: string } = {},
+  { prefix = '' }: { prefix: string } = Object.create(null),
 ): JestPathMapping => {
   const jestMap: JestPathMapping = {}
   for (const fromPath of Object.keys(mapping)) {
@@ -34,11 +32,19 @@ export const pathsToModuleNameMapper = (
     // split with '*'
     const segments = fromPath.split(/\*/g)
     if (segments.length === 1) {
-      const paths = toPaths.map((target) => normalizeSlashes(join(prefix, target)))
+      const paths = toPaths.map((target) => {
+        const enrichedPrefix = prefix !== '' && !prefix.endsWith('/') ? `${prefix}/` : prefix
+
+        return `${enrichedPrefix}${target}`
+      })
       pattern = `^${escapeRegex(fromPath)}$`
       jestMap[pattern] = paths.length === 1 ? paths[0] : paths
     } else if (segments.length === 2) {
-      const paths = toPaths.map((target) => normalizeSlashes(join(prefix, target.replace(/\*/g, '$1'))))
+      const paths = toPaths.map((target) => {
+        const enrichedPrefix = prefix !== '' && !prefix.endsWith('/') ? `${prefix}/` : prefix
+
+        return `${enrichedPrefix}${target.replace(/\*/g, '$1')}`
+      })
       pattern = `^${escapeRegex(segments[0])}(.*)${escapeRegex(segments[1])}$`
       jestMap[pattern] = paths.length === 1 ? paths[0] : paths
     } else {
