@@ -11,12 +11,14 @@ const tsconfigMap = {
   'test/*': ['test/*'],
   'mocks/*': ['test/mocks/*'],
   'test/*/mock': ['test/mocks/*', 'test/__mocks__/*'],
+  '@foo-bar/common': ['../common/dist/library'],
 }
 
 describe('pathsToModuleNameMapper', () => {
   it('should convert tsconfig mapping with no given prefix', () => {
     expect(pathsToModuleNameMapper(tsconfigMap)).toMatchInlineSnapshot(`
       Object {
+        "^@foo\\\\-bar/common$": "../common/dist/library",
         "^api/(.*)$": "src/api/$1",
         "^client$": Array [
           "src/client",
