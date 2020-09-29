@@ -1,3 +1,13 @@
+## [26.4.1](https://github.com/kulshekhar/ts-jest/compare/v26.4.0...v26.4.1) (2020-09-29)
+
+
+### Bug Fixes
+
+* **utils:** `MaybeMockedConstructor` returns T ([#1976](https://github.com/kulshekhar/ts-jest/issues/1976)) ([b7712b2](https://github.com/kulshekhar/ts-jest/commit/b7712b2055d8f32dd97999de1d94e8f3515d79e8))
+* **utils:** revert `path.join` and add check on prefix ends with `/` ([#1989](https://github.com/kulshekhar/ts-jest/issues/1989)) ([3d9035b](https://github.com/kulshekhar/ts-jest/commit/3d9035bd70dc087d4c5a943bb2fe2af2d0822875)), closes [#1982](https://github.com/kulshekhar/ts-jest/issues/1982)
+
+
+
 # [26.4.0](https://github.com/kulshekhar/ts-jest/compare/v26.3.0...v26.4.0) (2020-09-20)
 
 
