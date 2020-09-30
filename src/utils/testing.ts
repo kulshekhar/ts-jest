@@ -31,7 +31,9 @@ export type MaybeMocked<T> = T extends MockableFunction ? MockedFunction<T> : T 
 
 // the typings test helper
 export function mocked<T>(item: T, deep?: false): MaybeMocked<T>
+// eslint-disable-next-line no-redeclare
 export function mocked<T>(item: T, deep: true): MaybeMockedDeep<T>
+// eslint-disable-next-line no-redeclare
 export function mocked<T>(item: T, _deep = false): MaybeMocked<T> | MaybeMockedDeep<T> {
   return item as any
 }

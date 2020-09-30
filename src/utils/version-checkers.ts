@@ -41,7 +41,9 @@ type CheckVersionAction = 'warn' | 'throw'
  * @internal
  */
 function checkVersion(name: string, expectedRange: string, action?: Exclude<CheckVersionAction, 'throw'>): boolean
+// eslint-disable-next-line no-redeclare
 function checkVersion(name: string, expectedRange: string, action: 'throw'): true | never
+// eslint-disable-next-line no-redeclare
 function checkVersion(
   name: string,
   expectedRange: string,
