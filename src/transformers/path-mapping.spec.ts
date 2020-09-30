@@ -9,6 +9,7 @@ import { normalizeSlashes } from '../utils/normalize-slashes'
 const logger = testing.createLoggerMock()
 const TS_JS_CODE_WITH_PATH_ALIAS = `
   import { parse } from '@utils/json'
+  import hoo from '@utils/json'
   import * as json from '@utils/json'
   export * as jsonUtils from '@utils/json'
   const { stringify } = require('@utils/json')
@@ -22,6 +23,7 @@ const TS_JS_CODE_WITH_PATH_ALIAS = `
   console.log(json)
   console.log(foo)
   const bar: Foo = { foo: 2 }
+  hoo.foo(1)
 `
 
 describe('path-mapping', () => {
