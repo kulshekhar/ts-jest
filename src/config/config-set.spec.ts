@@ -100,6 +100,62 @@ describe('tsJest', () => {
     })
   })
 
+  describe('tsconfig', () => {
+    const logger = testing.createLoggerMock()
+
+    beforeEach(() => {
+      logger.target.clear()
+    })
+
+    it('should show warning message with tsConfig option', () => {
+      const cs = createConfigSet({
+        jestConfig: {
+          globals: {
+            'ts-jest': {
+              tsConfig: {
+                resolveJsonModule: true,
+              },
+            },
+          },
+        } as any,
+        logger,
+        resolve: null,
+      })
+
+      expect(cs.tsJest.tsConfig).toEqual({
+        kind: 'inline',
+        value: {
+          resolveJsonModule: true,
+        },
+      })
+      expect(logger.target.lines[1]).toMatchSnapshot()
+    })
+
+    it('should not show warning message with tsconfig option', () => {
+      const cs = createConfigSet({
+        jestConfig: {
+          globals: {
+            'ts-jest': {
+              tsconfig: {
+                resolveJsonModule: true,
+              },
+            },
+          },
+        } as any,
+        logger,
+        resolve: null,
+      })
+
+      expect(cs.tsJest.tsConfig).toEqual({
+        kind: 'inline',
+        value: {
+          resolveJsonModule: true,
+        },
+      })
+      expect(logger.target.lines[1]).not.toContain(Deprecations.TsConfig)
+    })
+  })
+
   describe('packageJson', () => {
     it('should be correct when packageJson is true', () => {
       const EXPECTED = {
@@ -347,23 +403,23 @@ describe('parsedTsConfig', () => {
   })
 
   it('should include compiler config from base config', () => {
-    expect(get(void 0, { tsConfig: { target: 'esnext' as any } }).options.target).toBe(ts.ScriptTarget.ESNext)
+    expect(get(void 0, { tsconfig: { target: 'esnext' as any } }).options.target).toBe(ts.ScriptTarget.ESNext)
   })
 
   it('should override some options', () => {
-    expect(get({ tsConfig: { module: 'esnext' as any, inlineSources: false } }).options).toMatchObject({
+    expect(get({ tsconfig: { module: 'esnext' as any, inlineSources: false } }).options).toMatchObject({
       module: ts.ModuleKind.CommonJS,
       inlineSources: true,
     })
   })
 
   it('should include default outDir $$ts-jest$$ when allowJs is enabled and no outDir from config', () => {
-    expect(get(void 0, { tsConfig: { allowJs: true } }).options.outDir).toBe(TS_JEST_OUT_DIR)
+    expect(get(void 0, { tsconfig: { allowJs: true } }).options.outDir).toBe(TS_JEST_OUT_DIR)
   })
 
   it('should be able to read extends', () => {
     const cs = createConfigSet({
-      tsJestConfig: { tsConfig: 'tsconfig.build.json' },
+      tsJestConfig: { tsconfig: 'tsconfig.build.json' },
       resolve: null,
     })
     expect(cs.parsedTsConfig.options).toMatchObject({
@@ -378,7 +434,7 @@ describe('parsedTsConfig', () => {
     target.clear()
     const cs = createConfigSet({
       tsJestConfig: {
-        tsConfig: { module: 'ES6', esModuleInterop: false } as any,
+        tsconfig: { module: 'ES6', esModuleInterop: false } as any,
         diagnostics: { warnOnly: true, pretty: false },
       },
       resolve: null,
@@ -399,7 +455,7 @@ describe('parsedTsConfig', () => {
     target.clear()
     const cs = createConfigSet({
       tsJestConfig: {
-        tsConfig: { module: 'amd', esModuleInterop: false } as any,
+        tsconfig: { module: 'amd', esModuleInterop: false } as any,
         diagnostics: { warnOnly: true, pretty: false },
         babelConfig: { babelrc: false },
       },
@@ -842,13 +898,13 @@ describe('tsJestDigest', () => {
 
 describe('shouldStringifyContent', () => {
   it('should return correct value is defined', () => {
-    const cs = createConfigSet({ tsJestConfig: { tsConfig: false, stringifyContentPathRegex: '\\.str$' } as any })
+    const cs = createConfigSet({ tsJestConfig: { tsconfig: false, stringifyContentPathRegex: '\\.str$' } as any })
     expect(cs.shouldStringifyContent('/foo/bar.ts')).toBe(false)
     expect(cs.shouldStringifyContent('/foo/bar.str')).toBe(true)
   })
 
   it('should return correct value when stringifyContentPathRegex is undefined', () => {
-    const cs = createConfigSet({ tsJestConfig: { tsConfig: false } as any })
+    const cs = createConfigSet({ tsJestConfig: { tsconfig: false } as any })
     expect(cs.shouldStringifyContent('/foo/bar.ts')).toBe(false)
   })
 }) // shouldStringifyContent
@@ -900,7 +956,7 @@ describe('tsCacheDir', () => {
         cache: true,
         cacheDirectory: cacheDir,
         globals: {
-          'ts-jest': { tsConfig: false },
+          'ts-jest': { tsconfig: false },
         },
       },
       projectPackageJson: pkg,
@@ -915,10 +971,10 @@ describe('tsCacheDir', () => {
 
 describe('shouldReportDiagnostic', () => {
   it('should return correct value', () => {
-    let cs = createConfigSet({ tsJestConfig: { tsConfig: false, diagnostics: { pathRegex: '/foo/' } } as any })
+    let cs = createConfigSet({ tsJestConfig: { tsconfig: false, diagnostics: { pathRegex: '/foo/' } } as any })
     expect(cs.shouldReportDiagnostic('/foo/index.ts')).toBe(true)
     expect(cs.shouldReportDiagnostic('/bar/index.ts')).toBe(false)
-    cs = createConfigSet({ tsJestConfig: { tsConfig: false } as any })
+    cs = createConfigSet({ tsJestConfig: { tsconfig: false } as any })
     expect(cs.shouldReportDiagnostic('/foo/index.ts')).toBe(true)
     expect(cs.shouldReportDiagnostic('/bar/index.ts')).toBe(true)
   })
@@ -931,7 +987,7 @@ describe('tsCompiler', () => {
         testRegex: [],
         testMatch: [],
       },
-      tsJestConfig: { tsConfig: false } as any,
+      tsJestConfig: { tsconfig: false } as any,
     })
     const compiler = cs.tsCompiler
     expect(compiler.cwd).toBe(cs.cwd)
@@ -1153,7 +1209,7 @@ describe('babelJestTransformer', () => {
 describe('cacheKey', () => {
   it('should be a string', () => {
     const cs = createConfigSet({
-      tsJestConfig: { tsConfig: require.resolve('../__mocks__/tsconfig-src.json') },
+      tsJestConfig: { tsconfig: require.resolve('../__mocks__/tsconfig-src.json') },
       projectDependencies: {
         opt: '1.2.3',
         peer: '1.2.4',
@@ -1180,7 +1236,7 @@ describe('cacheKey', () => {
 describe('jsonValue', () => {
   it('should create jsonValue based on each config and version', () => {
     const cs = createConfigSet({
-      tsJestConfig: { tsConfig: require.resolve('../__mocks__/tsconfig-src.json') },
+      tsJestConfig: { tsconfig: require.resolve('../__mocks__/tsconfig-src.json') },
       projectDependencies: {
         'some-module': '1.2.3',
       },

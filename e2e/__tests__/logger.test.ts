@@ -66,7 +66,7 @@ describe('ts-jest logging', () => {
         env: { TS_JEST_LOG: 'ts-jest.log' },
         noCache: true,
         tsJestConfig: {
-          tsConfig: {
+          tsconfig: {
             target: 'es2020' as any
           }
         }

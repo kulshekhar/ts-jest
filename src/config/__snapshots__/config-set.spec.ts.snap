@@ -366,3 +366,8 @@ Array [
   },
 ]
 `;
+
+exports[`tsJest tsconfig should show warning message with tsConfig option 1`] = `
+"[level:40] The option \`tsConfig\` is deprecated and will be removed in ts-jest 27, use \`tsconfig\` instead
+"
+`;

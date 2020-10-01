@@ -17,7 +17,7 @@ module.exports = Object.assign({}, cfg, {
   testEnvironment: "node",
   globals: {
     "ts-jest": {
-      tsConfig: "./tsconfig.json",
+      tsconfig: "./tsconfig.json",
     },
   },
 })
