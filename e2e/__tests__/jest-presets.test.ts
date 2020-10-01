@@ -1,4 +1,4 @@
-import { PackageSets } from '../__helpers__/templates'
+import { allValidPackageSets, PackageSets } from '../__helpers__/templates'
 import { configureTestCase } from '../__helpers__/test-case'
 
 // 'ts-jest' is tested in almost all test cases
@@ -21,6 +21,17 @@ describe('ts-jest/presets/js-with-babel', () => {
       const result = runTest()
       expect(result.status).toBe(0)
       expect(result).toMatchSnapshot()
+    })
+  })
+})
+
+describe('ts-jest all presets', () => {
+  const testCase = configureTestCase('presets')
+
+  testCase.runWithTemplates(allValidPackageSets, 0, (runTest, { testLabel }) => {
+    it(testLabel, () => {
+      const result = runTest()
+      expect(result.status).toBe(0)
     })
   })
 })
