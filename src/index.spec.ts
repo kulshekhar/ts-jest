@@ -21,23 +21,17 @@ describe('ts-jest', () => {
   it('should export a `createTransformer` function', () => {
     expect(typeof tsJest.createTransformer).toBe('function')
   })
-  it('should export a `process` function', () => {
-    expect(typeof tsJest.process).toBe('function')
-  })
-  it('should export a `getCacheKey` function', () => {
-    expect(typeof tsJest.getCacheKey).toBe('function')
-  })
+
   it('should export a `createJestPreset` function', () => {
     expect(typeof tsJest.createJestPreset).toBe('function')
   })
+
   it('should export a `mocked` function', () => {
     expect(typeof tsJest.mocked).toBe('function')
   })
+
   it('should export a `pathsToModuleNameMapper` function', () => {
     expect(typeof tsJest.pathsToModuleNameMapper).toBe('function')
-  })
-  it('should export a `jestPreset` object', () => {
-    expect(tsJest.jestPreset).toEqual({ jestPreset: true })
   })
 })
 
@@ -67,6 +61,7 @@ describe('moved helpers', () => {
     target = logTargetMock()
     target.clear()
   })
+
   it('should warn when using mocked', () => {
     tsJest.mocked(42)
     expect(target.lines.warn).toMatchInlineSnapshot(`
@@ -76,6 +71,7 @@ Array [
 ]
 `)
   })
+
   it('should warn when using createJestPreset', () => {
     tsJest.createJestPreset()
     expect(target.lines.warn).toMatchInlineSnapshot(`
@@ -85,6 +81,7 @@ Array [
 ]
 `)
   })
+
   it('should warn when using pathsToModuleNameMapper', () => {
     tsJest.pathsToModuleNameMapper({})
     expect(target.lines.warn).toMatchInlineSnapshot(`
@@ -104,31 +101,10 @@ describe('createTransformer', () => {
     expect(tr2).toBeInstanceOf(TsJestTransformer)
     expect(tr1).not.toBe(tr2)
   })
+
   it('should accept base options', () => {
     expect((tsJest.createTransformer({ isolatedModules: true }) as any).opt).toEqual({
       isolatedModules: true,
     })
-  })
-})
-
-describe('bare methods', () => {
-  beforeEach(() => {
-    tsJest.__resetModule()
-  })
-  it('should use the same instance of transformer for `process`', () => {
-    tsJest.process('foo')
-    expect(tsJest.__singleton().process).toHaveBeenCalledTimes(1)
-    expect(tsJest.__singleton().process).toHaveBeenCalledWith('foo')
-    tsJest.process('bar')
-    expect(tsJest.__singleton().process).toHaveBeenCalledTimes(2)
-    expect(tsJest.__singleton().process).toHaveBeenLastCalledWith('bar')
-  })
-  it('should use the same instance of transformer for `getCacheKey`', () => {
-    tsJest.getCacheKey('foo')
-    expect(tsJest.__singleton().getCacheKey).toHaveBeenCalledTimes(1)
-    expect(tsJest.__singleton().getCacheKey).toHaveBeenCalledWith('foo')
-    tsJest.getCacheKey('bar')
-    expect(tsJest.__singleton().getCacheKey).toHaveBeenCalledTimes(2)
-    expect(tsJest.__singleton().getCacheKey).toHaveBeenLastCalledWith('bar')
   })
 })

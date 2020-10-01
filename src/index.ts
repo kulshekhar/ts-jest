@@ -40,48 +40,8 @@ export const version: string = require('../package.json').version
  */
 export const digest: string = readFileSync(resolve(__dirname, '..', '.ts-jest-digest'), 'utf8')
 
-let transformer!: TsJestTransformer
-function defaultTransformer(): TsJestTransformer {
-  return transformer || (transformer = createTransformer())
-}
-
 export function createTransformer(baseConfig?: TsJestGlobalOptions): TsJestTransformer {
   VersionCheckers.jest.warn()
 
   return new TsJestTransformer(baseConfig)
-}
-/**
- * @internal
- */
-export function process(...args: any[]): any {
-  return (defaultTransformer().process as any)(...args)
-}
-/**
- * @internal
- */
-export function getCacheKey(...args: any[]): any {
-  return (defaultTransformer().getCacheKey as any)(...args)
-}
-
-/**
- * @internal
- */
-// we let jest doing the instrumentation, it does it well
-export const canInstrument = false
-
-const jestPreset = createJestPresetCore()
-
-/**
- * @internal
- */
-// for tests
-export const __singleton = (): TsJestTransformer => transformer
-/**
- * @internal
- */
-export const __resetModule = (): any => (transformer = undefined as any)
-
-export {
-  // extra ==================
-  jestPreset,
 }
