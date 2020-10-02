@@ -11,7 +11,7 @@ import type { TsJestGlobalOptions } from '../types'
 import * as _backports from '../utils/backports'
 import { getPackageVersion } from '../utils/get-package-version'
 import { normalizeSlashes } from '../utils/normalize-slashes'
-import { mocked } from '../utils'
+import { mocked } from '../utils/testing'
 
 import { IGNORE_DIAGNOSTIC_CODES, TS_JEST_OUT_DIR } from './config-set'
 // eslint-disable-next-line no-duplicate-imports
