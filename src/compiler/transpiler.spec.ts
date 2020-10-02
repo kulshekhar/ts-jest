@@ -10,7 +10,7 @@ describe('Transpiler', () => {
   it('should compile js file for allowJs true', () => {
     const fileName = 'foo.js'
     const compiler = makeCompiler({
-      tsJestConfig: { ...baseTsJestConfig, tsConfig: { allowJs: true, outDir: TS_JEST_OUT_DIR } },
+      tsJestConfig: { ...baseTsJestConfig, tsconfig: { allowJs: true, outDir: TS_JEST_OUT_DIR } },
     })
     const source = 'export default 42'
 
@@ -31,7 +31,7 @@ describe('Transpiler', () => {
       const compiler = makeCompiler({
         tsJestConfig: {
           ...baseTsJestConfig,
-          tsConfig: {
+          tsconfig: {
             jsx: 'preserve' as any,
           },
         },
@@ -45,7 +45,7 @@ describe('Transpiler', () => {
       const compiler = makeCompiler({
         tsJestConfig: {
           ...baseTsJestConfig,
-          tsConfig: {
+          tsconfig: {
             jsx: 'react' as any,
           },
         },
@@ -61,7 +61,7 @@ describe('Transpiler', () => {
     const fileName = 'test-source-map-transpiler.ts'
 
     it('should have correct source maps without mapRoot', () => {
-      const compiler = makeCompiler({ tsJestConfig: { ...baseTsJestConfig, tsConfig: false } })
+      const compiler = makeCompiler({ tsJestConfig: { ...baseTsJestConfig, tsconfig: false } })
       const compiled = compiler.compile(source, fileName)
 
       expect(new ProcessedSource(compiled, fileName).outputSourceMaps).toMatchObject({
@@ -75,7 +75,7 @@ describe('Transpiler', () => {
       const compiler = makeCompiler({
         tsJestConfig: {
           ...baseTsJestConfig,
-          tsConfig: {
+          tsconfig: {
             mapRoot: './',
           },
         },
@@ -92,7 +92,7 @@ describe('Transpiler', () => {
 
   describe('diagnostics', () => {
     it('should not report diagnostics related to typings', () => {
-      const compiler = makeCompiler({ tsJestConfig: { ...baseTsJestConfig, tsConfig: false } })
+      const compiler = makeCompiler({ tsJestConfig: { ...baseTsJestConfig, tsconfig: false } })
 
       expect(() =>
         compiler.compile(
@@ -107,7 +107,7 @@ const v: boolean = t
     })
 
     it('should report diagnostics related to codes with pathRegex config is undefined', () => {
-      const compiler = makeCompiler({ tsJestConfig: { ...baseTsJestConfig, tsConfig: false } })
+      const compiler = makeCompiler({ tsJestConfig: { ...baseTsJestConfig, tsconfig: false } })
 
       expect(() =>
         compiler.compile(
@@ -122,7 +122,7 @@ const t: string = f(5)
 
     it('should report diagnostics related to codes with pathRegex config matches file name', () => {
       const compiler = makeCompiler({
-        tsJestConfig: { ...baseTsJestConfig, tsConfig: false, diagnostics: { pathRegex: 'foo.ts' } },
+        tsJestConfig: { ...baseTsJestConfig, tsconfig: false, diagnostics: { pathRegex: 'foo.ts' } },
       })
 
       expect(() =>
@@ -138,7 +138,7 @@ const t: string = f(5)
 
     it('should not report diagnostics related to codes with pathRegex config does not match file name', () => {
       const compiler = makeCompiler({
-        tsJestConfig: { ...baseTsJestConfig, tsConfig: false, diagnostics: { pathRegex: 'bar.ts' } },
+        tsJestConfig: { ...baseTsJestConfig, tsconfig: false, diagnostics: { pathRegex: 'bar.ts' } },
       })
 
       expect(() =>

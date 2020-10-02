@@ -48,7 +48,7 @@ describe('Source map', () => {
   describe('with tsconfig mapRoot', () => {
     runSourceMapTests({
       ...BASE_CONFIG,
-      tsConfig: {
+      tsconfig: {
         mapRoot: './'
       }
     })

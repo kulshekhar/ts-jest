@@ -174,6 +174,9 @@ export class ConfigSet {
     const options: TsJestGlobalOptions = { ...globals['ts-jest'] }
 
     // tsconfig
+    if (options.tsConfig) {
+      this.logger.warn(Deprecations.TsConfig)
+    }
     const tsConfig: TsJestConfig['tsConfig'] = this.getInlineOrFileConfigOpt(
       options.tsConfig ?? options.tsconfig ?? true,
     )

@@ -103,7 +103,7 @@ describe('path-mapping', () => {
     ({ code, extension }) => {
       const configSet = createConfigSet({
         tsJestConfig: {
-          tsConfig: {
+          tsconfig: {
             baseUrl: '.',
             paths: {
               '@utils/*': ['src/utils/*'],

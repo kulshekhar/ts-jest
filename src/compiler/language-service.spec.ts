@@ -10,7 +10,7 @@ import ProcessedSource from '../__helpers__/processed-source'
 const logTarget = logTargetMock()
 
 describe('Language service', () => {
-  const baseTsJestConfig = { tsConfig: require.resolve('../../tsconfig.spec.json') }
+  const baseTsJestConfig = { tsconfig: require.resolve('../../tsconfig.spec.json') }
 
   beforeEach(() => {
     logTarget.clear()
@@ -22,7 +22,7 @@ describe('Language service', () => {
 
     it('should compile js file for allowJs true with outDir', () => {
       const compiler = makeCompiler({
-        tsJestConfig: { tsConfig: { allowJs: true, outDir: '$$foo$$' } },
+        tsJestConfig: { tsconfig: { allowJs: true, outDir: '$$foo$$' } },
       })
 
       const compiled = compiler.compile(source, fileName)
@@ -32,7 +32,7 @@ describe('Language service', () => {
 
     it('should compile js file for allowJs true without outDir', () => {
       const compiler = makeCompiler({
-        tsJestConfig: { tsConfig: { allowJs: true } },
+        tsJestConfig: { tsconfig: { allowJs: true } },
       })
       const compiled = compiler.compile(source, fileName)
 
@@ -51,7 +51,7 @@ describe('Language service', () => {
     it('should compile tsx file for jsx preserve', () => {
       const compiler = makeCompiler({
         tsJestConfig: {
-          tsConfig: {
+          tsconfig: {
             jsx: 'preserve' as any,
           },
         },
@@ -65,7 +65,7 @@ describe('Language service', () => {
     it('should compile tsx file for other jsx options', () => {
       const compiler = makeCompiler({
         tsJestConfig: {
-          tsConfig: {
+          tsconfig: {
             jsx: 'react' as any,
           },
         },
@@ -81,7 +81,7 @@ describe('Language service', () => {
     const fileName = 'test-source-map.ts'
 
     it('should have correct source maps without mapRoot', () => {
-      const compiler = makeCompiler({ tsJestConfig: { tsConfig: require.resolve('../../tsconfig.spec.json') } })
+      const compiler = makeCompiler({ tsJestConfig: { tsconfig: require.resolve('../../tsconfig.spec.json') } })
       const compiled = compiler.compile(source, fileName)
 
       expect(new ProcessedSource(compiled, fileName).outputSourceMaps).toMatchObject({
@@ -94,7 +94,7 @@ describe('Language service', () => {
     it('should have correct source maps with mapRoot', () => {
       const compiler = makeCompiler({
         tsJestConfig: {
-          tsConfig: {
+          tsconfig: {
             mapRoot: './',
           },
         },

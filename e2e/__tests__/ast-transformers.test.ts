@@ -22,7 +22,7 @@ describe('AST transformers', () => {
 
   describe('path mapping', () => {
     const tsJestConfig = {
-      tsConfig: {
+      tsconfig: {
         baseUrl: '.',
         paths: {
           '@share/*': ['share/*']
@@ -53,8 +53,8 @@ describe('AST transformers', () => {
       const testCase = configureTestCase('ast-transformers/path-mapping', {
         tsJestConfig: {
           ...tsJestConfig,
-          tsConfig: {
-            ...tsJestConfig.tsConfig,
+          tsconfig: {
+            ...tsJestConfig.tsconfig,
             rootDirs: ['./'],
           },
         },
