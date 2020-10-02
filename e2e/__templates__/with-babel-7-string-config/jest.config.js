@@ -1,5 +1,5 @@
 module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
-  globals: { 'ts-jest': { tsConfig: {}, babelConfig: 'babel.config.js' } },
+  globals: { 'ts-jest': { tsconfig: {}, babelConfig: 'babel.config.js' } },
 }

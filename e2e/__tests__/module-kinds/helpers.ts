@@ -9,7 +9,7 @@ import { configureTestCase } from '../../__helpers__/test-case'
 // ESNext = 6
 
 const testCaseForCompilerOpt = (config: any) => configureTestCase('module-kinds', {
-    tsJestConfig: { tsConfig: config, diagnostics: { warnOnly: true } },
+    tsJestConfig: { tsconfig: config, diagnostics: { warnOnly: true } },
     noCache: true,
   })
 
