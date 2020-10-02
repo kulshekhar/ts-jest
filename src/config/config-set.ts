@@ -128,13 +128,6 @@ export class ConfigSet {
   @Memoize()
   private get jest(): Config.ProjectConfig {
     const config = backportJestConfig(this.logger, this._jestConfig)
-    if (this.parentOptions) {
-      const globals: Config.ConfigGlobals = config.globals ?? Object.create(null)
-      globals['ts-jest'] = {
-        ...this.parentOptions,
-        ...globals['ts-jest'],
-      }
-    }
 
     this.logger.debug({ jestConfig: config }, 'normalized jest config')
 
@@ -748,7 +741,7 @@ export class ConfigSet {
    */
   private readonly _jestConfig: Config.ProjectConfig
 
-  constructor(jestConfig: Config.ProjectConfig, readonly parentOptions?: TsJestGlobalOptions, parentLogger?: Logger) {
+  constructor(jestConfig: Config.ProjectConfig, parentLogger?: Logger) {
     this._jestConfig = jestConfig
     this.logger = parentLogger ? parentLogger.child({ [LogContexts.namespace]: 'config' }) : logger
   }

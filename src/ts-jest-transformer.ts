@@ -1,20 +1,16 @@
 import type { CacheKeyOptions, TransformOptions, TransformedSource, Transformer } from '@jest/transform'
 import type { Config } from '@jest/types'
 import type { Logger } from 'bs-logger'
-import { inspect } from 'util'
 
 import { ConfigSet } from './config/config-set'
 import { JS_JSX_REGEX, TS_TSX_REGEX } from './constants'
-import type { TsJestGlobalOptions } from './types'
 import { stringify } from './utils/json'
 import { JsonableValue } from './utils/jsonable-value'
 import { rootLogger } from './utils/logger'
 import { Errors, interpolate } from './utils/messages'
 import { sha1 } from './utils/sha1'
 
-const INSPECT_CUSTOM = inspect.custom || 'inspect'
-
-interface ConfigSetIndexItem {
+interface ConfigSetItem {
   configSet: ConfigSet
   jestConfig: JsonableValue<Config.ProjectConfig>
 }
@@ -22,51 +18,30 @@ interface ConfigSetIndexItem {
 export class TsJestTransformer implements Transformer {
   /**
    * @internal
+   * cache ConfigSet within a process
    */
-  private static readonly _configSetsIndex: ConfigSetIndexItem[] = []
-  /**
-   * @internal
-   */
-  private static _lastTransformerId = 0
-  /**
-   * @internal
-   */
-  private static get _nextTransformerId() {
-    return ++TsJestTransformer._lastTransformerId
-  }
+  private static readonly configSetItems: ConfigSetItem[] = []
   private readonly logger: Logger
-  private readonly id: number
-  private readonly options: TsJestGlobalOptions
 
-  constructor(baseOptions: TsJestGlobalOptions = {}) {
-    this.options = { ...baseOptions }
-    this.id = TsJestTransformer._nextTransformerId
+  constructor() {
     this.logger = rootLogger.child({
-      transformerId: this.id,
-      namespace: 'jest-transformer',
+      namespace: 'ts-jest-transformer',
     })
-    this.logger.debug({ baseOptions }, 'created new transformer')
-  }
 
-  /**
-   * @internal
-   */
-  /* istanbul ignore next */
-  [INSPECT_CUSTOM](): string {
-    return `[object TsJestTransformer<#${this.id}>]`
+    this.logger.debug('created new transformer')
   }
 
   /**
    * Use by e2e, don't mark as internal
    */
   configsFor(jestConfig: Config.ProjectConfig): ConfigSet {
-    let csi: ConfigSetIndexItem | undefined = TsJestTransformer._configSetsIndex.find(
+    let csi: ConfigSetItem | undefined = TsJestTransformer.configSetItems.find(
       (cs) => cs.jestConfig.value === jestConfig,
     )
     if (csi) return csi.configSet
     // try to look-it up by stringified version
     const serialized = stringify(jestConfig)
-    csi = TsJestTransformer._configSetsIndex.find((cs) => cs.jestConfig.serialized === serialized)
+    csi = TsJestTransformer.configSetItems.find((cs) => cs.jestConfig.serialized === serialized)
     if (csi) {
       // update the object so that we can find it later
       // this happens because jest first calls getCacheKey with stringified version of
@@ -80,8 +55,8 @@ export class TsJestTransformer implements Transformer {
     // create the new record in the index
     this.logger.info('no matching config-set found, creating a new one')
 
-    const configSet = new ConfigSet(jestConfigObj, this.options, this.logger)
-    TsJestTransformer._configSetsIndex.push({
+    const configSet = new ConfigSet(jestConfigObj, this.logger)
+    TsJestTransformer.configSetItems.push({
       jestConfig: new JsonableValue(jestConfigObj),
       configSet,
     })

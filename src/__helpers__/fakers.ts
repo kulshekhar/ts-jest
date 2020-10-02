@@ -58,17 +58,15 @@ export const defaultResolve = (path: string): string => `resolved:${path}`
 export function createConfigSet({
   jestConfig,
   tsJestConfig,
-  parentConfig,
   resolve = defaultResolve,
   ...others
 }: {
   jestConfig?: Partial<Config.ProjectConfig>
   tsJestConfig?: TsJestGlobalOptions
-  parentConfig?: TsJestGlobalOptions
   resolve?: ((path: string) => string) | null
   [key: string]: any
 } = {}): ConfigSet {
-  const cs = new ConfigSet(getJestConfig(jestConfig, tsJestConfig), parentConfig)
+  const cs = new ConfigSet(getJestConfig(jestConfig, tsJestConfig))
   if (resolve) {
     cs.resolvePath = resolve
   }

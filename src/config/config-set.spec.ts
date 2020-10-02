@@ -83,7 +83,6 @@ describe('tsJest', () => {
           jestConfig: {
             globals: Object.create(null),
           },
-          parentConfig: { __parent: true } as any,
         }).tsJest,
       ).toMatchSnapshot()
     })
@@ -94,7 +93,6 @@ describe('tsJest', () => {
           jestConfig: {
             globals: undefined,
           } as any,
-          parentConfig: { __parent: true } as any,
         }).tsJest,
       ).toMatchSnapshot()
     })
@@ -389,8 +387,7 @@ describe('tsJest', () => {
 }) // tsJest
 
 describe('parsedTsConfig', () => {
-  const get = (tsJest?: TsJestGlobalOptions, parentConfig?: TsJestGlobalOptions) =>
-    createConfigSet({ tsJestConfig: tsJest, parentConfig }).parsedTsConfig
+  const get = (tsJest?: TsJestGlobalOptions) => createConfigSet({ tsJestConfig: tsJest }).parsedTsConfig
 
   it('should read file list from default tsconfig', () => {
     // since the default is to lookup for tsconfig,
@@ -403,7 +400,7 @@ describe('parsedTsConfig', () => {
   })
 
   it('should include compiler config from base config', () => {
-    expect(get(void 0, { tsconfig: { target: 'esnext' as any } }).options.target).toBe(ts.ScriptTarget.ESNext)
+    expect(get({ tsconfig: { target: 'esnext' } as any }).options.target).toBe(ts.ScriptTarget.ESNext)
   })
 
   it('should override some options', () => {
@@ -414,7 +411,7 @@ describe('parsedTsConfig', () => {
   })
 
   it('should include default outDir $$ts-jest$$ when allowJs is enabled and no outDir from config', () => {
-    expect(get(void 0, { tsconfig: { allowJs: true } }).options.outDir).toBe(TS_JEST_OUT_DIR)
+    expect(get({ tsconfig: { allowJs: true } }).options.outDir).toBe(TS_JEST_OUT_DIR)
   })
 
   it('should be able to read extends', () => {

@@ -40,8 +40,8 @@ export const version: string = require('../package.json').version
  */
 export const digest: string = readFileSync(resolve(__dirname, '..', '.ts-jest-digest'), 'utf8')
 
-export function createTransformer(baseConfig?: TsJestGlobalOptions): TsJestTransformer {
+export function createTransformer(): TsJestTransformer {
   VersionCheckers.jest.warn()
 
-  return new TsJestTransformer(baseConfig)
+  return new TsJestTransformer()
 }
