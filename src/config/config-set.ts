@@ -27,7 +27,6 @@ import {
   TransformerFactory,
 } from 'typescript'
 
-import { digest as MY_DIGEST, version as MY_VERSION } from '..'
 import { createCompilerInstance } from '../compiler/instance'
 import { DEFAULT_JEST_TEST_MATCH } from '../constants'
 import { internals as internalAstTransformers } from '../transformers'
@@ -55,6 +54,14 @@ import { sha1 } from '../utils/sha1'
 import { TSError } from '../utils/ts-error'
 
 const logger = rootLogger.child({ namespace: 'config' })
+/**
+ * @internal
+ */
+export const MY_VERSION: string = require('../../package.json').version
+/**
+ * @internal
+ */
+export const MY_DIGEST: string = readFileSync(resolve(__dirname, '..', '..', '.ts-jest-digest'), 'utf8')
 
 interface AstTransformerObj<T = Record<string, unknown>> {
   transformModule: AstTransformerDesc
