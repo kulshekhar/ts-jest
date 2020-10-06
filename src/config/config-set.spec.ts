@@ -4,7 +4,6 @@ import { LogLevels, testing } from 'bs-logger'
 import { join, resolve } from 'path'
 import ts from 'typescript'
 
-import * as _myModule from '..'
 import { logTargetMock } from '../__helpers__/mocks'
 import { createConfigSet, defaultResolve } from '../__helpers__/fakers'
 import type { TsJestGlobalOptions } from '../types'
@@ -13,17 +12,17 @@ import { getPackageVersion } from '../utils/get-package-version'
 import { normalizeSlashes } from '../utils/normalize-slashes'
 import { mocked } from '../utils/testing'
 
-import { IGNORE_DIAGNOSTIC_CODES, TS_JEST_OUT_DIR } from './config-set'
+import { IGNORE_DIAGNOSTIC_CODES, MY_DIGEST, MY_VERSION, TS_JEST_OUT_DIR } from './config-set'
 // eslint-disable-next-line no-duplicate-imports
 import type { ConfigSet } from './config-set'
 import { Deprecations } from '../utils/messages'
+import { digest } from '../__mocks__'
 
 jest.mock('../utils/backports')
 jest.mock('../index')
 jest.mock('../utils/get-package-version')
 
 const backports = mocked(_backports)
-const myModule = mocked(_myModule)
 
 backports.backportJestConfig.mockImplementation((_, config) => ({
   ...config,
@@ -840,7 +839,7 @@ describe('versions', () => {
     it('should return correct version map without babel', () => {
       expect(createConfigSet().versions).toEqual({
         jest: '-',
-        'ts-jest': myModule.version,
+        'ts-jest': MY_VERSION,
         typescript: '-',
       })
     })
@@ -850,7 +849,7 @@ describe('versions', () => {
         '@babel/core': '-',
         'babel-jest': '-',
         jest: '-',
-        'ts-jest': myModule.version,
+        'ts-jest': MY_VERSION,
         typescript: '-',
       })
     })
@@ -870,7 +869,7 @@ describe('versions', () => {
     it('should return correct version map without babel', () => {
       expect(createConfigSet().versions).toEqual({
         jest: pkgVersion('jest'),
-        'ts-jest': myModule.version,
+        'ts-jest': MY_VERSION,
         typescript: pkgVersion('typescript'),
       })
     })
@@ -880,7 +879,7 @@ describe('versions', () => {
         '@babel/core': pkgVersion('@babel/core'),
         'babel-jest': pkgVersion('babel-jest'),
         jest: pkgVersion('jest'),
-        'ts-jest': myModule.version,
+        'ts-jest': MY_VERSION,
         typescript: pkgVersion('typescript'),
       })
     })
@@ -889,7 +888,7 @@ describe('versions', () => {
 
 describe('tsJestDigest', () => {
   it('should be the package digest', () => {
-    expect(createConfigSet().tsJestDigest).toBe(myModule.digest)
+    expect(createConfigSet().tsJestDigest).toBe(MY_DIGEST)
   })
 }) // tsJestDigest
 
@@ -1215,6 +1214,7 @@ describe('cacheKey', () => {
       },
       resolve: null,
     })
+    jest.spyOn(cs, 'tsJestDigest', 'get').mockReturnValueOnce(digest)
     // we tested those and don't want the snapshot to change all the time we upgrade
     const val = cs.jsonValue.value
     delete val.versions
@@ -1239,6 +1239,7 @@ describe('jsonValue', () => {
       },
       resolve: null,
     })
+    jest.spyOn(cs, 'tsJestDigest', 'get').mockReturnValueOnce(digest)
     const val = cs.jsonValue.valueOf()
     expect(cs.toJSON()).toEqual(val)
     // we don't need to verify configFilePath and tsConfig value here
