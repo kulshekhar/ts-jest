@@ -166,6 +166,7 @@ module.exports = {
   ...tsjPreset,
   globals: {
     'ts-jest': {
+      packageJson: 'package.json',
       tsconfig: 'tsconfig.test.json',
       babelConfig: true,
     },
