@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TsJestTransformer process should process file with babel-jest 1`] = `
+"foo;
+//# "
+`;
+
+exports[`TsJestTransformer process should process file with babel-jest 2`] = `
+"[level:40] Got a unknown file type to compile (file: foo.bar). To fix this, in your Jest config change the \`transform\` key which value is \`ts-jest\` so that it does not match this kind of files anymore. If you still want Babel to process it, add another entry to the \`transform\` option with value \`babel-jest\` which key matches this type of files.
+"
+`;
+
+exports[`TsJestTransformer process should process file with babel-jest 3`] = `
+"foo;
+//# "
+`;

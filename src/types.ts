@@ -1,4 +1,4 @@
-import type { TransformedSource, Transformer } from '@jest/transform'
+import type { Transformer } from '@jest/transform'
 import type * as _babel from 'babel__core'
 import type * as _ts from 'typescript'
 
@@ -195,12 +195,6 @@ export interface TsJestConfig {
   transformers: ConfigCustomTransformer
   // to deprecate / deprecated === === ===
   stringifyContentPathRegex: TsJestConfig$stringifyContentPathRegex
-}
-/**
- * @internal
- */
-export interface TsJestHooksMap {
-  afterProcess?(args: any[], result: string | TransformedSource): string | TransformedSource | void
 }
 
 export interface TsCompiler {

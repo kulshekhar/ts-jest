@@ -1,7 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`cacheKey should be a string 1`] = `"{\\"digest\\":\\"a0d51ca854194df8191d0e65c0ca4730f510f332\\",\\"jest\\":{\\"__backported\\":true,\\"globals\\":{}},\\"transformers\\":[\\"hoisting-jest-mock@4\\"],\\"tsJest\\":{\\"compiler\\":\\"typescript\\",\\"diagnostics\\":{\\"ignoreCodes\\":[6059,18002,18003],\\"pretty\\":true,\\"throws\\":true},\\"isolatedModules\\":false,\\"packageJson\\":{\\"kind\\":\\"file\\"},\\"transformers\\":{},\\"tsConfig\\":{\\"kind\\":\\"file\\",\\"value\\":\\"\\"}},\\"tsconfig\\":{\\"options\\":{\\"configFilePath\\":\\"\\",\\"declaration\\":false,\\"inlineSourceMap\\":false,\\"inlineSources\\":true,\\"module\\":1,\\"noEmit\\":false,\\"removeComments\\":false,\\"sourceMap\\":true,\\"target\\":1,\\"types\\":[]},\\"raw\\":{\\"compileOnSave\\":false,\\"compilerOptions\\":{\\"composite\\":true,\\"declaration\\":true,\\"types\\":[]},\\"exclude\\":[\\"foo/**/*\\"],\\"include\\":[\\"bar/**/*\\"]}}}"`;
-
 exports[`isTestFile should return a boolean value whether the file matches test pattern 1`] = `true`;
 
 exports[`isTestFile should return a boolean value whether the file matches test pattern 2`] = `true`;
@@ -9,74 +7,6 @@ exports[`isTestFile should return a boolean value whether the file matches test 
 exports[`isTestFile should return a boolean value whether the file matches test pattern 3`] = `true`;
 
 exports[`isTestFile should return a boolean value whether the file matches test pattern 4`] = `true`;
-
-exports[`jsonValue should create jsonValue based on each config and version 1`] = `
-Object {
-  "babel": undefined,
-  "digest": "a0d51ca854194df8191d0e65c0ca4730f510f332",
-  "jest": Object {
-    "__backported": true,
-    "cacheDirectory": undefined,
-    "globals": Object {},
-    "name": undefined,
-  },
-  "transformers": Array [
-    "hoisting-jest-mock@4",
-  ],
-  "tsJest": Object {
-    "babelConfig": undefined,
-    "compiler": "typescript",
-    "diagnostics": Object {
-      "ignoreCodes": Array [
-        6059,
-        18002,
-        18003,
-      ],
-      "pretty": true,
-      "throws": true,
-    },
-    "isolatedModules": false,
-    "packageJson": Object {
-      "kind": "file",
-      "value": undefined,
-    },
-    "stringifyContentPathRegex": undefined,
-    "transformers": Object {},
-    "tsConfig": Object {
-      "kind": "file",
-      "value": "",
-    },
-  },
-  "tsconfig": Object {
-    "options": Object {
-      "configFilePath": "",
-      "declaration": false,
-      "inlineSourceMap": false,
-      "inlineSources": true,
-      "module": 1,
-      "noEmit": false,
-      "removeComments": false,
-      "sourceMap": true,
-      "target": 1,
-      "types": Array [],
-    },
-    "raw": Object {
-      "compileOnSave": false,
-      "compilerOptions": Object {
-        "composite": true,
-        "declaration": true,
-        "types": Array [],
-      },
-      "exclude": Array [
-        "foo/**/*",
-      ],
-      "include": Array [
-        "bar/**/*",
-      ],
-    },
-  },
-}
-`;
 
 exports[`readTsConfig resolve configFileName normally module in tsConfig is not the same as forced module and allowSyntheticDefaultImports is false in tsConfig should use correct paths when searching 1`] = `
 Array [
