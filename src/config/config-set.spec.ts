@@ -1,6 +1,6 @@
 /* eslint-disable jest/no-mocks-import */
 import type { Transformer } from '@jest/transform'
-import { LogLevels, testing } from 'bs-logger'
+import { testing } from 'bs-logger'
 import { join, resolve } from 'path'
 import ts from 'typescript'
 
@@ -16,7 +16,6 @@ import { IGNORE_DIAGNOSTIC_CODES, MY_DIGEST, MY_VERSION, TS_JEST_OUT_DIR } from 
 // eslint-disable-next-line no-duplicate-imports
 import type { ConfigSet } from './config-set'
 import { Deprecations } from '../utils/messages'
-import { digest } from '../__mocks__'
 
 jest.mock('../utils/backports')
 jest.mock('../index')
@@ -713,115 +712,6 @@ describe('readTsConfig', () => {
       })
     })
   })
-
-  describe('mismatch nodejs version and typescript target', () => {
-    const logTarget = logTargetMock()
-    function mismatchTestCaseContent(rawTarget: string | undefined, scriptTarget: ts.ScriptTarget) {
-      parseConfig.mockImplementation((conf: any) => ({
-        options: {
-          ...conf,
-          target: scriptTarget,
-        },
-        fileNames: [],
-        errors: [],
-      }))
-      readConfig.mockImplementation((p) => ({ config: { path: p, compilerOptions: { target: rawTarget } } }))
-
-      cs.readTsConfig()
-    }
-
-    describe.each([
-      { jestConfig: { rootDir: '/root', cwd: '/cwd' } as any, tsJestConfig: { babelConfig: true } },
-      { jestConfig: { rootDir: '/root', cwd: '/cwd' } as any },
-    ])('toggle warning message for users who are using ts-jest with babel or without babel', (config) => {
-      const shouldAction = config.tsJestConfig?.babelConfig ? `shouldn't` : 'should'
-
-      beforeEach(() => {
-        logTarget.clear()
-        cs = createConfigSet(config)
-        findConfig.mockImplementation((p: string) => `${p}/tsconfig.json`)
-      })
-
-      afterEach(() => {
-        findConfig.mockClear()
-        parseConfig.mockClear()
-        readConfig.mockClear()
-      })
-
-      /**
-       * It seems like not possible to mock process.version so the condition here is needed
-       */
-      if (process.version.startsWith('v10')) {
-        it(
-          `${shouldAction} show warning message when nodejs version is 10 and typescript target is higher than es2018` +
-            ` with tsconfig contains target`,
-          () => {
-            mismatchTestCaseContent('es2019', ts.ScriptTarget.ES2019)
-            // eslint-disable-next-line
-            config.tsJestConfig?.babelConfig
-              ? expect(logTarget.filteredLines(LogLevels.warn, Infinity)[0]).toBeUndefined()
-              : // expect.toEqual gives weird result here so toContain is workaround for it.
-                expect(logTarget.filteredLines(LogLevels.warn, Infinity)[0]).toContain(
-                  '[level:40] There is a mismatch between your ' +
-                    `NodeJs version ${process.version} and your TypeScript target es2019. This might lead to some unexpected errors ` +
-                    'when running tests with `ts-jest`. To fix this, you can check https://github.com/microsoft/TypeScript/wiki/Node-Target-Mapping',
-                )
-          },
-        )
-
-        it(
-          `${shouldAction} show warning message when nodejs version is 10 and typescript target is higher than es2018` +
-            ` with tsconfig doesn't contain target`,
-          () => {
-            mismatchTestCaseContent(undefined, ts.ScriptTarget.ES2019)
-            // eslint-disable-next-line
-            config.tsJestConfig?.babelConfig
-              ? expect(logTarget.filteredLines(LogLevels.warn, Infinity)[0]).toBeUndefined()
-              : // expect.toEqual gives weird result here so toContain is workaround for it.
-                expect(logTarget.filteredLines(LogLevels.warn, Infinity)[0]).toContain(
-                  '[level:40] There is a mismatch between your ' +
-                    `NodeJs version ${process.version} and your TypeScript target es2019. This might lead to some unexpected errors ` +
-                    'when running tests with `ts-jest`. To fix this, you can check https://github.com/microsoft/TypeScript/wiki/Node-Target-Mapping',
-                )
-          },
-        )
-      } else {
-        it(
-          `${shouldAction} show warning message when nodejs version is 12 and typescript target is higher than es2019` +
-            ` with tsconfig contains target`,
-          () => {
-            mismatchTestCaseContent('es2020', ts.ScriptTarget.ES2020)
-            // eslint-disable-next-line
-            config.tsJestConfig?.babelConfig
-              ? expect(logTarget.filteredLines(LogLevels.warn, Infinity)[0]).toBeUndefined()
-              : // expect.toEqual gives weird result here so toContain is workaround for it.
-                expect(logTarget.filteredLines(LogLevels.warn, Infinity)[0]).toContain(
-                  '[level:40] There is a mismatch between your ' +
-                    `NodeJs version ${process.version} and your TypeScript target es2020. This might lead to some unexpected errors ` +
-                    'when running tests with `ts-jest`. To fix this, you can check https://github.com/microsoft/TypeScript/wiki/Node-Target-Mapping',
-                )
-          },
-        )
-
-        it(
-          `${shouldAction} show warning message when nodejs version is 12 and typescript target is higher than es2019` +
-            ` with tsconfig doesn't target`,
-          () => {
-            mismatchTestCaseContent(undefined, ts.ScriptTarget.ES2020)
-            // eslint-disable-next-line
-            config.tsJestConfig?.babelConfig
-              ? expect(logTarget.filteredLines(LogLevels.warn, Infinity)[0]).toBeUndefined()
-              : // expect.toEqual gives weird result here so toContain is workaround for it.
-                expect(logTarget.filteredLines(LogLevels.warn, Infinity)[0]).toContain(
-                  '[level:40] There is a mismatch between your ' +
-                    `NodeJs version ${process.version} and your TypeScript target es2020. This might lead to some unexpected errors ` +
-                    'when running tests with `ts-jest`. To fix this, you can check https://github.com/microsoft/TypeScript/wiki/Node-Target-Mapping',
-                )
-          },
-        )
-      }
-    })
-  })
 }) // readTsConfig
 
 describe('versions', () => {
@@ -1201,55 +1091,6 @@ describe('babelJestTransformer', () => {
     expect(typeof babelJest.process).toBe('function')
   })
 }) // babelJestTransformer
-
-describe('cacheKey', () => {
-  it('should be a string', () => {
-    const cs = createConfigSet({
-      tsJestConfig: { tsconfig: require.resolve('../__mocks__/tsconfig-src.json') },
-      projectDependencies: {
-        opt: '1.2.3',
-        peer: '1.2.4',
-        dev: '1.2.5',
-        std: '1.2.6',
-      },
-      resolve: null,
-    })
-    jest.spyOn(cs, 'tsJestDigest', 'get').mockReturnValueOnce(digest)
-    // we tested those and don't want the snapshot to change all the time we upgrade
-    const val = cs.jsonValue.value
-    delete val.versions
-    // we don't need to verify configFilePath and tsConfig value here
-    val.tsconfig.options.configFilePath = ''
-    val.tsJest.tsConfig.value = ''
-    cs.jsonValue.value = val
-    /**
-     * digest is mocked in src/__mocks__/index.ts
-     * we don't want to save snapshot with real paths of tsconfig so we replace real path with empty string
-     */
-    expect(cs.cacheKey).toMatchSnapshot()
-  })
-}) // cacheKey
-
-describe('jsonValue', () => {
-  it('should create jsonValue based on each config and version', () => {
-    const cs = createConfigSet({
-      tsJestConfig: { tsconfig: require.resolve('../__mocks__/tsconfig-src.json') },
-      projectDependencies: {
-        'some-module': '1.2.3',
-      },
-      resolve: null,
-    })
-    jest.spyOn(cs, 'tsJestDigest', 'get').mockReturnValueOnce(digest)
-    const val = cs.jsonValue.valueOf()
-    expect(cs.toJSON()).toEqual(val)
-    // we don't need to verify configFilePath and tsConfig value here
-    val.tsconfig.options.configFilePath = ''
-    val.tsJest.tsConfig.value = ''
-
-    // digest is mocked in src/__mocks__/index.ts
-    expect(val).toMatchSnapshot()
-  })
-}) // jsonValue
 
 describe('raiseDiagnostics', () => {
   const createTsError = jest.fn(

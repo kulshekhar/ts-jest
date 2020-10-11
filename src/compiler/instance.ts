@@ -10,7 +10,7 @@ import { stringify } from '../utils/json'
 /**
  * Rely on TypeScript compiled output generation which contains this prefix to point to sourcemap location.
  */
-const SOURCE_MAPPING_PREFIX = 'sourceMappingURL='
+export const SOURCE_MAPPING_PREFIX = 'sourceMappingURL='
 
 /**
  * Update the output remapping the source map.

@@ -8,6 +8,7 @@
  * version of the `jest.ProjectConfig`, and then later it calls `process()`
  * with the complete, object version of it.
  */
+import type { TransformedSource } from '@jest/transform'
 import type { Config } from '@jest/types'
 import { LogContexts, Logger } from 'bs-logger'
 import { existsSync, readFileSync } from 'fs'
@@ -38,14 +39,12 @@ import type {
   TsCompiler,
   TsJestConfig,
   TsJestGlobalOptions,
-  TsJestHooksMap,
   TTypeScript,
 } from '../types'
 import { backportJestConfig } from '../utils/backports'
 import { getPackageVersion } from '../utils/get-package-version'
 import { importer } from '../utils/importer'
 import { stringify } from '../utils/json'
-import { JsonableValue } from '../utils/jsonable-value'
 import { rootLogger } from '../utils/logger'
 import { Memoize } from '../utils/memoize'
 import { Deprecations, Errors, ImportReasons, interpolate } from '../utils/messages'
@@ -67,12 +66,15 @@ interface AstTransformerObj<T = Record<string, unknown>> {
   transformModule: AstTransformerDesc
   options?: T
 }
-
 interface AstTransformer {
   before: AstTransformerObj[]
   after?: AstTransformerObj[]
   afterDeclarations?: AstTransformerObj[]
 }
+interface TsJestHooksMap {
+  afterProcess?(args: any[], result: string | TransformedSource): string | TransformedSource | void
+}
+
 /**
  * @internal
  */
@@ -368,7 +370,7 @@ export class ConfigSet {
    * @internal
    */
   @Memoize()
-  private get babel(): BabelConfig | undefined {
+  get babel(): BabelConfig | undefined {
     const {
       tsJest: { babelConfig },
     } = this
@@ -706,42 +708,6 @@ export class ConfigSet {
     return MY_DIGEST
   }
 
-  /**
-   * @internal
-   */
-  @Memoize()
-  get jsonValue(): JsonableValue {
-    const jest = { ...this.jest }
-    const globals = (jest.globals = { ...jest.globals } as any)
-    // we need to remove some stuff from jest config
-    // this which does not depend on config
-    jest.name = undefined as any
-    jest.cacheDirectory = undefined as any
-    // we do not need this since its normalized version is in tsJest
-    delete globals['ts-jest']
-
-    return new JsonableValue({
-      digest: this.tsJestDigest,
-      transformers: Object.values(this.astTransformers)
-        .reduce((acc, val) => acc.concat(val), [])
-        .map(({ transformModule }: AstTransformerObj) => `${transformModule.name}@${transformModule.version}`),
-      jest,
-      tsJest: this.tsJest,
-      babel: this.babel,
-      tsconfig: {
-        options: this.parsedTsConfig.options,
-        raw: this.parsedTsConfig.raw,
-      },
-    })
-  }
-
-  /**
-   * @internal
-   */
-  get cacheKey(): string {
-    return this.jsonValue.serialized
-  }
-
   readonly logger: Logger
   /**
    * @internal
@@ -889,6 +855,7 @@ export class ConfigSet {
     const nodeJsVer = process.version
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const compilationTarget = result.options.target!
+    /* istanbul ignore next (cover by e2e) */
     if (
       !this.tsJest.babelConfig &&
       ((nodeJsVer.startsWith('v10') && compilationTarget > ScriptTarget.ES2018) ||
@@ -939,12 +906,5 @@ export class ConfigSet {
     this.logger.debug({ fromPath: inputPath, toPath: path }, 'resolved path from', inputPath, 'to', path)
 
     return path
-  }
-
-  /**
-   * @internal
-   */
-  toJSON(): any {
-    return this.jsonValue.value
   }
 }

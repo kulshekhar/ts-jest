@@ -1,12 +1,9 @@
-import { createTransformer } from 'ts-jest'
 import { readFileSync } from 'fs'
+import { ConfigSet } from 'ts-jest/dist/config/config-set'
 
-describe('tsConfig', () => {
-  it('should have digest and versions', () => {
-    const tr = createTransformer()
-    const cs = tr.configsFor(Object.create(null))
-    expect(cs.tsJestDigest).toHaveLength(40)
-    expect(cs.tsJestDigest).toBe(readFileSync(require.resolve('ts-jest/.ts-jest-digest'), 'utf8'))
-    expect(cs.versions['ts-jest']).toBe(require('ts-jest/package.json').version)
-  })
+it('should have digest and versions', () => {
+  const cs = new ConfigSet(Object.create(null))
+  expect(cs.tsJestDigest).toHaveLength(40)
+  expect(cs.tsJestDigest).toBe(readFileSync(require.resolve('ts-jest/.ts-jest-digest'), 'utf8'))
+  expect(cs.versions['ts-jest']).toBe(require('ts-jest/package.json').version)
 })
