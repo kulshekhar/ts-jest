@@ -3,10 +3,14 @@
   "version": "1.0.0",
   "license": "MIT",
   "devDependencies": {
-    "@types/jest": "26.x",
-    "jest": "26.x",
-    "ts-jest": "26.x",
-    "typescript": "~4.0.2"
+    "@types/jest": "^26.0.14",
+    "jest": "^26.5.2",
+    "typescript": "^4.0.3"
+  },
+  "wantedDependencies": {
+    "@types/jest": "latest",
+    "jest": "latest",
+    "typescript": "latest"
   },
   "scripts": {
     "test": "jest"
