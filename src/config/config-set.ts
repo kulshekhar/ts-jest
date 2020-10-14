@@ -42,7 +42,6 @@ import type {
   TTypeScript,
 } from '../types'
 import { backportJestConfig } from '../utils/backports'
-import { getPackageVersion } from '../utils/get-package-version'
 import { importer } from '../utils/importer'
 import { stringify } from '../utils/json'
 import { rootLogger } from '../utils/logger'
@@ -52,11 +51,6 @@ import { normalizeSlashes } from '../utils/normalize-slashes'
 import { sha1 } from '../utils/sha1'
 import { TSError } from '../utils/ts-error'
 
-const logger = rootLogger.child({ namespace: 'config' })
-/**
- * @internal
- */
-export const MY_VERSION: string = require('../../package.json').version
 /**
  * @internal
  */
@@ -136,7 +130,7 @@ export class ConfigSet {
    */
   @Memoize()
   private get jest(): Config.ProjectConfig {
-    const config = backportJestConfig(this.logger, this._jestConfig)
+    const config = backportJestConfig(this.logger, this.jestConfig)
 
     this.logger.debug({ jestConfig: config }, 'normalized jest config')
 
@@ -295,26 +289,6 @@ export class ConfigSet {
    */
   get parsedTsConfig(): ParsedCommandLine {
     return this._parsedTsConfig
-  }
-
-  /**
-   * Use by e2e, don't mark as internal
-   */
-  @Memoize()
-  get versions(): Record<string, string> {
-    const modules = ['jest', this.tsJest.compiler]
-    if (this.tsJest.babelConfig) {
-      modules.push('@babel/core', 'babel-jest')
-    }
-
-    return modules.reduce(
-      (map, name) => {
-        map[name] = getPackageVersion(name) ?? '-'
-
-        return map
-      },
-      { 'ts-jest': MY_VERSION } as Record<string, string>,
-    )
   }
 
   /**
@@ -628,7 +602,7 @@ export class ConfigSet {
   @Memoize()
   get tsCacheDir(): string | undefined {
     if (!this.jest.cache) {
-      logger.debug('file caching disabled')
+      this.logger.debug('file caching disabled')
 
       return undefined
     }
@@ -644,7 +618,7 @@ export class ConfigSet {
     )
     const res = join(this.jest.cacheDirectory, 'ts-jest', cacheSuffix.substr(0, 2), cacheSuffix.substr(2))
 
-    logger.debug({ cacheDirectory: res }, 'will use file caching')
+    this.logger.debug({ cacheDirectory: res }, 'will use file caching')
 
     return res
   }
@@ -694,9 +668,8 @@ export class ConfigSet {
   /**
    * @internal
    */
-  @Memoize()
   get cwd(): string {
-    return normalize(this.jest.cwd || process.cwd())
+    return this._cwd
   }
 
   /**
@@ -709,14 +682,11 @@ export class ConfigSet {
   }
 
   readonly logger: Logger
-  /**
-   * @internal
-   */
-  private readonly _jestConfig: Config.ProjectConfig
+  private readonly _cwd: string
 
-  constructor(jestConfig: Config.ProjectConfig, parentLogger?: Logger) {
-    this._jestConfig = jestConfig
-    this.logger = parentLogger ? parentLogger.child({ [LogContexts.namespace]: 'config' }) : logger
+  constructor(private readonly jestConfig: Config.ProjectConfig) {
+    this.logger = rootLogger.child({ [LogContexts.namespace]: 'config' })
+    this._cwd = normalize(this.jestConfig.cwd ?? process.cwd())
   }
 
   /**
@@ -865,7 +835,7 @@ export class ConfigSet {
         nodeJsVer: process.version,
         compilationTarget: config.compilerOptions.target ?? TARGET_TO_VERSION_MAPPING[compilationTarget],
       })
-      logger.warn(message)
+      this.logger.warn(message)
     }
 
     return result

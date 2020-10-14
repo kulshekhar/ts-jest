@@ -12,7 +12,7 @@ import { getPackageVersion } from '../utils/get-package-version'
 import { normalizeSlashes } from '../utils/normalize-slashes'
 import { mocked } from '../utils/testing'
 
-import { IGNORE_DIAGNOSTIC_CODES, MY_DIGEST, MY_VERSION, TS_JEST_OUT_DIR } from './config-set'
+import { IGNORE_DIAGNOSTIC_CODES, MY_DIGEST, TS_JEST_OUT_DIR } from './config-set'
 // eslint-disable-next-line no-duplicate-imports
 import type { ConfigSet } from './config-set'
 import { Deprecations } from '../utils/messages'
@@ -27,8 +27,6 @@ backports.backportJestConfig.mockImplementation((_, config) => ({
   ...config,
   __backported: true,
 }))
-
-const pkgVersion = (pkgName: string) => require(`${pkgName}/package.json`).version || '????'
 
 beforeEach(() => {
   jest.clearAllMocks()
@@ -713,68 +711,6 @@ describe('readTsConfig', () => {
     })
   })
 }) // readTsConfig
-
-describe('versions', () => {
-  describe('package version cannot be resolved', () => {
-    let mock: jest.MockInstance<string | undefined, [string]>
-
-    beforeEach(() => {
-      mock = mocked(getPackageVersion).mockReturnValue(undefined)
-    })
-
-    afterEach(() => {
-      mock.mockRestore()
-    })
-
-    it('should return correct version map without babel', () => {
-      expect(createConfigSet().versions).toEqual({
-        jest: '-',
-        'ts-jest': MY_VERSION,
-        typescript: '-',
-      })
-    })
-
-    it('should return correct version map with babel', () => {
-      expect(createConfigSet({ tsJestConfig: { babelConfig: {} } }).versions).toEqual({
-        '@babel/core': '-',
-        'babel-jest': '-',
-        jest: '-',
-        'ts-jest': MY_VERSION,
-        typescript: '-',
-      })
-    })
-  })
-
-  describe('package version can be resolved', () => {
-    let mock: jest.MockInstance<string | undefined, [string]>
-
-    beforeEach(() => {
-      mock = mocked(getPackageVersion).mockImplementation(pkgVersion)
-    })
-
-    afterEach(() => {
-      mock.mockRestore()
-    })
-
-    it('should return correct version map without babel', () => {
-      expect(createConfigSet().versions).toEqual({
-        jest: pkgVersion('jest'),
-        'ts-jest': MY_VERSION,
-        typescript: pkgVersion('typescript'),
-      })
-    })
-
-    it('should return correct version map with babel', () => {
-      expect(createConfigSet({ tsJestConfig: { babelConfig: {} } }).versions).toEqual({
-        '@babel/core': pkgVersion('@babel/core'),
-        'babel-jest': pkgVersion('babel-jest'),
-        jest: pkgVersion('jest'),
-        'ts-jest': MY_VERSION,
-        typescript: pkgVersion('typescript'),
-      })
-    })
-  })
-}) // versions
 
 describe('tsJestDigest', () => {
   it('should be the package digest', () => {
