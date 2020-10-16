@@ -122,7 +122,7 @@ describe('tsJest', () => {
           resolveJsonModule: true,
         },
       })
-      expect(logger.target.lines[1]).toMatchSnapshot()
+      expect(logger.target.lines[0]).toMatchSnapshot()
     })
 
     it('should not show warning message with tsconfig option', () => {
@@ -146,7 +146,7 @@ describe('tsJest', () => {
           resolveJsonModule: true,
         },
       })
-      expect(logger.target.lines[1]).not.toContain(Deprecations.TsConfig)
+      expect(logger.target.lines[0]).not.toContain(Deprecations.TsConfig)
     })
   })
 
@@ -208,7 +208,7 @@ describe('tsJest', () => {
       logger.target.clear()
 
       expect(Object.keys(cs.tsJest.transformers)).toHaveLength(1)
-      expect(logger.target.lines[1]).toMatchSnapshot()
+      expect(logger.target.lines[0]).toMatchSnapshot()
     })
 
     it('should support transformers with options', () => {
@@ -270,7 +270,7 @@ describe('tsJest', () => {
       logger.target.clear()
 
       expect(Object.keys(cs.tsJest.transformers)).toHaveLength(Object.keys(data).length)
-      expect(logger.target.lines[1]).not.toContain(Deprecations.AstTransformerArrayConfig)
+      expect(logger.target.lines[0]).not.toContain(Deprecations.AstTransformerArrayConfig)
     })
   }) // custom AST transformers
 
@@ -871,7 +871,7 @@ describe('babelJestTransformer', () => {
     const babelJest = cs.babelJestTransformer as Transformer
 
     expect(cs.tsJest.babelConfig).toBeUndefined()
-    expect(logger.target.lines[2]).toMatchInlineSnapshot(`
+    expect(logger.target.lines[1]).toMatchInlineSnapshot(`
         "[level:20] babel is disabled
         "
       `)
@@ -897,7 +897,7 @@ describe('babelJestTransformer', () => {
 
     expect(cs.tsJest.babelConfig?.kind).toEqual('file')
     expect(cs.tsJest.babelConfig?.value).toBeUndefined()
-    expect(logger.target.lines[2]).toMatchInlineSnapshot(`
+    expect(logger.target.lines[1]).toMatchInlineSnapshot(`
         "[level:20] normalized babel config via ts-jest option
         "
       `)
@@ -925,7 +925,7 @@ describe('babelJestTransformer', () => {
 
     expect(cs.tsJest.babelConfig?.kind).toEqual('file')
     expect(cs.tsJest.babelConfig?.value).toEqual(join(process.cwd(), FILE))
-    expect(logger.target.lines[3]).toMatchInlineSnapshot(`
+    expect(logger.target.lines[2]).toMatchInlineSnapshot(`
         "[level:20] normalized babel config via ts-jest option
         "
       `)
@@ -953,7 +953,7 @@ describe('babelJestTransformer', () => {
 
     expect(cs.tsJest.babelConfig?.kind).toEqual('file')
     expect(cs.tsJest.babelConfig?.value).toEqual(join(process.cwd(), FILE))
-    expect(logger.target.lines[3]).toMatchInlineSnapshot(`
+    expect(logger.target.lines[2]).toMatchInlineSnapshot(`
         "[level:20] normalized babel config via ts-jest option
         "
       `)
@@ -989,7 +989,7 @@ describe('babelJestTransformer', () => {
         ],
       }
     `)
-    expect(logger.target.lines[2]).toMatchInlineSnapshot(`
+    expect(logger.target.lines[1]).toMatchInlineSnapshot(`
         "[level:20] normalized babel config via ts-jest option
         "
       `)
@@ -1017,7 +1017,7 @@ describe('babelJestTransformer', () => {
 
     expect(cs.tsJest.babelConfig?.kind).toEqual('inline')
     expect(cs.tsJest.babelConfig?.value).toEqual(CONFIG)
-    expect(logger.target.lines[2]).toMatchInlineSnapshot(`
+    expect(logger.target.lines[1]).toMatchInlineSnapshot(`
         "[level:20] normalized babel config via ts-jest option
         "
       `)
