@@ -125,16 +125,36 @@ const toDiagnosticCodeList = (items: (string | number)[], into: number[] = []): 
 }
 
 export class ConfigSet {
+  readonly logger: Logger
   /**
    * @internal
    */
-  @Memoize()
-  private get jest(): Config.ProjectConfig {
+  private readonly _cwd: string
+  /**
+   * @internal
+   */
+  private readonly _rootDir: string
+  /**
+   * @internal
+   */
+  private _jestCfg!: Config.ProjectConfig
+
+  constructor(private readonly jestConfig: Config.ProjectConfig) {
+    this.logger = rootLogger.child({ [LogContexts.namespace]: 'config' })
+    this._cwd = normalize(this.jestConfig.cwd ?? process.cwd())
+    this._rootDir = normalize(this.jestConfig.rootDir ?? this._cwd)
+    this._backportJestCfg()
+  }
+
+  /**
+   * @internal
+   */
+  private _backportJestCfg(): void {
     const config = backportJestConfig(this.logger, this.jestConfig)
 
     this.logger.debug({ jestConfig: config }, 'normalized jest config')
 
-    return config
+    this._jestCfg = config
   }
 
   /**
@@ -142,7 +162,7 @@ export class ConfigSet {
    */
   @Memoize()
   get isTestFile(): (fileName: string) => boolean {
-    const matchablePatterns = [...this.jest.testMatch, ...this.jest.testRegex].filter(
+    const matchablePatterns = [...this._jestCfg.testMatch, ...this._jestCfg.testRegex].filter(
       (pattern) =>
         /**
          * jest config testRegex doesn't always deliver the correct RegExp object
@@ -165,7 +185,7 @@ export class ConfigSet {
    */
   @Memoize()
   get tsJest(): TsJestConfig {
-    const parsedConfig = this.jest
+    const parsedConfig = this._jestCfg
     const { globals = {} } = parsedConfig as any
     const options: TsJestGlobalOptions = { ...globals['ts-jest'] }
 
@@ -601,7 +621,7 @@ export class ConfigSet {
    */
   @Memoize()
   get tsCacheDir(): string | undefined {
-    if (!this.jest.cache) {
+    if (!this._jestCfg.cache) {
       this.logger.debug('file caching disabled')
 
       return undefined
@@ -616,7 +636,7 @@ export class ConfigSet {
         diagnostics: this.tsJest.diagnostics,
       }),
     )
-    const res = join(this.jest.cacheDirectory, 'ts-jest', cacheSuffix.substr(0, 2), cacheSuffix.substr(2))
+    const res = join(this._jestCfg.cacheDirectory, 'ts-jest', cacheSuffix.substr(0, 2), cacheSuffix.substr(2))
 
     this.logger.debug({ cacheDirectory: res }, 'will use file caching')
 
@@ -657,17 +677,6 @@ export class ConfigSet {
     return options
   }
 
-  /**
-   * @internal
-   */
-  @Memoize()
-  get rootDir(): string {
-    return normalize(this.jest.rootDir || this.cwd)
-  }
-
-  /**
-   * @internal
-   */
   get cwd(): string {
     return this._cwd
   }
@@ -679,14 +688,6 @@ export class ConfigSet {
   // eslint-disable-next-line class-methods-use-this
   get tsJestDigest(): string {
     return MY_DIGEST
-  }
-
-  readonly logger: Logger
-  private readonly _cwd: string
-
-  constructor(private readonly jestConfig: Config.ProjectConfig) {
-    this.logger = rootLogger.child({ [LogContexts.namespace]: 'config' })
-    this._cwd = normalize(this.jestConfig.cwd ?? process.cwd())
   }
 
   /**
@@ -742,7 +743,7 @@ export class ConfigSet {
     noProject?: boolean | null,
   ): ParsedCommandLine {
     let config = { compilerOptions: Object.create(null) }
-    let basePath = normalizeSlashes(this.rootDir)
+    let basePath = normalizeSlashes(this._rootDir)
     let configFileName: string | undefined
     const ts = this.compilerModule
 
@@ -750,7 +751,7 @@ export class ConfigSet {
       // Read project configuration when available.
       configFileName = resolvedConfigFile
         ? normalizeSlashes(resolvedConfigFile)
-        : ts.findConfigFile(normalizeSlashes(this.rootDir), ts.sys.fileExists)
+        : ts.findConfigFile(normalizeSlashes(this._rootDir), ts.sys.fileExists)
 
       if (configFileName) {
         this.logger.debug({ tsConfigFileName: configFileName }, 'readTsConfig(): reading', configFileName)
@@ -841,9 +842,6 @@ export class ConfigSet {
     return result
   }
 
-  /**
-   * @internal
-   */
   resolvePath(
     inputPath: string,
     { throwIfMissing = true, nodeResolve = false }: { throwIfMissing?: boolean; nodeResolve?: boolean } = {},
@@ -851,7 +849,7 @@ export class ConfigSet {
     let path: string = inputPath
     let nodeResolved = false
     if (path.startsWith('<rootDir>')) {
-      path = resolve(join(this.rootDir, path.substr(9)))
+      path = resolve(join(this._rootDir, path.substr(9)))
     } else if (!isAbsolute(path)) {
       if (!path.startsWith('.') && nodeResolve) {
         try {
