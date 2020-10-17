@@ -1,12 +1,12 @@
 /* eslint-disable jest/no-mocks-import */
 import type { Transformer } from '@jest/transform'
-import { testing } from 'bs-logger'
+import { LogLevels, testing } from 'bs-logger'
 import { join, resolve } from 'path'
 import ts from 'typescript'
 
 import { logTargetMock } from '../__helpers__/mocks'
-import { createConfigSet, defaultResolve } from '../__helpers__/fakers'
-import type { TsJestGlobalOptions } from '../types'
+import { createConfigSet } from '../__helpers__/fakers'
+import type { TsJestGlobalOptions, TsJestConfig } from '../types'
 import * as _backports from '../utils/backports'
 import { getPackageVersion } from '../utils/get-package-version'
 import { normalizeSlashes } from '../utils/normalize-slashes'
@@ -151,40 +151,33 @@ describe('tsJest', () => {
   })
 
   describe('packageJson', () => {
-    it('should be correct when packageJson is true', () => {
-      const EXPECTED = {
-        kind: 'file',
-        value: undefined,
-      }
-      expect(getTsJest().packageJson).toEqual(EXPECTED)
-      expect(getTsJest({ packageJson: true }).packageJson).toEqual(EXPECTED)
+    const logger = testing.createLoggerMock()
+    let tsJestCfg: TsJestConfig
+
+    beforeEach(() => {
+      logger.target.clear()
+      tsJestCfg = createConfigSet({
+        jestConfig: {
+          globals: {
+            'ts-jest': {
+              packageJson: true,
+            },
+          },
+        } as any,
+        logger,
+        resolve: null,
+      }).tsJest
     })
 
-    it('should be correct for given file as string', () => {
-      const FILE = 'bar/tsconfig.foo.json'
-      const EXPECTED = {
-        kind: 'file',
-        value: defaultResolve(FILE),
-      }
-      expect(getTsJest({ packageJson: FILE }).packageJson).toEqual(EXPECTED)
+    it('should not contain packageJson in final tsJest config', () => {
+      expect(Object.keys(tsJestCfg)).not.toContain('packageJson')
     })
 
-    it('should be correct for given file as an object', () => {
-      const packageJsonStub = require('../__mocks__/package-foo.json')
-      const EXPECTED = {
-        kind: 'inline',
-        value: packageJsonStub,
-      }
-      expect(getTsJest({ packageJson: packageJsonStub }).packageJson).toEqual(EXPECTED)
-    })
-
-    it('should be correct for inline config', () => {
-      const CONFIG = { foo: 'bar' }
-      const EXPECTED = {
-        kind: 'inline',
-        value: CONFIG,
-      }
-      expect(getTsJest({ packageJson: CONFIG as any }).packageJson).toEqual(EXPECTED)
+    it('should show warning message when packageJson is provided', () => {
+      expect(logger.target.filteredLines(LogLevels.warn)[0]).toMatchInlineSnapshot(`
+        "[level:40] The option \`packageJson\` is deprecated and will be removed in ts-jest 27. This option is not used by internal \`ts-jest\`
+        "
+      `)
     })
   })
 

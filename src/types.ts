@@ -172,22 +172,12 @@ interface TsJestConfig$babelConfig$inline {
   value: BabelConfig
 }
 type TsJestConfig$babelConfig = TsJestConfig$babelConfig$file | TsJestConfig$babelConfig$inline | undefined
-interface TsJestConfig$packageJson$file {
-  kind: 'file'
-  value: string | undefined
-}
-interface TsJestConfig$packageJson$inline {
-  kind: 'inline'
-  value: any
-}
-type TsJestConfig$packageJson = TsJestConfig$packageJson$file | TsJestConfig$packageJson$inline | undefined
 type TsJestConfig$stringifyContentPathRegex = string | undefined
 /**
  * @internal
  */
 export interface TsJestConfig {
   tsConfig: TsJestConfig$tsConfig
-  packageJson: TsJestConfig$packageJson
   isolatedModules: boolean
   compiler: string
   diagnostics: TsJestConfig$diagnostics

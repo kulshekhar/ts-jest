@@ -197,9 +197,6 @@ export class ConfigSet {
       options.tsConfig ?? options.tsconfig ?? true,
     )
 
-    // packageJson
-    const packageJson: TsJestConfig['packageJson'] = this.getInlineOrFileConfigOpt(options.packageJson ?? true)
-
     // transformers
     let transformers: ConfigCustomTransformer = Object.create(null)
     const { astTransformers } = options
@@ -260,6 +257,10 @@ export class ConfigSet {
       }
     }
 
+    if (options.packageJson) {
+      this.logger.warn(Deprecations.PackageJson)
+    }
+
     // babel config (for babel-jest) default is undefined so we don't need to have fallback like tsConfig or packageJson
     const babelConfig: TsJestConfig['babelConfig'] = this.getInlineOrFileConfigOpt(options.babelConfig)
 
@@ -290,7 +291,6 @@ export class ConfigSet {
     // parsed options
     const res: TsJestConfig = {
       tsConfig,
-      packageJson,
       babelConfig,
       diagnostics,
       isolatedModules: !!options.isolatedModules,
