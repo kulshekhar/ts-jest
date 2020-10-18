@@ -19,7 +19,6 @@ export function tsJestConfig(options?: Partial<TsJestConfig>): TsJestConfig {
     transformers: options?.transformers ?? Object.create(null),
     babelConfig: undefined,
     tsConfig: undefined,
-    packageJson: undefined,
     stringifyContentPathRegex: undefined,
     diagnostics: { ignoreCodes: [], pretty: false, throws: true },
     ...options,

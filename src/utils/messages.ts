@@ -39,6 +39,7 @@ export const enum Deprecations {
   HelperMovedToUtils = "The `{{helper}}` helper has been moved to `ts-jest/utils`. Use `import { {{helper}} } from 'ts-jest/utils'` instead.",
   AstTransformerArrayConfig = 'The configuration for astTransformers as string[] is deprecated and will be removed in ts-jest 27. Please define your custom AST transformers in a form of an object. More information you can check online documentation https://kulshekhar.github.io/ts-jest/user/config/astTransformers',
   TsConfig = 'The option `tsConfig` is deprecated and will be removed in ts-jest 27, use `tsconfig` instead',
+  PackageJson = 'The option `packageJson` is deprecated and will be removed in ts-jest 27. This option is not used by internal `ts-jest`',
 }
 
 /**

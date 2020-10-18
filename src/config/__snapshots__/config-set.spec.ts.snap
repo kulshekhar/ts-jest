@@ -214,10 +214,6 @@ Object {
     "throws": true,
   },
   "isolatedModules": false,
-  "packageJson": Object {
-    "kind": "file",
-    "value": undefined,
-  },
   "stringifyContentPathRegex": undefined,
   "transformers": Object {},
   "tsConfig": Object {
@@ -241,10 +237,6 @@ Object {
     "throws": true,
   },
   "isolatedModules": false,
-  "packageJson": Object {
-    "kind": "file",
-    "value": undefined,
-  },
   "stringifyContentPathRegex": undefined,
   "transformers": Object {},
   "tsConfig": Object {
@@ -268,10 +260,6 @@ Object {
     "throws": true,
   },
   "isolatedModules": false,
-  "packageJson": Object {
-    "kind": "file",
-    "value": undefined,
-  },
   "stringifyContentPathRegex": undefined,
   "transformers": Object {},
   "tsConfig": Object {
