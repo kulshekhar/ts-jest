@@ -16,28 +16,23 @@ import { globsToMatcher } from 'jest-util'
 import json5 = require('json5')
 import { dirname, extname, isAbsolute, join, normalize, resolve } from 'path'
 import {
-  Bundle,
   CompilerOptions,
   CustomTransformers,
   Diagnostic,
-  DiagnosticCategory,
   FormatDiagnosticsHost,
   ParsedCommandLine,
   ScriptTarget,
-  SourceFile,
-  TransformerFactory,
 } from 'typescript'
 
 import { createCompilerInstance } from '../compiler/instance'
 import { DEFAULT_JEST_TEST_MATCH } from '../constants'
-import { internals as internalAstTransformers } from '../transformers'
+import { factory as hoisting } from '../transformers/hoist-jest'
 import type {
-  AstTransformerDesc,
+  AstTransformer,
   BabelConfig,
   BabelJestTransformer,
-  ConfigCustomTransformer,
   TsCompiler,
-  TsJestConfig,
+  TsJestDiagnosticsCfg,
   TsJestGlobalOptions,
   TTypeScript,
 } from '../types'
@@ -56,15 +51,6 @@ import { TSError } from '../utils/ts-error'
  */
 export const MY_DIGEST: string = readFileSync(resolve(__dirname, '..', '..', '.ts-jest-digest'), 'utf8')
 
-interface AstTransformerObj<T = Record<string, unknown>> {
-  transformModule: AstTransformerDesc
-  options?: T
-}
-interface AstTransformer {
-  before: AstTransformerObj[]
-  after?: AstTransformerObj[]
-  afterDeclarations?: AstTransformerObj[]
-}
 interface TsJestHooksMap {
   afterProcess?(args: any[], result: string | TransformedSource): string | TransformedSource | void
 }
@@ -126,29 +112,55 @@ const toDiagnosticCodeList = (items: (string | number)[], into: number[] = []): 
 
 export class ConfigSet {
   readonly logger: Logger
-  /**
-   * @internal
-   */
   private readonly _cwd: string
-  /**
-   * @internal
-   */
   private readonly _rootDir: string
-  /**
-   * @internal
-   */
   private _jestCfg!: Config.ProjectConfig
+  private _isolatedModules!: boolean
+  private _parsedTsConfig!: ParsedCommandLine
+  private _customTransformers: CustomTransformers = Object.create(null)
+  private _babelConfig: BabelConfig | undefined
+  private _babelJestTransformers: BabelJestTransformer | undefined
+  private _diagnostics!: TsJestDiagnosticsCfg
+  private _stringifyContentRegExp: RegExp | undefined
+  private readonly _compilerModule!: TTypeScript
+  private _tsCacheDir: string | undefined
+  private _overriddenCompilerOptions: Partial<CompilerOptions> = {
+    // we handle sourcemaps this way and not another
+    sourceMap: true,
+    inlineSourceMap: false,
+    inlineSources: true,
+    // we don't want to create declaration files
+    declaration: false,
+    noEmit: false, // set to true will make compiler API not emit any compiled results.
+    // else istanbul related will be dropped
+    removeComments: false,
+    // to clear out else it's buggy
+    out: undefined,
+    outFile: undefined,
+    composite: undefined, // see https://github.com/TypeStrong/ts-node/pull/657/files
+    declarationDir: undefined,
+    declarationMap: undefined,
+    emitDeclarationOnly: undefined,
+    sourceRoot: undefined,
+    tsBuildInfoFile: undefined,
+  }
 
   constructor(private readonly jestConfig: Config.ProjectConfig) {
     this.logger = rootLogger.child({ [LogContexts.namespace]: 'config' })
     this._cwd = normalize(this.jestConfig.cwd ?? process.cwd())
     this._rootDir = normalize(this.jestConfig.rootDir ?? this._cwd)
+    const tsJestCfg = this.jestConfig.globals && this.jestConfig.globals['ts-jest']
+    const options: TsJestGlobalOptions = tsJestCfg ?? Object.create(null)
+    // compiler module
+    this._compilerModule = importer.typescript(ImportReasons.TsJest, options.compiler ?? 'typescript')
+
+    this.logger.debug({ compilerModule: this._compilerModule }, 'normalized compiler module config via ts-jest option')
+
     this._backportJestCfg()
+    this._setupTsJestCfg(options)
+    this._resolveTsCacheDir()
   }
 
-  /**
-   * @internal
-   */
   private _backportJestCfg(): void {
     const config = backportJestConfig(this.logger, this.jestConfig)
 
@@ -157,115 +169,53 @@ export class ConfigSet {
     this._jestCfg = config
   }
 
-  /**
-   * @internal
-   */
-  @Memoize()
-  get isTestFile(): (fileName: string) => boolean {
-    const matchablePatterns = [...this._jestCfg.testMatch, ...this._jestCfg.testRegex].filter(
-      (pattern) =>
-        /**
-         * jest config testRegex doesn't always deliver the correct RegExp object
-         * See https://github.com/facebook/jest/issues/9778
-         */
-        pattern instanceof RegExp || typeof pattern === 'string',
-    )
-    if (!matchablePatterns.length) {
-      matchablePatterns.push(...DEFAULT_JEST_TEST_MATCH)
-    }
-    const stringPatterns = matchablePatterns.filter((pattern: any) => typeof pattern === 'string') as string[]
-    const isMatch = globsToMatcher(stringPatterns)
-
-    return (fileName: string) =>
-      matchablePatterns.some((pattern) => (typeof pattern === 'string' ? isMatch(fileName) : pattern.test(fileName)))
-  }
-
-  /**
-   * @internal
-   */
-  @Memoize()
-  get tsJest(): TsJestConfig {
-    const parsedConfig = this._jestCfg
-    const { globals = {} } = parsedConfig as any
-    const options: TsJestGlobalOptions = { ...globals['ts-jest'] }
-
-    // tsconfig
-    if (options.tsConfig) {
-      this.logger.warn(Deprecations.TsConfig)
-    }
-    const tsConfig: TsJestConfig['tsConfig'] = this.getInlineOrFileConfigOpt(
-      options.tsConfig ?? options.tsconfig ?? true,
-    )
-
-    // transformers
-    let transformers: ConfigCustomTransformer = Object.create(null)
-    const { astTransformers } = options
-    if (astTransformers) {
-      if (Array.isArray(astTransformers)) {
-        this.logger.warn(Deprecations.AstTransformerArrayConfig)
-
-        transformers = {
-          before: astTransformers.map((transformerPath) => ({
-            path: this.resolvePath(transformerPath, { nodeResolve: true }),
-          })),
-        }
-      } else {
-        if (astTransformers.before) {
-          transformers = {
-            before: astTransformers.before.map((transformer) =>
-              typeof transformer === 'string'
-                ? {
-                    path: this.resolvePath(transformer, { nodeResolve: true }),
-                  }
-                : {
-                    ...transformer,
-                    path: this.resolvePath(transformer.path, { nodeResolve: true }),
-                  },
-            ),
-          }
-        }
-        if (astTransformers.after) {
-          transformers = {
-            ...transformers,
-            after: astTransformers.after.map((transformer) =>
-              typeof transformer === 'string'
-                ? {
-                    path: this.resolvePath(transformer, { nodeResolve: true }),
-                  }
-                : {
-                    ...transformer,
-                    path: this.resolvePath(transformer.path, { nodeResolve: true }),
-                  },
-            ),
-          }
-        }
-        if (astTransformers.afterDeclarations) {
-          transformers = {
-            ...transformers,
-            afterDeclarations: astTransformers.afterDeclarations.map((transformer) =>
-              typeof transformer === 'string'
-                ? {
-                    path: this.resolvePath(transformer, { nodeResolve: true }),
-                  }
-                : {
-                    ...transformer,
-                    path: this.resolvePath(transformer.path, { nodeResolve: true }),
-                  },
-            ),
-          }
-        }
-      }
-    }
+  private _setupTsJestCfg(options: TsJestGlobalOptions): void {
+    // isolatedModules
+    this._isolatedModules = options.isolatedModules ?? false
 
     if (options.packageJson) {
       this.logger.warn(Deprecations.PackageJson)
     }
 
-    // babel config (for babel-jest) default is undefined so we don't need to have fallback like tsConfig or packageJson
-    const babelConfig: TsJestConfig['babelConfig'] = this.getInlineOrFileConfigOpt(options.babelConfig)
+    // babel config (for babel-jest) default is undefined so we don't need to have fallback like tsConfig
+    if (!options.babelConfig) {
+      this.logger.debug('babel is disabled')
+    } else {
+      const baseBabelCfg = { cwd: this._cwd }
+      if (typeof options.babelConfig === 'string') {
+        if (extname(options.babelConfig) === '.js') {
+          this._babelConfig = {
+            ...baseBabelCfg,
+            ...require(this.resolvePath(options.babelConfig, { nodeResolve: true })),
+          }
+        } else {
+          this._babelConfig = {
+            ...baseBabelCfg,
+            ...json5.parse(readFileSync(options.babelConfig, 'utf-8')),
+          }
+        }
+      } else if (typeof options.babelConfig === 'object') {
+        this._babelConfig = {
+          ...baseBabelCfg,
+          ...options.babelConfig,
+        }
+      } else {
+        this._babelConfig = baseBabelCfg
+      }
+
+      this.logger.debug({ babelConfig: this._babelConfig }, 'normalized babel config via ts-jest option')
+    }
+    if (!this._babelConfig) {
+      this._overriddenCompilerOptions.module = this.compilerModule.ModuleKind.CommonJS
+    } else {
+      this._babelJestTransformers = importer
+        .babelJest(ImportReasons.BabelJest)
+        .createTransformer(this._babelConfig) as BabelJestTransformer
+
+      this.logger.debug('created babel-jest transformer')
+    }
 
     // diagnostics
-    let diagnostics: TsJestConfig['diagnostics']
     const diagnosticsOpt = options.diagnostics ?? true
     const ignoreList: (string | number)[] = [...IGNORE_DIAGNOSTIC_CODES]
     if (typeof diagnosticsOpt === 'object') {
@@ -273,354 +223,107 @@ export class ConfigSet {
       if (ignoreCodes) {
         Array.isArray(ignoreCodes) ? ignoreList.push(...ignoreCodes) : ignoreList.push(ignoreCodes)
       }
-      diagnostics = {
+      this._diagnostics = {
         pretty: diagnosticsOpt.pretty ?? true,
         ignoreCodes: toDiagnosticCodeList(ignoreList),
         pathRegex: normalizeRegex(diagnosticsOpt.pathRegex),
         throws: !diagnosticsOpt.warnOnly,
       }
     } else {
-      diagnostics = {
+      this._diagnostics = {
         ignoreCodes: diagnosticsOpt ? toDiagnosticCodeList(ignoreList) : [],
         pretty: true,
         throws: diagnosticsOpt,
       }
     }
-    // stringifyContentPathRegex option
-    const stringifyContentPathRegex = normalizeRegex(options.stringifyContentPathRegex)
-    // parsed options
-    const res: TsJestConfig = {
-      tsConfig,
-      babelConfig,
-      diagnostics,
-      isolatedModules: !!options.isolatedModules,
-      compiler: options.compiler ?? 'typescript',
-      transformers,
-      stringifyContentPathRegex,
+
+    this.logger.debug({ diagnostics: this._diagnostics }, 'normalized diagnostics config via ts-jest option')
+
+    // tsconfig
+    if (options.tsConfig) {
+      this.logger.warn(Deprecations.TsConfig)
     }
-
-    this.logger.debug({ tsJestConfig: res }, 'normalized ts-jest config')
-
-    return res
-  }
-
-  /**
-   * @internal
-   */
-  get parsedTsConfig(): ParsedCommandLine {
-    return this._parsedTsConfig
-  }
-
-  /**
-   * @internal
-   */
-  @Memoize()
-  private get _parsedTsConfig(): ParsedCommandLine {
-    const {
-      tsJest: { tsConfig },
-    } = this
-    const configFilePath = tsConfig?.kind === 'file' ? tsConfig.value : undefined
-    const result = this.readTsConfig(
-      tsConfig?.kind === 'inline' ? tsConfig.value : undefined,
-      configFilePath,
-      tsConfig == null,
-    )
+    const tsconfigOpt = options.tsConfig ?? options.tsconfig
+    const configFilePath = typeof tsconfigOpt === 'string' ? this.resolvePath(tsconfigOpt) : undefined
+    this._parsedTsConfig = this._readTsConfig(typeof tsconfigOpt === 'object' ? tsconfigOpt : undefined, configFilePath)
     // throw errors if any matching wanted diagnostics
-    this.raiseDiagnostics(result.errors, configFilePath)
+    this.raiseDiagnostics(this._parsedTsConfig.errors, configFilePath)
 
-    this.logger.debug({ tsconfig: result }, 'normalized typescript config')
+    this.logger.debug({ tsconfig: this._parsedTsConfig }, 'normalized typescript config via ts-jest option')
 
-    return result
-  }
-
-  /**
-   * @internal
-   */
-  @Memoize()
-  get raiseDiagnostics(): (diagnostics: Diagnostic[], filePath?: string, logger?: Logger) => void | never {
-    const {
-      createTsError,
-      filterDiagnostics,
-      tsJest: {
-        diagnostics: { throws },
-      },
-      compilerModule: { DiagnosticCategory },
-    } = this
-
-    return (diagnostics: Diagnostic[], filePath?: string, logger: Logger = this.logger): void | never => {
-      const filteredDiagnostics = filterDiagnostics(diagnostics, filePath)
-      if (!filteredDiagnostics.length) return
-      const error = createTsError(filteredDiagnostics)
-      // only throw if `warnOnly` and it is a warning or error
-      const importantCategories = [DiagnosticCategory.Warning, DiagnosticCategory.Error]
-      if (throws && filteredDiagnostics.some((d) => importantCategories.includes(d.category))) {
-        throw error
-      }
-      logger.warn({ error }, error.message)
+    // transformers
+    const { astTransformers } = options
+    this._customTransformers = {
+      before: [hoisting(this)],
     }
-  }
+    if (astTransformers) {
+      if (Array.isArray(astTransformers)) {
+        this.logger.warn(Deprecations.AstTransformerArrayConfig)
 
-  /**
-   * @internal
-   */
-  @Memoize()
-  get babel(): BabelConfig | undefined {
-    const {
-      tsJest: { babelConfig },
-    } = this
-    if (babelConfig == null) {
-      this.logger.debug('babel is disabled')
+        this._customTransformers = {
+          before: [
+            ...this._customTransformers.before,
+            ...astTransformers.map((transformer) => {
+              const transformerPath = this.resolvePath(transformer, { nodeResolve: true })
 
-      return undefined
-    }
-    let base: BabelConfig = { cwd: this.cwd }
-    if (babelConfig.kind === 'file') {
-      if (babelConfig.value) {
-        if (extname(babelConfig.value) === '.js') {
-          base = {
-            ...base,
-            ...require(babelConfig.value),
+              return require(transformerPath).factory(this)
+            }),
+          ],
+        }
+      } else {
+        const resolveTransformers = (transformers: (string | AstTransformer)[]) =>
+          transformers.map((transformer) => {
+            let transformerPath: string
+            if (typeof transformer === 'string') {
+              transformerPath = this.resolvePath(transformer, { nodeResolve: true })
+
+              return require(transformerPath).factory(this)
+            } else {
+              transformerPath = this.resolvePath(transformer.path, { nodeResolve: true })
+
+              return require(transformerPath).factory(this, transformer.options)
+            }
+          })
+        if (astTransformers.before) {
+          this._customTransformers = {
+            before: [...this._customTransformers.before, ...resolveTransformers(astTransformers.before)],
           }
-        } else {
-          base = {
-            ...base,
-            ...json5.parse(readFileSync(babelConfig.value, 'utf8')),
+        }
+        if (astTransformers.after) {
+          this._customTransformers = {
+            ...this._customTransformers,
+            after: resolveTransformers(astTransformers.after),
+          }
+        }
+        if (astTransformers.afterDeclarations) {
+          this._customTransformers = {
+            ...this._customTransformers,
+            afterDeclarations: resolveTransformers(astTransformers.afterDeclarations),
           }
         }
       }
-    } else if (babelConfig.kind === 'inline') {
-      base = { ...base, ...babelConfig.value }
     }
 
-    this.logger.debug({ babelConfig: base }, 'normalized babel config via ts-jest option')
+    this.logger.debug(
+      { customTransformers: this._customTransformers },
+      'normalized custom AST transformers via ts-jest option',
+    )
 
-    return base
-  }
+    // stringifyContentPathRegex
+    if (options.stringifyContentPathRegex) {
+      this._stringifyContentRegExp =
+        typeof options.stringifyContentPathRegex === 'string'
+          ? new RegExp(normalizeRegex(options.stringifyContentPathRegex)!) // eslint-disable-line @typescript-eslint/no-non-null-assertion
+          : options.stringifyContentPathRegex
 
-  /**
-   * This API can be used by custom transformers
-   */
-  @Memoize()
-  get compilerModule(): TTypeScript {
-    return importer.typescript(ImportReasons.TsJest, this.tsJest.compiler)
-  }
-
-  /**
-   * @internal
-   */
-  @Memoize()
-  get babelJestTransformer(): BabelJestTransformer | undefined {
-    const { babel } = this
-    if (!babel) return undefined
-
-    this.logger.debug('creating babel-jest transformer')
-
-    return importer.babelJest(ImportReasons.BabelJest).createTransformer(babel) as BabelJestTransformer
-  }
-
-  @Memoize()
-  get tsCompiler(): TsCompiler {
-    return createCompilerInstance(this)
-  }
-
-  /**
-   * @internal
-   */
-  @Memoize()
-  private get astTransformers(): AstTransformer {
-    let astTransformers: AstTransformer = {
-      before: [
-        ...internalAstTransformers.map((transformer) => ({
-          transformModule: transformer,
-        })),
-      ],
-    }
-    const { transformers } = this.tsJest
-    if (transformers.before) {
-      astTransformers = {
-        before: [
-          ...astTransformers.before,
-          ...transformers.before.map((transformer) =>
-            typeof transformer === 'string'
-              ? {
-                  transformModule: require(transformer),
-                }
-              : {
-                  transformModule: require(transformer.path),
-                  options: transformer.options,
-                },
-          ),
-        ],
-      }
-    }
-    if (transformers.after) {
-      astTransformers = {
-        ...astTransformers,
-        after: transformers.after.map((transformer) =>
-          typeof transformer === 'string'
-            ? {
-                transformModule: require(transformer),
-              }
-            : {
-                transformModule: require(transformer.path),
-                options: transformer.options,
-              },
-        ),
-      }
-    }
-    if (transformers.afterDeclarations) {
-      astTransformers = {
-        ...astTransformers,
-        afterDeclarations: transformers.afterDeclarations.map((transformer) =>
-          typeof transformer === 'string'
-            ? {
-                transformModule: require(transformer),
-              }
-            : {
-                transformModule: require(transformer.path),
-                options: transformer.options,
-              },
-        ),
-      }
-    }
-
-    return astTransformers
-  }
-
-  /**
-   * @internal
-   */
-  @Memoize()
-  get tsCustomTransformers(): CustomTransformers {
-    let customTransformers: CustomTransformers = {
-      before: this.astTransformers.before.map((t) => t.transformModule.factory(this, t.options)) as TransformerFactory<
-        SourceFile
-      >[],
-    }
-    if (this.astTransformers.after) {
-      customTransformers = {
-        ...customTransformers,
-        after: this.astTransformers.after.map((t) => t.transformModule.factory(this, t.options)) as TransformerFactory<
-          SourceFile
-        >[],
-      }
-    }
-    if (this.astTransformers.afterDeclarations) {
-      customTransformers = {
-        ...customTransformers,
-        afterDeclarations: this.astTransformers.afterDeclarations.map((t) =>
-          t.transformModule.factory(this, t.options),
-        ) as TransformerFactory<Bundle | SourceFile>[],
-      }
-    }
-
-    return customTransformers
-  }
-
-  /**
-   * @internal
-   */
-  @Memoize()
-  get hooks(): TsJestHooksMap {
-    let hooksFile = process.env.TS_JEST_HOOKS
-    if (hooksFile) {
-      hooksFile = resolve(this.cwd, hooksFile)
-
-      return importer.tryTheseOr(hooksFile, {})
-    }
-
-    return {}
-  }
-
-  /**
-   * @internal
-   */
-  @Memoize()
-  private get filterDiagnostics(): (diagnostics: Diagnostic[], filePath?: string) => Diagnostic[] {
-    const {
-      tsJest: {
-        diagnostics: { ignoreCodes },
-      },
-      shouldReportDiagnostic,
-    } = this
-
-    return (diagnostics: Diagnostic[], filePath?: string): Diagnostic[] => {
-      if (filePath && !shouldReportDiagnostic(filePath)) return []
-
-      return diagnostics.filter((diagnostic) => {
-        if (diagnostic.file?.fileName && !shouldReportDiagnostic(diagnostic.file.fileName)) {
-          return false
-        }
-
-        return !ignoreCodes.includes(diagnostic.code)
-      })
+      this.logger.debug(
+        { stringifyContentPathRegex: this._stringifyContentRegExp },
+        'normalized stringifyContentPathRegex config via ts-jest option',
+      )
     }
   }
 
-  /**
-   * @internal
-   */
-  @Memoize()
-  get shouldReportDiagnostic(): (filePath: string) => boolean {
-    const {
-      diagnostics: { pathRegex },
-    } = this.tsJest
-    if (pathRegex) {
-      const regex = new RegExp(pathRegex)
-
-      return (file: string): boolean => regex.test(file)
-    } else {
-      return (): true => true
-    }
-  }
-
-  /**
-   * @internal
-   */
-  @Memoize()
-  get shouldStringifyContent(): (filePath: string) => boolean {
-    const { stringifyContentPathRegex } = this.tsJest
-    if (stringifyContentPathRegex) {
-      const regex = new RegExp(stringifyContentPathRegex)
-
-      return (file: string): boolean => regex.test(file)
-    } else {
-      return (): false => false
-    }
-  }
-
-  /**
-   * @internal
-   */
-  @Memoize()
-  private get createTsError(): (diagnostics: readonly Diagnostic[]) => TSError {
-    const {
-      diagnostics: { pretty },
-    } = this.tsJest
-
-    const formatDiagnostics = pretty
-      ? this.compilerModule.formatDiagnosticsWithColorAndContext
-      : this.compilerModule.formatDiagnostics
-
-    const diagnosticHost: FormatDiagnosticsHost = {
-      getNewLine: () => '\n',
-      getCurrentDirectory: () => this.cwd,
-      getCanonicalFileName: (path: string) => path,
-    }
-
-    return (diagnostics: readonly Diagnostic[]): TSError => {
-      const diagnosticText = formatDiagnostics(diagnostics, diagnosticHost)
-      const diagnosticCodes = diagnostics.map((x) => x.code)
-
-      return new TSError(diagnosticText, diagnosticCodes)
-    }
-  }
-
-  /**
-   * @internal
-   */
-  @Memoize()
-  get tsCacheDir(): string | undefined {
+  private _resolveTsCacheDir(): void {
     if (!this._jestCfg.cache) {
       this.logger.debug('file caching disabled')
 
@@ -628,107 +331,19 @@ export class ConfigSet {
     }
     const cacheSuffix = sha1(
       stringify({
-        version: this.compilerModule.version,
+        version: this._compilerModule.version,
         digest: this.tsJestDigest,
-        compiler: this.tsJest.compiler,
-        compilerOptions: this.parsedTsConfig.options,
-        isolatedModules: this.tsJest.isolatedModules,
-        diagnostics: this.tsJest.diagnostics,
+        compilerModule: this._compilerModule,
+        compilerOptions: this._parsedTsConfig.options,
+        isolatedModules: this._isolatedModules,
+        diagnostics: this._diagnostics,
       }),
     )
     const res = join(this._jestCfg.cacheDirectory, 'ts-jest', cacheSuffix.substr(0, 2), cacheSuffix.substr(2))
 
     this.logger.debug({ cacheDirectory: res }, 'will use file caching')
 
-    return res
-  }
-
-  /**
-   * @internal
-   */
-  @Memoize()
-  private get overriddenCompilerOptions(): Partial<CompilerOptions> {
-    const options: Partial<CompilerOptions> = {
-      // we handle sourcemaps this way and not another
-      sourceMap: true,
-      inlineSourceMap: false,
-      inlineSources: true,
-      // we don't want to create declaration files
-      declaration: false,
-      noEmit: false, // set to true will make compiler API not emit any compiled results.
-      // else istanbul related will be dropped
-      removeComments: false,
-      // to clear out else it's buggy
-      out: undefined,
-      outFile: undefined,
-      composite: undefined, // see https://github.com/TypeStrong/ts-node/pull/657/files
-      declarationDir: undefined,
-      declarationMap: undefined,
-      emitDeclarationOnly: undefined,
-      sourceRoot: undefined,
-      tsBuildInfoFile: undefined,
-    }
-    // force the module kind if not piping babel-jest
-    if (!this.tsJest.babelConfig) {
-      // commonjs is required for jest
-      options.module = this.compilerModule.ModuleKind.CommonJS
-    }
-
-    return options
-  }
-
-  get cwd(): string {
-    return this._cwd
-  }
-
-  /**
-   * Use by e2e, don't mark as internal
-   */
-  @Memoize()
-  // eslint-disable-next-line class-methods-use-this
-  get tsJestDigest(): string {
-    return MY_DIGEST
-  }
-
-  /**
-   * @internal
-   */
-  private makeDiagnostic(
-    code: number,
-    messageText: string,
-    options: { category?: DiagnosticCategory; file?: SourceFile; start?: number; length?: number } = {},
-  ): Diagnostic {
-    const { category = this.compilerModule.DiagnosticCategory.Warning, file, start, length } = options
-
-    return {
-      code,
-      messageText,
-      category,
-      file,
-      start,
-      length,
-    }
-  }
-
-  /**
-   * @internal
-   */
-  private getInlineOrFileConfigOpt(
-    configOpt: string | boolean | Record<string, any> | undefined,
-  ): { kind: 'inline' | 'file'; value: any } | undefined {
-    if (typeof configOpt === 'string' || configOpt === true) {
-      return {
-        kind: 'file',
-        value: typeof configOpt === 'string' ? this.resolvePath(configOpt) : undefined,
-      }
-    } else if (typeof configOpt === 'object') {
-      return {
-        kind: 'inline',
-        value: configOpt,
-      }
-    }
-
-    return
+    this._tsCacheDir = res
   }
 
   /**
@@ -737,34 +352,24 @@ export class ConfigSet {
    *
    * @internal
    */
-  readTsConfig(
-    compilerOptions?: CompilerOptions,
-    resolvedConfigFile?: string | null,
-    noProject?: boolean | null,
-  ): ParsedCommandLine {
+  private _readTsConfig(compilerOptions?: CompilerOptions, resolvedConfigFile?: string): ParsedCommandLine {
     let config = { compilerOptions: Object.create(null) }
     let basePath = normalizeSlashes(this._rootDir)
-    let configFileName: string | undefined
-    const ts = this.compilerModule
-
-    if (!noProject) {
-      // Read project configuration when available.
-      configFileName = resolvedConfigFile
-        ? normalizeSlashes(resolvedConfigFile)
-        : ts.findConfigFile(normalizeSlashes(this._rootDir), ts.sys.fileExists)
-
-      if (configFileName) {
-        this.logger.debug({ tsConfigFileName: configFileName }, 'readTsConfig(): reading', configFileName)
-        const result = ts.readConfigFile(configFileName, ts.sys.readFile)
-
-        // Return diagnostics.
-        if (result.error) {
-          return { errors: [result.error], fileNames: [], options: {} }
-        }
-
-        config = result.config
-        basePath = normalizeSlashes(dirname(configFileName))
+    const ts = this._compilerModule
+    // Read project configuration when available.
+    const configFileName: string | undefined = resolvedConfigFile
+      ? normalizeSlashes(resolvedConfigFile)
+      : ts.findConfigFile(normalizeSlashes(this._rootDir), ts.sys.fileExists)
+    if (configFileName) {
+      this.logger.debug({ tsConfigFileName: configFileName }, 'readTsConfig(): reading', configFileName)
+      const result = ts.readConfigFile(configFileName, ts.sys.readFile)
+      // Return diagnostics.
+      if (result.error) {
+        return { errors: [result.error], fileNames: [], options: {} }
       }
+
+      config = result.config
+      basePath = normalizeSlashes(dirname(configFileName))
     }
     // Override default configuration options `ts-jest` requires.
     config.compilerOptions = {
@@ -775,7 +380,7 @@ export class ConfigSet {
     // parse json, merge config extending others, ...
     const result = ts.parseJsonConfigFileContent(config, ts.sys, basePath, undefined, configFileName)
 
-    const { overriddenCompilerOptions: forcedOptions } = this
+    const { _overriddenCompilerOptions: forcedOptions } = this
     const finalOptions = result.options
 
     // Target ES5 output by default (instead of ES3).
@@ -795,11 +400,14 @@ export class ConfigSet {
       moduleValue !== forcedOptions.module &&
       !(finalOptions.esModuleInterop || finalOptions.allowSyntheticDefaultImports)
     ) {
-      result.errors.push(
-        this.makeDiagnostic(DiagnosticCodes.ConfigModuleOption, Errors.ConfigNoModuleInterop, {
-          category: ts.DiagnosticCategory.Message,
-        }),
-      )
+      result.errors.push({
+        code: DiagnosticCodes.ConfigModuleOption,
+        messageText: Errors.ConfigNoModuleInterop,
+        category: ts.DiagnosticCategory.Message,
+        file: undefined,
+        start: undefined,
+        length: undefined,
+      })
       // at least enable synthetic default imports (except if it's set in the input config)
       if (!('allowSyntheticDefaultImports' in config.compilerOptions)) {
         finalOptions.allowSyntheticDefaultImports = true
@@ -828,7 +436,7 @@ export class ConfigSet {
     const compilationTarget = result.options.target!
     /* istanbul ignore next (cover by e2e) */
     if (
-      !this.tsJest.babelConfig &&
+      !this._babelConfig &&
       ((nodeJsVer.startsWith('v10') && compilationTarget > ScriptTarget.ES2018) ||
         (nodeJsVer.startsWith('v12') && compilationTarget > ScriptTarget.ES2019))
     ) {
@@ -840,6 +448,157 @@ export class ConfigSet {
     }
 
     return result
+  }
+
+  get parsedTsConfig(): ParsedCommandLine {
+    return this._parsedTsConfig
+  }
+
+  get isolatedModules(): boolean {
+    return this._isolatedModules
+  }
+
+  /**
+   * This API can be used by custom transformers
+   */
+  get compilerModule(): TTypeScript {
+    return this._compilerModule
+  }
+
+  get customTransformers(): CustomTransformers {
+    return this._customTransformers
+  }
+
+  @Memoize()
+  get tsCompiler(): TsCompiler {
+    return createCompilerInstance(this)
+  }
+
+  /**
+   * @internal
+   */
+  get babelConfig(): BabelConfig | undefined {
+    return this._babelConfig
+  }
+
+  /**
+   * @internal
+   */
+  get babelJestTransformer(): BabelJestTransformer | undefined {
+    return this._babelJestTransformers
+  }
+
+  get cwd(): string {
+    return this._cwd
+  }
+
+  get tsCacheDir(): string | undefined {
+    return this._tsCacheDir
+  }
+
+  /**
+   * Use by e2e, don't mark as internal
+   */
+  @Memoize()
+  // eslint-disable-next-line class-methods-use-this
+  get tsJestDigest(): string {
+    return MY_DIGEST
+  }
+
+  /**
+   * @internal
+   */
+  @Memoize()
+  get hooks(): TsJestHooksMap {
+    let hooksFile = process.env.TS_JEST_HOOKS
+    if (hooksFile) {
+      hooksFile = resolve(this._cwd, hooksFile)
+
+      return importer.tryTheseOr(hooksFile, {})
+    }
+
+    return {}
+  }
+
+  @Memoize()
+  get isTestFile(): (fileName: string) => boolean {
+    const matchablePatterns = [...this._jestCfg.testMatch, ...this._jestCfg.testRegex].filter(
+      (pattern) =>
+        /**
+         * jest config testRegex doesn't always deliver the correct RegExp object
+         * See https://github.com/facebook/jest/issues/9778
+         */
+        pattern instanceof RegExp || typeof pattern === 'string',
+    )
+    if (!matchablePatterns.length) {
+      matchablePatterns.push(...DEFAULT_JEST_TEST_MATCH)
+    }
+    const stringPatterns = matchablePatterns.filter((pattern: any) => typeof pattern === 'string') as string[]
+    const isMatch = globsToMatcher(stringPatterns)
+
+    return (fileName: string) =>
+      matchablePatterns.some((pattern) => (typeof pattern === 'string' ? isMatch(fileName) : pattern.test(fileName)))
+  }
+
+  /**
+   * @internal
+   */
+  shouldStringifyContent(filePath: string): boolean {
+    return this._stringifyContentRegExp ? this._stringifyContentRegExp.test(filePath) : false
+  }
+
+  raiseDiagnostics(diagnostics: Diagnostic[], filePath?: string, logger?: Logger): void {
+    const { ignoreCodes } = this._diagnostics
+    const { DiagnosticCategory } = this._compilerModule
+    const filteredDiagnostics =
+      filePath && !this.shouldReportDiagnostics(filePath)
+        ? []
+        : diagnostics.filter((diagnostic) => {
+            if (diagnostic.file?.fileName && !this.shouldReportDiagnostics(diagnostic.file.fileName)) {
+              return false
+            }
+
+            return !ignoreCodes.includes(diagnostic.code)
+          })
+    if (!filteredDiagnostics.length) return
+    const error = this._createTsError(filteredDiagnostics)
+    // only throw if `warnOnly` and it is a warning or error
+    const importantCategories = [DiagnosticCategory.Warning, DiagnosticCategory.Error]
+    if (this._diagnostics.throws && filteredDiagnostics.some((d) => importantCategories.includes(d.category))) {
+      throw error
+    }
+    /* istanbul ignore next (already covered) */
+    logger ? logger.warn({ error }, error.message) : this.logger.warn({ error }, error.message)
+  }
+
+  shouldReportDiagnostics(filePath: string): boolean {
+    const { pathRegex } = this._diagnostics
+    if (pathRegex) {
+      const regex = new RegExp(pathRegex)
+
+      return regex.test(filePath)
+    } else {
+      return true
+    }
+  }
+
+  /**
+   * @internal
+   */
+  private _createTsError(diagnostics: readonly Diagnostic[]): TSError {
+    const formatDiagnostics = this._diagnostics.pretty
+      ? this.compilerModule.formatDiagnosticsWithColorAndContext
+      : this.compilerModule.formatDiagnostics
+    /* istanbul ignore next (not possible to cover) */
+    const diagnosticHost: FormatDiagnosticsHost = {
+      getNewLine: () => '\n',
+      getCurrentDirectory: () => this.cwd,
+      getCanonicalFileName: (path: string) => path,
+    }
+    const diagnosticText = formatDiagnostics(diagnostics, diagnosticHost)
+    const diagnosticCodes = diagnostics.map((x) => x.code)
+
+    return new TSError(diagnosticText, diagnosticCodes)
   }
 
   resolvePath(

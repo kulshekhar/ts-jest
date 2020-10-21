@@ -34,7 +34,7 @@ function doTypeChecking(
   service: _ts.LanguageService,
   logger: Logger,
 ): void {
-  if (configs.shouldReportDiagnostic(fileName)) {
+  if (configs.shouldReportDiagnostics(fileName)) {
     // Get the relevant diagnostics - this is 3x faster than `getPreEmitDiagnostics`.
     const diagnostics = service.getSemanticDiagnostics(fileName).concat(service.getSyntacticDiagnostics(fileName))
     diagnosedFiles.push(fileName)
@@ -200,7 +200,7 @@ export const initializeLanguageServiceInstance = (configs: ConfigSet, logger: Lo
     getCurrentDirectory: () => cwd,
     getCompilationSettings: () => options,
     getDefaultLibFileName: () => ts.getDefaultLibFilePath(options),
-    getCustomTransformers: () => configs.tsCustomTransformers,
+    getCustomTransformers: () => configs.customTransformers,
     resolveModuleNames,
   }
 

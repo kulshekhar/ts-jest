@@ -2,7 +2,6 @@ import createCacheKey from '@jest/create-cache-key-function'
 import type { CacheKeyOptions, TransformedSource, Transformer, TransformOptions } from '@jest/transform'
 import type { Config } from '@jest/types'
 import type { Logger } from 'bs-logger'
-import type { CompilerOptions } from 'typescript'
 
 import { ConfigSet } from './config/config-set'
 import { JS_JSX_REGEX, TS_TSX_REGEX } from './constants'
@@ -10,21 +9,11 @@ import { stringify } from './utils/json'
 import { JsonableValue } from './utils/jsonable-value'
 import { rootLogger } from './utils/logger'
 import { Errors, interpolate } from './utils/messages'
-import type { BabelConfig } from './types'
-
-interface TransformerConfig extends Config.ProjectConfig {
-  digest: string
-  babel: BabelConfig | undefined
-  tsconfig: {
-    options: CompilerOptions
-    raw: Record<string, any>
-  }
-}
 
 interface CachedConfigSet {
   configSet: ConfigSet
   jestConfig: JsonableValue<Config.ProjectConfig>
-  transformerConfig: JsonableValue<TransformerConfig>
+  transformerCfgStr: string
 }
 
 export class TsJestTransformer implements Transformer {
@@ -133,7 +122,7 @@ export class TsJestTransformer implements Transformer {
       (cs) => cs.jestConfig.value === jestConfig,
     )
     if (ccs) {
-      this._transformCfgStr = ccs.transformerConfig.serialized
+      this._transformCfgStr = ccs.transformerCfgStr
       this._tsJestCfgSet = ccs.configSet
     } else {
       // try to look-it up by stringified version
@@ -146,29 +135,27 @@ export class TsJestTransformer implements Transformer {
         // this happens because jest first calls getCacheKey with stringified version of
         // the config, and then it calls the transformer with the proper object
         serializedCcs.jestConfig.value = jestConfig
-        this._transformCfgStr = serializedCcs.transformerConfig.serialized
+        this._transformCfgStr = serializedCcs.transformerCfgStr
         this._tsJestCfgSet = serializedCcs.configSet
       } else {
         // create the new record in the index
         this.logger.info('no matching config-set found, creating a new one')
 
-        const configSet = new ConfigSet(jestConfig)
-        const transformerCfg = new JsonableValue({
-          digest: configSet.tsJestDigest,
-          babel: configSet.babel,
+        this._tsJestCfgSet = new ConfigSet(jestConfig)
+        this._transformCfgStr = new JsonableValue({
+          digest: this._tsJestCfgSet.tsJestDigest,
+          babel: this._tsJestCfgSet.babelConfig,
           ...jestConfig,
           tsconfig: {
-            options: configSet.parsedTsConfig.options,
-            raw: configSet.parsedTsConfig.raw,
+            options: this._tsJestCfgSet.parsedTsConfig.options,
+            raw: this._tsJestCfgSet.parsedTsConfig.raw,
           },
-        })
+        }).serialized
         TsJestTransformer._cachedConfigSets.push({
           jestConfig: new JsonableValue(jestConfig),
-          configSet,
-          transformerConfig: transformerCfg,
+          configSet: this._tsJestCfgSet,
+          transformerCfgStr: this._transformCfgStr,
         })
-        this._transformCfgStr = transformerCfg.serialized
-        this._tsJestCfgSet = configSet
       }
     }
   }

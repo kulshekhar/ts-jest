@@ -1,7 +1,7 @@
 import { LogContexts, LogLevels } from 'bs-logger'
 import { existsSync } from 'fs'
 
-import { PackageSets, allValidPackageSets } from '../__helpers__/templates'
+import { PackageSets, allValidPackageSets, allPackageSetsWithPreset } from '../__helpers__/templates'
 import { configureTestCase } from '../__helpers__/test-case'
 
 describe('ts-jest logging', () => {
@@ -108,14 +108,30 @@ describe('ts-jest logging', () => {
       })
     })
 
-    describe('with astTransformers config as an object', () => {
+    describe('with packageJson config', () => {
       const testCase = configureTestCase('simple', {
         tsJestConfig: {
-          astTransformers: {}
+          packageJson: true,
         }
       })
 
-      testCase.runWithTemplates(allValidPackageSets, 0, (runTest, { testLabel }) => {
+      testCase.runWithTemplates(allPackageSetsWithPreset, 0, (runTest, { testLabel }) => {
+        it(testLabel, () => {
+          const result = runTest()
+          expect(result.status).toBe(0)
+          expect(result).toMatchSnapshot()
+        })
+      })
+    })
+
+    describe('with tsConfig config', () => {
+      const testCase = configureTestCase('simple', {
+        tsJestConfig: {
+          tsConfig: true,
+        }
+      })
+
+      testCase.runWithTemplates(allPackageSetsWithPreset, 0, (runTest, { testLabel }) => {
         it(testLabel, () => {
           const result = runTest()
           expect(result.status).toBe(0)

@@ -156,7 +156,7 @@ interface TsJestConfig$tsConfig$inline {
   value: _ts.CompilerOptions
 }
 type TsJestConfig$tsConfig = TsJestConfig$tsConfig$file | TsJestConfig$tsConfig$inline | undefined
-interface TsJestConfig$diagnostics {
+export interface TsJestDiagnosticsCfg {
   pretty: boolean
   ignoreCodes: number[]
   pathRegex?: string | undefined
@@ -172,7 +172,6 @@ interface TsJestConfig$babelConfig$inline {
   value: BabelConfig
 }
 type TsJestConfig$babelConfig = TsJestConfig$babelConfig$file | TsJestConfig$babelConfig$inline | undefined
-type TsJestConfig$stringifyContentPathRegex = string | undefined
 /**
  * @internal
  */
@@ -180,11 +179,11 @@ export interface TsJestConfig {
   tsConfig: TsJestConfig$tsConfig
   isolatedModules: boolean
   compiler: string
-  diagnostics: TsJestConfig$diagnostics
+  diagnostics: TsJestDiagnosticsCfg
   babelConfig: TsJestConfig$babelConfig
   transformers: ConfigCustomTransformer
   // to deprecate / deprecated === === ===
-  stringifyContentPathRegex: TsJestConfig$stringifyContentPathRegex
+  stringifyContentPathRegex: string | undefined
 }
 
 export interface TsCompiler {

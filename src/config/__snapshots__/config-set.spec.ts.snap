@@ -1,5 +1,53 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`customTransformers should return an object containing all resolved transformers 1`] = `
+Object {
+  "before": Array [
+    [Function],
+  ],
+}
+`;
+
+exports[`customTransformers should return an object containing all resolved transformers 2`] = `
+Object {
+  "before": Array [
+    [Function],
+    [Function],
+  ],
+}
+`;
+
+exports[`customTransformers should return an object containing all resolved transformers 3`] = `
+Object {
+  "after": Array [
+    [Function],
+  ],
+  "before": Array [
+    [Function],
+  ],
+}
+`;
+
+exports[`customTransformers should return an object containing all resolved transformers 4`] = `
+Object {
+  "afterDeclarations": Array [
+    [Function],
+  ],
+  "before": Array [
+    [Function],
+  ],
+}
+`;
+
+exports[`customTransformers should return an object containing all resolved transformers 5`] = `
+Object {
+  "before": Array [
+    [Function],
+    [Function],
+  ],
+}
+`;
+
 exports[`isTestFile should return a boolean value whether the file matches test pattern 1`] = `true`;
 
 exports[`isTestFile should return a boolean value whether the file matches test pattern 2`] = `true`;
@@ -58,234 +106,4 @@ Array [
     "start": undefined,
   },
 ]
-`;
-
-exports[`tsCustomTransformers should return an object containing all resolved transformers 1`] = `
-Object {
-  "before": Array [
-    [Function],
-  ],
-}
-`;
-
-exports[`tsCustomTransformers should return an object containing all resolved transformers 2`] = `
-Object {
-  "before": Array [
-    [Function],
-    [Function],
-  ],
-}
-`;
-
-exports[`tsCustomTransformers should return an object containing all resolved transformers 3`] = `
-Object {
-  "after": Array [
-    [Function],
-  ],
-  "before": Array [
-    [Function],
-  ],
-}
-`;
-
-exports[`tsCustomTransformers should return an object containing all resolved transformers 4`] = `
-Object {
-  "afterDeclarations": Array [
-    [Function],
-  ],
-  "before": Array [
-    [Function],
-  ],
-}
-`;
-
-exports[`tsJest diagnostics should be correct for various kinds of ignoreCodes 1`] = `
-Object {
-  "ignoreCodes": Array [
-    6059,
-    18002,
-    18003,
-    10,
-  ],
-  "pathRegex": undefined,
-  "pretty": true,
-  "throws": true,
-}
-`;
-
-exports[`tsJest diagnostics should be correct for various kinds of ignoreCodes 2`] = `
-Object {
-  "ignoreCodes": Array [
-    6059,
-    18002,
-    18003,
-    10,
-  ],
-  "pathRegex": undefined,
-  "pretty": true,
-  "throws": true,
-}
-`;
-
-exports[`tsJest diagnostics should be correct for various kinds of ignoreCodes 3`] = `
-Object {
-  "ignoreCodes": Array [
-    6059,
-    18002,
-    18003,
-    2571,
-  ],
-  "pathRegex": undefined,
-  "pretty": true,
-  "throws": true,
-}
-`;
-
-exports[`tsJest diagnostics should be correct for various kinds of ignoreCodes 4`] = `
-Object {
-  "ignoreCodes": Array [
-    6059,
-    18002,
-    18003,
-    1009,
-    2571,
-    4072,
-  ],
-  "pathRegex": undefined,
-  "pretty": true,
-  "throws": true,
-}
-`;
-
-exports[`tsJest diagnostics should be correct for various kinds of ignoreCodes 5`] = `
-Object {
-  "ignoreCodes": Array [
-    6059,
-    18002,
-    18003,
-    1009,
-    2571,
-    6031,
-    10,
-  ],
-  "pathRegex": undefined,
-  "pretty": true,
-  "throws": true,
-}
-`;
-
-exports[`tsJest diagnostics should be correct for various kinds of ignoreCodes 6`] = `
-Object {
-  "ignoreCodes": Array [
-    6059,
-    18002,
-    18003,
-  ],
-  "pathRegex": undefined,
-  "pretty": true,
-  "throws": true,
-}
-`;
-
-exports[`tsJest diagnostics should be correct for various kinds of ignoreCodes 7`] = `
-Object {
-  "ignoreCodes": Array [
-    6059,
-    18002,
-    18003,
-  ],
-  "pathRegex": undefined,
-  "pretty": true,
-  "throws": true,
-}
-`;
-
-exports[`tsJest jest should merge parent config if any with globals is an empty object 1`] = `
-Object {
-  "babelConfig": undefined,
-  "compiler": "typescript",
-  "diagnostics": Object {
-    "ignoreCodes": Array [
-      6059,
-      18002,
-      18003,
-    ],
-    "pretty": true,
-    "throws": true,
-  },
-  "isolatedModules": false,
-  "stringifyContentPathRegex": undefined,
-  "transformers": Object {},
-  "tsConfig": Object {
-    "kind": "file",
-    "value": undefined,
-  },
-}
-`;
-
-exports[`tsJest jest should merge parent config if any with globals is undefined 1`] = `
-Object {
-  "babelConfig": undefined,
-  "compiler": "typescript",
-  "diagnostics": Object {
-    "ignoreCodes": Array [
-      6059,
-      18002,
-      18003,
-    ],
-    "pretty": true,
-    "throws": true,
-  },
-  "isolatedModules": false,
-  "stringifyContentPathRegex": undefined,
-  "transformers": Object {},
-  "tsConfig": Object {
-    "kind": "file",
-    "value": undefined,
-  },
-}
-`;
-
-exports[`tsJest jest should return correct config and go thru backports 1`] = `
-Object {
-  "babelConfig": undefined,
-  "compiler": "typescript",
-  "diagnostics": Object {
-    "ignoreCodes": Array [
-      6059,
-      18002,
-      18003,
-    ],
-    "pretty": true,
-    "throws": true,
-  },
-  "isolatedModules": false,
-  "stringifyContentPathRegex": undefined,
-  "transformers": Object {},
-  "tsConfig": Object {
-    "kind": "file",
-    "value": undefined,
-  },
-}
-`;
-
-exports[`tsJest transformers should display deprecation warning message when config transformers is string array 1`] = `
-"[level:40] The configuration for astTransformers as string[] is deprecated and will be removed in ts-jest 27. Please define your custom AST transformers in a form of an object. More information you can check online documentation https://kulshekhar.github.io/ts-jest/user/config/astTransformers
-"
-`;
-
-exports[`tsJest transformers should support transformers with options 1`] = `
-Array [
-  Object {
-    "options": Object {
-      "foo": 1,
-    },
-    "path": Any<String>,
-  },
-]
-`;
-
-exports[`tsJest tsconfig should show warning message with tsConfig option 1`] = `
-"[level:40] The option \`tsConfig\` is deprecated and will be removed in ts-jest 27, use \`tsconfig\` instead
-"
 `;
