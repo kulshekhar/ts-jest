@@ -18,6 +18,7 @@ const e2eWorkTemplatesDir = path.join(e2eWorkDir, '__templates__')
 const e2eWorkDirLink = path.join(e2eRootDir, '__workdir_synlink__')
 const projectsToRun = [
   `${e2eExternalRepoDir}/custom-typings`,
+  `${e2eExternalRepoDir}/memory-usage`,
   `${e2eExternalRepoDir}/path-mapping`,
   `${e2eExternalRepoDir}/simple/with-dependency`,
   `${e2eExternalRepoDir}/simple-project-references`,

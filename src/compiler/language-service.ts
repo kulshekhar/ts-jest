@@ -18,7 +18,6 @@ type TSFiles = Map<string, TSFile>
 
 interface TSFile {
   text?: string
-  output?: string
   version: number
 }
 
@@ -76,7 +75,7 @@ export const initializeLanguageServiceInstance = (configs: ConfigSet, logger: Lo
   }
   // Initialize memory cache for typescript compiler
   configs.parsedTsConfig.fileNames
-    .filter((fileName) => !configs.isTestFile(fileName))
+    .filter((fileName) => fileName.endsWith('.d.ts'))
     .forEach((fileName) => {
       memoryCache.files.set(fileName, {
         version: 0,
@@ -271,10 +270,6 @@ export const initializeLanguageServiceInstance = (configs: ConfigSet, logger: Lo
           }),
         )
       }
-      memoryCache.files.set(fileName, {
-        ...memoryCache.files.get(fileName)!, // eslint-disable-line @typescript-eslint/no-non-null-assertion
-        output: output.outputFiles[1].text,
-      })
 
       return [output.outputFiles[1].text, output.outputFiles[0].text]
     },
