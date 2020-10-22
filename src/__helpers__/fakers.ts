@@ -1,4 +1,5 @@
 import type { Config } from '@jest/types'
+import type { Logger } from 'bs-logger'
 import { resolve } from 'path'
 
 import { createCompilerInstance } from '../compiler/instance'
@@ -57,15 +58,17 @@ export const defaultResolve = (path: string): string => `resolved:${path}`
 export function createConfigSet({
   jestConfig,
   tsJestConfig,
+  logger, // don't change this key name, otherwise mock logging won't work
   resolve = defaultResolve,
   ...others
 }: {
   jestConfig?: Partial<Config.ProjectConfig>
   tsJestConfig?: TsJestGlobalOptions
+  logger?: Logger
   resolve?: ((path: string) => string) | null
   [key: string]: any
 } = {}): ConfigSet {
-  const cs = new ConfigSet(getJestConfig(jestConfig, tsJestConfig))
+  const cs = new ConfigSet(getJestConfig(jestConfig, tsJestConfig), logger)
   if (resolve) {
     cs.resolvePath = resolve
   }

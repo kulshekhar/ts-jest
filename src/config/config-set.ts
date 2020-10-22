@@ -145,8 +145,14 @@ export class ConfigSet {
     tsBuildInfoFile: undefined,
   }
 
-  constructor(private readonly jestConfig: Config.ProjectConfig) {
-    this.logger = rootLogger.child({ [LogContexts.namespace]: 'config' })
+  constructor(
+    private readonly jestConfig: Config.ProjectConfig,
+    // mainly for testing logging
+    private readonly parentLogger?: Logger,
+  ) {
+    this.logger = this.parentLogger
+      ? this.parentLogger.child({ [LogContexts.namespace]: 'config' })
+      : rootLogger.child({ namespace: 'config' })
     this._cwd = normalize(this.jestConfig.cwd ?? process.cwd())
     this._rootDir = normalize(this.jestConfig.rootDir ?? this._cwd)
     const tsJestCfg = this.jestConfig.globals && this.jestConfig.globals['ts-jest']
