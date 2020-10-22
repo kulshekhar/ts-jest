@@ -19,10 +19,18 @@ interface CachedConfigSet {
 export class TsJestTransformer implements Transformer {
   /**
    * cache ConfigSet between test runs
+   *
+   * @internal
    */
   private static readonly _cachedConfigSets: CachedConfigSet[] = []
   protected readonly logger: Logger
+  /**
+   * @internal
+   */
   private _transformCfgStr!: string
+  /**
+   * @internal
+   */
   private _tsJestCfgSet!: ConfigSet
 
   constructor() {

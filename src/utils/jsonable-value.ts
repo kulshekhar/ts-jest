@@ -1,8 +1,5 @@
 import { stringify } from './json'
 
-/**
- * @internal
- */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export class JsonableValue<V = Record<string, any>> {
   private _serialized!: string

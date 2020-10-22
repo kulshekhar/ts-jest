@@ -112,18 +112,36 @@ const toDiagnosticCodeList = (items: (string | number)[], into: number[] = []): 
 
 export class ConfigSet {
   readonly logger: Logger
-  private readonly _cwd: string
-  private readonly _rootDir: string
+  readonly compilerModule: TTypeScript
+  readonly isolatedModules: boolean
+  readonly cwd: string
+  tsCacheDir: string | undefined
+  parsedTsConfig!: ParsedCommandLine
+  customTransformers: CustomTransformers = Object.create(null)
+  readonly rootDir: string
+  /**
+   * @internal
+   */
   private _jestCfg!: Config.ProjectConfig
-  private _isolatedModules!: boolean
-  private _parsedTsConfig!: ParsedCommandLine
-  private _customTransformers: CustomTransformers = Object.create(null)
+  /**
+   * @internal
+   */
   private _babelConfig: BabelConfig | undefined
+  /**
+   * @internal
+   */
   private _babelJestTransformers: BabelJestTransformer | undefined
+  /**
+   * @internal
+   */
   private _diagnostics!: TsJestDiagnosticsCfg
+  /**
+   * @internal
+   */
   private _stringifyContentRegExp: RegExp | undefined
-  private readonly _compilerModule!: TTypeScript
-  private _tsCacheDir: string | undefined
+  /**
+   * @internal
+   */
   private _overriddenCompilerOptions: Partial<CompilerOptions> = {
     // we handle sourcemaps this way and not another
     sourceMap: true,
@@ -146,27 +164,39 @@ export class ConfigSet {
   }
 
   constructor(
+    /**
+     * @internal
+     */
     private readonly jestConfig: Config.ProjectConfig,
-    // mainly for testing logging
+    /**
+     * Mainly for testing logging
+     *
+     * @internal
+     */
     private readonly parentLogger?: Logger,
   ) {
     this.logger = this.parentLogger
       ? this.parentLogger.child({ [LogContexts.namespace]: 'config' })
       : rootLogger.child({ namespace: 'config' })
-    this._cwd = normalize(this.jestConfig.cwd ?? process.cwd())
-    this._rootDir = normalize(this.jestConfig.rootDir ?? this._cwd)
+    this.cwd = normalize(this.jestConfig.cwd ?? process.cwd())
+    this.rootDir = normalize(this.jestConfig.rootDir ?? this.cwd)
     const tsJestCfg = this.jestConfig.globals && this.jestConfig.globals['ts-jest']
     const options: TsJestGlobalOptions = tsJestCfg ?? Object.create(null)
     // compiler module
-    this._compilerModule = importer.typescript(ImportReasons.TsJest, options.compiler ?? 'typescript')
+    this.compilerModule = importer.typescript(ImportReasons.TsJest, options.compiler ?? 'typescript')
+    // isolatedModules
+    this.isolatedModules = options.isolatedModules ?? false
 
-    this.logger.debug({ compilerModule: this._compilerModule }, 'normalized compiler module config via ts-jest option')
+    this.logger.debug({ compilerModule: this.compilerModule }, 'normalized compiler module config via ts-jest option')
 
     this._backportJestCfg()
     this._setupTsJestCfg(options)
     this._resolveTsCacheDir()
   }
 
+  /**
+   * @internal
+   */
   private _backportJestCfg(): void {
     const config = backportJestConfig(this.logger, this.jestConfig)
 
@@ -175,10 +205,10 @@ export class ConfigSet {
     this._jestCfg = config
   }
 
+  /**
+   * @internal
+   */
   private _setupTsJestCfg(options: TsJestGlobalOptions): void {
-    // isolatedModules
-    this._isolatedModules = options.isolatedModules ?? false
-
     if (options.packageJson) {
       this.logger.warn(Deprecations.PackageJson)
     }
@@ -187,7 +217,7 @@ export class ConfigSet {
     if (!options.babelConfig) {
       this.logger.debug('babel is disabled')
     } else {
-      const baseBabelCfg = { cwd: this._cwd }
+      const baseBabelCfg = { cwd: this.cwd }
       if (typeof options.babelConfig === 'string') {
         if (extname(options.babelConfig) === '.js') {
           this._babelConfig = {
@@ -251,24 +281,24 @@ export class ConfigSet {
     }
     const tsconfigOpt = options.tsConfig ?? options.tsconfig
     const configFilePath = typeof tsconfigOpt === 'string' ? this.resolvePath(tsconfigOpt) : undefined
-    this._parsedTsConfig = this._readTsConfig(typeof tsconfigOpt === 'object' ? tsconfigOpt : undefined, configFilePath)
+    this.parsedTsConfig = this._readTsConfig(typeof tsconfigOpt === 'object' ? tsconfigOpt : undefined, configFilePath)
     // throw errors if any matching wanted diagnostics
-    this.raiseDiagnostics(this._parsedTsConfig.errors, configFilePath)
+    this.raiseDiagnostics(this.parsedTsConfig.errors, configFilePath)
 
-    this.logger.debug({ tsconfig: this._parsedTsConfig }, 'normalized typescript config via ts-jest option')
+    this.logger.debug({ tsconfig: this.parsedTsConfig }, 'normalized typescript config via ts-jest option')
 
     // transformers
     const { astTransformers } = options
-    this._customTransformers = {
+    this.customTransformers = {
       before: [hoisting(this)],
     }
     if (astTransformers) {
       if (Array.isArray(astTransformers)) {
         this.logger.warn(Deprecations.AstTransformerArrayConfig)
 
-        this._customTransformers = {
+        this.customTransformers = {
           before: [
-            ...this._customTransformers.before,
+            ...this.customTransformers.before,
             ...astTransformers.map((transformer) => {
               const transformerPath = this.resolvePath(transformer, { nodeResolve: true })
 
@@ -291,19 +321,19 @@ export class ConfigSet {
             }
           })
         if (astTransformers.before) {
-          this._customTransformers = {
-            before: [...this._customTransformers.before, ...resolveTransformers(astTransformers.before)],
+          this.customTransformers = {
+            before: [...this.customTransformers.before, ...resolveTransformers(astTransformers.before)],
           }
         }
         if (astTransformers.after) {
-          this._customTransformers = {
-            ...this._customTransformers,
+          this.customTransformers = {
+            ...this.customTransformers,
             after: resolveTransformers(astTransformers.after),
           }
         }
         if (astTransformers.afterDeclarations) {
-          this._customTransformers = {
-            ...this._customTransformers,
+          this.customTransformers = {
+            ...this.customTransformers,
             afterDeclarations: resolveTransformers(astTransformers.afterDeclarations),
           }
         }
@@ -311,7 +341,7 @@ export class ConfigSet {
     }
 
     this.logger.debug(
-      { customTransformers: this._customTransformers },
+      { customTransformers: this.customTransformers },
       'normalized custom AST transformers via ts-jest option',
     )
 
@@ -329,6 +359,9 @@ export class ConfigSet {
     }
   }
 
+  /**
+   * @internal
+   */
   private _resolveTsCacheDir(): void {
     if (!this._jestCfg.cache) {
       this.logger.debug('file caching disabled')
@@ -337,11 +370,11 @@ export class ConfigSet {
     }
     const cacheSuffix = sha1(
       stringify({
-        version: this._compilerModule.version,
+        version: this.compilerModule.version,
         digest: this.tsJestDigest,
-        compilerModule: this._compilerModule,
-        compilerOptions: this._parsedTsConfig.options,
-        isolatedModules: this._isolatedModules,
+        compilerModule: this.compilerModule,
+        compilerOptions: this.parsedTsConfig.options,
+        isolatedModules: this.isolatedModules,
         diagnostics: this._diagnostics,
       }),
     )
@@ -349,7 +382,7 @@ export class ConfigSet {
 
     this.logger.debug({ cacheDirectory: res }, 'will use file caching')
 
-    this._tsCacheDir = res
+    this.tsCacheDir = res
   }
 
   /**
@@ -360,12 +393,12 @@ export class ConfigSet {
    */
   private _readTsConfig(compilerOptions?: CompilerOptions, resolvedConfigFile?: string): ParsedCommandLine {
     let config = { compilerOptions: Object.create(null) }
-    let basePath = normalizeSlashes(this._rootDir)
-    const ts = this._compilerModule
+    let basePath = normalizeSlashes(this.rootDir)
+    const ts = this.compilerModule
     // Read project configuration when available.
     const configFileName: string | undefined = resolvedConfigFile
       ? normalizeSlashes(resolvedConfigFile)
-      : ts.findConfigFile(normalizeSlashes(this._rootDir), ts.sys.fileExists)
+      : ts.findConfigFile(normalizeSlashes(this.rootDir), ts.sys.fileExists)
     if (configFileName) {
       this.logger.debug({ tsConfigFileName: configFileName }, 'readTsConfig(): reading', configFileName)
       const result = ts.readConfigFile(configFileName, ts.sys.readFile)
@@ -456,25 +489,9 @@ export class ConfigSet {
     return result
   }
 
-  get parsedTsConfig(): ParsedCommandLine {
-    return this._parsedTsConfig
-  }
-
-  get isolatedModules(): boolean {
-    return this._isolatedModules
-  }
-
   /**
-   * This API can be used by custom transformers
+   * @internal
    */
-  get compilerModule(): TTypeScript {
-    return this._compilerModule
-  }
-
-  get customTransformers(): CustomTransformers {
-    return this._customTransformers
-  }
-
   @Memoize()
   get tsCompiler(): TsCompiler {
     return createCompilerInstance(this)
@@ -494,14 +511,6 @@ export class ConfigSet {
     return this._babelJestTransformers
   }
 
-  get cwd(): string {
-    return this._cwd
-  }
-
-  get tsCacheDir(): string | undefined {
-    return this._tsCacheDir
-  }
-
   /**
    * Use by e2e, don't mark as internal
    */
@@ -518,7 +527,7 @@ export class ConfigSet {
   get hooks(): TsJestHooksMap {
     let hooksFile = process.env.TS_JEST_HOOKS
     if (hooksFile) {
-      hooksFile = resolve(this._cwd, hooksFile)
+      hooksFile = resolve(this.cwd, hooksFile)
 
       return importer.tryTheseOr(hooksFile, {})
     }
@@ -546,16 +555,13 @@ export class ConfigSet {
       matchablePatterns.some((pattern) => (typeof pattern === 'string' ? isMatch(fileName) : pattern.test(fileName)))
   }
 
-  /**
-   * @internal
-   */
   shouldStringifyContent(filePath: string): boolean {
     return this._stringifyContentRegExp ? this._stringifyContentRegExp.test(filePath) : false
   }
 
   raiseDiagnostics(diagnostics: Diagnostic[], filePath?: string, logger?: Logger): void {
     const { ignoreCodes } = this._diagnostics
-    const { DiagnosticCategory } = this._compilerModule
+    const { DiagnosticCategory } = this.compilerModule
     const filteredDiagnostics =
       filePath && !this.shouldReportDiagnostics(filePath)
         ? []
@@ -614,7 +620,7 @@ export class ConfigSet {
     let path: string = inputPath
     let nodeResolved = false
     if (path.startsWith('<rootDir>')) {
-      path = resolve(join(this._rootDir, path.substr(9)))
+      path = resolve(join(this.rootDir, path.substr(9)))
     } else if (!isAbsolute(path)) {
       if (!path.startsWith('.') && nodeResolve) {
         try {
