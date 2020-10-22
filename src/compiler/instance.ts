@@ -62,7 +62,6 @@ export const createCompilerInstance = (configs: ConfigSet): TsCompiler => {
   const logger = configs.logger.child({ namespace: 'ts-compiler' })
   const {
     parsedTsConfig: { options: compilerOptions },
-    tsJest,
   } = configs
   const extensions = ['.ts', '.tsx']
   // Enable `allowJs` when flag is set.
@@ -70,7 +69,7 @@ export const createCompilerInstance = (configs: ConfigSet): TsCompiler => {
     extensions.push('.js')
     extensions.push('.jsx')
   }
-  const compilerInstance: CompilerInstance = !tsJest.isolatedModules
+  const compilerInstance: CompilerInstance = !configs.isolatedModules
     ? initializeLanguageServiceInstance(configs, logger) // Use language services by default
     : initializeTranspilerInstance(configs, logger)
   const compile = compileAndUpdateOutput(compilerInstance.compileFn, logger)

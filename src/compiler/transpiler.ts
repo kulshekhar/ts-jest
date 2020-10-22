@@ -19,11 +19,11 @@ export const initializeTranspilerInstance = (configs: ConfigSet, logger: Logger)
 
       const result: _ts.TranspileOutput = ts.transpileModule(code, {
         fileName,
-        transformers: configs.tsCustomTransformers,
+        transformers: configs.customTransformers,
         compilerOptions: options,
-        reportDiagnostics: configs.shouldReportDiagnostic(fileName),
+        reportDiagnostics: configs.shouldReportDiagnostics(fileName),
       })
-      if (result.diagnostics && configs.shouldReportDiagnostic(fileName)) {
+      if (result.diagnostics && configs.shouldReportDiagnostics(fileName)) {
         configs.raiseDiagnostics(result.diagnostics, fileName, logger)
       }
 
