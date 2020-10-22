@@ -75,11 +75,13 @@ export const initializeLanguageServiceInstance = (configs: ConfigSet, logger: Lo
     } catch (e) {}
   }
   // Initialize memory cache for typescript compiler
-  configs.parsedTsConfig.fileNames.forEach((fileName) => {
-    memoryCache.files.set(fileName, {
-      version: 0,
+  configs.parsedTsConfig.fileNames
+    .filter((fileName) => !configs.isTestFile(fileName))
+    .forEach((fileName) => {
+      memoryCache.files.set(fileName, {
+        version: 0,
+      })
     })
-  })
   function isFileInCache(fileName: string): boolean {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     return memoryCache.files.has(fileName) && memoryCache.files.get(fileName)!.version !== 0
