@@ -1,3 +1,23 @@
+## [26.4.2](https://github.com/kulshekhar/ts-jest/compare/v26.4.1...v26.4.2) (2020-10-23)
+
+
+### Features
+
+* **config:** expose several typings as public apis ([#2054](https://github.com/kulshekhar/ts-jest/issues/2054)) ([3b6b705](https://github.com/kulshekhar/ts-jest/commit/3b6b7055e2b9c74e81fb91596c807ace02ab77a1))
+
+
+### Performance Improvements
+
+* **compiler:** speed up bootstrap time for `isolatedModules:false` ([#2055](https://github.com/kulshekhar/ts-jest/issues/2055)) ([230b5dd](https://github.com/kulshekhar/ts-jest/commit/230b5ddbee55357d25dd190cd45aa8a30d7f31e0))
+
+
+### DEPRECATIONS
+
+* **config**: deprecate `tsConfig` in favor of `tsconfig` ([#1997](https://github.com/kulshekhar/ts-jest/pull/1997))
+* **config**: deprecate `packageJson` since internal codes don't use it anymore ([#2034](https://github.com/kulshekhar/ts-jest/pull/2034))
+
+
+
 ## [26.4.1](https://github.com/kulshekhar/ts-jest/compare/v26.4.0...v26.4.1) (2020-09-29)
 
 
