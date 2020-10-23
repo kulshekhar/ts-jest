@@ -38,6 +38,7 @@ The output of the logger will be in **ts-jest.log** in CWD, paste it in the belo
 ```
 System:
     OS:
+    Node version:
 
 Npm packages:
     jest:
