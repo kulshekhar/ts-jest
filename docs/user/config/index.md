@@ -147,7 +147,7 @@ module.exports = {
 
 ### Introduction
 
-All configuration of `ts-jest` specific options locate under `globals.ts-jest` path of your Jest config:
+All `ts-jest` specific options are located under the `globals.ts-jest` path of your Jest config:
 
 <div class="row"><div class="col-md-6" markdown="block">
 
@@ -183,7 +183,7 @@ module.exports = {
 
 #### IDE `ts-jest` config suggestion
 
-To utilize IDE suggestion, you can use `JSDOC` to provide suggested `ts-jest` configs for your Jest config:
+To utilize IDE suggestions, you can use `JSDoc` comments to provide suggested `ts-jest` configs for your Jest config:
 
 ```js
 /** @typedef {import('ts-jest')} */
