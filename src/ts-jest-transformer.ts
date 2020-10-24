@@ -4,7 +4,7 @@ import type { Config } from '@jest/types'
 import type { Logger } from 'bs-logger'
 
 import { ConfigSet } from './config/config-set'
-import { JS_JSX_REGEX, TS_TSX_REGEX } from './constants'
+import { DECLARATION_TYPE_EXT, JS_JSX_REGEX, TS_TSX_REGEX } from './constants'
 import { stringify } from './utils/json'
 import { JsonableValue } from './utils/jsonable-value'
 import { rootLogger } from './utils/logger'
@@ -24,14 +24,8 @@ export class TsJestTransformer implements Transformer {
    */
   private static readonly _cachedConfigSets: CachedConfigSet[] = []
   protected readonly logger: Logger
-  /**
-   * @internal
-   */
-  private _transformCfgStr!: string
-  /**
-   * @internal
-   */
-  private _tsJestCfgSet!: ConfigSet
+  protected _transformCfgStr!: string
+  protected _configSet!: ConfigSet
 
   constructor() {
     this.logger = rootLogger.child({ namespace: 'ts-jest-transformer' })
@@ -49,10 +43,10 @@ export class TsJestTransformer implements Transformer {
 
     let result: string | TransformedSource
     const source: string = input
-    const { hooks } = this._tsJestCfgSet
-    const shouldStringifyContent = this._tsJestCfgSet.shouldStringifyContent(filePath)
-    const babelJest = shouldStringifyContent ? undefined : this._tsJestCfgSet.babelJestTransformer
-    const isDefinitionFile = filePath.endsWith('.d.ts')
+    const { hooks } = this._configSet
+    const shouldStringifyContent = this._configSet.shouldStringifyContent(filePath)
+    const babelJest = shouldStringifyContent ? undefined : this._configSet.babelJestTransformer
+    const isDefinitionFile = filePath.endsWith(DECLARATION_TYPE_EXT)
     const isJsFile = JS_JSX_REGEX.test(filePath)
     const isTsFile = !isDefinitionFile && TS_TSX_REGEX.test(filePath)
     if (shouldStringifyContent) {
@@ -61,7 +55,7 @@ export class TsJestTransformer implements Transformer {
     } else if (isDefinitionFile) {
       // do not try to compile declaration files
       result = ''
-    } else if (!this._tsJestCfgSet.parsedTsConfig.options.allowJs && isJsFile) {
+    } else if (!this._configSet.parsedTsConfig.options.allowJs && isJsFile) {
       // we've got a '.js' but the compiler option `allowJs` is not set or set to false
       this.logger.warn({ fileName: filePath }, interpolate(Errors.GotJsFileButAllowJsFalse, { path: filePath }))
 
@@ -69,7 +63,7 @@ export class TsJestTransformer implements Transformer {
     } else if (isJsFile || isTsFile) {
       // transpile TS code (source maps are included)
       /* istanbul ignore if */
-      result = this._tsJestCfgSet.tsCompiler.compile(source, filePath)
+      result = this._configSet.tsCompiler.compile(source, filePath)
     } else {
       // we should not get called for files with other extension than js[x], ts[x] and d.ts,
       // TypeScript will bail if we try to compile, and if it was to call babel, users can
@@ -131,7 +125,7 @@ export class TsJestTransformer implements Transformer {
     )
     if (ccs) {
       this._transformCfgStr = ccs.transformerCfgStr
-      this._tsJestCfgSet = ccs.configSet
+      this._configSet = ccs.configSet
     } else {
       // try to look-it up by stringified version
       const serializedJestCfg = stringify(jestConfig)
@@ -144,24 +138,24 @@ export class TsJestTransformer implements Transformer {
         // the config, and then it calls the transformer with the proper object
         serializedCcs.jestConfig.value = jestConfig
         this._transformCfgStr = serializedCcs.transformerCfgStr
-        this._tsJestCfgSet = serializedCcs.configSet
+        this._configSet = serializedCcs.configSet
       } else {
         // create the new record in the index
         this.logger.info('no matching config-set found, creating a new one')
 
-        this._tsJestCfgSet = new ConfigSet(jestConfig)
+        this._configSet = new ConfigSet(jestConfig)
         this._transformCfgStr = new JsonableValue({
-          digest: this._tsJestCfgSet.tsJestDigest,
-          babel: this._tsJestCfgSet.babelConfig,
+          digest: this._configSet.tsJestDigest,
+          babel: this._configSet.babelConfig,
           ...jestConfig,
           tsconfig: {
-            options: this._tsJestCfgSet.parsedTsConfig.options,
-            raw: this._tsJestCfgSet.parsedTsConfig.raw,
+            options: this._configSet.parsedTsConfig.options,
+            raw: this._configSet.parsedTsConfig.raw,
           },
         }).serialized
         TsJestTransformer._cachedConfigSets.push({
           jestConfig: new JsonableValue(jestConfig),
-          configSet: this._tsJestCfgSet,
+          configSet: this._configSet,
           transformerCfgStr: this._transformCfgStr,
         })
       }
