@@ -1,3 +1,18 @@
+## [26.4.3](https://github.com/kulshekhar/ts-jest/compare/v26.4.2...v26.4.3) (2020-10-26)
+
+
+### Bug Fixes
+
+* **compiler:** only exclude test files when initializing compiler ([#2062](https://github.com/kulshekhar/ts-jest/issues/2062)) ([7264c13](https://github.com/kulshekhar/ts-jest/commit/7264c137114b6dd895624e3476dd7ec57b64ee13)), closes [#2061](https://github.com/kulshekhar/ts-jest/issues/2061), [#2068](https://github.com/kulshekhar/ts-jest/issues/2068), [#2072](https://github.com/kulshekhar/ts-jest/issues/2072), [#2073](https://github.com/kulshekhar/ts-jest/issues/2073)
+* **config:** resolve `.babelrc` file path before attempting to read it ([#2071](https://github.com/kulshekhar/ts-jest/issues/2071)) ([681bfef](https://github.com/kulshekhar/ts-jest/commit/681bfef41744f09cd50b71072f4d001cb58da82e)), closes [#2064](https://github.com/kulshekhar/ts-jest/issues/2064)
+
+
+### Features
+
+* **config:** allow to override resolve tsconfig behavior ([#2063](https://github.com/kulshekhar/ts-jest/issues/2063)) ([9f46ace](https://github.com/kulshekhar/ts-jest/commit/9f46acefceb1fa71ee2e8b3b3c172ceb0544b4c4))
+
+
+
 ## [26.4.2](https://github.com/kulshekhar/ts-jest/compare/v26.4.1...v26.4.2) (2020-10-23)
 
 
