@@ -199,7 +199,7 @@ describe('customTransformers', () => {
         } as any,
         logger,
         tsJestConfig: {
-          astTransformers: ['dummy-transformer'],
+          astTransformers: ['<rootDir>/__mocks__/dummy-transformer'],
         },
         resolve: null,
       }).customTransformers,
@@ -241,7 +241,7 @@ describe('babelJestTransformer', () => {
     expect(babelJest).toBeUndefined()
   })
 
-  it('should return babelJestTransformer with babalConfig is true', () => {
+  it('should return babelJestTransformer with babelConfig is true', () => {
     const cs = createConfigSet({
       jestConfig: {
         rootDir: 'src',
@@ -265,15 +265,24 @@ describe('babelJestTransformer', () => {
     expect(typeof babelJest.process).toBe('function')
   })
 
-  it('should return babelJestTransformer with non javascript file path', () => {
-    const FILE = 'src/__mocks__/.babelrc-foo'
+  it.each([
+    {
+      path: 'src/__mocks__/.babelrc-foo',
+      rootDir: './',
+    },
+    {
+      path: '<rootDir>/.babelrc-foo',
+      rootDir: 'src/__mocks__/',
+    },
+  ])('should return babelJestTransformer with non javascript file path', (data) => {
     const cs = createConfigSet({
       jestConfig: {
         globals: {
           'ts-jest': {
-            babelConfig: FILE,
+            babelConfig: data.path,
           },
         },
+        rootDir: data.rootDir,
       },
       resolve: null,
     })
