@@ -170,21 +170,6 @@ describe('customTransformers', () => {
   })
 })
 
-describe('tsCompiler', () => {
-  it('should be a compiler object', () => {
-    const cs = createConfigSet({
-      jestConfig: {
-        testRegex: [],
-        testMatch: [],
-      },
-      tsJestConfig: { tsconfig: false } as any,
-    })
-    const compiler = cs.tsCompiler
-    expect(compiler.cwd).toBe(cs.cwd)
-    expect(typeof compiler.compile).toBe('function')
-  })
-}) // tsCompiler
-
 describe('babelJestTransformer', () => {
   it('should return babelJestTransformer without babelConfig option', () => {
     const cs = createConfigSet({

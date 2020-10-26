@@ -24,14 +24,12 @@ import {
   ScriptTarget,
 } from 'typescript'
 
-import { createCompilerInstance } from '../compiler/instance'
 import { DEFAULT_JEST_TEST_MATCH } from '../constants'
 import { factory as hoisting } from '../transformers/hoist-jest'
 import type {
   AstTransformer,
   BabelConfig,
   BabelJestTransformer,
-  TsCompiler,
   TsJestDiagnosticsCfg,
   TsJestGlobalOptions,
   TTypeScript,
@@ -466,14 +464,6 @@ export class ConfigSet {
     }
 
     return result
-  }
-
-  /**
-   * @internal
-   */
-  @Memoize()
-  get tsCompiler(): TsCompiler {
-    return createCompilerInstance(this)
   }
 
   /**

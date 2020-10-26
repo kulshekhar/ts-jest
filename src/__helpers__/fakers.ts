@@ -2,10 +2,10 @@ import type { Config } from '@jest/types'
 import type { Logger } from 'bs-logger'
 import { resolve } from 'path'
 
-import { createCompilerInstance } from '../compiler/instance'
 import { ConfigSet } from '../config/config-set'
-import type { TsCompiler, TsJestGlobalOptions } from '../types'
+import type { TsJestGlobalOptions } from '../types'
 import type { ImportReasons } from '../utils/messages'
+import { TsJestCompiler } from '../compiler/ts-jest-compiler'
 
 export function filePath(relPath: string): string {
   return resolve(__dirname, '..', '..', relPath)
@@ -67,7 +67,7 @@ export function makeCompiler({
   jestConfig?: Partial<Config.ProjectConfig>
   tsJestConfig?: TsJestGlobalOptions
   parentConfig?: TsJestGlobalOptions
-} = {}): TsCompiler {
+} = {}): TsJestCompiler {
   tsJestConfig = { ...tsJestConfig }
   tsJestConfig.diagnostics = {
     ...(tsJestConfig.diagnostics as any),
@@ -82,5 +82,5 @@ export function makeCompiler({
   }
   const cs = createConfigSet({ jestConfig, tsJestConfig, parentConfig, resolve: null })
 
-  return createCompilerInstance(cs)
+  return new TsJestCompiler(cs)
 }

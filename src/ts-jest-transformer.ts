@@ -8,7 +8,9 @@ import { stringify } from './utils/json'
 import { JsonableValue } from './utils/jsonable-value'
 import { rootLogger } from './utils/logger'
 import { Errors, interpolate } from './utils/messages'
+import { TsJestCompiler } from './compiler/ts-jest-compiler'
 import { sha1 } from './utils/sha1'
+import type { CompilerInstance } from './types'
 
 interface CachedConfigSet {
   configSet: ConfigSet
@@ -23,6 +25,10 @@ export class TsJestTransformer implements Transformer {
    * @internal
    */
   private static readonly _cachedConfigSets: CachedConfigSet[] = []
+  /**
+   * @internal
+   */
+  private static _compiler: CompilerInstance | undefined
   protected readonly logger: Logger
   protected _transformCfgStr!: string
 
@@ -93,7 +99,7 @@ export class TsJestTransformer implements Transformer {
    * @public
    */
   process(
-    input: string,
+    fileContent: string,
     filePath: Config.Path,
     jestConfig: Config.ProjectConfig,
     transformOptions?: TransformOptions,
@@ -101,7 +107,6 @@ export class TsJestTransformer implements Transformer {
     this.logger.debug({ fileName: filePath, transformOptions }, 'processing', filePath)
 
     let result: string | TransformedSource
-    const source: string = input
     const configs = this.configsFor(jestConfig)
     const { hooks } = configs
     const shouldStringifyContent = configs.shouldStringifyContent(filePath)
@@ -111,7 +116,7 @@ export class TsJestTransformer implements Transformer {
     const isTsFile = !isDefinitionFile && TS_TSX_REGEX.test(filePath)
     if (shouldStringifyContent) {
       // handles here what we should simply stringify
-      result = `module.exports=${stringify(source)}`
+      result = `module.exports=${stringify(fileContent)}`
     } else if (isDefinitionFile) {
       // do not try to compile declaration files
       result = ''
@@ -119,11 +124,13 @@ export class TsJestTransformer implements Transformer {
       // we've got a '.js' but the compiler option `allowJs` is not set or set to false
       this.logger.warn({ fileName: filePath }, interpolate(Errors.GotJsFileButAllowJsFalse, { path: filePath }))
 
-      result = source
+      result = fileContent
     } else if (isJsFile || isTsFile) {
+      if (!TsJestTransformer._compiler) {
+        TsJestTransformer._compiler = new TsJestCompiler(configs)
+      }
       // transpile TS code (source maps are included)
-      /* istanbul ignore if */
-      result = configs.tsCompiler.compile(source, filePath)
+      result = TsJestTransformer._compiler.getCompiledOutput(fileContent, filePath)
     } else {
       // we should not get called for files with other extension than js[x], ts[x] and d.ts,
       // TypeScript will bail if we try to compile, and if it was to call babel, users can
@@ -132,7 +139,7 @@ export class TsJestTransformer implements Transformer {
 
       this.logger.warn({ fileName: filePath }, interpolate(message, { path: filePath }))
 
-      result = source
+      result = fileContent
     }
     // calling babel-jest transformer
     if (babelJest) {
@@ -146,7 +153,7 @@ export class TsJestTransformer implements Transformer {
     if (hooks.afterProcess) {
       this.logger.debug({ fileName: filePath, hookName: 'afterProcess' }, 'calling afterProcess hook')
 
-      const newResult = hooks.afterProcess([input, filePath, jestConfig, transformOptions], result)
+      const newResult = hooks.afterProcess([fileContent, filePath, jestConfig, transformOptions], result)
       if (newResult !== undefined) {
         return newResult
       }

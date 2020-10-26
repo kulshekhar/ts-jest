@@ -1,10 +1,10 @@
 import { LogLevels } from 'bs-logger'
 import { sep } from 'path'
 
-import { ConfigSet } from './config/config-set'
-import { SOURCE_MAPPING_PREFIX } from './compiler/instance'
 import { logTargetMock } from './__helpers__/mocks'
 import { TsJestTransformer } from './ts-jest-transformer'
+import { SOURCE_MAPPING_PREFIX } from './compiler/compiler-utils'
+import { TsJestCompiler } from './compiler/ts-jest-compiler'
 
 const logTarget = logTargetMock()
 
@@ -41,7 +41,7 @@ describe('TsJestTransformer', () => {
         fileContent: 'export default "foo"',
         fileName: 'foo.ts',
         jestConfigStr: '{"foo": "bar"}',
-        options: { config: { foo: 'bar' } as any, instrument: false, rootDir: '/foo' },
+        options: { config: { foo: 'bar', testMatch: [], testRegex: [] } as any, instrument: false, rootDir: '/foo' },
       }
       const keys = [
         tr.getCacheKey(input.fileContent, input.fileName, input.jestConfigStr, input.options),
@@ -75,6 +75,8 @@ describe('TsJestTransformer', () => {
             stringifyContentPathRegex: '\\.html$',
           },
         },
+        testMatch: [],
+        testRegex: [],
       } as any
       tr.getCacheKey(fileContent, filePath, JSON.stringify(jestCfg), { config: jestCfg } as any)
 
@@ -86,7 +88,10 @@ describe('TsJestTransformer', () => {
     test('should process type definition input', () => {
       const fileContent = 'type Foo = number'
       const filePath = 'foo.d.ts'
-      const jestCfg = Object.create(null)
+      const jestCfg = {
+        testMatch: [],
+        testRegex: [],
+      } as any
       tr.getCacheKey(fileContent, filePath, JSON.stringify(jestCfg), { config: jestCfg } as any)
       const result = tr.process(fileContent, filePath, jestCfg)
 
@@ -100,6 +105,8 @@ describe('TsJestTransformer', () => {
         globals: {
           'ts-jest': { tsconfig: { allowJs: false } },
         },
+        testMatch: [],
+        testRegex: [],
       } as any
       tr.getCacheKey(fileContent, filePath, JSON.stringify(jestCfg), { config: jestCfg } as any)
       logTarget.clear()
@@ -118,13 +125,12 @@ describe('TsJestTransformer', () => {
     test.each(['foo.ts', 'foo.tsx'])('should process ts/tsx file', (filePath) => {
       const fileContent = 'const foo = 1'
       const output = 'var foo = 1'
-      const jestCfg = Object.create(null)
+      const jestCfg = {
+        testMatch: [],
+        testRegex: [],
+      } as any
       tr.getCacheKey(fileContent, filePath, JSON.stringify(jestCfg), { config: jestCfg } as any)
-      jest.spyOn(ConfigSet.prototype, 'tsCompiler', 'get').mockImplementationOnce(() => ({
-        compile: () => output,
-        cwd: '.',
-        program: undefined,
-      }))
+      jest.spyOn(TsJestCompiler.prototype, 'getCompiledOutput').mockReturnValueOnce(output)
 
       const result = tr.process(fileContent, filePath, jestCfg)
 
@@ -138,14 +144,12 @@ describe('TsJestTransformer', () => {
         globals: {
           'ts-jest': { tsconfig: { allowJs: true } },
         },
+        testMatch: [],
+        testRegex: [],
       } as any
       tr.getCacheKey(fileContent, filePath, JSON.stringify(jestCfg), { config: jestCfg } as any)
       logTarget.clear()
-      jest.spyOn(ConfigSet.prototype, 'tsCompiler', 'get').mockImplementationOnce(() => ({
-        compile: () => output,
-        cwd: '.',
-        program: undefined,
-      }))
+      jest.spyOn(TsJestCompiler.prototype, 'getCompiledOutput').mockReturnValueOnce(output)
 
       const result = tr.process(fileContent, filePath, jestCfg)
 
@@ -159,6 +163,8 @@ describe('TsJestTransformer', () => {
         globals: {
           'ts-jest': { tsconfig: { allowJs: true } },
         },
+        testMatch: [],
+        testRegex: [],
       } as any
       tr.getCacheKey(fileContent, filePath, JSON.stringify(jestCfg), { config: jestCfg } as any)
       logTarget.clear()
@@ -178,6 +184,8 @@ describe('TsJestTransformer', () => {
         globals: {
           'ts-jest': { babelConfig: true },
         },
+        testMatch: [],
+        testRegex: [],
       } as any
       tr.getCacheKey(fileContent, filePath, JSON.stringify(jestCfg), { config: jestCfg } as any)
       logTarget.clear()
