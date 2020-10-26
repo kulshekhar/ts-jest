@@ -653,7 +653,7 @@ describe('resolvePath', () => {
   })
 }) // resolvePath
 
-describe('readTsConfig', () => {
+describe('_resolveTsConfig', () => {
   let findConfig!: jest.SpyInstance<string | undefined>
   let readConfig!: jest.SpyInstance<{ config?: any; error?: ts.Diagnostic }>
   let parseConfig!: jest.SpyInstance<ts.ParsedCommandLine>

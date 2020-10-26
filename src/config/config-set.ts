@@ -116,7 +116,7 @@ export class ConfigSet {
   readonly isolatedModules: boolean
   readonly cwd: string
   tsCacheDir: string | undefined
-  parsedTsConfig!: ParsedCommandLine
+  parsedTsConfig!: ParsedCommandLine | Record<string, any>
   customTransformers: CustomTransformers = Object.create(null)
   readonly rootDir: string
   /**
@@ -139,10 +139,7 @@ export class ConfigSet {
    * @internal
    */
   private _stringifyContentRegExp: RegExp | undefined
-  /**
-   * @internal
-   */
-  private _overriddenCompilerOptions: Partial<CompilerOptions> = {
+  protected _overriddenCompilerOptions: Partial<CompilerOptions> = {
     // we handle sourcemaps this way and not another
     sourceMap: true,
     inlineSourceMap: false,
@@ -282,7 +279,10 @@ export class ConfigSet {
     }
     const tsconfigOpt = options.tsConfig ?? options.tsconfig
     const configFilePath = typeof tsconfigOpt === 'string' ? this.resolvePath(tsconfigOpt) : undefined
-    this.parsedTsConfig = this._readTsConfig(typeof tsconfigOpt === 'object' ? tsconfigOpt : undefined, configFilePath)
+    this.parsedTsConfig = this._resolveTsConfig(
+      typeof tsconfigOpt === 'object' ? tsconfigOpt : undefined,
+      configFilePath,
+    )
     // throw errors if any matching wanted diagnostics
     this.raiseDiagnostics(this.parsedTsConfig.errors, configFilePath)
 
@@ -389,10 +389,10 @@ export class ConfigSet {
   /**
    * Load TypeScript configuration. Returns the parsed TypeScript config and
    * any `tsConfig` options specified in ts-jest tsConfig
-   *
-   * @internal
    */
-  private _readTsConfig(compilerOptions?: CompilerOptions, resolvedConfigFile?: string): ParsedCommandLine {
+  protected _resolveTsConfig(compilerOptions?: CompilerOptions, resolvedConfigFile?: string): Record<string, any>
+  // eslint-disable-next-line no-dupe-class-members
+  protected _resolveTsConfig(compilerOptions?: CompilerOptions, resolvedConfigFile?: string): ParsedCommandLine {
     let config = { compilerOptions: Object.create(null) }
     let basePath = normalizeSlashes(this.rootDir)
     const ts = this.compilerModule
@@ -402,6 +402,7 @@ export class ConfigSet {
       : ts.findConfigFile(normalizeSlashes(this.rootDir), ts.sys.fileExists)
     if (configFileName) {
       this.logger.debug({ tsConfigFileName: configFileName }, 'readTsConfig(): reading', configFileName)
+
       const result = ts.readConfigFile(configFileName, ts.sys.readFile)
       // Return diagnostics.
       if (result.error) {
@@ -419,10 +420,8 @@ export class ConfigSet {
 
     // parse json, merge config extending others, ...
     const result = ts.parseJsonConfigFileContent(config, ts.sys, basePath, undefined, configFileName)
-
     const { _overriddenCompilerOptions: forcedOptions } = this
     const finalOptions = result.options
-
     // Target ES5 output by default (instead of ES3).
     if (finalOptions.target === undefined) {
       finalOptions.target = ts.ScriptTarget.ES5
@@ -484,6 +483,7 @@ export class ConfigSet {
         nodeJsVer: process.version,
         compilationTarget: config.compilerOptions.target ?? TARGET_TO_VERSION_MAPPING[compilationTarget],
       })
+
       this.logger.warn(message)
     }
 

@@ -75,8 +75,8 @@ export const initializeLanguageServiceInstance = (configs: ConfigSet, logger: Lo
   }
   // Initialize memory cache for typescript compiler
   configs.parsedTsConfig.fileNames
-    .filter((fileName) => !configs.isTestFile(fileName))
-    .forEach((fileName) => {
+    .filter((fileName: string) => !configs.isTestFile(fileName))
+    .forEach((fileName: string) => {
       memoryCache.files.set(fileName, {
         version: 0,
       })

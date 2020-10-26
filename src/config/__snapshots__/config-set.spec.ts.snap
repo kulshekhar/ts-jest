@@ -1,5 +1,57 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`_resolveTsConfig resolve configFileName normally module in tsConfig is not the same as forced module and allowSyntheticDefaultImports is false in tsConfig should use correct paths when searching 1`] = `
+Array [
+  Object {
+    "category": 3,
+    "code": 151001,
+    "file": undefined,
+    "length": undefined,
+    "messageText": "If you have issues related to imports, you should consider setting \`esModuleInterop\` to \`true\` in your TypeScript configuration file (usually \`tsconfig.json\`). See https://blogs.msdn.microsoft.com/typescript/2018/01/31/announcing-typescript-2-7/#easier-ecmascript-module-interoperability for more information.",
+    "start": undefined,
+  },
+]
+`;
+
+exports[`_resolveTsConfig resolve configFileName normally module in tsConfig is not the same as forced module and allowSyntheticDefaultImports is false in tsConfig should use given tsconfig path 1`] = `
+Array [
+  Object {
+    "category": 3,
+    "code": 151001,
+    "file": undefined,
+    "length": undefined,
+    "messageText": "If you have issues related to imports, you should consider setting \`esModuleInterop\` to \`true\` in your TypeScript configuration file (usually \`tsconfig.json\`). See https://blogs.msdn.microsoft.com/typescript/2018/01/31/announcing-typescript-2-7/#easier-ecmascript-module-interoperability for more information.",
+    "start": undefined,
+  },
+]
+`;
+
+exports[`_resolveTsConfig resolve configFileName normally module in tsConfig is not the same as forced module and esModuleInterop is not in tsConfig should use correct paths when searching 1`] = `
+Array [
+  Object {
+    "category": 3,
+    "code": 151001,
+    "file": undefined,
+    "length": undefined,
+    "messageText": "If you have issues related to imports, you should consider setting \`esModuleInterop\` to \`true\` in your TypeScript configuration file (usually \`tsconfig.json\`). See https://blogs.msdn.microsoft.com/typescript/2018/01/31/announcing-typescript-2-7/#easier-ecmascript-module-interoperability for more information.",
+    "start": undefined,
+  },
+]
+`;
+
+exports[`_resolveTsConfig resolve configFileName normally module in tsConfig is not the same as forced module and esModuleInterop is not in tsConfig should use given tsconfig path 1`] = `
+Array [
+  Object {
+    "category": 3,
+    "code": 151001,
+    "file": undefined,
+    "length": undefined,
+    "messageText": "If you have issues related to imports, you should consider setting \`esModuleInterop\` to \`true\` in your TypeScript configuration file (usually \`tsconfig.json\`). See https://blogs.msdn.microsoft.com/typescript/2018/01/31/announcing-typescript-2-7/#easier-ecmascript-module-interoperability for more information.",
+    "start": undefined,
+  },
+]
+`;
+
 exports[`customTransformers should return an object containing all resolved transformers 1`] = `
 Object {
   "before": Array [
@@ -55,55 +107,3 @@ exports[`isTestFile should return a boolean value whether the file matches test 
 exports[`isTestFile should return a boolean value whether the file matches test pattern 3`] = `true`;
 
 exports[`isTestFile should return a boolean value whether the file matches test pattern 4`] = `true`;
-
-exports[`readTsConfig resolve configFileName normally module in tsConfig is not the same as forced module and allowSyntheticDefaultImports is false in tsConfig should use correct paths when searching 1`] = `
-Array [
-  Object {
-    "category": 3,
-    "code": 151001,
-    "file": undefined,
-    "length": undefined,
-    "messageText": "If you have issues related to imports, you should consider setting \`esModuleInterop\` to \`true\` in your TypeScript configuration file (usually \`tsconfig.json\`). See https://blogs.msdn.microsoft.com/typescript/2018/01/31/announcing-typescript-2-7/#easier-ecmascript-module-interoperability for more information.",
-    "start": undefined,
-  },
-]
-`;
-
-exports[`readTsConfig resolve configFileName normally module in tsConfig is not the same as forced module and allowSyntheticDefaultImports is false in tsConfig should use given tsconfig path 1`] = `
-Array [
-  Object {
-    "category": 3,
-    "code": 151001,
-    "file": undefined,
-    "length": undefined,
-    "messageText": "If you have issues related to imports, you should consider setting \`esModuleInterop\` to \`true\` in your TypeScript configuration file (usually \`tsconfig.json\`). See https://blogs.msdn.microsoft.com/typescript/2018/01/31/announcing-typescript-2-7/#easier-ecmascript-module-interoperability for more information.",
-    "start": undefined,
-  },
-]
-`;
-
-exports[`readTsConfig resolve configFileName normally module in tsConfig is not the same as forced module and esModuleInterop is not in tsConfig should use correct paths when searching 1`] = `
-Array [
-  Object {
-    "category": 3,
-    "code": 151001,
-    "file": undefined,
-    "length": undefined,
-    "messageText": "If you have issues related to imports, you should consider setting \`esModuleInterop\` to \`true\` in your TypeScript configuration file (usually \`tsconfig.json\`). See https://blogs.msdn.microsoft.com/typescript/2018/01/31/announcing-typescript-2-7/#easier-ecmascript-module-interoperability for more information.",
-    "start": undefined,
-  },
-]
-`;
-
-exports[`readTsConfig resolve configFileName normally module in tsConfig is not the same as forced module and esModuleInterop is not in tsConfig should use given tsconfig path 1`] = `
-Array [
-  Object {
-    "category": 3,
-    "code": 151001,
-    "file": undefined,
-    "length": undefined,
-    "messageText": "If you have issues related to imports, you should consider setting \`esModuleInterop\` to \`true\` in your TypeScript configuration file (usually \`tsconfig.json\`). See https://blogs.msdn.microsoft.com/typescript/2018/01/31/announcing-typescript-2-7/#easier-ecmascript-module-interoperability for more information.",
-    "start": undefined,
-  },
-]
-`;
