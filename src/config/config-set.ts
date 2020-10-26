@@ -219,15 +219,16 @@ export class ConfigSet {
     } else {
       const baseBabelCfg = { cwd: this.cwd }
       if (typeof options.babelConfig === 'string') {
+        const babelCfgPath = this.resolvePath(options.babelConfig)
         if (extname(options.babelConfig) === '.js') {
           this._babelConfig = {
             ...baseBabelCfg,
-            ...require(this.resolvePath(options.babelConfig, { nodeResolve: true })),
+            ...require(babelCfgPath),
           }
         } else {
           this._babelConfig = {
             ...baseBabelCfg,
-            ...json5.parse(readFileSync(options.babelConfig, 'utf-8')),
+            ...json5.parse(readFileSync(babelCfgPath, 'utf-8')),
           }
         }
       } else if (typeof options.babelConfig === 'object') {
