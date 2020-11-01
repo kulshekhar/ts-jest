@@ -10,7 +10,6 @@
     "build": "tsc -p tsconfig.build.json",
     "postbuild": "node scripts/post-build.js",
     "clean": "node scripts/clean.js",
-    "pretest": "npm run lint",
     "test": "run-s -s test:e2e \"test:unit -- {@}\" --",
     "test:prepare": "npm run test:e2e -- --prepareOnly",
     "test:e2e": "node scripts/e2e.js",
