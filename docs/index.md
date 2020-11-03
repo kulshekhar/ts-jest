@@ -5,11 +5,21 @@ layout: home
 <img src="assets/img/logo.png" title="ts-jest Log" width="128" height="128">
 </p>
 
-**`ts-jest`** is a TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript.
+<h1 align="center">ts-jest</h1>
 
-It supports all features of TypeScript including type-checking. [Read more about Babel7 + `preset-typescript` **vs** TypeScript (and `ts-jest`)](user/babel7-or-ts).
+<p align="center">A TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript.</p>
 
-[![npm version](https://badge.fury.io/js/ts-jest.svg)](https://badge.fury.io/js/ts-jest) [![NPM downloads](https://img.shields.io/npm/dm/ts-jest.svg?style=flat)](https://npmjs.org/package/ts-jest) [![Known Vulnerabilities](https://snyk.io/test/github/kulshekhar/ts-jest/badge.svg)](https://snyk.io/test/github/kulshekhar/ts-jest) [![Coverage Status](https://coveralls.io/repos/github/kulshekhar/ts-jest/badge.svg?branch=master)](https://coveralls.io/github/kulshekhar/ts-jest?branch=master) [![Build Status for linux](https://travis-ci.org/kulshekhar/ts-jest.svg?branch=master)](https://travis-ci.org/kulshekhar/ts-jest) [![Build Status for Windows](https://ci.appveyor.com/api/projects/status/g8tt9qd7usv0tolb/branch/master?svg=true)](https://ci.appveyor.com/project/kulshekhar/ts-jest/branch/master)
+<p align="center">
+  <a href="https://www.npmjs.com/package/ts-jest"><img src="https://img.shields.io/npm/v/ts-jest/latest.svg?style=flat-square" alt="NPM version" /> </a>
+  <a href="https://www.npmjs.com/package/ts-jest"><img src="https://img.shields.io/npm/dm/ts-jest.svg?style=flat-square" alt="NPM downloads"/> </a>
+  <a href="https://snyk.io/test/github/kulshekhar/ts-jest"><img src="https://snyk.io/test/github/kulshekhar/ts-jest/badge.svg?style=flat-square" alt="Known vulnerabilities"/> </a>
+  <a href="https://coveralls.io/github/kulshekhar/ts-jest?branch=master"><img src="https://coveralls.io/repos/github/kulshekhar/ts-jest/badge.svg?branch=master" alt="Coverage status"/> </a>
+  <a href="https://travis-ci.com/kulshekhar/ts-jest"><img src="https://travis-ci.com/kulshekhar/ts-jest.svg?branch=master" alt="Build status"/> </a>
+  <a href="https://actions-badge.atrox.dev/kulshekhar/ts-jest/goto?ref=master"><img alt="GitHub actions" src="https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fkulshekhar%2Fts-jest%2Fbadge%3Fref%3Dmaster&style=flat-square" /> </a>
+  <a href="https://github.com/kulshekhar/ts-jest/blob/master/LICENSE"><img src="https://img.shields.io/npm/l/ts-jest.svg?style=flat-square" alt="GitHub license"/> </a>
+</p>
+
+It supports all features of TypeScript including type-checking. [Read more about Babel7 + `preset-typescript` **vs** TypeScript (and `ts-jest`)](https://kulshekhar.github.io/ts-jest/user/babel7-or-ts).
 
 ---
 
