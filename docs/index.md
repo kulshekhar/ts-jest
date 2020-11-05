@@ -15,7 +15,6 @@ layout: home
   <a href="https://www.npmjs.com/package/ts-jest"><img src="https://img.shields.io/npm/dm/ts-jest.svg?style=flat-square" alt="NPM downloads"/> </a>
   <a href="https://snyk.io/test/github/kulshekhar/ts-jest"><img src="https://snyk.io/test/github/kulshekhar/ts-jest/badge.svg?style=flat-square" alt="Known vulnerabilities"/> </a>
   <a href="https://coveralls.io/github/kulshekhar/ts-jest?branch=master"><img src="https://coveralls.io/repos/github/kulshekhar/ts-jest/badge.svg?branch=master" alt="Coverage status"/> </a>
-  <a href="https://travis-ci.com/kulshekhar/ts-jest"><img src="https://travis-ci.com/kulshekhar/ts-jest.svg?branch=master" alt="Build status"/> </a>
   <a href="https://actions-badge.atrox.dev/kulshekhar/ts-jest/goto?ref=master"><img alt="GitHub actions" src="https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fkulshekhar%2Fts-jest%2Fbadge%3Fref%3Dmaster&style=flat-square" /> </a>
   <a href="https://github.com/kulshekhar/ts-jest/blob/master/LICENSE"><img src="https://img.shields.io/npm/l/ts-jest.svg?style=flat-square" alt="GitHub license"/> </a>
 </p>
