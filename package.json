@@ -1,9 +1,11 @@
 {
   "name": "ts-jest",
-  "version": "26.4.3",
+  "version": "26.4.4",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "bin": "cli.js",
+  "bin": {
+    "ts-jest": "cli.js"
+  },
   "description": "A preprocessor with source maps support to help use TypeScript with Jest",
   "scripts": {
     "prebuild": "node scripts/clean-dist.js",

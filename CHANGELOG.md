@@ -1,3 +1,17 @@
+## [26.4.4](https://github.com/kulshekhar/ts-jest/compare/v26.4.3...v26.4.4) (2020-11-08)
+
+
+### Bug Fixes
+
+* revert usage of `@jest/create-cache-key-function` ([#2108](https://github.com/kulshekhar/ts-jest/issues/2108)) ([dee8231](https://github.com/kulshekhar/ts-jest/commit/dee823172ce1e8eb9e0b2dd3aeed1ab4033bd0d9)), closes [#2080](https://github.com/kulshekhar/ts-jest/issues/2080) [#2090](https://github.com/kulshekhar/ts-jest/issues/2090) [#2104](https://github.com/kulshekhar/ts-jest/issues/2104)
+
+
+### Features
+
+* **testing:** expose all types for util `mocked` ([#2096](https://github.com/kulshekhar/ts-jest/issues/2096)) ([b1d072b](https://github.com/kulshekhar/ts-jest/commit/b1d072b52b9a7665b3a6914b0895f84f6ee3f8c0)), closes [#2086](https://github.com/kulshekhar/ts-jest/issues/2086)
+
+
+
 ## [26.4.3](https://github.com/kulshekhar/ts-jest/compare/v26.4.2...v26.4.3) (2020-10-26)
 
 
