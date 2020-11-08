@@ -1,4 +1,5 @@
 import { LogLevels } from 'bs-logger'
+import { sep } from 'path'
 
 import { TsJestTransformer } from './ts-jest-transformer'
 import { ConfigSet } from './config/config-set'
@@ -12,39 +13,24 @@ beforeEach(() => {
 })
 
 describe('TsJestTransformer', () => {
-  describe('createOrResolveTransformerCfg', () => {
-    it('should return the same config-set for same values with jest config string is not in cachedConfigSets', () => {
-      const obj1 = { cwd: '/foo/.' } as any
-      const tjT = new TsJestTransformer()
+  describe('configFor', () => {
+    it('should return the same config-set for same values with jest config string is not in configSetsIndex', () => {
+      const obj1 = { cwd: '/foo/.', rootDir: '/bar//dummy/..', globals: {} }
+      const cs3 = new TsJestTransformer().configsFor(obj1 as any)
 
-      logTarget.clear()
-
-      tjT.getCacheKey('foo', 'foo', JSON.stringify(obj1), {
-        config: obj1,
-      } as any)
-
-      expect(logTarget.lines[0]).toMatchInlineSnapshot(`
-        "[level:30] no matching config-set found, creating a new one
-        "
-      `)
+      expect(cs3.cwd).toBe(`${sep}foo`)
+      expect(cs3.rootDir).toBe(`${sep}bar`)
     })
 
-    it('should return the same config-set for same values with jest config string in cachedConfigSets', () => {
+    it('should return the same config-set for same values with jest config string in configSetsIndex', () => {
       const obj1 = { cwd: '/foo/.', rootDir: '/bar//dummy/..', globals: {} }
       const obj2 = { ...obj1 }
-      const tjT1 = new TsJestTransformer()
-      const tjT2 = new TsJestTransformer()
+      const cs1 = new TsJestTransformer().configsFor(obj1 as any)
+      const cs2 = new TsJestTransformer().configsFor(obj2 as any)
 
-      logTarget.clear()
-
-      tjT1.getCacheKey('foo', 'foo', JSON.stringify(obj1), {
-        config: obj1,
-      } as any)
-      tjT2.getCacheKey('foo', 'foo', JSON.stringify(obj2), {
-        config: obj2,
-      } as any)
-
-      expect(logTarget.filteredLines(LogLevels.info)).toHaveLength(1)
+      expect(cs1.cwd).toBe(`${sep}foo`)
+      expect(cs1.rootDir).toBe(`${sep}bar`)
+      expect(cs2).toBe(cs1)
     })
   })
 
@@ -63,10 +49,13 @@ describe('TsJestTransformer', () => {
         tr.getCacheKey(input.fileContent, input.fileName, '{}', { ...input.options, instrument: true }),
         tr.getCacheKey(input.fileContent, input.fileName, '{}', { ...input.options, rootDir: '/bar' }),
       ]
+
       // each key should have correct length
       for (const key of keys) {
-        expect(key).toHaveLength(32)
+        expect(key).toHaveLength(40)
       }
+      // unique array should have same length
+      expect(keys.filter((k, i, all) => all.indexOf(k) === i)).toHaveLength(keys.length)
     })
   })
 

@@ -55,7 +55,6 @@
   },
   "homepage": "https://kulshekhar.github.io/ts-jest",
   "dependencies": {
-    "@jest/create-cache-key-function": "^26.5.0",
     "@types/jest": "26.x",
     "bs-logger": "0.x",
     "buffer-from": "1.x",
