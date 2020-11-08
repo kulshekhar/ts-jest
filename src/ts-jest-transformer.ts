@@ -61,10 +61,18 @@ export class TsJestTransformer implements Transformer {
         this.logger.info('no matching config-set found, creating a new one')
 
         configSet = new ConfigSet(jestConfig)
+        const jest = { ...jestConfig }
+        const globals = (jest.globals = { ...jest.globals } as any)
+        // we need to remove some stuff from jest config
+        // this which does not depend on config
+        jest.name = undefined as any
+        jest.cacheDirectory = undefined as any
+        // we do not need this since its normalized version is in tsJest
+        delete globals['ts-jest']
         this._transformCfgStr = new JsonableValue({
           digest: configSet.tsJestDigest,
           babel: configSet.babelConfig,
-          ...jestConfig,
+          ...jest,
           tsconfig: {
             options: configSet.parsedTsConfig.options,
             raw: configSet.parsedTsConfig.raw,
