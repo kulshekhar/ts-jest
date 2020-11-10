@@ -41,7 +41,7 @@ import { importer } from '../utils/importer'
 import { stringify } from '../utils/json'
 import { rootLogger } from '../utils/logger'
 import { Memoize } from '../utils/memoize'
-import { Deprecations, Errors, ImportReasons, interpolate } from '../utils/messages'
+import { Errors, ImportReasons, interpolate } from '../utils/messages'
 import { normalizeSlashes } from '../utils/normalize-slashes'
 import { sha1 } from '../utils/sha1'
 import { TSError } from '../utils/ts-error'
@@ -206,10 +206,6 @@ export class ConfigSet {
    * @internal
    */
   private _setupTsJestCfg(options: TsJestGlobalOptions): void {
-    if (options.packageJson) {
-      this.logger.warn(Deprecations.PackageJson)
-    }
-
     // babel config (for babel-jest) default is undefined so we don't need to have fallback like tsConfig
     if (!options.babelConfig) {
       this.logger.debug('babel is disabled')

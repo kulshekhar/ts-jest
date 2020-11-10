@@ -1,6 +1,6 @@
 /* eslint-disable jest/no-mocks-import */
 import type { Transformer } from '@jest/transform'
-import { LogLevels, testing } from 'bs-logger'
+import { testing } from 'bs-logger'
 import { join, resolve } from 'path'
 import ts from 'typescript'
 
@@ -28,28 +28,6 @@ backports.backportJestConfig.mockImplementation((_, config) => ({
 beforeEach(() => {
   jest.clearAllMocks()
 })
-
-describe('packageJson', () => {
-  it('should not contain packageJson in final tsJest config', () => {
-    const logger = testing.createLoggerMock()
-    createConfigSet({
-      jestConfig: {
-        globals: {
-          'ts-jest': {
-            packageJson: true,
-          },
-        },
-      } as any,
-      resolve: null,
-      logger,
-    })
-
-    expect(logger.target.filteredLines(LogLevels.warn)[0]).toMatchInlineSnapshot(`
-      "[level:40] The option \`packageJson\` is deprecated and will be removed in ts-jest 27. This option is not used by internal \`ts-jest\`
-      "
-    `)
-  })
-}) // packageJson
 
 describe('parsedTsConfig', () => {
   const get = (tsJest?: TsJestGlobalOptions) => createConfigSet({ tsJestConfig: tsJest }).parsedTsConfig
