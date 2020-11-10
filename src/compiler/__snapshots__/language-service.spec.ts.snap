@@ -133,13 +133,13 @@ Array [
 exports[`Language service jsx option should compile tsx file for jsx preserve 1`] = `
   ===[ FILE: test-jsx.tsx ]=======================================================
   "use strict";
-  var App = function () {
+  const App = () => {
       return <>Test</>;
   };
-  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoidGVzdC1qc3gudHN4IiwibWFwcGluZ3MiOiI7QUFDUSxJQUFNLEdBQUcsR0FBRztJQUNWLE9BQU8sRUFBRSxJQUFJLEdBQUcsQ0FBQTtBQUNsQixDQUFDLENBQUEiLCJuYW1lcyI6W10sInNvdXJjZXMiOlsidGVzdC1qc3gudHN4Il0sInNvdXJjZXNDb250ZW50IjpbIlxuICAgICAgICBjb25zdCBBcHAgPSAoKSA9PiB7XG4gICAgICAgICAgcmV0dXJuIDw+VGVzdDwvPlxuICAgICAgICB9XG4gICAgICAiXSwidmVyc2lvbiI6M30=
+  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoidGVzdC1qc3gudHN4IiwibWFwcGluZ3MiOiI7QUFDUSxNQUFNLEdBQUcsR0FBRyxHQUFHLEVBQUU7SUFDZixPQUFPLEVBQUUsSUFBSSxHQUFHLENBQUE7QUFDbEIsQ0FBQyxDQUFBIiwibmFtZXMiOltdLCJzb3VyY2VzIjpbInRlc3QtanN4LnRzeCJdLCJzb3VyY2VzQ29udGVudCI6WyJcbiAgICAgICAgY29uc3QgQXBwID0gKCkgPT4ge1xuICAgICAgICAgIHJldHVybiA8PlRlc3Q8Lz5cbiAgICAgICAgfVxuICAgICAgIl0sInZlcnNpb24iOjN9
   ===[ INLINE SOURCE MAPS ]=======================================================
   file: test-jsx.tsx
-  mappings: ';AACQ,IAAM,GAAG,GAAG;IACV,OAAO,EAAE,IAAI,GAAG,CAAA;AAClB,CAAC,CAAA'
+  mappings: ';AACQ,MAAM,GAAG,GAAG,GAAG,EAAE;IACf,OAAO,EAAE,IAAI,GAAG,CAAA;AAClB,CAAC,CAAA'
   names: []
   sources:
     - test-jsx.tsx
@@ -157,13 +157,13 @@ exports[`Language service jsx option should compile tsx file for jsx preserve 1`
 exports[`Language service jsx option should compile tsx file for other jsx options 1`] = `
   ===[ FILE: test-jsx.tsx ]=======================================================
   "use strict";
-  var App = function () {
+  const App = () => {
       return React.createElement(React.Fragment, null, "Test");
   };
-  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoidGVzdC1qc3gudHN4IiwibWFwcGluZ3MiOiI7QUFDUSxJQUFNLEdBQUcsR0FBRztJQUNWLE9BQU8saURBQVMsQ0FBQTtBQUNsQixDQUFDLENBQUEiLCJuYW1lcyI6W10sInNvdXJjZXMiOlsidGVzdC1qc3gudHN4Il0sInNvdXJjZXNDb250ZW50IjpbIlxuICAgICAgICBjb25zdCBBcHAgPSAoKSA9PiB7XG4gICAgICAgICAgcmV0dXJuIDw+VGVzdDwvPlxuICAgICAgICB9XG4gICAgICAiXSwidmVyc2lvbiI6M30=
+  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoidGVzdC1qc3gudHN4IiwibWFwcGluZ3MiOiI7QUFDUSxNQUFNLEdBQUcsR0FBRyxHQUFHLEVBQUU7SUFDZixPQUFPLGlEQUFTLENBQUE7QUFDbEIsQ0FBQyxDQUFBIiwibmFtZXMiOltdLCJzb3VyY2VzIjpbInRlc3QtanN4LnRzeCJdLCJzb3VyY2VzQ29udGVudCI6WyJcbiAgICAgICAgY29uc3QgQXBwID0gKCkgPT4ge1xuICAgICAgICAgIHJldHVybiA8PlRlc3Q8Lz5cbiAgICAgICAgfVxuICAgICAgIl0sInZlcnNpb24iOjN9
   ===[ INLINE SOURCE MAPS ]=======================================================
   file: test-jsx.tsx
-  mappings: ';AACQ,IAAM,GAAG,GAAG;IACV,OAAO,iDAAS,CAAA;AAClB,CAAC,CAAA'
+  mappings: ';AACQ,MAAM,GAAG,GAAG,GAAG,EAAE;IACf,OAAO,iDAAS,CAAA;AAClB,CAAC,CAAA'
   names: []
   sources:
     - test-jsx.tsx
