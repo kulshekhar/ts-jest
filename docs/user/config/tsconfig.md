@@ -37,7 +37,7 @@ module.exports = {
   "jest": {
     "globals": {
       "ts-jest": {
-        "tsConfig": "tsconfig.test.json"
+        "tsconfig": "tsconfig.test.json"
       }
     }
   }
@@ -76,7 +76,7 @@ module.exports = {
   "jest": {
     "globals": {
       "ts-jest": {
-        "tsConfig": {
+        "tsconfig": {
           "importHelpers": true
         }
       }
@@ -114,7 +114,7 @@ module.exports = {
   "jest": {
     "globals": {
       "ts-jest": {
-        "tsConfig": false
+        "tsconfig": false
       }
     }
   }

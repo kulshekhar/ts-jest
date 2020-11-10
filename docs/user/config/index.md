@@ -207,7 +207,7 @@ All options have default values which should fit most of the projects. Click on 
 | Option | Description | Type | Default |
 |---|---|---|---|
 | [**`compiler`**][compiler] | [TypeScript module to use as compiler.][compiler] | `string` | `"typescript"` |
-| [**`tsConfig` or `tsconfig`**][tsConfig] | [TypeScript compiler related configuration.][tsConfig] | `string`\|`object`\|`boolean` | _auto_ |
+| [**`tsconfig`**][tsconfig] | [TypeScript compiler related configuration.][tsconfig] | `string`\|`object`\|`boolean` | _auto_ |
 | [**`isolatedModules`**][isolatedModules] | [Disable type-checking][isolatedModules] | `boolean` | _disabled_ |
 | [**`astTransformers`**][astTransformers] | [Custom TypeScript AST transformers][astTransformers] | `object` | _auto_ |
 | [**`diagnostics`**][diagnostics] | [Diagnostics related configuration.][diagnostics] | `boolean`\|`object` | _enabled_ |
@@ -260,7 +260,7 @@ npx ts-jest config:migrate package.json
 </div></div>
 
 [compiler]: compiler
-[tsConfig]: tsConfig
+[tsconfig]: tsconfig
 [isolatedModules]: isolatedModules
 [astTransformers]: astTransformers
 [compilerHost]: compilerHost

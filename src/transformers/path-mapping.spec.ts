@@ -50,10 +50,10 @@ describe('path-mapping', () => {
     },
   ])(
     'should replace alias path with relative path which is resolved from paths tsconfig with js/ts extension',
-    (tsConfig) => {
+    (tsconfig) => {
       const configSet = createConfigSet({
         tsJestConfig: {
-          tsConfig,
+          tsconfig,
         },
         logger,
       })
