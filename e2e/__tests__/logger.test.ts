@@ -92,22 +92,6 @@ describe('ts-jest logging', () => {
   }
 
   describe('deprecation warning', () => {
-    describe('with astTransformers config as string array', () => {
-      const testCase = configureTestCase('simple', {
-        tsJestConfig: {
-          astTransformers: []
-        }
-      })
-
-      testCase.runWithTemplates(allValidPackageSets, 0, (runTest, { testLabel }) => {
-        it(testLabel, () => {
-          const result = runTest()
-          expect(result.status).toBe(0)
-          expect(result).toMatchSnapshot()
-        })
-      })
-    })
-
     describe('with packageJson config', () => {
       const testCase = configureTestCase('simple', {
         tsJestConfig: {
