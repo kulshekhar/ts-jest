@@ -36,7 +36,6 @@ export const enum Deprecations {
   ConfigOptionWithNote = '"[jest-config].{{oldPath}}" is deprecated, use "[jest-config].{{newPath}}" instead.\n    ↳ {{note}}',
   ConfigOptionUseBabelRcNote = 'See `babel-jest` related issue: https://github.com/facebook/jest/issues/3845',
   AstTransformerArrayConfig = 'The configuration for astTransformers as string[] is deprecated and will be removed in ts-jest 27. Please define your custom AST transformers in a form of an object. More information you can check online documentation https://kulshekhar.github.io/ts-jest/user/config/astTransformers',
-  TsConfig = 'The option `tsConfig` is deprecated and will be removed in ts-jest 27, use `tsconfig` instead',
   PackageJson = 'The option `packageJson` is deprecated and will be removed in ts-jest 27. This option is not used by internal `ts-jest`',
 }
 

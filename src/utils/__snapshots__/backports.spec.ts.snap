@@ -66,7 +66,7 @@ exports[`backportJestConfig with "globals.__TS_CONFIG__" set to { foo: 'bar' } s
 Object {
   "globals": Object {
     "ts-jest": Object {
-      "tsConfig": Object {
+      "tsconfig": Object {
         "foo": "bar",
       },
     },
@@ -76,7 +76,7 @@ Object {
 
 exports[`backportJestConfig with "globals.__TS_CONFIG__" set to { foo: 'bar' } should warn the user 1`] = `
 Array [
-  "[level:40] \\"[jest-config].globals.__TS_CONFIG__\\" is deprecated, use \\"[jest-config].globals.ts-jest.tsConfig\\" instead.
+  "[level:40] \\"[jest-config].globals.__TS_CONFIG__\\" is deprecated, use \\"[jest-config].globals.ts-jest.tsconfig\\" instead.
 ",
   "[level:40] Your Jest configuration is outdated. Use the CLI to help migrating it: ts-jest config:migrate <config-file>.
 ",
@@ -245,7 +245,7 @@ exports[`backportJestConfig with "globals.ts-jest.tsConfigFile" set to 'tsconfig
 Object {
   "globals": Object {
     "ts-jest": Object {
-      "tsConfig": "tsconfig.build.json",
+      "tsconfig": "tsconfig.build.json",
     },
   },
 }
@@ -253,7 +253,7 @@ Object {
 
 exports[`backportJestConfig with "globals.ts-jest.tsConfigFile" set to 'tsconfig.build.json' should warn the user 1`] = `
 Array [
-  "[level:40] \\"[jest-config].globals.ts-jest.tsConfigFile\\" is deprecated, use \\"[jest-config].globals.ts-jest.tsConfig\\" instead.
+  "[level:40] \\"[jest-config].globals.ts-jest.tsConfigFile\\" is deprecated, use \\"[jest-config].globals.ts-jest.tsconfig\\" instead.
 ",
   "[level:40] Your Jest configuration is outdated. Use the CLI to help migrating it: ts-jest config:migrate <config-file>.
 ",

@@ -123,21 +123,5 @@ describe('ts-jest logging', () => {
         })
       })
     })
-
-    describe('with tsConfig config', () => {
-      const testCase = configureTestCase('simple', {
-        tsJestConfig: {
-          tsConfig: true,
-        }
-      })
-
-      testCase.runWithTemplates(allPackageSetsWithPreset, 0, (runTest, { testLabel }) => {
-        it(testLabel, () => {
-          const result = runTest()
-          expect(result.status).toBe(0)
-          expect(result).toMatchSnapshot()
-        })
-      })
-    })
   })
 })
