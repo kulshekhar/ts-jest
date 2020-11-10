@@ -4,7 +4,7 @@ import { resolve } from 'path'
 
 import { createCompilerInstance } from '../compiler/instance'
 import { ConfigSet } from '../config/config-set'
-import type { BabelConfig, TsCompiler, TsJestConfig, TsJestGlobalOptions } from '../types'
+import type { BabelConfig, TsCompiler, TsJestGlobalOptions } from '../types'
 import type { ImportReasons } from '../utils/messages'
 
 export function filePath(relPath: string): string {
@@ -12,19 +12,6 @@ export function filePath(relPath: string): string {
 }
 
 export const rootDir = filePath('')
-
-export function tsJestConfig(options?: Partial<TsJestConfig>): TsJestConfig {
-  return {
-    isolatedModules: false,
-    compiler: 'typescript',
-    transformers: options?.transformers ?? Object.create(null),
-    babelConfig: undefined,
-    tsConfig: undefined,
-    stringifyContentPathRegex: undefined,
-    diagnostics: { ignoreCodes: [], pretty: false, throws: true },
-    ...options,
-  }
-}
 
 function getJestConfig<T extends Config.ProjectConfig>(
   options?: Partial<Config.InitialOptions | Config.ProjectConfig>,

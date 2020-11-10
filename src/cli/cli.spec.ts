@@ -66,43 +66,43 @@ describe('cli', () => {
   it('should output usage', async () => {
     expect.assertions(2)
     await expect(runCli()).resolves.toMatchInlineSnapshot(`
-Object {
-  "exitCode": 0,
-  "log": "",
-  "stderr": "",
-  "stdout": "
-Usage:
-  ts-jest command [options] [...args]
+            Object {
+              "exitCode": 0,
+              "log": "",
+              "stderr": "",
+              "stdout": "
+            Usage:
+              ts-jest command [options] [...args]
 
-Commands:
-  config:init           Creates initial Jest configuration
-  config:migrate        Migrates a given Jest configuration
-  help [command]        Show this help, or help about a command
+            Commands:
+              config:init           Creates initial Jest configuration
+              config:migrate        Migrates a given Jest configuration
+              help [command]        Show this help, or help about a command
 
-Example:
-  ts-jest help config:migrate
-",
-}
-`)
+            Example:
+              ts-jest help config:migrate
+            ",
+            }
+          `)
     await expect(runCli('hello:motto')).resolves.toMatchInlineSnapshot(`
-Object {
-  "exitCode": 0,
-  "log": "",
-  "stderr": "",
-  "stdout": "
-Usage:
-  ts-jest command [options] [...args]
+            Object {
+              "exitCode": 0,
+              "log": "",
+              "stderr": "",
+              "stdout": "
+            Usage:
+              ts-jest command [options] [...args]
 
-Commands:
-  config:init           Creates initial Jest configuration
-  config:migrate        Migrates a given Jest configuration
-  help [command]        Show this help, or help about a command
+            Commands:
+              config:init           Creates initial Jest configuration
+              config:migrate        Migrates a given Jest configuration
+              help [command]        Show this help, or help about a command
 
-Example:
-  ts-jest help config:migrate
-",
-}
-`)
+            Example:
+              ts-jest help config:migrate
+            ",
+            }
+          `)
   })
 })
 
@@ -229,31 +229,31 @@ Jest configuration written to "${normalize('/foo/bar/package.json')}".
     it('should output help', async () => {
       const res = await runCli('help', noOption[0])
       expect(res).toMatchInlineSnapshot(`
-Object {
-  "exitCode": 0,
-  "log": "",
-  "stderr": "",
-  "stdout": "
-Usage:
-  ts-jest config:init [options] [<config-file>]
+        Object {
+          "exitCode": 0,
+          "log": "",
+          "stderr": "",
+          "stdout": "
+        Usage:
+          ts-jest config:init [options] [<config-file>]
 
-Arguments:
-  <config-file>         Can be a js or json Jest config file. If it is a
-                        package.json file, the configuration will be read from
-                        the \\"jest\\" property.
-                        Default: jest.config.js
+        Arguments:
+          <config-file>         Can be a js or json Jest config file. If it is a
+                                package.json file, the configuration will be read from
+                                the \\"jest\\" property.
+                                Default: jest.config.js
 
-Options:
-  --force               Discard any existing Jest config
-  --js ts|babel         Process .js files with ts-jest if 'ts' or with
-                        babel-jest if 'babel'
-  --no-jest-preset      Disable the use of Jest presets
-  --tsconfig <file>     Path to the tsconfig.json file
-  --babel               Pipe babel-jest after ts-jest
-  --jsdom               Use jsdom as test environment instead of node
-",
-}
-`)
+        Options:
+          --force               Discard any existing Jest config
+          --js ts|babel         Process .js files with ts-jest if 'ts' or with
+                                babel-jest if 'babel'
+          --no-jest-preset      Disable the use of Jest presets
+          --tsconfig <file>     Path to the tsconfig.json file
+          --babel               Pipe babel-jest after ts-jest
+          --jsdom               Use jsdom as test environment instead of node
+        ",
+        }
+      `)
     })
   }) // init
 
@@ -306,30 +306,30 @@ Options:
       )
       const res = await runCli(...noOption, pkgPaths.current)
       expect(res).toMatchInlineSnapshot(`
-Object {
-  "exitCode": 0,
-  "log": "",
-  "stderr": "
-Migrated Jest configuration:
+        Object {
+          "exitCode": 0,
+          "log": "",
+          "stderr": "
+        Migrated Jest configuration:
 
 
-Detected preset 'default' as the best matching preset for your configuration.
-Visit https://kulshekhar.github.io/ts-jest/user/config/#jest-preset for more information about presets.
+        Detected preset 'default' as the best matching preset for your configuration.
+        Visit https://kulshekhar.github.io/ts-jest/user/config/#jest-preset for more information about presets.
 
-",
-  "stdout": "\\"jest\\": {
-  \\"globals\\": {
-    \\"ts-jest\\": {
-      \\"tsConfig\\": {
-        \\"target\\": \\"es6\\"
-      }
-    }
-  },
-  \\"preset\\": \\"ts-jest\\"
-}
-",
-}
-`)
+        ",
+          "stdout": "\\"jest\\": {
+          \\"globals\\": {
+            \\"ts-jest\\": {
+              \\"tsconfig\\": {
+                \\"target\\": \\"es6\\"
+              }
+            }
+          },
+          \\"preset\\": \\"ts-jest\\"
+        }
+        ",
+        }
+      `)
       expect(fs.writeFileSync).not.toHaveBeenCalled()
     })
 
@@ -345,24 +345,24 @@ Visit https://kulshekhar.github.io/ts-jest/user/config/#jest-preset for more inf
       )
       const res = await runCli(...fullOptions, pkgPaths.current)
       expect(res).toMatchInlineSnapshot(`
-Object {
-  "exitCode": 0,
-  "log": "",
-  "stderr": "
-Migrated Jest configuration:
-",
-  "stdout": "\\"jest\\": {
-  \\"globals\\": {
-    \\"ts-jest\\": {
-      \\"tsConfig\\": {
-        \\"target\\": \\"es6\\"
-      }
-    }
-  }
-}
-",
-}
-`)
+        Object {
+          "exitCode": 0,
+          "log": "",
+          "stderr": "
+        Migrated Jest configuration:
+        ",
+          "stdout": "\\"jest\\": {
+          \\"globals\\": {
+            \\"ts-jest\\": {
+              \\"tsconfig\\": {
+                \\"target\\": \\"es6\\"
+              }
+            }
+          }
+        }
+        ",
+        }
+      `)
       expect(fs.writeFileSync).not.toHaveBeenCalled()
     })
 
@@ -387,29 +387,29 @@ Migrated Jest configuration:
       )
       const res = await runCli(...noOption, pkgPaths.current)
       expect(res.stdout).toMatchInlineSnapshot(`
-"\\"jest\\": {
-  \\"globals\\": {
-    \\"ts-jest\\": {
-      \\"tsConfig\\": {
-        \\"target\\": \\"es6\\"
-      }
-    }
-  },
-  \\"moduleFileExtensions\\": [
-    \\"js\\",
-    \\"ts\\",
-    \\"tsx\\"
-  ],
-  \\"testMatch\\": [
-    \\"**/?(*.)+(spec|test).js?(x)\\",
-    \\"**/?(*.)+(spec|test).ts?(x)\\",
-    \\"**/__tests__/**/*.js?(x)\\",
-    \\"**/__tests__/**/*.ts?(x)\\"
-  ],
-  \\"preset\\": \\"ts-jest\\"
-}
-"
-`)
+        "\\"jest\\": {
+          \\"globals\\": {
+            \\"ts-jest\\": {
+              \\"tsconfig\\": {
+                \\"target\\": \\"es6\\"
+              }
+            }
+          },
+          \\"moduleFileExtensions\\": [
+            \\"js\\",
+            \\"ts\\",
+            \\"tsx\\"
+          ],
+          \\"testMatch\\": [
+            \\"**/?(*.)+(spec|test).js?(x)\\",
+            \\"**/?(*.)+(spec|test).ts?(x)\\",
+            \\"**/__tests__/**/*.js?(x)\\",
+            \\"**/__tests__/**/*.ts?(x)\\"
+          ],
+          \\"preset\\": \\"ts-jest\\"
+        }
+        "
+      `)
     })
 
     it('should reset testMatch if testRegex is used', async () => {
@@ -426,13 +426,13 @@ Migrated Jest configuration:
       )
       const res = await runCli(...noOption, pkgPaths.current)
       expect(res.stdout).toMatchInlineSnapshot(`
-"\\"jest\\": {
-  \\"testRegex\\": \\"foo-pattern\\",
-  \\"preset\\": \\"ts-jest\\",
-  \\"testMatch\\": null
-}
-"
-`)
+        "\\"jest\\": {
+          \\"testRegex\\": \\"foo-pattern\\",
+          \\"preset\\": \\"ts-jest\\",
+          \\"testMatch\\": null
+        }
+        "
+      `)
     })
 
     it('should detect best preset', async () => {
@@ -444,31 +444,31 @@ Migrated Jest configuration:
       jest.doMock(pkgPaths.nextCfg, () => ({}), { virtual: true })
       let res = await runCli(...noOption, pkgPaths.currentCfg)
       expect(res.stdout).toMatchInlineSnapshot(`
-"module.exports = {
-  preset: 'ts-jest',
-}
-"
-`)
+        "module.exports = {
+          preset: 'ts-jest',
+        }
+        "
+      `)
 
       // js-with-ts from args
       jest.doMock(pkgPaths.nextCfg, () => ({}), { virtual: true })
       res = await runCli(...noOption, '--allow-js', pkgPaths.currentCfg)
       expect(res.stdout).toMatchInlineSnapshot(`
-"module.exports = {
-  preset: 'ts-jest/presets/js-with-ts',
-}
-"
-`)
+        "module.exports = {
+          preset: 'ts-jest/presets/js-with-ts',
+        }
+        "
+      `)
 
       // js-with-ts from previous transform
       jest.doMock(pkgPaths.nextCfg, () => ({ transform: { '^.+\\.[tj]sx?$': 'ts-jest' } }), { virtual: true })
       res = await runCli(...noOption, pkgPaths.currentCfg)
       expect(res.stdout).toMatchInlineSnapshot(`
-"module.exports = {
-  preset: 'ts-jest/presets/js-with-ts',
-}
-"
-`)
+        "module.exports = {
+          preset: 'ts-jest/presets/js-with-ts',
+        }
+        "
+      `)
 
       // js-with-babel from previous transform
       jest.doMock(pkgPaths.nextCfg, () => ({ transform: { '^.+\\.jsx?$': 'babel-jest', '^.+\\.tsx?$': 'ts-jest' } }), {
@@ -476,11 +476,11 @@ Migrated Jest configuration:
       })
       res = await runCli(...noOption, pkgPaths.currentCfg)
       expect(res.stdout).toMatchInlineSnapshot(`
-"module.exports = {
-  preset: 'ts-jest/presets/js-with-babel',
-}
-"
-`)
+        "module.exports = {
+          preset: 'ts-jest/presets/js-with-babel',
+        }
+        "
+      `)
 
       // defaults when previous transform is ambiguous
       jest.doMock(
@@ -490,15 +490,15 @@ Migrated Jest configuration:
       )
       res = await runCli(...noOption, pkgPaths.currentCfg)
       expect(res.stdout).toMatchInlineSnapshot(`
-"module.exports = {
-  transform: {
-    '^src/js/.+\\\\\\\\.jsx?$': 'babel-jest',
-    '^src/ts/.+\\\\\\\\.tsx?$': 'ts-jest',
-  },
-  preset: 'ts-jest',
-}
-"
-`)
+        "module.exports = {
+          transform: {
+            '^src/js/.+\\\\\\\\.jsx?$': 'babel-jest',
+            '^src/ts/.+\\\\\\\\.tsx?$': 'ts-jest',
+          },
+          preset: 'ts-jest',
+        }
+        "
+      `)
     })
 
     it('should normalize transform values', async () => {
@@ -519,41 +519,41 @@ Migrated Jest configuration:
       )
       const res = await runCli(...noOption, pkgPaths.current)
       expect(res.stdout).toMatchInlineSnapshot(`
-"\\"jest\\": {
-  \\"transform\\": {
-    \\"<rootDir>/src/.+\\\\\\\\.[jt]s$\\": \\"ts-jest\\",
-    \\"foo\\\\\\\\.ts\\": \\"ts-jest\\",
-    \\"bar\\\\\\\\.ts\\": \\"ts-jest\\"
-  },
-  \\"preset\\": \\"ts-jest\\"
-}
-"
-`)
+        "\\"jest\\": {
+          \\"transform\\": {
+            \\"<rootDir>/src/.+\\\\\\\\.[jt]s$\\": \\"ts-jest\\",
+            \\"foo\\\\\\\\.ts\\": \\"ts-jest\\",
+            \\"bar\\\\\\\\.ts\\": \\"ts-jest\\"
+          },
+          \\"preset\\": \\"ts-jest\\"
+        }
+        "
+      `)
     })
 
     it('should output help', async () => {
       const res = await runCli('help', noOption[0])
       expect(res).toMatchInlineSnapshot(`
-Object {
-  "exitCode": 0,
-  "log": "",
-  "stderr": "",
-  "stdout": "
-Usage:
-  ts-jest config:migrate [options] <config-file>
+        Object {
+          "exitCode": 0,
+          "log": "",
+          "stderr": "",
+          "stdout": "
+        Usage:
+          ts-jest config:migrate [options] <config-file>
 
-Arguments:
-  <config-file>         Can be a js or json Jest config file. If it is a
-                        package.json file, the configuration will be read from
-                        the \\"jest\\" property.
+        Arguments:
+          <config-file>         Can be a js or json Jest config file. If it is a
+                                package.json file, the configuration will be read from
+                                the \\"jest\\" property.
 
-Options:
-  --js ts|babel         Process .js files with ts-jest if 'ts' or with
-                        babel-jest if 'babel'
-  --no-jest-preset      Disable the use of Jest presets
-",
-}
-`)
+        Options:
+          --js ts|babel         Process .js files with ts-jest if 'ts' or with
+                                babel-jest if 'babel'
+          --no-jest-preset      Disable the use of Jest presets
+        ",
+        }
+      `)
     })
   }) // migrate
 }) // config

@@ -60,8 +60,8 @@ describe('parsedTsConfig', () => {
     expect(get().fileNames).toContain(normalizeSlashes(__filename))
   })
 
-  it.each(['tsConfig', 'tsconfig'])('should include compiler config from `%s` option key', (key: string) => {
-    expect(get({ [key]: { baseUrl: 'src/config' } }).options.baseUrl).toBe(normalizeSlashes(__dirname))
+  it('should include compiler config from `%s` option key', () => {
+    expect(get({ tsconfig: { baseUrl: 'src/config' } }).options.baseUrl).toBe(normalizeSlashes(__dirname))
   })
 
   it('should include compiler config from base config', () => {
