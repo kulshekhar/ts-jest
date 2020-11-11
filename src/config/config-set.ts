@@ -291,49 +291,34 @@ export class ConfigSet {
       before: [hoisting(this)],
     }
     if (astTransformers) {
-      if (Array.isArray(astTransformers)) {
-        this.logger.warn(Deprecations.AstTransformerArrayConfig)
+      const resolveTransformers = (transformers: (string | AstTransformer)[]) =>
+        transformers.map((transformer) => {
+          let transformerPath: string
+          if (typeof transformer === 'string') {
+            transformerPath = this.resolvePath(transformer, { nodeResolve: true })
 
+            return require(transformerPath).factory(this)
+          } else {
+            transformerPath = this.resolvePath(transformer.path, { nodeResolve: true })
+
+            return require(transformerPath).factory(this, transformer.options)
+          }
+        })
+      if (astTransformers.before) {
         this.customTransformers = {
-          before: [
-            ...this.customTransformers.before,
-            ...astTransformers.map((transformer) => {
-              const transformerPath = this.resolvePath(transformer, { nodeResolve: true })
-
-              return require(transformerPath).factory(this)
-            }),
-          ],
+          before: [...this.customTransformers.before, ...resolveTransformers(astTransformers.before)],
         }
-      } else {
-        const resolveTransformers = (transformers: (string | AstTransformer)[]) =>
-          transformers.map((transformer) => {
-            let transformerPath: string
-            if (typeof transformer === 'string') {
-              transformerPath = this.resolvePath(transformer, { nodeResolve: true })
-
-              return require(transformerPath).factory(this)
-            } else {
-              transformerPath = this.resolvePath(transformer.path, { nodeResolve: true })
-
-              return require(transformerPath).factory(this, transformer.options)
-            }
-          })
-        if (astTransformers.before) {
-          this.customTransformers = {
-            before: [...this.customTransformers.before, ...resolveTransformers(astTransformers.before)],
-          }
+      }
+      if (astTransformers.after) {
+        this.customTransformers = {
+          ...this.customTransformers,
+          after: resolveTransformers(astTransformers.after),
         }
-        if (astTransformers.after) {
-          this.customTransformers = {
-            ...this.customTransformers,
-            after: resolveTransformers(astTransformers.after),
-          }
-        }
-        if (astTransformers.afterDeclarations) {
-          this.customTransformers = {
-            ...this.customTransformers,
-            afterDeclarations: resolveTransformers(astTransformers.afterDeclarations),
-          }
+      }
+      if (astTransformers.afterDeclarations) {
+        this.customTransformers = {
+          ...this.customTransformers,
+          afterDeclarations: resolveTransformers(astTransformers.afterDeclarations),
         }
       }
     }

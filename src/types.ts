@@ -83,7 +83,7 @@ export interface TsJestGlobalOptions {
   /**
    * Custom transformers (mostly used by jest presets)
    */
-  astTransformers?: string[] | ConfigCustomTransformer
+  astTransformers?: ConfigCustomTransformer
 
   /**
    * TS diagnostics - less to be reported if `isolatedModules` is `true`. It can be:

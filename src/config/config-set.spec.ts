@@ -154,8 +154,6 @@ describe('compilerModule', () => {
 }) // compilerModule
 
 describe('customTransformers', () => {
-  const logger = testing.createLoggerMock()
-
   it.each([
     {},
     {
@@ -188,29 +186,6 @@ describe('customTransformers', () => {
     })
 
     expect(cs.customTransformers).toMatchSnapshot()
-  })
-
-  it('should return an object containing all resolved transformers when astTransformers config is an array', () => {
-    expect(
-      createConfigSet({
-        jestConfig: {
-          rootDir: 'src',
-          cwd: 'src',
-        } as any,
-        logger,
-        tsJestConfig: {
-          astTransformers: ['<rootDir>/__mocks__/dummy-transformer'],
-        },
-        resolve: null,
-      }).customTransformers,
-    ).toMatchInlineSnapshot(`
-      Object {
-        "before": Array [
-          [Function],
-          [Function],
-        ],
-      }
-    `)
   })
 })
 
