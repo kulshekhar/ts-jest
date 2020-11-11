@@ -1,3 +1,81 @@
+# [27.0.0-alpha.0](https://github.com/kulshekhar/ts-jest/compare/v26.4.4...v27.0.0-alpha.0) (2020-11-11)
+
+
+### Build System
+
+* **devs-infra:** build package with target `es2015` ([#2130](https://github.com/kulshekhar/ts-jest/issues/2130)) ([6bd101c](https://github.com/kulshekhar/ts-jest/commit/6bd101ccde60e263352de5bee4a6bd38987eb0ca))
+
+
+### Code Refactoring
+
+* **config:** remove support for `astTransformers` string array ([#2129](https://github.com/kulshekhar/ts-jest/issues/2129)) ([1e0b2ce](https://github.com/kulshekhar/ts-jest/commit/1e0b2ce5599a35c108712456e455bf29c8c5fd24))
+* **config:** remove support for `packageJson` option ([#2128](https://github.com/kulshekhar/ts-jest/issues/2128)) ([05916b9](https://github.com/kulshekhar/ts-jest/commit/05916b920160da5b43a20b47025eea43b4a1a5c3))
+* move jest transformer class to package entry ([#2122](https://github.com/kulshekhar/ts-jest/issues/2122)) ([5bbfd06](https://github.com/kulshekhar/ts-jest/commit/5bbfd06a0c114dbecd75b763bcfa76d4a6203ab1))
+* **config:** remove support for `tsConfig` option ([#2127](https://github.com/kulshekhar/ts-jest/issues/2127)) ([3cc9b80](https://github.com/kulshekhar/ts-jest/commit/3cc9b806be2b2096b981253d39ca40df65bb0f7b))
+
+
+### BREAKING CHANGES
+
+* **config:** `packageJson` config option is not used in internal `ts-jest` so this option is now removed
+* **devs-infra:** `ts-jest` no longer ships with `es5` build but now with `es2015`
+* **config:** One is defining ast transformers in `jest.config.js`/`package.json` should change to
+```
+// jest.config.js
+module.exports = {
+   //...
+   globals: {
+      'ts-jest': {
+         astTransformers: {
+           before: ['your_before_transformer_path'],
+           after: ['your_after_transformer_path'],
+           afterDeclarations: ['your_afterDeclarations_transformer_path'],
+         }
+      }
+   }
+}
+```
+
+or
+```
+// package.json
+{
+  "jest": {
+     "globals": {
+        "ts-jest": {
+           "astTransformers": {
+              "before": ["your_before_transformer_path"],
+              "after": ["your_after_transformer_path"],
+              "afterDeclarations": ["your_afterDeclarations_transformer_path"]
+           }
+        }
+     }
+  }
+}
+```
+- One currently refers type in `jest.config.js`
+```
+/** @typedef {import('ts-jest')} */
+module.exports = {
+  //...
+}
+```
+
+should change to
+```
+/** @typedef {import('ts-jest/dist/types')} */
+module.exports = {
+  //...
+}
+```
+
+- Remove possibilities to import `mocked`, `createJestPreset`, `pathsToModuleNameMapper` from package entry. One should change to
+```
+import { mocked, createJestPreset, pathsToModuleNameMapper` } from 'ts-jest/utils'
+```
+* **config:** One currently uses `tsConfig` should change to `tsconfig` in your `jest.config.js` or `package.json`
+
+
+
 ## [26.4.4](https://github.com/kulshekhar/ts-jest/compare/v26.4.3...v26.4.4) (2020-11-08)
 
 
