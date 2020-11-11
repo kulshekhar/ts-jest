@@ -305,9 +305,7 @@ export class ConfigSet {
           }
         })
       if (astTransformers.before) {
-        this.customTransformers = {
-          before: [...this.customTransformers.before, ...resolveTransformers(astTransformers.before)],
-        }
+        this.customTransformers.before?.push(...resolveTransformers(astTransformers.before))
       }
       if (astTransformers.after) {
         this.customTransformers = {
