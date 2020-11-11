@@ -330,7 +330,7 @@ In this case you’ll need to use the JavaScript version of Jest config (comment
 
 <p>To utilize IDE suggestions, you can use <code class="language-plaintext highlighter-rouge">JSDoc</code> comments to provide suggested <code class="language-plaintext highlighter-rouge">ts-jest</code> configs for your Jest config:</p>
 
-<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/** @typedef {import('ts-jest')} */</span>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/** @typedef {import('ts-jest/dist/types')} */</span>
 <span class="cm">/** @type {import('@jest/types').Config.InitialOptions} */</span>
 <span class="kd">const</span> <span class="nx">config</span> <span class="o">=</span> <span class="p">{</span>
   <span class="c1">// [...]</span>
