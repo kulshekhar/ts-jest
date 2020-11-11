@@ -4,7 +4,7 @@ import { resolve } from 'path'
 
 import { createCompilerInstance } from '../compiler/instance'
 import { ConfigSet } from '../config/config-set'
-import type { BabelConfig, TsCompiler, TsJestGlobalOptions } from '../types'
+import type { TsCompiler, TsJestGlobalOptions } from '../types'
 import type { ImportReasons } from '../utils/messages'
 
 export function filePath(relPath: string): string {
@@ -26,14 +26,6 @@ function getJestConfig<T extends Config.ProjectConfig>(
   }
 
   return res
-}
-
-export function babelConfig<T extends BabelConfig>(options?: BabelConfig): T {
-  return {
-    ...options,
-    presets: [...(options && options.presets)],
-    plugins: [...(options && options.plugins)],
-  } as any
 }
 
 export function importReason(text = '[[BECAUSE]]'): ImportReasons {
