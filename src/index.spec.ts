@@ -1,104 +1,194 @@
-import type { testing } from 'bs-logger'
+import { LogLevels } from 'bs-logger'
+import { sep } from 'path'
 
-import * as tsJest from '.'
+import { ConfigSet } from './config/config-set'
+import { SOURCE_MAPPING_PREFIX } from './compiler/instance'
 import { logTargetMock } from './__helpers__/mocks'
-import { TsJestTransformer } from './ts-jest-transformer'
 
-jest.mock('./ts-jest-transformer', () => {
-  class TsJestTransformer {
-    process: jest.Mock = jest.fn()
-    getCacheKey: jest.Mock = jest.fn()
-    constructor(public opt?: any) {}
-  }
+const logTarget = logTargetMock()
 
-  return { TsJestTransformer }
-})
-jest.mock('./presets/create-jest-preset', () => ({
-  createJestPreset: () => ({ jestPreset: true }),
-}))
-
-describe('ts-jest', () => {
-  it('should export a `createTransformer` function', () => {
-    expect(typeof tsJest.createTransformer).toBe('function')
-  })
-
-  it('should export a `createJestPreset` function', () => {
-    expect(typeof tsJest.createJestPreset).toBe('function')
-  })
-
-  it('should export a `mocked` function', () => {
-    expect(typeof tsJest.mocked).toBe('function')
-  })
-
-  it('should export a `pathsToModuleNameMapper` function', () => {
-    expect(typeof tsJest.pathsToModuleNameMapper).toBe('function')
-  })
+beforeEach(() => {
+  logTarget.clear()
 })
 
-describe('old entry point', () => {
-  const MANIFEST = { tsJestIndex: true }
-  const spy = jest.spyOn(console, 'warn')
-  spy.mockImplementation(() => undefined)
-  afterAll(() => {
-    spy.mockRestore()
+describe('TsJestTransformer', () => {
+  describe('configFor', () => {
+    test('should return the same config-set for same values with jest config string is not in configSetsIndex', () => {
+      const obj1 = { cwd: '/foo/.', rootDir: '/bar//dummy/..', globals: {} }
+      const cs3 = require('./').configsFor(obj1 as any)
+
+      expect(cs3.cwd).toBe(`${sep}foo`)
+      expect(cs3.rootDir).toBe(`${sep}bar`)
+    })
+
+    test('should return the same config-set for same values with jest config string in configSetsIndex', () => {
+      const obj1 = { cwd: '/foo/.', rootDir: '/bar//dummy/..', globals: {} }
+      const obj2 = { ...obj1 }
+      const cs1 = require('./').configsFor(obj1 as any)
+      const cs2 = require('./').configsFor(obj2 as any)
+
+      expect(cs1.cwd).toBe(`${sep}foo`)
+      expect(cs1.rootDir).toBe(`${sep}bar`)
+      expect(cs2).toBe(cs1)
+    })
   })
 
-  it('should warn when using old path to ts-jest', () => {
-    jest.mock('../dist/index', () => MANIFEST)
-    expect(require('../preprocessor.js')).toBe(MANIFEST)
-    expect(spy).toHaveBeenCalledTimes(1)
-    expect(spy.mock.calls[0]).toMatchInlineSnapshot(`
-Array [
-  "ts-jest[main] (WARN) Replace any occurrences of \\"ts-jest/dist/preprocessor.js\\" or  \\"<rootDir>/node_modules/ts-jest/preprocessor.js\\" in the 'transform' section of your Jest config with just \\"ts-jest\\".",
-]
-`)
-  })
-})
+  describe('getCacheKey', () => {
+    test('should be different for each argument value', () => {
+      const tr = require('./')
+      const input = {
+        fileContent: 'export default "foo"',
+        fileName: 'foo.ts',
+        jestConfigStr: '{"foo": "bar"}',
+        options: { config: { foo: 'bar' } as any, instrument: false, rootDir: '/foo' },
+      }
+      const keys = [
+        tr.getCacheKey(input.fileContent, input.fileName, input.jestConfigStr, input.options),
+        tr.getCacheKey(input.fileContent, 'bar.ts', input.jestConfigStr, input.options),
+        tr.getCacheKey(input.fileContent, input.fileName, '{}', { ...input.options, instrument: true }),
+        tr.getCacheKey(input.fileContent, input.fileName, '{}', { ...input.options, rootDir: '/bar' }),
+      ]
 
-describe('moved helpers', () => {
-  let target: testing.LogTargetMock
-  beforeEach(() => {
-    target = logTargetMock()
-    target.clear()
-  })
-
-  it('should warn when using mocked', () => {
-    tsJest.mocked(42)
-    expect(target.lines.warn).toMatchInlineSnapshot(`
-Array [
-  "[level:40] The \`mocked\` helper has been moved to \`ts-jest/utils\`. Use \`import { mocked } from 'ts-jest/utils'\` instead.
-",
-]
-`)
+      // each key should have correct length
+      for (const key of keys) {
+        expect(key).toHaveLength(40)
+      }
+      // unique array should have same length
+      expect(keys.filter((k, i, all) => all.indexOf(k) === i)).toHaveLength(keys.length)
+    })
   })
 
-  it('should warn when using createJestPreset', () => {
-    tsJest.createJestPreset()
-    expect(target.lines.warn).toMatchInlineSnapshot(`
-Array [
-  "[level:40] The \`createJestPreset\` helper has been moved to \`ts-jest/utils\`. Use \`import { createJestPreset } from 'ts-jest/utils'\` instead.
-",
-]
-`)
-  })
+  describe('process', () => {
+    let tr!: any
 
-  it('should warn when using pathsToModuleNameMapper', () => {
-    tsJest.pathsToModuleNameMapper({})
-    expect(target.lines.warn).toMatchInlineSnapshot(`
-Array [
-  "[level:40] The \`pathsToModuleNameMapper\` helper has been moved to \`ts-jest/utils\`. Use \`import { pathsToModuleNameMapper } from 'ts-jest/utils'\` instead.
-",
-]
-`)
-  })
-})
+    beforeEach(() => {
+      tr = require('./')
+    })
 
-describe('createTransformer', () => {
-  it('should create different instances', () => {
-    const tr1 = tsJest.createTransformer()
-    const tr2 = tsJest.createTransformer()
-    expect(tr1).toBeInstanceOf(TsJestTransformer)
-    expect(tr2).toBeInstanceOf(TsJestTransformer)
-    expect(tr1).not.toBe(tr2)
+    test('should process input as stringified content with content matching stringifyContentPathRegex option', () => {
+      const fileContent = '<h1>Hello World</h1>'
+      const filePath = 'foo.html'
+      const jestCfg = {
+        globals: {
+          'ts-jest': {
+            stringifyContentPathRegex: '\\.html$',
+          },
+        },
+      } as any
+      tr.getCacheKey(fileContent, filePath, JSON.stringify(jestCfg), { config: jestCfg } as any)
+
+      const result = tr.process(fileContent, filePath, jestCfg)
+
+      expect(result).toMatchInlineSnapshot(`"module.exports=\\"<h1>Hello World</h1>\\""`)
+    })
+
+    test('should process type definition input', () => {
+      const fileContent = 'type Foo = number'
+      const filePath = 'foo.d.ts'
+      const jestCfg = Object.create(null)
+      tr.getCacheKey(fileContent, filePath, JSON.stringify(jestCfg), { config: jestCfg } as any)
+      const result = tr.process(fileContent, filePath, jestCfg)
+
+      expect(result).toEqual('')
+    })
+
+    test('should process js file with allowJs false and show warning log', () => {
+      const fileContent = 'const foo = 1'
+      const filePath = 'foo.js'
+      const jestCfg = {
+        globals: {
+          'ts-jest': { tsconfig: { allowJs: false } },
+        },
+      } as any
+      tr.getCacheKey(fileContent, filePath, JSON.stringify(jestCfg), { config: jestCfg } as any)
+      logTarget.clear()
+
+      const result = tr.process(fileContent, filePath, jestCfg)
+
+      expect(result).toEqual(fileContent)
+      expect(logTarget.lines[1].substring(0)).toMatchInlineSnapshot(`
+        "[level:40] Got a \`.js\` file to compile while \`allowJs\` option is not set to \`true\` (file: foo.js). To fix this:
+          - if you want TypeScript to process JS files, set \`allowJs\` to \`true\` in your TypeScript config (usually tsconfig.json)
+          - if you do not want TypeScript to process your \`.js\` files, in your Jest config change the \`transform\` key which value is \`ts-jest\` so that it does not match \`.js\` files anymore
+        "
+      `)
+    })
+
+    test.each(['foo.ts', 'foo.tsx'])('should process ts/tsx file', (filePath) => {
+      const fileContent = 'const foo = 1'
+      const output = 'var foo = 1'
+      const jestCfg = Object.create(null)
+      tr.getCacheKey(fileContent, filePath, JSON.stringify(jestCfg), { config: jestCfg } as any)
+      jest.spyOn(ConfigSet.prototype, 'tsCompiler', 'get').mockImplementationOnce(() => ({
+        compile: () => output,
+        cwd: '.',
+        program: undefined,
+      }))
+
+      const result = tr.process(fileContent, filePath, jestCfg)
+
+      expect(result).toEqual(output)
+    })
+
+    test.each(['foo.js', 'foo.jsx'])('should process js/jsx file with allowJs true', (filePath) => {
+      const fileContent = 'const foo = 1'
+      const output = 'var foo = 1'
+      const jestCfg = {
+        globals: {
+          'ts-jest': { tsconfig: { allowJs: true } },
+        },
+      } as any
+      tr.getCacheKey(fileContent, filePath, JSON.stringify(jestCfg), { config: jestCfg } as any)
+      logTarget.clear()
+      jest.spyOn(ConfigSet.prototype, 'tsCompiler', 'get').mockImplementationOnce(() => ({
+        compile: () => output,
+        cwd: '.',
+        program: undefined,
+      }))
+
+      const result = tr.process(fileContent, filePath, jestCfg)
+
+      expect(result).toEqual(output)
+    })
+
+    test('should process file with unknown extension and show warning message without babel-jest', () => {
+      const fileContent = 'foo'
+      const filePath = 'foo.bar'
+      const jestCfg = {
+        globals: {
+          'ts-jest': { tsconfig: { allowJs: true } },
+        },
+      } as any
+      tr.getCacheKey(fileContent, filePath, JSON.stringify(jestCfg), { config: jestCfg } as any)
+      logTarget.clear()
+
+      const result = tr.process(fileContent, filePath, jestCfg)
+
+      expect(result).toEqual(fileContent)
+      expect(logTarget.lines[1]).toMatchInlineSnapshot(`
+        "[level:40] Got a unknown file type to compile (file: foo.bar). To fix this, in your Jest config change the \`transform\` key which value is \`ts-jest\` so that it does not match this kind of files anymore.
+        "
+      `)
+    })
+
+    test.each(['foo.bar', 'foo.js'])('should process file with babel-jest', (filePath) => {
+      const fileContent = 'foo'
+      const jestCfg = {
+        globals: {
+          'ts-jest': { babelConfig: true },
+        },
+      } as any
+      tr.getCacheKey(fileContent, filePath, JSON.stringify(jestCfg), { config: jestCfg } as any)
+      logTarget.clear()
+
+      const result = tr.process('foo', filePath, jestCfg)
+
+      if (typeof result !== 'string') {
+        expect(result.code.substring(0, result.code.indexOf(SOURCE_MAPPING_PREFIX))).toMatchSnapshot()
+      }
+      if (filePath === 'foo.bar') {
+        expect(logTarget.filteredLines(LogLevels.warn)[0]).toMatchSnapshot()
+      }
+    })
   })
 })

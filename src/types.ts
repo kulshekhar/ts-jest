@@ -4,6 +4,15 @@ import type * as _ts from 'typescript'
 
 import type { ConfigSet } from './config/config-set'
 
+declare module '@jest/types' {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
+  namespace Config {
+    interface ConfigGlobals {
+      'ts-jest': TsJestGlobalOptions
+    }
+  }
+}
+
 /**
  * @internal
  */
