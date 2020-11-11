@@ -31,9 +31,9 @@ export const backportJestConfig = <T extends Config.InitialOptions | Config.Proj
   }
 
   if ('__TS_CONFIG__' in globals) {
-    warnConfig('globals.__TS_CONFIG__', 'globals.ts-jest.tsConfig')
+    warnConfig('globals.__TS_CONFIG__', 'globals.ts-jest.tsconfig')
     if (typeof globals.__TS_CONFIG__ === 'object') {
-      mergeTsJest.tsConfig = globals.__TS_CONFIG__
+      mergeTsJest.tsconfig = globals.__TS_CONFIG__
     }
     delete globals.__TS_CONFIG__
   }
@@ -53,9 +53,9 @@ export const backportJestConfig = <T extends Config.InitialOptions | Config.Proj
   }
 
   if ('tsConfigFile' in tsJest) {
-    warnConfig('globals.ts-jest.tsConfigFile', 'globals.ts-jest.tsConfig')
+    warnConfig('globals.ts-jest.tsConfigFile', 'globals.ts-jest.tsconfig')
     if (tsJest.tsConfigFile) {
-      mergeTsJest.tsConfig = tsJest.tsConfigFile
+      mergeTsJest.tsconfig = tsJest.tsConfigFile
     }
     delete tsJest.tsConfigFile
   }

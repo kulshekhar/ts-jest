@@ -274,10 +274,7 @@ export class ConfigSet {
     this.logger.debug({ diagnostics: this._diagnostics }, 'normalized diagnostics config via ts-jest option')
 
     // tsconfig
-    if (options.tsConfig) {
-      this.logger.warn(Deprecations.TsConfig)
-    }
-    const tsconfigOpt = options.tsConfig ?? options.tsconfig
+    const tsconfigOpt = options.tsconfig
     const configFilePath = typeof tsconfigOpt === 'string' ? this.resolvePath(tsconfigOpt) : undefined
     this.parsedTsConfig = this._resolveTsConfig(
       typeof tsconfigOpt === 'object' ? tsconfigOpt : undefined,
