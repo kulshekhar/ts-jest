@@ -97,7 +97,7 @@
     "@types/micromatch": "4.x",
     "@types/mkdirp": "latest",
     "@types/node": "14.x",
-    "@types/react": "16.x",
+    "@types/react": "17.x",
     "@types/semver": "latest",
     "@types/yargs": "latest",
     "@types/yargs-parser": "15.x",
