@@ -1,6 +1,7 @@
 import RunResult from '../__helpers__/test-case/run-result'
 
-export const test = (val: unknown): boolean => val && val instanceof RunResult
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+export const test = (val: any): boolean => val && val instanceof RunResult
 export const print = (val: RunResult, _: unknown, indent: (l: string) => unknown): string => [
     `${ val.status === 0 ? '√' : '×' } ${ val.cmdLine }`,
     `↳ exit code: ${ val.status }`, // eslint-disable-line @typescript-eslint/restrict-template-expressions

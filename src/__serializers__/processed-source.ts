@@ -2,7 +2,8 @@ import { safeDump } from 'js-yaml'
 
 import ProcessedSource from '../__helpers__/processed-source'
 
-export const test = (val: unknown): boolean => val && val instanceof ProcessedSource
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+export const test = (val: any): boolean => val && val instanceof ProcessedSource
 export const print = (val: ProcessedSource, _: unknown, indent: (str: string) => any): string => {
   const sourceMaps = val.normalizedOutputSourceMaps
   const out = [
