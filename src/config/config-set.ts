@@ -301,6 +301,7 @@ export class ConfigSet {
           }
         })
       if (astTransformers.before) {
+        /* istanbul ignore next (already covered in unit test) */
         this.customTransformers.before?.push(...resolveTransformers(astTransformers.before))
       }
       if (astTransformers.after) {
@@ -398,9 +399,9 @@ export class ConfigSet {
     const result = ts.parseJsonConfigFileContent(config, ts.sys, basePath, undefined, configFileName)
     const { _overriddenCompilerOptions: forcedOptions } = this
     const finalOptions = result.options
-    // Target ES5 output by default (instead of ES3).
+    // Target ES2015 output by default (instead of ES3).
     if (finalOptions.target === undefined) {
-      finalOptions.target = ts.ScriptTarget.ES5
+      finalOptions.target = ts.ScriptTarget.ES2015
     }
 
     // check the module interoperability
@@ -424,6 +425,7 @@ export class ConfigSet {
         length: undefined,
       })
       // at least enable synthetic default imports (except if it's set in the input config)
+      /* istanbul ignore next (already covered in unit test) */
       if (!('allowSyntheticDefaultImports' in config.compilerOptions)) {
         finalOptions.allowSyntheticDefaultImports = true
       }

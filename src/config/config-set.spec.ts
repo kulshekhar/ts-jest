@@ -38,12 +38,12 @@ describe('parsedTsConfig', () => {
     expect(get().fileNames).toContain(normalizeSlashes(__filename))
   })
 
-  it('should include compiler config from `%s` option key', () => {
-    expect(get({ tsconfig: { baseUrl: 'src/config' } }).options.baseUrl).toBe(normalizeSlashes(__dirname))
-  })
-
   it('should include compiler config from base config', () => {
     expect(get({ tsconfig: { target: 'esnext' } as any }).options.target).toBe(ts.ScriptTarget.ESNext)
+  })
+
+  it('should fallback to ES2015 as default target when no target defined in tsconfig', () => {
+    expect(get().options.target).toBe(ts.ScriptTarget.ES2015)
   })
 
   it('should override some options', () => {
@@ -62,6 +62,7 @@ describe('parsedTsConfig', () => {
       tsJestConfig: { tsconfig: 'tsconfig.build.json' },
       resolve: null,
     })
+
     expect(cs.parsedTsConfig.options).toMatchObject({
       module: ts.ModuleKind.CommonJS,
       rootDir: normalizeSlashes(resolve(__dirname, '..')),
@@ -79,6 +80,7 @@ describe('parsedTsConfig', () => {
       },
       resolve: null,
     })
+
     expect(cs.parsedTsConfig.options).toMatchObject({
       module: ts.ModuleKind.CommonJS,
       allowSyntheticDefaultImports: true,
@@ -101,6 +103,7 @@ describe('parsedTsConfig', () => {
       },
       resolve: null,
     })
+
     expect(cs.parsedTsConfig.options).toMatchObject({
       module: ts.ModuleKind.AMD,
       esModuleInterop: false,
