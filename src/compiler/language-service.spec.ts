@@ -139,7 +139,7 @@ describe('Language service', () => {
        * resolved modules
        */
       async function firstCompile() {
-        return new Promise((resolve) => {
+        return new Promise<void>((resolve) => {
           const compiler1 = makeCompiler({
             jestConfig: {
               cache: true,
@@ -183,7 +183,7 @@ describe('Language service', () => {
        * resolved modules
        */
       async function firstCompile() {
-        return new Promise((resolve) => {
+        return new Promise<void>((resolve) => {
           const compiler1 = makeCompiler({
             jestConfig: {
               cache: true,
