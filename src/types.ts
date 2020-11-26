@@ -172,33 +172,8 @@ export interface TsJestConfig {
   stringifyContentPathRegex: string | undefined
 }
 
-export interface TsCompiler {
-  /**
-   * @internal
-   */
-  cwd: string
-  /**
-   * @internal
-   */
-  compile(code: string, fileName: string, lineOffset?: number): string
-  program: _ts.Program | undefined
-}
-/**
- * Internal source output.
- *
- * @internal
- */
-export type SourceOutput = [string, string]
-/**
- * @internal
- */
-export type CompileFn = (code: string, fileName: string, lineOffset?: number) => SourceOutput
-/**
- * @internal
- */
 export interface CompilerInstance {
-  compileFn: CompileFn
-  program: _ts.Program | undefined
+  getCompiledOutput(fileContent: string, fileName: string): string
 }
 /**
  * @internal
