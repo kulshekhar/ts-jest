@@ -1,3 +1,14 @@
+# [27.0.0-alpha.1](https://github.com/kulshekhar/ts-jest/compare/v27.0.0-alpha.0...v27.0.0-alpha.1) (2020-11-26)
+
+
+### BREAKING CHANGES
+
+* By default, when no `target` is defined in `tsconfig`, `ts-jest` will transform codes to ES2015 syntax
+* Now both `isolatedModules: true` and `isolatedModule: false` codes are in one single class `TsCompiler` which is an instance created in `TsJestCompiler` based on config option `compiler` with value `typescript` or `ttypescript`.
+
+
+
+
 # [27.0.0-alpha.0](https://github.com/kulshekhar/ts-jest/compare/v26.4.4...v27.0.0-alpha.0) (2020-11-11)
 
 
