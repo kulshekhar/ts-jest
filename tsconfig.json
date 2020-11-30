@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "target": "ES2015",
     "module": "CommonJS",
     "declaration": false,
     "noEmit": true,

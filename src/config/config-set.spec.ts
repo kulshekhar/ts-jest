@@ -43,7 +43,7 @@ describe('parsedTsConfig', () => {
   })
 
   it('should fallback to ES2015 as default target when no target defined in tsconfig', () => {
-    expect(get().options.target).toBe(ts.ScriptTarget.ES2015)
+    expect(get({ tsconfig: 'tsconfig.spec.json' }).options.target).toBe(ts.ScriptTarget.ES2015)
   })
 
   it('should override some options', () => {
