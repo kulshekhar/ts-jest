@@ -36,49 +36,6 @@ exports[`TsCompiler isolatedModule false allowJs option should compile js file f
   ================================================================================
 `;
 
-exports[`TsCompiler isolatedModule false diagnostics should not report diagnostics for test file which doesn't exist when compiling import module file 1`] = `
-Array [
-  "[level:20] getCompiledOutput(): compiling using language service
-",
-  "[level:20] updateMemoryCache: update memory cache for language service
-",
-  "[level:20] visitSourceFileNode(): hoisting
-",
-  "[level:20] getCompiledOutput(): computing diagnostics using language service
-",
-]
-`;
-
-exports[`TsCompiler isolatedModule false diagnostics should only report diagnostics for imported modules but not test files without cache 1`] = `
-Array [
-  "[level:20] getCompiledOutput(): compiling using language service
-",
-  "[level:20] updateMemoryCache: update memory cache for language service
-",
-  "[level:20] visitSourceFileNode(): hoisting
-",
-  "[level:20] getCompiledOutput(): computing diagnostics using language service
-",
-]
-`;
-
-exports[`TsCompiler isolatedModule false diagnostics should report diagnostics for imported modules as well as test files which use imported modules with cache 1`] = `
-Array [
-  "[level:20] getCompiledOutput(): compiling using language service
-",
-  "[level:20] updateMemoryCache: update memory cache for language service
-",
-  "[level:20] visitSourceFileNode(): hoisting
-",
-  "[level:20] getCompiledOutput(): computing diagnostics using language service
-",
-  "[level:20] updateMemoryCache: update memory cache for language service
-",
-  "[level:20] getCompiledOutput(): computing diagnostics using language service for test file which uses the module
-",
-]
-`;
-
 exports[`TsCompiler isolatedModule false diagnostics should throw error when cannot compile 1`] = `
 "Unable to require \`.d.ts\` file for file: test-cannot-compile.d.ts.
 This is usually the result of a faulty configuration or import. Make sure there is a \`.js\`, \`.json\` or another executable extension available alongside \`test-cannot-compile.d.ts\`."
@@ -93,25 +50,6 @@ Array [
   "[level:20] visitSourceFileNode(): hoisting
 ",
   "[level:20] getCompiledOutput(): computing diagnostics using language service
-",
-]
-`;
-
-exports[`TsCompiler isolatedModule false diagnostics shouldn't report diagnostics for test file name that has been type checked before 1`] = `
-Array [
-  "[level:20] getCompiledOutput(): compiling using language service
-",
-  "[level:20] updateMemoryCache: update memory cache for language service
-",
-  "[level:20] visitSourceFileNode(): hoisting
-",
-  "[level:20] getCompiledOutput(): computing diagnostics using language service
-",
-  "[level:20] getCompiledOutput(): compiling using language service
-",
-  "[level:20] updateMemoryCache: update memory cache for language service
-",
-  "[level:20] visitSourceFileNode(): hoisting
 ",
 ]
 `;

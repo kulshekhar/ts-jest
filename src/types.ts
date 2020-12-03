@@ -172,7 +172,10 @@ export interface TsJestConfig {
   stringifyContentPathRegex: string | undefined
 }
 
+export type ResolvedModulesMap = Map<string, _ts.ResolvedModuleFull | undefined> | undefined
+
 export interface CompilerInstance {
+  getResolvedModulesMap(fileContent: string, fileName: string): ResolvedModulesMap
   getCompiledOutput(fileContent: string, fileName: string): string
 }
 /**
