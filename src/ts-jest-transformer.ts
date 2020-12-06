@@ -1,4 +1,4 @@
-import type { CacheKeyOptions, TransformedSource, Transformer, TransformOptions } from '@jest/transform'
+import type { TransformedSource, Transformer, TransformOptions } from '@jest/transform'
 import type { Config } from '@jest/types'
 import type { Logger } from 'bs-logger'
 import { existsSync, readFileSync, statSync, writeFile } from 'fs'
@@ -112,15 +112,11 @@ export class TsJestTransformer implements Transformer {
   /**
    * @public
    */
-  process(
-    fileContent: string,
-    filePath: Config.Path,
-    jestConfig: Config.ProjectConfig,
-    transformOptions?: TransformOptions,
-  ): TransformedSource | string {
+  process(fileContent: string, filePath: Config.Path, transformOptions: TransformOptions): TransformedSource | string {
     this._logger.debug({ fileName: filePath, transformOptions }, 'processing', filePath)
 
     let result: string | TransformedSource
+    const jestConfig = transformOptions.config
     const configs = this._configsFor(jestConfig)
     const { hooks } = configs
     const shouldStringifyContent = configs.shouldStringifyContent(filePath)
@@ -157,7 +153,7 @@ export class TsJestTransformer implements Transformer {
       this._logger.debug({ fileName: filePath }, 'calling babel-jest processor')
 
       // do not instrument here, jest will do it anyway afterwards
-      result = babelJest.process(result, filePath, jestConfig, { ...transformOptions, instrument: false })
+      result = babelJest.process(result, filePath, { ...transformOptions, instrument: false })
     }
     // allows hooks (useful for internal testing)
     /* istanbul ignore next (cover by e2e) */
@@ -180,22 +176,17 @@ export class TsJestTransformer implements Transformer {
    *
    * @public
    */
-  getCacheKey(
-    fileContent: string,
-    filePath: string,
-    _jestConfigStr: string,
-    transformOptions: CacheKeyOptions,
-  ): string {
+  getCacheKey(fileContent: string, filePath: string, transformOptions: TransformOptions): string {
     const configs = this._configsFor(transformOptions.config)
 
     this._logger.debug({ fileName: filePath, transformOptions }, 'computing cache key for', filePath)
 
     // we do not instrument, ensure it is false all the time
-    const { instrument = false, rootDir = configs.rootDir } = transformOptions
+    const { instrument = false } = transformOptions
     const constructingCacheKeyElements = [
       this._transformCfgStr,
       CACHE_KEY_EL_SEPARATOR,
-      rootDir,
+      configs.rootDir,
       CACHE_KEY_EL_SEPARATOR,
       `instrument:${instrument ? 'on' : 'off'}`,
       CACHE_KEY_EL_SEPARATOR,
@@ -256,18 +247,19 @@ export class TsJestTransformer implements Transformer {
     return sha1(...constructingCacheKeyElements)
   }
 
+  /**
+   * Subclasses extends `TsJestTransformer` can call this method to get resolved module disk cache
+   */
   protected _getFsCachedResolvedModules(configSet: ConfigSet): void {
-    if (!configSet.isolatedModules) {
-      const cacheDir = configSet.tsCacheDir
-      if (cacheDir) {
-        // Make sure the cache directory exists before continuing.
-        mkdirp.sync(cacheDir)
-        this._tsResolvedModulesCachePath = join(cacheDir, sha1('ts-jest-resolved-modules', CACHE_KEY_EL_SEPARATOR))
-        try {
-          const cachedTSResolvedModules = readFileSync(this._tsResolvedModulesCachePath, 'utf-8')
-          this._depGraphs = new Map(parse(cachedTSResolvedModules))
-        } catch (e) {}
-      }
+    const cacheDir = configSet.tsCacheDir
+    if (!configSet.isolatedModules && cacheDir) {
+      // Make sure the cache directory exists before continuing.
+      mkdirp.sync(cacheDir)
+      this._tsResolvedModulesCachePath = join(cacheDir, sha1('ts-jest-resolved-modules', CACHE_KEY_EL_SEPARATOR))
+      try {
+        const cachedTSResolvedModules = readFileSync(this._tsResolvedModulesCachePath, 'utf-8')
+        this._depGraphs = new Map(parse(cachedTSResolvedModules))
+      } catch (e) {}
     }
   }
 }

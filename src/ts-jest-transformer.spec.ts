@@ -121,9 +121,13 @@ describe('TsJestTransformer', () => {
     const input = {
       fileContent: 'export default "foo"',
       fileName: 'foo.ts',
-      jestConfigStr: '{"foo": "bar"}',
-      options: { config: { foo: 'bar', testMatch: [], testRegex: [] } as any, instrument: false, rootDir: '/foo' },
-    }
+      transformOptions: {
+        configString: '{"foo": "bar"}',
+        config: { foo: 'bar', testMatch: [], testRegex: [] } as any,
+        instrument: false,
+        rootDir: '/foo',
+      },
+    } as any
     const depGraphs: ResolvedModulesMap = new Map<string, ResolvedModuleFull | undefined>()
 
     beforeEach(() => {
@@ -137,10 +141,16 @@ describe('TsJestTransformer', () => {
 
     test('should be different for each argument value', () => {
       const keys = [
-        tr.getCacheKey(input.fileContent, input.fileName, input.jestConfigStr, input.options),
-        tr.getCacheKey(input.fileContent, 'bar.ts', input.jestConfigStr, input.options),
-        tr.getCacheKey(input.fileContent, input.fileName, '{}', { ...input.options, instrument: true }),
-        tr.getCacheKey(input.fileContent, input.fileName, '{}', { ...input.options, rootDir: '/bar' }),
+        tr.getCacheKey(input.fileContent, input.fileName, input.transformOptions),
+        tr.getCacheKey(input.fileContent, 'bar.ts', input.transformOptions),
+        tr.getCacheKey(input.fileContent, input.fileName, {
+          ...input.transformOptions,
+          config: { ...input.transformOptions.config, instrument: true },
+        }),
+        tr.getCacheKey(input.fileContent, input.fileName, {
+          ...input.transformOptions,
+          config: { ...input.transformOptions.config, rootDir: '/bar' },
+        }),
       ]
 
       // each key should have correct length
@@ -155,8 +165,8 @@ describe('TsJestTransformer', () => {
       depGraphs.set(input.fileName, resolvedModule)
       jest.spyOn(TsJestCompiler.prototype, 'getResolvedModulesMap').mockReturnValueOnce(depGraphs)
 
-      const cacheKey1 = tr.getCacheKey(input.fileContent, input.fileName, input.jestConfigStr, input.options)
-      const cacheKey2 = tr.getCacheKey(input.fileContent, input.fileName, input.jestConfigStr, input.options)
+      const cacheKey1 = tr.getCacheKey(input.fileContent, input.fileName, input.transformOptions)
+      const cacheKey2 = tr.getCacheKey(input.fileContent, input.fileName, input.transformOptions)
 
       expect(cacheKey1).toEqual(cacheKey2)
       expect(TsJestCompiler.prototype.getResolvedModulesMap).toHaveBeenCalledTimes(1)
@@ -167,17 +177,17 @@ describe('TsJestTransformer', () => {
       depGraphs.set(input.fileName, resolvedModule)
       jest.spyOn(TsJestCompiler.prototype, 'getResolvedModulesMap').mockReturnValueOnce(depGraphs)
 
-      const cacheKey1 = tr.getCacheKey(input.fileContent, input.fileName, input.jestConfigStr, {
-        ...input.options,
+      const cacheKey1 = tr.getCacheKey(input.fileContent, input.fileName, {
+        ...input.transformOptions,
         config: {
-          ...input.options.config,
+          ...input.config,
           globals: { 'ts-jest': { isolatedModules: true } },
         },
       })
 
       jest.spyOn(TsJestCompiler.prototype, 'getResolvedModulesMap').mockReturnValueOnce(depGraphs)
       const tr1 = new TsJestTransformer()
-      const cacheKey2 = tr1.getCacheKey(input.fileContent, input.fileName, input.jestConfigStr, input.options)
+      const cacheKey2 = tr1.getCacheKey(input.fileContent, input.fileName, input.transformOptions)
 
       expect(TsJestCompiler.prototype.getResolvedModulesMap).toHaveBeenCalledTimes(1)
       expect(TsJestCompiler.prototype.getResolvedModulesMap).toHaveBeenCalledWith(input.fileContent, input.fileName)
@@ -188,11 +198,11 @@ describe('TsJestTransformer', () => {
       depGraphs.set(input.fileName, resolvedModule)
       jest.spyOn(TsJestCompiler.prototype, 'getResolvedModulesMap').mockReturnValueOnce(depGraphs)
 
-      const cacheKey1 = tr.getCacheKey(input.fileContent, input.fileName, input.jestConfigStr, input.options)
+      const cacheKey1 = tr.getCacheKey(input.fileContent, input.fileName, input.transformOptions)
 
       jest.spyOn(TsJestCompiler.prototype, 'getResolvedModulesMap').mockReturnValueOnce(depGraphs)
       const newFileContent = 'const foo = 1'
-      const cacheKey2 = tr.getCacheKey(newFileContent, input.fileName, input.jestConfigStr, input.options)
+      const cacheKey2 = tr.getCacheKey(newFileContent, input.fileName, input.transformOptions)
 
       expect(cacheKey1).not.toEqual(cacheKey2)
       expect(TsJestCompiler.prototype.getResolvedModulesMap).toHaveBeenCalledTimes(2)
@@ -208,10 +218,10 @@ describe('TsJestTransformer', () => {
       depGraphs.set(input.fileName, resolvedModule)
       jest.spyOn(TsJestCompiler.prototype, 'getResolvedModulesMap').mockReturnValueOnce(depGraphs)
 
-      const cacheKey1 = tr.getCacheKey(input.fileContent, input.fileName, input.jestConfigStr, input.options)
+      const cacheKey1 = tr.getCacheKey(input.fileContent, input.fileName, input.transformOptions)
 
       jest.spyOn(fs, 'existsSync').mockReturnValueOnce(false)
-      const cacheKey2 = tr.getCacheKey(input.fileContent, input.fileName, input.jestConfigStr, input.options)
+      const cacheKey2 = tr.getCacheKey(input.fileContent, input.fileName, input.transformOptions)
 
       expect(cacheKey1).not.toEqual(cacheKey2)
       expect(TsJestCompiler.prototype.getResolvedModulesMap).toHaveBeenCalledTimes(1)
@@ -230,18 +240,20 @@ describe('TsJestTransformer', () => {
     test('should process input as stringified content with content matching stringifyContentPathRegex option', () => {
       const filePath = 'foo.html'
       const fileContent = '<h1>Hello World</h1>'
-      const jestCfg = {
-        globals: {
-          'ts-jest': {
-            stringifyContentPathRegex: '\\.html$',
+      const transformOptions = {
+        config: {
+          globals: {
+            'ts-jest': {
+              stringifyContentPathRegex: '\\.html$',
+            },
           },
+          testMatch: [],
+          testRegex: [],
         },
-        testMatch: [],
-        testRegex: [],
       } as any
-      tr.getCacheKey(fileContent, filePath, JSON.stringify(jestCfg), { config: jestCfg } as any)
+      tr.getCacheKey(fileContent, filePath, transformOptions)
 
-      const result = tr.process(fileContent, filePath, jestCfg)
+      const result = tr.process(fileContent, filePath, transformOptions)
 
       expect(result).toMatchInlineSnapshot(`"module.exports=\\"<h1>Hello World</h1>\\""`)
     })
@@ -249,12 +261,14 @@ describe('TsJestTransformer', () => {
     test('should process type definition input', () => {
       const fileContent = 'type Foo = number'
       const filePath = 'foo.d.ts'
-      const jestCfg = {
-        testMatch: [],
-        testRegex: [],
+      const transformOptions = {
+        config: {
+          testMatch: [],
+          testRegex: [],
+        },
       } as any
-      tr.getCacheKey(fileContent, filePath, JSON.stringify(jestCfg), { config: jestCfg } as any)
-      const result = tr.process(fileContent, filePath, jestCfg)
+      tr.getCacheKey(fileContent, filePath, transformOptions)
+      const result = tr.process(fileContent, filePath, transformOptions)
 
       expect(result).toEqual('')
     })
@@ -262,17 +276,19 @@ describe('TsJestTransformer', () => {
     test('should process js file with allowJs false and show warning log', () => {
       const fileContent = 'const foo = 1'
       const filePath = 'foo.js'
-      const jestCfg = {
-        globals: {
-          'ts-jest': { tsconfig: { allowJs: false } },
+      const transformOptions = {
+        config: {
+          globals: {
+            'ts-jest': { tsconfig: { allowJs: false } },
+          },
+          testMatch: [],
+          testRegex: [],
         },
-        testMatch: [],
-        testRegex: [],
       } as any
-      tr.getCacheKey(fileContent, filePath, JSON.stringify(jestCfg), { config: jestCfg } as any)
+      tr.getCacheKey(fileContent, filePath, transformOptions)
       logTarget.clear()
 
-      const result = tr.process(fileContent, filePath, jestCfg)
+      const result = tr.process(fileContent, filePath, transformOptions)
 
       expect(result).toEqual(fileContent)
       expect(logTarget.lines[1].substring(0)).toMatchInlineSnapshot(`
@@ -286,14 +302,16 @@ describe('TsJestTransformer', () => {
     test.each(['foo.ts', 'foo.tsx'])('should process ts/tsx file', (filePath) => {
       const fileContent = 'const foo = 1'
       const output = 'var foo = 1'
-      const jestCfg = {
-        testMatch: [],
-        testRegex: [],
+      const transformOptions = {
+        config: {
+          testMatch: [],
+          testRegex: [],
+        },
       } as any
-      tr.getCacheKey(fileContent, filePath, JSON.stringify(jestCfg), { config: jestCfg } as any)
+      tr.getCacheKey(fileContent, filePath, transformOptions)
       jest.spyOn(TsJestCompiler.prototype, 'getCompiledOutput').mockReturnValueOnce(output)
 
-      const result = tr.process(fileContent, filePath, jestCfg)
+      const result = tr.process(fileContent, filePath, transformOptions)
 
       expect(result).toEqual(output)
     })
@@ -301,18 +319,20 @@ describe('TsJestTransformer', () => {
     test.each(['foo.js', 'foo.jsx'])('should process js/jsx file with allowJs true', (filePath) => {
       const fileContent = 'const foo = 1'
       const output = 'var foo = 1'
-      const jestCfg = {
-        globals: {
-          'ts-jest': { tsconfig: { allowJs: true } },
+      const transformOptions = {
+        config: {
+          globals: {
+            'ts-jest': { tsconfig: { allowJs: true } },
+          },
+          testMatch: [],
+          testRegex: [],
         },
-        testMatch: [],
-        testRegex: [],
       } as any
-      tr.getCacheKey(fileContent, filePath, JSON.stringify(jestCfg), { config: jestCfg } as any)
+      tr.getCacheKey(fileContent, filePath, transformOptions)
       logTarget.clear()
       jest.spyOn(TsJestCompiler.prototype, 'getCompiledOutput').mockReturnValueOnce(output)
 
-      const result = tr.process(fileContent, filePath, jestCfg)
+      const result = tr.process(fileContent, filePath, transformOptions)
 
       expect(result).toEqual(output)
     })
@@ -320,17 +340,19 @@ describe('TsJestTransformer', () => {
     test('should process file with unknown extension and show warning message without babel-jest', () => {
       const fileContent = 'foo'
       const filePath = 'foo.bar'
-      const jestCfg = {
-        globals: {
-          'ts-jest': { tsconfig: { allowJs: true } },
+      const transformOptions = {
+        config: {
+          globals: {
+            'ts-jest': { tsconfig: { allowJs: true } },
+          },
+          testMatch: [],
+          testRegex: [],
         },
-        testMatch: [],
-        testRegex: [],
       } as any
-      tr.getCacheKey(fileContent, filePath, JSON.stringify(jestCfg), { config: jestCfg } as any)
+      tr.getCacheKey(fileContent, filePath, transformOptions)
       logTarget.clear()
 
-      const result = tr.process(fileContent, filePath, jestCfg)
+      const result = tr.process(fileContent, filePath, transformOptions)
 
       expect(result).toEqual(fileContent)
       expect(logTarget.lines[1]).toMatchInlineSnapshot(`
@@ -341,17 +363,19 @@ describe('TsJestTransformer', () => {
 
     test.each(['foo.bar', 'foo.js'])('should process file with babel-jest', (filePath) => {
       const fileContent = 'foo'
-      const jestCfg = {
-        globals: {
-          'ts-jest': { babelConfig: true },
+      const transformOptions = {
+        config: {
+          globals: {
+            'ts-jest': { babelConfig: true },
+          },
+          testMatch: [],
+          testRegex: [],
         },
-        testMatch: [],
-        testRegex: [],
       } as any
-      tr.getCacheKey(fileContent, filePath, JSON.stringify(jestCfg), { config: jestCfg } as any)
+      tr.getCacheKey(fileContent, filePath, transformOptions)
       logTarget.clear()
 
-      const result = tr.process('foo', filePath, jestCfg)
+      const result = tr.process('foo', filePath, transformOptions)
 
       if (typeof result !== 'string') {
         expect(result.code.substring(0, result.code.indexOf(SOURCE_MAPPING_PREFIX))).toMatchSnapshot()

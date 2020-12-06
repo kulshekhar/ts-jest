@@ -61,7 +61,7 @@
     "bs-logger": "0.x",
     "buffer-from": "1.x",
     "fast-json-stable-stringify": "2.x",
-    "jest-util": "^26.1.0",
+    "jest-util": "next",
     "json5": "2.x",
     "lodash.memoize": "4.x",
     "make-error": "1.x",
@@ -70,7 +70,7 @@
     "yargs-parser": "20.x"
   },
   "peerDependencies": {
-    "jest": ">=26 <27",
+    "jest": "27.0.0-next.2",
     "typescript": ">=3.8 <5.0"
   },
   "husky": {
@@ -83,8 +83,8 @@
   "devDependencies": {
     "@commitlint/cli": "11.x",
     "@commitlint/config-angular": "^11.0.0",
-    "@jest/transform": "26.x",
-    "@jest/types": "26.x",
+    "@jest/transform": "next",
+    "@jest/types": "next",
     "@types/babel__core": "7.x",
     "@types/buffer-from": "latest",
     "@types/cross-spawn": "latest",
@@ -114,7 +114,7 @@
     "fs-extra": "9.x",
     "glob-gitignore": "latest",
     "husky": "4.x",
-    "jest": "26.x",
+    "jest": "next",
     "js-yaml": "latest",
     "lint-staged": "latest",
     "lodash.merge": "4.x",
