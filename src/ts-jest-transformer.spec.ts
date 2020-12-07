@@ -13,6 +13,7 @@ import { CACHE_KEY_EL_SEPARATOR, TsJestTransformer } from './ts-jest-transformer
 import type { ResolvedModulesMap } from './types'
 import { stringify } from './utils/json'
 import { sha1 } from './utils/sha1'
+import { VersionCheckers } from './utils/version-checkers'
 
 const logTarget = logTargetMock()
 const cacheDir = join(process.cwd(), 'tmp')
@@ -358,6 +359,18 @@ describe('TsJestTransformer', () => {
       if (filePath === 'foo.bar') {
         expect(logTarget.filteredLines(LogLevels.warn)[0]).toMatchSnapshot()
       }
+    })
+  })
+
+  describe('subclass extends TsJestTransformer', () => {
+    class MyTransformer extends TsJestTransformer {}
+
+    test('should have jest version checking', () => {
+      VersionCheckers.jest.warn = jest.fn()
+
+      new MyTransformer()
+
+      expect(VersionCheckers.jest.warn).toHaveBeenCalled()
     })
   })
 })

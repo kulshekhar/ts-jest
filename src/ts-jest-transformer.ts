@@ -14,6 +14,7 @@ import { rootLogger } from './utils/logger'
 import { Errors, interpolate } from './utils/messages'
 import type { CompilerInstance } from './types'
 import { sha1 } from './utils/sha1'
+import { VersionCheckers } from './utils/version-checkers'
 
 interface CachedConfigSet {
   configSet: ConfigSet
@@ -47,6 +48,7 @@ export class TsJestTransformer implements Transformer {
 
   constructor() {
     this._logger = rootLogger.child({ namespace: 'ts-jest-transformer' })
+    VersionCheckers.jest.warn()
 
     this._logger.debug('created new transformer')
   }
