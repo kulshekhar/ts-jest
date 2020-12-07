@@ -5,7 +5,7 @@
     "test": "jest"
   },
   "devDependencies": {
-    "@types/jest": "^26.0.15",
+    "@types/jest": "^26.0.16",
     "@types/jquery": "^3.5.4",
     "jest": "^26.6.3",
     "jquery": "^3.5.1",
