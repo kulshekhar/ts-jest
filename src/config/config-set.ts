@@ -341,24 +341,23 @@ export class ConfigSet {
   private _resolveTsCacheDir(): void {
     if (!this._jestCfg.cache) {
       this.logger.debug('file caching disabled')
+    } else {
+      const cacheSuffix = sha1(
+        stringify({
+          version: this.compilerModule.version,
+          digest: this.tsJestDigest,
+          compilerModule: this.compilerModule,
+          compilerOptions: this.parsedTsConfig.options,
+          isolatedModules: this.isolatedModules,
+          diagnostics: this._diagnostics,
+        }),
+      )
+      const res = join(this._jestCfg.cacheDirectory, 'ts-jest', cacheSuffix.substr(0, 2), cacheSuffix.substr(2))
 
-      return undefined
+      this.logger.debug({ cacheDirectory: res }, 'will use file caching')
+
+      this.tsCacheDir = res
     }
-    const cacheSuffix = sha1(
-      stringify({
-        version: this.compilerModule.version,
-        digest: this.tsJestDigest,
-        compilerModule: this.compilerModule,
-        compilerOptions: this.parsedTsConfig.options,
-        isolatedModules: this.isolatedModules,
-        diagnostics: this._diagnostics,
-      }),
-    )
-    const res = join(this._jestCfg.cacheDirectory, 'ts-jest', cacheSuffix.substr(0, 2), cacheSuffix.substr(2))
-
-    this.logger.debug({ cacheDirectory: res }, 'will use file caching')
-
-    this.tsCacheDir = res
   }
 
   /**

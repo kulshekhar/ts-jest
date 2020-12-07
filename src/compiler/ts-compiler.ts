@@ -1,8 +1,6 @@
-import { LogContexts, LogLevels, Logger } from 'bs-logger'
-import { basename, join, normalize, relative } from 'path'
-import { existsSync, readFileSync, writeFile } from 'fs'
+import { LogContexts, Logger, LogLevels } from 'bs-logger'
 import memoize from 'lodash.memoize'
-import mkdirp from 'mkdirp'
+import { basename, normalize, relative } from 'path'
 import type {
   EmitOutput,
   LanguageService,
@@ -15,23 +13,13 @@ import type {
 import { updateOutput } from './compiler-utils'
 import type { ConfigSet } from '../config/config-set'
 import { LINE_FEED } from '../constants'
-import type { CompilerInstance, TTypeScript } from '../types'
+import type { CompilerInstance, ResolvedModulesMap, TTypeScript } from '../types'
 import { rootLogger } from '../utils/logger'
-import { parse, stringify } from '../utils/json'
 import { Errors, interpolate } from '../utils/messages'
-import { sha1 } from '../utils/sha1'
-
-/** where key is filepath */
-type TSFiles = Map<string, TSFile>
 
 interface TSFile {
   text?: string
   version: number
-}
-
-interface MemoryCache {
-  resolvedModules: Map<string, string[]>
-  files: TSFiles
 }
 
 /**
@@ -41,14 +29,9 @@ export class TsCompiler implements CompilerInstance {
   private readonly _logger: Logger
   private readonly _ts: TTypeScript
   private readonly _parsedTsConfig: ParsedCommandLine
-  private readonly _memoryHost: MemoryCache = {
-    files: new Map<string, TSFile>(),
-    resolvedModules: new Map<string, string[]>(),
-  }
-  private readonly _diagnosedFiles: string[] = []
+  private readonly _cacheFS: Map<string, TSFile> = new Map<string, TSFile>()
   private _cachedReadFile: any
   private _projectVersion = 1
-  private _tsResolvedModulesCachePath: string | undefined
   private _languageService: LanguageService | undefined
 
   constructor(private readonly configSet: ConfigSet) {
@@ -61,27 +44,16 @@ export class TsCompiler implements CompilerInstance {
   }
 
   private _createLanguageService(): void {
-    const cacheDir = this.configSet.tsCacheDir
     const serviceHostTraceCtx = {
       namespace: 'ts:serviceHost',
       call: null,
       [LogContexts.logLevel]: LogLevels.trace,
     }
-    if (cacheDir) {
-      // Make sure the cache directory exists before continuing.
-      mkdirp.sync(cacheDir)
-      this._tsResolvedModulesCachePath = join(cacheDir, sha1('ts-jest-resolved-modules', '\x00'))
-      try {
-        /* istanbul ignore next (already covered with unit test) */
-        const cachedTSResolvedModules = readFileSync(this._tsResolvedModulesCachePath, 'utf-8')
-        this._memoryHost.resolvedModules = new Map(parse(cachedTSResolvedModules))
-      } catch (e) {}
-    }
     // Initialize memory cache for typescript compiler
     this._parsedTsConfig.fileNames
       .filter((fileName) => !this.configSet.isTestFile(fileName))
       .forEach((fileName) => {
-        this._memoryHost.files.set(fileName, {
+        this._cacheFS.set(fileName, {
           version: 0,
         })
       })
@@ -103,10 +75,10 @@ export class TsCompiler implements CompilerInstance {
     /* istanbul ignore next */
     const serviceHost: LanguageServiceHost = {
       getProjectVersion: () => String(this._projectVersion),
-      getScriptFileNames: () => [...this._memoryHost.files.keys()],
+      getScriptFileNames: () => [...this._cacheFS.keys()],
       getScriptVersion: (fileName: string) => {
         const normalizedFileName = normalize(fileName)
-        const version = this._memoryHost.files.get(normalizedFileName)?.version
+        const version = this._cacheFS.get(normalizedFileName)?.version
 
         // We need to return `undefined` and not a string here because TypeScript will use
         // `getScriptVersion` and compare against their own version - which can be `undefined`.
@@ -123,12 +95,12 @@ export class TsCompiler implements CompilerInstance {
 
         // Read contents from TypeScript memory cache.
         if (!hit) {
-          this._memoryHost.files.set(normalizedFileName, {
+          this._cacheFS.set(normalizedFileName, {
             text: this._cachedReadFile(normalizedFileName),
             version: 1,
           })
         }
-        const contents = this._memoryHost.files.get(normalizedFileName)?.text
+        const contents = this._cacheFS.get(normalizedFileName)?.text
 
         if (contents === undefined) return
 
@@ -145,35 +117,30 @@ export class TsCompiler implements CompilerInstance {
       getCompilationSettings: () => this._parsedTsConfig.options,
       getDefaultLibFileName: () => this._ts.getDefaultLibFilePath(this._parsedTsConfig.options),
       getCustomTransformers: () => this.configSet.customTransformers,
-      resolveModuleNames: (moduleNames: string[], containingFile: string): (ResolvedModuleFull | undefined)[] => {
-        const normalizedContainingFile = normalize(containingFile)
-        const currentResolvedModules = this._memoryHost.resolvedModules.get(normalizedContainingFile) ?? []
-
-        return moduleNames.map((moduleName) => {
-          const resolveModuleName = this._ts.resolveModuleName(
+      resolveModuleNames: (moduleNames: string[], containingFile: string): (ResolvedModuleFull | undefined)[] =>
+        moduleNames.map((moduleName) => {
+          const { resolvedModule } = this._ts.resolveModuleName(
             moduleName,
             containingFile,
             this._parsedTsConfig.options,
             moduleResolutionHost,
             moduleResolutionCache,
           )
-          const resolvedModule = resolveModuleName.resolvedModule
-          if (this.configSet.isTestFile(normalizedContainingFile) && resolvedModule) {
-            const normalizedResolvedFileName = normalize(resolvedModule.resolvedFileName)
-            if (!currentResolvedModules.includes(normalizedResolvedFileName)) {
-              currentResolvedModules.push(normalizedResolvedFileName)
-              this._memoryHost.resolvedModules.set(normalizedContainingFile, currentResolvedModules)
-            }
-          }
 
           return resolvedModule
-        })
-      },
+        }),
     }
 
     this._logger.debug('created language service')
 
     this._languageService = this._ts.createLanguageService(serviceHost, this._ts.createDocumentRegistry())
+  }
+
+  getResolvedModulesMap(fileContent: string, fileName: string): ResolvedModulesMap {
+    this._updateMemoryCache(fileContent, fileName)
+
+    // See https://github.com/microsoft/TypeScript/blob/master/src/compiler/utilities.ts#L164
+    return (this._languageService?.getProgram()?.getSourceFile(fileName) as any).resolvedModules
   }
 
   getCompiledOutput(fileContent: string, fileName: string): string {
@@ -183,52 +150,10 @@ export class TsCompiler implements CompilerInstance {
       // Must set memory cache before attempting to compile
       this._updateMemoryCache(fileContent, fileName)
       const output: EmitOutput = this._languageService.getEmitOutput(fileName)
-      /* istanbul ignore next */
-      if (this._tsResolvedModulesCachePath) {
-        // Cache resolved modules to disk so next run can reuse it
-        void (async () => {
-          // eslint-disable-next-line @typescript-eslint/await-thenable
-          await writeFile(
-            this._tsResolvedModulesCachePath as string,
-            stringify([...this._memoryHost.resolvedModules]),
-            () => {},
-          )
-        })()
-      }
-      /**
-       * There might be a chance that test files are type checked even before jest executes them, we don't need to do
-       * type check again
-       */
-      if (!this._diagnosedFiles.includes(fileName)) {
-        this._logger.debug({ fileName }, 'getCompiledOutput(): computing diagnostics using language service')
 
-        this._doTypeChecking(fileName)
-      }
-      /* istanbul ignore next (already covered with unit tests) */
-      if (!this.configSet.isTestFile(fileName)) {
-        for (const [testFileName, resolvedModules] of this._memoryHost.resolvedModules.entries()) {
-          // Only do type checking for test files which haven't been type checked before as well as the file must exist
-          if (
-            resolvedModules.includes(fileName) &&
-            !this._diagnosedFiles.includes(testFileName) &&
-            existsSync(testFileName)
-          ) {
-            const testFileContent = this._memoryHost.files.get(testFileName)?.text
-            if (!testFileContent) {
-              // Must set memory cache before attempting to get diagnostics
-              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-              this._updateMemoryCache(this._cachedReadFile(testFileName)!, testFileName)
-            }
+      this._logger.debug({ fileName }, 'getCompiledOutput(): computing diagnostics using language service')
 
-            this._logger.debug(
-              { testFileName },
-              'getCompiledOutput(): computing diagnostics using language service for test file which uses the module',
-            )
-
-            this._doTypeChecking(testFileName)
-          }
-        }
-      }
+      this._doTypeChecking(fileName)
       /* istanbul ignore next (this should never happen but is kept for security) */
       if (output.emitSkipped) {
         throw new TypeError(`${relative(this.configSet.cwd, fileName)}: Emit skipped for language service`)
@@ -263,7 +188,7 @@ export class TsCompiler implements CompilerInstance {
 
   private _isFileInCache(fileName: string): boolean {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    return this._memoryHost.files.has(fileName) && this._memoryHost.files.get(fileName)!.version !== 0
+    return this._cacheFS.has(fileName) && this._cacheFS.get(fileName)!.version !== 0
   }
 
   /* istanbul ignore next */
@@ -273,18 +198,18 @@ export class TsCompiler implements CompilerInstance {
     let shouldIncrementProjectVersion = false
     const hit = this._isFileInCache(fileName)
     if (!hit) {
-      this._memoryHost.files.set(fileName, {
+      this._cacheFS.set(fileName, {
         text: contents,
         version: 1,
       })
       shouldIncrementProjectVersion = true
     } else {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      const cachedFileName = this._memoryHost.files.get(fileName)!
+      const cachedFileName = this._cacheFS.get(fileName)!
       const previousContents = cachedFileName.text
       // Avoid incrementing cache when nothing has changed.
       if (previousContents !== contents) {
-        this._memoryHost.files.set(fileName, {
+        this._cacheFS.set(fileName, {
           text: contents,
           version: cachedFileName.version + 1,
         })
@@ -311,7 +236,6 @@ export class TsCompiler implements CompilerInstance {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         this._languageService!.getSyntacticDiagnostics(fileName),
       )
-      this._diagnosedFiles.push(fileName)
       // will raise or just warn diagnostics depending on config
       this.configSet.raiseDiagnostics(diagnostics, fileName, this._logger)
     }

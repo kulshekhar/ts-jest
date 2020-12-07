@@ -1,22 +1,33 @@
 import type { CacheKeyOptions, TransformedSource, Transformer, TransformOptions } from '@jest/transform'
 import type { Config } from '@jest/types'
 import type { Logger } from 'bs-logger'
+import { existsSync, readFileSync, statSync, writeFile } from 'fs'
+import mkdirp from 'mkdirp'
+import { join } from 'path'
 
+import { TsJestCompiler } from './compiler/ts-jest-compiler'
 import { ConfigSet } from './config/config-set'
 import { DECLARATION_TYPE_EXT, JS_JSX_REGEX, TS_TSX_REGEX } from './constants'
-import { stringify } from './utils/json'
+import { parse, stringify } from './utils/json'
 import { JsonableValue } from './utils/jsonable-value'
 import { rootLogger } from './utils/logger'
 import { Errors, interpolate } from './utils/messages'
-import { TsJestCompiler } from './compiler/ts-jest-compiler'
-import { sha1 } from './utils/sha1'
 import type { CompilerInstance } from './types'
+import { sha1 } from './utils/sha1'
 
 interface CachedConfigSet {
   configSet: ConfigSet
   jestConfig: JsonableValue<Config.ProjectConfig>
   transformerCfgStr: string
+  compiler: CompilerInstance
 }
+
+export interface DepGraphInfo {
+  fileContent: string
+  resolveModuleNames: string[]
+}
+
+export const CACHE_KEY_EL_SEPARATOR = '\x00'
 
 export class TsJestTransformer implements Transformer {
   /**
@@ -28,26 +39,26 @@ export class TsJestTransformer implements Transformer {
   /**
    * @internal
    */
-  private static _compiler: CompilerInstance | undefined
-  protected readonly logger: Logger
+  private _compiler!: CompilerInstance
+  protected readonly _logger: Logger
+  protected _tsResolvedModulesCachePath: string | undefined
   protected _transformCfgStr!: string
+  protected _depGraphs: Map<string, DepGraphInfo> = new Map<string, DepGraphInfo>()
 
   constructor() {
-    this.logger = rootLogger.child({ namespace: 'ts-jest-transformer' })
+    this._logger = rootLogger.child({ namespace: 'ts-jest-transformer' })
 
-    this.logger.debug('created new transformer')
+    this._logger.debug('created new transformer')
   }
 
-  /**
-   * @public
-   */
-  configsFor(jestConfig: Config.ProjectConfig): ConfigSet {
+  protected _configsFor(jestConfig: Config.ProjectConfig): ConfigSet {
     const ccs: CachedConfigSet | undefined = TsJestTransformer._cachedConfigSets.find(
       (cs) => cs.jestConfig.value === jestConfig,
     )
     let configSet: ConfigSet
     if (ccs) {
       this._transformCfgStr = ccs.transformerCfgStr
+      this._compiler = ccs.compiler
       configSet = ccs.configSet
     } else {
       // try to look-it up by stringified version
@@ -61,20 +72,18 @@ export class TsJestTransformer implements Transformer {
         // the config, and then it calls the transformer with the proper object
         serializedCcs.jestConfig.value = jestConfig
         this._transformCfgStr = serializedCcs.transformerCfgStr
+        this._compiler = serializedCcs.compiler
         configSet = serializedCcs.configSet
       } else {
         // create the new record in the index
-        this.logger.info('no matching config-set found, creating a new one')
+        this._logger.info('no matching config-set found, creating a new one')
 
         configSet = new ConfigSet(jestConfig)
         const jest = { ...jestConfig }
-        const globals = (jest.globals = { ...jest.globals } as any)
         // we need to remove some stuff from jest config
         // this which does not depend on config
         jest.name = undefined as any
         jest.cacheDirectory = undefined as any
-        // we do not need this since its normalized version is in tsJest
-        delete globals['ts-jest']
         this._transformCfgStr = new JsonableValue({
           digest: configSet.tsJestDigest,
           babel: configSet.babelConfig,
@@ -84,11 +93,14 @@ export class TsJestTransformer implements Transformer {
             raw: configSet.parsedTsConfig.raw,
           },
         }).serialized
+        this._compiler = new TsJestCompiler(configSet)
         TsJestTransformer._cachedConfigSets.push({
           jestConfig: new JsonableValue(jestConfig),
           configSet,
           transformerCfgStr: this._transformCfgStr,
+          compiler: this._compiler,
         })
+        this._getFsCachedResolvedModules(configSet)
       }
     }
 
@@ -104,10 +116,10 @@ export class TsJestTransformer implements Transformer {
     jestConfig: Config.ProjectConfig,
     transformOptions?: TransformOptions,
   ): TransformedSource | string {
-    this.logger.debug({ fileName: filePath, transformOptions }, 'processing', filePath)
+    this._logger.debug({ fileName: filePath, transformOptions }, 'processing', filePath)
 
     let result: string | TransformedSource
-    const configs = this.configsFor(jestConfig)
+    const configs = this._configsFor(jestConfig)
     const { hooks } = configs
     const shouldStringifyContent = configs.shouldStringifyContent(filePath)
     const babelJest = shouldStringifyContent ? undefined : configs.babelJestTransformer
@@ -122,28 +134,25 @@ export class TsJestTransformer implements Transformer {
       result = ''
     } else if (!configs.parsedTsConfig.options.allowJs && isJsFile) {
       // we've got a '.js' but the compiler option `allowJs` is not set or set to false
-      this.logger.warn({ fileName: filePath }, interpolate(Errors.GotJsFileButAllowJsFalse, { path: filePath }))
+      this._logger.warn({ fileName: filePath }, interpolate(Errors.GotJsFileButAllowJsFalse, { path: filePath }))
 
       result = fileContent
     } else if (isJsFile || isTsFile) {
-      if (!TsJestTransformer._compiler) {
-        TsJestTransformer._compiler = new TsJestCompiler(configs)
-      }
       // transpile TS code (source maps are included)
-      result = TsJestTransformer._compiler.getCompiledOutput(fileContent, filePath)
+      result = this._compiler.getCompiledOutput(fileContent, filePath)
     } else {
       // we should not get called for files with other extension than js[x], ts[x] and d.ts,
       // TypeScript will bail if we try to compile, and if it was to call babel, users can
       // define the transform value with `babel-jest` for this extension instead
       const message = babelJest ? Errors.GotUnknownFileTypeWithBabel : Errors.GotUnknownFileTypeWithoutBabel
 
-      this.logger.warn({ fileName: filePath }, interpolate(message, { path: filePath }))
+      this._logger.warn({ fileName: filePath }, interpolate(message, { path: filePath }))
 
       result = fileContent
     }
     // calling babel-jest transformer
     if (babelJest) {
-      this.logger.debug({ fileName: filePath }, 'calling babel-jest processor')
+      this._logger.debug({ fileName: filePath }, 'calling babel-jest processor')
 
       // do not instrument here, jest will do it anyway afterwards
       result = babelJest.process(result, filePath, jestConfig, { ...transformOptions, instrument: false })
@@ -151,7 +160,7 @@ export class TsJestTransformer implements Transformer {
     // allows hooks (useful for internal testing)
     /* istanbul ignore next (cover by e2e) */
     if (hooks.afterProcess) {
-      this.logger.debug({ fileName: filePath, hookName: 'afterProcess' }, 'calling afterProcess hook')
+      this._logger.debug({ fileName: filePath, hookName: 'afterProcess' }, 'calling afterProcess hook')
 
       const newResult = hooks.afterProcess([fileContent, filePath, jestConfig, transformOptions], result)
       if (newResult !== undefined) {
@@ -175,23 +184,88 @@ export class TsJestTransformer implements Transformer {
     _jestConfigStr: string,
     transformOptions: CacheKeyOptions,
   ): string {
-    const configs = this.configsFor(transformOptions.config)
+    const configs = this._configsFor(transformOptions.config)
 
-    this.logger.debug({ fileName: filePath, transformOptions }, 'computing cache key for', filePath)
+    this._logger.debug({ fileName: filePath, transformOptions }, 'computing cache key for', filePath)
 
     // we do not instrument, ensure it is false all the time
     const { instrument = false, rootDir = configs.rootDir } = transformOptions
-
-    return sha1(
+    const constructingCacheKeyElements = [
       this._transformCfgStr,
-      '\x00',
+      CACHE_KEY_EL_SEPARATOR,
       rootDir,
-      '\x00',
+      CACHE_KEY_EL_SEPARATOR,
       `instrument:${instrument ? 'on' : 'off'}`,
-      '\x00',
+      CACHE_KEY_EL_SEPARATOR,
       fileContent,
-      '\x00',
+      CACHE_KEY_EL_SEPARATOR,
       filePath,
-    )
+    ]
+    if (!configs.isolatedModules) {
+      let resolvedModuleNames: string[]
+      if (this._depGraphs.get(filePath)?.fileContent === fileContent) {
+        this._logger.debug(
+          { fileName: filePath, transformOptions },
+          'getting resolved modules from disk caching or memory caching for',
+          filePath,
+        )
+
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        resolvedModuleNames = this._depGraphs
+          .get(filePath)!
+          .resolveModuleNames.filter((moduleName) => existsSync(moduleName))
+      } else {
+        this._logger.debug(
+          { fileName: filePath, transformOptions },
+          'getting resolved modules from TypeScript API for',
+          filePath,
+        )
+
+        const resolvedModuleMap = this._compiler.getResolvedModulesMap(fileContent, filePath)
+        resolvedModuleNames = resolvedModuleMap
+          ? [...resolvedModuleMap.values()]
+              .filter((resolvedModule) => resolvedModule !== undefined)
+              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+              .map((resolveModule) => resolveModule!.resolvedFileName)
+          : []
+        this._depGraphs.set(filePath, {
+          fileContent,
+          resolveModuleNames: resolvedModuleNames,
+        })
+        /* istanbul ignore next */
+        if (this._tsResolvedModulesCachePath) {
+          // Cache resolved modules to disk so next run can reuse it
+          void (async () => {
+            // eslint-disable-next-line @typescript-eslint/await-thenable
+            await writeFile(this._tsResolvedModulesCachePath as string, stringify([...this._depGraphs]), () => {})
+          })()
+        }
+      }
+      resolvedModuleNames.forEach((moduleName) => {
+        constructingCacheKeyElements.push(
+          CACHE_KEY_EL_SEPARATOR,
+          moduleName,
+          CACHE_KEY_EL_SEPARATOR,
+          statSync(moduleName).mtimeMs.toString(),
+        )
+      })
+    }
+
+    return sha1(...constructingCacheKeyElements)
+  }
+
+  protected _getFsCachedResolvedModules(configSet: ConfigSet): void {
+    if (!configSet.isolatedModules) {
+      const cacheDir = configSet.tsCacheDir
+      if (cacheDir) {
+        // Make sure the cache directory exists before continuing.
+        mkdirp.sync(cacheDir)
+        this._tsResolvedModulesCachePath = join(cacheDir, sha1('ts-jest-resolved-modules', CACHE_KEY_EL_SEPARATOR))
+        try {
+          const cachedTSResolvedModules = readFileSync(this._tsResolvedModulesCachePath, 'utf-8')
+          this._depGraphs = new Map(parse(cachedTSResolvedModules))
+        } catch (e) {}
+      }
+    }
   }
 }
