@@ -1,0 +1,43 @@
+/* stylelint-disable docusaurus/copyright-header */
+/**
+ * Any CSS included here will be global. The classic template
+ * bundles Infima by default. Infima is a CSS framework designed to
+ * work well for content-centric websites.
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800;900&family=Roboto:wght@400;500;700&display=swap');
+
+.col.footer__col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.main-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-right: 2rem;
+  padding-left: 2rem;
+  padding-top: 2rem;
+}
+
+.content-section {
+  margin-bottom: 1rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1)
+}
+
+.link {
+  color: #007bff
+}
+
+.link-icon {
+  margin-right: 0.5rem;
+}
+
+@media (min-width: 1280px) {
+  header, main {
+    width: 1032px;
+  }
+}
+
