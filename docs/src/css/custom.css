@@ -35,9 +35,13 @@
   margin-right: 0.5rem;
 }
 
-@media (min-width: 1280px) {
-  header, main {
+@media (min-width: 1080px) {
+  header {
     width: 1032px;
+  }
+
+  main {
+    max-width: 1032px;
   }
 }
 
