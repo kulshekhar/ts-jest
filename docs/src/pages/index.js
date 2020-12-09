@@ -44,7 +44,7 @@ function IntroHeading({ ...siteConfig }) {
       </p>
       <p>
         It supports all features of TypeScript including type-checking.{' '}
-        <a href="user/babel7-or-ts" className="link">
+        <a href="docs/babel7-or-ts" className="link">
           Read more about Babel 7<code>preset-typescript</code> <strong>vs</strong> TypeScript(and <code>ts-jest</code>)
         </a>
       </p>
@@ -92,12 +92,12 @@ function Home() {
           <h2>Usage</h2>
           <p>
             Refer to the{' '}
-            <a href="user/install" className="link">
+            <a href="docs/installation" className="link">
               {' '}
               installation{' '}
             </a>
             and{' '}
-            <a href="user/config" className="link">
+            <a href="docs/presets" className="link">
               {' '}
               configuration{' '}
             </a>{' '}
