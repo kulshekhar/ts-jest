@@ -1,7 +1,7 @@
 import type { TransformedSource, Transformer, TransformOptions } from '@jest/transform'
 import type { Config } from '@jest/types'
 import type { Logger } from 'bs-logger'
-import { existsSync, readFileSync, statSync, writeFile } from 'fs'
+import { existsSync, readFileSync, statSync, writeFileSync } from 'fs'
 import mkdirp from 'mkdirp'
 import { join } from 'path'
 
@@ -53,9 +53,10 @@ export class TsJestTransformer implements Transformer {
     this._logger.debug('created new transformer')
   }
 
-  protected _configsFor(jestConfig: Config.ProjectConfig): ConfigSet {
+  protected _configsFor(transformOptions: TransformOptions): ConfigSet {
+    const { config, cacheFS } = transformOptions
     const ccs: CachedConfigSet | undefined = TsJestTransformer._cachedConfigSets.find(
-      (cs) => cs.jestConfig.value === jestConfig,
+      (cs) => cs.jestConfig.value === config,
     )
     let configSet: ConfigSet
     if (ccs) {
@@ -64,7 +65,7 @@ export class TsJestTransformer implements Transformer {
       configSet = ccs.configSet
     } else {
       // try to look-it up by stringified version
-      const serializedJestCfg = stringify(jestConfig)
+      const serializedJestCfg = stringify(config)
       const serializedCcs = TsJestTransformer._cachedConfigSets.find(
         (cs) => cs.jestConfig.serialized === serializedJestCfg,
       )
@@ -72,7 +73,7 @@ export class TsJestTransformer implements Transformer {
         // update the object so that we can find it later
         // this happens because jest first calls getCacheKey with stringified version of
         // the config, and then it calls the transformer with the proper object
-        serializedCcs.jestConfig.value = jestConfig
+        serializedCcs.jestConfig.value = config
         this._transformCfgStr = serializedCcs.transformerCfgStr
         this._compiler = serializedCcs.compiler
         configSet = serializedCcs.configSet
@@ -80,8 +81,8 @@ export class TsJestTransformer implements Transformer {
         // create the new record in the index
         this._logger.info('no matching config-set found, creating a new one')
 
-        configSet = new ConfigSet(jestConfig)
-        const jest = { ...jestConfig }
+        configSet = new ConfigSet(config)
+        const jest = { ...config }
         // we need to remove some stuff from jest config
         // this which does not depend on config
         jest.name = undefined as any
@@ -95,9 +96,9 @@ export class TsJestTransformer implements Transformer {
             raw: configSet.parsedTsConfig.raw,
           },
         }).serialized
-        this._compiler = new TsJestCompiler(configSet)
+        this._compiler = new TsJestCompiler(configSet, cacheFS)
         TsJestTransformer._cachedConfigSets.push({
-          jestConfig: new JsonableValue(jestConfig),
+          jestConfig: new JsonableValue(config),
           configSet,
           transformerCfgStr: this._transformCfgStr,
           compiler: this._compiler,
@@ -117,7 +118,7 @@ export class TsJestTransformer implements Transformer {
 
     let result: string | TransformedSource
     const jestConfig = transformOptions.config
-    const configs = this._configsFor(jestConfig)
+    const configs = this._configsFor(transformOptions)
     const { hooks } = configs
     const shouldStringifyContent = configs.shouldStringifyContent(filePath)
     const babelJest = shouldStringifyContent ? undefined : configs.babelJestTransformer
@@ -177,7 +178,7 @@ export class TsJestTransformer implements Transformer {
    * @public
    */
   getCacheKey(fileContent: string, filePath: string, transformOptions: TransformOptions): string {
-    const configs = this._configsFor(transformOptions.config)
+    const configs = this._configsFor(transformOptions)
 
     this._logger.debug({ fileName: filePath, transformOptions }, 'computing cache key for', filePath)
 
@@ -194,7 +195,7 @@ export class TsJestTransformer implements Transformer {
       CACHE_KEY_EL_SEPARATOR,
       filePath,
     ]
-    if (!configs.isolatedModules) {
+    if (!configs.isolatedModules && this._tsResolvedModulesCachePath) {
       let resolvedModuleNames: string[]
       if (this._depGraphs.get(filePath)?.fileContent === fileContent) {
         this._logger.debug(
@@ -225,14 +226,7 @@ export class TsJestTransformer implements Transformer {
           fileContent,
           resolveModuleNames: resolvedModuleNames,
         })
-        /* istanbul ignore next */
-        if (this._tsResolvedModulesCachePath) {
-          // Cache resolved modules to disk so next run can reuse it
-          void (async () => {
-            // eslint-disable-next-line @typescript-eslint/await-thenable
-            await writeFile(this._tsResolvedModulesCachePath as string, stringify([...this._depGraphs]), () => {})
-          })()
-        }
+        writeFileSync(this._tsResolvedModulesCachePath, stringify([...this._depGraphs]))
       }
       resolvedModuleNames.forEach((moduleName) => {
         constructingCacheKeyElements.push(

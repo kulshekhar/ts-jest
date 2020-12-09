@@ -3,7 +3,7 @@ import type { Logger } from 'bs-logger'
 import { resolve } from 'path'
 
 import { ConfigSet } from '../config/config-set'
-import type { TsJestGlobalOptions } from '../types'
+import type { StringMap, TsJestGlobalOptions } from '../types'
 import type { ImportReasons } from '../utils/messages'
 import { TsJestCompiler } from '../compiler/ts-jest-compiler'
 
@@ -59,15 +59,18 @@ export function createConfigSet({
 }
 
 // not really unit-testing here, but it's hard to mock all those values :-D
-export function makeCompiler({
-  jestConfig,
-  tsJestConfig,
-  parentConfig,
-}: {
-  jestConfig?: Partial<Config.ProjectConfig>
-  tsJestConfig?: TsJestGlobalOptions
-  parentConfig?: TsJestGlobalOptions
-} = {}): TsJestCompiler {
+export function makeCompiler(
+  {
+    jestConfig,
+    tsJestConfig,
+    parentConfig,
+  }: {
+    jestConfig?: Partial<Config.ProjectConfig>
+    tsJestConfig?: TsJestGlobalOptions
+    parentConfig?: TsJestGlobalOptions
+  } = {},
+  jestCacheFS: StringMap = new Map<string, string>(),
+): TsJestCompiler {
   tsJestConfig = { ...tsJestConfig }
   tsJestConfig.diagnostics = {
     ...(tsJestConfig.diagnostics as any),
@@ -82,5 +85,5 @@ export function makeCompiler({
   }
   const cs = createConfigSet({ jestConfig, tsJestConfig, parentConfig, resolve: null })
 
-  return new TsJestCompiler(cs)
+  return new TsJestCompiler(cs, jestCacheFS)
 }

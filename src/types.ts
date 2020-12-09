@@ -173,6 +173,10 @@ export interface TsJestConfig {
 }
 
 export type ResolvedModulesMap = Map<string, _ts.ResolvedModuleFull | undefined> | undefined
+/**
+ * @internal
+ */
+export type StringMap = Map<string, string>
 
 export interface CompilerInstance {
   getResolvedModulesMap(fileContent: string, fileName: string): ResolvedModulesMap

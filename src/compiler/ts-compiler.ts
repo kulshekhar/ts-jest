@@ -13,14 +13,9 @@ import type {
 import { updateOutput } from './compiler-utils'
 import type { ConfigSet } from '../config/config-set'
 import { LINE_FEED } from '../constants'
-import type { CompilerInstance, ResolvedModulesMap, TTypeScript } from '../types'
+import type { CompilerInstance, ResolvedModulesMap, StringMap, TTypeScript } from '../types'
 import { rootLogger } from '../utils/logger'
 import { Errors, interpolate } from '../utils/messages'
-
-interface TSFile {
-  text?: string
-  version: number
-}
 
 /**
  * @internal
@@ -29,15 +24,17 @@ export class TsCompiler implements CompilerInstance {
   private readonly _logger: Logger
   private readonly _ts: TTypeScript
   private readonly _parsedTsConfig: ParsedCommandLine
-  private readonly _cacheFS: Map<string, TSFile> = new Map<string, TSFile>()
-  private _cachedReadFile: any
+  private readonly _compilerCacheFS: Map<string, number> = new Map<string, number>()
+  private readonly _jestCacheFS: StringMap
+  private _cachedReadFile: ((fileName: string) => string | undefined) | undefined
   private _projectVersion = 1
   private _languageService: LanguageService | undefined
 
-  constructor(private readonly configSet: ConfigSet) {
+  constructor(readonly configSet: ConfigSet, readonly jestCacheFS: StringMap) {
     this._ts = configSet.compilerModule
     this._logger = rootLogger.child({ namespace: 'ts-compiler' })
     this._parsedTsConfig = this.configSet.parsedTsConfig as ParsedCommandLine
+    this._jestCacheFS = jestCacheFS
     if (!this.configSet.isolatedModules) {
       this._createLanguageService()
     }
@@ -52,11 +49,7 @@ export class TsCompiler implements CompilerInstance {
     // Initialize memory cache for typescript compiler
     this._parsedTsConfig.fileNames
       .filter((fileName) => !this.configSet.isTestFile(fileName))
-      .forEach((fileName) => {
-        this._cacheFS.set(fileName, {
-          version: 0,
-        })
-      })
+      .forEach((fileName) => this._compilerCacheFS.set(fileName, 0))
     this._cachedReadFile = this._logger.wrap(serviceHostTraceCtx, 'readFile', memoize(this._ts.sys.readFile))
     /* istanbul ignore next */
     const moduleResolutionHost = {
@@ -75,10 +68,10 @@ export class TsCompiler implements CompilerInstance {
     /* istanbul ignore next */
     const serviceHost: LanguageServiceHost = {
       getProjectVersion: () => String(this._projectVersion),
-      getScriptFileNames: () => [...this._cacheFS.keys()],
+      getScriptFileNames: () => [...this._compilerCacheFS.keys()],
       getScriptVersion: (fileName: string) => {
         const normalizedFileName = normalize(fileName)
-        const version = this._cacheFS.get(normalizedFileName)?.version
+        const version = this._compilerCacheFS.get(normalizedFileName)
 
         // We need to return `undefined` and not a string here because TypeScript will use
         // `getScriptVersion` and compare against their own version - which can be `undefined`.
@@ -95,12 +88,14 @@ export class TsCompiler implements CompilerInstance {
 
         // Read contents from TypeScript memory cache.
         if (!hit) {
-          this._cacheFS.set(normalizedFileName, {
-            text: this._cachedReadFile(normalizedFileName),
-            version: 1,
-          })
+          const fileContent =
+            this._jestCacheFS.get(normalizedFileName) ?? this._cachedReadFile?.(normalizedFileName) ?? undefined
+          if (fileContent) {
+            this._jestCacheFS.set(normalizedFileName, fileContent)
+            this._compilerCacheFS.set(normalizedFileName, 1)
+          }
         }
-        const contents = this._cacheFS.get(normalizedFileName)?.text
+        const contents = this._jestCacheFS.get(normalizedFileName)
 
         if (contents === undefined) return
 
@@ -140,7 +135,7 @@ export class TsCompiler implements CompilerInstance {
     this._updateMemoryCache(fileContent, fileName)
 
     // See https://github.com/microsoft/TypeScript/blob/master/src/compiler/utilities.ts#L164
-    return (this._languageService?.getProgram()?.getSourceFile(fileName) as any).resolvedModules
+    return (this._languageService?.getProgram()?.getSourceFile(fileName) as any)?.resolvedModules
   }
 
   getCompiledOutput(fileContent: string, fileName: string): string {
@@ -187,8 +182,11 @@ export class TsCompiler implements CompilerInstance {
   }
 
   private _isFileInCache(fileName: string): boolean {
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    return this._cacheFS.has(fileName) && this._cacheFS.get(fileName)!.version !== 0
+    return (
+      this._jestCacheFS.has(fileName) &&
+      this._compilerCacheFS.has(fileName) &&
+      this._compilerCacheFS.get(fileName) !== 0
+    )
   }
 
   /* istanbul ignore next */
@@ -198,21 +196,14 @@ export class TsCompiler implements CompilerInstance {
     let shouldIncrementProjectVersion = false
     const hit = this._isFileInCache(fileName)
     if (!hit) {
-      this._cacheFS.set(fileName, {
-        text: contents,
-        version: 1,
-      })
+      this._compilerCacheFS.set(fileName, 1)
       shouldIncrementProjectVersion = true
     } else {
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      const cachedFileName = this._cacheFS.get(fileName)!
-      const previousContents = cachedFileName.text
+      const prevVersion = this._compilerCacheFS.get(fileName) ?? 0
+      const previousContents = this._jestCacheFS.get(fileName)
       // Avoid incrementing cache when nothing has changed.
       if (previousContents !== contents) {
-        this._cacheFS.set(fileName, {
-          text: contents,
-          version: cachedFileName.version + 1,
-        })
+        this._compilerCacheFS.set(fileName, prevVersion + 1)
         // Only bump project version when file is modified in cache, not when discovered for the first time
         if (hit) shouldIncrementProjectVersion = true
       }
