@@ -1,54 +1,61 @@
-# This is a basic workflow to help you get started with Actions
-
 name: doc-generator
 
-# Controls when the action will run. Triggers the workflow on push or pull request
-# events but only for the master branch
 on:
   push:
     branches: [ master ]
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
+  checks:
+    if: github.event_name != 'push'
     runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      - name: install plantuml
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+      - name: Test Build
         run: |
-          sudo apt-get update -y
-          sudo apt-get install -y plantuml
-
-      - uses: actions/setup-ruby@v1.0.0
-
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
-
-      - name: setup bundler and install dependencies
+          if [ -e yarn.lock ]; then
+          yarn install --frozen-lockfile
+          elif [ -e package-lock.json ]; then
+          npm ci
+          else
+          npm i
+          fi
+          npm run build
+  gh-release:
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+      - name: Add key to allow access to repository
+        env:
+          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
         run: |
-          gem install bundler:1.17.3
-          cd docs
-          bundle install
-
-      - name: link documentation
-        # gets gh-pages branch and links that to docs/_site directory
+          mkdir -p ~/.ssh
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+          echo "${{ secrets.GH_PAGES_DEPLOY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          cat <<EOT >> ~/.ssh/config
+          Host github.com
+          HostName github.com
+          IdentityFile ~/.ssh/id_rsa
+          EOT
+      - name: Release to GitHub Pages
+        env:
+          USE_SSH: true
+          GIT_USER: git
         run: |
-          git fetch --no-tags --prune --progress --no-recurse-submodules --depth=1 origin gh-pages
-          git worktree add docs/_site gh-pages
-
-      - name: generate documentation
-        run: |
-          cd docs
-          bundle exec jekyll build
-
-      - name: push generated documentation
-        run: |
-          cd docs/_site
-          git config user.name "Doc Bot"
-          git config user.email noreply@github.com
-          git add .
-          git commit -m "[BOT] 🤖 updates doc. No humans needed."
-          git push
+          git config --global user.email "actions@gihub.com"
+          git config --global user.name "gh-actions"
+          if [ -e yarn.lock ]; then
+          yarn install --frozen-lockfile
+          elif [ -e package-lock.json ]; then
+          npm ci
+          else
+          npm i
+          fi
+          npx docusaurus deploy

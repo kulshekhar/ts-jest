@@ -1,33 +1,33 @@
-# `ts-jest` Documentation
+# Website
 
-## Setup
+This website is built using [Docusaurus 2](https://v2.docusaurus.io/), a modern static website generator.
 
-Make sure you have latest Ruby, then make sure you have the bundler:
+### Installation
 
-```sh
-gem install bundler
+```
+$ yarn
 ```
 
-You will also need [PlantUML](http://plantuml.com/download) to build the docs
+### Local Development
 
-Finally you can install requirements:
-
-```sh
-# from the root of this project
-cd docs
-bundle install
+```
+$ yarn start
 ```
 
-To link the build directory to the `gh-pages` branch, ensure the `docs/_site` directory does NOT exists and run:
+This command starts a local development server and open up a browser window. Most changes are reflected live without having to restart the server.
 
-```sh
-npm run doc:link
+### Build
+
+```
+$ yarn build
 ```
 
-## Serve the docs locally with live-reload
+This command generates static content into the `build` directory and can be served using any static contents hosting service.
 
-To preview your changes with live-reload, run this:
+### Deployment
 
-```sh
-npm run doc
 ```
+$ GIT_USER=<Your GitHub username> USE_SSH=true yarn deploy
+```
+
+If you are using GitHub pages for hosting, this command is a convenient way to build the website and push to the `gh-pages` branch.
