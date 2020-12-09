@@ -5,13 +5,13 @@
   "devDependencies": {
     "@types/jest": "26.0.16",
     "@types/node": "12.19.0",
-    "jest": "26.6.3",
+    "jest": "27.0.0-next.2",
     "typescript": "4.1.2"
   },
   "wantedDependencies": {
     "@types/jest": "latest",
     "@types/node": "12",
-    "jest": "latest",
+    "jest": "next",
     "typescript": "latest"
   },
   "resolutions": {
