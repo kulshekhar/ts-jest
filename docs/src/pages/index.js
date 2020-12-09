@@ -6,7 +6,7 @@ function IntroHeading({ ...siteConfig }) {
   return (
     <div className="content-section" align="center">
       <p>
-        <img src="../../static/img/logo.png" title="ts-jest Log" width="128" height="128" />
+        <img src="img/logo.png" title="ts-jest Log" width="128" height="128" />
       </p>
       <h1>ts-jest</h1>
       <p>{siteConfig.tagline}</p>
@@ -57,19 +57,19 @@ function IntroDescription() {
     <div className="content-section">
       <p>
         <a href="https://bit.ly/3bRHFPQ" className="link">
-          <img src="../../static/img/slack.png" align="left" height="24" className="link-icon" />
+          <img src="img/slack.png" align="left" height="24" className="link-icon" />
           Ask for some help in the <code>ts-jest</code> community of Slack
         </a>
       </p>
       <p>
         <a href="https://github.com/kulshekhar/ts-jest/blob/master/TROUBLESHOOTING.md" className="link">
-          <img src="../../static/img/troubleshooting.png" align="left" height="24" className="link-icon" />
+          <img src="img/troubleshooting.png" align="left" height="24" className="link-icon" />
           Before reporting any issue, be sure to check the troubleshooting page
         </a>
       </p>
       <p>
         <a href="https://github.com/kulshekhar/ts-jest/issues/223" className="link">
-          <img src="../../static/img/pull-request.png" align="left" height="24" className="link-icon" />
+          <img src="img/pull-request.png" align="left" height="24" className="link-icon" />
           Looking for collaborators. Want to help improve `ts-jest`?
         </a>
       </p>
