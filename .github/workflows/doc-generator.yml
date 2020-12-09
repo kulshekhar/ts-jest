@@ -15,6 +15,7 @@ jobs:
           node-version: '12.x'
       - name: Test Build
         run: |
+          cd docs
           if [ -e yarn.lock ]; then
           yarn install --frozen-lockfile
           elif [ -e package-lock.json ]; then
@@ -44,11 +45,17 @@ jobs:
           HostName github.com
           IdentityFile ~/.ssh/id_rsa
           EOT
+      - name: link documentation
+        # gets gh-pages branch and links that to docs/_site directory
+        run: |
+          git fetch --no-tags --prune --progress --no-recurse-submodules --depth=1 origin gh-pages
+          git worktree add docs/build gh-pages
       - name: Release to GitHub Pages
         env:
           USE_SSH: true
           GIT_USER: git
         run: |
+          cd docs
           git config --global user.email "actions@gihub.com"
           git config --global user.name "gh-actions"
           if [ -e yarn.lock ]; then
