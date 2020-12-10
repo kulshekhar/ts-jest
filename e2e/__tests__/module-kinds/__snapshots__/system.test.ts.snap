@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`run with options: {"module":"system","allowSyntheticDefaultImports":false} 1`] = `
+exports[`Module system run with options: {"module":"system","allowSyntheticDefaultImports":false} with template default 1`] = `
   × jest --no-cache
   ↳ exit code: 1
   ===[ STDOUT ]===================================================================
@@ -44,7 +44,7 @@ exports[`run with options: {"module":"system","allowSyntheticDefaultImports":fal
   ================================================================================
 `;
 
-exports[`run with options: {"module":"system","allowSyntheticDefaultImports":true} 1`] = `
+exports[`Module system run with options: {"module":"system","allowSyntheticDefaultImports":true} with template default 1`] = `
   × jest --no-cache
   ↳ exit code: 1
   ===[ STDOUT ]===================================================================
@@ -78,7 +78,7 @@ exports[`run with options: {"module":"system","allowSyntheticDefaultImports":tru
   ================================================================================
 `;
 
-exports[`run with options: {"module":"system","esModuleInterop":false} 1`] = `
+exports[`Module system run with options: {"module":"system","esModuleInterop":false} with template default 1`] = `
   × jest --no-cache
   ↳ exit code: 1
   ===[ STDOUT ]===================================================================
@@ -113,7 +113,7 @@ exports[`run with options: {"module":"system","esModuleInterop":false} 1`] = `
   ================================================================================
 `;
 
-exports[`run with options: {"module":"system","esModuleInterop":true} 1`] = `
+exports[`Module system run with options: {"module":"system","esModuleInterop":true} with template default 1`] = `
   × jest --no-cache
   ↳ exit code: 1
   ===[ STDOUT ]===================================================================
@@ -158,7 +158,7 @@ exports[`run with options: {"module":"system","esModuleInterop":true} 1`] = `
   ================================================================================
 `;
 
-exports[`run with options: {"module":"system"} 1`] = `
+exports[`Module system run with options: {"module":"system"} with template default 1`] = `
   × jest --no-cache
   ↳ exit code: 1
   ===[ STDOUT ]===================================================================

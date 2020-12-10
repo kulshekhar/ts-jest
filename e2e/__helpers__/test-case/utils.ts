@@ -55,3 +55,5 @@ export function escapeRegex(s: string): string {
 export function enableOptimizations(): boolean {
   return !!process.env.TS_JEST_E2E_OPTIMIZATIONS
 }
+
+export const nodeWithESMSupport = process.version.startsWith('v12') || process.version.startsWith('v14')

@@ -692,6 +692,7 @@ describe('_resolveTsConfig', () => {
         expect(parseConfig.mock.calls[0][4]).toBe(tscfgPathStub)
         expect(conf.options.allowSyntheticDefaultImports).toEqual(true)
         expect(conf.errors).toMatchSnapshot()
+        expect(cs.parsedTsConfig.options.module).toEqual(ts.ModuleKind.CommonJS)
       })
 
       it('should use given tsconfig path', () => {
@@ -703,6 +704,7 @@ describe('_resolveTsConfig', () => {
             rootDir: '/root',
             cwd: '/cwd',
             globals: { 'ts-jest': { tsconfig: 'tsconfig.bar.json' } },
+            extensionsToTreatAsEsm: ['.ts'],
           } as any,
         })
 
@@ -713,6 +715,7 @@ describe('_resolveTsConfig', () => {
         expect(parseConfig.mock.calls[0][2]).toBe('/foo')
         expect(parseConfig.mock.calls[0][4]).toBe(tscfgPathStub)
         expect(conf.errors).toMatchSnapshot()
+        expect(cs.parsedTsConfig.options.module).not.toEqual(ts.ModuleKind.CommonJS)
       })
     })
 
@@ -753,6 +756,7 @@ describe('_resolveTsConfig', () => {
         expect(parseConfig.mock.calls[0][4]).toBe(tscfgPathStub)
         expect(conf.options.allowSyntheticDefaultImports).toEqual(true)
         expect(conf.errors).toMatchSnapshot()
+        expect(cs.parsedTsConfig.options.module).toEqual(ts.ModuleKind.CommonJS)
       })
 
       it('should use given tsconfig path', () => {
@@ -764,6 +768,7 @@ describe('_resolveTsConfig', () => {
             rootDir: '/root',
             cwd: '/cwd',
             globals: { 'ts-jest': { tsconfig: 'tsconfig.bar.json' } },
+            extensionsToTreatAsEsm: ['.ts'],
           } as any,
         })
 
@@ -774,6 +779,7 @@ describe('_resolveTsConfig', () => {
         expect(parseConfig.mock.calls[0][2]).toBe('/foo')
         expect(parseConfig.mock.calls[0][4]).toBe(tscfgPathStub)
         expect(conf.errors).toMatchSnapshot()
+        expect(cs.parsedTsConfig.options.module).not.toEqual(ts.ModuleKind.CommonJS)
       })
     })
 
@@ -814,6 +820,7 @@ describe('_resolveTsConfig', () => {
         expect(parseConfig.mock.calls[0][4]).toBe(tscfgPathStub)
         expect(conf.options.allowSyntheticDefaultImports).toBeUndefined()
         expect(conf.errors).toEqual([])
+        expect(cs.parsedTsConfig.options.module).toEqual(ts.ModuleKind.CommonJS)
       })
 
       it('should use given tsconfig path', () => {
@@ -825,6 +832,7 @@ describe('_resolveTsConfig', () => {
             rootDir: '/root',
             cwd: '/cwd',
             globals: { 'ts-jest': { tsconfig: 'tsconfig.bar.json' } },
+            extensionsToTreatAsEsm: ['.ts'],
           } as any,
         })
 
@@ -835,6 +843,7 @@ describe('_resolveTsConfig', () => {
         expect(parseConfig.mock.calls[0][2]).toBe('/foo')
         expect(parseConfig.mock.calls[0][4]).toBe(tscfgPathStub)
         expect(conf.errors).toEqual([])
+        expect(cs.parsedTsConfig.options.module).not.toEqual(ts.ModuleKind.CommonJS)
       })
     })
 
@@ -875,6 +884,7 @@ describe('_resolveTsConfig', () => {
         expect(parseConfig.mock.calls[0][4]).toBe(tscfgPathStub)
         expect(conf.errors).toEqual([])
         expect(conf.options.allowSyntheticDefaultImports).toEqual(true)
+        expect(cs.parsedTsConfig.options.module).toEqual(ts.ModuleKind.CommonJS)
       })
 
       it('should use given tsconfig path', () => {
@@ -886,6 +896,7 @@ describe('_resolveTsConfig', () => {
             rootDir: '/root',
             cwd: '/cwd',
             globals: { 'ts-jest': { tsconfig: 'tsconfig.bar.json' } },
+            extensionsToTreatAsEsm: ['.ts'],
           } as any,
         })
 
@@ -897,6 +908,7 @@ describe('_resolveTsConfig', () => {
         expect(parseConfig.mock.calls[0][4]).toBe(tscfgPathStub)
         expect(conf.errors).toEqual([])
         expect(conf.options.allowSyntheticDefaultImports).toEqual(true)
+        expect(cs.parsedTsConfig.options.module).not.toEqual(ts.ModuleKind.CommonJS)
       })
     })
   })

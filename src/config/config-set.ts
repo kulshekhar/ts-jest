@@ -111,14 +111,10 @@ export class ConfigSet {
   readonly compilerModule: TTypeScript
   readonly isolatedModules: boolean
   readonly cwd: string
+  readonly rootDir: string
   tsCacheDir: string | undefined
   parsedTsConfig!: ParsedCommandLine | Record<string, any>
   customTransformers: CustomTransformers = Object.create(null)
-  readonly rootDir: string
-  /**
-   * @internal
-   */
-  private _jestCfg!: Config.ProjectConfig
   /**
    * @internal
    */
@@ -130,14 +126,27 @@ export class ConfigSet {
   /**
    * @internal
    */
+  private _jestCfg!: Config.ProjectConfig
+  /**
+   * @internal
+   */
   private _diagnostics!: TsJestDiagnosticsCfg
   /**
    * @internal
    */
   private _stringifyContentRegExp: RegExp | undefined
+  /**
+   * @internal
+   */
   private readonly _matchablePatterns: (string | RegExp)[]
+  /**
+   * @internal
+   */
   private readonly _isMatch: (str: Config.Path) => boolean
-  protected _overriddenCompilerOptions: Partial<CompilerOptions> = {
+  /**
+   * @internal
+   */
+  private readonly _overriddenCompilerOptions: Partial<CompilerOptions> = {
     // we handle sourcemaps this way and not another
     sourceMap: true,
     inlineSourceMap: false,
@@ -158,18 +167,7 @@ export class ConfigSet {
     tsBuildInfoFile: undefined,
   }
 
-  constructor(
-    /**
-     * @internal
-     */
-    private readonly jestConfig: Config.ProjectConfig,
-    /**
-     * Mainly for testing logging
-     *
-     * @internal
-     */
-    private readonly parentLogger?: Logger,
-  ) {
+  constructor(readonly jestConfig: Config.ProjectConfig, readonly parentLogger?: Logger) {
     this.logger = this.parentLogger
       ? this.parentLogger.child({ [LogContexts.namespace]: 'config' })
       : rootLogger.child({ namespace: 'config' })
@@ -248,7 +246,9 @@ export class ConfigSet {
       this.logger.debug({ babelConfig: this.babelConfig }, 'normalized babel config via ts-jest option')
     }
     if (!this.babelConfig) {
-      this._overriddenCompilerOptions.module = this.compilerModule.ModuleKind.CommonJS
+      this._overriddenCompilerOptions.module = this.jestConfig.extensionsToTreatAsEsm.length
+        ? undefined
+        : this.compilerModule.ModuleKind.CommonJS
     } else {
       this.babelJestTransformer = importer
         .babelJest(ImportReasons.BabelJest)
@@ -421,7 +421,7 @@ export class ConfigSet {
     const defaultModule = [ts.ScriptTarget.ES3, ts.ScriptTarget.ES5].includes(target)
       ? ts.ModuleKind.CommonJS
       : ts.ModuleKind.ESNext
-    const moduleValue = finalOptions.module == null ? defaultModule : finalOptions.module
+    const moduleValue = finalOptions.module ?? defaultModule
     if (
       'module' in forcedOptions &&
       moduleValue !== forcedOptions.module &&

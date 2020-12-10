@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`run with options: {"module":"commonjs","allowSyntheticDefaultImports":false} 1`] = `
+exports[`Module commonjs run with options: {"module":"commonjs","allowSyntheticDefaultImports":false} with template default 1`] = `
   × jest --no-cache
   ↳ exit code: 1
   ===[ STDOUT ]===================================================================
@@ -43,7 +43,7 @@ exports[`run with options: {"module":"commonjs","allowSyntheticDefaultImports":f
   ================================================================================
 `;
 
-exports[`run with options: {"module":"commonjs","allowSyntheticDefaultImports":true} 1`] = `
+exports[`Module commonjs run with options: {"module":"commonjs","allowSyntheticDefaultImports":true} with template default 1`] = `
   × jest --no-cache
   ↳ exit code: 1
   ===[ STDOUT ]===================================================================
@@ -77,7 +77,7 @@ exports[`run with options: {"module":"commonjs","allowSyntheticDefaultImports":t
   ================================================================================
 `;
 
-exports[`run with options: {"module":"commonjs","esModuleInterop":false} 1`] = `
+exports[`Module commonjs run with options: {"module":"commonjs","esModuleInterop":false} with template default 1`] = `
   × jest --no-cache
   ↳ exit code: 1
   ===[ STDOUT ]===================================================================
@@ -120,7 +120,7 @@ exports[`run with options: {"module":"commonjs","esModuleInterop":false} 1`] = `
   ================================================================================
 `;
 
-exports[`run with options: {"module":"commonjs","esModuleInterop":true} 1`] = `
+exports[`Module commonjs run with options: {"module":"commonjs","esModuleInterop":true} with template default 1`] = `
   × jest --no-cache
   ↳ exit code: 1
   ===[ STDOUT ]===================================================================
@@ -165,7 +165,7 @@ exports[`run with options: {"module":"commonjs","esModuleInterop":true} 1`] = `
   ================================================================================
 `;
 
-exports[`run with options: {"module":"commonjs"} 1`] = `
+exports[`Module commonjs run with options: {"module":"commonjs"} with template default 1`] = `
   × jest --no-cache
   ↳ exit code: 1
   ===[ STDOUT ]===================================================================
