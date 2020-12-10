@@ -31,7 +31,7 @@ beforeEach(() => {
 describe('TsJestTransformer', () => {
   describe('_configsFor', () => {
     test('should return the same config set for same values with jest config string is not in configSetsIndex', () => {
-      const obj1 = { cwd: '/foo/.', rootDir: '/bar//dummy/..', globals: {} }
+      const obj1 = { config: { cwd: '/foo/.', rootDir: '/bar//dummy/..', globals: {} } }
       // @ts-expect-error testing purpose
       const cs3 = new TsJestTransformer()._configsFor(obj1 as any)
 
@@ -40,7 +40,7 @@ describe('TsJestTransformer', () => {
     })
 
     test('should return the same config set for same values with jest config string in configSetsIndex', () => {
-      const obj1 = { cwd: '/foo/.', rootDir: '/bar//dummy/..', globals: {} }
+      const obj1 = { config: { cwd: '/foo/.', rootDir: '/bar//dummy/..', globals: {} } }
       const obj2 = { ...obj1 }
       // @ts-expect-error testing purpose
       const cs1 = new TsJestTransformer()._configsFor(obj1 as any)
@@ -128,14 +128,25 @@ describe('TsJestTransformer', () => {
         rootDir: '/foo',
       },
     } as any
+    const transformOptionsWithCache = {
+      ...input.transformOptions,
+      config: {
+        ...input.transformOptions.config,
+        cache: true,
+        cacheDirectory: cacheDir,
+      },
+    }
     const depGraphs: ResolvedModulesMap = new Map<string, ResolvedModuleFull | undefined>()
 
     beforeEach(() => {
       depGraphs.clear()
+      // @ts-expect-error testing purpose
+      TsJestTransformer._cachedConfigSets = []
       tr = new TsJestTransformer()
     })
 
     afterEach(() => {
+      removeSync(cacheDir)
       jest.restoreAllMocks()
     })
 
@@ -165,8 +176,8 @@ describe('TsJestTransformer', () => {
       depGraphs.set(input.fileName, resolvedModule)
       jest.spyOn(TsJestCompiler.prototype, 'getResolvedModulesMap').mockReturnValueOnce(depGraphs)
 
-      const cacheKey1 = tr.getCacheKey(input.fileContent, input.fileName, input.transformOptions)
-      const cacheKey2 = tr.getCacheKey(input.fileContent, input.fileName, input.transformOptions)
+      const cacheKey1 = tr.getCacheKey(input.fileContent, input.fileName, transformOptionsWithCache)
+      const cacheKey2 = tr.getCacheKey(input.fileContent, input.fileName, transformOptionsWithCache)
 
       expect(cacheKey1).toEqual(cacheKey2)
       expect(TsJestCompiler.prototype.getResolvedModulesMap).toHaveBeenCalledTimes(1)
@@ -187,7 +198,7 @@ describe('TsJestTransformer', () => {
 
       jest.spyOn(TsJestCompiler.prototype, 'getResolvedModulesMap').mockReturnValueOnce(depGraphs)
       const tr1 = new TsJestTransformer()
-      const cacheKey2 = tr1.getCacheKey(input.fileContent, input.fileName, input.transformOptions)
+      const cacheKey2 = tr1.getCacheKey(input.fileContent, input.fileName, transformOptionsWithCache)
 
       expect(TsJestCompiler.prototype.getResolvedModulesMap).toHaveBeenCalledTimes(1)
       expect(TsJestCompiler.prototype.getResolvedModulesMap).toHaveBeenCalledWith(input.fileContent, input.fileName)
@@ -198,11 +209,11 @@ describe('TsJestTransformer', () => {
       depGraphs.set(input.fileName, resolvedModule)
       jest.spyOn(TsJestCompiler.prototype, 'getResolvedModulesMap').mockReturnValueOnce(depGraphs)
 
-      const cacheKey1 = tr.getCacheKey(input.fileContent, input.fileName, input.transformOptions)
+      const cacheKey1 = tr.getCacheKey(input.fileContent, input.fileName, transformOptionsWithCache)
 
       jest.spyOn(TsJestCompiler.prototype, 'getResolvedModulesMap').mockReturnValueOnce(depGraphs)
       const newFileContent = 'const foo = 1'
-      const cacheKey2 = tr.getCacheKey(newFileContent, input.fileName, input.transformOptions)
+      const cacheKey2 = tr.getCacheKey(newFileContent, input.fileName, transformOptionsWithCache)
 
       expect(cacheKey1).not.toEqual(cacheKey2)
       expect(TsJestCompiler.prototype.getResolvedModulesMap).toHaveBeenCalledTimes(2)
@@ -218,10 +229,10 @@ describe('TsJestTransformer', () => {
       depGraphs.set(input.fileName, resolvedModule)
       jest.spyOn(TsJestCompiler.prototype, 'getResolvedModulesMap').mockReturnValueOnce(depGraphs)
 
-      const cacheKey1 = tr.getCacheKey(input.fileContent, input.fileName, input.transformOptions)
+      const cacheKey1 = tr.getCacheKey(input.fileContent, input.fileName, transformOptionsWithCache)
 
       jest.spyOn(fs, 'existsSync').mockReturnValueOnce(false)
-      const cacheKey2 = tr.getCacheKey(input.fileContent, input.fileName, input.transformOptions)
+      const cacheKey2 = tr.getCacheKey(input.fileContent, input.fileName, transformOptionsWithCache)
 
       expect(cacheKey1).not.toEqual(cacheKey2)
       expect(TsJestCompiler.prototype.getResolvedModulesMap).toHaveBeenCalledTimes(1)

@@ -1,5 +1,6 @@
 import { readFileSync } from 'fs'
 import { LogLevels } from 'bs-logger'
+import { join } from 'path'
 
 import { TS_JEST_OUT_DIR } from '../config/config-set'
 import { makeCompiler } from '../__helpers__/fakers'
@@ -163,6 +164,7 @@ const t: string = f(5)
 
   describe('isolatedModule false', () => {
     const baseTsJestConfig = { tsconfig: require.resolve('../../tsconfig.spec.json') }
+    const jestCacheFS = new Map<string, string>()
 
     beforeEach(() => {
       logTarget.clear()
@@ -171,11 +173,15 @@ const t: string = f(5)
     describe('allowJs option', () => {
       const fileName = 'test-allow-js.js'
       const source = 'export default 42'
+      jestCacheFS.set(fileName, source)
 
       it('should compile js file for allowJs true with outDir', () => {
-        const compiler = makeCompiler({
-          tsJestConfig: { tsconfig: { allowJs: true, outDir: '$$foo$$' } },
-        })
+        const compiler = makeCompiler(
+          {
+            tsJestConfig: { tsconfig: { allowJs: true, outDir: '$$foo$$' } },
+          },
+          jestCacheFS,
+        )
 
         const compiled = compiler.getCompiledOutput(source, fileName)
 
@@ -183,9 +189,12 @@ const t: string = f(5)
       })
 
       it('should compile js file for allowJs true without outDir', () => {
-        const compiler = makeCompiler({
-          tsJestConfig: { tsconfig: { allowJs: true } },
-        })
+        const compiler = makeCompiler(
+          {
+            tsJestConfig: { tsconfig: { allowJs: true } },
+          },
+          jestCacheFS,
+        )
         const compiled = compiler.getCompiledOutput(source, fileName)
 
         expect(new ProcessedSource(compiled, fileName)).toMatchSnapshot()
@@ -199,15 +208,19 @@ const t: string = f(5)
           return <>Test</>
         }
       `
+      jestCacheFS.set(fileName, source)
 
       it('should compile tsx file for jsx preserve', () => {
-        const compiler = makeCompiler({
-          tsJestConfig: {
-            tsconfig: {
-              jsx: 'preserve' as any,
+        const compiler = makeCompiler(
+          {
+            tsJestConfig: {
+              tsconfig: {
+                jsx: 'preserve' as any,
+              },
             },
           },
-        })
+          jestCacheFS,
+        )
 
         const compiled = compiler.getCompiledOutput(source, fileName)
 
@@ -215,13 +228,16 @@ const t: string = f(5)
       })
 
       it('should compile tsx file for other jsx options', () => {
-        const compiler = makeCompiler({
-          tsJestConfig: {
-            tsconfig: {
-              jsx: 'react' as any,
+        const compiler = makeCompiler(
+          {
+            tsJestConfig: {
+              tsconfig: {
+                jsx: 'react' as any,
+              },
             },
           },
-        })
+          jestCacheFS,
+        )
         const compiled = compiler.getCompiledOutput(source, fileName)
 
         expect(new ProcessedSource(compiled, fileName)).toMatchSnapshot()
@@ -231,9 +247,13 @@ const t: string = f(5)
     describe('source maps', () => {
       const source = 'const gsm = (v: number) => v\nconst h: number = gsm(5)'
       const fileName = 'test-source-map.ts'
+      jestCacheFS.set(fileName, source)
 
       it('should have correct source maps without mapRoot', () => {
-        const compiler = makeCompiler({ tsJestConfig: { tsconfig: require.resolve('../../tsconfig.spec.json') } })
+        const compiler = makeCompiler(
+          { tsJestConfig: { tsconfig: require.resolve('../../tsconfig.spec.json') } },
+          jestCacheFS,
+        )
         const compiled = compiler.getCompiledOutput(source, fileName)
 
         expect(new ProcessedSource(compiled, fileName).outputSourceMaps).toMatchObject({
@@ -244,13 +264,16 @@ const t: string = f(5)
       })
 
       it('should have correct source maps with mapRoot', () => {
-        const compiler = makeCompiler({
-          tsJestConfig: {
-            tsconfig: {
-              mapRoot: './',
+        const compiler = makeCompiler(
+          {
+            tsJestConfig: {
+              tsconfig: {
+                mapRoot: './',
+              },
             },
           },
-        })
+          jestCacheFS,
+        )
         const compiled = compiler.getCompiledOutput(source, fileName)
 
         expect(new ProcessedSource(compiled, fileName).outputSourceMaps).toMatchObject({
@@ -278,25 +301,84 @@ const t: string = f(5)
       })
     })
 
+    describe('getResolvedModulesMap', () => {
+      const fileName = 'foo.ts'
+      const fileContent = 'const foo = 1'
+
+      test('should return undefined when file name is not known to compiler', () => {
+        const compiler = makeCompiler({
+          tsJestConfig: baseTsJestConfig,
+        })
+
+        expect(compiler.getResolvedModulesMap(fileContent, fileName)).toBeUndefined()
+      })
+
+      test('should return undefined when it is isolatedModules true', () => {
+        const compiler = makeCompiler({
+          tsJestConfig: {
+            ...baseTsJestConfig,
+            isolatedModules: true,
+          },
+        })
+
+        expect(compiler.getResolvedModulesMap(fileContent, fileName)).toBeUndefined()
+      })
+
+      test('should return undefined when file has no resolved modules', () => {
+        const jestCacheFS = new Map<string, string>()
+        jestCacheFS.set(fileName, fileContent)
+        const compiler = makeCompiler(
+          {
+            tsJestConfig: baseTsJestConfig,
+          },
+          jestCacheFS,
+        )
+
+        expect(compiler.getResolvedModulesMap(fileContent, fileName)).toBeUndefined()
+      })
+
+      test('should return resolved modules when file has resolved modules', () => {
+        const jestCacheFS = new Map<string, string>()
+        const fileContentWithModules = readFileSync(join(__dirname, '..', '__mocks__', 'thing.spec.ts'), 'utf-8')
+        jestCacheFS.set(fileName, fileContentWithModules)
+        const compiler = makeCompiler(
+          {
+            tsJestConfig: baseTsJestConfig,
+          },
+          jestCacheFS,
+        )
+
+        expect(compiler.getResolvedModulesMap(fileContentWithModules, fileName)).toBeDefined()
+      })
+    })
+
     describe('diagnostics', () => {
       const importedFileName = require.resolve('../__mocks__/thing.ts')
       const importedFileContent = readFileSync(importedFileName, 'utf-8')
 
       it(`shouldn't report diagnostics when file name doesn't match diagnostic file pattern`, () => {
-        const compiler = makeCompiler({
-          tsJestConfig: {
-            ...baseTsJestConfig,
-            diagnostics: { pathRegex: 'foo.spec.ts' },
+        jestCacheFS.set(importedFileName, importedFileContent)
+        const compiler = makeCompiler(
+          {
+            tsJestConfig: {
+              ...baseTsJestConfig,
+              diagnostics: { pathRegex: 'foo.spec.ts' },
+            },
           },
-        })
+          jestCacheFS,
+        )
 
         expect(() => compiler.getCompiledOutput(importedFileContent, importedFileName)).not.toThrowError()
       })
 
       it(`shouldn't report diagnostic when processing file isn't used by any test files`, () => {
-        const compiler = makeCompiler({
-          tsJestConfig: baseTsJestConfig,
-        })
+        jestCacheFS.set('foo.ts', importedFileContent)
+        const compiler = makeCompiler(
+          {
+            tsJestConfig: baseTsJestConfig,
+          },
+          jestCacheFS,
+        )
         logTarget.clear()
 
         compiler.getCompiledOutput(importedFileContent, 'foo.ts')
@@ -311,9 +393,13 @@ const t: string = f(5)
           a: string
         }
       `
-        const compiler = makeCompiler({
-          tsJestConfig: baseTsJestConfig,
-        })
+        jestCacheFS.set(fileName, source)
+        const compiler = makeCompiler(
+          {
+            tsJestConfig: baseTsJestConfig,
+          },
+          jestCacheFS,
+        )
 
         expect(() => compiler.getCompiledOutput(source, fileName)).toThrowErrorMatchingSnapshot()
       })
