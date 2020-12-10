@@ -44,8 +44,8 @@ function IntroHeading({ ...siteConfig }) {
       </p>
       <p>
         It supports all features of TypeScript including type-checking.{' '}
-        <a href="user/babel7-or-ts" className="link">
-          Read more about Babel 7<code>preset-typescript</code> <strong>vs</strong> TypeScript(and <code>ts-jest</code>)
+        <a href="docs/babel7-or-ts" className="link">
+          Read more about Babel 7 <code>preset-typescript</code> <strong>vs</strong> TypeScript(and <code>ts-jest</code>)
         </a>
       </p>
     </div>
@@ -70,7 +70,7 @@ function IntroDescription() {
       <p>
         <a href="https://github.com/kulshekhar/ts-jest/issues/223" className="link">
           <img src="img/pull-request.png" align="left" height="24" className="link-icon" />
-          Looking for collaborators. Want to help improve `ts-jest`?
+          Looking for collaborators. Want to help improve <code>ts-jest</code> ?
         </a>
       </p>
     </div>
@@ -92,12 +92,12 @@ function Home() {
           <h2>Usage</h2>
           <p>
             Refer to the{' '}
-            <a href="user/install" className="link">
+            <a href="docs/installation" className="link">
               {' '}
               installation{' '}
             </a>
             and{' '}
-            <a href="user/config" className="link">
+            <a href="docs/presets" className="link">
               {' '}
               configuration{' '}
             </a>{' '}
@@ -121,7 +121,7 @@ function Home() {
             </li>
             <li>
               <a href="https://github.com/kulshekhar/ts-jest" className="link">
-                Jest
+                ts-jest
               </a>{' '}
               - Jest processor for TypeScript{' '}
               <i>
@@ -147,7 +147,7 @@ function Home() {
             <a href="http://semver.org/" className="link">
               SemVer
             </a>
-            . Our Major version follows Jest, which means that our **minor changes can be breaking.** Please make sure
+            . Our Major version follows Jest, which means that our <strong>minor changes can be breaking.</strong> Please make sure
             to pin your version of <code>ts-jest</code> to a specific version if this is a problem. For the versions
             available, see the{' '}
             <a href="https://github.com/kulshekhar/ts-jest/tags" className="link">
@@ -224,7 +224,7 @@ function Home() {
           <h2>License</h2>
           <p>
             This project is licensed under the MIT License - see the{' '}
-            <a className="link" href="https://kulshekhar.github.io/github.com/kulshekhar/ts-jest/LICENSE.md">
+            <a className="link" href="https://github.com/kulshekhar/ts-jest/blob/master/LICENSE.md">
               {' '}
               LICENSE.md
             </a>{' '}
