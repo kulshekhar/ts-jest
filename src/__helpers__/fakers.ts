@@ -13,6 +13,9 @@ export function filePath(relPath: string): string {
 
 export const rootDir = filePath('')
 
+const defaultTestRegex = ['(/__tests__/.*|(\\\\.|/)(test|spec))\\\\.[jt]sx?$']
+const defaultTestMatch = ['**/__tests__/**/*.[jt]s?(x)', '**/?(*.)+(spec|test).[jt]s?(x)']
+
 function getJestConfig<T extends Config.ProjectConfig>(
   options?: Partial<Config.InitialOptions | Config.ProjectConfig>,
   tsJestOptions?: TsJestGlobalOptions,
@@ -47,7 +50,16 @@ export function createConfigSet({
   resolve?: ((path: string) => string) | null
   [key: string]: any
 } = {}): ConfigSet {
-  const cs = new ConfigSet(getJestConfig(jestConfig, tsJestConfig), logger)
+  const jestCfg = getJestConfig(jestConfig, tsJestConfig)
+  const cs = new ConfigSet(
+    {
+      ...jestCfg,
+      testMatch: jestConfig?.testMatch ? [...jestConfig.testMatch, ...defaultTestMatch] : defaultTestMatch,
+      testRegex: jestConfig?.testRegex ? [...jestConfig.testRegex, ...defaultTestRegex] : defaultTestRegex,
+      extensionsToTreatAsEsm: jestCfg.extensionsToTreatAsEsm ?? [],
+    },
+    logger,
+  )
   if (resolve) {
     cs.resolvePath = resolve
   }
@@ -76,12 +88,11 @@ export function makeCompiler(
     ...(tsJestConfig.diagnostics as any),
     pretty: false,
   }
-  const defaultTestRegex = ['(/__tests__/.*|(\\\\.|/)(test|spec))\\\\.[jt]sx?$']
-  const defaultTestMatch = ['**/__tests__/**/*.[jt]s?(x)', '**/?(*.)+(spec|test).[jt]s?(x)']
   jestConfig = {
     ...jestConfig,
+    extensionsToTreatAsEsm: jestConfig?.extensionsToTreatAsEsm ?? [],
     testMatch: jestConfig?.testMatch ? [...jestConfig.testMatch, ...defaultTestMatch] : defaultTestMatch,
-    testRegex: jestConfig?.testRegex ? [...defaultTestRegex, ...jestConfig.testRegex] : defaultTestRegex,
+    testRegex: jestConfig?.testRegex ? [...jestConfig.testRegex, ...defaultTestRegex] : defaultTestRegex,
   }
   const cs = createConfigSet({ jestConfig, tsJestConfig, parentConfig, resolve: null })
 

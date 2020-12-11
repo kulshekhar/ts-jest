@@ -396,17 +396,6 @@ describe('tsJestDigest', () => {
   })
 }) // tsJestDigest
 
-describe('hooks', () => {
-  it('should return empty object when environment variable TS_JEST_HOOKS is undefined', () => {
-    expect(createConfigSet().hooks).toEqual({})
-  })
-
-  it('should return value when environment variable TS_JEST_HOOKS is defined', () => {
-    process.env.TS_JEST_HOOKS = './foo'
-    expect(createConfigSet().hooks).toBeDefined()
-  })
-}) // hooks
-
 describe('isTestFile', () => {
   it.each([
     {

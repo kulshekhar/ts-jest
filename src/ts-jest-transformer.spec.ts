@@ -7,13 +7,13 @@ import { Extension, ResolvedModuleFull } from 'typescript'
 
 import { SOURCE_MAPPING_PREFIX } from './compiler/compiler-utils'
 import { TsJestCompiler } from './compiler/ts-jest-compiler'
-import { ConfigSet } from './config/config-set'
 import { logTargetMock } from './__helpers__/mocks'
 import { CACHE_KEY_EL_SEPARATOR, TsJestTransformer } from './ts-jest-transformer'
 import type { ResolvedModulesMap } from './types'
 import { stringify } from './utils/json'
 import { sha1 } from './utils/sha1'
 import { VersionCheckers } from './utils/version-checkers'
+import { createConfigSet } from './__helpers__/fakers'
 
 const logTarget = logTargetMock()
 const cacheDir = join(process.cwd(), 'tmp')
@@ -31,7 +31,7 @@ beforeEach(() => {
 describe('TsJestTransformer', () => {
   describe('_configsFor', () => {
     test('should return the same config set for same values with jest config string is not in configSetsIndex', () => {
-      const obj1 = { config: { cwd: '/foo/.', rootDir: '/bar//dummy/..', globals: {} } }
+      const obj1 = { config: { cwd: '/foo/.', rootDir: '/bar//dummy/..', globals: {}, testMatch: [], testRegex: [] } }
       // @ts-expect-error testing purpose
       const cs3 = new TsJestTransformer()._configsFor(obj1 as any)
 
@@ -40,7 +40,7 @@ describe('TsJestTransformer', () => {
     })
 
     test('should return the same config set for same values with jest config string in configSetsIndex', () => {
-      const obj1 = { config: { cwd: '/foo/.', rootDir: '/bar//dummy/..', globals: {} } }
+      const obj1 = { config: { cwd: '/foo/.', rootDir: '/bar//dummy/..', globals: {}, testMatch: [], testRegex: [] } }
       const obj2 = { ...obj1 }
       // @ts-expect-error testing purpose
       const cs1 = new TsJestTransformer()._configsFor(obj1 as any)
@@ -54,11 +54,11 @@ describe('TsJestTransformer', () => {
 
     test(`should not read disk cache with isolatedModules true`, () => {
       const tr = new TsJestTransformer()
-      const cs = new ConfigSet({
-        testMatch: [],
-        testRegex: [],
-        globals: { 'ts-jest': { isolatedModules: true } },
-      } as any)
+      const cs = createConfigSet({
+        jestConfig: {
+          globals: { 'ts-jest': { isolatedModules: true } },
+        },
+      })
       const readFileSyncSpy = jest.spyOn(fs, 'readFileSync')
 
       // @ts-expect-error testing purpose
@@ -71,11 +71,11 @@ describe('TsJestTransformer', () => {
 
     test(`should not read disk cache with isolatedModules false and no jest cache`, () => {
       const tr = new TsJestTransformer()
-      const cs = new ConfigSet({
-        testMatch: [],
-        testRegex: [],
-        globals: { 'ts-jest': { isolatedModules: false } },
-      } as any)
+      const cs = createConfigSet({
+        jestConfig: {
+          globals: { 'ts-jest': { isolatedModules: false } },
+        },
+      })
       const readFileSyncSpy = jest.spyOn(fs, 'readFileSync')
 
       // @ts-expect-error testing purpose
@@ -90,13 +90,13 @@ describe('TsJestTransformer', () => {
       const readFileSyncSpy = jest.spyOn(fs, 'readFileSync')
       const fileName = 'foo.ts'
       const tr = new TsJestTransformer()
-      const cs = new ConfigSet({
-        cache: true,
-        cacheDirectory: cacheDir,
-        globals: { 'ts-jest': { isolatedModules: false } },
-        testMatch: [],
-        testRegex: [],
-      } as any)
+      const cs = createConfigSet({
+        jestConfig: {
+          cache: true,
+          cacheDirectory: cacheDir,
+          globals: { 'ts-jest': { isolatedModules: false } },
+        },
+      })
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       const tsCacheDir = cs.tsCacheDir!
       const depGraphs: ResolvedModulesMap = new Map<string, ResolvedModuleFull | undefined>()
@@ -191,7 +191,7 @@ describe('TsJestTransformer', () => {
       const cacheKey1 = tr.getCacheKey(input.fileContent, input.fileName, {
         ...input.transformOptions,
         config: {
-          ...input.config,
+          ...input.transformOptions.config,
           globals: { 'ts-jest': { isolatedModules: true } },
         },
       })
