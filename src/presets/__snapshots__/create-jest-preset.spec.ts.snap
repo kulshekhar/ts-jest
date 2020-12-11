@@ -1,0 +1,76 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`create-jest-preset should return correct preset 1`] = `
+Object {
+  "transform": Object {
+    "^.+\\\\.tsx?$": "ts-jest",
+  },
+}
+`;
+
+exports[`create-jest-preset should return correct preset 2`] = `
+Object {
+  "transform": Object {
+    "^.+\\\\.tsx?$": "ts-jest",
+  },
+}
+`;
+
+exports[`create-jest-preset should return correct preset 3`] = `
+Object {
+  "transform": Object {
+    "^.+\\\\.[tj]sx?$": "ts-jest",
+  },
+}
+`;
+
+exports[`create-jest-preset should return correct preset 4`] = `
+Object {
+  "transform": Object {
+    "^.+\\\\.[tj]sx?$": "ts-jest",
+  },
+}
+`;
+
+exports[`create-jest-preset should return correct preset 5`] = `
+Object {
+  "transform": Object {
+    "^.+\\\\.tsx?$": "ts-jest",
+  },
+}
+`;
+
+exports[`create-jest-preset should return correct preset 6`] = `
+Object {
+  "moduleFileExtensions": Array [
+    "bar",
+  ],
+  "testMatch": Array [
+    "foo",
+  ],
+  "transform": Object {
+    "^.+\\\\.tsx?$": "ts-jest",
+    "foo": "bar",
+  },
+}
+`;
+
+exports[`create-jest-preset should return correct preset 7`] = `
+Object {
+  "extensionsToTreatAsEsm": Array [
+    ".jsx",
+    ".ts",
+    ".tsx",
+  ],
+  "moduleFileExtensions": Array [
+    "bar",
+  ],
+  "testMatch": Array [
+    "foo",
+  ],
+  "transform": Object {
+    "^.+\\\\.m?[tj]sx?$": "ts-jest",
+    "foo": "bar",
+  },
+}
+`;

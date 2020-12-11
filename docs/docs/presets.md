@@ -3,15 +3,18 @@ id: presets
 title: Presets
 ---
 
-### The 3 presets
+### The presets
 
-`ts-jest` comes with 3 presets, covering most of the project's base configuration:
+`ts-jest` comes with several presets, covering most of the project's base configuration:
 
 | Preset name | Description |
 |---|---|
-| `ts-jest/presets/default`<br/>or `ts-jest` | `ts-jest` will take care of `.ts` and `.tsx` files only, leaving JavaScript files as-is. |
-| `ts-jest/presets/js-with-ts` | TypeScript and JavaScript files (`.ts`, `.tsx`, `.js` and `.jsx`) will be handled by `ts-jest`.<br/>You'll need to set `allowJs` to `true` in your `tsconfig.json` file. |
-| `ts-jest/presets/js-with-babel` | TypeScript files will be handled by `ts-jest`, and JavaScript files will be handled by `babel-jest`. |
+| `ts-jest/presets/default`<br/>or `ts-jest` | TypeScript files (`.ts`, `.tsx`) will be transformed by `ts-jest` to **CommonJS** syntax, leaving JavaScript files (`.js`, `jsx`) as-is. |
+| `ts-jest/presets/default-esm`<br/> | TypeScript files (`.ts`, `.tsx`) will be transformed by `ts-jest` to **ESM** syntax, leaving JavaScript files (`.js`, `jsx`) as-is. |
+| `ts-jest/presets/js-with-ts` | TypeScript and JavaScript files (`.ts`, `.tsx`, `.js`, `.jsx`) will be transformed by `ts-jest` to **CommonJS** syntax.<br/>You'll need to set `allowJs` to `true` in your `tsconfig.json` file. |
+| `ts-jest/presets/js-with-ts-esm` | TypeScript and JavaScript files (`.ts`, `.tsx`, `.js`, `.jsx`, `.mjs`) will be transformed by `ts-jest` to **ESM** syntax.<br/>You'll need to set `allowJs` to `true` in your `tsconfig.json` file. |
+| `ts-jest/presets/js-with-babel` | TypeScript files (`.ts`, `.tsx`) will be transformed by `ts-jest` to **CommonJS** syntax, and JavaScript files (`.js`, `jsx`) will be transformed by `babel-jest`. |
+| `ts-jest/presets/js-with-babel-esm` | TypeScript files (`.ts`, `.tsx`) will be transformed by `ts-jest` to **ESM** syntax, and JavaScript files (`.js`, `jsx`, `.mjs`) will be transformed by `babel-jest`. |
 
 ### Basic usage
 
@@ -27,7 +30,7 @@ module.exports = {
 };
 ```
 
-```js
+```json5
 // OR package.json
 {
   // [...]

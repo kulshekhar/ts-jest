@@ -14,7 +14,7 @@
 
 <img src="./icon.png" align="right" title="ts-jest Logo" width="128" height="128">
 
-It supports all features of TypeScript including type-checking. [Read more about Babel7 + `preset-typescript` **vs** TypeScript (and `ts-jest`)](https://kulshekhar.github.io/ts-jest/user/babel7-or-ts).
+It supports all features of TypeScript including type-checking. [Read more about Babel7 + `preset-typescript` **vs** TypeScript (and `ts-jest`)](https://kulshekhar.github.io/ts-jest/docs/babel7-or-ts).
 
 ---
 

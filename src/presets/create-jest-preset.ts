@@ -4,24 +4,23 @@ import { rootLogger } from '../utils/logger'
 
 const logger = rootLogger.child({ namespace: 'jest-preset' })
 
-export type TsJestPresets = Pick<Config.InitialOptions, 'moduleFileExtensions' | 'transform' | 'testMatch'>
+export type TsJestPresets = Pick<
+  Config.InitialOptions,
+  'extensionsToTreatAsEsm' | 'moduleFileExtensions' | 'transform' | 'testMatch'
+>
 
-interface CreateJestPresetOptions {
-  allowJs?: boolean
-}
-
-export function createJestPreset(
-  { allowJs = false }: CreateJestPresetOptions = {},
-  from: Config.InitialOptions = {},
-): TsJestPresets {
+export function createJestPreset(allowJs = false, extraOptions: Config.InitialOptions = {}): TsJestPresets {
   logger.debug({ allowJs }, 'creating jest presets', allowJs ? 'handling' : 'not handling', 'JavaScript files')
 
+  const { extensionsToTreatAsEsm, moduleFileExtensions, testMatch } = extraOptions
+
   return {
+    ...(extensionsToTreatAsEsm ? { extensionsToTreatAsEsm } : undefined),
+    ...(moduleFileExtensions ? { moduleFileExtensions } : undefined),
     transform: {
-      ...from.transform,
-      [allowJs ? '^.+\\.[tj]sx?$' : '^.+\\.tsx?$']: 'ts-jest',
+      ...extraOptions.transform,
+      [allowJs ? (extensionsToTreatAsEsm?.length ? '^.+\\.m?[tj]sx?$' : '^.+\\.[tj]sx?$') : '^.+\\.tsx?$']: 'ts-jest',
     },
-    ...(from.testMatch ? { testMatch: from.testMatch } : undefined),
-    ...(from.moduleFileExtensions ? { moduleFileExtensions: from.moduleFileExtensions } : undefined),
+    ...(testMatch ? { testMatch } : undefined),
   }
 }

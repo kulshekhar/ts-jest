@@ -12,15 +12,15 @@ import { parse, stringify } from './utils/json'
 import { JsonableValue } from './utils/jsonable-value'
 import { rootLogger } from './utils/logger'
 import { Errors, interpolate } from './utils/messages'
-import type { CompilerInstance } from './types'
+import type { TsJestProjectConfig, TransformOptionsTsJest } from './types'
 import { sha1 } from './utils/sha1'
 import { VersionCheckers } from './utils/version-checkers'
 
 interface CachedConfigSet {
   configSet: ConfigSet
-  jestConfig: JsonableValue<Config.ProjectConfig>
+  jestConfig: JsonableValue<TsJestProjectConfig>
   transformerCfgStr: string
-  compiler: CompilerInstance
+  compiler: TsJestCompiler
 }
 
 export interface DepGraphInfo {
@@ -40,7 +40,7 @@ export class TsJestTransformer implements Transformer {
   /**
    * @internal
    */
-  private _compiler!: CompilerInstance
+  private _compiler!: TsJestCompiler
   protected readonly _logger: Logger
   protected _tsResolvedModulesCachePath: string | undefined
   protected _transformCfgStr!: string
@@ -113,7 +113,11 @@ export class TsJestTransformer implements Transformer {
   /**
    * @public
    */
-  process(fileContent: string, filePath: Config.Path, transformOptions: TransformOptions): TransformedSource | string {
+  process(
+    fileContent: string,
+    filePath: Config.Path,
+    transformOptions: TransformOptionsTsJest,
+  ): TransformedSource | string {
     this._logger.debug({ fileName: filePath, transformOptions }, 'processing', filePath)
 
     let result: string | TransformedSource
@@ -177,7 +181,7 @@ export class TsJestTransformer implements Transformer {
    *
    * @public
    */
-  getCacheKey(fileContent: string, filePath: string, transformOptions: TransformOptions): string {
+  getCacheKey(fileContent: string, filePath: string, transformOptions: TransformOptionsTsJest): string {
     const configs = this._configsFor(transformOptions)
 
     this._logger.debug({ fileName: filePath, transformOptions }, 'computing cache key for', filePath)

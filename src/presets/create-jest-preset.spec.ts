@@ -1,47 +1,46 @@
 import { createJestPreset } from './create-jest-preset'
+import { JS_EXT_TO_TREAT_AS_ESM, TS_EXT_TO_TREAT_AS_ESM } from '../constants'
 
 describe('create-jest-preset', () => {
-  it('should return correct defaults when allowJs is false or not set', () => {
-    const withoutJs = {
-      transform: {
-        '^.+\\.tsx?$': 'ts-jest',
-      },
-    }
-    expect(createJestPreset()).toEqual(withoutJs)
-    expect(createJestPreset({ allowJs: false })).toEqual(withoutJs)
-  })
+  const baseExtraOptions = {
+    testMatch: ['foo'],
+    moduleFileExtensions: ['bar'],
+    transform: { foo: 'bar' },
+  }
 
-  it('should return correct defaults when allowJs is true', () => {
-    expect(createJestPreset({ allowJs: true })).toEqual({
-      transform: {
-        '^.+\\.[tj]sx?$': 'ts-jest',
+  test.each([
+    {
+      allowJs: undefined,
+      extraOptions: undefined,
+    },
+    {
+      allowJs: false,
+      extraOptions: undefined,
+    },
+    {
+      allowJs: true,
+      extraOptions: undefined,
+    },
+    {
+      allowJs: true,
+      extraOptions: {},
+    },
+    {
+      allowJs: false,
+      extraOptions: {},
+    },
+    {
+      allowJs: false,
+      extraOptions: baseExtraOptions,
+    },
+    {
+      allowJs: true,
+      extraOptions: {
+        ...baseExtraOptions,
+        extensionsToTreatAsEsm: [...JS_EXT_TO_TREAT_AS_ESM, ...TS_EXT_TO_TREAT_AS_ESM],
       },
-    })
-  })
-
-  it('should be able to use a base config', () => {
-    expect(createJestPreset(undefined, {})).toMatchInlineSnapshot(`
-Object {
-  "transform": Object {
-    "^.+\\\\.tsx?$": "ts-jest",
-  },
-}
-`)
-    expect(
-      createJestPreset(undefined, { testMatch: ['foo'], moduleFileExtensions: ['bar'], transform: { foo: 'bar' } }),
-    ).toMatchInlineSnapshot(`
-Object {
-  "moduleFileExtensions": Array [
-    "bar",
-  ],
-  "testMatch": Array [
-    "foo",
-  ],
-  "transform": Object {
-    "^.+\\\\.tsx?$": "ts-jest",
-    "foo": "bar",
-  },
-}
-`)
+    },
+  ])('should return correct preset', (data) => {
+    expect(createJestPreset(data.allowJs, data.extraOptions)).toMatchSnapshot()
   })
 })
