@@ -1,4 +1,5 @@
-import type { Transformer } from '@jest/transform'
+import type { Transformer, TransformOptions } from '@jest/transform'
+import type { Config } from '@jest/types'
 import type * as _babel from 'babel__core'
 import type * as _ts from 'typescript'
 
@@ -170,6 +171,16 @@ export interface TsJestConfig {
   transformers: ConfigCustomTransformer
   // to deprecate / deprecated === === ===
   stringifyContentPathRegex: string | undefined
+}
+
+export interface TsJestProjectConfig extends Config.ProjectConfig {
+  globals: {
+    'ts-jest': TsJestGlobalOptions
+  }
+}
+
+export interface TransformOptionsTsJest extends TransformOptions {
+  config: TsJestProjectConfig
 }
 
 export type ResolvedModulesMap = Map<string, _ts.ResolvedModuleFull | undefined> | undefined
