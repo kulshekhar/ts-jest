@@ -3,7 +3,7 @@ import type { Config } from '@jest/types'
 import type { Logger } from 'bs-logger'
 import { existsSync, readFileSync, statSync, writeFileSync } from 'fs'
 import mkdirp from 'mkdirp'
-import { join } from 'path'
+import { join, resolve } from 'path'
 
 import { TsJestCompiler } from './compiler/ts-jest-compiler'
 import { ConfigSet } from './config/config-set'
@@ -15,12 +15,17 @@ import { Errors, interpolate } from './utils/messages'
 import type { TsJestProjectConfig, TransformOptionsTsJest } from './types'
 import { sha1 } from './utils/sha1'
 import { VersionCheckers } from './utils/version-checkers'
+import { importer } from './utils/importer'
 
 interface CachedConfigSet {
   configSet: ConfigSet
   jestConfig: JsonableValue<TsJestProjectConfig>
   transformerCfgStr: string
   compiler: TsJestCompiler
+}
+
+interface TsJestHooksMap {
+  afterProcess?(args: any[], result: string | TransformedSource): string | TransformedSource | void
 }
 
 export interface DepGraphInfo {
@@ -123,7 +128,16 @@ export class TsJestTransformer implements Transformer {
     let result: string | TransformedSource
     const jestConfig = transformOptions.config
     const configs = this._configsFor(transformOptions)
-    const { hooks } = configs
+    let hooksFile = process.env.TS_JEST_HOOKS
+    let hooks: TsJestHooksMap
+    /* istanbul ignore next (cover by e2e) */
+    if (hooksFile) {
+      hooksFile = resolve(configs.cwd, hooksFile)
+
+      hooks = importer.tryTheseOr(hooksFile, {})
+    } else {
+      hooks = {}
+    }
     const shouldStringifyContent = configs.shouldStringifyContent(filePath)
     const babelJest = shouldStringifyContent ? undefined : configs.babelJestTransformer
     const isDefinitionFile = filePath.endsWith(DECLARATION_TYPE_EXT)

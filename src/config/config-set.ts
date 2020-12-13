@@ -8,7 +8,6 @@
  * version of the `jest.ProjectConfig`, and then later it calls `process()`
  * with the complete, object version of it.
  */
-import type { TransformedSource } from '@jest/transform'
 import type { Config } from '@jest/types'
 import { LogContexts, Logger } from 'bs-logger'
 import { existsSync, readFileSync } from 'fs'
@@ -38,7 +37,6 @@ import { backportJestConfig } from '../utils/backports'
 import { importer } from '../utils/importer'
 import { stringify } from '../utils/json'
 import { rootLogger } from '../utils/logger'
-import { Memoize } from '../utils/memoize'
 import { Errors, ImportReasons, interpolate } from '../utils/messages'
 import { normalizeSlashes } from '../utils/normalize-slashes'
 import { sha1 } from '../utils/sha1'
@@ -48,10 +46,6 @@ import { TSError } from '../utils/ts-error'
  * @internal
  */
 export const MY_DIGEST: string = readFileSync(resolve(__dirname, '..', '..', '.ts-jest-digest'), 'utf8')
-
-interface TsJestHooksMap {
-  afterProcess?(args: any[], result: string | TransformedSource): string | TransformedSource | void
-}
 
 /**
  * @internal
@@ -109,6 +103,10 @@ const toDiagnosticCodeList = (items: (string | number)[], into: number[] = []): 
 }
 
 export class ConfigSet {
+  /**
+   * Use by e2e, don't mark as internal
+   */
+  readonly tsJestDigest = MY_DIGEST
   readonly logger: Logger
   readonly compilerModule: TTypeScript
   readonly isolatedModules: boolean
@@ -124,11 +122,11 @@ export class ConfigSet {
   /**
    * @internal
    */
-  private _babelConfig: BabelConfig | undefined
+  babelConfig: BabelConfig | undefined
   /**
    * @internal
    */
-  private _babelJestTransformers: BabelJestTransformer | undefined
+  babelJestTransformer: BabelJestTransformer | undefined
   /**
    * @internal
    */
@@ -137,6 +135,8 @@ export class ConfigSet {
    * @internal
    */
   private _stringifyContentRegExp: RegExp | undefined
+  private readonly _matchablePatterns: (string | RegExp)[]
+  private readonly _isMatch: (str: Config.Path) => boolean
   protected _overriddenCompilerOptions: Partial<CompilerOptions> = {
     // we handle sourcemaps this way and not another
     sourceMap: true,
@@ -187,6 +187,20 @@ export class ConfigSet {
     this._backportJestCfg()
     this._setupTsJestCfg(options)
     this._resolveTsCacheDir()
+    this._matchablePatterns = [...this._jestCfg.testMatch, ...this._jestCfg.testRegex].filter(
+      (pattern) =>
+        /**
+         * jest config testRegex doesn't always deliver the correct RegExp object
+         * See https://github.com/facebook/jest/issues/9778
+         */
+        pattern instanceof RegExp || typeof pattern === 'string',
+    )
+    if (!this._matchablePatterns.length) {
+      this._matchablePatterns.push(...DEFAULT_JEST_TEST_MATCH)
+    }
+    this._isMatch = globsToMatcher(
+      this._matchablePatterns.filter((pattern: any) => typeof pattern === 'string') as string[],
+    )
   }
 
   /**
@@ -212,33 +226,33 @@ export class ConfigSet {
       if (typeof options.babelConfig === 'string') {
         const babelCfgPath = this.resolvePath(options.babelConfig)
         if (extname(options.babelConfig) === '.js') {
-          this._babelConfig = {
+          this.babelConfig = {
             ...baseBabelCfg,
             ...require(babelCfgPath),
           }
         } else {
-          this._babelConfig = {
+          this.babelConfig = {
             ...baseBabelCfg,
             ...json5.parse(readFileSync(babelCfgPath, 'utf-8')),
           }
         }
       } else if (typeof options.babelConfig === 'object') {
-        this._babelConfig = {
+        this.babelConfig = {
           ...baseBabelCfg,
           ...options.babelConfig,
         }
       } else {
-        this._babelConfig = baseBabelCfg
+        this.babelConfig = baseBabelCfg
       }
 
-      this.logger.debug({ babelConfig: this._babelConfig }, 'normalized babel config via ts-jest option')
+      this.logger.debug({ babelConfig: this.babelConfig }, 'normalized babel config via ts-jest option')
     }
-    if (!this._babelConfig) {
+    if (!this.babelConfig) {
       this._overriddenCompilerOptions.module = this.compilerModule.ModuleKind.CommonJS
     } else {
-      this._babelJestTransformers = importer
+      this.babelJestTransformer = importer
         .babelJest(ImportReasons.BabelJest)
-        .createTransformer(this._babelConfig) as BabelJestTransformer
+        .createTransformer(this.babelConfig) as BabelJestTransformer
 
       this.logger.debug('created babel-jest transformer')
     }
@@ -450,7 +464,7 @@ export class ConfigSet {
     const compilationTarget = result.options.target!
     /* istanbul ignore next (cover by e2e) */
     if (
-      !this._babelConfig &&
+      !this.babelConfig &&
       ((nodeJsVer.startsWith('v10') && compilationTarget > ScriptTarget.ES2018) ||
         (nodeJsVer.startsWith('v12') && compilationTarget > ScriptTarget.ES2019))
     ) {
@@ -465,62 +479,10 @@ export class ConfigSet {
     return result
   }
 
-  /**
-   * @internal
-   */
-  get babelConfig(): BabelConfig | undefined {
-    return this._babelConfig
-  }
-
-  /**
-   * @internal
-   */
-  get babelJestTransformer(): BabelJestTransformer | undefined {
-    return this._babelJestTransformers
-  }
-
-  /**
-   * Use by e2e, don't mark as internal
-   */
-  @Memoize()
-  // eslint-disable-next-line class-methods-use-this
-  get tsJestDigest(): string {
-    return MY_DIGEST
-  }
-
-  /**
-   * @internal
-   */
-  @Memoize()
-  get hooks(): TsJestHooksMap {
-    let hooksFile = process.env.TS_JEST_HOOKS
-    if (hooksFile) {
-      hooksFile = resolve(this.cwd, hooksFile)
-
-      return importer.tryTheseOr(hooksFile, {})
-    }
-
-    return {}
-  }
-
-  @Memoize()
-  get isTestFile(): (fileName: string) => boolean {
-    const matchablePatterns = [...this._jestCfg.testMatch, ...this._jestCfg.testRegex].filter(
-      (pattern) =>
-        /**
-         * jest config testRegex doesn't always deliver the correct RegExp object
-         * See https://github.com/facebook/jest/issues/9778
-         */
-        pattern instanceof RegExp || typeof pattern === 'string',
+  isTestFile(fileName: string): boolean {
+    return this._matchablePatterns.some((pattern) =>
+      typeof pattern === 'string' ? this._isMatch(fileName) : pattern.test(fileName),
     )
-    if (!matchablePatterns.length) {
-      matchablePatterns.push(...DEFAULT_JEST_TEST_MATCH)
-    }
-    const stringPatterns = matchablePatterns.filter((pattern: any) => typeof pattern === 'string') as string[]
-    const isMatch = globsToMatcher(stringPatterns)
-
-    return (fileName: string) =>
-      matchablePatterns.some((pattern) => (typeof pattern === 'string' ? isMatch(fileName) : pattern.test(fileName)))
   }
 
   shouldStringifyContent(filePath: string): boolean {
