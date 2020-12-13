@@ -27,7 +27,7 @@ import * as Paths from '../../../scripts/lib/paths'
 
 import RunResult from './run-result'
 import type { PreparedTest, RunTestOptions } from './types'
-import { enableOptimizations, templateNameForPath } from './utils'
+import { enableOptimizations, nodeWithESMSupport, templateNameForPath } from './utils'
 
 const TEMPLATE_EXCLUDED_ITEMS = ['node_modules', 'package-lock.json']
 
@@ -55,7 +55,7 @@ function hooksSourceWith(vars: Record<string, any>): string {
 }
 
 export function run(name: string, options: RunTestOptions = {}): RunResult {
-  const { env = {}, template, inject, writeIo, noCache, jestConfigPath: configFile = 'jest.config.js' } = options
+  const { env = {}, template, inject, writeIo, noCache, jestConfigPath: configFile = 'jest.config.js', jestConfig } = options
   const { workdir: dir, sourceDir } = prepareTest(
     name,
     template || templateNameForPath(join(Paths.e2eSourceDir, name)),
@@ -89,8 +89,8 @@ export function run(name: string, options: RunTestOptions = {}): RunResult {
   }
 
   // extends config
-  if (options.jestConfig) {
-    merge(extraConfig, options.jestConfig)
+  if (jestConfig) {
+    merge(extraConfig, jestConfig)
   }
   if (options.tsJestConfig) {
     const globalConfig: any = extraConfig.globals || (extraConfig.globals = {'ts-jest': {}})
@@ -106,6 +106,11 @@ export function run(name: string, options: RunTestOptions = {}): RunResult {
     // force the cache directory if not set
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
     extraConfig.cacheDirectory = join(Paths.cacheDir, `e2e-${template}`)
+  }
+
+  // Run with ESM support
+  if (nodeWithESMSupport && jestConfig?.extensionsToTreatAsEsm?.length) {
+    shortCmd = 'node --experimental-vm-modules node_modules/.bin/jest'
   }
 
   // build final config and create dir suffix based on it

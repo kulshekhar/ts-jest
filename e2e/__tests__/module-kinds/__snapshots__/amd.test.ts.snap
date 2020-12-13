@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`run with options: {"module":"amd","allowSyntheticDefaultImports":false} 1`] = `
+exports[`Module amd run with options: {"module":"amd","allowSyntheticDefaultImports":false} with template default 1`] = `
   × jest --no-cache
   ↳ exit code: 1
   ===[ STDOUT ]===================================================================
@@ -44,7 +44,7 @@ exports[`run with options: {"module":"amd","allowSyntheticDefaultImports":false}
   ================================================================================
 `;
 
-exports[`run with options: {"module":"amd","allowSyntheticDefaultImports":true} 1`] = `
+exports[`Module amd run with options: {"module":"amd","allowSyntheticDefaultImports":true} with template default 1`] = `
   × jest --no-cache
   ↳ exit code: 1
   ===[ STDOUT ]===================================================================
@@ -78,7 +78,7 @@ exports[`run with options: {"module":"amd","allowSyntheticDefaultImports":true} 
   ================================================================================
 `;
 
-exports[`run with options: {"module":"amd","esModuleInterop":false} 1`] = `
+exports[`Module amd run with options: {"module":"amd","esModuleInterop":false} with template default 1`] = `
   × jest --no-cache
   ↳ exit code: 1
   ===[ STDOUT ]===================================================================
@@ -113,7 +113,7 @@ exports[`run with options: {"module":"amd","esModuleInterop":false} 1`] = `
   ================================================================================
 `;
 
-exports[`run with options: {"module":"amd","esModuleInterop":true} 1`] = `
+exports[`Module amd run with options: {"module":"amd","esModuleInterop":true} with template default 1`] = `
   × jest --no-cache
   ↳ exit code: 1
   ===[ STDOUT ]===================================================================
@@ -158,7 +158,7 @@ exports[`run with options: {"module":"amd","esModuleInterop":true} 1`] = `
   ================================================================================
 `;
 
-exports[`run with options: {"module":"amd"} 1`] = `
+exports[`Module amd run with options: {"module":"amd"} with template default 1`] = `
   × jest --no-cache
   ↳ exit code: 1
   ===[ STDOUT ]===================================================================

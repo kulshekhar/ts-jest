@@ -8,14 +8,14 @@ import { join, resolve } from 'path'
 import { TsJestCompiler } from './compiler/ts-jest-compiler'
 import { ConfigSet } from './config/config-set'
 import { DECLARATION_TYPE_EXT, JS_JSX_REGEX, TS_TSX_REGEX } from './constants'
+import type { TsJestProjectConfig, TransformOptionsTsJest } from './types'
 import { parse, stringify } from './utils/json'
 import { JsonableValue } from './utils/jsonable-value'
 import { rootLogger } from './utils/logger'
 import { Errors, interpolate } from './utils/messages'
-import type { TsJestProjectConfig, TransformOptionsTsJest } from './types'
+import { importer } from './utils/importer'
 import { sha1 } from './utils/sha1'
 import { VersionCheckers } from './utils/version-checkers'
-import { importer } from './utils/importer'
 
 interface CachedConfigSet {
   configSet: ConfigSet

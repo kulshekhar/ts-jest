@@ -1,9 +1,5 @@
-import { runTestForOptions } from './helpers'
+import { runTestCases } from './helpers'
 
-const MODULE_KIND = 'umd'
-
-runTestForOptions({ module: MODULE_KIND })
-runTestForOptions({ module: MODULE_KIND, allowSyntheticDefaultImports: false })
-runTestForOptions({ module: MODULE_KIND, allowSyntheticDefaultImports: true })
-runTestForOptions({ module: MODULE_KIND, esModuleInterop: true })
-runTestForOptions({ module: MODULE_KIND, esModuleInterop: false })
+describe('Module umd', () => {
+  runTestCases('umd')
+})

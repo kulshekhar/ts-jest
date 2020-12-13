@@ -2,18 +2,18 @@ import { LogLevels } from 'bs-logger'
 import fs from 'fs'
 import { removeSync, writeFileSync } from 'fs-extra'
 import mkdirp from 'mkdirp'
-import { join, sep } from 'path'
+import { join } from 'path'
 import { Extension, ResolvedModuleFull } from 'typescript'
 
 import { SOURCE_MAPPING_PREFIX } from './compiler/compiler-utils'
 import { TsJestCompiler } from './compiler/ts-jest-compiler'
+import { createConfigSet } from './__helpers__/fakers'
 import { logTargetMock } from './__helpers__/mocks'
 import { CACHE_KEY_EL_SEPARATOR, TsJestTransformer } from './ts-jest-transformer'
 import type { ResolvedModulesMap } from './types'
 import { stringify } from './utils/json'
 import { sha1 } from './utils/sha1'
 import { VersionCheckers } from './utils/version-checkers'
-import { createConfigSet } from './__helpers__/fakers'
 
 const logTarget = logTargetMock()
 const cacheDir = join(process.cwd(), 'tmp')
@@ -30,25 +30,33 @@ beforeEach(() => {
 
 describe('TsJestTransformer', () => {
   describe('_configsFor', () => {
-    test('should return the same config set for same values with jest config string is not in configSetsIndex', () => {
-      const obj1 = { config: { cwd: '/foo/.', rootDir: '/bar//dummy/..', globals: {}, testMatch: [], testRegex: [] } }
-      // @ts-expect-error testing purpose
-      const cs3 = new TsJestTransformer()._configsFor(obj1 as any)
+    test(
+      'should return the same config set for same values with different jest config objects' +
+        ' but their serialized versions are the same',
+      () => {
+        const obj1 = {
+          config: { cwd: process.cwd(), extensionsToTreatAsEsm: [], globals: {}, testMatch: [], testRegex: [] },
+        }
+        const obj2 = { ...obj1, config: { ...obj1.config, globals: Object.create(null) } }
+        // @ts-expect-error testing purpose
+        const cs1 = new TsJestTransformer()._configsFor(obj1)
+        // @ts-expect-error testing purpose
+        const cs2 = new TsJestTransformer()._configsFor(obj2)
 
-      expect(cs3.cwd).toBe(`${sep}foo`)
-      expect(cs3.rootDir).toBe(`${sep}bar`)
-    })
+        expect(cs2).toBe(cs1)
+      },
+    )
 
-    test('should return the same config set for same values with jest config string in configSetsIndex', () => {
-      const obj1 = { config: { cwd: '/foo/.', rootDir: '/bar//dummy/..', globals: {}, testMatch: [], testRegex: [] } }
+    test('should return the same config set for same values with jest config objects', () => {
+      const obj1 = {
+        config: { cwd: process.cwd(), extensionsToTreatAsEsm: [], globals: {}, testMatch: [], testRegex: [] },
+      }
       const obj2 = { ...obj1 }
       // @ts-expect-error testing purpose
-      const cs1 = new TsJestTransformer()._configsFor(obj1 as any)
+      const cs1 = new TsJestTransformer()._configsFor(obj1)
       // @ts-expect-error testing purpose
-      const cs2 = new TsJestTransformer()._configsFor(obj2 as any)
+      const cs2 = new TsJestTransformer()._configsFor(obj2)
 
-      expect(cs1.cwd).toBe(`${sep}foo`)
-      expect(cs1.rootDir).toBe(`${sep}bar`)
       expect(cs2).toBe(cs1)
     })
 
@@ -123,7 +131,7 @@ describe('TsJestTransformer', () => {
       fileName: 'foo.ts',
       transformOptions: {
         configString: '{"foo": "bar"}',
-        config: { foo: 'bar', testMatch: [], testRegex: [] } as any,
+        config: { foo: 'bar', testMatch: [], testRegex: [], extensionsToTreatAsEsm: [] } as any,
         instrument: false,
         rootDir: '/foo',
       },
@@ -241,6 +249,13 @@ describe('TsJestTransformer', () => {
   })
 
   describe('process', () => {
+    const baseTransformOptions = {
+      config: {
+        testMatch: [],
+        testRegex: [],
+        extensionsToTreatAsEsm: [],
+      },
+    } as any
     let tr!: TsJestTransformer
 
     beforeEach(() => {
@@ -253,13 +268,12 @@ describe('TsJestTransformer', () => {
       const fileContent = '<h1>Hello World</h1>'
       const transformOptions = {
         config: {
+          ...baseTransformOptions.config,
           globals: {
             'ts-jest': {
               stringifyContentPathRegex: '\\.html$',
             },
           },
-          testMatch: [],
-          testRegex: [],
         },
       } as any
       tr.getCacheKey(fileContent, filePath, transformOptions)
@@ -272,14 +286,8 @@ describe('TsJestTransformer', () => {
     test('should process type definition input', () => {
       const fileContent = 'type Foo = number'
       const filePath = 'foo.d.ts'
-      const transformOptions = {
-        config: {
-          testMatch: [],
-          testRegex: [],
-        },
-      } as any
-      tr.getCacheKey(fileContent, filePath, transformOptions)
-      const result = tr.process(fileContent, filePath, transformOptions)
+      tr.getCacheKey(fileContent, filePath, baseTransformOptions)
+      const result = tr.process(fileContent, filePath, baseTransformOptions)
 
       expect(result).toEqual('')
     })
@@ -289,11 +297,10 @@ describe('TsJestTransformer', () => {
       const filePath = 'foo.js'
       const transformOptions = {
         config: {
+          ...baseTransformOptions.config,
           globals: {
             'ts-jest': { tsconfig: { allowJs: false } },
           },
-          testMatch: [],
-          testRegex: [],
         },
       } as any
       tr.getCacheKey(fileContent, filePath, transformOptions)
@@ -313,16 +320,10 @@ describe('TsJestTransformer', () => {
     test.each(['foo.ts', 'foo.tsx'])('should process ts/tsx file', (filePath) => {
       const fileContent = 'const foo = 1'
       const output = 'var foo = 1'
-      const transformOptions = {
-        config: {
-          testMatch: [],
-          testRegex: [],
-        },
-      } as any
-      tr.getCacheKey(fileContent, filePath, transformOptions)
+      tr.getCacheKey(fileContent, filePath, baseTransformOptions)
       jest.spyOn(TsJestCompiler.prototype, 'getCompiledOutput').mockReturnValueOnce(output)
 
-      const result = tr.process(fileContent, filePath, transformOptions)
+      const result = tr.process(fileContent, filePath, baseTransformOptions)
 
       expect(result).toEqual(output)
     })
@@ -332,11 +333,10 @@ describe('TsJestTransformer', () => {
       const output = 'var foo = 1'
       const transformOptions = {
         config: {
+          ...baseTransformOptions.config,
           globals: {
             'ts-jest': { tsconfig: { allowJs: true } },
           },
-          testMatch: [],
-          testRegex: [],
         },
       } as any
       tr.getCacheKey(fileContent, filePath, transformOptions)
@@ -353,11 +353,10 @@ describe('TsJestTransformer', () => {
       const filePath = 'foo.bar'
       const transformOptions = {
         config: {
+          ...baseTransformOptions.config,
           globals: {
             'ts-jest': { tsconfig: { allowJs: true } },
           },
-          testMatch: [],
-          testRegex: [],
         },
       } as any
       tr.getCacheKey(fileContent, filePath, transformOptions)
@@ -376,11 +375,10 @@ describe('TsJestTransformer', () => {
       const fileContent = 'foo'
       const transformOptions = {
         config: {
+          ...baseTransformOptions.config,
           globals: {
             'ts-jest': { babelConfig: true },
           },
-          testMatch: [],
-          testRegex: [],
         },
       } as any
       tr.getCacheKey(fileContent, filePath, transformOptions)

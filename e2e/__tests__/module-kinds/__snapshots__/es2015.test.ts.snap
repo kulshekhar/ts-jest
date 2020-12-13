@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`run with options: {"module":"es2015","allowSyntheticDefaultImports":false} 1`] = `
+exports[`Module es2015 run with options: {"module":"es2015","allowSyntheticDefaultImports":false} with template default 1`] = `
   × jest --no-cache
   ↳ exit code: 1
   ===[ STDOUT ]===================================================================
@@ -44,7 +44,7 @@ exports[`run with options: {"module":"es2015","allowSyntheticDefaultImports":fal
   ================================================================================
 `;
 
-exports[`run with options: {"module":"es2015","allowSyntheticDefaultImports":true} 1`] = `
+exports[`Module es2015 run with options: {"module":"es2015","allowSyntheticDefaultImports":true} with template default 1`] = `
   × jest --no-cache
   ↳ exit code: 1
   ===[ STDOUT ]===================================================================
@@ -78,7 +78,7 @@ exports[`run with options: {"module":"es2015","allowSyntheticDefaultImports":tru
   ================================================================================
 `;
 
-exports[`run with options: {"module":"es2015","esModuleInterop":false} 1`] = `
+exports[`Module es2015 run with options: {"module":"es2015","esModuleInterop":false} with template default 1`] = `
   × jest --no-cache
   ↳ exit code: 1
   ===[ STDOUT ]===================================================================
@@ -113,7 +113,7 @@ exports[`run with options: {"module":"es2015","esModuleInterop":false} 1`] = `
   ================================================================================
 `;
 
-exports[`run with options: {"module":"es2015","esModuleInterop":true} 1`] = `
+exports[`Module es2015 run with options: {"module":"es2015","esModuleInterop":true} with template default 1`] = `
   × jest --no-cache
   ↳ exit code: 1
   ===[ STDOUT ]===================================================================
@@ -158,7 +158,7 @@ exports[`run with options: {"module":"es2015","esModuleInterop":true} 1`] = `
   ================================================================================
 `;
 
-exports[`run with options: {"module":"es2015"} 1`] = `
+exports[`Module es2015 run with options: {"module":"es2015"} with template default 1`] = `
   × jest --no-cache
   ↳ exit code: 1
   ===[ STDOUT ]===================================================================

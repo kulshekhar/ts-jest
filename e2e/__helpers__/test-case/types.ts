@@ -9,7 +9,7 @@ export interface RunTestOptions {
   env?: Record<string, unknown>
   inject?: (() => any) | string
   writeIo?: boolean
-  jestConfig?: Config.ProjectConfig | Record<string, unknown>
+  jestConfig?: Config.InitialOptions
   tsJestConfig?: TsJestGlobalOptions
   noCache?: boolean
   jestConfigPath?: string
