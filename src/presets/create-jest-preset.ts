@@ -1,5 +1,7 @@
 import type { Config } from '@jest/types'
 
+import { ALL_ESM_OPTIONS_ENABLED } from '../constants'
+
 import { rootLogger } from '../utils/logger'
 
 const logger = rootLogger.child({ namespace: 'jest-preset' })
@@ -13,14 +15,17 @@ export function createJestPreset(allowJs = false, extraOptions: Config.InitialOp
   logger.debug({ allowJs }, 'creating jest presets', allowJs ? 'handling' : 'not handling', 'JavaScript files')
 
   const { extensionsToTreatAsEsm, moduleFileExtensions, testMatch } = extraOptions
+  const supportESM = extensionsToTreatAsEsm?.length
 
   return {
     ...(extensionsToTreatAsEsm ? { extensionsToTreatAsEsm } : undefined),
     ...(moduleFileExtensions ? { moduleFileExtensions } : undefined),
+    ...(testMatch ? { testMatch } : undefined),
     transform: {
       ...extraOptions.transform,
-      [allowJs ? (extensionsToTreatAsEsm?.length ? '^.+\\.m?[tj]sx?$' : '^.+\\.[tj]sx?$') : '^.+\\.tsx?$']: 'ts-jest',
+      [allowJs ? (supportESM ? '^.+\\.m?[tj]sx?$' : '^.+\\.[tj]sx?$') : '^.+\\.tsx?$']: supportESM
+        ? ['ts-jest', ALL_ESM_OPTIONS_ENABLED]
+        : 'ts-jest',
     },
-    ...(testMatch ? { testMatch } : undefined),
   }
 }

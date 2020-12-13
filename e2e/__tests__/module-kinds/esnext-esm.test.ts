@@ -1,6 +1,6 @@
-import { AllPreset, esmOnly, runTestCases } from './helpers'
+import { AllPreset, esmOnly as describe, runTestCases } from './helpers'
 
-esmOnly.each([
+describe.each([
   AllPreset.DEFAULT_ESM,
   AllPreset.JS_WITH_TS_ESM,
   AllPreset.JS_WITH_BABEL_ESM
