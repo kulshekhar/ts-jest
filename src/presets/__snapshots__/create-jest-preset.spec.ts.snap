@@ -69,15 +69,7 @@ Object {
     "foo",
   ],
   "transform": Object {
-    "^.+\\\\.m?[tj]sx?$": Array [
-      "ts-jest",
-      Object {
-        "supportsDynamicImport": true,
-        "supportsExportNamespaceFrom": true,
-        "supportsStaticESM": true,
-        "supportsTopLevelAwait": true,
-      },
-    ],
+    "^.+\\\\.m?[tj]sx?$": "ts-jest",
     "foo": "bar",
   },
 }

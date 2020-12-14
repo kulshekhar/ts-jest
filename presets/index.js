@@ -1,5 +1,4 @@
 const { JS_EXT_TO_TREAT_AS_ESM, TS_EXT_TO_TREAT_AS_ESM } = require('../dist/constants')
-const { ALL_ESM_OPTIONS_ENABLED } = require('../dist/constants')
 const { createJestPreset } = require('../dist/presets/create-jest-preset')
 
 module.exports = {
@@ -26,7 +25,7 @@ module.exports = {
     return createJestPreset(false, {
       extensionsToTreatAsEsm: [...JS_EXT_TO_TREAT_AS_ESM, ...TS_EXT_TO_TREAT_AS_ESM],
       transform: {
-        '^.+\\.m?[j]sx?$': ['babel-jest', ALL_ESM_OPTIONS_ENABLED],
+        '^.+\\.m?[j]sx?$': 'babel-jest',
       },
     })
   },
