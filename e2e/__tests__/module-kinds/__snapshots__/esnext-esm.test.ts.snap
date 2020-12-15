@@ -222,13 +222,22 @@ exports[`Module esnext with preset js-with-babel-esm run with options: {"module"
         at Object.<anonymous> (import-legacy.spec.ts:4:22)
   
   FAIL ./import-star.spec.ts
-    ● Test suite failed to run
+    ● import default
   
-      Unknown option: .supportsDynamicImport. Check out https://babeljs.io/docs/en/babel-core/#options for more information about options.
+      expect(received).toBe(expected) // Object.is equality
   
-        at throwUnknownError (../../__templates__/with-babel-7/node_modules/@babel/core/lib/config/validation/options.js:124:27)
-            at Array.forEach (<anonymous>)
-            at loadPrivatePartialConfig.next (<anonymous>)
+      Expected: "function"
+      Received: "object"
+  
+        2 | 
+        3 | test('import default', () => {
+      > 4 |   expect(typeof lib).toBe('function')
+          |                      ^
+        5 |   expect(lib()).toBe('foo')
+        6 |   expect(lib.bar).toBe('bar')
+        7 | })
+  
+        at Object.<anonymous> (import-star.spec.ts:4:22)
   
   ts-jest[ts-compiler] (WARN) import-default.spec.ts:1:8 - error TS1259: Module '"<cwd>/lib"' can only be default-imported using the 'allowSyntheticDefaultImports' flag
   
@@ -239,17 +248,10 @@ exports[`Module esnext with preset js-with-babel-esm run with options: {"module"
       5 export = lib
         ~~~~~~~~~~~~
       This module is declared with using 'export =', and can only be used with a default import when using the 'allowSyntheticDefaultImports' flag.
-  FAIL ./import-default.spec.ts
-    ● Test suite failed to run
+  PASS ./import-default.spec.ts
   
-      Unknown option: .supportsDynamicImport. Check out https://babeljs.io/docs/en/babel-core/#options for more information about options.
-  
-        at throwUnknownError (../../__templates__/with-babel-7/node_modules/@babel/core/lib/config/validation/options.js:124:27)
-            at Array.forEach (<anonymous>)
-            at loadPrivatePartialConfig.next (<anonymous>)
-  
-  Test Suites: 3 failed, 3 total
-  Tests:       1 failed, 1 total
+  Test Suites: 2 failed, 1 passed, 3 total
+  Tests:       2 failed, 1 passed, 3 total
   Snapshots:   0 total
   Time:        XXs
   Ran all test suites.
@@ -285,13 +287,22 @@ exports[`Module esnext with preset js-with-babel-esm run with options: {"module"
         at Object.<anonymous> (import-legacy.spec.ts:4:22)
   
   FAIL ./import-star.spec.ts
-    ● Test suite failed to run
+    ● import default
   
-      Unknown option: .supportsDynamicImport. Check out https://babeljs.io/docs/en/babel-core/#options for more information about options.
+      expect(received).toBe(expected) // Object.is equality
   
-        at throwUnknownError (../../__templates__/with-babel-7-string-config/node_modules/@babel/core/lib/config/validation/options.js:124:27)
-            at Array.forEach (<anonymous>)
-            at loadPrivatePartialConfig.next (<anonymous>)
+      Expected: "function"
+      Received: "object"
+  
+        2 | 
+        3 | test('import default', () => {
+      > 4 |   expect(typeof lib).toBe('function')
+          |                      ^
+        5 |   expect(lib()).toBe('foo')
+        6 |   expect(lib.bar).toBe('bar')
+        7 | })
+  
+        at Object.<anonymous> (import-star.spec.ts:4:22)
   
   ts-jest[ts-compiler] (WARN) import-default.spec.ts:1:8 - error TS1259: Module '"<cwd>/lib"' can only be default-imported using the 'allowSyntheticDefaultImports' flag
   
@@ -302,17 +313,10 @@ exports[`Module esnext with preset js-with-babel-esm run with options: {"module"
       5 export = lib
         ~~~~~~~~~~~~
       This module is declared with using 'export =', and can only be used with a default import when using the 'allowSyntheticDefaultImports' flag.
-  FAIL ./import-default.spec.ts
-    ● Test suite failed to run
+  PASS ./import-default.spec.ts
   
-      Unknown option: .supportsDynamicImport. Check out https://babeljs.io/docs/en/babel-core/#options for more information about options.
-  
-        at throwUnknownError (../../__templates__/with-babel-7-string-config/node_modules/@babel/core/lib/config/validation/options.js:124:27)
-            at Array.forEach (<anonymous>)
-            at loadPrivatePartialConfig.next (<anonymous>)
-  
-  Test Suites: 3 failed, 3 total
-  Tests:       1 failed, 1 total
+  Test Suites: 2 failed, 1 passed, 3 total
+  Tests:       2 failed, 1 passed, 3 total
   Snapshots:   0 total
   Time:        XXs
   Ran all test suites.
@@ -348,25 +352,27 @@ exports[`Module esnext with preset js-with-babel-esm run with options: {"module"
         at Object.<anonymous> (import-legacy.spec.ts:4:22)
   
   FAIL ./import-star.spec.ts
-    ● Test suite failed to run
+    ● import default
   
-      Unknown option: .supportsDynamicImport. Check out https://babeljs.io/docs/en/babel-core/#options for more information about options.
+      expect(received).toBe(expected) // Object.is equality
   
-        at throwUnknownError (../../__templates__/with-babel-7/node_modules/@babel/core/lib/config/validation/options.js:124:27)
-            at Array.forEach (<anonymous>)
-            at loadPrivatePartialConfig.next (<anonymous>)
+      Expected: "function"
+      Received: "object"
   
-  FAIL ./import-default.spec.ts
-    ● Test suite failed to run
+        2 | 
+        3 | test('import default', () => {
+      > 4 |   expect(typeof lib).toBe('function')
+          |                      ^
+        5 |   expect(lib()).toBe('foo')
+        6 |   expect(lib.bar).toBe('bar')
+        7 | })
   
-      Unknown option: .supportsDynamicImport. Check out https://babeljs.io/docs/en/babel-core/#options for more information about options.
+        at Object.<anonymous> (import-star.spec.ts:4:22)
   
-        at throwUnknownError (../../__templates__/with-babel-7/node_modules/@babel/core/lib/config/validation/options.js:124:27)
-            at Array.forEach (<anonymous>)
-            at loadPrivatePartialConfig.next (<anonymous>)
+  PASS ./import-default.spec.ts
   
-  Test Suites: 3 failed, 3 total
-  Tests:       1 failed, 1 total
+  Test Suites: 2 failed, 1 passed, 3 total
+  Tests:       2 failed, 1 passed, 3 total
   Snapshots:   0 total
   Time:        XXs
   Ran all test suites.
@@ -402,25 +408,27 @@ exports[`Module esnext with preset js-with-babel-esm run with options: {"module"
         at Object.<anonymous> (import-legacy.spec.ts:4:22)
   
   FAIL ./import-star.spec.ts
-    ● Test suite failed to run
+    ● import default
   
-      Unknown option: .supportsDynamicImport. Check out https://babeljs.io/docs/en/babel-core/#options for more information about options.
+      expect(received).toBe(expected) // Object.is equality
   
-        at throwUnknownError (../../__templates__/with-babel-7-string-config/node_modules/@babel/core/lib/config/validation/options.js:124:27)
-            at Array.forEach (<anonymous>)
-            at loadPrivatePartialConfig.next (<anonymous>)
+      Expected: "function"
+      Received: "object"
   
-  FAIL ./import-default.spec.ts
-    ● Test suite failed to run
+        2 | 
+        3 | test('import default', () => {
+      > 4 |   expect(typeof lib).toBe('function')
+          |                      ^
+        5 |   expect(lib()).toBe('foo')
+        6 |   expect(lib.bar).toBe('bar')
+        7 | })
   
-      Unknown option: .supportsDynamicImport. Check out https://babeljs.io/docs/en/babel-core/#options for more information about options.
+        at Object.<anonymous> (import-star.spec.ts:4:22)
   
-        at throwUnknownError (../../__templates__/with-babel-7-string-config/node_modules/@babel/core/lib/config/validation/options.js:124:27)
-            at Array.forEach (<anonymous>)
-            at loadPrivatePartialConfig.next (<anonymous>)
+  PASS ./import-default.spec.ts
   
-  Test Suites: 3 failed, 3 total
-  Tests:       1 failed, 1 total
+  Test Suites: 2 failed, 1 passed, 3 total
+  Tests:       2 failed, 1 passed, 3 total
   Snapshots:   0 total
   Time:        XXs
   Ran all test suites.
@@ -456,13 +464,22 @@ exports[`Module esnext with preset js-with-babel-esm run with options: {"module"
         at Object.<anonymous> (import-legacy.spec.ts:4:22)
   
   FAIL ./import-star.spec.ts
-    ● Test suite failed to run
+    ● import default
   
-      Unknown option: .supportsDynamicImport. Check out https://babeljs.io/docs/en/babel-core/#options for more information about options.
+      expect(received).toBe(expected) // Object.is equality
   
-        at throwUnknownError (../../__templates__/with-babel-7/node_modules/@babel/core/lib/config/validation/options.js:124:27)
-            at Array.forEach (<anonymous>)
-            at loadPrivatePartialConfig.next (<anonymous>)
+      Expected: "function"
+      Received: "object"
+  
+        2 | 
+        3 | test('import default', () => {
+      > 4 |   expect(typeof lib).toBe('function')
+          |                      ^
+        5 |   expect(lib()).toBe('foo')
+        6 |   expect(lib.bar).toBe('bar')
+        7 | })
+  
+        at Object.<anonymous> (import-star.spec.ts:4:22)
   
   ts-jest[ts-compiler] (WARN) import-default.spec.ts:1:8 - error TS1259: Module '"<cwd>/lib"' can only be default-imported using the 'allowSyntheticDefaultImports' flag
   
@@ -473,17 +490,10 @@ exports[`Module esnext with preset js-with-babel-esm run with options: {"module"
       5 export = lib
         ~~~~~~~~~~~~
       This module is declared with using 'export =', and can only be used with a default import when using the 'allowSyntheticDefaultImports' flag.
-  FAIL ./import-default.spec.ts
-    ● Test suite failed to run
+  PASS ./import-default.spec.ts
   
-      Unknown option: .supportsDynamicImport. Check out https://babeljs.io/docs/en/babel-core/#options for more information about options.
-  
-        at throwUnknownError (../../__templates__/with-babel-7/node_modules/@babel/core/lib/config/validation/options.js:124:27)
-            at Array.forEach (<anonymous>)
-            at loadPrivatePartialConfig.next (<anonymous>)
-  
-  Test Suites: 3 failed, 3 total
-  Tests:       1 failed, 1 total
+  Test Suites: 2 failed, 1 passed, 3 total
+  Tests:       2 failed, 1 passed, 3 total
   Snapshots:   0 total
   Time:        XXs
   Ran all test suites.
@@ -519,13 +529,22 @@ exports[`Module esnext with preset js-with-babel-esm run with options: {"module"
         at Object.<anonymous> (import-legacy.spec.ts:4:22)
   
   FAIL ./import-star.spec.ts
-    ● Test suite failed to run
+    ● import default
   
-      Unknown option: .supportsDynamicImport. Check out https://babeljs.io/docs/en/babel-core/#options for more information about options.
+      expect(received).toBe(expected) // Object.is equality
   
-        at throwUnknownError (../../__templates__/with-babel-7-string-config/node_modules/@babel/core/lib/config/validation/options.js:124:27)
-            at Array.forEach (<anonymous>)
-            at loadPrivatePartialConfig.next (<anonymous>)
+      Expected: "function"
+      Received: "object"
+  
+        2 | 
+        3 | test('import default', () => {
+      > 4 |   expect(typeof lib).toBe('function')
+          |                      ^
+        5 |   expect(lib()).toBe('foo')
+        6 |   expect(lib.bar).toBe('bar')
+        7 | })
+  
+        at Object.<anonymous> (import-star.spec.ts:4:22)
   
   ts-jest[ts-compiler] (WARN) import-default.spec.ts:1:8 - error TS1259: Module '"<cwd>/lib"' can only be default-imported using the 'allowSyntheticDefaultImports' flag
   
@@ -536,17 +555,10 @@ exports[`Module esnext with preset js-with-babel-esm run with options: {"module"
       5 export = lib
         ~~~~~~~~~~~~
       This module is declared with using 'export =', and can only be used with a default import when using the 'allowSyntheticDefaultImports' flag.
-  FAIL ./import-default.spec.ts
-    ● Test suite failed to run
+  PASS ./import-default.spec.ts
   
-      Unknown option: .supportsDynamicImport. Check out https://babeljs.io/docs/en/babel-core/#options for more information about options.
-  
-        at throwUnknownError (../../__templates__/with-babel-7-string-config/node_modules/@babel/core/lib/config/validation/options.js:124:27)
-            at Array.forEach (<anonymous>)
-            at loadPrivatePartialConfig.next (<anonymous>)
-  
-  Test Suites: 3 failed, 3 total
-  Tests:       1 failed, 1 total
+  Test Suites: 2 failed, 1 passed, 3 total
+  Tests:       2 failed, 1 passed, 3 total
   Snapshots:   0 total
   Time:        XXs
   Ran all test suites.
@@ -592,25 +604,27 @@ exports[`Module esnext with preset js-with-babel-esm run with options: {"module"
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
       Type originates at this import. A namespace-style import cannot be called or constructed, and will cause a failure at runtime. Consider using a default import or import require here instead.
   FAIL ./import-star.spec.ts
-    ● Test suite failed to run
+    ● import default
   
-      Unknown option: .supportsDynamicImport. Check out https://babeljs.io/docs/en/babel-core/#options for more information about options.
+      expect(received).toBe(expected) // Object.is equality
   
-        at throwUnknownError (../../__templates__/with-babel-7/node_modules/@babel/core/lib/config/validation/options.js:124:27)
-            at Array.forEach (<anonymous>)
-            at loadPrivatePartialConfig.next (<anonymous>)
+      Expected: "function"
+      Received: "object"
   
-  FAIL ./import-default.spec.ts
-    ● Test suite failed to run
+        2 | 
+        3 | test('import default', () => {
+      > 4 |   expect(typeof lib).toBe('function')
+          |                      ^
+        5 |   expect(lib()).toBe('foo')
+        6 |   expect(lib.bar).toBe('bar')
+        7 | })
   
-      Unknown option: .supportsDynamicImport. Check out https://babeljs.io/docs/en/babel-core/#options for more information about options.
+        at Object.<anonymous> (import-star.spec.ts:4:22)
   
-        at throwUnknownError (../../__templates__/with-babel-7/node_modules/@babel/core/lib/config/validation/options.js:124:27)
-            at Array.forEach (<anonymous>)
-            at loadPrivatePartialConfig.next (<anonymous>)
+  PASS ./import-default.spec.ts
   
-  Test Suites: 3 failed, 3 total
-  Tests:       1 failed, 1 total
+  Test Suites: 2 failed, 1 passed, 3 total
+  Tests:       2 failed, 1 passed, 3 total
   Snapshots:   0 total
   Time:        XXs
   Ran all test suites.
@@ -656,25 +670,27 @@ exports[`Module esnext with preset js-with-babel-esm run with options: {"module"
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
       Type originates at this import. A namespace-style import cannot be called or constructed, and will cause a failure at runtime. Consider using a default import or import require here instead.
   FAIL ./import-star.spec.ts
-    ● Test suite failed to run
+    ● import default
   
-      Unknown option: .supportsDynamicImport. Check out https://babeljs.io/docs/en/babel-core/#options for more information about options.
+      expect(received).toBe(expected) // Object.is equality
   
-        at throwUnknownError (../../__templates__/with-babel-7-string-config/node_modules/@babel/core/lib/config/validation/options.js:124:27)
-            at Array.forEach (<anonymous>)
-            at loadPrivatePartialConfig.next (<anonymous>)
+      Expected: "function"
+      Received: "object"
   
-  FAIL ./import-default.spec.ts
-    ● Test suite failed to run
+        2 | 
+        3 | test('import default', () => {
+      > 4 |   expect(typeof lib).toBe('function')
+          |                      ^
+        5 |   expect(lib()).toBe('foo')
+        6 |   expect(lib.bar).toBe('bar')
+        7 | })
   
-      Unknown option: .supportsDynamicImport. Check out https://babeljs.io/docs/en/babel-core/#options for more information about options.
+        at Object.<anonymous> (import-star.spec.ts:4:22)
   
-        at throwUnknownError (../../__templates__/with-babel-7-string-config/node_modules/@babel/core/lib/config/validation/options.js:124:27)
-            at Array.forEach (<anonymous>)
-            at loadPrivatePartialConfig.next (<anonymous>)
+  PASS ./import-default.spec.ts
   
-  Test Suites: 3 failed, 3 total
-  Tests:       1 failed, 1 total
+  Test Suites: 2 failed, 1 passed, 3 total
+  Tests:       2 failed, 1 passed, 3 total
   Snapshots:   0 total
   Time:        XXs
   Ran all test suites.
@@ -710,13 +726,22 @@ exports[`Module esnext with preset js-with-babel-esm run with options: {"module"
         at Object.<anonymous> (import-legacy.spec.ts:4:22)
   
   FAIL ./import-star.spec.ts
-    ● Test suite failed to run
+    ● import default
   
-      Unknown option: .supportsDynamicImport. Check out https://babeljs.io/docs/en/babel-core/#options for more information about options.
+      expect(received).toBe(expected) // Object.is equality
   
-        at throwUnknownError (../../__templates__/with-babel-7/node_modules/@babel/core/lib/config/validation/options.js:124:27)
-            at Array.forEach (<anonymous>)
-            at loadPrivatePartialConfig.next (<anonymous>)
+      Expected: "function"
+      Received: "object"
+  
+        2 | 
+        3 | test('import default', () => {
+      > 4 |   expect(typeof lib).toBe('function')
+          |                      ^
+        5 |   expect(lib()).toBe('foo')
+        6 |   expect(lib.bar).toBe('bar')
+        7 | })
+  
+        at Object.<anonymous> (import-star.spec.ts:4:22)
   
   ts-jest[ts-compiler] (WARN) import-default.spec.ts:1:8 - error TS1259: Module '"<cwd>/lib"' can only be default-imported using the 'allowSyntheticDefaultImports' flag
   
@@ -727,17 +752,10 @@ exports[`Module esnext with preset js-with-babel-esm run with options: {"module"
       5 export = lib
         ~~~~~~~~~~~~
       This module is declared with using 'export =', and can only be used with a default import when using the 'allowSyntheticDefaultImports' flag.
-  FAIL ./import-default.spec.ts
-    ● Test suite failed to run
+  PASS ./import-default.spec.ts
   
-      Unknown option: .supportsDynamicImport. Check out https://babeljs.io/docs/en/babel-core/#options for more information about options.
-  
-        at throwUnknownError (../../__templates__/with-babel-7/node_modules/@babel/core/lib/config/validation/options.js:124:27)
-            at Array.forEach (<anonymous>)
-            at loadPrivatePartialConfig.next (<anonymous>)
-  
-  Test Suites: 3 failed, 3 total
-  Tests:       1 failed, 1 total
+  Test Suites: 2 failed, 1 passed, 3 total
+  Tests:       2 failed, 1 passed, 3 total
   Snapshots:   0 total
   Time:        XXs
   Ran all test suites.
@@ -773,13 +791,22 @@ exports[`Module esnext with preset js-with-babel-esm run with options: {"module"
         at Object.<anonymous> (import-legacy.spec.ts:4:22)
   
   FAIL ./import-star.spec.ts
-    ● Test suite failed to run
+    ● import default
   
-      Unknown option: .supportsDynamicImport. Check out https://babeljs.io/docs/en/babel-core/#options for more information about options.
+      expect(received).toBe(expected) // Object.is equality
   
-        at throwUnknownError (../../__templates__/with-babel-7-string-config/node_modules/@babel/core/lib/config/validation/options.js:124:27)
-            at Array.forEach (<anonymous>)
-            at loadPrivatePartialConfig.next (<anonymous>)
+      Expected: "function"
+      Received: "object"
+  
+        2 | 
+        3 | test('import default', () => {
+      > 4 |   expect(typeof lib).toBe('function')
+          |                      ^
+        5 |   expect(lib()).toBe('foo')
+        6 |   expect(lib.bar).toBe('bar')
+        7 | })
+  
+        at Object.<anonymous> (import-star.spec.ts:4:22)
   
   ts-jest[ts-compiler] (WARN) import-default.spec.ts:1:8 - error TS1259: Module '"<cwd>/lib"' can only be default-imported using the 'allowSyntheticDefaultImports' flag
   
@@ -790,17 +817,10 @@ exports[`Module esnext with preset js-with-babel-esm run with options: {"module"
       5 export = lib
         ~~~~~~~~~~~~
       This module is declared with using 'export =', and can only be used with a default import when using the 'allowSyntheticDefaultImports' flag.
-  FAIL ./import-default.spec.ts
-    ● Test suite failed to run
+  PASS ./import-default.spec.ts
   
-      Unknown option: .supportsDynamicImport. Check out https://babeljs.io/docs/en/babel-core/#options for more information about options.
-  
-        at throwUnknownError (../../__templates__/with-babel-7-string-config/node_modules/@babel/core/lib/config/validation/options.js:124:27)
-            at Array.forEach (<anonymous>)
-            at loadPrivatePartialConfig.next (<anonymous>)
-  
-  Test Suites: 3 failed, 3 total
-  Tests:       1 failed, 1 total
+  Test Suites: 2 failed, 1 passed, 3 total
+  Tests:       2 failed, 1 passed, 3 total
   Snapshots:   0 total
   Time:        XXs
   Ran all test suites.

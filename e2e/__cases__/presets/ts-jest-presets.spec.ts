@@ -1,6 +1,6 @@
 // preset and utils should work all the time
 import * as presets from 'ts-jest/presets'
-import { ALL_ESM_OPTIONS_ENABLED, JS_EXT_TO_TREAT_AS_ESM, TS_EXT_TO_TREAT_AS_ESM } from 'ts-jest/dist/constants'
+import { JS_EXT_TO_TREAT_AS_ESM, TS_EXT_TO_TREAT_AS_ESM } from 'ts-jest/dist/constants'
 
 test('presets', () => {
   expect(presets.defaults).toEqual({
@@ -11,7 +11,7 @@ test('presets', () => {
   expect(presets.defaultsESM).toEqual({
     extensionsToTreatAsEsm: [...TS_EXT_TO_TREAT_AS_ESM],
     transform: {
-      '^.+\\.tsx?$': ['ts-jest', ALL_ESM_OPTIONS_ENABLED],
+      '^.+\\.tsx?$': 'ts-jest',
     },
   })
   expect(presets.jsWithTs).toEqual({
@@ -22,7 +22,7 @@ test('presets', () => {
   expect(presets.jsWithTsESM).toEqual({
     extensionsToTreatAsEsm: [...JS_EXT_TO_TREAT_AS_ESM, ...TS_EXT_TO_TREAT_AS_ESM],
     transform: {
-      '^.+\\.m?[tj]sx?$': ['ts-jest', ALL_ESM_OPTIONS_ENABLED],
+      '^.+\\.m?[tj]sx?$': 'ts-jest',
     },
   })
   expect(presets.jsWithBabel).toEqual({
@@ -34,8 +34,8 @@ test('presets', () => {
   expect(presets.jsWithBabelESM).toEqual({
     extensionsToTreatAsEsm: [...JS_EXT_TO_TREAT_AS_ESM, ...TS_EXT_TO_TREAT_AS_ESM],
     transform: {
-      '^.+\\.tsx?$': ['ts-jest', ALL_ESM_OPTIONS_ENABLED],
-      '^.+\\.m?[j]sx?$': ['babel-jest', ALL_ESM_OPTIONS_ENABLED],
+      '^.+\\.tsx?$': 'ts-jest',
+      '^.+\\.m?[j]sx?$': 'babel-jest',
     },
   })
 })
