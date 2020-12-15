@@ -171,3 +171,15 @@ exports[`TsCompiler isolatedModule true should compile js file for allowJs true 
   version: 3
   ================================================================================
 `;
+
+exports[`TsCompiler isolatedModule true support ESM should transpile codes to correct syntax with supportsStaticESM and useESM options 1`] = `99`;
+
+exports[`TsCompiler isolatedModule true support ESM should transpile codes to correct syntax with supportsStaticESM and useESM options 2`] = `99`;
+
+exports[`TsCompiler isolatedModule true support ESM should transpile codes to correct syntax with supportsStaticESM and useESM options 3`] = `99`;
+
+exports[`TsCompiler isolatedModule true support ESM should transpile codes to correct syntax with supportsStaticESM and useESM options 4`] = `1`;
+
+exports[`TsCompiler isolatedModule true support ESM should transpile codes to correct syntax with supportsStaticESM and useESM options 5`] = `1`;
+
+exports[`TsCompiler isolatedModule true support ESM should transpile codes to correct syntax with supportsStaticESM and useESM options 6`] = `1`;

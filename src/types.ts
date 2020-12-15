@@ -132,6 +132,12 @@ export interface TsJestGlobalOptions {
    * exporting the content of the file as a string
    */
   stringifyContentPathRegex?: string | RegExp
+
+  /**
+   * Tell `ts-jest` to transform codes to ESM format. This only works in combination with `jest-runtime` ESM option
+   * `supportsStaticESM` true which is passed into Jest transformer
+   */
+  useESM?: boolean
 }
 
 interface TsJestConfig$tsConfig$file {
@@ -191,7 +197,7 @@ export type StringMap = Map<string, string>
 
 export interface CompilerInstance {
   getResolvedModulesMap(fileContent: string, fileName: string): ResolvedModulesMap
-  getCompiledOutput(fileContent: string, fileName: string): string
+  getCompiledOutput(fileContent: string, fileName: string, supportsStaticESM: boolean): string
 }
 /**
  * @internal

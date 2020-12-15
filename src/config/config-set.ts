@@ -12,7 +12,7 @@ import type { Config } from '@jest/types'
 import { LogContexts, Logger } from 'bs-logger'
 import { existsSync, readFileSync } from 'fs'
 import { globsToMatcher } from 'jest-util'
-import json5 = require('json5')
+import json5 from 'json5'
 import { dirname, extname, isAbsolute, join, normalize, resolve } from 'path'
 import {
   CompilerOptions,
@@ -20,6 +20,7 @@ import {
   Diagnostic,
   FormatDiagnosticsHost,
   ParsedCommandLine,
+  ModuleKind,
   ScriptTarget,
 } from 'typescript'
 
@@ -115,6 +116,7 @@ export class ConfigSet {
   tsCacheDir: string | undefined
   parsedTsConfig!: ParsedCommandLine | Record<string, any>
   customTransformers: CustomTransformers = Object.create(null)
+  useESM = false
   /**
    * @internal
    */
@@ -183,7 +185,7 @@ export class ConfigSet {
     this.logger.debug({ compilerModule: this.compilerModule }, 'normalized compiler module config via ts-jest option')
 
     this._backportJestCfg()
-    this._setupTsJestCfg(options)
+    this._setupConfigSet(options)
     this._resolveTsCacheDir()
     this._matchablePatterns = [...this._jestCfg.testMatch, ...this._jestCfg.testRegex].filter(
       (pattern) =>
@@ -215,7 +217,10 @@ export class ConfigSet {
   /**
    * @internal
    */
-  private _setupTsJestCfg(options: TsJestGlobalOptions): void {
+  private _setupConfigSet(options: TsJestGlobalOptions): void {
+    // useESM
+    this.useESM = options.useESM ?? false
+
     // babel config (for babel-jest) default is undefined so we don't need to have fallback like tsConfig
     if (!options.babelConfig) {
       this.logger.debug('babel is disabled')
@@ -244,12 +249,7 @@ export class ConfigSet {
       }
 
       this.logger.debug({ babelConfig: this.babelConfig }, 'normalized babel config via ts-jest option')
-    }
-    if (!this.babelConfig) {
-      this._overriddenCompilerOptions.module = this.jestConfig.extensionsToTreatAsEsm.length
-        ? undefined
-        : this.compilerModule.ModuleKind.CommonJS
-    } else {
+
       this.babelJestTransformer = importer
         .babelJest(ImportReasons.BabelJest)
         .createTransformer(this.babelConfig) as BabelJestTransformer
@@ -412,19 +412,19 @@ export class ConfigSet {
     const finalOptions = result.options
     // Target ES2015 output by default (instead of ES3).
     if (finalOptions.target === undefined) {
-      finalOptions.target = ts.ScriptTarget.ES2015
+      finalOptions.target = ScriptTarget.ES2015
     }
 
     // check the module interoperability
     const target = finalOptions.target
     // compute the default if not set
-    const defaultModule = [ts.ScriptTarget.ES3, ts.ScriptTarget.ES5].includes(target)
-      ? ts.ModuleKind.CommonJS
-      : ts.ModuleKind.ESNext
+    const defaultModule = [ScriptTarget.ES3, ScriptTarget.ES5].includes(target)
+      ? ModuleKind.CommonJS
+      : ModuleKind.ESNext
     const moduleValue = finalOptions.module ?? defaultModule
     if (
-      'module' in forcedOptions &&
-      moduleValue !== forcedOptions.module &&
+      !this.babelConfig &&
+      moduleValue !== ModuleKind.CommonJS &&
       !(finalOptions.esModuleInterop || finalOptions.allowSyntheticDefaultImports)
     ) {
       result.errors.push({
