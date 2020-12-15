@@ -45,7 +45,8 @@ function IntroHeading({ ...siteConfig }) {
       <p>
         It supports all features of TypeScript including type-checking.{' '}
         <a href="docs/babel7-or-ts" className="link">
-          Read more about Babel 7 <code>preset-typescript</code> <strong>vs</strong> TypeScript(and <code>ts-jest</code>)
+          Read more about Babel 7 <code>preset-typescript</code> <strong>vs</strong> TypeScript(and <code>ts-jest</code>
+          )
         </a>
       </p>
     </div>
@@ -77,6 +78,7 @@ function IntroDescription() {
   )
 }
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 function Home() {
   const context = useDocusaurusContext()
   const { siteConfig = {} } = context
@@ -147,9 +149,9 @@ function Home() {
             <a href="http://semver.org/" className="link">
               SemVer
             </a>
-            . Our Major version follows Jest, which means that our <strong>minor changes can be breaking.</strong> Please make sure
-            to pin your version of <code>ts-jest</code> to a specific version if this is a problem. For the versions
-            available, see the{' '}
+            . Our Major version follows Jest, which means that our <strong>minor changes can be breaking.</strong>{' '}
+            Please make sure to pin your version of <code>ts-jest</code> to a specific version if this is a problem. For
+            the versions available, see the{' '}
             <a href="https://github.com/kulshekhar/ts-jest/tags" className="link">
               tags on this repository.
             </a>
