@@ -179,14 +179,14 @@ export interface TsJestConfig {
   stringifyContentPathRegex: string | undefined
 }
 
-export interface TsJestProjectConfig extends Config.ProjectConfig {
+export interface ProjectConfigTsJest extends Config.ProjectConfig {
   globals: {
     'ts-jest': TsJestGlobalOptions
   }
 }
 
 export interface TransformOptionsTsJest extends TransformOptions {
-  config: TsJestProjectConfig
+  config: ProjectConfigTsJest
 }
 
 export type ResolvedModulesMap = Map<string, _ts.ResolvedModuleFull | undefined> | undefined

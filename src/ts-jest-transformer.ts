@@ -1,4 +1,4 @@
-import type { TransformedSource, Transformer, TransformOptions } from '@jest/transform'
+import type { TransformedSource, Transformer } from '@jest/transform'
 import type { Config } from '@jest/types'
 import type { Logger } from 'bs-logger'
 import { existsSync, readFileSync, statSync, writeFileSync } from 'fs'
@@ -8,7 +8,7 @@ import { join, resolve } from 'path'
 import { TsJestCompiler } from './compiler/ts-jest-compiler'
 import { ConfigSet } from './config/config-set'
 import { DECLARATION_TYPE_EXT, JS_JSX_REGEX, TS_TSX_REGEX } from './constants'
-import type { TsJestProjectConfig, TransformOptionsTsJest } from './types'
+import type { ProjectConfigTsJest, TransformOptionsTsJest } from './types'
 import { parse, stringify } from './utils/json'
 import { JsonableValue } from './utils/jsonable-value'
 import { rootLogger } from './utils/logger'
@@ -19,7 +19,7 @@ import { VersionCheckers } from './utils/version-checkers'
 
 interface CachedConfigSet {
   configSet: ConfigSet
-  jestConfig: JsonableValue<TsJestProjectConfig>
+  jestConfig: JsonableValue<ProjectConfigTsJest>
   transformerCfgStr: string
   compiler: TsJestCompiler
 }
@@ -58,7 +58,7 @@ export class TsJestTransformer implements Transformer {
     this._logger.debug('created new transformer')
   }
 
-  protected _configsFor(transformOptions: TransformOptions): ConfigSet {
+  protected _configsFor(transformOptions: TransformOptionsTsJest): ConfigSet {
     const { config, cacheFS } = transformOptions
     const ccs: CachedConfigSet | undefined = TsJestTransformer._cachedConfigSets.find(
       (cs) => cs.jestConfig.value === config,

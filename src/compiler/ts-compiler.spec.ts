@@ -23,7 +23,7 @@ describe('TsCompiler', () => {
       })
       const source = 'export default 42'
 
-      const compiled = compiler.getCompiledOutput(source, fileName)
+      const compiled = compiler.getCompiledOutput(source, fileName, false)
 
       expect(new ProcessedSource(compiled, fileName)).toMatchSnapshot()
     })
@@ -45,7 +45,7 @@ describe('TsCompiler', () => {
             },
           },
         })
-        const compiled = compiler.getCompiledOutput(source, fileName)
+        const compiled = compiler.getCompiledOutput(source, fileName, false)
 
         expect(new ProcessedSource(compiled, fileName)).toMatchSnapshot()
       })
@@ -59,7 +59,7 @@ describe('TsCompiler', () => {
             },
           },
         })
-        const compiled = compiler.getCompiledOutput(source, fileName)
+        const compiled = compiler.getCompiledOutput(source, fileName, false)
 
         expect(new ProcessedSource(compiled, fileName)).toMatchSnapshot()
       })
@@ -71,7 +71,7 @@ describe('TsCompiler', () => {
 
       it('should have correct source maps without mapRoot', () => {
         const compiler = makeCompiler({ tsJestConfig: { ...baseTsJestConfig, tsconfig: false } })
-        const compiled = compiler.getCompiledOutput(source, fileName)
+        const compiled = compiler.getCompiledOutput(source, fileName, false)
 
         expect(new ProcessedSource(compiled, fileName).outputSourceMaps).toMatchObject({
           file: fileName,
@@ -89,7 +89,7 @@ describe('TsCompiler', () => {
             },
           },
         })
-        const compiled = compiler.getCompiledOutput(source, fileName)
+        const compiled = compiler.getCompiledOutput(source, fileName, false)
 
         expect(new ProcessedSource(compiled, fileName).outputSourceMaps).toMatchObject({
           file: fileName,
@@ -111,6 +111,7 @@ const t: string = f(5)
 const v: boolean = t
 `,
             'foo.ts',
+            false,
           ),
         ).not.toThrowError()
       })
@@ -125,6 +126,7 @@ const f = (v: number) = v
 const t: string = f(5)
 `,
             'foo.ts',
+            false,
           ),
         ).toThrowErrorMatchingSnapshot()
       })
@@ -141,6 +143,7 @@ const f = (v: number) = v
 const t: string = f(5)
 `,
             'foo.ts',
+            false,
           ),
         ).toThrowErrorMatchingSnapshot()
       })
@@ -157,6 +160,7 @@ const f = (v: number) = v
 const t: string = f(5)
 `,
             'foo.ts',
+            false,
           ),
         ).not.toThrowError()
       })
@@ -235,7 +239,7 @@ const t: string = f(5)
           jestCacheFS,
         )
 
-        const compiled = compiler.getCompiledOutput(source, fileName)
+        const compiled = compiler.getCompiledOutput(source, fileName, false)
 
         expect(new ProcessedSource(compiled, fileName)).toMatchSnapshot()
       })
@@ -247,7 +251,7 @@ const t: string = f(5)
           },
           jestCacheFS,
         )
-        const compiled = compiler.getCompiledOutput(source, fileName)
+        const compiled = compiler.getCompiledOutput(source, fileName, false)
 
         expect(new ProcessedSource(compiled, fileName)).toMatchSnapshot()
       })
@@ -274,7 +278,7 @@ const t: string = f(5)
           jestCacheFS,
         )
 
-        const compiled = compiler.getCompiledOutput(source, fileName)
+        const compiled = compiler.getCompiledOutput(source, fileName, false)
 
         expect(new ProcessedSource(compiled, fileName)).toMatchSnapshot()
       })
@@ -290,7 +294,7 @@ const t: string = f(5)
           },
           jestCacheFS,
         )
-        const compiled = compiler.getCompiledOutput(source, fileName)
+        const compiled = compiler.getCompiledOutput(source, fileName, false)
 
         expect(new ProcessedSource(compiled, fileName)).toMatchSnapshot()
       })
@@ -306,7 +310,7 @@ const t: string = f(5)
           { tsJestConfig: { tsconfig: require.resolve('../../tsconfig.spec.json') } },
           jestCacheFS,
         )
-        const compiled = compiler.getCompiledOutput(source, fileName)
+        const compiled = compiler.getCompiledOutput(source, fileName, false)
 
         expect(new ProcessedSource(compiled, fileName).outputSourceMaps).toMatchObject({
           file: fileName,
@@ -326,7 +330,7 @@ const t: string = f(5)
           },
           jestCacheFS,
         )
-        const compiled = compiler.getCompiledOutput(source, fileName)
+        const compiled = compiler.getCompiledOutput(source, fileName, false)
 
         expect(new ProcessedSource(compiled, fileName).outputSourceMaps).toMatchObject({
           file: fileName,
@@ -420,7 +424,7 @@ const t: string = f(5)
           jestCacheFS,
         )
 
-        expect(() => compiler.getCompiledOutput(importedFileContent, importedFileName)).not.toThrowError()
+        expect(() => compiler.getCompiledOutput(importedFileContent, importedFileName, false)).not.toThrowError()
       })
 
       it(`shouldn't report diagnostic when processing file isn't used by any test files`, () => {
@@ -433,7 +437,7 @@ const t: string = f(5)
         )
         logTarget.clear()
 
-        compiler.getCompiledOutput(importedFileContent, 'foo.ts')
+        compiler.getCompiledOutput(importedFileContent, 'foo.ts', false)
 
         expect(logTarget.filteredLines(LogLevels.debug, Infinity)).toMatchSnapshot()
       })
@@ -453,7 +457,7 @@ const t: string = f(5)
           jestCacheFS,
         )
 
-        expect(() => compiler.getCompiledOutput(source, fileName)).toThrowErrorMatchingSnapshot()
+        expect(() => compiler.getCompiledOutput(source, fileName, false)).toThrowErrorMatchingSnapshot()
       })
     })
   })
