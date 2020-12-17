@@ -28,7 +28,7 @@ jobs:
         # https://help.github.com/en/actions/reference/workflow-commands-for-github-actions#setting-an-output-parameter
         run: echo "::set-output name=latest::$LATEST"
         env:
-          LATEST: ${{ contains(github.ref, '-alpha') != true && contains(github.ref, '-beta') != true && contains(github.ref, '-rc') != true }}
+          LATEST: ${{ contains(github.ref, '-next') != true && contains(github.ref, '-rc') != true }}
   create_release:
     needs: [setup_variables]
     # The type of runner that the job will run on

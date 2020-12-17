@@ -1,3 +1,25 @@
+# [27.0.0-next.2](https://github.com/kulshekhar/ts-jest/compare/v27.0.0-alpha.1...v27.0.0-next.2) (2020-12-17)
+
+
+### Bug Fixes
+
+* redo type checking when type has changed in watch mode ([#2167](https://github.com/kulshekhar/ts-jest/issues/2167)) ([ec70365](https://github.com/kulshekhar/ts-jest/commit/ec7036517ac218c2dc9cc20f5127025d21d5ada6)), closes [#2118](https://github.com/kulshekhar/ts-jest/issues/2118) [#1122](https://github.com/kulshekhar/ts-jest/issues/1122) [#943](https://github.com/kulshekhar/ts-jest/issues/943)
+
+
+### Features
+
+* **compiler:** allow `isolatedModule: true` to have ESM support ([#2219](https://github.com/kulshekhar/ts-jest/issues/2219)) ([e101db0](https://github.com/kulshekhar/ts-jest/commit/e101db01095ce75ce9a48e27a1d9bf84bb8e19ee)), closes [#1709](https://github.com/kulshekhar/ts-jest/issues/1709)
+* **presets:** add 3 new presets to work with ESM ([#2207](https://github.com/kulshekhar/ts-jest/issues/2207)) ([c277858](https://github.com/kulshekhar/ts-jest/commit/c277858c7820d8873c2d7d0c6e3704a47868d600))
+* allow subclasses of `TsJestTransformer` to have version checking ([#2176](https://github.com/kulshekhar/ts-jest/issues/2176)) ([ca8d7c4](https://github.com/kulshekhar/ts-jest/commit/ca8d7c44779105ef208d17cdd8c6baaf96b479ad))
+* support jest 27 ([#2171](https://github.com/kulshekhar/ts-jest/issues/2171)) ([9909b9d](https://github.com/kulshekhar/ts-jest/commit/9909b9d6b6c72b4c64d2d0ff46f142b2a65a7eae))
+
+
+### Performance Improvements
+
+* reuse jest file system cache for `isolatedModules: false` ([#2189](https://github.com/kulshekhar/ts-jest/issues/2189)) ([68f446b](https://github.com/kulshekhar/ts-jest/commit/68f446b8351bb8925ac4822aa631aa6b23f2f711))
+
+
+
 # [27.0.0-alpha.1](https://github.com/kulshekhar/ts-jest/compare/v27.0.0-alpha.0...v27.0.0-alpha.1) (2020-11-26)
 
 
