@@ -17,7 +17,7 @@ export class TsJestCompiler implements CompilerInstance {
     return this._compilerInstance.getResolvedModulesMap(fileContent, fileName)
   }
 
-  getCompiledOutput(fileContent: string, fileName: string): string {
-    return this._compilerInstance.getCompiledOutput(fileContent, fileName)
+  getCompiledOutput(fileContent: string, fileName: string, supportsStaticESM = false): string {
+    return this._compilerInstance.getCompiledOutput(fileContent, fileName, supportsStaticESM)
   }
 }

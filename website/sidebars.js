@@ -15,6 +15,10 @@ module.exports = {
     },
     {
       type: 'doc',
+      id: 'esm-support',
+    },
+    {
+      type: 'doc',
       id: 'react-native',
     },
     {

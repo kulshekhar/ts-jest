@@ -1,6 +1,7 @@
 import { readFileSync } from 'fs'
 import { LogLevels } from 'bs-logger'
 import { join } from 'path'
+import ts from 'typescript'
 
 import { TS_JEST_OUT_DIR } from '../config/config-set'
 import { makeCompiler } from '../__helpers__/fakers'
@@ -158,6 +159,57 @@ const t: string = f(5)
             'foo.ts',
           ),
         ).not.toThrowError()
+      })
+    })
+
+    describe('support ESM', () => {
+      test.each([
+        {
+          supportsStaticESM: true,
+          useESM: true,
+          moduleKind: 'esnext',
+        },
+        {
+          supportsStaticESM: true,
+          useESM: true,
+          moduleKind: 'amd',
+        },
+        {
+          supportsStaticESM: true,
+          useESM: true,
+          moduleKind: undefined,
+        },
+        {
+          supportsStaticESM: false,
+          useESM: true,
+          moduleKind: 'esnext',
+        },
+        {
+          supportsStaticESM: true,
+          useESM: false,
+          moduleKind: 'amd',
+        },
+        {
+          supportsStaticESM: false,
+          useESM: false,
+          moduleKind: 'es2015',
+        },
+      ])('should transpile codes to correct syntax with supportsStaticESM and useESM options', (data) => {
+        const transpileModuleSpy = (ts.transpileModule = jest.fn().mockReturnValueOnce({
+          outputText: 'var foo = 1',
+          diagnostics: [],
+          sourceMapText: '{}',
+        }))
+        const fileContent = `const foo = import('./foo')`
+        const fileName = 'foo.ts'
+
+        const compiler = makeCompiler({
+          tsJestConfig: { ...baseTsJestConfig, tsconfig: { module: data.moduleKind as any }, useESM: data.useESM },
+        })
+        compiler.getCompiledOutput(fileContent, fileName, data.supportsStaticESM)
+
+        expect(transpileModuleSpy).toHaveBeenCalled()
+        expect(transpileModuleSpy.mock.calls[0][1].compilerOptions.module).toMatchSnapshot()
       })
     })
   })

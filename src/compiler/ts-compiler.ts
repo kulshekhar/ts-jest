@@ -1,13 +1,14 @@
 import { LogContexts, Logger, LogLevels } from 'bs-logger'
 import memoize from 'lodash.memoize'
 import { basename, normalize, relative } from 'path'
-import type {
+import {
   EmitOutput,
   LanguageService,
   LanguageServiceHost,
   ParsedCommandLine,
   ResolvedModuleFull,
   TranspileOutput,
+  ModuleKind,
 } from 'typescript'
 
 import { updateOutput } from './compiler-utils'
@@ -16,6 +17,8 @@ import { LINE_FEED } from '../constants'
 import type { CompilerInstance, ResolvedModulesMap, StringMap, TTypeScript } from '../types'
 import { rootLogger } from '../utils/logger'
 import { Errors, interpolate } from '../utils/messages'
+
+const AVAILABLE_ESM_MODULE_KINDS = [ModuleKind.ES2015, ModuleKind.ES2020, ModuleKind.ESNext]
 
 /**
  * @internal
@@ -41,6 +44,10 @@ export class TsCompiler implements CompilerInstance {
   }
 
   private _createLanguageService(): void {
+    const compilerOptions = {
+      ...this._parsedTsConfig.options,
+      module: ModuleKind.CommonJS,
+    }
     const serviceHostTraceCtx = {
       namespace: 'ts:serviceHost',
       call: null,
@@ -60,11 +67,7 @@ export class TsCompiler implements CompilerInstance {
       realpath: this._ts.sys.realpath && memoize(this._ts.sys.realpath),
       getDirectories: memoize(this._ts.sys.getDirectories),
     }
-    const moduleResolutionCache = this._ts.createModuleResolutionCache(
-      this.configSet.cwd,
-      (x) => x,
-      this._parsedTsConfig.options,
-    )
+    const moduleResolutionCache = this._ts.createModuleResolutionCache(this.configSet.cwd, (x) => x, compilerOptions)
     /* istanbul ignore next */
     const serviceHost: LanguageServiceHost = {
       getProjectVersion: () => String(this._projectVersion),
@@ -109,15 +112,15 @@ export class TsCompiler implements CompilerInstance {
       realpath: this._ts.sys.realpath && memoize(this._ts.sys.realpath),
       getNewLine: () => LINE_FEED,
       getCurrentDirectory: () => this.configSet.cwd,
-      getCompilationSettings: () => this._parsedTsConfig.options,
-      getDefaultLibFileName: () => this._ts.getDefaultLibFilePath(this._parsedTsConfig.options),
+      getCompilationSettings: () => compilerOptions,
+      getDefaultLibFileName: () => this._ts.getDefaultLibFilePath(compilerOptions),
       getCustomTransformers: () => this.configSet.customTransformers,
       resolveModuleNames: (moduleNames: string[], containingFile: string): (ResolvedModuleFull | undefined)[] =>
         moduleNames.map((moduleName) => {
           const { resolvedModule } = this._ts.resolveModuleName(
             moduleName,
             containingFile,
-            this._parsedTsConfig.options,
+            compilerOptions,
             moduleResolutionHost,
             moduleResolutionCache,
           )
@@ -138,7 +141,7 @@ export class TsCompiler implements CompilerInstance {
     return (this._languageService?.getProgram()?.getSourceFile(fileName) as any)?.resolvedModules
   }
 
-  getCompiledOutput(fileContent: string, fileName: string): string {
+  getCompiledOutput(fileContent: string, fileName: string, supportsStaticESM: boolean): string {
     if (this._languageService) {
       this._logger.debug({ fileName }, 'getCompiledOutput(): compiling using language service')
 
@@ -164,12 +167,25 @@ export class TsCompiler implements CompilerInstance {
 
       return updateOutput(output.outputFiles[1].text, fileName, output.outputFiles[0].text)
     } else {
+      let moduleKind = this._parsedTsConfig.options.module
+      if (supportsStaticESM && this.configSet.useESM) {
+        moduleKind =
+          !moduleKind || (moduleKind && !AVAILABLE_ESM_MODULE_KINDS.includes(moduleKind))
+            ? ModuleKind.ESNext
+            : moduleKind
+      } else {
+        moduleKind = ModuleKind.CommonJS
+      }
+
       this._logger.debug({ fileName }, 'getCompiledOutput(): compiling as isolated module')
 
       const result: TranspileOutput = this._ts.transpileModule(fileContent, {
         fileName,
         transformers: this.configSet.customTransformers,
-        compilerOptions: this._parsedTsConfig.options,
+        compilerOptions: {
+          ...this._parsedTsConfig.options,
+          module: moduleKind,
+        },
         reportDiagnostics: this.configSet.shouldReportDiagnostics(fileName),
       })
       if (result.diagnostics && this.configSet.shouldReportDiagnostics(fileName)) {

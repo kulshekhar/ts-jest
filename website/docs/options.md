@@ -65,6 +65,7 @@ All options have default values which should fit most of the projects. Click on 
 | [**`diagnostics`**][diagnostics] | [Diagnostics related configuration.][diagnostics] | `boolean`\|`object` | _enabled_ |
 | [**`babelConfig`**][babelConfig] | [Babel(Jest) related configuration.][babelConfig] | `boolean`\|`string`\|`object` | _disabled_ |
 | [**`stringifyContentPathRegex`**][stringifyContentPathRegex] | [Files which will become modules returning self content.][stringifyContentPathRegex] | `string`\|`RegExp` | _disabled_ |
+| [**`useESM`**][useESM] | [Enable ESM support][useESM] | `boolean` | _auto_ |
 
 [compiler]: options/compiler
 [tsconfig]: options/tsconfig
@@ -74,3 +75,4 @@ All options have default values which should fit most of the projects. Click on 
 [diagnostics]: options/diagnostics
 [babelConfig]: options/babelConfig
 [stringifyContentPathRegex]: options/stringifyContentPathRegex
+[useESM]: options/useESM

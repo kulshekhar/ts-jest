@@ -47,8 +47,7 @@ describe('parsedTsConfig', () => {
   })
 
   it('should override some options', () => {
-    expect(get({ tsconfig: { module: 'esnext' as any, inlineSources: false } }).options).toMatchObject({
-      module: ts.ModuleKind.CommonJS,
+    expect(get({ tsconfig: { inlineSources: false } }).options).toMatchObject({
       inlineSources: true,
     })
   })
@@ -70,19 +69,19 @@ describe('parsedTsConfig', () => {
     })
   })
 
-  it('should warn about possibly wrong module config and set synth. default imports', () => {
+  it('should warn about possibly wrong module config and set synth. default imports with module None/AMD/UMD/System', () => {
     const target = logTargetMock()
     target.clear()
     const cs = createConfigSet({
       tsJestConfig: {
-        tsconfig: { module: 'ES6', esModuleInterop: false } as any,
+        tsconfig: { module: 'AMD', esModuleInterop: false } as any,
         diagnostics: { warnOnly: true, pretty: false },
       },
       resolve: null,
     })
 
     expect(cs.parsedTsConfig.options).toMatchObject({
-      module: ts.ModuleKind.CommonJS,
+      module: ts.ModuleKind.AMD,
       allowSyntheticDefaultImports: true,
       esModuleInterop: false,
     })
@@ -692,7 +691,6 @@ describe('_resolveTsConfig', () => {
         expect(parseConfig.mock.calls[0][4]).toBe(tscfgPathStub)
         expect(conf.options.allowSyntheticDefaultImports).toEqual(true)
         expect(conf.errors).toMatchSnapshot()
-        expect(cs.parsedTsConfig.options.module).toEqual(ts.ModuleKind.CommonJS)
       })
 
       it('should use given tsconfig path', () => {
@@ -715,7 +713,6 @@ describe('_resolveTsConfig', () => {
         expect(parseConfig.mock.calls[0][2]).toBe('/foo')
         expect(parseConfig.mock.calls[0][4]).toBe(tscfgPathStub)
         expect(conf.errors).toMatchSnapshot()
-        expect(cs.parsedTsConfig.options.module).not.toEqual(ts.ModuleKind.CommonJS)
       })
     })
 
@@ -756,7 +753,6 @@ describe('_resolveTsConfig', () => {
         expect(parseConfig.mock.calls[0][4]).toBe(tscfgPathStub)
         expect(conf.options.allowSyntheticDefaultImports).toEqual(true)
         expect(conf.errors).toMatchSnapshot()
-        expect(cs.parsedTsConfig.options.module).toEqual(ts.ModuleKind.CommonJS)
       })
 
       it('should use given tsconfig path', () => {
@@ -779,7 +775,6 @@ describe('_resolveTsConfig', () => {
         expect(parseConfig.mock.calls[0][2]).toBe('/foo')
         expect(parseConfig.mock.calls[0][4]).toBe(tscfgPathStub)
         expect(conf.errors).toMatchSnapshot()
-        expect(cs.parsedTsConfig.options.module).not.toEqual(ts.ModuleKind.CommonJS)
       })
     })
 
@@ -820,7 +815,6 @@ describe('_resolveTsConfig', () => {
         expect(parseConfig.mock.calls[0][4]).toBe(tscfgPathStub)
         expect(conf.options.allowSyntheticDefaultImports).toBeUndefined()
         expect(conf.errors).toEqual([])
-        expect(cs.parsedTsConfig.options.module).toEqual(ts.ModuleKind.CommonJS)
       })
 
       it('should use given tsconfig path', () => {
@@ -843,7 +837,6 @@ describe('_resolveTsConfig', () => {
         expect(parseConfig.mock.calls[0][2]).toBe('/foo')
         expect(parseConfig.mock.calls[0][4]).toBe(tscfgPathStub)
         expect(conf.errors).toEqual([])
-        expect(cs.parsedTsConfig.options.module).not.toEqual(ts.ModuleKind.CommonJS)
       })
     })
 
@@ -884,7 +877,6 @@ describe('_resolveTsConfig', () => {
         expect(parseConfig.mock.calls[0][4]).toBe(tscfgPathStub)
         expect(conf.errors).toEqual([])
         expect(conf.options.allowSyntheticDefaultImports).toEqual(true)
-        expect(cs.parsedTsConfig.options.module).toEqual(ts.ModuleKind.CommonJS)
       })
 
       it('should use given tsconfig path', () => {
@@ -908,7 +900,6 @@ describe('_resolveTsConfig', () => {
         expect(parseConfig.mock.calls[0][4]).toBe(tscfgPathStub)
         expect(conf.errors).toEqual([])
         expect(conf.options.allowSyntheticDefaultImports).toEqual(true)
-        expect(cs.parsedTsConfig.options.module).not.toEqual(ts.ModuleKind.CommonJS)
       })
     })
   })
