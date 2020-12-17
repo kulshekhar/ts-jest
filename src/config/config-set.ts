@@ -20,6 +20,7 @@ import {
   Diagnostic,
   FormatDiagnosticsHost,
   ParsedCommandLine,
+  DiagnosticCategory,
   ModuleKind,
   ScriptTarget,
 } from 'typescript'
@@ -32,6 +33,7 @@ import type {
   BabelJestTransformer,
   TsJestDiagnosticsCfg,
   TsJestGlobalOptions,
+  ProjectConfigTsJest,
   TTypeScript,
 } from '../types'
 import { backportJestConfig } from '../utils/backports'
@@ -169,7 +171,7 @@ export class ConfigSet {
     tsBuildInfoFile: undefined,
   }
 
-  constructor(readonly jestConfig: Config.ProjectConfig, readonly parentLogger?: Logger) {
+  constructor(readonly jestConfig: ProjectConfigTsJest, readonly parentLogger?: Logger) {
     this.logger = this.parentLogger
       ? this.parentLogger.child({ [LogContexts.namespace]: 'config' })
       : rootLogger.child({ namespace: 'config' })
@@ -284,7 +286,7 @@ export class ConfigSet {
     // tsconfig
     const tsconfigOpt = options.tsconfig
     const configFilePath = typeof tsconfigOpt === 'string' ? this.resolvePath(tsconfigOpt) : undefined
-    this.parsedTsConfig = this._resolveTsConfig(
+    this.parsedTsConfig = this._getAndResolveTsConfig(
       typeof tsconfigOpt === 'object' ? tsconfigOpt : undefined,
       configFilePath,
     )
@@ -374,9 +376,82 @@ export class ConfigSet {
     }
   }
 
+  private _getAndResolveTsConfig(compilerOptions?: CompilerOptions, resolvedConfigFile?: string): ParsedCommandLine {
+    const result = this._resolveTsConfig(compilerOptions, resolvedConfigFile) as ParsedCommandLine
+    const { _overriddenCompilerOptions: forcedOptions } = this
+    const finalOptions = result.options
+    // Target ES2015 output by default (instead of ES3).
+    if (finalOptions.target === undefined) {
+      finalOptions.target = ScriptTarget.ES2015
+    }
+
+    // check the module interoperability
+    const target = finalOptions.target
+    // compute the default if not set
+    const defaultModule = [ScriptTarget.ES3, ScriptTarget.ES5].includes(target)
+      ? ModuleKind.CommonJS
+      : ModuleKind.ESNext
+    const moduleValue = finalOptions.module ?? defaultModule
+    if (
+      !this.babelConfig &&
+      moduleValue !== ModuleKind.CommonJS &&
+      !(finalOptions.esModuleInterop || finalOptions.allowSyntheticDefaultImports)
+    ) {
+      result.errors.push({
+        code: DiagnosticCodes.ConfigModuleOption,
+        messageText: Errors.ConfigNoModuleInterop,
+        category: DiagnosticCategory.Message,
+        file: undefined,
+        start: undefined,
+        length: undefined,
+      })
+      // at least enable synthetic default imports (except if it's set in the input config)
+      /* istanbul ignore next (already covered in unit test) */
+      if (!('allowSyntheticDefaultImports' in finalOptions)) {
+        finalOptions.allowSyntheticDefaultImports = true
+      }
+    }
+    // Make sure when allowJs is enabled, outDir is required to have when using allowJs: true
+    if (finalOptions.allowJs && !finalOptions.outDir) {
+      finalOptions.outDir = TS_JEST_OUT_DIR
+    }
+
+    // ensure undefined are removed and other values are overridden
+    for (const key of Object.keys(forcedOptions)) {
+      const val = forcedOptions[key]
+      if (val === undefined) {
+        delete finalOptions[key]
+      } else {
+        finalOptions[key] = val
+      }
+    }
+    /**
+     * See https://github.com/microsoft/TypeScript/wiki/Node-Target-Mapping
+     * Every time this page is updated, we also need to update here. Here we only show warning message for Node LTS versions
+     */
+    const nodeJsVer = process.version
+    const compilationTarget = result.options.target
+    /* istanbul ignore next (cover by e2e) */
+    if (
+      compilationTarget &&
+      !this.babelConfig &&
+      ((nodeJsVer.startsWith('v10') && compilationTarget > ScriptTarget.ES2018) ||
+        (nodeJsVer.startsWith('v12') && compilationTarget > ScriptTarget.ES2019))
+    ) {
+      const message = interpolate(Errors.MismatchNodeTargetMapping, {
+        nodeJsVer: process.version,
+        compilationTarget: TARGET_TO_VERSION_MAPPING[compilationTarget],
+      })
+
+      this.logger.warn(message)
+    }
+
+    return result
+  }
+
   /**
-   * Load TypeScript configuration. Returns the parsed TypeScript config and
-   * any `tsConfig` options specified in ts-jest tsConfig
+   * Load TypeScript configuration. Returns the parsed TypeScript config and any `tsconfig` options specified in ts-jest
+   * Subclasses which extend `ConfigSet` can override the default behavior
    */
   protected _resolveTsConfig(compilerOptions?: CompilerOptions, resolvedConfigFile?: string): Record<string, any>
   // eslint-disable-next-line no-dupe-class-members
@@ -407,76 +482,7 @@ export class ConfigSet {
     }
 
     // parse json, merge config extending others, ...
-    const result = ts.parseJsonConfigFileContent(config, ts.sys, basePath, undefined, configFileName)
-    const { _overriddenCompilerOptions: forcedOptions } = this
-    const finalOptions = result.options
-    // Target ES2015 output by default (instead of ES3).
-    if (finalOptions.target === undefined) {
-      finalOptions.target = ScriptTarget.ES2015
-    }
-
-    // check the module interoperability
-    const target = finalOptions.target
-    // compute the default if not set
-    const defaultModule = [ScriptTarget.ES3, ScriptTarget.ES5].includes(target)
-      ? ModuleKind.CommonJS
-      : ModuleKind.ESNext
-    const moduleValue = finalOptions.module ?? defaultModule
-    if (
-      !this.babelConfig &&
-      moduleValue !== ModuleKind.CommonJS &&
-      !(finalOptions.esModuleInterop || finalOptions.allowSyntheticDefaultImports)
-    ) {
-      result.errors.push({
-        code: DiagnosticCodes.ConfigModuleOption,
-        messageText: Errors.ConfigNoModuleInterop,
-        category: ts.DiagnosticCategory.Message,
-        file: undefined,
-        start: undefined,
-        length: undefined,
-      })
-      // at least enable synthetic default imports (except if it's set in the input config)
-      /* istanbul ignore next (already covered in unit test) */
-      if (!('allowSyntheticDefaultImports' in config.compilerOptions)) {
-        finalOptions.allowSyntheticDefaultImports = true
-      }
-    }
-    // Make sure when allowJs is enabled, outDir is required to have when using allowJs: true
-    if (finalOptions.allowJs && !finalOptions.outDir) {
-      finalOptions.outDir = TS_JEST_OUT_DIR
-    }
-
-    // ensure undefined are removed and other values are overridden
-    for (const key of Object.keys(forcedOptions)) {
-      const val = forcedOptions[key]
-      if (val === undefined) {
-        delete finalOptions[key]
-      } else {
-        finalOptions[key] = val
-      }
-    }
-    /**
-     * See https://github.com/microsoft/TypeScript/wiki/Node-Target-Mapping
-     * Every time this page is updated, we also need to update here. Here we only show warning message for Node LTS versions
-     */
-    const nodeJsVer = process.version
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const compilationTarget = result.options.target!
-    /* istanbul ignore next (cover by e2e) */
-    if (
-      !this.babelConfig &&
-      ((nodeJsVer.startsWith('v10') && compilationTarget > ScriptTarget.ES2018) ||
-        (nodeJsVer.startsWith('v12') && compilationTarget > ScriptTarget.ES2019))
-    ) {
-      const message = interpolate(Errors.MismatchNodeTargetMapping, {
-        nodeJsVer: process.version,
-        compilationTarget: config.compilerOptions.target ?? TARGET_TO_VERSION_MAPPING[compilationTarget],
-      })
-
-      this.logger.warn(message)
-    }
-
-    return result
+    return ts.parseJsonConfigFileContent(config, ts.sys, basePath, undefined, configFileName)
   }
 
   isTestFile(fileName: string): boolean {
