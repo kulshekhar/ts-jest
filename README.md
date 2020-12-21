@@ -23,7 +23,7 @@ It supports all features of TypeScript including type-checking. [Read more about
 
 [<img src="./website/static/img/documentation.png" align="left" height="24"> View the online documentation (usage & technical)](https://kulshekhar.github.io/ts-jest)
 
-[<img src="./website/static/img/slack.png" align="left" height="24"> Ask for some help in the `ts-jest` community of Slack](https://bit.ly/3bRHFPQ)
+[<img src="./website/static/img/discord.svg" align="left" height="24"> Ask for some help in the `Jest` Discord community](https://www.reactiflux.com) or [`ts-jest` GitHub Discussion](https://github.com/kulshekhar/ts-jest/discussions)
 
 [<img src="./website/static/img/troubleshooting.png" align="left" height="24"> Before reporting any issue, be sure to check the troubleshooting page](TROUBLESHOOTING.md)
 
