@@ -42,10 +42,7 @@ export class TsJestTransformer implements Transformer {
    * @internal
    */
   private static readonly _cachedConfigSets: CachedConfigSet[] = []
-  /**
-   * @internal
-   */
-  private _compiler!: TsJestCompiler
+  protected _compiler!: TsJestCompiler
   protected readonly _logger: Logger
   protected _tsResolvedModulesCachePath: string | undefined
   protected _transformCfgStr!: string
