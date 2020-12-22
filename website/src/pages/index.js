@@ -57,9 +57,13 @@ function IntroDescription() {
   return (
     <div className="content-section">
       <p>
-        <a href="https://bit.ly/3bRHFPQ" className="link">
-          <img src="img/slack.png" align="left" height="24" className="link-icon" />
-          Ask for some help in the <code>ts-jest</code> community of Slack
+        <a href="https://www.reactiflux.com" className="link">
+          <img src="img/discord.svg" align="left" height="24" className="link-icon" />
+          Ask for some help in the <code>Jest</code> Discord community
+        </a>{' '}
+        or{' '}
+        <a href="https://github.com/kulshekhar/ts-jest/discussions" className="link">
+          <code>ts-jest</code> GitHub Discussions
         </a>
       </p>
       <p>
