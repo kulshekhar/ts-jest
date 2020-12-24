@@ -97,7 +97,7 @@
     "@types/react": "17.x",
     "@types/semver": "latest",
     "@types/yargs": "latest",
-    "@types/yargs-parser": "15.x",
+    "@types/yargs-parser": "20.x",
     "@typescript-eslint/eslint-plugin": "4.x",
     "@typescript-eslint/parser": "4.x",
     "conventional-changelog-cli": "2.x",
