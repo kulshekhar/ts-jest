@@ -57,7 +57,7 @@ function IntroDescription() {
   return (
     <div className="content-section">
       <p>
-        <a href="https://www.reactiflux.com" className="link">
+        <a href="https://discord.gg/j6FKKQQrW9" className="link">
           <img src="img/discord.svg" align="left" height="24" className="link-icon" />
           Ask for some help in the <code>Jest</code> Discord community
         </a>{' '}
