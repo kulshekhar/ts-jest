@@ -2,7 +2,7 @@
 title: TypeScript Config option
 ---
 
-The `tsConfig` option (alias `tsconfig`) allows you to define which `tsconfig` JSON file to use. An inline [compiler options][] object can also be specified instead of a file path.
+The `tsconfig` option allows you to define which `tsconfig` JSON file to use. An inline [compiler options][] object can also be specified instead of a file path.
 
 By default `ts-jest` will try to find a `tsconfig.json` in your project. If it cannot find one, it will use the default TypeScript [compiler options][]; except, `ES2015` is used as `target` instead of `ES5`.
 
@@ -20,7 +20,7 @@ module.exports = {
   // [...]
   globals: {
     'ts-jest': {
-      tsConfig: 'tsconfig.test.json'
+      tsconfig: 'tsconfig.test.json'
     }
   }
 };
@@ -51,7 +51,7 @@ module.exports = {
   // [...]
   globals: {
     'ts-jest': {
-      tsConfig: {
+      tsconfig: {
         importHelpers: true
       }
     }
@@ -77,7 +77,7 @@ module.exports = {
 
 #### Disable auto-lookup
 
-By default `ts-jest` will try to find a `tsconfig.json` in your project. But you may not want to use it at all and keep TypeScript default options. You can achieve this by setting `tsConfig` to `false`.
+By default `ts-jest` will try to find a `tsconfig.json` in your project. But you may not want to use it at all and keep TypeScript default options. You can achieve this by setting `tsconfig` to `false`.
 
 ```js
 // jest.config.js
@@ -85,7 +85,7 @@ module.exports = {
   // [...]
   globals: {
     'ts-jest': {
-      tsConfig: false
+      tsconfig: false
     }
   }
 };
