@@ -16,7 +16,7 @@ npx ts-jest config:migrate jest.config.js
 ### Yarn
 
 ```sh
-yarn create ts-jest config:migrate jest.config.js
+yarn ts-jest config:migrate jest.config.js
 ```
 
 _If you're using `jest` config property of `package.json`:_
@@ -30,5 +30,5 @@ npx ts-jest config:migrate package.json
 ### Yarn
 
 ```sh
-yarn create ts-jest config:migrate package.json
+yarn ts-jest config:migrate package.json
 ```
