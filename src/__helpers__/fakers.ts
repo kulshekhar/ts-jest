@@ -1,11 +1,12 @@
-import type { Config } from '@jest/types'
-import type { Logger } from 'bs-logger'
 import { resolve } from 'path'
 
+import type { Config } from '@jest/types'
+import type { Logger } from 'bs-logger'
+
+import { TsJestCompiler } from '../compiler/ts-jest-compiler'
 import { ConfigSet } from '../config/config-set'
 import type { StringMap, TsJestGlobalOptions } from '../types'
 import type { ImportReasons } from '../utils/messages'
-import { TsJestCompiler } from '../compiler/ts-jest-compiler'
 
 export function filePath(relPath: string): string {
   return resolve(__dirname, '..', '..', relPath)

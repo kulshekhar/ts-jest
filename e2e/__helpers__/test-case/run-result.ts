@@ -1,9 +1,10 @@
-import type { Config } from '@jest/types'
-import type { LogMessage } from 'bs-logger'
 import type { SpawnSyncReturns } from 'child_process'
 import { readFileSync, realpathSync } from 'fs'
 import { tmpdir } from 'os'
 import { resolve, sep } from 'path'
+
+import type { Config } from '@jest/types'
+import type { LogMessage } from 'bs-logger'
 
 import { cacheDir } from '../../../scripts/lib/paths'
 

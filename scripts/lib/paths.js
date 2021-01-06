@@ -1,5 +1,5 @@
-const path = require('path')
 const os = require('os')
+const path = require('path')
 
 const rootDir = path.resolve(__dirname, '..', '..')
 const cacheDir = path.join(rootDir, '.cache')

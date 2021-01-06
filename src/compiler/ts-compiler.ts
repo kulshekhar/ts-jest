@@ -1,6 +1,7 @@
+import { basename, normalize, relative } from 'path'
+
 import { LogContexts, Logger, LogLevels } from 'bs-logger'
 import memoize from 'lodash.memoize'
-import { basename, normalize, relative } from 'path'
 import {
   EmitOutput,
   LanguageService,
@@ -11,12 +12,13 @@ import {
   ModuleKind,
 } from 'typescript'
 
-import { updateOutput } from './compiler-utils'
 import type { ConfigSet } from '../config/config-set'
 import { LINE_FEED } from '../constants'
 import type { CompilerInstance, ResolvedModulesMap, StringMap, TTypeScript } from '../types'
 import { rootLogger } from '../utils/logger'
 import { Errors, interpolate } from '../utils/messages'
+
+import { updateOutput } from './compiler-utils'
 
 const AVAILABLE_ESM_MODULE_KINDS = [ModuleKind.ES2015, ModuleKind.ES2020, ModuleKind.ESNext]
 

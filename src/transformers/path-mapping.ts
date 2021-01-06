@@ -4,8 +4,9 @@
  * - https://github.com/dropbox/ts-transform-import-path-rewrite
  * Thank you: @longlho, @LeddGroup for all the great works
  */
-import { LogContexts, LogLevels } from 'bs-logger'
 import { basename, dirname, isAbsolute, join, normalize, relative } from 'path'
+
+import { LogContexts, LogLevels } from 'bs-logger'
 import type * as _ts from 'typescript'
 
 import type { ConfigSet } from '../config/config-set'

@@ -1,12 +1,13 @@
 import { readFileSync } from 'fs'
-import { LogLevels } from 'bs-logger'
 import { join } from 'path'
+
+import { LogLevels } from 'bs-logger'
 import ts from 'typescript'
 
-import { TS_JEST_OUT_DIR } from '../config/config-set'
 import { makeCompiler } from '../__helpers__/fakers'
 import { logTargetMock } from '../__helpers__/mocks'
 import ProcessedSource from '../__helpers__/processed-source'
+import { TS_JEST_OUT_DIR } from '../config/config-set'
 
 const logTarget = logTargetMock()
 

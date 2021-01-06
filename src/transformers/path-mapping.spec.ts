@@ -1,10 +1,12 @@
-import { testing } from 'bs-logger'
 import { join } from 'path'
+
+import { testing } from 'bs-logger'
 import tsc from 'typescript'
 
-import * as pathMapping from './path-mapping'
 import { createConfigSet } from '../__helpers__/fakers'
 import { normalizeSlashes } from '../utils/normalize-slashes'
+
+import * as pathMapping from './path-mapping'
 
 const logger = testing.createLoggerMock()
 const TS_JS_CODE_WITH_PATH_ALIAS = `

@@ -1,5 +1,6 @@
-import { LogContexts, LogLevels } from 'bs-logger'
 import { existsSync } from 'fs'
+
+import { LogContexts, LogLevels } from 'bs-logger'
 
 import { PackageSets, allValidPackageSets } from '../__helpers__/templates'
 import { configureTestCase } from '../__helpers__/test-case'

@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 
-const { removeSync } = require('fs-extra')
 const { join } = require('path')
+
+const { removeSync } = require('fs-extra')
 
 const Paths = require('./lib/paths')
 

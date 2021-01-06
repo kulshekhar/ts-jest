@@ -1,5 +1,6 @@
-import * as tsJest from '.'
 import { TsJestTransformer } from './ts-jest-transformer'
+
+import * as tsJest from '.'
 
 describe('createTransformer', () => {
   it('should create different instances', () => {

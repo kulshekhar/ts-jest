@@ -1,8 +1,9 @@
 // WARNING: this file is shared between e2e and unit tests
-import bufferFrom = require('buffer-from')
-import stableStringify = require('fast-json-stable-stringify')
 import { realpathSync } from 'fs'
 import { isAbsolute, relative } from 'path'
+
+import bufferFrom = require('buffer-from')
+import stableStringify = require('fast-json-stable-stringify')
 import type { RawSourceMap } from 'source-map'
 
 export function base64ToSourceMaps(base64: string): RawSourceMap {

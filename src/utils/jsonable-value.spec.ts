@@ -1,7 +1,6 @@
-import { mocked } from './testing'
-
 import * as _json from './json'
 import { JsonableValue } from './jsonable-value'
+import { mocked } from './testing'
 
 jest.mock('./json')
 

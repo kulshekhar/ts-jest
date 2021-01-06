@@ -1,4 +1,5 @@
 import { isAbsolute, relative } from 'path'
+
 import type { RawSourceMap } from 'source-map'
 
 import { ROOT } from './path'

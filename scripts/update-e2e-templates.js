@@ -1,13 +1,14 @@
 #!/usr/bin/env node
 'use strict'
 
-const execa = require('execa')
-const fs = require('fs-extra')
 const path = require('path')
 
+const execa = require('execa')
+const fs = require('fs-extra')
+
+const logger = require('./lib/logger')
 const { projectsToRun } = require('./lib/paths')
 const Paths = require('./lib/paths')
-const logger = require('./lib/logger')
 
 const prepareAndExecuteCmd = (tmplPath, wantedDependencies, useNpm) => {
   let args = []

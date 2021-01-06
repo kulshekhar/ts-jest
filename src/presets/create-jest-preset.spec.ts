@@ -1,5 +1,6 @@
-import { createJestPreset } from './create-jest-preset'
 import { JS_EXT_TO_TREAT_AS_ESM, TS_EXT_TO_TREAT_AS_ESM } from '../constants'
+
+import { createJestPreset } from './create-jest-preset'
 
 describe('create-jest-preset', () => {
   const baseExtraOptions = {

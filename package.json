@@ -104,6 +104,7 @@
     "cross-spawn": "latest",
     "eslint": "7.x",
     "eslint-config-prettier": "latest",
+    "eslint-plugin-import": "latest",
     "eslint-plugin-jest": "latest",
     "eslint-plugin-jsdoc": "latest",
     "eslint-plugin-prettier": "latest",

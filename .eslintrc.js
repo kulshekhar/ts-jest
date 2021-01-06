@@ -22,7 +22,7 @@ module.exports = {
       jsx: true,
     },
   },
-  plugins: ['@typescript-eslint', 'jest', 'jsdoc'],
+  plugins: ['@typescript-eslint', 'import', 'jest', 'jsdoc'],
   rules: {
     'arrow-body-style': 'warn',
     'arrow-parens': ['off', 'always'],
@@ -41,6 +41,25 @@ module.exports = {
     'getter-return': 'warn',
     'guard-for-in': 'error',
     'id-match': 'error',
+    'import/order': [
+      'error',
+      {
+        'alphabetize': {
+          'order': 'asc',
+          'caseInsensitive': true,
+        },
+        // this is the default order except for added `internal` in the middle
+        'groups': [
+          'builtin',
+          'external',
+          'internal',
+          'parent',
+          'sibling',
+          'index',
+        ],
+        'newlines-between': 'always',
+      }
+    ],
     'jest/valid-title': 'off',
     'jest/no-conditional-expect': 'off',
     'jsdoc/check-alignment': 'error',

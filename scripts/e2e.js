@@ -2,16 +2,17 @@
 'use strict'
 
 const { createHash } = require('crypto')
+const path = require('path')
+
 const execa = require('execa')
 const fs = require('fs-extra')
 // eslint-disable-next-line jest/no-jest-import
 const jest = require('jest')
-const path = require('path')
 
-const Paths = require('./lib/paths')
-const logger = require('./lib/logger')
 const { createBundle, readPackageDigest } = require('./lib/bundle')
+const logger = require('./lib/logger')
 const npm = require('./lib/npm')
+const Paths = require('./lib/paths')
 
 const configFile = path.join(Paths.e2eRootDir, 'jest.config.js')
 
