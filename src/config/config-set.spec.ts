@@ -1,11 +1,12 @@
 /* eslint-disable jest/no-mocks-import */
+import { join, resolve } from 'path'
+
 import type { Transformer } from '@jest/transform'
 import { testing } from 'bs-logger'
-import { join, resolve } from 'path'
 import ts from 'typescript'
 
-import { logTargetMock } from '../__helpers__/mocks'
 import { createConfigSet } from '../__helpers__/fakers'
+import { logTargetMock } from '../__helpers__/mocks'
 import type { TsJestGlobalOptions } from '../types'
 import * as _backports from '../utils/backports'
 import { getPackageVersion } from '../utils/get-package-version'

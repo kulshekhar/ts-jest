@@ -1,8 +1,8 @@
+// @ts-expect-error testing purpose
+import tsJestPresets from '../../../presets'
 import { PackageSets } from '../../__helpers__/templates'
 import { configureTestCase } from '../../__helpers__/test-case'
 import { nodeWithESMSupport } from '../../__helpers__/test-case/utils'
-// @ts-expect-error testing purpose
-import tsJestPresets from '../../../presets'
 
 // eslint-disable-next-line no-console
 console.log = jest.fn()

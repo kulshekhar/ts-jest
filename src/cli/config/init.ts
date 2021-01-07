@@ -5,8 +5,9 @@
  */
 
 import { existsSync, readFileSync, writeFileSync } from 'fs'
-import { stringify as stringifyJson5 } from 'json5'
 import { basename, join } from 'path'
+
+import { stringify as stringifyJson5 } from 'json5'
 import type { Arguments } from 'yargs'
 
 import type { CliCommand } from '..'

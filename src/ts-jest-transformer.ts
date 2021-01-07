@@ -1,19 +1,20 @@
+import { existsSync, readFileSync, statSync, writeFileSync } from 'fs'
+import { join, resolve } from 'path'
+
 import type { TransformedSource, Transformer } from '@jest/transform'
 import type { Config } from '@jest/types'
 import type { Logger } from 'bs-logger'
-import { existsSync, readFileSync, statSync, writeFileSync } from 'fs'
 import mkdirp from 'mkdirp'
-import { join, resolve } from 'path'
 
 import { TsJestCompiler } from './compiler/ts-jest-compiler'
 import { ConfigSet } from './config/config-set'
 import { DECLARATION_TYPE_EXT, JS_JSX_REGEX, TS_TSX_REGEX } from './constants'
 import type { ProjectConfigTsJest, TransformOptionsTsJest } from './types'
+import { importer } from './utils/importer'
 import { parse, stringify } from './utils/json'
 import { JsonableValue } from './utils/jsonable-value'
 import { rootLogger } from './utils/logger'
 import { Errors, interpolate } from './utils/messages'
-import { importer } from './utils/importer'
 import { sha1 } from './utils/sha1'
 import { VersionCheckers } from './utils/version-checkers'
 

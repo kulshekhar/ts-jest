@@ -1,14 +1,15 @@
 #!/usr/bin/env node
 'use strict'
 
-const execa = require('execa')
 const { existsSync, realpathSync } = require('fs')
 const { tmpdir } = require('os')
 const { resolve, join } = require('path')
 
-const { rootDir, projectsToRun } = require('./lib/paths')
-const logger = require('./lib/logger')
+const execa = require('execa')
+
 const { createBundle } = require('./lib/bundle')
+const logger = require('./lib/logger')
+const { rootDir, projectsToRun } = require('./lib/paths')
 
 let projectPath = process.argv[2]
 const jestArgs = process.argv.slice(3)

@@ -1,9 +1,10 @@
+import { existsSync } from 'fs'
+import { basename, resolve } from 'path'
+
 import type { Config } from '@jest/types'
 import { createLogger } from 'bs-logger'
 import stableStringify = require('fast-json-stable-stringify')
-import { existsSync } from 'fs'
 import { stringify as stringifyJson5 } from 'json5'
-import { basename, resolve } from 'path'
 import type { Arguments } from 'yargs'
 
 import type { CliCommand } from '..'

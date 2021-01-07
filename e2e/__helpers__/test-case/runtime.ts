@@ -1,6 +1,8 @@
+import { createHash } from 'crypto'
+import { join, relative, resolve, sep } from 'path'
+
 import type { Config } from '@jest/types'
 import { sync as spawnSync } from 'cross-spawn'
-import { createHash } from 'crypto'
 import stringifyJson = require('fast-json-stable-stringify')
 import {
   copySync,
@@ -21,7 +23,7 @@ import {
 } from 'fs-extra'
 import { stringify as stringifyJson5 } from 'json5'
 import merge = require('lodash.merge')
-import { join, relative, resolve, sep } from 'path'
+
 
 import * as Paths from '../../../scripts/lib/paths'
 

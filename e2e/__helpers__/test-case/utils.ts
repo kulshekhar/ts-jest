@@ -1,5 +1,6 @@
-import { existsSync } from 'fs-extra'
 import { join } from 'path'
+
+import { existsSync } from 'fs-extra'
 
 // from https://stackoverflow.com/questions/25245716/remove-all-ansi-colors-styles-from-strings
 export function stripAnsiColors(stringToStrip: string): string {

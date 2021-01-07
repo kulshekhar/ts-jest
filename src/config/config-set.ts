@@ -8,12 +8,13 @@
  * version of the `jest.ProjectConfig`, and then later it calls `process()`
  * with the complete, object version of it.
  */
+import { existsSync, readFileSync } from 'fs'
+import { dirname, extname, isAbsolute, join, normalize, resolve } from 'path'
+
 import type { Config } from '@jest/types'
 import { LogContexts, Logger } from 'bs-logger'
-import { existsSync, readFileSync } from 'fs'
 import { globsToMatcher } from 'jest-util'
 import json5 from 'json5'
-import { dirname, extname, isAbsolute, join, normalize, resolve } from 'path'
 import {
   CompilerOptions,
   CustomTransformers,

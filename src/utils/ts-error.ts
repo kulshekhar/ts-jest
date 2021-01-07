@@ -1,5 +1,6 @@
-import { BaseError } from 'make-error'
 import { inspect } from 'util'
+
+import { BaseError } from 'make-error'
 
 import { rootLogger } from './logger'
 import { Errors, interpolate } from './messages'

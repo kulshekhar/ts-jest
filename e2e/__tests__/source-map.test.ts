@@ -1,8 +1,8 @@
 import { join } from 'path'
 
+import type { TsJestConfig } from '../../src/types'
 import { allValidPackageSets } from '../__helpers__/templates'
 import { configureTestCase } from '../__helpers__/test-case'
-import type { TsJestConfig } from '../../src/types'
 
 function runSourceMapTests(tsJestConfig: Partial<TsJestConfig> | any) {
   const testCase = configureTestCase('source-maps', {

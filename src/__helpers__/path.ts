@@ -1,6 +1,7 @@
-import { ensureDirSync } from 'fs-extra'
 import { tmpdir } from 'os'
 import { join, resolve } from 'path'
+
+import { ensureDirSync } from 'fs-extra'
 
 export const ROOT = resolve(__dirname, '..', '..')
 

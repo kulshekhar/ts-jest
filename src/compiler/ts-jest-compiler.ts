@@ -1,6 +1,7 @@
-import { TsCompiler } from './ts-compiler'
 import type { ConfigSet } from '../config/config-set'
 import type { CompilerInstance, ResolvedModulesMap, StringMap } from '../types'
+
+import { TsCompiler } from './ts-compiler'
 
 /**
  * @internal

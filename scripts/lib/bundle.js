@@ -1,8 +1,9 @@
-const execa = require('execa')
 const { createHash } = require('crypto')
+const { join, resolve } = require('path')
+
+const execa = require('execa')
 const { readFileSync, statSync, writeFileSync, existsSync } = require('fs-extra')
 const { sync: globIgnore } = require('glob-gitignore')
-const { join, resolve } = require('path')
 
 const logger = require('./logger')
 const { rootDir, pkgDigestFile } = require('./paths')

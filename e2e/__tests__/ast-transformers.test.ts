@@ -1,7 +1,7 @@
 import { LogContexts, LogLevels } from 'bs-logger'
 
-import { configureTestCase } from '../__helpers__/test-case'
 import { allValidPackageSets } from '../__helpers__/templates'
+import { configureTestCase } from '../__helpers__/test-case'
 
 describe('AST transformers', () => {
   describe('hoisting', () => {
