@@ -22,7 +22,7 @@ import {
   writeFileSync,
 } from 'fs-extra'
 import { stringify as stringifyJson5 } from 'json5'
-import merge = require('lodash.merge')
+import merge = require('lodash/merge')
 
 
 import * as Paths from '../../../scripts/lib/paths'
