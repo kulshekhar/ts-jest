@@ -2,6 +2,8 @@ import { isAbsolute, relative } from 'path'
 
 import type { RawSourceMap } from 'source-map'
 
+import { SOURCE_MAPPING_PREFIX } from '../compiler/compiler-utils'
+
 import { ROOT } from './path'
 import { ParsedSourceWithMaps, parseSource, relativisePaths, rewriteSourceMaps } from './source-maps'
 
@@ -19,7 +21,7 @@ export default class ProcessedSource {
     return parseSource(this.output)
   }
   get outputCodeWithoutMaps(): string {
-    return this.parsedSource.source
+    return this.output.substring(0, this.output.indexOf(SOURCE_MAPPING_PREFIX))
   }
   get outputSourceMaps(): RawSourceMap | undefined {
     return this.parsedSource.sourceMaps
