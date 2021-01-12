@@ -1,5 +1,5 @@
 import { testing } from 'bs-logger'
-import * as tsc from 'typescript'
+import ts from 'typescript'
 
 import * as hoist from './hoist-jest'
 
@@ -116,8 +116,8 @@ const CODE_WITH_HOISTING_HAS_JEST_GLOBALS = `
 `
 
 const logger = testing.createLoggerMock()
-const createFactory = () => hoist.factory({ logger, compilerModule: tsc } as any)
-const transpile = (source: string) => tsc.transpileModule(source, { transformers: { before: [createFactory()] } })
+const createFactory = () => hoist.factory({ logger, compilerModule: ts } as any)
+const transpile = (source: string) => ts.transpileModule(source, { transformers: { before: [createFactory()] } })
 
 describe('hoisting', () => {
   it('should have correct signature', () => {

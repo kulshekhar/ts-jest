@@ -11,3 +11,5 @@ export function tempDir(ns: string): string {
 
   return dir
 }
+
+export const mockFolder = join(process.cwd(), 'src', '__mocks__')

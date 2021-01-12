@@ -2,10 +2,10 @@ import { readFileSync } from 'fs'
 import { join } from 'path'
 
 import { LogLevels } from 'bs-logger'
-import ts from 'typescript'
 
 import { makeCompiler } from '../__helpers__/fakers'
 import { logTargetMock } from '../__helpers__/mocks'
+import { mockFolder } from '../__helpers__/path'
 import ProcessedSource from '../__helpers__/processed-source'
 import { TS_JEST_OUT_DIR } from '../config/config-set'
 
@@ -17,6 +17,17 @@ describe('TsCompiler', () => {
       isolatedModules: true,
     }
 
+    test('should transpile code with useESM true', () => {
+      const compiler = makeCompiler({
+        tsJestConfig: { ...baseTsJestConfig, useESM: true },
+      })
+      const fileName = join(mockFolder, 'thing.spec.ts')
+
+      const compiledOutput = compiler.getCompiledOutput(readFileSync(fileName, 'utf-8'), fileName, true)
+
+      expect(new ProcessedSource(compiledOutput, fileName).outputCodeWithoutMaps).toMatchSnapshot()
+    })
+
     it('should compile js file for allowJs true', () => {
       const fileName = 'foo.js'
       const compiler = makeCompiler({
@@ -24,9 +35,9 @@ describe('TsCompiler', () => {
       })
       const source = 'export default 42'
 
-      const compiled = compiler.getCompiledOutput(source, fileName, false)
+      const compiledOutput = compiler.getCompiledOutput(source, fileName, false)
 
-      expect(new ProcessedSource(compiled, fileName)).toMatchSnapshot()
+      expect(new ProcessedSource(compiledOutput, fileName).outputCodeWithoutMaps).toMatchSnapshot()
     })
 
     describe('jsx option', () => {
@@ -46,9 +57,9 @@ describe('TsCompiler', () => {
             },
           },
         })
-        const compiled = compiler.getCompiledOutput(source, fileName, false)
+        const compiledOutput = compiler.getCompiledOutput(source, fileName, false)
 
-        expect(new ProcessedSource(compiled, fileName)).toMatchSnapshot()
+        expect(new ProcessedSource(compiledOutput, fileName).outputCodeWithoutMaps).toMatchSnapshot()
       })
 
       it('should compile tsx file for other jsx options', () => {
@@ -60,9 +71,9 @@ describe('TsCompiler', () => {
             },
           },
         })
-        const compiled = compiler.getCompiledOutput(source, fileName, false)
+        const compiledOutput = compiler.getCompiledOutput(source, fileName, false)
 
-        expect(new ProcessedSource(compiled, fileName)).toMatchSnapshot()
+        expect(new ProcessedSource(compiledOutput, fileName).outputCodeWithoutMaps).toMatchSnapshot()
       })
     })
 
@@ -72,9 +83,9 @@ describe('TsCompiler', () => {
 
       it('should have correct source maps without mapRoot', () => {
         const compiler = makeCompiler({ tsJestConfig: { ...baseTsJestConfig, tsconfig: false } })
-        const compiled = compiler.getCompiledOutput(source, fileName, false)
+        const compiledOutput = compiler.getCompiledOutput(source, fileName, false)
 
-        expect(new ProcessedSource(compiled, fileName).outputSourceMaps).toMatchObject({
+        expect(new ProcessedSource(compiledOutput, fileName).outputSourceMaps).toMatchObject({
           file: fileName,
           sources: [fileName],
           sourcesContent: [source],
@@ -166,57 +177,6 @@ const t: string = f(5)
         ).not.toThrowError()
       })
     })
-
-    describe('support ESM', () => {
-      test.each([
-        {
-          supportsStaticESM: true,
-          useESM: true,
-          moduleKind: 'esnext',
-        },
-        {
-          supportsStaticESM: true,
-          useESM: true,
-          moduleKind: 'amd',
-        },
-        {
-          supportsStaticESM: true,
-          useESM: true,
-          moduleKind: undefined,
-        },
-        {
-          supportsStaticESM: false,
-          useESM: true,
-          moduleKind: 'esnext',
-        },
-        {
-          supportsStaticESM: true,
-          useESM: false,
-          moduleKind: 'amd',
-        },
-        {
-          supportsStaticESM: false,
-          useESM: false,
-          moduleKind: 'es2015',
-        },
-      ])('should transpile codes to correct syntax with supportsStaticESM and useESM options', (data) => {
-        const transpileModuleSpy = (ts.transpileModule = jest.fn().mockReturnValueOnce({
-          outputText: 'var foo = 1',
-          diagnostics: [],
-          sourceMapText: '{}',
-        }))
-        const fileContent = `const foo = import('./foo')`
-        const fileName = 'foo.ts'
-
-        const compiler = makeCompiler({
-          tsJestConfig: { ...baseTsJestConfig, tsconfig: { module: data.moduleKind as any }, useESM: data.useESM },
-        })
-        compiler.getCompiledOutput(fileContent, fileName, data.supportsStaticESM)
-
-        expect(transpileModuleSpy).toHaveBeenCalled()
-        expect(transpileModuleSpy.mock.calls[0][1].compilerOptions.module).toMatchSnapshot()
-      })
-    })
   })
 
   describe('isolatedModule false', () => {
@@ -225,6 +185,17 @@ const t: string = f(5)
 
     beforeEach(() => {
       logTarget.clear()
+    })
+
+    test('should compile codes with useESM true', () => {
+      const compiler = makeCompiler({
+        tsJestConfig: { ...baseTsJestConfig, useESM: true },
+      })
+      const fileName = join(mockFolder, 'thing.spec.ts')
+
+      const compiledOutput = compiler.getCompiledOutput(readFileSync(fileName, 'utf-8'), fileName, true)
+
+      expect(new ProcessedSource(compiledOutput, fileName).outputCodeWithoutMaps).toMatchSnapshot()
     })
 
     describe('allowJs option', () => {
@@ -242,7 +213,7 @@ const t: string = f(5)
 
         const compiled = compiler.getCompiledOutput(source, fileName, false)
 
-        expect(new ProcessedSource(compiled, fileName)).toMatchSnapshot()
+        expect(new ProcessedSource(compiled, fileName).outputCodeWithoutMaps).toMatchSnapshot()
       })
 
       it('should compile js file for allowJs true without outDir', () => {
@@ -254,7 +225,7 @@ const t: string = f(5)
         )
         const compiled = compiler.getCompiledOutput(source, fileName, false)
 
-        expect(new ProcessedSource(compiled, fileName)).toMatchSnapshot()
+        expect(new ProcessedSource(compiled, fileName).outputCodeWithoutMaps).toMatchSnapshot()
       })
     })
 
@@ -281,7 +252,7 @@ const t: string = f(5)
 
         const compiled = compiler.getCompiledOutput(source, fileName, false)
 
-        expect(new ProcessedSource(compiled, fileName)).toMatchSnapshot()
+        expect(new ProcessedSource(compiled, fileName).outputCodeWithoutMaps).toMatchSnapshot()
       })
 
       it('should compile tsx file for other jsx options', () => {
@@ -297,7 +268,7 @@ const t: string = f(5)
         )
         const compiled = compiler.getCompiledOutput(source, fileName, false)
 
-        expect(new ProcessedSource(compiled, fileName)).toMatchSnapshot()
+        expect(new ProcessedSource(compiled, fileName).outputCodeWithoutMaps).toMatchSnapshot()
       })
     })
 

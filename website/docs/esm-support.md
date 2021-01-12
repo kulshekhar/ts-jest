@@ -4,7 +4,36 @@ title: ESM Support
 
 To use `ts-jest` with ESM support, you'll first need to check [ESM Jest documentation](https://jestjs.io/docs/en/ecmascript-modules).
 
-`ts-jest` supports ESM via a config option `useESM`. When this option is enabled and depending on which files Jest supports
-ESM, `ts-jest` will transform codes to ESM syntax. There are also 3 presets to use with `useESM` option.
- 
-More information see [useESM option](options/useESM.md) and [ESM presets](presets.md)
+`ts-jest` supports ESM via a config option [useESM](options/useESM.md) in combination with jest config option [extensionsToTreatAsEsm](https://jestjs.io/docs/en/next/configuration#extensionstotreatasesm-arraystring). 
+
+There are also [3 presets](presets.md) to work with ESM.
+
+### Examples
+
+```js
+// jest.config.js
+module.exports = {
+  // [...]
+  "extensionsToTreatAsEsm": ['.ts'],
+  globals: {
+    'ts-jest': {
+      useESM: true,
+    },
+  },
+}
+```
+
+```json5
+// OR package.json
+{
+  // [...]
+  "jest": {
+    "extensionsToTreatAsEsm": [".ts"],
+    "globals": {
+      "ts-jest": {
+        "useESM": true,
+      }
+    }
+  }
+}
+```
