@@ -18,13 +18,13 @@ module.exports = {
   // [...]
   globals: {
     'ts-jest': {
-      isolatedModules: true
-    }
-  }
-};
+      isolatedModules: true,
+    },
+  },
+}
 ```
 
-```json5
+```json
 // OR package.json
 {
   // [...]
@@ -46,22 +46,19 @@ The least amount of files which are provided in `include`, the more performance 
 
 ### Example
 
-```json5
+```json
 // tsconfig.json
 {
   // ...other configs
-  include: [
-    "my-typings/*",
-    "my-global-modules/*",
-  ]
+  "include": ["my-typings/*", "my-global-modules/*"]
 }
 ```
 
 ## Caveats
 
-Limiting the amount of files loaded via `include` can greatly boost performance when running tests. However, the trade off 
+Limiting the amount of files loaded via `include` can greatly boost performance when running tests. However, the trade off
 is `ts-jest` might not recognize all files which are intended to use with `jest`. One can run into issues with custom typings,
-global modules, etc... 
+global modules, etc...
 
-The suggested solution is what is needed for the test environment should be captured by 
+The suggested solution is what is needed for the test environment should be captured by
 glob patterns in `include`, to gain both performance boost and avoid breaking behaviors.

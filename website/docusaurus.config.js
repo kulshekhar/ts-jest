@@ -1,8 +1,9 @@
-const simplePlantUML = require("@akebifiky/remark-simple-plantuml")
+const simplePlantUML = require('@akebifiky/remark-simple-plantuml')
 
 module.exports = {
   title: 'ts-jest',
-  tagline: 'A TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript.',
+  tagline:
+    'A TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript.',
   url: 'https://kulshekhar.github.io',
   baseUrl: '/ts-jest/',
   favicon: 'img/logo.svg',
@@ -13,21 +14,21 @@ module.exports = {
       title: 'Home',
       logo: {
         alt: 'ts-jest',
-        src: 'img/logo.png'
+        src: 'img/logo.png',
       },
       items: [
         {
           to: 'docs/installation',
           activeBasePath: 'docs',
           label: 'Docs',
-          position: 'left'
+          position: 'left',
         },
         {
           href: 'https://github.com/kulshekhar/ts-jest/',
           label: 'GitHub',
-          position: 'right'
-        }
-      ]
+          position: 'right',
+        },
+      ],
     },
     footer: {
       style: 'light',
@@ -37,35 +38,35 @@ module.exports = {
           items: [
             {
               label: 'Getting Started',
-              to: 'docs/installation'
-            }
-          ]
+              to: 'docs/installation',
+            },
+          ],
         },
         {
           title: 'Community',
           items: [
             {
               label: 'Slack',
-              href: 'https://bit.ly/3bRHFPQ'
+              href: 'https://bit.ly/3bRHFPQ',
             },
-          ]
+          ],
         },
         {
           title: 'Social',
           items: [
             {
               label: 'GitHub',
-              href: 'https://github.com/kulshekhar/ts-jest/'
+              href: 'https://github.com/kulshekhar/ts-jest/',
             },
-          ]
-        }
+          ],
+        },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} ts-jest. Built with Docusaurus.`
+      copyright: `Copyright © ${new Date().getFullYear()} ts-jest. Built with Docusaurus.`,
     },
     prism: {
-      theme: require('prism-react-renderer/themes/nightOwlLight')
+      theme: require('prism-react-renderer/themes/nightOwlLight'),
     },
-    sidebarCollapsible: false
+    sidebarCollapsible: false,
   },
   presets: [
     [
@@ -74,12 +75,12 @@ module.exports = {
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
           editUrl: 'https://github.com/kulshekhar/ts-jest/edit/master/docs',
-          remarkPlugins: [simplePlantUML]
+          remarkPlugins: [simplePlantUML],
         },
         theme: {
-          customCss: require.resolve('./src/css/custom.css')
-        }
-      }
-    ]
-  ]
-};
+          customCss: require.resolve('./src/css/custom.css'),
+        },
+      },
+    ],
+  ],
+}

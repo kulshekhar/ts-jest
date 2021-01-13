@@ -34,9 +34,9 @@ module.exports = {
   // [...]
   moduleNameMapper: {
     '^@App/(.*)$': '<rootDir>/src/$1',
-    '^lib/(.*)$': '<rootDir>/common/$1'
-  }
-};
+    '^lib/(.*)$': '<rootDir>/common/$1',
+  },
+}
 ```
 
 ```js
@@ -56,13 +56,13 @@ module.exports = {
 
 ```js
 // jest.config.js
-const { pathsToModuleNameMapper } = require('ts-jest/utils');
+const { pathsToModuleNameMapper } = require('ts-jest/utils')
 // In the following statement, replace `./tsconfig` with the path to your `tsconfig` file
 // which contains the path mapping (ie the `compilerOptions.paths` option):
-const { compilerOptions } = require('./tsconfig');
+const { compilerOptions } = require('./tsconfig')
 
 module.exports = {
   // [...]
-  moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths /*, { prefix: '<rootDir>/' } */ )
-};
+  moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths /*, { prefix: '<rootDir>/' } */),
+}
 ```

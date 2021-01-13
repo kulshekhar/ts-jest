@@ -20,13 +20,13 @@ module.exports = {
   // [...]
   globals: {
     'ts-jest': {
-      tsconfig: 'tsconfig.test.json'
-    }
-  }
-};
+      tsconfig: 'tsconfig.test.json',
+    },
+  },
+}
 ```
 
-```json5
+```json
 // OR package.json
 {
   // [...]
@@ -52,14 +52,14 @@ module.exports = {
   globals: {
     'ts-jest': {
       tsconfig: {
-        importHelpers: true
-      }
-    }
-  }
-};
+        importHelpers: true,
+      },
+    },
+  },
+}
 ```
 
-```json5
+```json
 // OR package.json
 {
   // [...]
@@ -85,13 +85,13 @@ module.exports = {
   // [...]
   globals: {
     'ts-jest': {
-      tsconfig: false
-    }
-  }
-};
+      tsconfig: false,
+    },
+  },
+}
 ```
 
-```json5
+```json
 // OR package.json
 {
   // [...]

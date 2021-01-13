@@ -19,7 +19,7 @@ It supports all features of TypeScript including type-checking. [Read more about
 ---
 
 | We are not doing semantic versioning and `23.10` is a re-write, run `npm i -D ts-jest@"<23.10.0"` to go back to the previous version |
-|---|
+| ------------------------------------------------------------------------------------------------------------------------------------ |
 
 [<img src="./website/static/img/documentation.png" align="left" height="24"> View the online documentation (usage & technical)](https://kulshekhar.github.io/ts-jest)
 
@@ -35,18 +35,18 @@ It supports all features of TypeScript including type-checking. [Read more about
 
 These instructions will get you setup to use `ts-jest` in your project. For more detailed documentation, please check [online documentation](https://kulshekhar.github.io/ts-jest).
 
-| | using npm | using yarn |
-|---:|---|---|
-| **Prerequisites** | `npm i -D jest typescript` | `yarn add --dev jest typescript` |
-| **Installing** | `npm i -D ts-jest @types/jest` | `yarn add --dev ts-jest @types/jest` |
-| **Creating config** | `npx ts-jest config:init` | `yarn ts-jest config:init` |
-| **Running tests** | `npm t` or `npx jest` | `yarn test` or `yarn jest` |
+|                     | using npm                      | using yarn                           |
+| ------------------: | ------------------------------ | ------------------------------------ |
+|   **Prerequisites** | `npm i -D jest typescript`     | `yarn add --dev jest typescript`     |
+|      **Installing** | `npm i -D ts-jest @types/jest` | `yarn add --dev ts-jest @types/jest` |
+| **Creating config** | `npx ts-jest config:init`      | `yarn ts-jest config:init`           |
+|   **Running tests** | `npm t` or `npx jest`          | `yarn test` or `yarn jest`           |
 
 ## Built With
 
-* [TypeScript](https://www.typescriptlang.org/) - JavaScript that scales
-* [Jest](https://jestjs.io/) - Delightful JavaScript Testing
-* [`ts-jest`](https://kulshekhar.github.io/ts-jest) - Jest processor for TypeScript _(yes, `ts-jest` uses itself for its tests)_
+- [TypeScript](https://www.typescriptlang.org/) - JavaScript that scales
+- [Jest](https://jestjs.io/) - Delightful JavaScript Testing
+- [`ts-jest`](https://kulshekhar.github.io/ts-jest) - Jest processor for TypeScript _(yes, `ts-jest` uses itself for its tests)_
 
 ## Contributing
 
@@ -58,10 +58,10 @@ We **DO NOT** use [SemVer](http://semver.org/) for versioning. Though you can th
 
 ## Authors/maintainers
 
-* **Kulshekhar Kabra** - [kulshekhar](https://github.com/kulshekhar)
-* **Gustav Wengel** - [GeeWee](https://github.com/GeeWee)
-* **Ahn** - [ahnpnl](https://github.com/ahnpnl)
-* **Huafu Gandon** - [huafu](https://github.com/huafu)
+- **Kulshekhar Kabra** - [kulshekhar](https://github.com/kulshekhar)
+- **Gustav Wengel** - [GeeWee](https://github.com/GeeWee)
+- **Ahn** - [ahnpnl](https://github.com/ahnpnl)
+- **Huafu Gandon** - [huafu](https://github.com/huafu)
 
 See also the list of [contributors](https://github.com/kulshekhar/ts-jest/contributors) who participated in this project.
 

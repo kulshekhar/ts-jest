@@ -144,9 +144,10 @@ export class TsCompiler implements CompilerInstance {
   }
 
   getCompiledOutput(fileContent: string, fileName: string, supportsStaticESM: boolean): string {
-    let moduleKind = this._compilerOptions.module
-    let esModuleInterop = this._compilerOptions.esModuleInterop
-    let allowSyntheticDefaultImports = this._compilerOptions.allowSyntheticDefaultImports
+    const initialCompilerOptions = { ...this._parsedTsConfig.options }
+    let moduleKind = initialCompilerOptions.module
+    let esModuleInterop = initialCompilerOptions.esModuleInterop
+    let allowSyntheticDefaultImports = initialCompilerOptions.allowSyntheticDefaultImports
     if (supportsStaticESM && this.configSet.useESM) {
       moduleKind =
         !moduleKind ||

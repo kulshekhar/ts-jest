@@ -13,10 +13,8 @@ If you didn't yet, move any Babel config from `.babelrc` to `babel.config.js`. I
 ```js
 // babel.config.js
 module.exports = {
-  presets: [
-    'module:metro-react-native-babel-preset'
-  ]
-};
+  presets: ['module:metro-react-native-babel-preset'],
+}
 ```
 
 ### Jest config
@@ -25,7 +23,7 @@ In the same way that you moved Babel config, move Jest config from `jest` key of
 
 ```js
 // jest.config.js
-const { defaults: tsjPreset } = require('ts-jest/presets');
+const { defaults: tsjPreset } = require('ts-jest/presets')
 
 module.exports = {
   ...tsjPreset,
@@ -37,10 +35,10 @@ module.exports = {
   globals: {
     'ts-jest': {
       babelConfig: true,
-    }
+    },
   },
   // This is the only part which you can keep
   // from the above linked tutorial's config:
   cacheDirectory: '.jest/cache',
-};
+}
 ```
