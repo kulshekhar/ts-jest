@@ -14,12 +14,12 @@ module.exports = {
   globals: {
     'ts-jest': {
       // ts-jest configuration goes here
-    }
-  }
-};
+    },
+  },
+}
 ```
 
-```json5
+```json
 // OR package.json
 {
   // [...]
@@ -45,34 +45,34 @@ const config = {
   globals: {
     'ts-jest': {
       // ts-jest configuration goes here and your IDE will suggest which configs when typing
-    }
-  }
-};
+    },
+  },
+}
 
-module.exports = config;
+module.exports = config
 ```
 
 ### Options
 
 All options have default values which should fit most of the projects. Click on the option's name to see details and example(s).
 
-| Option | Description | Type | Default |
-|---|---|---|---|
-| [**`compiler`**][compiler] | [TypeScript module to use as compiler.][compiler] | `string` | `"typescript"` |
-| [**`tsconfig`**][tsconfig] | [TypeScript compiler related configuration.][tsconfig] | `string`\|`object`\|`boolean` | _auto_ |
-| [**`isolatedModules`**][isolatedModules] | [Disable type-checking][isolatedModules] | `boolean` | _disabled_ |
-| [**`astTransformers`**][astTransformers] | [Custom TypeScript AST transformers][astTransformers] | `object` | _auto_ |
-| [**`diagnostics`**][diagnostics] | [Diagnostics related configuration.][diagnostics] | `boolean`\|`object` | _enabled_ |
-| [**`babelConfig`**][babelConfig] | [Babel(Jest) related configuration.][babelConfig] | `boolean`\|`string`\|`object` | _disabled_ |
-| [**`stringifyContentPathRegex`**][stringifyContentPathRegex] | [Files which will become modules returning self content.][stringifyContentPathRegex] | `string`\|`RegExp` | _disabled_ |
-| [**`useESM`**][useESM] | [Enable ESM support][useESM] | `boolean` | _auto_ |
+| Option                                                       | Description                                                                          | Type                          | Default        |
+| ------------------------------------------------------------ | ------------------------------------------------------------------------------------ | ----------------------------- | -------------- |
+| [**`compiler`**][compiler]                                   | [TypeScript module to use as compiler.][compiler]                                    | `string`                      | `"typescript"` |
+| [**`tsconfig`**][tsconfig]                                   | [TypeScript compiler related configuration.][tsconfig]                               | `string`\|`object`\|`boolean` | _auto_         |
+| [**`isolatedModules`**][isolatedmodules]                     | [Disable type-checking][isolatedmodules]                                             | `boolean`                     | _disabled_     |
+| [**`astTransformers`**][asttransformers]                     | [Custom TypeScript AST transformers][asttransformers]                                | `object`                      | _auto_         |
+| [**`diagnostics`**][diagnostics]                             | [Diagnostics related configuration.][diagnostics]                                    | `boolean`\|`object`           | _enabled_      |
+| [**`babelConfig`**][babelconfig]                             | [Babel(Jest) related configuration.][babelconfig]                                    | `boolean`\|`string`\|`object` | _disabled_     |
+| [**`stringifyContentPathRegex`**][stringifycontentpathregex] | [Files which will become modules returning self content.][stringifycontentpathregex] | `string`\|`RegExp`            | _disabled_     |
+| [**`useESM`**][useesm]                                       | [Enable ESM support][useesm]                                                         | `boolean`                     | _auto_         |
 
 [compiler]: options/compiler
 [tsconfig]: options/tsconfig
-[isolatedModules]: options/isolatedModules
-[astTransformers]: options/astTransformers
-[compilerHost]: options/compilerHost
+[isolatedmodules]: options/isolatedModules
+[asttransformers]: options/astTransformers
+[compilerhost]: options/compilerHost
 [diagnostics]: options/diagnostics
-[babelConfig]: options/babelConfig
-[stringifyContentPathRegex]: options/stringifyContentPathRegex
-[useESM]: options/useESM
+[babelconfig]: options/babelConfig
+[stringifycontentpathregex]: options/stringifyContentPathRegex
+[useesm]: options/useESM

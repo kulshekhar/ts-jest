@@ -4,7 +4,7 @@ title: ESM Support
 
 To use `ts-jest` with ESM support, you'll first need to check [ESM Jest documentation](https://jestjs.io/docs/en/ecmascript-modules).
 
-`ts-jest` supports ESM via a config option [useESM](options/useESM.md) in combination with jest config option [extensionsToTreatAsEsm](https://jestjs.io/docs/en/next/configuration#extensionstotreatasesm-arraystring). 
+`ts-jest` supports ESM via a config option [useESM](options/useESM.md) in combination with jest config option [extensionsToTreatAsEsm](https://jestjs.io/docs/en/next/configuration#extensionstotreatasesm-arraystring).
 
 There are also [3 presets](presets.md) to work with ESM.
 
@@ -25,7 +25,7 @@ module.exports = {
 }
 ```
 
-```json5
+```json
 // OR package.json
 {
   // [...]
@@ -33,7 +33,7 @@ module.exports = {
     "extensionsToTreatAsEsm": [".ts"],
     "globals": {
       "ts-jest": {
-        "useESM": true,
+        "useESM": true
       }
     }
   }
@@ -46,7 +46,7 @@ module.exports = {
 // jest.config.js
 module.exports = {
   // [...]
-  preset: 'ts-jest/presets/defaults-esm', // or other ESM presets
+  preset: 'ts-jest/presets/default-esm', // or other ESM presets
   globals: {
     'ts-jest': {
       useESM: true,
@@ -55,15 +55,15 @@ module.exports = {
 }
 ```
 
-```json5
+```json
 // OR package.json
 {
   // [...]
   "jest": {
-    "preset": "ts-jest/presets/defaults-esm", // or other ESM presets,
+    "preset": "ts-jest/presets/default-esm", // or other ESM presets,
     "globals": {
       "ts-jest": {
-        "useESM": true,
+        "useESM": true
       }
     }
   }

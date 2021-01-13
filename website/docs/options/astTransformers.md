@@ -30,14 +30,14 @@ module.exports = {
 }
 ```
 
-```json5
+```json
 // OR package.json
 {
   // [...]
   "jest": {
     "globals": {
       "ts-jest": {
-        astTransformers: {
+        "astTransformers": {
           "before": ["my-custom-transformer"]
         }
       }
@@ -67,18 +67,20 @@ module.exports = {
 }
 ```
 
-```json5
+```json
 // OR package.json
 {
   // [...]
   "jest": {
     "globals": {
       "ts-jest": {
-        astTransformers: {
-          "before": [{
-            path: 'my-custom-transformer-that-needs-extra-opts',
-            options: {} // extra options to pass to transformers here
-          }]
+        "astTransformers": {
+          "before": [
+            {
+              "path": "my-custom-transformer-that-needs-extra-opts",
+              "options": {} // extra options to pass to transformers here
+            }
+          ]
         }
       }
     }
@@ -111,14 +113,14 @@ module.exports = {
 }
 ```
 
-```json5
+```json
 // OR package.json
 {
   // [...]
   "jest": {
     "globals": {
       "ts-jest": {
-        astTransformers: {
+        "astTransformers": {
           "before": ["ts-jest/dist/transformers/path-mapping"]
         }
       }

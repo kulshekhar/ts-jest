@@ -17,13 +17,13 @@ module.exports = {
   // [...]
   globals: {
     'ts-jest': {
-      compiler: 'ttypescript'
-    }
-  }
-};
+      compiler: 'ttypescript',
+    },
+  },
+}
 ```
 
-```json5
+```json
 // OR package.json
 {
   // [...]

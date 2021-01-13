@@ -2,7 +2,7 @@
 title: Jest flow
 ---
 
-*These are internal technical documents. If you're not a contributor to `ts-jest`, but simply trying to use the library you'll find nothing of value here*
+_These are internal technical documents. If you're not a contributor to `ts-jest`, but simply trying to use the library you'll find nothing of value here_
 
 ## Jest process
 

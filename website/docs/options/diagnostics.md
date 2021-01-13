@@ -35,13 +35,13 @@ module.exports = {
   // [...]
   globals: {
     'ts-jest': {
-      diagnostics: false
-    }
-  }
-};
+      diagnostics: false,
+    },
+  },
+}
 ```
 
-```json5
+```json
 // OR package.json
 {
   // [...]
@@ -68,14 +68,14 @@ module.exports = {
   globals: {
     'ts-jest': {
       diagnostics: {
-        pathRegex: /\.(spec|test)\.ts$/
-      }
-    }
-  }
-};
+        pathRegex: /\.(spec|test)\.ts$/,
+      },
+    },
+  },
+}
 ```
 
-```json5
+```json
 // OR package.json
 {
   // [...]
@@ -102,14 +102,14 @@ module.exports = {
   globals: {
     'ts-jest': {
       diagnostics: {
-        warnOnly: true
-      }
-    }
-  }
-};
+        warnOnly: true,
+      },
+    },
+  },
+}
 ```
 
-```json5
+```json
 // OR package.json
 {
   // [...]
@@ -141,14 +141,14 @@ module.exports = {
   globals: {
     'ts-jest': {
       diagnostics: {
-        ignoreCodes: [2571, 6031, 18003]
-      }
-    }
-  }
-};
+        ignoreCodes: [2571, 6031, 18003],
+      },
+    },
+  },
+}
 ```
 
-```json5
+```json
 // OR package.json
 {
   // [...]

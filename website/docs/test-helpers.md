@@ -47,5 +47,4 @@ test('direct', () => {
   // here only foo.name is mocked (or its methods if it's an object)
   expect(mocked(foo.name).mock.calls).toHaveLength(1)
 })
-
 ```

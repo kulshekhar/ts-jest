@@ -7,14 +7,14 @@ title: Presets
 
 `ts-jest` comes with several presets, covering most of the project's base configuration:
 
-| Preset name | Description |
-|---|---|
-| `ts-jest/presets/default`<br/>or `ts-jest` | TypeScript files (`.ts`, `.tsx`) will be transformed by `ts-jest` to **CommonJS** syntax, leaving JavaScript files (`.js`, `jsx`) as-is. |
-| `ts-jest/presets/default-esm`<br/> | TypeScript files (`.ts`, `.tsx`) will be transformed by `ts-jest` to **ESM** syntax, leaving JavaScript files (`.js`, `jsx`) as-is. |
-| `ts-jest/presets/js-with-ts` | TypeScript and JavaScript files (`.ts`, `.tsx`, `.js`, `.jsx`) will be transformed by `ts-jest` to **CommonJS** syntax.<br/>You'll need to set `allowJs` to `true` in your `tsconfig.json` file. |
-| `ts-jest/presets/js-with-ts-esm` | TypeScript and JavaScript files (`.ts`, `.tsx`, `.js`, `.jsx`, `.mjs`) will be transformed by `ts-jest` to **ESM** syntax.<br/>You'll need to set `allowJs` to `true` in your `tsconfig.json` file. |
-| `ts-jest/presets/js-with-babel` | TypeScript files (`.ts`, `.tsx`) will be transformed by `ts-jest` to **CommonJS** syntax, and JavaScript files (`.js`, `jsx`) will be transformed by `babel-jest`. |
-| `ts-jest/presets/js-with-babel-esm` | TypeScript files (`.ts`, `.tsx`) will be transformed by `ts-jest` to **ESM** syntax, and JavaScript files (`.js`, `jsx`, `.mjs`) will be transformed by `babel-jest`. |
+| Preset name                                | Description                                                                                                                                                                                         |
+| ------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ts-jest/presets/default`<br/>or `ts-jest` | TypeScript files (`.ts`, `.tsx`) will be transformed by `ts-jest` to **CommonJS** syntax, leaving JavaScript files (`.js`, `jsx`) as-is.                                                            |
+| `ts-jest/presets/default-esm`<br/>         | TypeScript files (`.ts`, `.tsx`) will be transformed by `ts-jest` to **ESM** syntax, leaving JavaScript files (`.js`, `jsx`) as-is.                                                                 |
+| `ts-jest/presets/js-with-ts`               | TypeScript and JavaScript files (`.ts`, `.tsx`, `.js`, `.jsx`) will be transformed by `ts-jest` to **CommonJS** syntax.<br/>You'll need to set `allowJs` to `true` in your `tsconfig.json` file.    |
+| `ts-jest/presets/js-with-ts-esm`           | TypeScript and JavaScript files (`.ts`, `.tsx`, `.js`, `.jsx`, `.mjs`) will be transformed by `ts-jest` to **ESM** syntax.<br/>You'll need to set `allowJs` to `true` in your `tsconfig.json` file. |
+| `ts-jest/presets/js-with-babel`            | TypeScript files (`.ts`, `.tsx`) will be transformed by `ts-jest` to **CommonJS** syntax, and JavaScript files (`.js`, `jsx`) will be transformed by `babel-jest`.                                  |
+| `ts-jest/presets/js-with-babel-esm`        | TypeScript files (`.ts`, `.tsx`) will be transformed by `ts-jest` to **ESM** syntax, and JavaScript files (`.js`, `jsx`, `.mjs`) will be transformed by `babel-jest`.                               |
 
 ### Basic usage
 
@@ -26,11 +26,11 @@ module.exports = {
   // [...]
   // Replace `ts-jest` with the preset you want to use
   // from the above list
-  preset: 'ts-jest'
-};
+  preset: 'ts-jest',
+}
 ```
 
-```json5
+```json
 // OR package.json
 {
   // [...]
@@ -52,7 +52,7 @@ In this case you'll need to use the JavaScript version of Jest config (comment/u
 
 ```js
 // jest.config.js
-const { defaults: tsjPreset } = require('ts-jest/presets');
+const { defaults: tsjPreset } = require('ts-jest/presets')
 // const { defaultsESM: tsjPreset } = require('ts-jest/presets');
 // const { jsWithTs: tsjPreset } = require('ts-jest/presets');
 // const { jsWithTsESM: tsjPreset } = require('ts-jest/presets');
@@ -64,6 +64,6 @@ module.exports = {
   transform: {
     ...tsjPreset.transform,
     // [...]
-  }
+  },
 }
 ```

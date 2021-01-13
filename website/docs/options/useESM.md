@@ -20,14 +20,14 @@ module.exports = {
 }
 ```
 
-```json5
+```json
 // OR package.json
 {
   // [...]
   "jest": {
     "globals": {
       "ts-jest": {
-        "useESM": true,
+        "useESM": true
       }
     }
   }

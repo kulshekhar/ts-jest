@@ -20,13 +20,13 @@ module.exports = {
   // [...]
   globals: {
     'ts-jest': {
-      babelConfig: true
-    }
-  }
-};
+      babelConfig: true,
+    },
+  },
+}
 ```
 
-```json5
+```json
 // OR package.json
 {
   // [...]
@@ -50,10 +50,10 @@ module.exports = {
   // [...]
   globals: {
     'ts-jest': {
-      babelConfig: 'babelrc.test.js'
-    }
-  }
-};
+      babelConfig: 'babelrc.test.js',
+    },
+  },
+}
 ```
 
 ```js
@@ -63,12 +63,12 @@ module.exports = {
   globals: {
     'ts-jest': {
       babelConfig: require('./babelrc.test.js'),
-    }
-  }
-};
+    },
+  },
+}
 ```
 
-```json5
+```json
 // OR package.json
 {
   // [...]
@@ -94,14 +94,14 @@ module.exports = {
     'ts-jest': {
       babelConfig: {
         comments: false,
-        plugins: ['@babel/plugin-transform-for-of']
-      }
-    }
-  }
-};
+        plugins: ['@babel/plugin-transform-for-of'],
+      },
+    },
+  },
+}
 ```
 
-```json5
+```json
 // OR package.json
 {
   // [...]

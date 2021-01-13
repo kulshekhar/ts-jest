@@ -39,6 +39,8 @@ jobs:
         run: npm ci
       - name: Run eslint
         run: npm run lint
+      - name: Run prettier
+        run: npm run lint:prettier-ci
 
   test-ubuntu:
     name: Node v${{ matrix.node-version }} on ${{ matrix.os }}
