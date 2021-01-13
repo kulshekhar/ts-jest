@@ -10,11 +10,13 @@ There are also [3 presets](presets.md) to work with ESM.
 
 ### Examples
 
+#### Manual configuration
+
 ```js
 // jest.config.js
 module.exports = {
   // [...]
-  "extensionsToTreatAsEsm": ['.ts'],
+  extensionsToTreatAsEsm: ['.ts'],
   globals: {
     'ts-jest': {
       useESM: true,
@@ -29,6 +31,36 @@ module.exports = {
   // [...]
   "jest": {
     "extensionsToTreatAsEsm": [".ts"],
+    "globals": {
+      "ts-jest": {
+        "useESM": true,
+      }
+    }
+  }
+}
+```
+
+#### Use ESM presets
+
+```js
+// jest.config.js
+module.exports = {
+  // [...]
+  preset: 'ts-jest/presets/defaults-esm', // or other ESM presets
+  globals: {
+    'ts-jest': {
+      useESM: true,
+    },
+  },
+}
+```
+
+```json5
+// OR package.json
+{
+  // [...]
+  "jest": {
+    "preset": "ts-jest/presets/defaults-esm", // or other ESM presets,
     "globals": {
       "ts-jest": {
         "useESM": true,
