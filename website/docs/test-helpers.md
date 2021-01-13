@@ -4,9 +4,9 @@ title: Test helpers
 
 `ts-jest` provides some test utilities to be used in your test, related to TypeScript.
 
-## `mocked()`
+## `mocked<T>(item: T, deep = false)`
 
-The `mocked` test helper provides typings on your mocked modules and even their deep methods, based on the typing of its source. It make use of the latest TypeScript features so you even have argument types completion in the IDE (as opposed to `jest.MockInstance`).
+The `mocked` test helper provides typings on your mocked modules and even their deep methods, based on the typing of its source. It makes use of the latest TypeScript feature, so you even have argument types completion in the IDE (as opposed to `jest.MockInstance`).
 
 **Note:** while it needs to be a function so that input type is changed, the helper itself does nothing else than returning the given input value.
 
@@ -15,7 +15,7 @@ The `mocked` test helper provides typings on your mocked modules and even their 
 ```ts
 // foo.ts
 export const foo = {
-  a : {
+  a: {
     b: {
       c: {
         hello: (name: string) => `Hello, ${name}`,
