@@ -1,4 +1,4 @@
-import { safeDump } from 'js-yaml'
+import { dump } from 'js-yaml'
 
 import ProcessedSource from '../__helpers__/processed-source'
 
@@ -12,7 +12,7 @@ export const print = (val: ProcessedSource, _: unknown, indent: (str: string) =>
     ...(sourceMaps
       ? [
           `===[ INLINE SOURCE MAPS ]${'='.repeat(55)}`,
-          safeDump(sourceMaps, {
+          dump(sourceMaps, {
             sortKeys: true,
             noRefs: true,
             noCompatMode: true,
