@@ -1,3 +1,17 @@
+# [27.0.0-next.3](https://github.com/kulshekhar/ts-jest/compare/v27.0.0-next.2...v27.0.0-next.3) (2021-01-14)
+
+
+### Bug Fixes
+
+* reduce size of node_modules when adding ts-jest ([#2263](https://github.com/kulshekhar/ts-jest/issues/2263)) ([8e0675c](https://github.com/kulshekhar/ts-jest/commit/8e0675c02b6095af6656df50c8782c01ad9e87a3))
+
+
+### Features
+
+* **compiler:** support ESM for `isolatedModules: false` ([#2269](https://github.com/kulshekhar/ts-jest/issues/2269)) ([9bb0c05](https://github.com/kulshekhar/ts-jest/commit/9bb0c054a3a7bd8949b0c12b2bb42348f69e2e2e)), closes [#1709](https://github.com/kulshekhar/ts-jest/issues/1709)
+
+
+
 # [27.0.0-next.2](https://github.com/kulshekhar/ts-jest/compare/v27.0.0-alpha.1...v27.0.0-next.2) (2020-12-17)
 
 
