@@ -3,11 +3,13 @@ import { join } from 'path'
 
 import { LogLevels } from 'bs-logger'
 
-import { makeCompiler } from '../__helpers__/fakers'
+import { createConfigSet, makeCompiler } from '../__helpers__/fakers'
 import { logTargetMock } from '../__helpers__/mocks'
 import { mockFolder } from '../__helpers__/path'
 import ProcessedSource from '../__helpers__/processed-source'
 import { TS_JEST_OUT_DIR } from '../config/config-set'
+
+import { TsCompiler } from './ts-compiler'
 
 const logTarget = logTargetMock()
 
@@ -188,14 +190,32 @@ const t: string = f(5)
     })
 
     test('should compile codes with useESM true', () => {
-      const compiler = makeCompiler({
-        tsJestConfig: { ...baseTsJestConfig, useESM: true },
-      })
+      const compiler = new TsCompiler(
+        createConfigSet({
+          tsJestConfig: {
+            ...baseTsJestConfig,
+            useESM: true,
+            tsconfig: {
+              esModuleInterop: false,
+              allowSyntheticDefaultImports: false,
+            },
+          },
+        }),
+        new Map(),
+      )
       const fileName = join(mockFolder, 'thing.spec.ts')
 
       const compiledOutput = compiler.getCompiledOutput(readFileSync(fileName, 'utf-8'), fileName, true)
 
       expect(new ProcessedSource(compiledOutput, fileName).outputCodeWithoutMaps).toMatchSnapshot()
+      // @ts-expect-error _compilerOptions is a private property
+      expect(compiler._compilerOptions.esModuleInterop).toEqual(true)
+      // @ts-expect-error _compilerOptions is a private property
+      expect(compiler._compilerOptions.allowSyntheticDefaultImports).toEqual(true)
+      // @ts-expect-error _initialCompilerOptions is a private property
+      expect(compiler._initialCompilerOptions.esModuleInterop).not.toEqual(true)
+      // @ts-expect-error _initialCompilerOptions is a private property
+      expect(compiler._initialCompilerOptions.allowSyntheticDefaultImports).not.toEqual(true)
     })
 
     describe('allowJs option', () => {

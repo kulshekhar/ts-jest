@@ -29,6 +29,7 @@ export class TsCompiler implements CompilerInstance {
   private readonly _parsedTsConfig: ParsedCommandLine
   private readonly _compilerCacheFS: Map<string, number> = new Map<string, number>()
   private readonly _jestCacheFS: StringMap
+  private readonly _initialCompilerOptions: CompilerOptions
   private _compilerOptions: CompilerOptions
   private _cachedReadFile: ((fileName: string) => string | undefined) | undefined
   private _projectVersion = 1
@@ -39,7 +40,8 @@ export class TsCompiler implements CompilerInstance {
     this._logger = rootLogger.child({ namespace: 'ts-compiler' })
     this._parsedTsConfig = this.configSet.parsedTsConfig as ParsedCommandLine
     this._jestCacheFS = jestCacheFS
-    this._compilerOptions = { ...this._parsedTsConfig.options, module: this._ts.ModuleKind.CommonJS }
+    this._initialCompilerOptions = { ...this._parsedTsConfig.options }
+    this._compilerOptions = { ...this._initialCompilerOptions }
     if (!this.configSet.isolatedModules) {
       this._createLanguageService()
     }
@@ -144,10 +146,9 @@ export class TsCompiler implements CompilerInstance {
   }
 
   getCompiledOutput(fileContent: string, fileName: string, supportsStaticESM: boolean): string {
-    const initialCompilerOptions = { ...this._parsedTsConfig.options }
-    let moduleKind = initialCompilerOptions.module
-    let esModuleInterop = initialCompilerOptions.esModuleInterop
-    let allowSyntheticDefaultImports = initialCompilerOptions.allowSyntheticDefaultImports
+    let moduleKind = this._initialCompilerOptions.module
+    let esModuleInterop = this._initialCompilerOptions.esModuleInterop
+    let allowSyntheticDefaultImports = this._initialCompilerOptions.allowSyntheticDefaultImports
     if (supportsStaticESM && this.configSet.useESM) {
       moduleKind =
         !moduleKind ||

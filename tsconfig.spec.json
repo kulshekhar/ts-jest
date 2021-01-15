@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "module": "CommonJS",
     "declaration": false,
     "noEmit": true,
     "downlevelIteration": true,
