@@ -26,6 +26,10 @@ module.exports = {
       id: 'babel7-or-ts',
     },
     {
+      type: 'doc',
+      id: 'debugging',
+    },
+    {
       type: 'category',
       label: 'Contribution',
       items: ['processing', 'e2e-testing'],
