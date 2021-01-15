@@ -43,8 +43,11 @@ describe('parsedTsConfig', () => {
     expect(get({ tsconfig: { target: 'esnext' } as any }).options.target).toBe(ts.ScriptTarget.ESNext)
   })
 
-  it('should fallback to ES2015 as default target when no target defined in tsconfig', () => {
-    expect(get({ tsconfig: 'tsconfig.spec.json' }).options.target).toBe(ts.ScriptTarget.ES2015)
+  it('should fallback to ES2015 as default target and CommonJS as default module when no target or module defined in tsconfig', () => {
+    const compilerOptions = get({ tsconfig: 'tsconfig.spec.json' }).options
+
+    expect(compilerOptions.target).toBe(ts.ScriptTarget.ES2015)
+    expect(compilerOptions.module).toBe(ts.ModuleKind.CommonJS)
   })
 
   it('should override some options', () => {
