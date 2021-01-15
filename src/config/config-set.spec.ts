@@ -549,13 +549,48 @@ describe('raiseDiagnostics', () => {
 }) // raiseDiagnostics
 
 describe('shouldReportDiagnostics', () => {
-  it('should return correct value', () => {
-    let cs = createConfigSet({ tsJestConfig: { tsconfig: false, diagnostics: { pathRegex: '/foo/' } } as any })
+  it('should return correct value for ts/tsx files', () => {
+    let cs = createConfigSet({
+      tsJestConfig: {
+        tsconfig: false,
+        diagnostics: { pathRegex: '/foo/' },
+      } as any,
+    })
+
     expect(cs.shouldReportDiagnostics('/foo/index.ts')).toBe(true)
-    expect(cs.shouldReportDiagnostics('/bar/index.ts')).toBe(false)
+    expect(cs.shouldReportDiagnostics('/bar/index.tsx')).toBe(false)
+
     cs = createConfigSet({ tsJestConfig: { tsconfig: false } as any })
+
     expect(cs.shouldReportDiagnostics('/foo/index.ts')).toBe(true)
-    expect(cs.shouldReportDiagnostics('/bar/index.ts')).toBe(true)
+    expect(cs.shouldReportDiagnostics('/bar/index.tsx')).toBe(true)
+  })
+
+  test('should return correct value for js/jsx files with checkJs compiler option', () => {
+    let cs = createConfigSet({
+      tsJestConfig: {
+        tsconfig: { checkJs: false },
+        diagnostics: { pathRegex: '/foo/' },
+      },
+    })
+
+    expect(cs.shouldReportDiagnostics('/foo/index.js')).toBe(false)
+    expect(cs.shouldReportDiagnostics('/foo/index.jsx')).toBe(false)
+
+    cs = createConfigSet({
+      tsJestConfig: {
+        tsconfig: { checkJs: true },
+        diagnostics: { pathRegex: '/foo/' },
+      },
+    })
+
+    expect(cs.shouldReportDiagnostics('/foo/index.js')).toBe(true)
+    expect(cs.shouldReportDiagnostics('/foo/index.jsx')).toBe(true)
+
+    cs = createConfigSet({ tsJestConfig: { tsconfig: { checkJs: true } } })
+
+    expect(cs.shouldReportDiagnostics('/foo/index.js')).toBe(true)
+    expect(cs.shouldReportDiagnostics('/foo/index.jsx')).toBe(true)
   })
 }) // shouldReportDiagnostics
 
