@@ -26,7 +26,7 @@ import {
   ScriptTarget,
 } from 'typescript'
 
-import { DEFAULT_JEST_TEST_MATCH } from '../constants'
+import { DEFAULT_JEST_TEST_MATCH, JS_JSX_EXTENSIONS } from '../constants'
 import { factory as hoisting } from '../transformers/hoist-jest'
 import type {
   AstTransformer,
@@ -528,12 +528,14 @@ export class ConfigSet {
 
   shouldReportDiagnostics(filePath: string): boolean {
     const { pathRegex } = this._diagnostics
+    const fileExtension = extname(filePath)
+    const { checkJs } = this.parsedTsConfig.options
     if (pathRegex) {
       const regex = new RegExp(pathRegex)
 
-      return regex.test(filePath)
+      return JS_JSX_EXTENSIONS.includes(fileExtension) ? checkJs && regex.test(filePath) : regex.test(filePath)
     } else {
-      return true
+      return JS_JSX_EXTENSIONS.includes(fileExtension) ? checkJs : true
     }
   }
 
