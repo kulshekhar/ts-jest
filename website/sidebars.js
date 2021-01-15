@@ -23,6 +23,10 @@ module.exports = {
       id: 'migration',
     },
     {
+      type: 'doc',
+      id: 'debugging',
+    },
+    {
       type: 'category',
       label: 'How it works',
       items: ['processing', 'e2e-testing'],

@@ -1,4 +1,5 @@
 ---
+id: babel7-or-ts
 title: Babel7 or TypeScript
 ---
 
