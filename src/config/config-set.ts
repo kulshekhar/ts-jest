@@ -447,7 +447,13 @@ export class ConfigSet {
       this.logger.warn(message)
     }
 
-    return result
+    return {
+      ...result,
+      options: {
+        ...result.options,
+        module: result.options.module ?? this.compilerModule.ModuleKind.CommonJS,
+      },
+    }
   }
 
   /**
