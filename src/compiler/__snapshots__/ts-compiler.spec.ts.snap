@@ -53,9 +53,9 @@ exports[`TsCompiler isolatedModule false should compile codes with useESM true 1
 //# "
 `;
 
-exports[`TsCompiler isolatedModule true diagnostics should report diagnostics related to codes with pathRegex config is undefined 1`] = `"foo.ts(2,23): error TS1005: '=>' expected."`;
+exports[`TsCompiler isolatedModule true diagnostics should report diagnostics related to codes with exclude config is undefined 1`] = `"foo.ts(2,23): error TS1005: '=>' expected."`;
 
-exports[`TsCompiler isolatedModule true diagnostics should report diagnostics related to codes with pathRegex config matches file name 1`] = `"foo.ts(2,23): error TS1005: '=>' expected."`;
+exports[`TsCompiler isolatedModule true diagnostics should report diagnostics related to codes with exclude config matches file name 1`] = `"foo.ts(2,23): error TS1005: '=>' expected."`;
 
 exports[`TsCompiler isolatedModule true jsx option should compile tsx file for jsx preserve 1`] = `
 "\\"use strict\\";

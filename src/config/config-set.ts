@@ -147,7 +147,11 @@ export class ConfigSet {
   /**
    * @internal
    */
-  private readonly _isMatch: (str: Config.Path) => boolean
+  private readonly _matchTestFilePath: (filePath: string) => boolean
+  /**
+   * @internal
+   */
+  private _shouldGetDiagnosticsForFile!: (filePath: string) => boolean
   /**
    * @internal
    */
@@ -201,7 +205,7 @@ export class ConfigSet {
     if (!this._matchablePatterns.length) {
       this._matchablePatterns.push(...DEFAULT_JEST_TEST_MATCH)
     }
-    this._isMatch = globsToMatcher(
+    this._matchTestFilePath = globsToMatcher(
       this._matchablePatterns.filter((pattern: any) => typeof pattern === 'string') as string[],
     )
   }
@@ -270,17 +274,21 @@ export class ConfigSet {
       }
       this._diagnostics = {
         pretty: diagnosticsOpt.pretty ?? true,
+        exclude: diagnosticsOpt.exclude ?? [],
         ignoreCodes: toDiagnosticCodeList(ignoreList),
-        pathRegex: normalizeRegex(diagnosticsOpt.pathRegex),
         throws: !diagnosticsOpt.warnOnly,
       }
     } else {
       this._diagnostics = {
         ignoreCodes: diagnosticsOpt ? toDiagnosticCodeList(ignoreList) : [],
+        exclude: [],
         pretty: true,
         throws: diagnosticsOpt,
       }
     }
+    this._shouldGetDiagnosticsForFile = this._diagnostics.exclude.length
+      ? globsToMatcher(this._diagnostics.exclude)
+      : () => true
 
     this.logger.debug({ diagnostics: this._diagnostics }, 'normalized diagnostics config via ts-jest option')
 
@@ -377,6 +385,9 @@ export class ConfigSet {
     }
   }
 
+  /**
+   * @internal
+   */
   private _getAndResolveTsConfig(compilerOptions?: CompilerOptions, resolvedConfigFile?: string): ParsedCommandLine {
     const result = this._resolveTsConfig(compilerOptions, resolvedConfigFile) as ParsedCommandLine
     const { _overriddenCompilerOptions: forcedOptions } = this
@@ -494,7 +505,7 @@ export class ConfigSet {
 
   isTestFile(fileName: string): boolean {
     return this._matchablePatterns.some((pattern) =>
-      typeof pattern === 'string' ? this._isMatch(fileName) : pattern.test(fileName),
+      typeof pattern === 'string' ? this._matchTestFilePath(fileName) : pattern.test(fileName),
     )
   }
 
@@ -527,16 +538,11 @@ export class ConfigSet {
   }
 
   shouldReportDiagnostics(filePath: string): boolean {
-    const { pathRegex } = this._diagnostics
     const fileExtension = extname(filePath)
-    const { checkJs } = this.parsedTsConfig.options
-    if (pathRegex) {
-      const regex = new RegExp(pathRegex)
 
-      return JS_JSX_EXTENSIONS.includes(fileExtension) ? checkJs && regex.test(filePath) : regex.test(filePath)
-    } else {
-      return JS_JSX_EXTENSIONS.includes(fileExtension) ? checkJs : true
-    }
+    return JS_JSX_EXTENSIONS.includes(fileExtension)
+      ? this.parsedTsConfig.options.checkJs && this._shouldGetDiagnosticsForFile(filePath)
+      : this._shouldGetDiagnosticsForFile(filePath)
   }
 
   /**

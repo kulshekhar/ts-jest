@@ -98,7 +98,9 @@ Object {
   "globals": Object {
     "ts-jest": Object {
       "diagnostics": Object {
-        "pathRegex": "\\\\.spec\\\\.ts$",
+        "exclude": Array [
+          "\\\\.spec\\\\.ts$",
+        ],
         "warnOnly": true,
       },
     },
