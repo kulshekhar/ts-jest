@@ -102,10 +102,9 @@ export interface TsJestGlobalOptions {
          */
         ignoreCodes?: number | string | (number | string)[]
         /**
-         * If specified, diagnostics of source files which path does **not** match
-         * will be ignored
+         * If specified, diagnostics of source files which path **matches** will be ignored
          */
-        pathRegex?: RegExp | string
+        exclude?: Config.Glob[]
         /**
          * Logs TypeScript errors to stderr instead of throwing exceptions
          *
@@ -152,7 +151,7 @@ type TsJestConfig$tsConfig = TsJestConfig$tsConfig$file | TsJestConfig$tsConfig$
 export interface TsJestDiagnosticsCfg {
   pretty: boolean
   ignoreCodes: number[]
-  pathRegex?: string | undefined
+  exclude: Config.Glob[]
   throws: boolean
   warnOnly?: boolean
 }

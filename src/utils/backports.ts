@@ -64,7 +64,7 @@ export const backportJestConfig = <T extends Config.InitialOptions | Config.Proj
     warnConfig('globals.ts-jest.enableTsDiagnostics', 'globals.ts-jest.diagnostics')
     if (tsJest.enableTsDiagnostics) {
       mergeTsJest.diagnostics = { warnOnly: true }
-      if (typeof tsJest.enableTsDiagnostics === 'string') mergeTsJest.diagnostics.pathRegex = tsJest.enableTsDiagnostics
+      if (typeof tsJest.enableTsDiagnostics === 'string') mergeTsJest.diagnostics.exclude = [tsJest.enableTsDiagnostics]
     } else {
       mergeTsJest.diagnostics = false
     }
