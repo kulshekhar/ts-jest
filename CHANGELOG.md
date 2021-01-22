@@ -1,3 +1,19 @@
+# [27.0.0-next.4](https://github.com/kulshekhar/ts-jest/compare/v27.0.0-next.3...v27.0.0-next.4) (2021-01-22)
+
+
+### Features
+
+* **config:** replace `pathRegex` with `exclude` ([#2295](https://github.com/kulshekhar/ts-jest/issues/2295)) ([f2f99c3](https://github.com/kulshekhar/ts-jest/commit/f2f99c3a46ac18a1fd6cc98922329b71a7e8c4e8))
+* **config:** type checking `js` files based on `checkJs` ([#2283](https://github.com/kulshekhar/ts-jest/issues/2283)) ([1e04433](https://github.com/kulshekhar/ts-jest/commit/1e044335a38907ff5c06eb43efeb2e5fd9769a0c))
+
+
+### BREAKING CHANGES
+
+* One is currently using `pathRegex` should use `exclude` with Glob patterns.
+* If one currently relies on type check for `js` files, please set `checkJs: true` in your tsconfig
+
+
+
 # [27.0.0-next.3](https://github.com/kulshekhar/ts-jest/compare/v27.0.0-next.2...v27.0.0-next.3) (2021-01-14)
 
 
