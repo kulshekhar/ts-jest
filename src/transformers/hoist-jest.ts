@@ -11,7 +11,7 @@ import type {
   Visitor,
 } from 'typescript'
 
-import type { ConfigSet } from '../config/config-set'
+import type { TsCompilerInstance } from '../types'
 
 /**
  * What methods of `jest` we should hoist
@@ -36,13 +36,13 @@ export const version = 4
  *
  * @internal
  */
-export function factory(cs: ConfigSet): (ctx: TransformationContext) => Transformer<SourceFile> {
-  const logger = cs.logger.child({ namespace: 'ts-hoisting' })
+export function factory({ configSet }: TsCompilerInstance): (ctx: TransformationContext) => Transformer<SourceFile> {
+  const logger = configSet.logger.child({ namespace: 'ts-hoisting' })
   /**
    * Our compiler (typescript, or a module with typescript-like interface)
    * To access Program or TypeChecker, do: cs.tsCompiler.program or cs.tsCompiler.program.getTypeChecker()
    */
-  const ts = cs.compilerModule
+  const ts = configSet.compilerModule
   const importNames: string[] = []
 
   function shouldHoistExpression(node: Node): boolean {

@@ -198,6 +198,10 @@ export interface CompilerInstance {
   getResolvedModulesMap(fileContent: string, fileName: string): ResolvedModulesMap
   getCompiledOutput(fileContent: string, fileName: string, supportsStaticESM: boolean): string
 }
+export interface TsCompilerInstance extends CompilerInstance {
+  configSet: ConfigSet
+  program: _ts.Program | undefined
+}
 /**
  * @internal
  */
@@ -205,7 +209,8 @@ export interface AstTransformerDesc<T = Record<string, unknown>> {
   name: string
   version: number
   factory(
-    cs: ConfigSet,
+    tsCompiler: TsCompilerInstance,
     opts?: T,
   ): _ts.TransformerFactory<_ts.SourceFile> | _ts.TransformerFactory<_ts.Bundle | _ts.SourceFile>
+  options?: T
 }

@@ -1,8 +1,8 @@
 const { LogContexts, LogLevels } = require('bs-logger')
 
-function factory(cs, extraOpts = Object.create(null)) {
-  const logger = cs.logger.child({ namespace: 'dummy-transformer' })
-  const ts = cs.compilerModule
+function factory({ configSet }, extraOpts = Object.create(null)) {
+  const logger = configSet.logger.child({ namespace: 'dummy-transformer' })
+  const ts = configSet.compilerModule
   logger.debug('Dummy transformer with extra options', JSON.stringify(extraOpts))
 
   function createVisitor(_ctx, _sf) {

@@ -54,17 +54,31 @@ Array [
 
 exports[`customTransformers should return an object containing all resolved transformers 1`] = `
 Object {
+  "after": Array [],
+  "afterDeclarations": Array [],
   "before": Array [
-    [Function],
+    Object {
+      "factory": [Function],
+      "name": "hoisting-jest-mock",
+      "version": 4,
+    },
   ],
 }
 `;
 
 exports[`customTransformers should return an object containing all resolved transformers 2`] = `
 Object {
+  "after": Array [],
+  "afterDeclarations": Array [],
   "before": Array [
-    [Function],
-    [Function],
+    Object {
+      "factory": [Function],
+      "name": "hoisting-jest-mock",
+      "version": 4,
+    },
+    Object {
+      "factory": [Function],
+    },
   ],
 }
 `;
@@ -72,30 +86,53 @@ Object {
 exports[`customTransformers should return an object containing all resolved transformers 3`] = `
 Object {
   "after": Array [
-    [Function],
+    Object {
+      "factory": [Function],
+    },
   ],
+  "afterDeclarations": Array [],
   "before": Array [
-    [Function],
+    Object {
+      "factory": [Function],
+      "name": "hoisting-jest-mock",
+      "version": 4,
+    },
   ],
 }
 `;
 
 exports[`customTransformers should return an object containing all resolved transformers 4`] = `
 Object {
+  "after": Array [],
   "afterDeclarations": Array [
-    [Function],
+    Object {
+      "factory": [Function],
+    },
   ],
   "before": Array [
-    [Function],
+    Object {
+      "factory": [Function],
+      "name": "hoisting-jest-mock",
+      "version": 4,
+    },
   ],
 }
 `;
 
 exports[`customTransformers should return an object containing all resolved transformers 5`] = `
 Object {
+  "after": Array [],
+  "afterDeclarations": Array [],
   "before": Array [
-    [Function],
-    [Function],
+    Object {
+      "factory": [Function],
+      "name": "hoisting-jest-mock",
+      "version": 4,
+    },
+    Object {
+      "factory": [Function],
+      "options": Object {},
+    },
   ],
 }
 `;

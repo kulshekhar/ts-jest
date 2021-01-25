@@ -1,9 +1,10 @@
 import { join } from 'path'
 
 import { testing } from 'bs-logger'
-import tsc from 'typescript'
+import ts from 'typescript'
 
 import { createConfigSet } from '../__helpers__/fakers'
+import { TsCompiler } from '../compiler/ts-compiler'
 import { normalizeSlashes } from '../utils/normalize-slashes'
 
 import * as pathMapping from './path-mapping'
@@ -59,9 +60,9 @@ describe('path-mapping', () => {
         },
         logger,
       })
-      const createFactory = () => pathMapping.factory(configSet)
-      const transpile = (source: string) => tsc.transpileModule(source, { transformers: { before: [createFactory()] } })
-      jest.spyOn(tsc, 'resolveModuleName').mockReturnValue({
+      const createFactory = () => pathMapping.factory(new TsCompiler(configSet, new Map()))
+      const transpile = (source: string) => ts.transpileModule(source, { transformers: { before: [createFactory()] } })
+      jest.spyOn(ts, 'resolveModuleName').mockReturnValue({
         resolvedModule: {
           resolvedFileName: require.resolve('../utils/json'),
           extension: 'ts',
@@ -114,10 +115,10 @@ describe('path-mapping', () => {
         },
         logger,
       })
-      const createFactory = () => pathMapping.factory(configSet)
-      const transpile = (source: string) => tsc.transpileModule(source, { transformers: { before: [createFactory()] } })
+      const createFactory = () => pathMapping.factory(new TsCompiler(configSet, new Map()))
+      const transpile = (source: string) => ts.transpileModule(source, { transformers: { before: [createFactory()] } })
       const resolvedFileNameStub = join('..', `utils/json.${extension}`)
-      jest.spyOn(tsc, 'resolveModuleName').mockReturnValue({
+      jest.spyOn(ts, 'resolveModuleName').mockReturnValue({
         resolvedModule: {
           resolvedFileName: resolvedFileNameStub,
           extension,

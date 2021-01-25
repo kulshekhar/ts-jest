@@ -169,7 +169,7 @@ describe('customTransformers', () => {
       resolve: null,
     })
 
-    expect(cs.customTransformers).toMatchSnapshot()
+    expect(cs.resolvedTransformers).toMatchSnapshot()
   })
 })
 

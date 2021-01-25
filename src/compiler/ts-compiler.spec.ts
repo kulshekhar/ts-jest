@@ -30,7 +30,7 @@ describe('TsCompiler', () => {
       expect(new ProcessedSource(compiledOutput, fileName).outputCodeWithoutMaps).toMatchSnapshot()
     })
 
-    it('should compile js file for allowJs true', () => {
+    test('should compile js file for allowJs true', () => {
       const fileName = 'foo.js'
       const compiler = makeCompiler({
         tsJestConfig: { ...baseTsJestConfig, tsconfig: { allowJs: true, outDir: TS_JEST_OUT_DIR } },
@@ -178,6 +178,32 @@ const t: string = f(5)
           ),
         ).not.toThrowError()
       })
+    })
+
+    test('should use correct custom AST transformers', () => {
+      // eslint-disable-next-line no-console
+      console.log = jest.fn()
+      const fileName = 'foo.js'
+      const compiler = makeCompiler({
+        tsJestConfig: {
+          ...baseTsJestConfig,
+          tsconfig: {
+            allowJs: true,
+            outDir: TS_JEST_OUT_DIR,
+          },
+          astTransformers: {
+            before: ['dummy-transformer'],
+            after: ['dummy-transformer'],
+            afterDeclarations: ['dummy-transformer'],
+          },
+        },
+      })
+      const source = 'export default 42'
+
+      compiler.getCompiledOutput(source, fileName, false)
+
+      // eslint-disable-next-line no-console
+      expect(console.log).toHaveBeenCalledTimes(3)
     })
   })
 
@@ -451,6 +477,32 @@ const t: string = f(5)
 
         expect(() => compiler.getCompiledOutput(source, fileName, false)).toThrowErrorMatchingSnapshot()
       })
+    })
+
+    test('should pass Program instance into custom transformers', () => {
+      // eslint-disable-next-line no-console
+      console.log = jest.fn()
+      const fileName = join(mockFolder, 'thing.spec.ts')
+      const compiler = makeCompiler(
+        {
+          tsJestConfig: {
+            ...baseTsJestConfig,
+            astTransformers: {
+              before: ['dummy-transformer'],
+              after: ['dummy-transformer'],
+              afterDeclarations: ['dummy-transformer'],
+            },
+          },
+        },
+        jestCacheFS,
+      )
+
+      compiler.getCompiledOutput(readFileSync(fileName, 'utf-8'), fileName, false)
+
+      // eslint-disable-next-line no-console
+      expect(console.log).toHaveBeenCalled()
+      // eslint-disable-next-line no-console
+      expect(((console.log as any) as jest.MockInstance<any, any>).mock.calls[0][0].emit).toBeDefined()
     })
   })
 })
