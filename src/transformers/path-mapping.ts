@@ -9,7 +9,7 @@ import { basename, dirname, isAbsolute, join, normalize, relative } from 'path'
 import { LogContexts, LogLevels } from 'bs-logger'
 import type * as _ts from 'typescript'
 
-import type { ConfigSet } from '../config/config-set'
+import type { TsCompilerInstance } from '../types'
 
 /**
  * @internal
@@ -26,10 +26,12 @@ const isBaseDir = (base: string, dir: string) => !relative(base, dir)?.startsWit
 /**
  * The factory of import path alias transformer factory.
  */
-export function factory(cs: ConfigSet): (ctx: _ts.TransformationContext) => _ts.Transformer<_ts.SourceFile> {
-  const logger = cs.logger.child({ namespace: 'ts-path-mapping' })
-  const ts = cs.compilerModule
-  const compilerOptions = cs.parsedTsConfig.options
+export function factory({
+  configSet,
+}: TsCompilerInstance): (ctx: _ts.TransformationContext) => _ts.Transformer<_ts.SourceFile> {
+  const logger = configSet.logger.child({ namespace: 'ts-path-mapping' })
+  const ts = configSet.compilerModule
+  const compilerOptions = configSet.parsedTsConfig.options
   const rootDirs = compilerOptions.rootDirs?.filter(isAbsolute)
 
   const isDynamicImport = (node: _ts.Node): node is _ts.CallExpression =>

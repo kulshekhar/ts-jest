@@ -15,26 +15,17 @@ import type { Config } from '@jest/types'
 import { LogContexts, Logger } from 'bs-logger'
 import { globsToMatcher } from 'jest-util'
 import json5 from 'json5'
-import {
-  CompilerOptions,
-  CustomTransformers,
-  Diagnostic,
-  FormatDiagnosticsHost,
-  ParsedCommandLine,
-  DiagnosticCategory,
-  ModuleKind,
-  ScriptTarget,
-} from 'typescript'
+import type { CompilerOptions, Diagnostic, FormatDiagnosticsHost, ParsedCommandLine } from 'typescript'
 
 import { DEFAULT_JEST_TEST_MATCH, JS_JSX_EXTENSIONS } from '../constants'
-import { factory as hoisting } from '../transformers/hoist-jest'
 import type {
   AstTransformer,
+  AstTransformerDesc,
   BabelConfig,
   BabelJestTransformer,
+  ProjectConfigTsJest,
   TsJestDiagnosticsCfg,
   TsJestGlobalOptions,
-  ProjectConfigTsJest,
   TTypeScript,
 } from '../types'
 import { backportJestConfig } from '../utils/backports'
@@ -63,13 +54,6 @@ export const IGNORE_DIAGNOSTIC_CODES = [
  * @internal
  */
 export const TS_JEST_OUT_DIR = '$$ts-jest$$'
-
-const TARGET_TO_VERSION_MAPPING: Record<number, string> = {
-  [ScriptTarget.ES2018]: 'es2018',
-  [ScriptTarget.ES2019]: 'es2019',
-  [ScriptTarget.ES2020]: 'es2020',
-  [ScriptTarget.ESNext]: 'ESNext',
-}
 
 /**
  * @internal
@@ -106,6 +90,12 @@ const toDiagnosticCodeList = (items: (string | number)[], into: number[] = []): 
   return into
 }
 
+interface TsJestAstTransformer {
+  before: AstTransformerDesc[]
+  after: AstTransformerDesc[]
+  afterDeclarations: AstTransformerDesc[]
+}
+
 export class ConfigSet {
   /**
    * Use by e2e, don't mark as internal
@@ -118,7 +108,11 @@ export class ConfigSet {
   readonly rootDir: string
   tsCacheDir: string | undefined
   parsedTsConfig!: ParsedCommandLine | Record<string, any>
-  customTransformers: CustomTransformers = Object.create(null)
+  resolvedTransformers: TsJestAstTransformer = {
+    before: [],
+    after: [],
+    afterDeclarations: [],
+  }
   useESM = false
   /**
    * @internal
@@ -305,44 +299,40 @@ export class ConfigSet {
     this.logger.debug({ tsconfig: this.parsedTsConfig }, 'normalized typescript config via ts-jest option')
 
     // transformers
+    this.resolvedTransformers.before = [require('../transformers/hoist-jest')]
     const { astTransformers } = options
-    this.customTransformers = {
-      before: [hoisting(this)],
-    }
     if (astTransformers) {
-      const resolveTransformers = (transformers: (string | AstTransformer)[]) =>
+      const resolveTransformers = (transformers: (string | AstTransformer)[]): AstTransformerDesc[] =>
         transformers.map((transformer) => {
-          let transformerPath: string
           if (typeof transformer === 'string') {
-            transformerPath = this.resolvePath(transformer, { nodeResolve: true })
-
-            return require(transformerPath).factory(this)
+            return require(this.resolvePath(transformer, { nodeResolve: true }))
           } else {
-            transformerPath = this.resolvePath(transformer.path, { nodeResolve: true })
-
-            return require(transformerPath).factory(this, transformer.options)
+            return {
+              ...require(this.resolvePath(transformer.path, { nodeResolve: true })),
+              options: transformer.options,
+            }
           }
         })
       if (astTransformers.before) {
         /* istanbul ignore next (already covered in unit test) */
-        this.customTransformers.before?.push(...resolveTransformers(astTransformers.before))
+        this.resolvedTransformers.before?.push(...resolveTransformers(astTransformers.before))
       }
       if (astTransformers.after) {
-        this.customTransformers = {
-          ...this.customTransformers,
+        this.resolvedTransformers = {
+          ...this.resolvedTransformers,
           after: resolveTransformers(astTransformers.after),
         }
       }
       if (astTransformers.afterDeclarations) {
-        this.customTransformers = {
-          ...this.customTransformers,
+        this.resolvedTransformers = {
+          ...this.resolvedTransformers,
           afterDeclarations: resolveTransformers(astTransformers.afterDeclarations),
         }
       }
     }
 
     this.logger.debug(
-      { customTransformers: this.customTransformers },
+      { customTransformers: this.resolvedTransformers },
       'normalized custom AST transformers via ts-jest option',
     )
 
@@ -394,25 +384,25 @@ export class ConfigSet {
     const finalOptions = result.options
     // Target ES2015 output by default (instead of ES3).
     if (finalOptions.target === undefined) {
-      finalOptions.target = ScriptTarget.ES2015
+      finalOptions.target = this.compilerModule.ScriptTarget.ES2015
     }
 
     // check the module interoperability
     const target = finalOptions.target
     // compute the default if not set
-    const defaultModule = [ScriptTarget.ES3, ScriptTarget.ES5].includes(target)
-      ? ModuleKind.CommonJS
-      : ModuleKind.ESNext
+    const defaultModule = [this.compilerModule.ScriptTarget.ES3, this.compilerModule.ScriptTarget.ES5].includes(target)
+      ? this.compilerModule.ModuleKind.CommonJS
+      : this.compilerModule.ModuleKind.ESNext
     const moduleValue = finalOptions.module ?? defaultModule
     if (
       !this.babelConfig &&
-      moduleValue !== ModuleKind.CommonJS &&
+      moduleValue !== this.compilerModule.ModuleKind.CommonJS &&
       !(finalOptions.esModuleInterop || finalOptions.allowSyntheticDefaultImports)
     ) {
       result.errors.push({
         code: DiagnosticCodes.ConfigModuleOption,
         messageText: Errors.ConfigNoModuleInterop,
-        category: DiagnosticCategory.Message,
+        category: this.compilerModule.DiagnosticCategory.Message,
         file: undefined,
         start: undefined,
         length: undefined,
@@ -443,12 +433,18 @@ export class ConfigSet {
      */
     const nodeJsVer = process.version
     const compilationTarget = result.options.target
+    const TARGET_TO_VERSION_MAPPING: Record<number, string> = {
+      [this.compilerModule.ScriptTarget.ES2018]: 'es2018',
+      [this.compilerModule.ScriptTarget.ES2019]: 'es2019',
+      [this.compilerModule.ScriptTarget.ES2020]: 'es2020',
+      [this.compilerModule.ScriptTarget.ESNext]: 'ESNext',
+    }
     /* istanbul ignore next (cover by e2e) */
     if (
       compilationTarget &&
       !this.babelConfig &&
-      ((nodeJsVer.startsWith('v10') && compilationTarget > ScriptTarget.ES2018) ||
-        (nodeJsVer.startsWith('v12') && compilationTarget > ScriptTarget.ES2019))
+      ((nodeJsVer.startsWith('v10') && compilationTarget > this.compilerModule.ScriptTarget.ES2018) ||
+        (nodeJsVer.startsWith('v12') && compilationTarget > this.compilerModule.ScriptTarget.ES2019))
     ) {
       const message = interpolate(Errors.MismatchNodeTargetMapping, {
         nodeJsVer: process.version,

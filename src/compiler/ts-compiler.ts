@@ -10,11 +10,16 @@ import type {
   ResolvedModuleFull,
   TranspileOutput,
   CompilerOptions,
+  SourceFile,
+  Program,
+  TransformerFactory,
+  Bundle,
+  CustomTransformerFactory,
 } from 'typescript'
 
 import type { ConfigSet } from '../config/config-set'
 import { LINE_FEED } from '../constants'
-import type { CompilerInstance, ResolvedModulesMap, StringMap, TTypeScript } from '../types'
+import type { ResolvedModulesMap, StringMap, TsCompilerInstance, TTypeScript } from '../types'
 import { rootLogger } from '../utils/logger'
 import { Errors, interpolate } from '../utils/messages'
 
@@ -23,23 +28,22 @@ import { updateOutput } from './compiler-utils'
 /**
  * @internal
  */
-export class TsCompiler implements CompilerInstance {
+export class TsCompiler implements TsCompilerInstance {
   private readonly _logger: Logger
   private readonly _ts: TTypeScript
   private readonly _parsedTsConfig: ParsedCommandLine
   private readonly _compilerCacheFS: Map<string, number> = new Map<string, number>()
-  private readonly _jestCacheFS: StringMap
   private readonly _initialCompilerOptions: CompilerOptions
   private _compilerOptions: CompilerOptions
   private _cachedReadFile: ((fileName: string) => string | undefined) | undefined
   private _projectVersion = 1
   private _languageService: LanguageService | undefined
+  program: Program | undefined
 
   constructor(readonly configSet: ConfigSet, readonly jestCacheFS: StringMap) {
     this._ts = configSet.compilerModule
     this._logger = rootLogger.child({ namespace: 'ts-compiler' })
     this._parsedTsConfig = this.configSet.parsedTsConfig as ParsedCommandLine
-    this._jestCacheFS = jestCacheFS
     this._initialCompilerOptions = { ...this._parsedTsConfig.options }
     this._compilerOptions = { ...this._initialCompilerOptions }
     if (!this.configSet.isolatedModules) {
@@ -96,13 +100,13 @@ export class TsCompiler implements CompilerInstance {
         // Read contents from TypeScript memory cache.
         if (!hit) {
           const fileContent =
-            this._jestCacheFS.get(normalizedFileName) ?? this._cachedReadFile?.(normalizedFileName) ?? undefined
+            this.jestCacheFS.get(normalizedFileName) ?? this._cachedReadFile?.(normalizedFileName) ?? undefined
           if (fileContent) {
-            this._jestCacheFS.set(normalizedFileName, fileContent)
+            this.jestCacheFS.set(normalizedFileName, fileContent)
             this._compilerCacheFS.set(normalizedFileName, 1)
           }
         }
-        const contents = this._jestCacheFS.get(normalizedFileName)
+        const contents = this.jestCacheFS.get(normalizedFileName)
 
         if (contents === undefined) return
 
@@ -118,7 +122,17 @@ export class TsCompiler implements CompilerInstance {
       getCurrentDirectory: () => this.configSet.cwd,
       getCompilationSettings: () => this._compilerOptions,
       getDefaultLibFileName: () => this._ts.getDefaultLibFilePath(this._compilerOptions),
-      getCustomTransformers: () => this.configSet.customTransformers,
+      getCustomTransformers: () => ({
+        before: this.configSet.resolvedTransformers.before.map((beforeTransformer) =>
+          beforeTransformer.factory(this, beforeTransformer.options),
+        ) as (TransformerFactory<SourceFile> | CustomTransformerFactory)[],
+        after: this.configSet.resolvedTransformers.after.map((afterTransformer) =>
+          afterTransformer.factory(this, afterTransformer.options),
+        ) as (TransformerFactory<SourceFile> | CustomTransformerFactory)[],
+        afterDeclarations: this.configSet.resolvedTransformers.afterDeclarations.map((afterDeclarations) =>
+          afterDeclarations.factory(this, afterDeclarations.options),
+        ) as TransformerFactory<SourceFile | Bundle>[],
+      }),
       resolveModuleNames: (moduleNames: string[], containingFile: string): (ResolvedModuleFull | undefined)[] =>
         moduleNames.map((moduleName) => {
           const { resolvedModule } = this._ts.resolveModuleName(
@@ -136,6 +150,7 @@ export class TsCompiler implements CompilerInstance {
     this._logger.debug('created language service')
 
     this._languageService = this._ts.createLanguageService(serviceHost, this._ts.createDocumentRegistry())
+    this.program = this._languageService.getProgram()
   }
 
   getResolvedModulesMap(fileContent: string, fileName: string): ResolvedModulesMap {
@@ -197,7 +212,17 @@ export class TsCompiler implements CompilerInstance {
 
       const result: TranspileOutput = this._ts.transpileModule(fileContent, {
         fileName,
-        transformers: this.configSet.customTransformers,
+        transformers: {
+          before: this.configSet.resolvedTransformers.before.map((beforeTransformer) =>
+            beforeTransformer.factory(this, beforeTransformer.options),
+          ) as (TransformerFactory<SourceFile> | CustomTransformerFactory)[],
+          after: this.configSet.resolvedTransformers.after.map((afterTransformer) =>
+            afterTransformer.factory(this, afterTransformer.options),
+          ) as (TransformerFactory<SourceFile> | CustomTransformerFactory)[],
+          afterDeclarations: this.configSet.resolvedTransformers.afterDeclarations.map((afterDeclarations) =>
+            afterDeclarations.factory(this, afterDeclarations.options),
+          ) as TransformerFactory<SourceFile | Bundle>[],
+        },
         compilerOptions: this._compilerOptions,
         reportDiagnostics: this.configSet.shouldReportDiagnostics(fileName),
       })
@@ -212,9 +237,7 @@ export class TsCompiler implements CompilerInstance {
 
   private _isFileInCache(fileName: string): boolean {
     return (
-      this._jestCacheFS.has(fileName) &&
-      this._compilerCacheFS.has(fileName) &&
-      this._compilerCacheFS.get(fileName) !== 0
+      this.jestCacheFS.has(fileName) && this._compilerCacheFS.has(fileName) && this._compilerCacheFS.get(fileName) !== 0
     )
   }
 
@@ -229,7 +252,7 @@ export class TsCompiler implements CompilerInstance {
       shouldIncrementProjectVersion = true
     } else {
       const prevVersion = this._compilerCacheFS.get(fileName) ?? 0
-      const previousContents = this._jestCacheFS.get(fileName)
+      const previousContents = this.jestCacheFS.get(fileName)
       // Avoid incrementing cache when nothing has changed.
       if (previousContents !== contents) {
         this._compilerCacheFS.set(fileName, prevVersion + 1)

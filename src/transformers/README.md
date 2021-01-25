@@ -7,15 +7,15 @@ See https://dev.doctorevidence.com/how-to-write-a-typescript-transform-plugin-fc
 ```ts
 import { SourceFile, TransformationContext, Transformer, Visitor } from 'typescript'
 
-import { ConfigSet } from '../config/config-set'
+import type { TsCompilerInstance } from 'ts-jest/dist/types'
 
 // this is a unique identifier for your transformer
 export const name = 'my-transformer'
 // increment this each time you change the behavior of your transformer
 export const version = 1
 
-export function factory(cs: ConfigSet) {
-  const ts = cs.compilerModule
+export function factory(compilerInstance: TsCompilerInstance) {
+  const ts = compilerInstance.configSet.compilerModule
   function createVisitor(ctx: TransformationContext, sf: SourceFile) {
     const visitor: Visitor = node => {
       // here we can check each node and potentially return

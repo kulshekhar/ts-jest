@@ -37,6 +37,7 @@ describe('TsJestTransformer', () => {
       () => {
         const obj1 = {
           config: { cwd: process.cwd(), extensionsToTreatAsEsm: [], globals: {}, testMatch: [], testRegex: [] },
+          cacheFS: new Map(),
         }
         const obj2 = { ...obj1, config: { ...obj1.config, globals: Object.create(null) } }
         // @ts-expect-error testing purpose
@@ -51,6 +52,7 @@ describe('TsJestTransformer', () => {
     test('should return the same config set for same values with jest config objects', () => {
       const obj1 = {
         config: { cwd: process.cwd(), extensionsToTreatAsEsm: [], globals: {}, testMatch: [], testRegex: [] },
+        cacheFS: new Map(),
       }
       const obj2 = { ...obj1 }
       // @ts-expect-error testing purpose
@@ -135,6 +137,7 @@ describe('TsJestTransformer', () => {
         config: { foo: 'bar', testMatch: [], testRegex: [], extensionsToTreatAsEsm: [] } as any,
         instrument: false,
         rootDir: '/foo',
+        cacheFS: new Map(),
       },
     } as any
     const transformOptionsWithCache = {
@@ -256,6 +259,7 @@ describe('TsJestTransformer', () => {
         testRegex: [],
         extensionsToTreatAsEsm: [],
       },
+      cacheFS: new Map(),
     } as any
     let tr!: TsJestTransformer
 
@@ -268,6 +272,7 @@ describe('TsJestTransformer', () => {
       const filePath = 'foo.html'
       const fileContent = '<h1>Hello World</h1>'
       const transformOptions = {
+        ...baseTransformOptions,
         config: {
           ...baseTransformOptions.config,
           globals: {
@@ -276,7 +281,7 @@ describe('TsJestTransformer', () => {
             },
           },
         },
-      } as any
+      }
       tr.getCacheKey(fileContent, filePath, transformOptions)
 
       const result = tr.process(fileContent, filePath, transformOptions)
@@ -297,13 +302,14 @@ describe('TsJestTransformer', () => {
       const fileContent = 'const foo = 1'
       const filePath = 'foo.js'
       const transformOptions = {
+        ...baseTransformOptions,
         config: {
           ...baseTransformOptions.config,
           globals: {
             'ts-jest': { tsconfig: { allowJs: false } },
           },
         },
-      } as any
+      }
       tr.getCacheKey(fileContent, filePath, transformOptions)
       logTarget.clear()
 
@@ -333,13 +339,14 @@ describe('TsJestTransformer', () => {
       const fileContent = 'const foo = 1'
       const output = 'var foo = 1'
       const transformOptions = {
+        ...baseTransformOptions,
         config: {
           ...baseTransformOptions.config,
           globals: {
             'ts-jest': { tsconfig: { allowJs: true } },
           },
         },
-      } as any
+      }
       tr.getCacheKey(fileContent, filePath, transformOptions)
       logTarget.clear()
       jest.spyOn(TsJestCompiler.prototype, 'getCompiledOutput').mockReturnValueOnce(output)
@@ -353,13 +360,14 @@ describe('TsJestTransformer', () => {
       const fileContent = 'foo'
       const filePath = 'foo.bar'
       const transformOptions = {
+        ...baseTransformOptions,
         config: {
           ...baseTransformOptions.config,
           globals: {
             'ts-jest': { tsconfig: { allowJs: true } },
           },
         },
-      } as any
+      }
       tr.getCacheKey(fileContent, filePath, transformOptions)
       logTarget.clear()
 
@@ -375,13 +383,14 @@ describe('TsJestTransformer', () => {
     test.each(['foo.bar', 'foo.js'])('should process file with babel-jest', (filePath) => {
       const fileContent = 'foo'
       const transformOptions = {
+        ...baseTransformOptions,
         config: {
           ...baseTransformOptions.config,
           globals: {
             'ts-jest': { babelConfig: true },
           },
         },
-      } as any
+      }
       tr.getCacheKey(fileContent, filePath, transformOptions)
       logTarget.clear()
 
