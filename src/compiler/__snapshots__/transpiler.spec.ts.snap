@@ -13,7 +13,7 @@ exports[`Transpiler jsx option should compile tsx file for jsx preserve 1`] = `
   //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoiZm9vLnRzeCIsIm1hcHBpbmdzIjoiO0FBQ1EsSUFBTSxHQUFHLEdBQUc7SUFDVixPQUFPLEVBQUUsSUFBSSxHQUFHLENBQUE7QUFDbEIsQ0FBQyxDQUFBIiwibmFtZXMiOltdLCJzb3VyY2VzIjpbImZvby50c3giXSwic291cmNlc0NvbnRlbnQiOlsiXG4gICAgICAgIGNvbnN0IEFwcCA9ICgpID0+IHtcbiAgICAgICAgICByZXR1cm4gPD5UZXN0PC8+XG4gICAgICAgIH1cbiAgICAgICJdLCJ2ZXJzaW9uIjozfQ==
   ===[ INLINE SOURCE MAPS ]=======================================================
   file: foo.tsx
-  mappings: ';AACQ,IAAM,GAAG,GAAG;IACV,OAAO,EAAE,IAAI,GAAG,CAAA;AAClB,CAAC,CAAA'
+  mappings: ;AACQ,IAAM,GAAG,GAAG;IACV,OAAO,EAAE,IAAI,GAAG,CAAA;AAClB,CAAC,CAAA
   names: []
   sources:
     - foo.tsx
@@ -37,7 +37,7 @@ exports[`Transpiler jsx option should compile tsx file for other jsx options 1`]
   //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoiZm9vLnRzeCIsIm1hcHBpbmdzIjoiO0FBQ1EsSUFBTSxHQUFHLEdBQUc7SUFDVixPQUFPLGlEQUFTLENBQUE7QUFDbEIsQ0FBQyxDQUFBIiwibmFtZXMiOltdLCJzb3VyY2VzIjpbImZvby50c3giXSwic291cmNlc0NvbnRlbnQiOlsiXG4gICAgICAgIGNvbnN0IEFwcCA9ICgpID0+IHtcbiAgICAgICAgICByZXR1cm4gPD5UZXN0PC8+XG4gICAgICAgIH1cbiAgICAgICJdLCJ2ZXJzaW9uIjozfQ==
   ===[ INLINE SOURCE MAPS ]=======================================================
   file: foo.tsx
-  mappings: ';AACQ,IAAM,GAAG,GAAG;IACV,OAAO,iDAAS,CAAA;AAClB,CAAC,CAAA'
+  mappings: ;AACQ,IAAM,GAAG,GAAG;IACV,OAAO,iDAAS,CAAA;AAClB,CAAC,CAAA
   names: []
   sources:
     - foo.tsx
@@ -60,7 +60,7 @@ exports[`Transpiler should compile js file for allowJs true 1`] = `
   //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoiZm9vLmpzIiwibWFwcGluZ3MiOiI7O0FBQUEsa0JBQWUsRUFBRSxDQUFBIiwibmFtZXMiOltdLCJzb3VyY2VzIjpbImZvby5qcyJdLCJzb3VyY2VzQ29udGVudCI6WyJleHBvcnQgZGVmYXVsdCA0MiJdLCJ2ZXJzaW9uIjozfQ==
   ===[ INLINE SOURCE MAPS ]=======================================================
   file: foo.js
-  mappings: ';;AAAA,kBAAe,EAAE,CAAA'
+  mappings: ;;AAAA,kBAAe,EAAE,CAAA
   names: []
   sources:
     - foo.js

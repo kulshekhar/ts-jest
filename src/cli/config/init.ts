@@ -16,7 +16,7 @@ import { TsJestPresetDescriptor, defaults, jsWIthBabel, jsWithTs } from '../help
  * @internal
  */
 export const run: CliCommand = async (args: Arguments /* , logger: Logger */) => {
-  const file = args._[0] || 'jest.config.js'
+  const file = args._[0]?.toString() ?? 'jest.config.js'
   const filePath = join(process.cwd(), file)
   const name = basename(file)
   const isPackage = name === 'package.json'

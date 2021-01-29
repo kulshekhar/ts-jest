@@ -1,7 +1,7 @@
 import { LogContexts, Logger, LogLevels } from 'bs-logger'
 import { existsSync, readFileSync, writeFile } from 'fs'
 import { basename, normalize, relative, join } from 'path'
-import memoize = require('lodash.memoize')
+import memoize = require('lodash/memoize')
 import mkdirp = require('mkdirp')
 import type * as _ts from 'typescript'
 
