@@ -1,4 +1,5 @@
 import type { Transformer } from '@jest/transform'
+import type { Config } from '@jest/types'
 import type * as _babel from 'babel__core'
 import type * as _ts from 'typescript'
 
@@ -117,8 +118,14 @@ export interface TsJestGlobalOptions {
         /**
          * If specified, diagnostics of source files which path does **not** match
          * will be ignored
+         *
+         * @deprecated
          */
         pathRegex?: RegExp | string
+        /**
+         * If specified, diagnostics of source files which path **matches** will be ignored
+         */
+        exclude?: Config.Glob[]
         /**
          * Logs TypeScript errors to stderr instead of throwing exceptions
          *
@@ -160,6 +167,7 @@ export interface TsJestDiagnosticsCfg {
   pretty: boolean
   ignoreCodes: number[]
   pathRegex?: string | undefined
+  exclude: Config.Glob[]
   throws: boolean
   warnOnly?: boolean
 }

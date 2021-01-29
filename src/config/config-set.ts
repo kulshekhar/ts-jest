@@ -139,6 +139,18 @@ export class ConfigSet {
    * @internal
    */
   private _stringifyContentRegExp: RegExp | undefined
+  /**
+   * @internal
+   */
+  private readonly _matchablePatterns: (string | RegExp)[]
+  /**
+   * @internal
+   */
+  private readonly _matchTestFilePath: (filePath: string) => boolean
+  /**
+   * @internal
+   */
+  private _shouldGetDiagnosticsForFile!: ((filePath: string) => boolean) | RegExp
   protected _overriddenCompilerOptions: Partial<CompilerOptions> = {
     // we handle sourcemaps this way and not another
     sourceMap: true,
@@ -160,18 +172,7 @@ export class ConfigSet {
     tsBuildInfoFile: undefined,
   }
 
-  constructor(
-    /**
-     * @internal
-     */
-    private readonly jestConfig: Config.ProjectConfig,
-    /**
-     * Mainly for testing logging
-     *
-     * @internal
-     */
-    private readonly parentLogger?: Logger,
-  ) {
+  constructor(private readonly jestConfig: Config.ProjectConfig, private readonly parentLogger?: Logger) {
     this.logger = this.parentLogger
       ? this.parentLogger.child({ [LogContexts.namespace]: 'config' })
       : rootLogger.child({ namespace: 'config' })
@@ -189,6 +190,20 @@ export class ConfigSet {
     this._backportJestCfg()
     this._setupTsJestCfg(options)
     this._resolveTsCacheDir()
+    this._matchablePatterns = [...this._jestCfg.testMatch, ...this._jestCfg.testRegex].filter(
+      (pattern) =>
+        /**
+         * jest config testRegex doesn't always deliver the correct RegExp object
+         * See https://github.com/facebook/jest/issues/9778
+         */
+        pattern instanceof RegExp || typeof pattern === 'string',
+    )
+    if (!this._matchablePatterns.length) {
+      this._matchablePatterns.push(...DEFAULT_JEST_TEST_MATCH)
+    }
+    this._matchTestFilePath = globsToMatcher(
+      this._matchablePatterns.filter((pattern: any) => typeof pattern === 'string') as string[],
+    )
   }
 
   /**
@@ -259,16 +274,32 @@ export class ConfigSet {
       }
       this._diagnostics = {
         pretty: diagnosticsOpt.pretty ?? true,
+        exclude: diagnosticsOpt.exclude ?? [],
         ignoreCodes: toDiagnosticCodeList(ignoreList),
-        pathRegex: normalizeRegex(diagnosticsOpt.pathRegex),
         throws: !diagnosticsOpt.warnOnly,
+      }
+      if (diagnosticsOpt.pathRegex) {
+        this.logger.warn(Deprecations.PathRegex)
+
+        this._diagnostics = {
+          ...this._diagnostics,
+          pathRegex: normalizeRegex(diagnosticsOpt.pathRegex),
+        }
       }
     } else {
       this._diagnostics = {
         ignoreCodes: diagnosticsOpt ? toDiagnosticCodeList(ignoreList) : [],
+        exclude: [],
         pretty: true,
         throws: diagnosticsOpt,
       }
+    }
+    if (this._diagnostics.pathRegex && !this._diagnostics.exclude.length) {
+      this._shouldGetDiagnosticsForFile = new RegExp(this._diagnostics.pathRegex)
+    } else {
+      this._shouldGetDiagnosticsForFile = this._diagnostics.exclude.length
+        ? globsToMatcher(this._diagnostics.exclude)
+        : () => true
     }
 
     this.logger.debug({ diagnostics: this._diagnostics }, 'normalized diagnostics config via ts-jest option')
@@ -536,24 +567,10 @@ export class ConfigSet {
     return {}
   }
 
-  @Memoize()
-  get isTestFile(): (fileName: string) => boolean {
-    const matchablePatterns = [...this._jestCfg.testMatch, ...this._jestCfg.testRegex].filter(
-      (pattern) =>
-        /**
-         * jest config testRegex doesn't always deliver the correct RegExp object
-         * See https://github.com/facebook/jest/issues/9778
-         */
-        pattern instanceof RegExp || typeof pattern === 'string',
+  isTestFile(fileName: string): boolean {
+    return this._matchablePatterns.some((pattern) =>
+      typeof pattern === 'string' ? this._matchTestFilePath(fileName) : pattern.test(fileName),
     )
-    if (!matchablePatterns.length) {
-      matchablePatterns.push(...DEFAULT_JEST_TEST_MATCH)
-    }
-    const stringPatterns = matchablePatterns.filter((pattern: any) => typeof pattern === 'string') as string[]
-    const isMatch = globsToMatcher(stringPatterns)
-
-    return (fileName: string) =>
-      matchablePatterns.some((pattern) => (typeof pattern === 'string' ? isMatch(fileName) : pattern.test(fileName)))
   }
 
   shouldStringifyContent(filePath: string): boolean {
@@ -585,14 +602,9 @@ export class ConfigSet {
   }
 
   shouldReportDiagnostics(filePath: string): boolean {
-    const { pathRegex } = this._diagnostics
-    if (pathRegex) {
-      const regex = new RegExp(pathRegex)
-
-      return regex.test(filePath)
-    } else {
-      return true
-    }
+    return this._shouldGetDiagnosticsForFile instanceof RegExp
+      ? this._shouldGetDiagnosticsForFile.test(filePath)
+      : this._shouldGetDiagnosticsForFile(filePath)
   }
 
   /**

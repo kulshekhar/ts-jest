@@ -259,7 +259,7 @@ describe('Language service', () => {
       const compiler = makeCompiler({
         tsJestConfig: {
           ...baseTsJestConfig,
-          diagnostics: { pathRegex: 'foo.spec.ts' },
+          diagnostics: { exclude: ['foo.spec.ts'] },
         },
       })
 

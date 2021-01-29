@@ -120,9 +120,9 @@ const t: string = f(5)
       ).toThrowErrorMatchingSnapshot()
     })
 
-    it('should report diagnostics related to codes with pathRegex config matches file name', () => {
+    it('should report diagnostics related to codes with exclude config matches file name', () => {
       const compiler = makeCompiler({
-        tsJestConfig: { ...baseTsJestConfig, tsconfig: false, diagnostics: { pathRegex: 'foo.ts' } },
+        tsJestConfig: { ...baseTsJestConfig, tsconfig: false, diagnostics: { exclude: ['foo.ts'] } },
       })
 
       expect(() =>
@@ -136,9 +136,9 @@ const t: string = f(5)
       ).toThrowErrorMatchingSnapshot()
     })
 
-    it('should not report diagnostics related to codes with pathRegex config does not match file name', () => {
+    it('should not report diagnostics related to codes with exclude config does not match file name', () => {
       const compiler = makeCompiler({
-        tsJestConfig: { ...baseTsJestConfig, tsconfig: false, diagnostics: { pathRegex: 'bar.ts' } },
+        tsJestConfig: { ...baseTsJestConfig, tsconfig: false, diagnostics: { exclude: ['bar.ts'] } },
       })
 
       expect(() =>
