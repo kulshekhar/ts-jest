@@ -15,7 +15,7 @@ import { JestPresetNames, TsJestPresetDescriptor, allPresets, defaults } from '.
  */
 export const run: CliCommand = async (args: Arguments /* , logger: Logger*/) => {
   const nullLogger = createLogger({ targets: [] })
-  const file = args._[0]
+  const file = args._[0]?.toString()
   const filePath = resolve(process.cwd(), file)
   const footNotes: string[] = []
   if (!existsSync(filePath)) {
