@@ -1,3 +1,17 @@
+# [26.5.0](https://github.com/kulshekhar/ts-jest/compare/v26.5.0...v26.4.4) (2021-01-29)
+
+
+### Bug Fixes
+
+* reduce size of `node_modules` when adding `ts-jest` ([#2309](https://github.com/kulshekhar/ts-jest/issues/2309)) ([6bf2e8a](https://github.com/kulshekhar/ts-jest/commit/b8d5d2090567f23947d9efd87f5f869b16bf2e8a))
+
+
+### Features
+
+* introduce `exclude` to exclude files from diagnostics ([#2308](https://github.com/kulshekhar/ts-jest/issues/2308)) ([cd82fd3](https://github.com/kulshekhar/ts-jest/commit/0c555c250774a7fd9e356cf20a3d8b693cd82fd3))
+
+
+
 # [27.0.0-next.4](https://github.com/kulshekhar/ts-jest/compare/v27.0.0-next.3...v27.0.0-next.4) (2021-01-22)
 
 
