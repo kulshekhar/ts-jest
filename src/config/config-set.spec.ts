@@ -499,13 +499,20 @@ describe('isTestFile', () => {
 
 describe('shouldStringifyContent', () => {
   it('should return correct value is defined', () => {
-    const cs = createConfigSet({ tsJestConfig: { tsconfig: false, stringifyContentPathRegex: '\\.str$' } as any })
-    expect(cs.shouldStringifyContent('/foo/bar.ts')).toBe(false)
-    expect(cs.shouldStringifyContent('/foo/bar.str')).toBe(true)
+    const cs1 = createConfigSet({ tsJestConfig: { tsconfig: false, stringifyContentPathRegex: '\\.str$' } as any })
+
+    expect(cs1.shouldStringifyContent('/foo/bar.ts')).toBe(false)
+    expect(cs1.shouldStringifyContent('/foo/bar.str')).toBe(true)
+
+    const cs2 = createConfigSet({ tsJestConfig: { tsconfig: false, stringifyContentPathRegex: /\.str$/ } as any })
+
+    expect(cs2.shouldStringifyContent('/foo/bar.ts')).toBe(false)
+    expect(cs2.shouldStringifyContent('/foo/bar.str')).toBe(true)
   })
 
   it('should return correct value when stringifyContentPathRegex is undefined', () => {
     const cs = createConfigSet({ tsJestConfig: { tsconfig: false } as any })
+
     expect(cs.shouldStringifyContent('/foo/bar.ts')).toBe(false)
   })
 }) // shouldStringifyContent
@@ -554,8 +561,19 @@ describe('raiseDiagnostics', () => {
       code = 9999,
       category = ts.DiagnosticCategory.Warning,
     }: Partial<ts.Diagnostic> = {}): ts.Diagnostic => ({ messageText, code, category } as any)
-    it('should throw when diagnostics contains file path and pathRegex config matches file path', () => {
-      const cs = createConfigSet({
+
+    it('should throw when diagnostics contains file path and exclude config matches file path', () => {
+      let cs = createConfigSet({
+        logger,
+        tsJestConfig: { diagnostics: { exclude: ['src/__mocks__/index.ts'], pretty: false } },
+      })
+      logger.target.clear()
+
+      expect(() =>
+        cs.raiseDiagnostics([makeDiagnostic()], 'src/__mocks__/index.ts', logger),
+      ).toThrowErrorMatchingInlineSnapshot(`"warning TS9999: foo"`)
+
+      cs = createConfigSet({
         logger,
         tsJestConfig: { diagnostics: { pathRegex: 'src/__mocks__/index.ts', pretty: false } },
       })
@@ -566,8 +584,16 @@ describe('raiseDiagnostics', () => {
       ).toThrowErrorMatchingInlineSnapshot(`"warning TS9999: foo"`)
     })
 
-    it("should not throw when diagnostics contains file path and pathRegex config doesn't match file path", () => {
-      const cs = createConfigSet({
+    it("should not throw when diagnostics contains file path and exclude config doesn't match file path", () => {
+      let cs = createConfigSet({
+        logger,
+        tsJestConfig: { diagnostics: { warnOnly: true, exclude: ['/bar/'], pretty: false } },
+      })
+      logger.target.clear()
+
+      expect(() => cs.raiseDiagnostics([makeDiagnostic()], 'src/__mocks__/index.ts', logger)).not.toThrow()
+
+      cs = createConfigSet({
         logger,
         tsJestConfig: { diagnostics: { warnOnly: true, pathRegex: '/bar/', pretty: false } },
       })
@@ -591,24 +617,42 @@ describe('raiseDiagnostics', () => {
       file = program.getSourceFiles().find((sourceFile) => sourceFile.fileName === 'src/__mocks__/index.ts'),
     }: Partial<ts.Diagnostic> = {}): ts.Diagnostic => ({ messageText, code, category, file } as any)
 
-    it("should not throw when pathRegex config doesn't match source file path", () => {
+    it("should not throw when exclude config doesn't match source file path", () => {
       const cs = createConfigSet({
+        logger,
+        tsJestConfig: { diagnostics: { exclude: ['/foo/'], pretty: false, ignoreCodes: [1111] } },
+      })
+      logger.target.clear()
+
+      expect(() => cs.raiseDiagnostics([makeDiagnostic()])).not.toThrow()
+
+      const cs1 = createConfigSet({
         logger,
         tsJestConfig: { diagnostics: { pathRegex: '/foo/', pretty: false, ignoreCodes: [1111] } },
       })
       logger.target.clear()
 
-      expect(() => cs.raiseDiagnostics([makeDiagnostic()])).not.toThrow()
+      expect(() => cs1.raiseDiagnostics([makeDiagnostic()])).not.toThrow()
     })
 
-    it("should throw when pathRegex config doesn't match source file path", () => {
+    it("should throw when exclude config doesn't match source file path", () => {
       const cs = createConfigSet({
+        logger,
+        tsJestConfig: { diagnostics: { exclude: ['src/__mocks__/index.ts'], pretty: false } },
+      })
+      logger.target.clear()
+
+      expect(() => cs.raiseDiagnostics([makeDiagnostic()])).toThrowErrorMatchingInlineSnapshot(
+        `"Debug Failure. False expression: position cannot precede the beginning of the file"`,
+      )
+
+      const cs1 = createConfigSet({
         logger,
         tsJestConfig: { diagnostics: { pathRegex: 'src/__mocks__/index.ts', pretty: false } },
       })
       logger.target.clear()
 
-      expect(() => cs.raiseDiagnostics([makeDiagnostic()])).toThrowErrorMatchingInlineSnapshot(
+      expect(() => cs1.raiseDiagnostics([makeDiagnostic()])).toThrowErrorMatchingInlineSnapshot(
         `"Debug Failure. False expression: position cannot precede the beginning of the file"`,
       )
     })
@@ -616,13 +660,63 @@ describe('raiseDiagnostics', () => {
 }) // raiseDiagnostics
 
 describe('shouldReportDiagnostics', () => {
-  it('should return correct value', () => {
-    let cs = createConfigSet({ tsJestConfig: { tsconfig: false, diagnostics: { pathRegex: '/foo/' } } as any })
+  it('should return correct value for ts/tsx files', () => {
+    let cs = createConfigSet({
+      tsJestConfig: {
+        tsconfig: false,
+        diagnostics: { exclude: ['**/foo/*.ts', '**/foo/*.tsx'] },
+      } as any,
+    })
+
     expect(cs.shouldReportDiagnostics('/foo/index.ts')).toBe(true)
-    expect(cs.shouldReportDiagnostics('/bar/index.ts')).toBe(false)
+    expect(cs.shouldReportDiagnostics('/bar/index.tsx')).toBe(false)
+
+    cs = createConfigSet({
+      tsJestConfig: {
+        tsconfig: false,
+        diagnostics: { pathRegex: '/foo/' },
+      } as any,
+    })
+
+    expect(cs.shouldReportDiagnostics('/foo/index.ts')).toBe(true)
+    expect(cs.shouldReportDiagnostics('/bar/index.tsx')).toBe(false)
+
     cs = createConfigSet({ tsJestConfig: { tsconfig: false } as any })
+
     expect(cs.shouldReportDiagnostics('/foo/index.ts')).toBe(true)
-    expect(cs.shouldReportDiagnostics('/bar/index.ts')).toBe(true)
+    expect(cs.shouldReportDiagnostics('/bar/index.tsx')).toBe(true)
+  })
+
+  test('should return correct value for js/jsx files with checkJs compiler option', () => {
+    let cs = createConfigSet({
+      tsJestConfig: {
+        tsconfig: { checkJs: false },
+        diagnostics: { exclude: ['foo/*'] },
+      },
+    })
+
+    expect(cs.shouldReportDiagnostics('/foo/index.js')).toBe(false)
+    expect(cs.shouldReportDiagnostics('/foo/index.jsx')).toBe(false)
+
+    cs = createConfigSet({
+      tsJestConfig: {
+        tsconfig: { checkJs: false },
+        diagnostics: { pathRegex: '/bar/' },
+      },
+    })
+
+    expect(cs.shouldReportDiagnostics('/foo/index.js')).toBe(false)
+    expect(cs.shouldReportDiagnostics('/foo/index.jsx')).toBe(false)
+
+    cs = createConfigSet({
+      tsJestConfig: {
+        tsconfig: { checkJs: true },
+        diagnostics: { exclude: ['**/foo/*.js', '**/foo/*.jsx'] },
+      },
+    })
+
+    expect(cs.shouldReportDiagnostics('/foo/index.js')).toBe(true)
+    expect(cs.shouldReportDiagnostics('/foo/index.jsx')).toBe(true)
   })
 }) // shouldReportDiagnostics
 
@@ -979,7 +1073,7 @@ describe('diagnostics', () => {
     {
       diagnostics: {
         ignoreCodes: '10, 25',
-        pathRegex: '\\.test\\.ts',
+        exclude: ['\\.test\\.ts'],
         pretty: false,
       },
     },
@@ -987,7 +1081,7 @@ describe('diagnostics', () => {
       diagnostics: {
         ignoreCodes: ['10', 25],
         pretty: false,
-        pathRegex: RegExp('\\.test\\.ts'),
+        exclude: ['\\.test\\.ts'],
       },
     },
     { diagnostics: { warnOnly: true } },
