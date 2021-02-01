@@ -11,6 +11,11 @@
 * introduce `exclude` to exclude files from diagnostics ([#2308](https://github.com/kulshekhar/ts-jest/issues/2308)) ([cd82fd3](https://github.com/kulshekhar/ts-jest/commit/0c555c250774a7fd9e356cf20a3d8b693cd82fd3))
 
 
+### DEPRECATIONS
+
+* **config**: deprecate `pathRegex` in favor of `exclude` ([#2308](https://github.com/kulshekhar/ts-jest/issues/2308)) ([cd82fd3](https://github.com/kulshekhar/ts-jest/commit/0c555c250774a7fd9e356cf20a3d8b693cd82fd3))
+
+
 
 # [27.0.0-next.4](https://github.com/kulshekhar/ts-jest/compare/v27.0.0-next.3...v27.0.0-next.4) (2021-01-22)
 

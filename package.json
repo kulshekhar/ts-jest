@@ -89,7 +89,6 @@
     "@types/cross-spawn": "latest",
     "@types/fs-extra": "latest",
     "@types/js-yaml": "latest",
-    "@types/json5": "latest",
     "@types/lodash": "4.x",
     "@types/micromatch": "4.x",
     "@types/mkdirp": "latest",
