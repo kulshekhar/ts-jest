@@ -214,3 +214,9 @@ export interface AstTransformerDesc<T = Record<string, unknown>> {
   ): _ts.TransformerFactory<_ts.SourceFile> | _ts.TransformerFactory<_ts.Bundle | _ts.SourceFile>
   options?: T
 }
+
+export interface TsJestAstTransformer {
+  before: AstTransformerDesc[]
+  after: AstTransformerDesc[]
+  afterDeclarations: AstTransformerDesc[]
+}
