@@ -1,3 +1,24 @@
+# [27.0.0-next.5](https://github.com/kulshekhar/ts-jest/compare/v27.0.0-next.4...v27.0.0-next.5) (2021-02-04)
+
+
+### Features
+
+* **compiler:** allow custom transformers to access internal `Program` ([#2299](https://github.com/kulshekhar/ts-jest/issues/2299)) ([387964f](https://github.com/kulshekhar/ts-jest/commit/387964faed14ce24d2cf8170a04eee244d69b8b9))
+
+
+### BREAKING CHANGES
+
+`ts-jest` custom AST transformer function signature has changed to
+```
+import type { TsCompilerInstance } from 'ts-jest/dist/types'
+
+export function factory(compilerInstance: TsCompilerInstance) {
+   //...
+}
+```
+
+
+
 # [26.5.0](https://github.com/kulshekhar/ts-jest/compare/v26.5.0...v26.4.4) (2021-01-29)
 
 
