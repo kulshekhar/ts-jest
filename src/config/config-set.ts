@@ -24,6 +24,7 @@ import type {
   BabelConfig,
   BabelJestTransformer,
   ProjectConfigTsJest,
+  TsJestAstTransformer,
   TsJestDiagnosticsCfg,
   TsJestGlobalOptions,
   TTypeScript,
@@ -88,12 +89,6 @@ const toDiagnosticCodeList = (items: (string | number)[], into: number[] = []): 
   }
 
   return into
-}
-
-interface TsJestAstTransformer {
-  before: AstTransformerDesc[]
-  after: AstTransformerDesc[]
-  afterDeclarations: AstTransformerDesc[]
 }
 
 export class ConfigSet {
