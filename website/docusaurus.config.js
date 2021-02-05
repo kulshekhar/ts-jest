@@ -5,40 +5,162 @@ module.exports = {
   tagline:
     'A TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript.',
   url: 'https://kulshekhar.github.io',
-  baseUrl: '/ts-jest/',
+  baseUrl: '/',
+  baseUrlIssueBanner: true,
+  onBrokenLinks: 'throw',
+  onBrokenMarkdownLinks: 'warn',
   favicon: 'img/logo.svg',
   organizationName: 'kulshekhar',
   projectName: 'ts-jest',
+  plugins: [
+    [
+      '@docusaurus/plugin-ideal-image',
+      {
+        quality: 70,
+        max: 1030, // max resized image's size.
+        min: 640, // min resized image's size. if original is lower, use that size.
+        steps: 2, // the max number of images generated between min and max (inclusive)
+      },
+    ],
+    [
+      '@docusaurus/plugin-pwa',
+      {
+        debug: false,
+        offlineModeActivationStrategies: ['appInstalled', 'queryString'],
+        pwaHead: [
+          {
+            tagName: 'link',
+            rel: 'icon',
+            href: 'img/logo.png',
+          },
+          {
+            tagName: 'link',
+            rel: 'manifest',
+            href: `/manifest.json`,
+          },
+          {
+            tagName: 'meta',
+            name: 'theme-color',
+            content: 'rgb(37, 194, 160)',
+          },
+          {
+            tagName: 'meta',
+            name: 'apple-mobile-web-app-capable',
+            content: 'yes',
+          },
+          {
+            tagName: 'meta',
+            name: 'apple-mobile-web-app-status-bar-style',
+            content: '#000',
+          },
+          {
+            tagName: 'link',
+            rel: 'apple-touch-icon',
+            href: 'img/logo.png',
+          },
+          {
+            tagName: 'link',
+            rel: 'mask-icon',
+            href: 'img/logo.svg',
+            color: 'rgb(62, 204, 94)',
+          },
+          {
+            tagName: 'meta',
+            name: 'msapplication-TileImage',
+            content: 'img/logo.png',
+          },
+          {
+            tagName: 'meta',
+            name: 'msapplication-TileColor',
+            content: '#000',
+          },
+        ],
+      },
+    ],
+  ],
+  presets: [
+    [
+      '@docusaurus/preset-classic',
+      {
+        docs: {
+          sidebarPath: require.resolve('./sidebars.js'),
+          // Please change this to your repo.
+          editUrl: 'https://github.com/kulshekhar/ts-jest/edit/master/docs',
+          remarkPlugins: [simplePlantUML],
+        },
+        theme: {
+          customCss: require.resolve('./src/css/custom.css'),
+        },
+      },
+    ],
+  ],
   themeConfig: {
+    hideableSidebar: true,
+    colorMode: {
+      defaultMode: 'light',
+      disableSwitch: false,
+      respectPrefersColorScheme: true,
+    },
+    announcementBar: {
+      id: 'supportus',
+      content:
+        '⭐️ If you like ts-jest, give it a star on <a target="_blank" rel="noopener noreferrer" href="https://github.com/kulshekhar/ts-jest">GitHub</a>! ⭐️',
+    },
+    prism: {
+      theme: require('prism-react-renderer/themes/github'),
+      darkTheme: require('prism-react-renderer/themes/dracula'),
+    },
     navbar: {
-      title: 'Home',
+      hideOnScroll: true,
+      title: 'ts-jest',
       logo: {
-        alt: 'ts-jest',
-        src: 'img/logo.png',
+        alt: 'ts-jest logo',
+        src: 'img/logo.svg',
       },
       items: [
         {
-          to: 'docs/installation',
+          to: 'docs/',
           activeBasePath: 'docs',
           label: 'Docs',
           position: 'left',
         },
+        // right
         {
-          href: 'https://github.com/kulshekhar/ts-jest/',
-          label: 'GitHub',
+          type: 'docsVersionDropdown',
           position: 'right',
+          dropdownActiveClassDisabled: true,
+          dropdownItemsAfter: [
+            {
+              to: '/versions',
+              label: 'All versions',
+            },
+          ],
+        },
+        {
+          href: 'https://github.com/kulshekhar/ts-jest',
+          position: 'right',
+          className: 'header-github-link',
+          'aria-label': 'GitHub repository',
         },
       ],
     },
     footer: {
-      style: 'light',
+      style: 'dark',
       links: [
         {
-          title: 'Docs',
+          title: 'Learn',
           items: [
             {
-              label: 'Getting Started',
-              to: 'docs/installation',
+              label: 'Introduction',
+              to: 'docs/',
+            },
+            {
+              label: 'Installation',
+              to: 'docs/getting-started/installation',
+            },
+            {
+              label: 'Migration from <=23.10',
+              to: 'docs/migration',
             },
           ],
         },
@@ -46,13 +168,21 @@ module.exports = {
           title: 'Community',
           items: [
             {
-              label: 'Slack',
-              href: 'https://bit.ly/3bRHFPQ',
+              label: 'Jest',
+              href: 'https://stackoverflow.com/questions/tagged/jest',
+            },
+            {
+              label: 'Discord',
+              href: 'https://discord.gg/j6FKKQQrW9',
+            },
+            {
+              label: 'GitHub Discussion',
+              href: 'https://github.com/kulshekhar/ts-jest/discussions',
             },
           ],
         },
         {
-          title: 'Social',
+          title: 'More',
           items: [
             {
               label: 'GitHub',
@@ -63,24 +193,5 @@ module.exports = {
       ],
       copyright: `Copyright © ${new Date().getFullYear()} ts-jest. Built with Docusaurus.`,
     },
-    prism: {
-      theme: require('prism-react-renderer/themes/nightOwlLight'),
-    },
-    sidebarCollapsible: false,
   },
-  presets: [
-    [
-      '@docusaurus/preset-classic',
-      {
-        docs: {
-          sidebarPath: require.resolve('./sidebars.js'),
-          editUrl: 'https://github.com/kulshekhar/ts-jest/edit/master/docs',
-          remarkPlugins: [simplePlantUML],
-        },
-        theme: {
-          customCss: require.resolve('./src/css/custom.css'),
-        },
-      },
-    ],
-  ],
 }

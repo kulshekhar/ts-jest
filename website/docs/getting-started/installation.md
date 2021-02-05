@@ -3,10 +3,6 @@ id: installation
 title: Installation
 ---
 
-`ts-jest` is a Typescript preprocessor for Jest pre-processor. You'll need both Jest and TypeScript installed inside your project.
-
-> Tip: If you get an error with the following `npm` commands such as `npx: command not found`, you can replace `npx XXX` with `node node_modules/.bin/XXX` from the root of your project.
-
 ### Dependencies
 
 You can install `ts-jest` and dependencies all at once with the following commands.
@@ -22,6 +18,8 @@ npm install --save-dev jest typescript ts-jest
 ```sh
 yarn add --dev jest typescript ts-jest
 ```
+
+> Tip: If you get an error with the following `npm` commands such as `npx: command not found`, you can replace `npx XXX` with `node node_modules/.bin/XXX` from the root of your project.
 
 ### Jest config file
 
@@ -53,4 +51,4 @@ However, answer `no` to the Jest question about whether or not to enable Typescr
 
 For customizing jest, please follow their [official guide online](https://jestjs.io/docs/en/configuration.html).
 
-`ts-jest` specific options can be found [here](./options).
+`ts-jest` specific options can be found [here](options).

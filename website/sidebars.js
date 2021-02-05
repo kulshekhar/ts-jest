@@ -1,18 +1,27 @@
 module.exports = {
   docs: [
     {
-      type: 'doc',
-      id: 'installation',
+      type: 'category',
+      label: 'ts-jest',
+      items: ['introduction', 'processing', 'contributing'],
     },
     {
       type: 'category',
-      label: 'Configuration',
-      items: ['presets', 'paths-mapping', 'options', 'version-checking'],
+      label: 'Getting Started',
+      collapsed: false,
+      items: [
+        'getting-started/installation',
+        'getting-started/presets',
+        'getting-started/options',
+        'getting-started/paths-mapping',
+        'getting-started/version-checking',
+      ],
     },
     {
       type: 'category',
       label: 'Guides',
-      items: ['test-helpers', 'esm-support', 'react-native', 'troubleshooting'],
+      collapsed: false,
+      items: ['guides/test-helpers', 'guides/esm-support', 'guides/react-native', 'guides/troubleshooting'],
     },
     {
       type: 'doc',
@@ -25,11 +34,6 @@ module.exports = {
     {
       type: 'doc',
       id: 'debugging',
-    },
-    {
-      type: 'category',
-      label: 'How it works',
-      items: ['processing', 'e2e-testing'],
     },
   ],
 }

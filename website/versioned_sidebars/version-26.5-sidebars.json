@@ -1,0 +1,85 @@
+{
+  "version-26.5-docs": [
+    {
+      "collapsed": true,
+      "type": "category",
+      "label": "ts-jest",
+      "items": [
+        {
+          "type": "doc",
+          "id": "version-26.5/introduction"
+        },
+        {
+          "type": "doc",
+          "id": "version-26.5/processing"
+        },
+        {
+          "type": "doc",
+          "id": "version-26.5/contributing"
+        }
+      ]
+    },
+    {
+      "collapsed": false,
+      "type": "category",
+      "label": "Getting Started",
+      "items": [
+        {
+          "type": "doc",
+          "id": "version-26.5/getting-started/installation"
+        },
+        {
+          "type": "doc",
+          "id": "version-26.5/getting-started/presets"
+        },
+        {
+          "type": "doc",
+          "id": "version-26.5/getting-started/options"
+        },
+        {
+          "type": "doc",
+          "id": "version-26.5/getting-started/paths-mapping"
+        },
+        {
+          "type": "doc",
+          "id": "version-26.5/getting-started/version-checking"
+        }
+      ]
+    },
+    {
+      "collapsed": false,
+      "type": "category",
+      "label": "Guides",
+      "items": [
+        {
+          "type": "doc",
+          "id": "version-26.5/guides/test-helpers"
+        },
+        {
+          "type": "doc",
+          "id": "version-26.5/guides/esm-support"
+        },
+        {
+          "type": "doc",
+          "id": "version-26.5/guides/react-native"
+        },
+        {
+          "type": "doc",
+          "id": "version-26.5/guides/troubleshooting"
+        }
+      ]
+    },
+    {
+      "type": "doc",
+      "id": "version-26.5/babel7-or-ts"
+    },
+    {
+      "type": "doc",
+      "id": "version-26.5/migration"
+    },
+    {
+      "type": "doc",
+      "id": "version-26.5/debugging"
+    }
+  ]
+}

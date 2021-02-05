@@ -3,21 +3,29 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
+    "docusaurus": "docusaurus",
     "start": "docusaurus start",
     "build": "docusaurus build",
     "swizzle": "docusaurus swizzle",
-    "deploy": "GIT_USER=kulshekhar USE_SSH=true docusaurus deploy"
+    "deploy": "GIT_USER=kulshekhar USE_SSH=true docusaurus deploy",
+    "serve": "docusaurus serve",
+    "clear": "docusaurus clear"
   },
   "dependencies": {
     "@akebifiky/remark-simple-plantuml": "^1.0.1",
-    "@docusaurus/core": "^2.0.0-alpha.69",
-    "@docusaurus/preset-classic": "^2.0.0-alpha.69",
+    "@docusaurus/core": "2.0.0-alpha.70",
+    "@docusaurus/plugin-ideal-image": "2.0.0-alpha.70",
+    "@docusaurus/plugin-pwa": "2.0.0-alpha.70",
+    "@docusaurus/preset-classic": "2.0.0-alpha.70",
+    "@mdx-js/react": "^1.6.21",
+    "clsx": "^1.1.1",
+    "latest-version": "^5.1.0",
     "react": "^16.8.4",
     "react-dom": "^16.8.4"
   },
   "browserslist": {
     "production": [
-      ">0.2%",
+      ">0.5%",
       "not dead",
       "not op_mini all"
     ],
@@ -26,8 +34,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "remark": "^13.0.0"
   }
 }
