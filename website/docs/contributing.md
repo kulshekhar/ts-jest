@@ -1,11 +1,24 @@
 ---
-id: e2e-testing
-title: E2E tests flow
+id: contributing
+title: Contributing
 ---
+
+When contributing to this repository, please first discuss the change you wish to make via [`ts-jest` GitHub discussion](https://github.com/kulshekhar/ts-jest/discussions) or [issue](https://github.com/kulshekhar/ts-jest/issues) with the owners of this repository before making a change.
+
+Please note we have a code of conduct, please follow it in all your interactions with the project.
+
+## Pull Request Process
+
+1. Ensure the tests are passing and that you have latest `master` branch merged in.
+2. Update the `docs/` with details of your changes if required.
+3. If possible, squash your commits. There must be only one commit in your PR (until a review). Then after each review requesting changes, DO NOT squash your commits with the one before the review, so that we can see intermediate modifications.
+4. You may merge the Pull Request in once you have the sign-off of two other developers, or if you do not have permission to do that, you may request the second reviewer to merge it for you.
 
 _These are internal technical documents. If you're not a contributor to `ts-jest`, but simply trying to use the library you'll find nothing of value here_
 
-## Preparing
+## E2E Testing
+
+### Preparing
 
 The preparation of E2E test directory is done in `scripts/e2e.js`. Here is the process:
 
@@ -63,7 +76,7 @@ endwhile (done)
 stop
 ```
 
-## Running
+### Running
 
 When a test-case needs to be run with a given template within tests, here is what's happening (in `e2e/__helpers__/test-case/runtime.ts`):
 

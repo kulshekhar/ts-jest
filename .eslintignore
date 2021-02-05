@@ -4,6 +4,6 @@ e2e/__cases__/
 e2e/__workdir_synlink__/
 e2e/__external-repos__/
 coverage/
-docs/
+website/src/**/*.js
 *.config.js
 .eslintrc.js
