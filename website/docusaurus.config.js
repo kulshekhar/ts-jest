@@ -5,7 +5,7 @@ module.exports = {
   tagline:
     'A TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript.',
   url: 'https://kulshekhar.github.io',
-  baseUrl: '/',
+  baseUrl: '/ts-jest/',
   baseUrlIssueBanner: true,
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
