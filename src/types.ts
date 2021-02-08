@@ -154,6 +154,14 @@ export interface TsJestGlobalOptions {
   stringifyContentPathRegex?: string | RegExp
 }
 
+export interface GlobalConfigTsJest extends Config.ConfigGlobals {
+  'ts-jest': TsJestGlobalOptions
+}
+
+export interface InitialOptionsTsJest extends Config.InitialOptions {
+  globals?: GlobalConfigTsJest
+}
+
 interface TsJestConfig$tsConfig$file {
   kind: 'file'
   value: string | undefined
