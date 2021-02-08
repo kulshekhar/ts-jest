@@ -29,7 +29,7 @@ Tip: If you get an error with the following `npm` commands such as `npx: command
 
 #### Creating
 
-By default Jest can run without any config files, but it will not compile `.ts` files.
+By default, Jest can run without any config files, but it will not compile `.ts` files.
 To make it transpile TypeScript with `ts-jest`, we will need to create a configuration file that will tell Jest to use a `ts-jest` preset.
 
 `ts-jest` can create the configuration file for you automatically:

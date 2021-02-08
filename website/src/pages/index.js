@@ -19,7 +19,7 @@ const features = [
   },
   {
     title: 'Babel support',
-    description: <>Working seamlessly with Babel</>,
+    description: <>Support working in combination with Babel</>,
   },
 ]
 

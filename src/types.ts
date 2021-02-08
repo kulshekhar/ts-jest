@@ -139,6 +139,14 @@ export interface TsJestGlobalOptions {
   useESM?: boolean
 }
 
+export interface GlobalConfigTsJest extends Config.ConfigGlobals {
+  'ts-jest': TsJestGlobalOptions
+}
+
+export interface InitialOptionsTsJest extends Config.InitialOptions {
+  globals?: GlobalConfigTsJest
+}
+
 interface TsJestConfig$tsConfig$file {
   kind: 'file'
   value: string | undefined
@@ -189,6 +197,7 @@ export interface TransformOptionsTsJest extends TransformOptions {
 }
 
 export type ResolvedModulesMap = Map<string, _ts.ResolvedModuleFull | undefined> | undefined
+
 /**
  * @internal
  */
