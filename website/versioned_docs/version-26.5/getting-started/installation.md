@@ -19,7 +19,11 @@ npm install --save-dev jest typescript ts-jest
 yarn add --dev jest typescript ts-jest
 ```
 
-> Tip: If you get an error with the following `npm` commands such as `npx: command not found`, you can replace `npx XXX` with `node node_modules/.bin/XXX` from the root of your project.
+:::tip
+
+Tip: If you get an error with the following `npm` commands such as `npx: command not found`, you can replace `npx XXX` with `node node_modules/.bin/XXX` from the root of your project.
+
+:::
 
 ### Jest config file
 

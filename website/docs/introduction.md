@@ -9,5 +9,8 @@ slug: /
 
 It supports all features of TypeScript including type-checking. [Read more about Babel7 + `preset-typescript` **vs** TypeScript (and `ts-jest`)](babel7-or-ts).
 
-| We are not doing semantic versioning and `23.10` is a re-write, run `npm i -D ts-jest@"<23.10.0"` to go back to the previous version |
-| ------------------------------------------------------------------------------------------------------------------------------------ |
+:::important
+
+We are not doing semantic versioning and \*\*23.10 is a re-write, run `npm i -D ts-jest@"<23.10.0"` to go back to the previous version
+
+:::
