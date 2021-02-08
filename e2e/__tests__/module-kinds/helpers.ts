@@ -1,4 +1,3 @@
-// @ts-expect-error testing purpose
 import tsJestPresets from '../../../presets'
 import { PackageSets } from '../../__helpers__/templates'
 import { configureTestCase } from '../../__helpers__/test-case'
@@ -33,7 +32,7 @@ const runTestForOptions = (options: TestOptions, preset: AllPresetType = AllPres
   let tsJestPresetToUse
   switch (preset) {
     case AllPreset.DEFAULT_ESM:
-      tsJestPresetToUse = tsJestPresets.defaultEsm
+      tsJestPresetToUse = tsJestPresets.defaultsESM
       break
     case AllPreset.JS_WITH_TS_ESM:
       tsJestPresetToUse = tsJestPresets.jsWithTsESM
@@ -42,7 +41,7 @@ const runTestForOptions = (options: TestOptions, preset: AllPresetType = AllPres
       tsJestPresetToUse = tsJestPresets.jsWithBabelESM
       break
     default:
-      tsJestPresetToUse = tsJestPresets.default
+      tsJestPresetToUse = tsJestPresets.defaults
   }
   const testCase = configureTestCase('module-kinds',
     {
