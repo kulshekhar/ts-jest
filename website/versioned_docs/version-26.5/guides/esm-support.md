@@ -5,6 +5,6 @@ title: ESM Support
 
 :::important
 
-ESM support is only available in **v27**
+ESM support is only available in **v27++**
 
 :::

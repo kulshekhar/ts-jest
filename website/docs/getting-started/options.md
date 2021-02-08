@@ -5,7 +5,24 @@ title: Options
 
 ### Introduction
 
-All `ts-jest` specific options are located under the `globals.ts-jest` path of your Jest config:
+All `ts-jest` specific options are located under the `globals` of Jest config object in the `package.json` file of your project,
+or through a `jest.config.js`, or `jest.config.ts` file.
+
+```json
+// package.json
+{
+  // [...]
+  "jest": {
+    "globals": {
+      "ts-jest": {
+        // ts-jest configuration goes here
+      }
+    }
+  }
+}
+```
+
+Or through JavaScript:
 
 ```js
 // jest.config.js
@@ -19,28 +36,13 @@ module.exports = {
 }
 ```
 
-```json
-// OR package.json
-{
-  // [...]
-  "jest": {
-    "globals": {
-      "ts-jest": {
-        // ts-jest configuration goes here
-      }
-    }
-  }
-}
-```
-
-#### IDE `ts-jest` config suggestion
+:::tip
 
 To utilize IDE suggestions, you can use `JSDoc` comments to provide suggested `ts-jest` configs for your Jest config:
 
 ```js
-/** @typedef {import('ts-jest/dist/types')} */
-/** @type {import('@jest/types').Config.InitialOptions} */
-const config = {
+/** @type {import('ts-jest/dist/types').InitialOptionsTsJest} */
+module.exports = config = {
   // [...]
   globals: {
     'ts-jest': {
@@ -48,8 +50,22 @@ const config = {
     },
   },
 }
+```
 
-module.exports = config
+:::
+
+Or through TypeScript (if `ts-node` is installed):
+
+```ts
+// jest.config.ts
+import type { InitialOptionsTsJest } from 'ts-jest/dist/types'
+
+const config: InitialOptionsTsJests = {
+  'ts-jest': {
+    // ts-jest configuration goes here
+  },
+}
+export default config
 ```
 
 ### Options
