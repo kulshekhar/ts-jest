@@ -18,7 +18,7 @@ title: Presets
 
 ### Basic usage
 
-In most cases, simply setting the `preset` key to the desired preset name in your Jest config should be enough to start using TypeScript with Jest (assuming you added `ts-jest` to your dev. dependencies of course):
+In most cases, simply setting the `preset` key to the desired preset name in your Jest config should be enough to start using TypeScript with Jest (assuming you added `ts-jest` to your `devDependencies` of course):
 
 ```js
 // jest.config.js
@@ -48,7 +48,7 @@ module.exports = {
 
 Any preset can also be used with other options.
 If you're already using another preset, you might want only some specific settings from the chosen `ts-jest` preset.
-In this case you'll need to use the JavaScript version of Jest config (comment/uncomment according to your use-case):
+In this case you'll need to use the JavaScript version of Jest config (comment/uncomment according to your use case):
 
 ```js
 // jest.config.js
