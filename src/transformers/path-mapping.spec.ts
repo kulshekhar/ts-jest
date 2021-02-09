@@ -30,13 +30,6 @@ const TS_JS_CODE_WITH_PATH_ALIAS = `
 `
 
 describe('path-mapping', () => {
-  test('should have correct signature', () => {
-    expect(pathMapping.name).toBe('path-mapping')
-    expect(typeof pathMapping.version).toBe('number')
-    expect(pathMapping.version).toBeGreaterThan(0)
-    expect(typeof pathMapping.factory).toBe('function')
-  })
-
   test.each([
     {
       baseUrl: '.',

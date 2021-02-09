@@ -20,16 +20,6 @@ const HOIST_METHODS = ['mock', 'unmock', 'enableAutomock', 'disableAutomock', 'd
 const JEST_GLOBALS_MODULE_NAME = '@jest/globals'
 const JEST_GLOBAL_NAME = 'jest'
 const ROOT_LEVEL_AST = 1
-/**
- * @internal
- */
-export const name = 'hoisting-jest-mock'
-/**
- * Please increment this each time the code is modified
- *
- * @internal
- */
-export const version = 4
 
 /**
  * The factory of hoisting transformer factory

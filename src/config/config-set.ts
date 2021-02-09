@@ -356,10 +356,15 @@ export class ConfigSet {
         stringify({
           version: this.compilerModule.version,
           digest: this.tsJestDigest,
+          babelConfig: this.babelConfig,
           compilerModule: this.compilerModule,
-          compilerOptions: this.parsedTsConfig.options,
+          tsconfig: {
+            options: this.parsedTsConfig.options,
+            raw: this.parsedTsConfig.raw,
+          },
           isolatedModules: this.isolatedModules,
           diagnostics: this._diagnostics,
+          transformers: this.resolvedTransformers,
         }),
       )
       const res = join(this._jestCfg.cacheDirectory, 'ts-jest', cacheSuffix.substr(0, 2), cacheSuffix.substr(2))

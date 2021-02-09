@@ -98,6 +98,8 @@ export class TsJestTransformer implements Transformer {
             options: configSet.parsedTsConfig.options,
             raw: configSet.parsedTsConfig.raw,
           },
+          transformers: configSet.resolvedTransformers,
+          tsCacheDir: configSet.tsCacheDir,
         }).serialized
         this._compiler = new TsJestCompiler(configSet, cacheFS)
         TsJestTransformer._cachedConfigSets.push({

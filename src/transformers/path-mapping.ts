@@ -11,16 +11,6 @@ import type * as _ts from 'typescript'
 
 import type { TsCompilerInstance } from '../types'
 
-/**
- * @internal
- */
-export const name = 'path-mapping'
-// increment this each time the code is modified
-/**
- * @internal
- */
-export const version = 1
-
 const isBaseDir = (base: string, dir: string) => !relative(base, dir)?.startsWith('.')
 
 /**
