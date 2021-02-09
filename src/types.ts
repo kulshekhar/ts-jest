@@ -162,6 +162,8 @@ export interface InitialOptionsTsJest extends Config.InitialOptions {
   globals?: GlobalConfigTsJest
 }
 
+export type TsJestPresets = Pick<Config.InitialOptions, 'moduleFileExtensions' | 'transform' | 'testMatch'>
+
 interface TsJestConfig$tsConfig$file {
   kind: 'file'
   value: string | undefined
