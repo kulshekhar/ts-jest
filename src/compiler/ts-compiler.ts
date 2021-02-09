@@ -15,28 +15,41 @@ import type {
   TransformerFactory,
   Bundle,
   CustomTransformerFactory,
+  CustomTransformers,
 } from 'typescript'
 
 import type { ConfigSet } from '../config/config-set'
 import { LINE_FEED } from '../constants'
-import type { ResolvedModulesMap, StringMap, TsCompilerInstance, TTypeScript } from '../types'
+import type { ResolvedModulesMap, StringMap, TsCompilerInstance, TsJestAstTransformer, TTypeScript } from '../types'
 import { rootLogger } from '../utils/logger'
 import { Errors, interpolate } from '../utils/messages'
 
 import { updateOutput } from './compiler-utils'
 
-/**
- * @internal
- */
 export class TsCompiler implements TsCompilerInstance {
-  private readonly _logger: Logger
-  private readonly _ts: TTypeScript
+  protected readonly _logger: Logger
+  protected readonly _ts: TTypeScript
+  protected readonly _initialCompilerOptions: CompilerOptions
+  protected _compilerOptions: CompilerOptions
+  /**
+   * @internal
+   */
   private readonly _parsedTsConfig: ParsedCommandLine
+  /**
+   * @internal
+   */
   private readonly _compilerCacheFS: Map<string, number> = new Map<string, number>()
-  private readonly _initialCompilerOptions: CompilerOptions
-  private _compilerOptions: CompilerOptions
+  /**
+   * @internal
+   */
   private _cachedReadFile: ((fileName: string) => string | undefined) | undefined
+  /**
+   * @internal
+   */
   private _projectVersion = 1
+  /**
+   * @internal
+   */
   private _languageService: LanguageService | undefined
   program: Program | undefined
 
@@ -51,6 +64,9 @@ export class TsCompiler implements TsCompilerInstance {
     }
   }
 
+  /**
+   * @internal
+   */
   private _createLanguageService(): void {
     const serviceHostTraceCtx = {
       namespace: 'ts:serviceHost',
@@ -122,17 +138,7 @@ export class TsCompiler implements TsCompilerInstance {
       getCurrentDirectory: () => this.configSet.cwd,
       getCompilationSettings: () => this._compilerOptions,
       getDefaultLibFileName: () => this._ts.getDefaultLibFilePath(this._compilerOptions),
-      getCustomTransformers: () => ({
-        before: this.configSet.resolvedTransformers.before.map((beforeTransformer) =>
-          beforeTransformer.factory(this, beforeTransformer.options),
-        ) as (TransformerFactory<SourceFile> | CustomTransformerFactory)[],
-        after: this.configSet.resolvedTransformers.after.map((afterTransformer) =>
-          afterTransformer.factory(this, afterTransformer.options),
-        ) as (TransformerFactory<SourceFile> | CustomTransformerFactory)[],
-        afterDeclarations: this.configSet.resolvedTransformers.afterDeclarations.map((afterDeclarations) =>
-          afterDeclarations.factory(this, afterDeclarations.options),
-        ) as TransformerFactory<SourceFile | Bundle>[],
-      }),
+      getCustomTransformers: () => this._makeTransformers(this.configSet.resolvedTransformers),
       resolveModuleNames: (moduleNames: string[], containingFile: string): (ResolvedModuleFull | undefined)[] =>
         moduleNames.map((moduleName) => {
           const { resolvedModule } = this._ts.resolveModuleName(
@@ -210,22 +216,7 @@ export class TsCompiler implements TsCompilerInstance {
     } else {
       this._logger.debug({ fileName }, 'getCompiledOutput(): compiling as isolated module')
 
-      const result: TranspileOutput = this._ts.transpileModule(fileContent, {
-        fileName,
-        transformers: {
-          before: this.configSet.resolvedTransformers.before.map((beforeTransformer) =>
-            beforeTransformer.factory(this, beforeTransformer.options),
-          ) as (TransformerFactory<SourceFile> | CustomTransformerFactory)[],
-          after: this.configSet.resolvedTransformers.after.map((afterTransformer) =>
-            afterTransformer.factory(this, afterTransformer.options),
-          ) as (TransformerFactory<SourceFile> | CustomTransformerFactory)[],
-          afterDeclarations: this.configSet.resolvedTransformers.afterDeclarations.map((afterDeclarations) =>
-            afterDeclarations.factory(this, afterDeclarations.options),
-          ) as TransformerFactory<SourceFile | Bundle>[],
-        },
-        compilerOptions: this._compilerOptions,
-        reportDiagnostics: this.configSet.shouldReportDiagnostics(fileName),
-      })
+      const result: TranspileOutput = this._transpileOutput(fileContent, fileName)
       if (result.diagnostics && this.configSet.shouldReportDiagnostics(fileName)) {
         this.configSet.raiseDiagnostics(result.diagnostics, fileName, this._logger)
       }
@@ -235,12 +226,41 @@ export class TsCompiler implements TsCompilerInstance {
     }
   }
 
+  protected _transpileOutput(fileContent: string, fileName: string): TranspileOutput {
+    return this._ts.transpileModule(fileContent, {
+      fileName,
+      transformers: this._makeTransformers(this.configSet.resolvedTransformers),
+      compilerOptions: this._compilerOptions,
+      reportDiagnostics: this.configSet.shouldReportDiagnostics(fileName),
+    })
+  }
+
+  protected _makeTransformers(customTransformers: TsJestAstTransformer): CustomTransformers {
+    return {
+      before: customTransformers.before.map((beforeTransformer) =>
+        beforeTransformer.factory(this, beforeTransformer.options),
+      ) as (TransformerFactory<SourceFile> | CustomTransformerFactory)[],
+      after: customTransformers.after.map((afterTransformer) =>
+        afterTransformer.factory(this, afterTransformer.options),
+      ) as (TransformerFactory<SourceFile> | CustomTransformerFactory)[],
+      afterDeclarations: customTransformers.afterDeclarations.map((afterDeclarations) =>
+        afterDeclarations.factory(this, afterDeclarations.options),
+      ) as TransformerFactory<SourceFile | Bundle>[],
+    }
+  }
+
+  /**
+   * @internal
+   */
   private _isFileInCache(fileName: string): boolean {
     return (
       this.jestCacheFS.has(fileName) && this._compilerCacheFS.has(fileName) && this._compilerCacheFS.get(fileName) !== 0
     )
   }
 
+  /**
+   * @internal
+   */
   /* istanbul ignore next */
   private _updateMemoryCache(contents: string, fileName: string): void {
     this._logger.debug({ fileName }, 'updateMemoryCache: update memory cache for language service')
@@ -271,6 +291,9 @@ export class TsCompiler implements TsCompilerInstance {
     if (shouldIncrementProjectVersion) this._projectVersion++
   }
 
+  /**
+   * @internal
+   */
   private _doTypeChecking(fileName: string): void {
     if (this.configSet.shouldReportDiagnostics(fileName)) {
       // Get the relevant diagnostics - this is 3x faster than `getPreEmitDiagnostics`.
