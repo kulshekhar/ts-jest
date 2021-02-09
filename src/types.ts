@@ -34,6 +34,11 @@ export type BabelJestTransformer = {
  */
 export type BabelConfig = _babel.TransformOptions
 
+export type TsJestPresets = Pick<
+  Config.InitialOptions,
+  'extensionsToTreatAsEsm' | 'moduleFileExtensions' | 'transform' | 'testMatch'
+>
+
 export interface AstTransformer<T = Record<string, unknown>> {
   path: string
   options?: T
@@ -211,9 +216,7 @@ export interface TsCompilerInstance extends CompilerInstance {
   configSet: ConfigSet
   program: _ts.Program | undefined
 }
-/**
- * @internal
- */
+
 export interface AstTransformerDesc<T = Record<string, unknown>> {
   name: string
   version: number

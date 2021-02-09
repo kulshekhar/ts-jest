@@ -18,7 +18,8 @@ title: Presets
 
 ### Basic usage
 
-In most cases, simply setting the `preset` key to the desired preset name in your Jest config should be enough to start using TypeScript with Jest (assuming you added `ts-jest` to your `devDependencies` of course):
+In most cases, simply setting the `preset` key to the desired preset name in your Jest config should be enough to start
+using TypeScript with Jest (assuming you added `ts-jest` to your `devDependencies` of course):
 
 ```js
 // jest.config.js
@@ -53,11 +54,11 @@ In this case you'll need to use the JavaScript version of Jest config (comment/u
 ```js
 // jest.config.js
 const { defaults: tsjPreset } = require('ts-jest/presets')
-// const { defaultsESM: tsjPreset } = require('ts-jest/presets');
-// const { jsWithTs: tsjPreset } = require('ts-jest/presets');
-// const { jsWithTsESM: tsjPreset } = require('ts-jest/presets');
-// const { jsWithBabel: tsjPreset } = require('ts-jest/presets');
-// const { jsWithBabelESM: tsjPreset } = require('ts-jest/presets');
+// const { defaultsESM: tsjPreset } = require('ts-jest/presets')
+// const { jsWithTs: tsjPreset } = require('ts-jest/presets')
+// const { jsWithTsESM: tsjPreset } = require('ts-jest/presets')
+// const { jsWithBabel: tsjPreset } = require('ts-jest/presets')
+// const { jsWithBabelESM: tsjPreset } = require('ts-jest/presets')
 
 module.exports = {
   // [...]
@@ -66,4 +67,27 @@ module.exports = {
     // [...]
   },
 }
+```
+
+Or through TypeScript (if `ts-node` is installed):
+
+```ts
+// jest.config.ts
+import type { InitialOptionsTsJest } from 'ts-jest/dist/types'
+import { defaults as tsjPreset } from 'ts-jest/preset'
+// import { defaultsESM as tsjPreset } from 'ts-jest/preset'
+// import { jsWithTs as tsjPreset } from 'ts-jest/preset'
+// import { jsWithTsESM as tsjPreset } from 'ts-jest/preset'
+// import { jsWithBabel as tsjPreset } from 'ts-jest/preset'
+// import { jsWithBabelESM as tsjPreset } from 'ts-jest/preset'
+
+const config: InitialOptionsTsJest = {
+  // [...]
+  transform: {
+    ...tsjPreset.transform,
+    // [...]
+  },
+}
+
+export default config
 ```
