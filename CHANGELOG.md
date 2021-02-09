@@ -1,3 +1,32 @@
+## [26.5.1](https://github.com/kulshekhar/ts-jest/compare/v26.5.0...v26.5.1) (2021-02-09)
+
+
+### Features
+
+* **config:** support typed config options for jest config typescript ([#2336](https://github.com/kulshekhar/ts-jest/issues/2336)) ([f4f5d32](https://github.com/kulshekhar/ts-jest/commit/f4f5d3205d1c80e545a32c02c6a66e7e91386f7f))
+* **presets:** add typing for `presets` entry point ([#2341](https://github.com/kulshekhar/ts-jest/issues/2341)) ([e12b004](https://github.com/kulshekhar/ts-jest/commit/e12b004dcc5848d5ae0638e885147c54e11cc72b)), closes [#2325](https://github.com/kulshekhar/ts-jest/issues/2325)
+
+
+
+# [26.5.0](https://github.com/kulshekhar/ts-jest/compare/v26.5.0...v26.4.4) (2021-01-29)
+
+
+### Bug Fixes
+
+* reduce size of `node_modules` when adding `ts-jest` ([#2309](https://github.com/kulshekhar/ts-jest/issues/2309)) ([6bf2e8a](https://github.com/kulshekhar/ts-jest/commit/b8d5d2090567f23947d9efd87f5f869b16bf2e8a))
+
+
+### Features
+
+* introduce `exclude` to exclude files from diagnostics ([#2308](https://github.com/kulshekhar/ts-jest/issues/2308)) ([cd82fd3](https://github.com/kulshekhar/ts-jest/commit/0c555c250774a7fd9e356cf20a3d8b693cd82fd3))
+
+
+### DEPRECATIONS
+
+* **config**: deprecate `pathRegex` in favor of `exclude` ([#2308](https://github.com/kulshekhar/ts-jest/issues/2308)) ([cd82fd3](https://github.com/kulshekhar/ts-jest/commit/0c555c250774a7fd9e356cf20a3d8b693cd82fd3))
+
+
+
 ## [26.4.4](https://github.com/kulshekhar/ts-jest/compare/v26.4.3...v26.4.4) (2020-11-08)
 
 
