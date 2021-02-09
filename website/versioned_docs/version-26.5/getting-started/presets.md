@@ -50,8 +50,8 @@ In this case you'll need to use the JavaScript version of Jest config (comment/u
 ```js
 // jest.config.js
 const { defaults: tsjPreset } = require('ts-jest/presets')
-// const { jsWithTs: tsjPreset } = require('ts-jest/presets');
-// const { jsWithBabel: tsjPreset } = require('ts-jest/presets');
+// const { jsWithTs: tsjPreset } = require('ts-jest/presets')
+// const { jsWithBabel: tsjPreset } = require('ts-jest/presets')
 
 module.exports = {
   // [...]
@@ -60,4 +60,22 @@ module.exports = {
     // [...]
   },
 }
+```
+
+Or through TypeScript (if `ts-node` is installed):
+
+```ts
+// jest.config.ts
+import type { InitialOptionsTsJest } from 'ts-jest/dist/types'
+import { defaults as tsjPreset } from 'ts-jest/preset'
+// import { jsWithTs as tsjPreset } from 'ts-jest/preset'
+// import { jsWithBabel as tsjPreset } from 'ts-jest/preset'
+const config: InitialOptionsTsJest = {
+  // [...]
+  transform: {
+    ...tsjPreset.transform,
+    // [...]
+  },
+}
+export default config
 ```

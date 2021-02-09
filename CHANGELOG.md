@@ -1,3 +1,13 @@
+## [26.5.1](https://github.com/kulshekhar/ts-jest/compare/v26.5.0...v26.5.1) (2021-02-09)
+
+
+### Features
+
+* **config:** support typed config options for jest config typescript ([#2336](https://github.com/kulshekhar/ts-jest/issues/2336)) ([f4f5d32](https://github.com/kulshekhar/ts-jest/commit/f4f5d3205d1c80e545a32c02c6a66e7e91386f7f))
+* **presets:** add typing for `presets` entry point ([#2341](https://github.com/kulshekhar/ts-jest/issues/2341)) ([e12b004](https://github.com/kulshekhar/ts-jest/commit/e12b004dcc5848d5ae0638e885147c54e11cc72b)), closes [#2325](https://github.com/kulshekhar/ts-jest/issues/2325)
+
+
+
 # [27.0.0-next.5](https://github.com/kulshekhar/ts-jest/compare/v27.0.0-next.4...v27.0.0-next.5) (2021-02-04)
 
 
