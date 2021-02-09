@@ -110,7 +110,7 @@
     "execa": "latest",
     "fs-extra": "9.x",
     "glob-gitignore": "latest",
-    "husky": "4.x",
+    "husky": "5.x",
     "jest": "next",
     "js-yaml": "latest",
     "lint-staged": "latest",
