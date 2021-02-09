@@ -1,10 +1,9 @@
 import type { Config } from '@jest/types'
 
+import type { TsJestPresets } from '../types'
 import { rootLogger } from '../utils/logger'
 
 const logger = rootLogger.child({ namespace: 'jest-preset' })
-
-export type TsJestPresets = Pick<Config.InitialOptions, 'moduleFileExtensions' | 'transform' | 'testMatch'>
 
 interface CreateJestPresetOptions {
   allowJs?: boolean
