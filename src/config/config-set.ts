@@ -101,6 +101,7 @@ export class ConfigSet {
   readonly isolatedModules: boolean
   readonly cwd: string
   readonly rootDir: string
+  cacheSuffix!: string
   tsCacheDir: string | undefined
   parsedTsConfig!: ParsedCommandLine | Record<string, any>
   resolvedTransformers: TsJestAstTransformer = {
@@ -349,20 +350,30 @@ export class ConfigSet {
    * @internal
    */
   private _resolveTsCacheDir(): void {
+    this.cacheSuffix = sha1(
+      stringify({
+        version: this.compilerModule.version,
+        digest: this.tsJestDigest,
+        babelConfig: this.babelConfig,
+        compilerModule: this.compilerModule,
+        tsconfig: {
+          options: this.parsedTsConfig.options,
+          raw: this.parsedTsConfig.raw,
+        },
+        isolatedModules: this.isolatedModules,
+        diagnostics: this._diagnostics,
+        transformers: this.resolvedTransformers,
+      }),
+    )
     if (!this._jestCfg.cache) {
       this.logger.debug('file caching disabled')
     } else {
-      const cacheSuffix = sha1(
-        stringify({
-          version: this.compilerModule.version,
-          digest: this.tsJestDigest,
-          compilerModule: this.compilerModule,
-          compilerOptions: this.parsedTsConfig.options,
-          isolatedModules: this.isolatedModules,
-          diagnostics: this._diagnostics,
-        }),
+      const res = join(
+        this._jestCfg.cacheDirectory,
+        'ts-jest',
+        this.cacheSuffix.substr(0, 2),
+        this.cacheSuffix.substr(2),
       )
-      const res = join(this._jestCfg.cacheDirectory, 'ts-jest', cacheSuffix.substr(0, 2), cacheSuffix.substr(2))
 
       this.logger.debug({ cacheDirectory: res }, 'will use file caching')
 

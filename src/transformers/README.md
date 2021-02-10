@@ -9,11 +9,6 @@ import { SourceFile, TransformationContext, Transformer, Visitor } from 'typescr
 
 import type { TsCompilerInstance } from 'ts-jest/dist/types'
 
-// this is a unique identifier for your transformer
-export const name = 'my-transformer'
-// increment this each time you change the behavior of your transformer
-export const version = 1
-
 export function factory(compilerInstance: TsCompilerInstance) {
   const ts = compilerInstance.configSet.compilerModule
   function createVisitor(ctx: TransformationContext, sf: SourceFile) {

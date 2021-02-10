@@ -121,14 +121,7 @@ const createFactory = () => hoist.factory(new TsCompiler(createConfigSet(), new 
 const transpile = (source: string) => ts.transpileModule(source, { transformers: { before: [createFactory()] } })
 
 describe('hoisting', () => {
-  it('should have correct signature', () => {
-    expect(hoist.name).toBe('hoisting-jest-mock')
-    expect(typeof hoist.version).toBe('number')
-    expect(hoist.version).toBeGreaterThan(0)
-    expect(typeof hoist.factory).toBe('function')
-  })
-
-  it.each([CODE_WITH_HOISTING_NO_JEST_GLOBALS, CODE_WITH_HOISTING_HAS_JEST_GLOBALS])(
+  test.each([CODE_WITH_HOISTING_NO_JEST_GLOBALS, CODE_WITH_HOISTING_HAS_JEST_GLOBALS])(
     'should hoist correctly jest methods',
     (data) => {
       const out = transpile(data)

@@ -90,15 +90,7 @@ export class TsJestTransformer implements Transformer {
         // this which does not depend on config
         jest.name = undefined as any
         jest.cacheDirectory = undefined as any
-        this._transformCfgStr = new JsonableValue({
-          digest: configSet.tsJestDigest,
-          babel: configSet.babelConfig,
-          ...jest,
-          tsconfig: {
-            options: configSet.parsedTsConfig.options,
-            raw: configSet.parsedTsConfig.raw,
-          },
-        }).serialized
+        this._transformCfgStr = `${new JsonableValue(jest).serialized}${configSet.cacheSuffix}`
         this._compiler = new TsJestCompiler(configSet, cacheFS)
         TsJestTransformer._cachedConfigSets.push({
           jestConfig: new JsonableValue(config),

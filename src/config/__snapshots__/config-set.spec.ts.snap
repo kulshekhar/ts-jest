@@ -59,8 +59,6 @@ Object {
   "before": Array [
     Object {
       "factory": [Function],
-      "name": "hoisting-jest-mock",
-      "version": 4,
     },
   ],
 }
@@ -73,8 +71,6 @@ Object {
   "before": Array [
     Object {
       "factory": [Function],
-      "name": "hoisting-jest-mock",
-      "version": 4,
     },
     Object {
       "factory": [Function],
@@ -94,8 +90,6 @@ Object {
   "before": Array [
     Object {
       "factory": [Function],
-      "name": "hoisting-jest-mock",
-      "version": 4,
     },
   ],
 }
@@ -112,8 +106,6 @@ Object {
   "before": Array [
     Object {
       "factory": [Function],
-      "name": "hoisting-jest-mock",
-      "version": 4,
     },
   ],
 }
@@ -126,8 +118,6 @@ Object {
   "before": Array [
     Object {
       "factory": [Function],
-      "name": "hoisting-jest-mock",
-      "version": 4,
     },
     Object {
       "factory": [Function],
