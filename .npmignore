@@ -6,6 +6,7 @@ src
 
 # Developement scripts
 scripts
+.husky
 
 # Logs
 logs

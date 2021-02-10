@@ -31,7 +31,9 @@
     "prepublishOnly": "npm run test",
     "preversion": "npm run test",
     "update:e2e": "node scripts/update-e2e-templates.js",
-    "version": "npm run changelog && git add CHANGELOG.md"
+    "version": "npm run changelog && git add CHANGELOG.md",
+    "postinstall": "husky install",
+    "postpublish": "pinst --enable"
   },
   "repository": {
     "type": "git",
@@ -110,11 +112,12 @@
     "execa": "latest",
     "fs-extra": "9.x",
     "glob-gitignore": "latest",
-    "husky": "4.x",
+    "husky": "^5.0.9",
     "jest": "next",
     "js-yaml": "latest",
     "lint-staged": "latest",
     "npm-run-all": "latest",
+    "pinst": "^2.1.4",
     "prettier": "2.x",
     "source-map": "latest",
     "typescript": "^4.1.2"
