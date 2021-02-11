@@ -1,3 +1,19 @@
+# [27.0.0-next.6](https://github.com/kulshekhar/ts-jest/compare/v27.0.0-next.5...v27.0.0-next.6) (2021-02-11)
+
+
+### Bug Fixes
+
+* **config:** invalidate Jest transform cache when `astTransformers` value changes ([#2345](https://github.com/kulshekhar/ts-jest/issues/2345)) ([d726016](https://github.com/kulshekhar/ts-jest/commit/d726016a17a26215fad782cf57bb9b9bec807307))
+
+
+### Features
+
+* **compiler:** expose `TsCompiler` as public api ([#2344](https://github.com/kulshekhar/ts-jest/issues/2344)) ([871cd6a](https://github.com/kulshekhar/ts-jest/commit/871cd6a3abb10569a04d05f72bbb41c952665ed4))
+* **config:** support typed config options for jest config typescript ([#2335](https://github.com/kulshekhar/ts-jest/issues/2335)) ([3cfc37b](https://github.com/kulshekhar/ts-jest/commit/3cfc37b1eba125fe861cea0415095dbe1f538520))
+* **presets:** add typing for `presets` entry point ([#2337](https://github.com/kulshekhar/ts-jest/issues/2337)) ([1a3058f](https://github.com/kulshekhar/ts-jest/commit/1a3058f3b7f8a2e377cb6a7e829cea310a06d4fa))
+
+
+
 ## [26.5.1](https://github.com/kulshekhar/ts-jest/compare/v26.5.0...v26.5.1) (2021-02-09)
 
 
