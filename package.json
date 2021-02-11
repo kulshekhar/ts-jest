@@ -1,6 +1,6 @@
 {
   "name": "ts-jest",
-  "version": "27.0.0-next.5",
+  "version": "27.0.0-next.6",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "bin": {
@@ -110,7 +110,7 @@
     "execa": "latest",
     "fs-extra": "9.x",
     "glob-gitignore": "latest",
-    "husky": "5.x",
+    "husky": "4.x",
     "jest": "next",
     "js-yaml": "latest",
     "lint-staged": "latest",
