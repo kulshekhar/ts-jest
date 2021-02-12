@@ -23,6 +23,8 @@ interface CachedConfigSet {
   jestConfig: JsonableValue<ProjectConfigTsJest>
   transformerCfgStr: string
   compiler: TsJestCompiler
+  depGraphs: Map<string, DepGraphInfo>
+  tsResolvedModulesCachePath: string | undefined
 }
 
 interface TsJestHooksMap {
@@ -65,6 +67,8 @@ export class TsJestTransformer implements Transformer {
     if (ccs) {
       this._transformCfgStr = ccs.transformerCfgStr
       this._compiler = ccs.compiler
+      this._depGraphs = ccs.depGraphs
+      this._tsResolvedModulesCachePath = ccs.tsResolvedModulesCachePath
       configSet = ccs.configSet
     } else {
       // try to look-it up by stringified version
@@ -79,6 +83,8 @@ export class TsJestTransformer implements Transformer {
         serializedCcs.jestConfig.value = config
         this._transformCfgStr = serializedCcs.transformerCfgStr
         this._compiler = serializedCcs.compiler
+        this._depGraphs = serializedCcs.depGraphs
+        this._tsResolvedModulesCachePath = serializedCcs.tsResolvedModulesCachePath
         configSet = serializedCcs.configSet
       } else {
         // create the new record in the index
@@ -92,13 +98,15 @@ export class TsJestTransformer implements Transformer {
         jest.cacheDirectory = undefined as any
         this._transformCfgStr = `${new JsonableValue(jest).serialized}${configSet.cacheSuffix}`
         this._compiler = new TsJestCompiler(configSet, cacheFS)
+        this._getFsCachedResolvedModules(configSet)
         TsJestTransformer._cachedConfigSets.push({
           jestConfig: new JsonableValue(config),
           configSet,
           transformerCfgStr: this._transformCfgStr,
           compiler: this._compiler,
+          depGraphs: this._depGraphs,
+          tsResolvedModulesCachePath: this._tsResolvedModulesCachePath,
         })
-        this._getFsCachedResolvedModules(configSet)
       }
     }
 
