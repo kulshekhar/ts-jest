@@ -31,11 +31,14 @@ interface TsJestHooksMap {
   afterProcess?(args: any[], result: string | TransformedSource): string | TransformedSource | void
 }
 
-export interface DepGraphInfo {
+interface DepGraphInfo {
   fileContent: string
   resolveModuleNames: string[]
 }
 
+/**
+ * @internal
+ */
 export const CACHE_KEY_EL_SEPARATOR = '\x00'
 
 export class TsJestTransformer implements Transformer {
@@ -45,11 +48,11 @@ export class TsJestTransformer implements Transformer {
    * @internal
    */
   private static readonly _cachedConfigSets: CachedConfigSet[] = []
-  protected _compiler!: TsJestCompiler
-  protected readonly _logger: Logger
-  protected _tsResolvedModulesCachePath: string | undefined
-  protected _transformCfgStr!: string
-  protected _depGraphs: Map<string, DepGraphInfo> = new Map<string, DepGraphInfo>()
+  private readonly _logger: Logger
+  private _compiler!: TsJestCompiler
+  private _tsResolvedModulesCachePath: string | undefined
+  private _transformCfgStr!: string
+  private _depGraphs: Map<string, DepGraphInfo> = new Map<string, DepGraphInfo>()
 
   constructor() {
     this._logger = rootLogger.child({ namespace: 'ts-jest-transformer' })
@@ -58,7 +61,7 @@ export class TsJestTransformer implements Transformer {
     this._logger.debug('created new transformer')
   }
 
-  protected _configsFor(transformOptions: TransformOptionsTsJest): ConfigSet {
+  private _configsFor(transformOptions: TransformOptionsTsJest): ConfigSet {
     const { config, cacheFS } = transformOptions
     const ccs: CachedConfigSet | undefined = TsJestTransformer._cachedConfigSets.find(
       (cs) => cs.jestConfig.value === config,
@@ -90,14 +93,14 @@ export class TsJestTransformer implements Transformer {
         // create the new record in the index
         this._logger.info('no matching config-set found, creating a new one')
 
-        configSet = new ConfigSet(config)
+        configSet = this._createConfigSet(config)
         const jest = { ...config }
         // we need to remove some stuff from jest config
         // this which does not depend on config
         jest.name = undefined as any
         jest.cacheDirectory = undefined as any
         this._transformCfgStr = `${new JsonableValue(jest).serialized}${configSet.cacheSuffix}`
-        this._compiler = new TsJestCompiler(configSet, cacheFS)
+        this._compiler = this._createCompiler(configSet, cacheFS)
         this._getFsCachedResolvedModules(configSet)
         TsJestTransformer._cachedConfigSets.push({
           jestConfig: new JsonableValue(config),
@@ -111,6 +114,16 @@ export class TsJestTransformer implements Transformer {
     }
 
     return configSet
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  protected _createConfigSet(config: ProjectConfigTsJest): ConfigSet {
+    return new ConfigSet(config)
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  protected _createCompiler(configSet: ConfigSet, cacheFS: Map<string, string>): TsJestCompiler {
+    return new TsJestCompiler(configSet, cacheFS)
   }
 
   /**
@@ -260,7 +273,7 @@ export class TsJestTransformer implements Transformer {
   /**
    * Subclasses extends `TsJestTransformer` can call this method to get resolved module disk cache
    */
-  protected _getFsCachedResolvedModules(configSet: ConfigSet): void {
+  private _getFsCachedResolvedModules(configSet: ConfigSet): void {
     const cacheDir = configSet.tsCacheDir
     if (!configSet.isolatedModules && cacheDir) {
       // Make sure the cache directory exists before continuing.
