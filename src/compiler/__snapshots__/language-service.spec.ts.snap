@@ -1,24 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Language service allowJs option should compile js file for allowJs true with outDir 1`] = `
-  ===[ FILE: test-allow-js.js ]===================================================
-  "use strict";
-  Object.defineProperty(exports, "__esModule", { value: true });
-  exports.default = 42;
-  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoidGVzdC1hbGxvdy1qcy5qcyIsIm1hcHBpbmdzIjoiOztBQUFBLGtCQUFlLEVBQUUsQ0FBQSIsIm5hbWVzIjpbXSwic291cmNlcyI6WyJ0ZXN0LWFsbG93LWpzLmpzIl0sInNvdXJjZXNDb250ZW50IjpbImV4cG9ydCBkZWZhdWx0IDQyIl0sInZlcnNpb24iOjN9
-  ===[ INLINE SOURCE MAPS ]=======================================================
-  file: test-allow-js.js
-  mappings: ;;AAAA,kBAAe,EAAE,CAAA
-  names: []
-  sources:
-    - test-allow-js.js
-  sourcesContent:
-    - export default 42
-  version: 3
-  ================================================================================
-`;
-
-exports[`Language service allowJs option should compile js file for allowJs true without outDir 1`] = `
+exports[`Language service allowJs option should compile js file for allowJs true 1`] = `
   ===[ FILE: test-allow-js.js ]===================================================
   "use strict";
   Object.defineProperty(exports, "__esModule", { value: true });

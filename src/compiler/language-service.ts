@@ -1,6 +1,6 @@
 import { LogContexts, Logger, LogLevels } from 'bs-logger'
 import { existsSync, readFileSync, writeFile } from 'fs'
-import { basename, normalize, relative, join } from 'path'
+import { basename, normalize, join } from 'path'
 import memoize = require('lodash/memoize')
 import mkdirp = require('mkdirp')
 import type * as _ts from 'typescript'
@@ -260,7 +260,7 @@ export const initializeLanguageServiceInstance = (configs: ConfigSet, logger: Lo
       }
       /* istanbul ignore next (this should never happen but is kept for security) */
       if (output.emitSkipped) {
-        throw new TypeError(`${relative(cwd, fileName)}: Emit skipped for language service`)
+        throw new Error(interpolate(Errors.CannotCompile, { file: fileName }))
       }
       // Throw an error when requiring `.d.ts` files.
       if (!output.outputFiles.length) {

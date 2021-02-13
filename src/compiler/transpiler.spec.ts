@@ -1,6 +1,5 @@
 import { makeCompiler } from '../__helpers__/fakers'
 import ProcessedSource from '../__helpers__/processed-source'
-import { TS_JEST_OUT_DIR } from '../config/config-set'
 
 describe('Transpiler', () => {
   const baseTsJestConfig = {
@@ -10,7 +9,7 @@ describe('Transpiler', () => {
   it('should compile js file for allowJs true', () => {
     const fileName = 'foo.js'
     const compiler = makeCompiler({
-      tsJestConfig: { ...baseTsJestConfig, tsconfig: { allowJs: true, outDir: TS_JEST_OUT_DIR } },
+      tsJestConfig: { ...baseTsJestConfig, tsconfig: { allowJs: true } },
     })
     const source = 'export default 42'
 

@@ -69,14 +69,13 @@ describe('parsedTsConfig', () => {
   })
 
   it('should override some options', () => {
-    expect(get({ tsconfig: { module: 'esnext' as any, inlineSources: false } }).options).toMatchObject({
-      module: ts.ModuleKind.CommonJS,
-      inlineSources: true,
-    })
-  })
-
-  it('should include default outDir $$ts-jest$$ when allowJs is enabled and no outDir from config', () => {
-    expect(get({ tsconfig: { allowJs: true } }).options.outDir).toBe(TS_JEST_OUT_DIR)
+    expect(get({ tsconfig: { module: 'esnext' as any, inlineSources: false, outDir: 'build' } }).options).toMatchObject(
+      {
+        module: ts.ModuleKind.CommonJS,
+        inlineSources: true,
+        outDir: TS_JEST_OUT_DIR,
+      },
+    )
   })
 
   it('should be able to read extends', () => {
