@@ -20,20 +20,11 @@ describe('Language service', () => {
     const fileName = 'test-allow-js.js'
     const source = 'export default 42'
 
-    it('should compile js file for allowJs true with outDir', () => {
-      const compiler = makeCompiler({
-        tsJestConfig: { tsconfig: { allowJs: true, outDir: '$$foo$$' } },
-      })
-
-      const compiled = compiler.compile(source, fileName)
-
-      expect(new ProcessedSource(compiled, fileName)).toMatchSnapshot()
-    })
-
-    it('should compile js file for allowJs true without outDir', () => {
+    it('should compile js file for allowJs true', () => {
       const compiler = makeCompiler({
         tsJestConfig: { tsconfig: { allowJs: true } },
       })
+
       const compiled = compiler.compile(source, fileName)
 
       expect(new ProcessedSource(compiled, fileName)).toMatchSnapshot()
