@@ -1,7 +1,7 @@
 import fs from 'fs'
 import { join } from 'path'
 
-import { LogLevels } from 'bs-logger'
+import { Logger, LogLevels } from 'bs-logger'
 import { removeSync, writeFileSync } from 'fs-extra'
 import mkdirp from 'mkdirp'
 import { Extension, ResolvedModuleFull } from 'typescript'
@@ -9,9 +9,11 @@ import { Extension, ResolvedModuleFull } from 'typescript'
 import { createConfigSet } from './__helpers__/fakers'
 import { logTargetMock } from './__helpers__/mocks'
 import { SOURCE_MAPPING_PREFIX } from './compiler/compiler-utils'
+import { TsCompiler } from './compiler/ts-compiler'
 import { TsJestCompiler } from './compiler/ts-jest-compiler'
+import { ConfigSet } from './config/config-set'
 import { CACHE_KEY_EL_SEPARATOR, TsJestTransformer } from './ts-jest-transformer'
-import type { ResolvedModulesMap } from './types'
+import type { ProjectConfigTsJest, ResolvedModulesMap, StringMap } from './types'
 import { stringify } from './utils/json'
 import { sha1 } from './utils/sha1'
 import { VersionCheckers } from './utils/version-checkers'
@@ -420,7 +422,35 @@ Array [
   })
 
   describe('subclass extends TsJestTransformer', () => {
-    class MyTransformer extends TsJestTransformer {}
+    class MyTsCompiler extends TsCompiler {
+      constructor(readonly configSet: ConfigSet, readonly jestCacheFS: StringMap) {
+        super(configSet, jestCacheFS)
+      }
+    }
+
+    class MyConfigSet extends ConfigSet {
+      constructor(readonly jestConfig: ProjectConfigTsJest, readonly parentLogger?: Logger) {
+        super(jestConfig, parentLogger)
+      }
+    }
+
+    class MyTransformer extends TsJestTransformer {
+      // @ts-expect-error testing purpose
+      // eslint-disable-next-line class-methods-use-this
+      protected _createCompiler(configSet: ConfigSet, cacheFS: Map<string, string>): MyTsCompiler {
+        return new MyTsCompiler(configSet, cacheFS)
+      }
+
+      // eslint-disable-next-line class-methods-use-this
+      protected _createConfigSet(config: ProjectConfigTsJest): MyConfigSet {
+        return new MyConfigSet(config)
+      }
+    }
+    let tr: MyTransformer
+
+    beforeEach(() => {
+      tr = new MyTransformer()
+    })
 
     test('should have jest version checking', () => {
       VersionCheckers.jest.warn = jest.fn()
@@ -428,6 +458,24 @@ Array [
       new MyTransformer()
 
       expect(VersionCheckers.jest.warn).toHaveBeenCalled()
+    })
+
+    test('should create MyTsCompiler instance', () => {
+      // @ts-expect-error testing purpose
+      expect(tr._createCompiler(createConfigSet(), new Map())).toBeInstanceOf(MyTsCompiler)
+    })
+
+    test('should create MyConfigSet instance', () => {
+      expect(
+        // @ts-expect-error testing purpose
+        tr._createConfigSet({
+          cwd: process.cwd(),
+          extensionsToTreatAsEsm: [],
+          globals: Object.create(null),
+          testMatch: [],
+          testRegex: [],
+        }),
+      ).toBeInstanceOf(MyConfigSet)
     })
   })
 })
