@@ -31,14 +31,32 @@ beforeEach(() => {
 
 describe('TsJestTransformer', () => {
   describe('_configsFor', () => {
+    const obj1 = {
+      config: { cwd: process.cwd(), extensionsToTreatAsEsm: [], globals: {}, testMatch: [], testRegex: [] },
+      cacheFS: new Map(),
+    }
+
+    test('should cache necessary things', () => {
+      // @ts-expect-error testing purpose
+      new TsJestTransformer()._configsFor(obj1)
+
+      // @ts-expect-error testing purpose
+      expect(Object.keys(TsJestTransformer._cachedConfigSets[0])).toMatchInlineSnapshot(`
+Array [
+  "jestConfig",
+  "configSet",
+  "transformerCfgStr",
+  "compiler",
+  "depGraphs",
+  "tsResolvedModulesCachePath",
+]
+`)
+    })
+
     test(
       'should return the same config set for same values with different jest config objects' +
         ' but their serialized versions are the same',
       () => {
-        const obj1 = {
-          config: { cwd: process.cwd(), extensionsToTreatAsEsm: [], globals: {}, testMatch: [], testRegex: [] },
-          cacheFS: new Map(),
-        }
         const obj2 = { ...obj1, config: { ...obj1.config, globals: Object.create(null) } }
         // @ts-expect-error testing purpose
         const cs1 = new TsJestTransformer()._configsFor(obj1)
@@ -50,10 +68,6 @@ describe('TsJestTransformer', () => {
     )
 
     test('should return the same config set for same values with jest config objects', () => {
-      const obj1 = {
-        config: { cwd: process.cwd(), extensionsToTreatAsEsm: [], globals: {}, testMatch: [], testRegex: [] },
-        cacheFS: new Map(),
-      }
       const obj2 = { ...obj1 }
       // @ts-expect-error testing purpose
       const cs1 = new TsJestTransformer()._configsFor(obj1)
