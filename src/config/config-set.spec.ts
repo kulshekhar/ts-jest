@@ -51,13 +51,10 @@ describe('parsedTsConfig', () => {
   })
 
   it('should override some options', () => {
-    expect(get({ tsconfig: { inlineSources: false } }).options).toMatchObject({
+    expect(get({ tsconfig: { inlineSources: false, outDir: 'build' } }).options).toMatchObject({
       inlineSources: true,
+      outDir: TS_JEST_OUT_DIR,
     })
-  })
-
-  it('should include default outDir $$ts-jest$$ when allowJs is enabled and no outDir from config', () => {
-    expect(get({ tsconfig: { allowJs: true } }).options.outDir).toBe(TS_JEST_OUT_DIR)
   })
 
   it('should be able to read extends', () => {

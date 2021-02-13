@@ -1,4 +1,4 @@
-import { basename, normalize, relative } from 'path'
+import { basename, normalize } from 'path'
 
 import { LogContexts, Logger, LogLevels } from 'bs-logger'
 import memoize from 'lodash/memoize'
@@ -201,7 +201,7 @@ export class TsCompiler implements TsCompilerInstance {
       this._doTypeChecking(fileName)
       /* istanbul ignore next (this should never happen but is kept for security) */
       if (output.emitSkipped) {
-        throw new TypeError(`${relative(this.configSet.cwd, fileName)}: Emit skipped for language service`)
+        throw new Error(interpolate(Errors.CannotCompile, { file: fileName }))
       }
       // Throw an error when requiring `.d.ts` files.
       if (!output.outputFiles.length) {
