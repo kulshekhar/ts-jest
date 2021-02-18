@@ -5,7 +5,7 @@ import memoize = require('lodash/memoize')
 import mkdirp = require('mkdirp')
 import type * as _ts from 'typescript'
 
-import type { ConfigSet } from '../config/config-set'
+import { ConfigSet, TS_JEST_OUT_DIR } from '../config/config-set'
 import { LINE_FEED } from '../constants'
 import type { CompilerInstance, SourceOutput } from '../types'
 import { Errors, interpolate } from '../utils/messages'
@@ -75,7 +75,10 @@ export const initializeLanguageServiceInstance = (configs: ConfigSet, logger: Lo
   }
   // Initialize memory cache for typescript compiler
   configs.parsedTsConfig.fileNames
-    .filter((fileName: string) => !configs.isTestFile(fileName))
+    .filter(
+      (fileName: string) =>
+        !configs.isTestFile(fileName) && !fileName.includes(configs.parsedTsConfig.options.outDir ?? TS_JEST_OUT_DIR),
+    )
     .forEach((fileName: string) => {
       memoryCache.files.set(fileName, {
         version: 0,
