@@ -13,7 +13,7 @@ import { getPackageVersion } from '../utils/get-package-version'
 import { normalizeSlashes } from '../utils/normalize-slashes'
 import { mocked } from '../utils/testing'
 
-import { ConfigSet, MY_DIGEST, TS_JEST_OUT_DIR } from './config-set'
+import { ConfigSet, MY_DIGEST } from './config-set'
 
 jest.mock('../utils/backports')
 jest.mock('../index')
@@ -53,7 +53,6 @@ describe('parsedTsConfig', () => {
   it('should override some options', () => {
     expect(get({ tsconfig: { inlineSources: false, outDir: 'build' } }).options).toMatchObject({
       inlineSources: true,
-      outDir: TS_JEST_OUT_DIR,
     })
   })
 
