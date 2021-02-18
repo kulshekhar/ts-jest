@@ -85,7 +85,6 @@ describe('parsedTsConfig', () => {
     })
     expect(cs.parsedTsConfig.options).toMatchObject({
       module: ts.ModuleKind.CommonJS,
-      rootDir: normalizeSlashes(resolve(__dirname, '..')),
       skipLibCheck: true,
     })
   })

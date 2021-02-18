@@ -8,7 +8,7 @@
   },
   "description": "A preprocessor with source maps support to help use TypeScript with Jest",
   "scripts": {
-    "prebuild": "node scripts/clean-dist.js",
+    "prebuild": "node scripts/pre-build.js",
     "build": "tsc -p tsconfig.build.json",
     "postbuild": "node scripts/post-build.js",
     "clean": "node scripts/clean.js",
@@ -32,7 +32,8 @@
     "prepublishOnly": "npm run test",
     "preversion": "npm run test",
     "update:e2e": "node scripts/update-e2e-templates.js",
-    "version": "npm run changelog && git add CHANGELOG.md"
+    "version": "npm run changelog && git add CHANGELOG.md",
+    "raw-tsconfig-types": "node scripts/tsconfig-raw-types.js"
   },
   "repository": {
     "type": "git",
@@ -114,7 +115,9 @@
     "husky": "4.x",
     "jest": "26.x",
     "js-yaml": "latest",
+    "json-schema-to-typescript": "^10.1.3",
     "lint-staged": "latest",
+    "node-fetch": "^2.6.1",
     "npm-run-all": "latest",
     "prettier": "2.x",
     "source-map": "latest",

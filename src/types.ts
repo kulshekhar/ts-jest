@@ -4,6 +4,7 @@ import type * as _babel from 'babel__core'
 import type * as _ts from 'typescript'
 
 import type { ConfigSet } from './config/config-set'
+import type { RawCompilerOptions } from './tsconfig-raw'
 
 /**
  * @internal
@@ -47,7 +48,7 @@ export interface TsJestGlobalOptions {
    * @default undefined uses the default tsconfig file
    * @alias tsconfig
    */
-  tsConfig?: boolean | string | _ts.CompilerOptions
+  tsConfig?: boolean | string | RawCompilerOptions
 
   /**
    * Compiler options. It can be:
@@ -59,7 +60,7 @@ export interface TsJestGlobalOptions {
    * @default undefined uses the default tsconfig file
    * @alias tsConfig
    */
-  tsconfig?: boolean | string | _ts.CompilerOptions
+  tsconfig?: boolean | string | RawCompilerOptions
 
   /**
    * packageJson. It can be:
