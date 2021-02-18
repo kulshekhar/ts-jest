@@ -3,6 +3,8 @@ const { LogContexts, LogLevels } = require('bs-logger')
 function factory(cs) {
   const logger = cs.logger.child({ namespace: 'dummy-transformer' })
   const ts = cs.compilerModule
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const program = cs.tsCompiler.program
 
   function createVisitor(_ctx, _) {
     return (node) => node
