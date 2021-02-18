@@ -9,7 +9,6 @@
     "removeComments": true,
     "stripInternal": true,
     "outDir": "dist",
-    "rootDir": "src"
   },
   "include": ["src"],
   "exclude": [

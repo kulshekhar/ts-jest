@@ -45,6 +45,7 @@ import { Deprecations, Errors, ImportReasons, interpolate } from '../utils/messa
 import { normalizeSlashes } from '../utils/normalize-slashes'
 import { sha1 } from '../utils/sha1'
 import { TSError } from '../utils/ts-error'
+import type { RawCompilerOptions } from '../tsconfig-raw'
 
 /**
  * @internal
@@ -421,9 +422,9 @@ export class ConfigSet {
    * Load TypeScript configuration. Returns the parsed TypeScript config and
    * any `tsConfig` options specified in ts-jest tsConfig
    */
-  protected _resolveTsConfig(compilerOptions?: CompilerOptions, resolvedConfigFile?: string): Record<string, any>
+  protected _resolveTsConfig(compilerOptions?: RawCompilerOptions, resolvedConfigFile?: string): Record<string, any>
   // eslint-disable-next-line no-dupe-class-members
-  protected _resolveTsConfig(compilerOptions?: CompilerOptions, resolvedConfigFile?: string): ParsedCommandLine {
+  protected _resolveTsConfig(compilerOptions?: RawCompilerOptions, resolvedConfigFile?: string): ParsedCommandLine {
     let config = { compilerOptions: Object.create(null) }
     let basePath = normalizeSlashes(this.rootDir)
     const ts = this.compilerModule
