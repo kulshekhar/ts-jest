@@ -164,8 +164,6 @@ export class ConfigSet {
     // to clear out else it's buggy
     out: undefined,
     outFile: undefined,
-    // ensure that `LanguageService` won't pick up things from `build` folder which can lead to emit skipped error
-    outDir: TS_JEST_OUT_DIR,
     composite: undefined, // see https://github.com/TypeStrong/ts-node/pull/657/files
     declarationDir: undefined,
     declarationMap: undefined,
@@ -484,6 +482,10 @@ export class ConfigSet {
       if (!('allowSyntheticDefaultImports' in config.compilerOptions)) {
         finalOptions.allowSyntheticDefaultImports = true
       }
+    }
+    // Make sure when allowJs is enabled, outDir is required to have when using allowJs: true
+    if (finalOptions.allowJs && !finalOptions.outDir) {
+      finalOptions.outDir = TS_JEST_OUT_DIR
     }
 
     // ensure undefined are removed and other values are overridden

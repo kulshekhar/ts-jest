@@ -12,7 +12,7 @@ import { getPackageVersion } from '../utils/get-package-version'
 import { normalizeSlashes } from '../utils/normalize-slashes'
 import { mocked } from '../utils/testing'
 
-import { ConfigSet, MY_DIGEST, TS_JEST_OUT_DIR } from './config-set'
+import { ConfigSet, MY_DIGEST } from './config-set'
 
 jest.mock('../utils/backports')
 jest.mock('../index')
@@ -73,7 +73,6 @@ describe('parsedTsConfig', () => {
       {
         module: ts.ModuleKind.CommonJS,
         inlineSources: true,
-        outDir: TS_JEST_OUT_DIR,
       },
     )
   })
