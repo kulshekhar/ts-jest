@@ -435,10 +435,10 @@ Array [
     }
 
     class MyTransformer extends TsJestTransformer {
-      // @ts-expect-error testing purpose
       // eslint-disable-next-line class-methods-use-this
-      protected _createCompiler(configSet: ConfigSet, cacheFS: Map<string, string>): MyTsCompiler {
-        return new MyTsCompiler(configSet, cacheFS)
+      protected _createCompiler(configSet: ConfigSet, cacheFS: Map<string, string>): void {
+        // @ts-expect-error testing purpose
+        this._compiler = new MyTsCompiler(configSet, cacheFS)
       }
 
       // eslint-disable-next-line class-methods-use-this
@@ -462,7 +462,10 @@ Array [
 
     test('should create MyTsCompiler instance', () => {
       // @ts-expect-error testing purpose
-      expect(tr._createCompiler(createConfigSet(), new Map())).toBeInstanceOf(MyTsCompiler)
+      tr._createCompiler(createConfigSet(), new Map())
+
+      // @ts-expect-error testing purpose
+      expect(tr._compiler).toBeInstanceOf(MyTsCompiler)
     })
 
     test('should create MyConfigSet instance', () => {
