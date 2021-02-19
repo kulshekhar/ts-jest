@@ -18,7 +18,7 @@ import type {
   CustomTransformers,
 } from 'typescript'
 
-import type { ConfigSet } from '../config/config-set'
+import { ConfigSet, TS_JEST_OUT_DIR } from '../config/config-set'
 import { LINE_FEED } from '../constants'
 import type { ResolvedModulesMap, StringMap, TsCompilerInstance, TsJestAstTransformer, TTypeScript } from '../types'
 import { rootLogger } from '../utils/logger'
@@ -75,7 +75,12 @@ export class TsCompiler implements TsCompilerInstance {
     }
     // Initialize memory cache for typescript compiler
     this._parsedTsConfig.fileNames
-      .filter((fileName) => !this.configSet.isTestFile(fileName))
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      .filter(
+        (fileName) =>
+          !this.configSet.isTestFile(fileName) &&
+          !fileName.includes(this._parsedTsConfig.options.outDir ?? TS_JEST_OUT_DIR),
+      )
       .forEach((fileName) => this._compilerCacheFS.set(fileName, 0))
     this._cachedReadFile = this._logger.wrap(serviceHostTraceCtx, 'readFile', memoize(this._ts.sys.readFile))
     /* istanbul ignore next */
