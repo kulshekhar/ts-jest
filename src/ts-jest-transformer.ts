@@ -49,7 +49,7 @@ export class TsJestTransformer implements Transformer {
    */
   private static readonly _cachedConfigSets: CachedConfigSet[] = []
   private readonly _logger: Logger
-  private _compiler!: TsJestCompiler
+  protected _compiler!: TsJestCompiler
   private _tsResolvedModulesCachePath: string | undefined
   private _transformCfgStr!: string
   private _depGraphs: Map<string, DepGraphInfo> = new Map<string, DepGraphInfo>()
@@ -100,7 +100,7 @@ export class TsJestTransformer implements Transformer {
         jest.name = undefined as any
         jest.cacheDirectory = undefined as any
         this._transformCfgStr = `${new JsonableValue(jest).serialized}${configSet.cacheSuffix}`
-        this._compiler = this._createCompiler(configSet, cacheFS)
+        this._createCompiler(configSet, cacheFS)
         this._getFsCachedResolvedModules(configSet)
         TsJestTransformer._cachedConfigSets.push({
           jestConfig: new JsonableValue(config),
@@ -121,9 +121,8 @@ export class TsJestTransformer implements Transformer {
     return new ConfigSet(config)
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  protected _createCompiler(configSet: ConfigSet, cacheFS: Map<string, string>): TsJestCompiler {
-    return new TsJestCompiler(configSet, cacheFS)
+  protected _createCompiler(configSet: ConfigSet, cacheFS: Map<string, string>): void {
+    this._compiler = new TsJestCompiler(configSet, cacheFS)
   }
 
   /**

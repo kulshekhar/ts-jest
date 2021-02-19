@@ -25,7 +25,7 @@ exports[`Module commonjs run with options: {"module":"commonjs","allowSyntheticD
       Expected: "function"
       Received: "undefined"
   
-        2 | 
+        2 |
         3 | test('import default', () => {
       > 4 |   expect(typeof lib).toBe('function')
           |                      ^
@@ -59,7 +59,7 @@ exports[`Module commonjs run with options: {"module":"commonjs","allowSyntheticD
       Expected: "function"
       Received: "undefined"
   
-        2 | 
+        2 |
         3 | test('import default', () => {
       > 4 |   expect(typeof lib).toBe('function')
           |                      ^
@@ -102,7 +102,7 @@ exports[`Module commonjs run with options: {"module":"commonjs","esModuleInterop
       Expected: "function"
       Received: "undefined"
   
-        2 | 
+        2 |
         3 | test('import default', () => {
       > 4 |   expect(typeof lib).toBe('function')
           |                      ^
@@ -145,7 +145,7 @@ exports[`Module commonjs run with options: {"module":"commonjs","esModuleInterop
       Expected: "function"
       Received: "object"
   
-        2 | 
+        2 |
         3 | test('import default', () => {
       > 4 |   expect(typeof lib).toBe('function')
           |                      ^
@@ -190,7 +190,7 @@ exports[`Module commonjs run with options: {"module":"commonjs"} with template d
       Expected: "function"
       Received: "undefined"
   
-        2 | 
+        2 |
         3 | test('import default', () => {
       > 4 |   expect(typeof lib).toBe('function')
           |                      ^

@@ -26,7 +26,7 @@ exports[`Module umd run with options: {"module":"umd","allowSyntheticDefaultImpo
       Expected: "function"
       Received: "undefined"
   
-        2 | 
+        2 |
         3 | test('import default', () => {
       > 4 |   expect(typeof lib).toBe('function')
           |                      ^
@@ -60,7 +60,7 @@ exports[`Module umd run with options: {"module":"umd","allowSyntheticDefaultImpo
       Expected: "function"
       Received: "undefined"
   
-        2 | 
+        2 |
         3 | test('import default', () => {
       > 4 |   expect(typeof lib).toBe('function')
           |                      ^
@@ -95,7 +95,7 @@ exports[`Module umd run with options: {"module":"umd","esModuleInterop":false} w
       Expected: "function"
       Received: "undefined"
   
-        2 | 
+        2 |
         3 | test('import default', () => {
       > 4 |   expect(typeof lib).toBe('function')
           |                      ^
@@ -138,7 +138,7 @@ exports[`Module umd run with options: {"module":"umd","esModuleInterop":true} wi
       Expected: "function"
       Received: "object"
   
-        2 | 
+        2 |
         3 | test('import default', () => {
       > 4 |   expect(typeof lib).toBe('function')
           |                      ^
@@ -175,7 +175,7 @@ exports[`Module umd run with options: {"module":"umd"} with template default 1`]
       Expected: "function"
       Received: "undefined"
   
-        2 | 
+        2 |
         3 | test('import default', () => {
       > 4 |   expect(typeof lib).toBe('function')
           |                      ^
