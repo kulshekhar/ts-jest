@@ -11,6 +11,7 @@ declare const distDir: string
 declare const testsRootDir: string
 declare const e2eTestsDir: string
 declare const projectsToRun: string[]
+declare const generatedPath: string
 
 export {
   rootDir,
@@ -26,4 +27,5 @@ export {
   testsRootDir,
   e2eTestsDir,
   projectsToRun,
+  generatedPath,
 }

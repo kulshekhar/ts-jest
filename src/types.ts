@@ -4,6 +4,7 @@ import type * as _babel from 'babel__core'
 import type * as _ts from 'typescript'
 
 import type { ConfigSet } from './config/config-set'
+import type { RawCompilerOptions } from './raw-compiler-options'
 
 declare module '@jest/types' {
   // eslint-disable-next-line @typescript-eslint/no-namespace
@@ -60,7 +61,7 @@ export interface TsJestGlobalOptions {
    *
    * @default undefined uses the default tsconfig file
    */
-  tsconfig?: boolean | string | _ts.CompilerOptions
+  tsconfig?: boolean | string | RawCompilerOptions
 
   /**
    * Compiles files as isolated modules (disables some features and type-checking)
@@ -144,14 +145,6 @@ export interface TsJestGlobalOptions {
   useESM?: boolean
 }
 
-export interface GlobalConfigTsJest extends Config.ConfigGlobals {
-  'ts-jest': TsJestGlobalOptions
-}
-
-export interface InitialOptionsTsJest extends Config.InitialOptions {
-  globals?: GlobalConfigTsJest
-}
-
 interface TsJestConfig$tsConfig$file {
   kind: 'file'
   value: string | undefined
@@ -191,14 +184,24 @@ export interface TsJestConfig {
   stringifyContentPathRegex: string | undefined
 }
 
+/**
+ * For transformers which extends `ts-jest`
+ */
 export interface ProjectConfigTsJest extends Config.ProjectConfig {
-  globals: {
-    'ts-jest': TsJestGlobalOptions
-  }
+  globals: GlobalConfigTsJest
 }
-
 export interface TransformOptionsTsJest extends TransformOptions {
   config: ProjectConfigTsJest
+}
+
+/**
+ * For typings in `jest.config.ts`
+ */
+export interface GlobalConfigTsJest extends Config.ConfigGlobals {
+  'ts-jest': TsJestGlobalOptions
+}
+export interface InitialOptionsTsJest extends Config.InitialOptions {
+  globals?: GlobalConfigTsJest
 }
 
 export type ResolvedModulesMap = Map<string, _ts.ResolvedModuleFull | undefined> | undefined
