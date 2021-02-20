@@ -8,3 +8,4 @@ website/src/**/*.js
 presets/index.d.ts
 *.config.js
 .eslintrc.js
+src/generated-raw-compiler-options.d.ts

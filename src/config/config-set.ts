@@ -11,13 +11,13 @@
 import { existsSync, readFileSync } from 'fs'
 import { dirname, extname, isAbsolute, join, normalize, resolve } from 'path'
 
-import type { Config } from '@jest/types'
 import { LogContexts, Logger } from 'bs-logger'
 import { globsToMatcher } from 'jest-util'
 import json5 from 'json5'
 import type { CompilerOptions, Diagnostic, FormatDiagnosticsHost, ParsedCommandLine } from 'typescript'
 
 import { DEFAULT_JEST_TEST_MATCH, JS_JSX_EXTENSIONS } from '../constants'
+import type { RawCompilerOptions } from '../raw-compiler-options'
 import type {
   AstTransformer,
   AstTransformerDesc,
@@ -121,7 +121,7 @@ export class ConfigSet {
   /**
    * @internal
    */
-  private _jestCfg!: Config.ProjectConfig
+  private _jestCfg!: ProjectConfigTsJest
   /**
    * @internal
    */
@@ -173,7 +173,7 @@ export class ConfigSet {
     this.cwd = normalize(this.jestConfig.cwd ?? process.cwd())
     this.rootDir = normalize(this.jestConfig.rootDir ?? this.cwd)
     const tsJestCfg = this.jestConfig.globals && this.jestConfig.globals['ts-jest']
-    const options: TsJestGlobalOptions = tsJestCfg ?? Object.create(null)
+    const options = tsJestCfg ?? Object.create(null)
     // compiler module
     this.compilerModule = importer.typescript(ImportReasons.TsJest, options.compiler ?? 'typescript')
     // isolatedModules
@@ -384,7 +384,7 @@ export class ConfigSet {
   /**
    * @internal
    */
-  private _getAndResolveTsConfig(compilerOptions?: CompilerOptions, resolvedConfigFile?: string): ParsedCommandLine {
+  private _getAndResolveTsConfig(compilerOptions?: RawCompilerOptions, resolvedConfigFile?: string): ParsedCommandLine {
     const result = this._resolveTsConfig(compilerOptions, resolvedConfigFile) as ParsedCommandLine
     const { _overriddenCompilerOptions: forcedOptions } = this
     const finalOptions = result.options
@@ -473,9 +473,9 @@ export class ConfigSet {
    * Load TypeScript configuration. Returns the parsed TypeScript config and any `tsconfig` options specified in ts-jest
    * Subclasses which extend `ConfigSet` can override the default behavior
    */
-  protected _resolveTsConfig(compilerOptions?: CompilerOptions, resolvedConfigFile?: string): Record<string, any>
+  protected _resolveTsConfig(compilerOptions?: RawCompilerOptions, resolvedConfigFile?: string): Record<string, any>
   // eslint-disable-next-line no-dupe-class-members
-  protected _resolveTsConfig(compilerOptions?: CompilerOptions, resolvedConfigFile?: string): ParsedCommandLine {
+  protected _resolveTsConfig(compilerOptions?: RawCompilerOptions, resolvedConfigFile?: string): ParsedCommandLine {
     let config = { compilerOptions: Object.create(null) }
     let basePath = normalizeSlashes(this.rootDir)
     const ts = this.compilerModule
