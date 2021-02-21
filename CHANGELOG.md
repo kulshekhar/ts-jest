@@ -10,6 +10,18 @@
 
 
 
+# [27.0.0-next.7](https://github.com/kulshekhar/ts-jest/compare/v27.0.0-next.6...v27.0.0-next.7) (2021-02-21)
+
+
+### Bug Fixes
+
+* **compiler:** exclude files in `outDir` from compiler source files ([#2375](https://github.com/kulshekhar/ts-jest/issues/2375)) ([ec68c74](https://github.com/kulshekhar/ts-jest/commit/ec68c74bccf56d682a7ed9e5c48ea676dcf3fbf9)), closes [#2350](https://github.com/kulshekhar/ts-jest/issues/2350) [#2374](https://github.com/kulshekhar/ts-jest/issues/2374)
+* **config:** cache config and compiler correctly between runs ([#2356](https://github.com/kulshekhar/ts-jest/issues/2356)) ([5f91336](https://github.com/kulshekhar/ts-jest/commit/5f91336b9023da1051cc85b509ad02c525679fcb))
+* **config:** improve emit skipped error message ([#2358](https://github.com/kulshekhar/ts-jest/issues/2358)) ([2ae8df4](https://github.com/kulshekhar/ts-jest/commit/2ae8df4515d6f6e975e57719a89184b5583f9e2f)), closes [#2350](https://github.com/kulshekhar/ts-jest/issues/2350)
+* **typings:** set correct typing for `tsconfig`/`tsConfig` ([#2383](https://github.com/kulshekhar/ts-jest/issues/2383)) ([584324a](https://github.com/kulshekhar/ts-jest/commit/584324a60c0784275e9bf8bcfd0814735a250d24)), closes [#2368](https://github.com/kulshekhar/ts-jest/issues/2368)
+
+
+
 # [27.0.0-next.6](https://github.com/kulshekhar/ts-jest/compare/v27.0.0-next.5...v27.0.0-next.6) (2021-02-11)
 
 
