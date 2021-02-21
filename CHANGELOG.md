@@ -1,3 +1,15 @@
+## [26.5.2](https://github.com/kulshekhar/ts-jest/compare/v26.5.1...v26.5.2) (2021-02-21)
+
+
+### Bug Fixes
+
+* **compiler:** exclude files in `outDir` from compiler source files ([#2376](https://github.com/kulshekhar/ts-jest/issues/2376)) ([9034677](https://github.com/kulshekhar/ts-jest/commit/9034677f9ce0968339d3d942a70e888996fac532)), closes [#2350](https://github.com/kulshekhar/ts-jest/issues/2350) [#2374](https://github.com/kulshekhar/ts-jest/issues/2374)
+* **config:** define `matchTestFilePath` before `setupTsJestCfg` ([#2373](https://github.com/kulshekhar/ts-jest/issues/2373)) ([c427fea](https://github.com/kulshekhar/ts-jest/commit/c427fea48a24b5ce6e8b9260d3c322583b062a77)), closes [#2371](https://github.com/kulshekhar/ts-jest/issues/2371)
+* **config:** improve emit skipped error message and ensure `outDir` always `TS_JEST_OUT_DIR` ([#2357](https://github.com/kulshekhar/ts-jest/issues/2357)) ([f2808bb](https://github.com/kulshekhar/ts-jest/commit/f2808bb0b15231c67ccb9a97ed606741213c03e6))
+* **typings:** set correct typing for `tsconfig`/`tsConfig` option ([#2377](https://github.com/kulshekhar/ts-jest/issues/2377)) ([d4f6aff](https://github.com/kulshekhar/ts-jest/commit/d4f6aff3f181761bf25c64ff1a97dd19a69196f9)), closes [#2368](https://github.com/kulshekhar/ts-jest/issues/2368)
+
+
+
 ## [26.5.1](https://github.com/kulshekhar/ts-jest/compare/v26.5.0...v26.5.1) (2021-02-09)
 
 
