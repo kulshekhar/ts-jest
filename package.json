@@ -82,7 +82,7 @@
   },
   "devDependencies": {
     "@commitlint/cli": "11.x",
-    "@commitlint/config-angular": "^11.0.0",
+    "@commitlint/config-angular": "^12.0.0",
     "@jest/transform": "next",
     "@jest/types": "next",
     "@types/babel__core": "7.x",
