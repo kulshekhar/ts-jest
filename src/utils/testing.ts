@@ -1,7 +1,10 @@
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type MockableFunction = (...args: any[]) => any
 export type MethodKeysOf<T> = { [K in keyof T]: T[K] extends MockableFunction ? K : never }[keyof T]
 export type PropertyKeysOf<T> = { [K in keyof T]: T[K] extends MockableFunction ? never : K }[keyof T]
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type ArgumentsOf<T> = T extends (...args: infer A) => any ? A : never
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type ConstructorArgumentsOf<T> = T extends new (...args: infer A) => any ? A : never
 
 export interface MockWithArgs<T extends MockableFunction> extends jest.MockInstance<ReturnType<T>, ArgumentsOf<T>> {
@@ -9,6 +12,7 @@ export interface MockWithArgs<T extends MockableFunction> extends jest.MockInsta
   (...args: ArgumentsOf<T>): ReturnType<T>
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type MaybeMockedConstructor<T> = T extends new (...args: any[]) => infer R
   ? jest.MockInstance<R, ConstructorArgumentsOf<T>>
   : T
@@ -35,5 +39,6 @@ export function mocked<T>(item: T, deep?: false): MaybeMocked<T>
 export function mocked<T>(item: T, deep: true): MaybeMockedDeep<T>
 // eslint-disable-next-line no-redeclare
 export function mocked<T>(item: T, _deep = false): MaybeMocked<T> | MaybeMockedDeep<T> {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return item as any
 }

@@ -59,7 +59,7 @@ describe('path-mapping', () => {
         resolvedModule: {
           resolvedFileName: require.resolve('../utils/json'),
           extension: 'ts',
-        } as any,
+        } as any, // eslint-disable-line @typescript-eslint/no-explicit-any
       })
       const out = transpile(TS_JS_CODE_WITH_PATH_ALIAS)
 
@@ -115,7 +115,7 @@ describe('path-mapping', () => {
         resolvedModule: {
           resolvedFileName: resolvedFileNameStub,
           extension,
-        } as any,
+        } as any, // eslint-disable-line @typescript-eslint/no-explicit-any
       })
 
       const out = transpile(code)

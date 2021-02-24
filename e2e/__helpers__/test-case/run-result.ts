@@ -89,7 +89,8 @@ export default class RunResult {
     if (!this.context.ioDir) {
       throw new Error('IO not written for test, you must configure the test with `writeIo: true`.')
     }
-    let io: any = { in: ['', '', {}, {}], out: '' }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let io: Record<string, any> = { in: ['', '', {}, {}], out: '' }
     try {
       io = require(`${this.context.ioDir}/${relFilePath}.json`)
     } catch (err) {
@@ -127,6 +128,7 @@ export default class RunResult {
     }
 
     return map
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       .sort((a, b) => ((b.from as any).length || Infinity) - ((a.from as any).length || Infinity))
       .reduce((str, { from, to }) => str.replace(typeof from === 'string' ? new RegExp(`${escapeRegex(from)}`, 'g') : from, to), str)
   }

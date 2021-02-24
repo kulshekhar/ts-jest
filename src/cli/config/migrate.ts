@@ -29,6 +29,7 @@ export const run: CliCommand = async (args: Arguments /* , logger: Logger*/) => 
   }
   let actualConfig: Config.InitialOptions = require(filePath)
   if (isPackage) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     actualConfig = (actualConfig as any).jest
   }
   if (!actualConfig) actualConfig = {}
@@ -47,6 +48,7 @@ export const run: CliCommand = async (args: Arguments /* , logger: Logger*/) => 
       // try to detect what transformer the js extensions would target
       const jsTransformers = Object.keys(migratedConfig.transform || {}).reduce((list, pattern) => {
         if (RegExp(pattern.replace(/^<rootDir>\/?/, '/dummy-project/')).test('/dummy-project/src/foo.js')) {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           let transformer: string = (migratedConfig.transform as any)[pattern]
           if (/\bbabel-jest\b/.test(transformer)) transformer = 'babel-jest'
           else if (/\ts-jest\b/.test(transformer)) transformer = 'ts-jest'
@@ -80,6 +82,7 @@ Visit https://kulshekhar.github.io/ts-jest/user/config/#jest-preset for more inf
     if (args.jestPreset === false) {
       delete migratedConfig.preset
     } else {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       preset = (allPresets as any)[migratedConfig.preset] || defaults
     }
   }
@@ -97,6 +100,7 @@ Visit https://kulshekhar.github.io/ts-jest/user/config/#jest-preset for more inf
   }
   // there is a testRegex, remove our testMatch
   if (migratedConfig.testRegex && preset) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     migratedConfig.testMatch = null as any
   }
   // check the testMatch
@@ -111,8 +115,10 @@ Visit https://kulshekhar.github.io/ts-jest/user/config/#jest-preset for more inf
   // migrate the transform
   if (migratedConfig.transform) {
     Object.keys(migratedConfig.transform).forEach((key) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const val = (migratedConfig.transform as any)[key]
       if (typeof val === 'string' && /\/?ts-jest(?:\/preprocessor\.js)?$/.test(val)) {
+        // eslint-disable-next-line
         ;(migratedConfig.transform as any)[key] = 'ts-jest'
       }
     })
@@ -179,7 +185,9 @@ ${footNotes.join('\n')}
 
 function cleanupConfig(config: Config.InitialOptions): void {
   if (config.globals) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     if ((config as any).globals['ts-jest'] && Object.keys((config as any).globals['ts-jest']).length === 0) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       delete (config as any).globals['ts-jest']
     }
     if (Object.keys(config.globals).length === 0) {
@@ -200,6 +208,7 @@ function cleanupConfig(config: Config.InitialOptions): void {
   if (config.preset === JestPresetNames.default) config.preset = defaults.name
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function dedupSort(arr: any[]) {
   return arr
     .filter((s, i, a) => a.findIndex((e) => s.toString() === e.toString()) === i)

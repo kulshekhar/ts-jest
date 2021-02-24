@@ -40,7 +40,7 @@ describe('parsedTsConfig', () => {
   })
 
   it('should include compiler config from base config', () => {
-    expect(get({ tsconfig: { target: 'esnext' } as any }).options.target).toBe(ts.ScriptTarget.ESNext)
+    expect(get({ tsconfig: { target: 'esnext' } }).options.target).toBe(ts.ScriptTarget.ESNext)
   })
 
   it('should fallback to ES2015 as default target and CommonJS as default module when no target or module defined in tsconfig', () => {
@@ -73,7 +73,7 @@ describe('parsedTsConfig', () => {
     target.clear()
     const cs = createConfigSet({
       tsJestConfig: {
-        tsconfig: { module: 'AMD', esModuleInterop: false } as any,
+        tsconfig: { module: 'AMD', esModuleInterop: false },
         diagnostics: { warnOnly: true, pretty: false },
       },
       resolve: null,
@@ -95,7 +95,7 @@ describe('parsedTsConfig', () => {
     target.clear()
     const cs = createConfigSet({
       tsJestConfig: {
-        tsconfig: { module: 'amd', esModuleInterop: false } as any,
+        tsconfig: { module: 'amd', esModuleInterop: false },
         diagnostics: { warnOnly: true, pretty: false },
         babelConfig: { babelrc: false },
       },
@@ -157,7 +157,7 @@ describe('customTransformers', () => {
       jestConfig: {
         rootDir: 'src',
         cwd: 'src',
-      } as any,
+      } as any, // eslint-disable-line @typescript-eslint/no-explicit-any
       tsJestConfig: {
         astTransformers: data,
       },
@@ -361,7 +361,7 @@ describe('tsCacheDir', () => {
       devDependencies: { dev: '1.2.5' },
       dependencies: { std: '1.2.6' },
     }
-    const realVersions: any = {
+    const realVersions: Record<string, string> = {
       peer: '0.1.0',
       dev: '4.3.2',
       std: '9.10.2',
@@ -400,25 +400,25 @@ describe('isTestFile', () => {
       jestConfig: {
         testRegex: [{}],
         testMatch: [],
-      } as any,
+      } as any, // eslint-disable-line @typescript-eslint/no-explicit-any
     },
     {
       jestConfig: {
         testMatch: [],
         testRegex: [/.*\.(spec|test)\.[jt]sx?$/],
-      } as any,
+      } as any, // eslint-disable-line @typescript-eslint/no-explicit-any
     },
     {
       jestConfig: {
         testMatch: ['**/?(*.)+(spec|test).[tj]s?(x)'],
         testRegex: [],
-      } as any,
+      } as any, // eslint-disable-line @typescript-eslint/no-explicit-any
     },
     {
       jestConfig: {
         testMatch: ['**/?(*.)+(spec|test).[tj]s?(x)'],
         testRegex: ['**/?(*.)+(foo|bar).[tj]s?(x)'],
-      } as any,
+      } as any, // eslint-disable-line @typescript-eslint/no-explicit-any
     },
   ])('should return a boolean value whether the file matches test pattern', (config) => {
     expect(createConfigSet(config).isTestFile('foo.spec.ts')).toMatchSnapshot()
@@ -427,11 +427,13 @@ describe('isTestFile', () => {
 
 describe('shouldStringifyContent', () => {
   it('should return correct value is defined', () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const cs1 = createConfigSet({ tsJestConfig: { tsconfig: false, stringifyContentPathRegex: '\\.str$' } as any })
 
     expect(cs1.shouldStringifyContent('/foo/bar.ts')).toBe(false)
     expect(cs1.shouldStringifyContent('/foo/bar.str')).toBe(true)
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const cs2 = createConfigSet({ tsJestConfig: { tsconfig: false, stringifyContentPathRegex: /\.str$/ } as any })
 
     expect(cs2.shouldStringifyContent('/foo/bar.ts')).toBe(false)
@@ -439,7 +441,7 @@ describe('shouldStringifyContent', () => {
   })
 
   it('should return correct value when stringifyContentPathRegex is undefined', () => {
-    const cs = createConfigSet({ tsJestConfig: { tsconfig: false } as any })
+    const cs = createConfigSet({ tsJestConfig: { tsconfig: false } })
 
     expect(cs.shouldStringifyContent('/foo/bar.ts')).toBe(false)
   })
@@ -454,7 +456,8 @@ describe('raiseDiagnostics', () => {
       messageText = 'foo',
       code = 9999,
       category = ts.DiagnosticCategory.Warning,
-    }: Partial<ts.Diagnostic> = {}): ts.Diagnostic => ({ messageText, code, category } as any)
+    }: // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    Partial<ts.Diagnostic> = {}): ts.Diagnostic => ({ messageText, code, category } as any)
 
     it('should throw when warnOnly is false', () => {
       const cs = createConfigSet({ filterDiagnostics, logger, tsJestConfig: { diagnostics: { pretty: false } } })
@@ -488,7 +491,8 @@ describe('raiseDiagnostics', () => {
       messageText = 'foo',
       code = 9999,
       category = ts.DiagnosticCategory.Warning,
-    }: Partial<ts.Diagnostic> = {}): ts.Diagnostic => ({ messageText, code, category } as any)
+    }: // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    Partial<ts.Diagnostic> = {}): ts.Diagnostic => ({ messageText, code, category } as any)
     it('should throw when diagnostics contains file path and exclude config matches file path', () => {
       const cs = createConfigSet({
         logger,
@@ -524,7 +528,8 @@ describe('raiseDiagnostics', () => {
       code = 9999,
       category = ts.DiagnosticCategory.Warning,
       file = program.getSourceFiles().find((sourceFile) => sourceFile.fileName === 'src/__mocks__/index.ts'),
-    }: Partial<ts.Diagnostic> = {}): ts.Diagnostic => ({ messageText, code, category, file } as any)
+    }: // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    Partial<ts.Diagnostic> = {}): ts.Diagnostic => ({ messageText, code, category, file } as any)
 
     it("should not throw when exclude config doesn't match source file path", () => {
       const cs = createConfigSet({
@@ -556,12 +561,13 @@ describe('shouldReportDiagnostics', () => {
       tsJestConfig: {
         tsconfig: false,
         diagnostics: { exclude: ['**/foo/*.ts', '**/foo/*.tsx'] },
-      } as any,
+      } as any, // eslint-disable-line @typescript-eslint/no-explicit-any
     })
 
     expect(cs.shouldReportDiagnostics('/foo/index.ts')).toBe(true)
     expect(cs.shouldReportDiagnostics('/bar/index.tsx')).toBe(false)
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     cs = createConfigSet({ tsJestConfig: { tsconfig: false } as any })
 
     expect(cs.shouldReportDiagnostics('/foo/index.ts')).toBe(true)
@@ -593,6 +599,7 @@ describe('shouldReportDiagnostics', () => {
 
 describe('resolvePath', () => {
   it('should resolve paths', () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const cs = createConfigSet({ jestConfig: { rootDir: '/root', cwd: '/cwd' } as any, resolve: null })
     const doResolve = (path: string) => cs.resolvePath(path, { throwIfMissing: false })
     expect(doResolve('bar.js')).toBe(resolve('/cwd/bar.js'))
@@ -601,6 +608,7 @@ describe('resolvePath', () => {
     expect(doResolve('<rootDir>/bar.js')).toBe(resolve('/root//bar.js'))
   })
   it('should resolve node paths', () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const cs = createConfigSet({ jestConfig: { rootDir: '/root', cwd: '/cwd' } as any, resolve: null })
     const doResolve = (path: string) => cs.resolvePath(path, { throwIfMissing: false, nodeResolve: true })
     expect(doResolve('json5')).toBe(resolve(__dirname, '../../node_modules/json5', require('json5/package.json').main))
@@ -609,6 +617,7 @@ describe('resolvePath', () => {
     expect(doResolve('<rootDir>/bar.js')).toBe(resolve('/root//bar.js'))
   })
   it('should throw for invalid paths', () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const cs = createConfigSet({ jestConfig: { rootDir: __dirname, cwd: __dirname } as any, resolve: null })
     const doResolve = (path: string) => cs.resolvePath(path)
     expect(() => doResolve('bar.js')).toThrow()
@@ -620,6 +629,7 @@ describe('resolvePath', () => {
 
 describe('_resolveTsConfig', () => {
   let findConfig!: jest.SpyInstance<string | undefined>
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let readConfig!: jest.SpyInstance<{ config?: any; error?: ts.Diagnostic }>
   let parseConfig!: jest.SpyInstance<ts.ParsedCommandLine>
   let cs!: ConfigSet
@@ -642,7 +652,7 @@ describe('_resolveTsConfig', () => {
       readConfig.mockReturnValue({
         error: {
           code: 404,
-        } as any,
+        } as any, // eslint-disable-line @typescript-eslint/no-explicit-any
       })
     })
 
@@ -653,6 +663,7 @@ describe('_resolveTsConfig', () => {
     })
 
     it('should use correct paths when searching', () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       cs = createConfigSet({ jestConfig: { rootDir: '/root', cwd: '/cwd' } as any })
 
       const conf = cs.parsedTsConfig
@@ -664,6 +675,7 @@ describe('_resolveTsConfig', () => {
 
     it('should use given tsconfig path', () => {
       jest.spyOn(ConfigSet.prototype, 'resolvePath').mockReturnValueOnce('/foo/tsconfig.bar.json')
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
       jest.spyOn(ConfigSet.prototype, 'raiseDiagnostics').mockImplementationOnce(() => {})
 
       cs = createConfigSet({
@@ -671,7 +683,7 @@ describe('_resolveTsConfig', () => {
           rootDir: '/root',
           cwd: '/cwd',
           globals: { 'ts-jest': { tsconfig: 'tsconfig.bar.json' } },
-        } as any,
+        } as any, // eslint-disable-line @typescript-eslint/no-explicit-any
       })
 
       const conf = cs.parsedTsConfig
@@ -695,6 +707,7 @@ describe('_resolveTsConfig', () => {
 
     describe('module in tsConfig is not the same as forced module and esModuleInterop is not in tsConfig', () => {
       beforeEach(() => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         parseConfig.mockImplementation((conf: any) => ({
           options: {
             ...conf,
@@ -716,7 +729,7 @@ describe('_resolveTsConfig', () => {
           jestConfig: {
             rootDir: '/root',
             cwd: '/cwd',
-          } as any,
+          } as any, // eslint-disable-line @typescript-eslint/no-explicit-any
         })
 
         const conf = cs.parsedTsConfig
@@ -739,7 +752,7 @@ describe('_resolveTsConfig', () => {
             cwd: '/cwd',
             globals: { 'ts-jest': { tsconfig: 'tsconfig.bar.json' } },
             extensionsToTreatAsEsm: ['.ts'],
-          } as any,
+          } as any, // eslint-disable-line @typescript-eslint/no-explicit-any
         })
 
         const conf = cs.parsedTsConfig
@@ -754,6 +767,7 @@ describe('_resolveTsConfig', () => {
 
     describe('module in tsConfig is not the same as forced module and allowSyntheticDefaultImports is false in tsConfig', () => {
       beforeEach(() => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         parseConfig.mockImplementation((conf: any) => ({
           options: {
             ...conf,
@@ -778,7 +792,7 @@ describe('_resolveTsConfig', () => {
             rootDir: '/root',
             cwd: '/cwd',
             globals: { 'ts-jest': { tsconfig: 'tsconfig.json' } },
-          } as any,
+          } as any, // eslint-disable-line @typescript-eslint/no-explicit-any
         })
 
         const conf = cs.parsedTsConfig
@@ -800,7 +814,7 @@ describe('_resolveTsConfig', () => {
             cwd: '/cwd',
             globals: { 'ts-jest': { tsconfig: 'tsconfig.bar.json' } },
             extensionsToTreatAsEsm: ['.ts'],
-          } as any,
+          } as any, // eslint-disable-line @typescript-eslint/no-explicit-any
         })
 
         const conf = cs.parsedTsConfig
@@ -815,6 +829,7 @@ describe('_resolveTsConfig', () => {
 
     describe('module in tsConfig is the same as forced module and esModuleInterop true is in tsConfig', () => {
       beforeEach(() => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         parseConfig.mockImplementation((conf: any) => ({
           options: {
             ...conf,
@@ -839,7 +854,7 @@ describe('_resolveTsConfig', () => {
             rootDir: '/root',
             cwd: '/cwd',
             globals: { 'ts-jest': { tsconfig: 'tsconfig.json' } },
-          } as any,
+          } as any, // eslint-disable-line @typescript-eslint/no-explicit-any
         })
 
         const conf = cs.parsedTsConfig
@@ -862,7 +877,7 @@ describe('_resolveTsConfig', () => {
             cwd: '/cwd',
             globals: { 'ts-jest': { tsconfig: 'tsconfig.bar.json' } },
             extensionsToTreatAsEsm: ['.ts'],
-          } as any,
+          } as any, // eslint-disable-line @typescript-eslint/no-explicit-any
         })
 
         const conf = cs.parsedTsConfig
@@ -877,6 +892,7 @@ describe('_resolveTsConfig', () => {
 
     describe('module in tsConfig is the same as forced module and allowSyntheticDefaultImports true is in tsConfig', () => {
       beforeEach(() => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         parseConfig.mockImplementation((conf: any) => ({
           options: {
             ...conf,
@@ -901,7 +917,7 @@ describe('_resolveTsConfig', () => {
             rootDir: '/root',
             cwd: '/cwd',
             globals: { 'ts-jest': { tsconfig: 'tsconfig.json' } },
-          } as any,
+          } as any, // eslint-disable-line @typescript-eslint/no-explicit-any
         })
 
         const conf = cs.parsedTsConfig
@@ -924,7 +940,7 @@ describe('_resolveTsConfig', () => {
             cwd: '/cwd',
             globals: { 'ts-jest': { tsconfig: 'tsconfig.bar.json' } },
             extensionsToTreatAsEsm: ['.ts'],
-          } as any,
+          } as any, // eslint-disable-line @typescript-eslint/no-explicit-any
         })
 
         const conf = cs.parsedTsConfig

@@ -46,9 +46,9 @@ export interface AstTransformer<T = Record<string, unknown>> {
 }
 
 export interface ConfigCustomTransformer {
-  before?: (string | AstTransformer)[]
-  after?: (string | AstTransformer)[]
-  afterDeclarations?: (string | AstTransformer)[]
+  before?: Array<string | AstTransformer>
+  after?: Array<string | AstTransformer>
+  afterDeclarations?: Array<string | AstTransformer>
 }
 
 export interface TsJestGlobalOptions {
@@ -106,7 +106,7 @@ export interface TsJestGlobalOptions {
          * @see https://github.com/Microsoft/TypeScript/blob/master/src/compiler/diagnosticMessages.json
          * @default [6059,18002,18003]
          */
-        ignoreCodes?: number | string | (number | string)[]
+        ignoreCodes?: number | string | Array<number | string>
         /**
          * If specified, diagnostics of source files which path **matches** will be ignored
          */

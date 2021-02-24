@@ -5,6 +5,7 @@ import { Memoize } from './memoize'
 import { Errors, Helps, ImportReasons, interpolate } from './messages'
 import { VersionCheckers } from './version-checkers'
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type ModulePatcher<T = any> = (module: T) => T
 
 const logger = rootLogger.child({ namespace: 'Importer' })
@@ -15,9 +16,10 @@ const logger = rootLogger.child({ namespace: 'Importer' })
 // case it can't import.
 interface ImportOptions {
   alternatives?: string[]
-  installTip?: string | { module: string; label: string }[]
+  installTip?: string | Array<{ module: string; label: string }>
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const passThru = (action: () => void) => (input: any) => {
   action()
 
@@ -66,6 +68,7 @@ export class Importer {
       const req = requireWrapper(name)
 
       // remove exports from what we're going to log
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const contextReq: any = { ...req }
       delete contextReq.exports
 
@@ -121,6 +124,7 @@ export class Importer {
     why: string,
     moduleName: string,
     { alternatives = [], installTip = moduleName }: ImportOptions = {},
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ): any {
     // try to load any of the alternative after trying main one
     const res = this.tryThese(moduleName, ...alternatives)
@@ -163,6 +167,7 @@ export interface RequireResult<E = boolean> {
   exists: E
   given: string
   path?: string
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   exports?: any
   error?: Error
 }

@@ -3,6 +3,7 @@ import * as fakers from '../__helpers__/fakers'
 import { Importer, __requireModule } from './importer'
 
 const moduleNotFound = (mod: string) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const err: any = new Error(`Module not found: ${mod}.`)
   err.code = 'MODULE_NOT_FOUND'
   throw err
@@ -10,8 +11,10 @@ const moduleNotFound = (mod: string) => {
 const fakeFullPath = (mod: string) => `/root/${mod}.js`
 const requireModule = jest.fn((mod) => (mod in modules ? modules[mod]() : moduleNotFound(mod)))
 const resolveModule = jest.fn((mod) => (mod in modules ? fakeFullPath(mod) : moduleNotFound(mod)))
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 __requireModule(requireModule as any, resolveModule)
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 let modules!: { [key: string]: () => any }
 beforeEach(() => {
   modules = {}
@@ -57,6 +60,7 @@ Object {
       path: fakeFullPath('fail1'),
     })
     expect(res).not.toHaveProperty('exports')
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     expect((res as any).error.message).toMatch(/\bfoo\b/)
   })
 })

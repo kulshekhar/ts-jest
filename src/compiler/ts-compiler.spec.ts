@@ -54,7 +54,7 @@ describe('TsCompiler', () => {
           tsJestConfig: {
             ...baseTsJestConfig,
             tsconfig: {
-              jsx: 'preserve' as any,
+              jsx: 'preserve',
             },
           },
         })
@@ -68,7 +68,7 @@ describe('TsCompiler', () => {
           tsJestConfig: {
             ...baseTsJestConfig,
             tsconfig: {
-              jsx: 'react' as any,
+              jsx: 'react',
             },
           },
         })
@@ -287,7 +287,7 @@ const t: string = f(5)
           {
             tsJestConfig: {
               tsconfig: {
-                jsx: 'preserve' as any,
+                jsx: 'preserve',
               },
             },
           },
@@ -304,7 +304,7 @@ const t: string = f(5)
           {
             tsJestConfig: {
               tsconfig: {
-                jsx: 'react' as any,
+                jsx: 'react',
               },
             },
           },
@@ -360,6 +360,7 @@ const t: string = f(5)
       it(`should use moduleResolutionCache`, () => {
         jest.unmock('typescript')
         const ts = require('typescript')
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
         const moduleResolutionCacheMock = (ts.createModuleResolutionCache = jest.fn().mockImplementation(() => {}))
 
         makeCompiler({
@@ -499,7 +500,7 @@ const t: string = f(5)
 
       // eslint-disable-next-line no-console
       expect(console.log).toHaveBeenCalled()
-      // eslint-disable-next-line no-console
+      // eslint-disable-next-line
       expect(((console.log as any) as jest.MockInstance<any, any>).mock.calls[0][0].emit).toBeDefined()
     })
   })

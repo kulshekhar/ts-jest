@@ -21,6 +21,7 @@ it('should cache the serialized value', () => {
 })
 
 it('should update the serialized value when updating the value', () => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const jv = new JsonableValue({ foo: 'bar' } as any)
   expect(jv.serialized).toBe('{"foo":"bar"}')
   stringify.mockClear()

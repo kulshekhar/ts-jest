@@ -28,6 +28,7 @@ interface CachedConfigSet {
 }
 
 interface TsJestHooksMap {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   afterProcess?(args: any[], result: string | TransformedSource): string | TransformedSource | void
 }
 
@@ -97,8 +98,8 @@ export class TsJestTransformer implements Transformer {
         const jest = { ...config }
         // we need to remove some stuff from jest config
         // this which does not depend on config
-        jest.name = undefined as any
-        jest.cacheDirectory = undefined as any
+        jest.name = undefined as any // eslint-disable-line @typescript-eslint/no-explicit-any
+        jest.cacheDirectory = undefined as any // eslint-disable-line @typescript-eslint/no-explicit-any
         this._transformCfgStr = `${new JsonableValue(jest).serialized}${configSet.cacheSuffix}`
         this._createCompiler(configSet, cacheFS)
         this._getFsCachedResolvedModules(configSet)

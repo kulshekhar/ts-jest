@@ -69,11 +69,10 @@ const enum DiagnosticCodes {
 const normalizeRegex = (pattern: string | RegExp | undefined): string | undefined =>
   pattern ? (typeof pattern === 'string' ? pattern : pattern.source) : undefined
 
-const toDiagnosticCode = (code: any): number | undefined =>
-  // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+const toDiagnosticCode = (code?: string | number): number | undefined =>
   code ? parseInt(`${code}`.trim().replace(/^TS/, ''), 10) ?? undefined : undefined
 
-const toDiagnosticCodeList = (items: (string | number)[], into: number[] = []): number[] => {
+const toDiagnosticCodeList = (items: Array<string | number>, into: number[] = []): number[] => {
   for (let item of items) {
     if (typeof item === 'string') {
       const children = item.trim().split(/\s*,\s*/g)
@@ -103,6 +102,7 @@ export class ConfigSet {
   readonly rootDir: string
   cacheSuffix!: string
   tsCacheDir: string | undefined
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   parsedTsConfig!: ParsedCommandLine | Record<string, any>
   resolvedTransformers: TsJestAstTransformer = {
     before: [],
@@ -133,7 +133,7 @@ export class ConfigSet {
   /**
    * @internal
    */
-  private readonly _matchablePatterns: (string | RegExp)[]
+  private readonly _matchablePatterns: Array<string | RegExp>
   /**
    * @internal
    */
@@ -196,7 +196,7 @@ export class ConfigSet {
       this._matchablePatterns.push(...DEFAULT_JEST_TEST_MATCH)
     }
     this._matchTestFilePath = globsToMatcher(
-      this._matchablePatterns.filter((pattern: any) => typeof pattern === 'string') as string[],
+      this._matchablePatterns.filter((pattern: string | RegExp) => typeof pattern === 'string') as string[],
     )
   }
 
@@ -256,7 +256,7 @@ export class ConfigSet {
 
     // diagnostics
     const diagnosticsOpt = options.diagnostics ?? true
-    const ignoreList: (string | number)[] = [...IGNORE_DIAGNOSTIC_CODES]
+    const ignoreList: Array<string | number> = [...IGNORE_DIAGNOSTIC_CODES]
     if (typeof diagnosticsOpt === 'object') {
       const { ignoreCodes } = diagnosticsOpt
       if (ignoreCodes) {
@@ -298,7 +298,7 @@ export class ConfigSet {
     this.resolvedTransformers.before = [require('../transformers/hoist-jest')]
     const { astTransformers } = options
     if (astTransformers) {
-      const resolveTransformers = (transformers: (string | AstTransformer)[]): AstTransformerDesc[] =>
+      const resolveTransformers = (transformers: Array<string | AstTransformer>): AstTransformerDesc[] =>
         transformers.map((transformer) => {
           if (typeof transformer === 'string') {
             return require(this.resolvePath(transformer, { nodeResolve: true }))
@@ -473,6 +473,7 @@ export class ConfigSet {
    * Load TypeScript configuration. Returns the parsed TypeScript config and any `tsconfig` options specified in ts-jest
    * Subclasses which extend `ConfigSet` can override the default behavior
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   protected _resolveTsConfig(compilerOptions?: RawCompilerOptions, resolvedConfigFile?: string): Record<string, any>
   // eslint-disable-next-line no-dupe-class-members
   protected _resolveTsConfig(compilerOptions?: RawCompilerOptions, resolvedConfigFile?: string): ParsedCommandLine {

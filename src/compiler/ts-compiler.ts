@@ -110,6 +110,7 @@ export class TsCompiler implements TsCompilerInstance {
         // If we don't return `undefined` it results in `undefined === "undefined"` and run
         // `createProgram` again (which is very slow). Using a `string` assertion here to avoid
         // TypeScript errors from the function signature (expects `(x: string) => string`).
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         return version === undefined ? ((undefined as any) as string) : String(version)
       },
       getScriptSnapshot: (fileName: string) => {
@@ -144,7 +145,7 @@ export class TsCompiler implements TsCompilerInstance {
       getCompilationSettings: () => this._compilerOptions,
       getDefaultLibFileName: () => this._ts.getDefaultLibFilePath(this._compilerOptions),
       getCustomTransformers: () => this._makeTransformers(this.configSet.resolvedTransformers),
-      resolveModuleNames: (moduleNames: string[], containingFile: string): (ResolvedModuleFull | undefined)[] =>
+      resolveModuleNames: (moduleNames: string[], containingFile: string): Array<ResolvedModuleFull | undefined> =>
         moduleNames.map((moduleName) => {
           const { resolvedModule } = this._ts.resolveModuleName(
             moduleName,
@@ -168,6 +169,7 @@ export class TsCompiler implements TsCompilerInstance {
     this._updateMemoryCache(fileContent, fileName)
 
     // See https://github.com/microsoft/TypeScript/blob/master/src/compiler/utilities.ts#L164
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return (this._languageService?.getProgram()?.getSourceFile(fileName) as any)?.resolvedModules
   }
 
@@ -244,13 +246,13 @@ export class TsCompiler implements TsCompilerInstance {
     return {
       before: customTransformers.before.map((beforeTransformer) =>
         beforeTransformer.factory(this, beforeTransformer.options),
-      ) as (TransformerFactory<SourceFile> | CustomTransformerFactory)[],
+      ) as Array<TransformerFactory<SourceFile> | CustomTransformerFactory>,
       after: customTransformers.after.map((afterTransformer) =>
         afterTransformer.factory(this, afterTransformer.options),
-      ) as (TransformerFactory<SourceFile> | CustomTransformerFactory)[],
+      ) as Array<TransformerFactory<SourceFile> | CustomTransformerFactory>,
       afterDeclarations: customTransformers.afterDeclarations.map((afterDeclarations) =>
         afterDeclarations.factory(this, afterDeclarations.options),
-      ) as TransformerFactory<SourceFile | Bundle>[],
+      ) as Array<TransformerFactory<SourceFile | Bundle>>,
     }
   }
 
