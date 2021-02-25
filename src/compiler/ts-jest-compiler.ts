@@ -1,5 +1,5 @@
 import type { ConfigSet } from '../config/config-set'
-import type { CompilerInstance, ResolvedModulesMap, StringMap } from '../types'
+import type { CompilerInstance, StringMap } from '../types'
 
 import { TsCompiler } from './ts-compiler'
 
@@ -9,13 +9,13 @@ import { TsCompiler } from './ts-compiler'
 export class TsJestCompiler implements CompilerInstance {
   private readonly _compilerInstance: CompilerInstance
 
-  constructor(readonly configSet: ConfigSet, readonly jestCacheFS: StringMap) {
+  constructor(configSet: ConfigSet, runtimeCacheFS: StringMap) {
     // Later we can add swc/esbuild or other typescript compiler instance here
-    this._compilerInstance = new TsCompiler(configSet, jestCacheFS)
+    this._compilerInstance = new TsCompiler(configSet, runtimeCacheFS)
   }
 
-  getResolvedModulesMap(fileContent: string, fileName: string): ResolvedModulesMap {
-    return this._compilerInstance.getResolvedModulesMap(fileContent, fileName)
+  getResolvedModules(fileContent: string, fileName: string, runtimeCacheFS: StringMap): string[] {
+    return this._compilerInstance.getResolvedModules(fileContent, fileName, runtimeCacheFS)
   }
 
   getCompiledOutput(fileContent: string, fileName: string, supportsStaticESM: boolean): string {

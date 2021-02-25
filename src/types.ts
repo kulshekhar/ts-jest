@@ -204,15 +204,18 @@ export interface InitialOptionsTsJest extends Config.InitialOptions {
   globals?: GlobalConfigTsJest
 }
 
-export type ResolvedModulesMap = Map<string, _ts.ResolvedModuleFull | undefined> | undefined
-
 /**
  * @internal
  */
 export type StringMap = Map<string, string>
 
+export interface DepGraphInfo {
+  fileContent: string
+  resolvedModuleNames: string[]
+}
+
 export interface CompilerInstance {
-  getResolvedModulesMap(fileContent: string, fileName: string): ResolvedModulesMap
+  getResolvedModules(fileContent: string, fileName: string, runtimeCacheFS: StringMap): string[]
   getCompiledOutput(fileContent: string, fileName: string, supportsStaticESM: boolean): string
 }
 export interface TsCompilerInstance extends CompilerInstance {

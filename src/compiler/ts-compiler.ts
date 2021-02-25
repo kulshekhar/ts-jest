@@ -16,11 +16,13 @@ import type {
   Bundle,
   CustomTransformerFactory,
   CustomTransformers,
+  ModuleResolutionHost,
+  ModuleResolutionCache,
 } from 'typescript'
 
 import { ConfigSet, TS_JEST_OUT_DIR } from '../config/config-set'
 import { LINE_FEED } from '../constants'
-import type { ResolvedModulesMap, StringMap, TsCompilerInstance, TsJestAstTransformer, TTypeScript } from '../types'
+import type { StringMap, TsCompilerInstance, TsJestAstTransformer, TTypeScript } from '../types'
 import { rootLogger } from '../utils/logger'
 import { Errors, interpolate } from '../utils/messages'
 
@@ -32,17 +34,25 @@ export class TsCompiler implements TsCompilerInstance {
   protected readonly _initialCompilerOptions: CompilerOptions
   protected _compilerOptions: CompilerOptions
   /**
+   * @private
+   */
+  private _runtimeCacheFS: StringMap
+  /**
+   * @private
+   */
+  private _fileContentCache: StringMap | undefined
+  /**
    * @internal
    */
   private readonly _parsedTsConfig: ParsedCommandLine
   /**
    * @internal
    */
-  private readonly _compilerCacheFS: Map<string, number> = new Map<string, number>()
+  private readonly _fileVersionCache: Map<string, number> | undefined
   /**
    * @internal
    */
-  private _cachedReadFile: ((fileName: string) => string | undefined) | undefined
+  private readonly _cachedReadFile: ((fileName: string) => string | undefined) | undefined
   /**
    * @internal
    */
@@ -51,15 +61,50 @@ export class TsCompiler implements TsCompilerInstance {
    * @internal
    */
   private _languageService: LanguageService | undefined
+  /**
+   * @internal
+   */
+  private readonly _moduleResolutionHost: ModuleResolutionHost | undefined
+  /**
+   * @internal
+   */
+  private readonly _moduleResolutionCache: ModuleResolutionCache | undefined
+
   program: Program | undefined
 
-  constructor(readonly configSet: ConfigSet, readonly jestCacheFS: StringMap) {
+  constructor(readonly configSet: ConfigSet, readonly runtimeCacheFS: StringMap) {
     this._ts = configSet.compilerModule
     this._logger = rootLogger.child({ namespace: 'ts-compiler' })
     this._parsedTsConfig = this.configSet.parsedTsConfig as ParsedCommandLine
     this._initialCompilerOptions = { ...this._parsedTsConfig.options }
     this._compilerOptions = { ...this._initialCompilerOptions }
+    this._runtimeCacheFS = runtimeCacheFS
     if (!this.configSet.isolatedModules) {
+      this._fileContentCache = new Map<string, string>()
+      this._fileVersionCache = new Map<string, number>()
+      this._cachedReadFile = this._logger.wrap(
+        {
+          namespace: 'ts:serviceHost',
+          call: null,
+          [LogContexts.logLevel]: LogLevels.trace,
+        },
+        'readFile',
+        memoize(this._ts.sys.readFile),
+      )
+      /* istanbul ignore next */
+      this._moduleResolutionHost = {
+        fileExists: memoize(this._ts.sys.fileExists),
+        readFile: this._cachedReadFile,
+        directoryExists: memoize(this._ts.sys.directoryExists),
+        getCurrentDirectory: () => this.configSet.cwd,
+        realpath: this._ts.sys.realpath && memoize(this._ts.sys.realpath),
+        getDirectories: memoize(this._ts.sys.getDirectories),
+      }
+      this._moduleResolutionCache = this._ts.createModuleResolutionCache(
+        this.configSet.cwd,
+        (x) => x,
+        this._compilerOptions,
+      )
       this._createLanguageService()
     }
   }
@@ -68,11 +113,6 @@ export class TsCompiler implements TsCompilerInstance {
    * @internal
    */
   private _createLanguageService(): void {
-    const serviceHostTraceCtx = {
-      namespace: 'ts:serviceHost',
-      call: null,
-      [LogContexts.logLevel]: LogLevels.trace,
-    }
     // Initialize memory cache for typescript compiler
     this._parsedTsConfig.fileNames
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -81,29 +121,17 @@ export class TsCompiler implements TsCompilerInstance {
           !this.configSet.isTestFile(fileName) &&
           !fileName.includes(this._parsedTsConfig.options.outDir ?? TS_JEST_OUT_DIR),
       )
-      .forEach((fileName) => this._compilerCacheFS.set(fileName, 0))
-    this._cachedReadFile = this._logger.wrap(serviceHostTraceCtx, 'readFile', memoize(this._ts.sys.readFile))
-    /* istanbul ignore next */
-    const moduleResolutionHost = {
-      fileExists: memoize(this._ts.sys.fileExists),
-      readFile: this._cachedReadFile,
-      directoryExists: memoize(this._ts.sys.directoryExists),
-      getCurrentDirectory: () => this.configSet.cwd,
-      realpath: this._ts.sys.realpath && memoize(this._ts.sys.realpath),
-      getDirectories: memoize(this._ts.sys.getDirectories),
-    }
-    const moduleResolutionCache = this._ts.createModuleResolutionCache(
-      this.configSet.cwd,
-      (x) => x,
-      this._compilerOptions,
-    )
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      .forEach((fileName) => this._fileVersionCache!.set(fileName, 0))
     /* istanbul ignore next */
     const serviceHost: LanguageServiceHost = {
       getProjectVersion: () => String(this._projectVersion),
-      getScriptFileNames: () => [...this._compilerCacheFS.keys()],
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      getScriptFileNames: () => [...this._fileVersionCache!.keys()],
       getScriptVersion: (fileName: string) => {
         const normalizedFileName = normalize(fileName)
-        const version = this._compilerCacheFS.get(normalizedFileName)
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        const version = this._fileVersionCache!.get(normalizedFileName)
 
         // We need to return `undefined` and not a string here because TypeScript will use
         // `getScriptVersion` and compare against their own version - which can be `undefined`.
@@ -122,13 +150,20 @@ export class TsCompiler implements TsCompilerInstance {
         // Read contents from TypeScript memory cache.
         if (!hit) {
           const fileContent =
-            this.jestCacheFS.get(normalizedFileName) ?? this._cachedReadFile?.(normalizedFileName) ?? undefined
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            this._fileContentCache!.get(normalizedFileName) ??
+            this._runtimeCacheFS.get(normalizedFileName) ??
+            this._cachedReadFile?.(normalizedFileName) ??
+            undefined
           if (fileContent) {
-            this.jestCacheFS.set(normalizedFileName, fileContent)
-            this._compilerCacheFS.set(normalizedFileName, 1)
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            this._fileContentCache!.set(normalizedFileName, fileContent)
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            this._fileVersionCache!.set(normalizedFileName, 1)
           }
         }
-        const contents = this.jestCacheFS.get(normalizedFileName)
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        const contents = this._fileContentCache!.get(normalizedFileName)
 
         if (contents === undefined) return
 
@@ -151,8 +186,10 @@ export class TsCompiler implements TsCompilerInstance {
             moduleName,
             containingFile,
             this._compilerOptions,
-            moduleResolutionHost,
-            moduleResolutionCache,
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            this._moduleResolutionHost!,
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            this._moduleResolutionCache!,
           )
 
           return resolvedModule
@@ -165,12 +202,29 @@ export class TsCompiler implements TsCompilerInstance {
     this.program = this._languageService.getProgram()
   }
 
-  getResolvedModulesMap(fileContent: string, fileName: string): ResolvedModulesMap {
-    this._updateMemoryCache(fileContent, fileName)
+  getResolvedModules(fileContent: string, fileName: string, runtimeCacheFS: StringMap): string[] {
+    // In watch mode, it is possible that the initial cacheFS becomes empty
+    if (!this.runtimeCacheFS.size) {
+      this._runtimeCacheFS = runtimeCacheFS
+    }
 
-    // See https://github.com/microsoft/TypeScript/blob/master/src/compiler/utilities.ts#L164
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return (this._languageService?.getProgram()?.getSourceFile(fileName) as any)?.resolvedModules
+    return this._ts
+      .preProcessFile(fileContent, true, true)
+      .importedFiles.map((importedFile) => {
+        const { resolvedModule } = this._ts.resolveModuleName(
+          importedFile.fileName,
+          fileName,
+          this._compilerOptions,
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          this._moduleResolutionHost!,
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          this._moduleResolutionCache!,
+        )
+
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        return resolvedModule?.resolvedFileName ?? ''
+      })
+      .filter((resolvedFileName) => !!resolvedFileName)
   }
 
   getCompiledOutput(fileContent: string, fileName: string, supportsStaticESM: boolean): string {
@@ -261,7 +315,12 @@ export class TsCompiler implements TsCompilerInstance {
    */
   private _isFileInCache(fileName: string): boolean {
     return (
-      this.jestCacheFS.has(fileName) && this._compilerCacheFS.has(fileName) && this._compilerCacheFS.get(fileName) !== 0
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      this._fileContentCache!.has(fileName) &&
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      this._fileVersionCache!.has(fileName) &&
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      this._fileVersionCache!.get(fileName) !== 0
     )
   }
 
@@ -275,14 +334,20 @@ export class TsCompiler implements TsCompilerInstance {
     let shouldIncrementProjectVersion = false
     const hit = this._isFileInCache(fileName)
     if (!hit) {
-      this._compilerCacheFS.set(fileName, 1)
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      this._fileVersionCache!.set(fileName, 1)
       shouldIncrementProjectVersion = true
     } else {
-      const prevVersion = this._compilerCacheFS.get(fileName) ?? 0
-      const previousContents = this.jestCacheFS.get(fileName)
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      const prevVersion = this._fileVersionCache!.get(fileName) ?? 0
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      const previousContents = this._fileContentCache!.get(fileName)
       // Avoid incrementing cache when nothing has changed.
       if (previousContents !== contents) {
-        this._compilerCacheFS.set(fileName, prevVersion + 1)
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        this._fileVersionCache!.set(fileName, prevVersion + 1)
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        this._fileContentCache!.set(fileName, contents)
         // Only bump project version when file is modified in cache, not when discovered for the first time
         if (hit) shouldIncrementProjectVersion = true
       }

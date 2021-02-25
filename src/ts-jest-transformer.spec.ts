@@ -4,7 +4,6 @@ import { join } from 'path'
 import { Logger, LogLevels } from 'bs-logger'
 import { removeSync, writeFileSync } from 'fs-extra'
 import mkdirp from 'mkdirp'
-import { Extension, ResolvedModuleFull } from 'typescript'
 
 import { createConfigSet } from './__helpers__/fakers'
 import { logTargetMock } from './__helpers__/mocks'
@@ -13,19 +12,13 @@ import { TsCompiler } from './compiler/ts-compiler'
 import { TsJestCompiler } from './compiler/ts-jest-compiler'
 import { ConfigSet } from './config/config-set'
 import { CACHE_KEY_EL_SEPARATOR, TsJestTransformer } from './ts-jest-transformer'
-import type { ProjectConfigTsJest, ResolvedModulesMap, StringMap } from './types'
+import type { DepGraphInfo, ProjectConfigTsJest, StringMap } from './types'
 import { stringify } from './utils/json'
 import { sha1 } from './utils/sha1'
 import { VersionCheckers } from './utils/version-checkers'
 
 const logTarget = logTargetMock()
 const cacheDir = join(process.cwd(), 'tmp')
-const resolvedModule = {
-  resolvedFileName: join(__dirname, '__mocks__', 'thing.ts'),
-  extension: Extension.Ts,
-  isExternalLibraryImport: false,
-  packageId: undefined,
-}
 
 beforeEach(() => {
   logTarget.clear()
@@ -126,8 +119,11 @@ Array [
       })
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       const tsCacheDir = cs.tsCacheDir!
-      const depGraphs: ResolvedModulesMap = new Map<string, ResolvedModuleFull | undefined>()
-      depGraphs.set(fileName, resolvedModule)
+      const depGraphs: Map<string, DepGraphInfo> = new Map<string, DepGraphInfo>()
+      depGraphs.set(fileName, {
+        fileContent: 'const foo = 1',
+        resolvedModuleNames: [],
+      })
       const resolvedModulesCacheDir = join(tsCacheDir, sha1('ts-jest-resolved-modules', CACHE_KEY_EL_SEPARATOR))
       mkdirp.sync(tsCacheDir)
       writeFileSync(resolvedModulesCacheDir, stringify([...depGraphs]))
@@ -165,10 +161,8 @@ Array [
         cacheDirectory: cacheDir,
       },
     }
-    const depGraphs: ResolvedModulesMap = new Map<string, ResolvedModuleFull | undefined>()
 
     beforeEach(() => {
-      depGraphs.clear()
       // @ts-expect-error testing purpose
       TsJestTransformer._cachedConfigSets = []
       tr = new TsJestTransformer()
@@ -202,20 +196,22 @@ Array [
     })
 
     test('should be the same with the same file content', () => {
-      depGraphs.set(input.fileName, resolvedModule)
-      jest.spyOn(TsJestCompiler.prototype, 'getResolvedModulesMap').mockReturnValueOnce(depGraphs)
+      jest.spyOn(TsJestCompiler.prototype, 'getResolvedModules').mockReturnValueOnce([])
 
       const cacheKey1 = tr.getCacheKey(input.fileContent, input.fileName, transformOptionsWithCache)
       const cacheKey2 = tr.getCacheKey(input.fileContent, input.fileName, transformOptionsWithCache)
 
       expect(cacheKey1).toEqual(cacheKey2)
-      expect(TsJestCompiler.prototype.getResolvedModulesMap).toHaveBeenCalledTimes(1)
-      expect(TsJestCompiler.prototype.getResolvedModulesMap).toHaveBeenCalledWith(input.fileContent, input.fileName)
+      expect(TsJestCompiler.prototype.getResolvedModules).toHaveBeenCalledTimes(1)
+      expect(TsJestCompiler.prototype.getResolvedModules).toHaveBeenCalledWith(
+        input.fileContent,
+        input.fileName,
+        new Map(),
+      )
     })
 
     test('should be different between isolatedModules true and isolatedModules false', () => {
-      depGraphs.set(input.fileName, resolvedModule)
-      jest.spyOn(TsJestCompiler.prototype, 'getResolvedModulesMap').mockReturnValueOnce(depGraphs)
+      jest.spyOn(TsJestCompiler.prototype, 'getResolvedModules').mockReturnValueOnce([])
 
       const cacheKey1 = tr.getCacheKey(input.fileContent, input.fileName, {
         ...input.transformOptions,
@@ -225,38 +221,48 @@ Array [
         },
       })
 
-      jest.spyOn(TsJestCompiler.prototype, 'getResolvedModulesMap').mockReturnValueOnce(depGraphs)
+      jest.spyOn(TsJestCompiler.prototype, 'getResolvedModules').mockReturnValueOnce([])
       const tr1 = new TsJestTransformer()
       const cacheKey2 = tr1.getCacheKey(input.fileContent, input.fileName, transformOptionsWithCache)
 
-      expect(TsJestCompiler.prototype.getResolvedModulesMap).toHaveBeenCalledTimes(1)
-      expect(TsJestCompiler.prototype.getResolvedModulesMap).toHaveBeenCalledWith(input.fileContent, input.fileName)
+      expect(TsJestCompiler.prototype.getResolvedModules).toHaveBeenCalledTimes(1)
+      expect(TsJestCompiler.prototype.getResolvedModules).toHaveBeenCalledWith(
+        input.fileContent,
+        input.fileName,
+        new Map(),
+      )
       expect(cacheKey1).not.toEqual(cacheKey2)
     })
 
     test('should be different with different file content for the same file', () => {
-      depGraphs.set(input.fileName, resolvedModule)
-      jest.spyOn(TsJestCompiler.prototype, 'getResolvedModulesMap').mockReturnValueOnce(depGraphs)
+      jest.spyOn(TsJestCompiler.prototype, 'getResolvedModules').mockReturnValueOnce([])
 
       const cacheKey1 = tr.getCacheKey(input.fileContent, input.fileName, transformOptionsWithCache)
 
-      jest.spyOn(TsJestCompiler.prototype, 'getResolvedModulesMap').mockReturnValueOnce(depGraphs)
+      jest.spyOn(TsJestCompiler.prototype, 'getResolvedModules').mockReturnValueOnce([])
       const newFileContent = 'const foo = 1'
       const cacheKey2 = tr.getCacheKey(newFileContent, input.fileName, transformOptionsWithCache)
 
       expect(cacheKey1).not.toEqual(cacheKey2)
-      expect(TsJestCompiler.prototype.getResolvedModulesMap).toHaveBeenCalledTimes(2)
-      expect(TsJestCompiler.prototype.getResolvedModulesMap).toHaveBeenNthCalledWith(
+      expect(TsJestCompiler.prototype.getResolvedModules).toHaveBeenCalledTimes(2)
+      expect(TsJestCompiler.prototype.getResolvedModules).toHaveBeenNthCalledWith(
         1,
         input.fileContent,
         input.fileName,
+        new Map(),
       )
-      expect(TsJestCompiler.prototype.getResolvedModulesMap).toHaveBeenNthCalledWith(2, newFileContent, input.fileName)
+      expect(TsJestCompiler.prototype.getResolvedModules).toHaveBeenNthCalledWith(
+        2,
+        newFileContent,
+        input.fileName,
+        new Map(),
+      )
     })
 
     test('should be different with non existed imported modules', () => {
-      depGraphs.set(input.fileName, resolvedModule)
-      jest.spyOn(TsJestCompiler.prototype, 'getResolvedModulesMap').mockReturnValueOnce(depGraphs)
+      jest
+        .spyOn(TsJestCompiler.prototype, 'getResolvedModules')
+        .mockReturnValueOnce([join(process.cwd(), 'src', '__mocks__', 'thing.ts')])
 
       const cacheKey1 = tr.getCacheKey(input.fileContent, input.fileName, transformOptionsWithCache)
 
@@ -264,8 +270,12 @@ Array [
       const cacheKey2 = tr.getCacheKey(input.fileContent, input.fileName, transformOptionsWithCache)
 
       expect(cacheKey1).not.toEqual(cacheKey2)
-      expect(TsJestCompiler.prototype.getResolvedModulesMap).toHaveBeenCalledTimes(1)
-      expect(TsJestCompiler.prototype.getResolvedModulesMap).toHaveBeenCalledWith(input.fileContent, input.fileName)
+      expect(TsJestCompiler.prototype.getResolvedModules).toHaveBeenCalledTimes(1)
+      expect(TsJestCompiler.prototype.getResolvedModules).toHaveBeenCalledWith(
+        input.fileContent,
+        input.fileName,
+        new Map(),
+      )
     })
   })
 
@@ -282,7 +292,7 @@ Array [
 
     beforeEach(() => {
       tr = new TsJestTransformer()
-      jest.spyOn(TsJestCompiler.prototype, 'getResolvedModulesMap').mockReturnValueOnce(new Map())
+      jest.spyOn(TsJestCompiler.prototype, 'getResolvedModules').mockReturnValueOnce([])
     })
 
     test('should process input as stringified content with content matching stringifyContentPathRegex option', () => {
@@ -424,8 +434,8 @@ Array [
 
   describe('subclass extends TsJestTransformer', () => {
     class MyTsCompiler extends TsCompiler {
-      constructor(readonly configSet: ConfigSet, readonly jestCacheFS: StringMap) {
-        super(configSet, jestCacheFS)
+      constructor(readonly configSet: ConfigSet, readonly runtimeCacheFS: StringMap) {
+        super(configSet, runtimeCacheFS)
       }
     }
 
