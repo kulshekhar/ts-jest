@@ -374,8 +374,8 @@ const t: string = f(5)
       })
     })
 
-    describe('getResolvedModulesMap', () => {
-      const fileName = 'foo.ts'
+    describe('getResolvedModules', () => {
+      const fileName = join(__dirname, '..', '__mocks__', 'thing.spec.ts')
       const fileContent = 'const foo = 1'
 
       test('should return undefined when file name is not known to compiler', () => {
@@ -383,7 +383,7 @@ const t: string = f(5)
           tsJestConfig: baseTsJestConfig,
         })
 
-        expect(compiler.getResolvedModulesMap(fileContent, fileName)).toBeUndefined()
+        expect(compiler.getResolvedModules(fileContent, fileName, new Map())).toEqual([])
       })
 
       test('should return undefined when it is isolatedModules true', () => {
@@ -394,7 +394,7 @@ const t: string = f(5)
           },
         })
 
-        expect(compiler.getResolvedModulesMap(fileContent, fileName)).toBeUndefined()
+        expect(compiler.getResolvedModules(fileContent, fileName, new Map())).toEqual([])
       })
 
       test('should return undefined when file has no resolved modules', () => {
@@ -407,12 +407,12 @@ const t: string = f(5)
           jestCacheFS,
         )
 
-        expect(compiler.getResolvedModulesMap(fileContent, fileName)).toBeUndefined()
+        expect(compiler.getResolvedModules(fileContent, fileName, new Map())).toEqual([])
       })
 
       test('should return resolved modules when file has resolved modules', () => {
         const jestCacheFS = new Map<string, string>()
-        const fileContentWithModules = readFileSync(join(__dirname, '..', '__mocks__', 'thing.spec.ts'), 'utf-8')
+        const fileContentWithModules = readFileSync(fileName, 'utf-8')
         jestCacheFS.set(fileName, fileContentWithModules)
         const compiler = makeCompiler(
           {
@@ -421,7 +421,7 @@ const t: string = f(5)
           jestCacheFS,
         )
 
-        expect(compiler.getResolvedModulesMap(fileContentWithModules, fileName)).toBeDefined()
+        expect(compiler.getResolvedModules(fileContentWithModules, fileName, new Map())).not.toEqual([])
       })
     })
 
@@ -475,6 +475,30 @@ const t: string = f(5)
         )
 
         expect(() => compiler.getCompiledOutput(source, fileName, false)).toThrowErrorMatchingSnapshot()
+      })
+
+      test('should report correct diagnostics when file content has changed', () => {
+        const compiler = makeCompiler(
+          {
+            tsJestConfig: baseTsJestConfig,
+          },
+          jestCacheFS,
+        )
+        const fileName = join(process.cwd(), 'src', '__mocks__', 'thing.spec.ts')
+        const oldSource = `
+          foo.split('-');
+        `
+        const newSource = `
+          const foo = 'bla-bla'
+          foo.split('-');
+        `
+        jestCacheFS.set(fileName, oldSource)
+
+        expect(() => compiler.getCompiledOutput(oldSource, fileName, false)).toThrowError()
+
+        jestCacheFS.set(fileName, newSource)
+
+        expect(() => compiler.getCompiledOutput(newSource, fileName, false)).not.toThrowError()
       })
     })
 

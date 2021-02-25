@@ -9,7 +9,7 @@ import mkdirp from 'mkdirp'
 import { TsJestCompiler } from './compiler/ts-jest-compiler'
 import { ConfigSet } from './config/config-set'
 import { DECLARATION_TYPE_EXT, JS_JSX_REGEX, TS_TSX_REGEX } from './constants'
-import type { ProjectConfigTsJest, TransformOptionsTsJest } from './types'
+import type { DepGraphInfo, ProjectConfigTsJest, TransformOptionsTsJest } from './types'
 import { importer } from './utils/importer'
 import { parse, stringify } from './utils/json'
 import { JsonableValue } from './utils/jsonable-value'
@@ -30,11 +30,6 @@ interface CachedConfigSet {
 interface TsJestHooksMap {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   afterProcess?(args: any[], result: string | TransformedSource): string | TransformedSource | void
-}
-
-interface DepGraphInfo {
-  fileContent: string
-  resolveModuleNames: string[]
 }
 
 /**
@@ -236,7 +231,7 @@ export class TsJestTransformer implements Transformer {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         resolvedModuleNames = this._depGraphs
           .get(filePath)!
-          .resolveModuleNames.filter((moduleName) => existsSync(moduleName))
+          .resolvedModuleNames.filter((moduleName) => existsSync(moduleName))
       } else {
         this._logger.debug(
           { fileName: filePath, transformOptions },
@@ -244,16 +239,10 @@ export class TsJestTransformer implements Transformer {
           filePath,
         )
 
-        const resolvedModuleMap = this._compiler.getResolvedModulesMap(fileContent, filePath)
-        resolvedModuleNames = resolvedModuleMap
-          ? [...resolvedModuleMap.values()]
-              .filter((resolvedModule) => resolvedModule !== undefined)
-              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-              .map((resolveModule) => resolveModule!.resolvedFileName)
-          : []
+        resolvedModuleNames = this._compiler.getResolvedModules(fileContent, filePath, transformOptions.cacheFS)
         this._depGraphs.set(filePath, {
           fileContent,
-          resolveModuleNames: resolvedModuleNames,
+          resolvedModuleNames,
         })
         writeFileSync(this._tsResolvedModulesCachePath, stringify([...this._depGraphs]))
       }
