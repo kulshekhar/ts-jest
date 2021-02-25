@@ -47,7 +47,7 @@ eval(process.env.__TS_JEST_EVAL);
 `
 
 let __hooksSource: string
-function hooksSourceWith(vars: Record<string, any>): string {
+function hooksSourceWith(vars: Record<string, unknown>): string {
   if (!__hooksSource) {
     __hooksSource = readFileSync(join(__dirname, '__hooks-source__.js.hbs'), 'utf8')
   }
@@ -69,6 +69,7 @@ export function run(name: string, options: RunTestOptions = {}): RunResult {
 
   // grab base configuration
   let baseConfig: Config.InitialOptions = require(jestConfigPath())
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   if (configFile === 'package.json') baseConfig = (baseConfig as any).jest
 
   const extraConfig = {} as Config.InitialOptions
@@ -95,6 +96,7 @@ export function run(name: string, options: RunTestOptions = {}): RunResult {
     merge(extraConfig, jestConfig)
   }
   if (options.tsJestConfig) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const globalConfig: any = extraConfig.globals || (extraConfig.globals = {'ts-jest': {}})
     const tsJestConfig = globalConfig['ts-jest'] || (globalConfig['ts-jest'] = {})
     merge(tsJestConfig, options.tsJestConfig)
@@ -152,6 +154,7 @@ export function run(name: string, options: RunTestOptions = {}): RunResult {
   if (cmdArgs[cmdArgs.length - 1] === '--') cmdArgs.pop()
 
   // extend env
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const localEnv: any = { ...env }
   if (inject) {
     const injected = typeof inject === 'function' ? `(${inject.toString()}).apply(this);` : inject
@@ -162,6 +165,7 @@ export function run(name: string, options: RunTestOptions = {}): RunResult {
   }
 
   // arguments to give to spawn
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const spawnOptions: { env: Record<string, string>; cwd: string } = { env: localEnv } as any
 
   // create started script for debugging
@@ -225,6 +229,7 @@ export function prepareTest(name: string, template: string, options: RunTestOpti
   const templateDir = join(Paths.e2eWorkTemplatesDir, template)
   // config utils
   const configUtils = {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     merge: (...objects: any[]) => merge({}, ...objects),
   }
 
@@ -307,7 +312,7 @@ export function prepareTest(name: string, template: string, options: RunTestOpti
 
   // create a package.json if it does not exists, and/or enforce the package name
   const pkgFile = join(caseWorkdir, 'package.json')
-  const pkg: any = existsSync(pkgFile) ? readJsonSync(pkgFile) : {}
+  const pkg: Record<string, unknown> = existsSync(pkgFile) ? readJsonSync(pkgFile) : {}
   pkg.name = name
   pkg.private = true
   pkg.version = `0.0.0-mock0`

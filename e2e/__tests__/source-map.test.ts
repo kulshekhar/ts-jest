@@ -4,6 +4,7 @@ import type { TsJestConfig } from '../../src/types'
 import { allValidPackageSets } from '../__helpers__/templates'
 import { configureTestCase } from '../__helpers__/test-case'
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function runSourceMapTests(tsJestConfig: Partial<TsJestConfig> | any) {
   const testCase = configureTestCase('source-maps', {
     writeIo: true,

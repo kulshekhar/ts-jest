@@ -7,11 +7,13 @@ export function stringify(input: unknown): string {
   return input === undefined ? UNDEFINED : stableStringify(input)
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function parse(input: string): any {
   return input === UNDEFINED ? undefined : JSON.parse(input)
 }
 
 interface NormalizeOptions {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   parse?: (input: string) => any
 }
 /**

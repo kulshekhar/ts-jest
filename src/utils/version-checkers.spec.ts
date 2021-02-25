@@ -23,6 +23,7 @@ function describeChecker(
   checker: VersionChecker,
   moduleName: string,
   supportedVersions: string[],
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   unsupportedVersions: any[],
 ) {
   describe(moduleName, () => {

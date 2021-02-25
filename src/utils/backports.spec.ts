@@ -13,8 +13,10 @@ beforeEach(() => {
 })
 
 describe('backportJestConfig', () => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const makeTestsFor = (oldPath: string, _: string, values: any[]) => {
     values.forEach((val) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       let original: any
       beforeEach(() => {
         original = {}

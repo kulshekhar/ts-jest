@@ -69,10 +69,10 @@ export interface RawCompilerOptions {
   paths?: {
     [k: string]: string[]
   }
-  plugins?: {
+  plugins?: Array<{
     name?: string
     [k: string]: unknown
-  }[]
+  }>
   rootDirs?: string[]
   typeRoots?: string[]
   types?: string[]
@@ -83,7 +83,7 @@ export interface RawCompilerOptions {
   noImplicitUseStrict?: boolean
   listEmittedFiles?: boolean
   disableSizeLimit?: boolean
-  lib?: (
+  lib?: Array<
     | 'ES5'
     | 'ES6'
     | 'ES2015'
@@ -133,7 +133,7 @@ export interface RawCompilerOptions {
     | 'ScriptHost'
     | 'WebWorker'
     | 'WebWorker.ImportScripts'
-  )[]
+  >
   strictNullChecks?: boolean
   maxNodeModuleJsDepth?: number
   importHelpers?: boolean

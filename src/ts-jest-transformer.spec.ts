@@ -150,12 +150,13 @@ Array [
       fileName: 'foo.ts',
       transformOptions: {
         configString: '{"foo": "bar"}',
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         config: { foo: 'bar', testMatch: [], testRegex: [], extensionsToTreatAsEsm: [] } as any,
         instrument: false,
         rootDir: '/foo',
         cacheFS: new Map(),
       },
-    } as any
+    } as any // eslint-disable-line @typescript-eslint/no-explicit-any
     const transformOptionsWithCache = {
       ...input.transformOptions,
       config: {
@@ -276,7 +277,7 @@ Array [
         extensionsToTreatAsEsm: [],
       },
       cacheFS: new Map(),
-    } as any
+    } as any // eslint-disable-line @typescript-eslint/no-explicit-any
     let tr!: TsJestTransformer
 
     beforeEach(() => {

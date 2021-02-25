@@ -1,21 +1,27 @@
 import { Memoize } from './memoize'
 
 describe('memoize', () => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const sharedHasher = jest.fn((...args: any[]) => args.join(':'))
   class Dummy {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     _getter = jest.fn(function getter(this: any) {
       return this.data.getter
     })
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     _method0 = jest.fn(function method0(this: any) {
       return this.data.method0
     })
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     _method1 = jest.fn(function method1(this: any, ...args: any[]) {
       return [this.data.method1, ...args].join(':')
     })
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     _method2 = jest.fn(function method2(this: any, ...args: any[]) {
       return [this.data.method2, ...args].join(':')
     })
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     constructor(public data: any) {}
 
     @Memoize()
@@ -29,11 +35,13 @@ describe('memoize', () => {
     }
 
     @Memoize()
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     method1(...args: any[]) {
       return this._method1(...args)
     }
 
     @Memoize(sharedHasher)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     method2(...args: any[]) {
       return this._method2(...args)
     }

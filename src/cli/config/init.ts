@@ -73,9 +73,11 @@ export const run: CliCommand = async (args: Arguments /* , logger: Logger */) =>
 
   if (isPackage) {
     // package.json config
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const base: any = jestPreset ? { preset: preset.name } : { ...preset.value }
     if (!jsdom) base.testEnvironment = 'node'
     if (tsconfig || shouldPostProcessWithBabel) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const tsJestConf: any = {}
       base.globals = { 'ts-jest': tsJestConf }
       if (tsconfig) tsJestConf.tsconfig = tsconfig

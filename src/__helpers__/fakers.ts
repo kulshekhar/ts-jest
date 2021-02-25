@@ -24,7 +24,7 @@ function getJestConfig<T extends Config.ProjectConfig>(
   const res = {
     globals: {},
     ...options,
-  } as any
+  } as any // eslint-disable-line @typescript-eslint/no-explicit-any
   if (tsJestOptions) {
     res.globals['ts-jest'] = tsJestOptions
   }
@@ -33,6 +33,7 @@ function getJestConfig<T extends Config.ProjectConfig>(
 }
 
 export function importReason(text = '[[BECAUSE]]'): ImportReasons {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return text as any
 }
 
@@ -49,6 +50,7 @@ export function createConfigSet({
   tsJestConfig?: TsJestGlobalOptions
   logger?: Logger
   resolve?: ((path: string) => string) | null
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: any
 } = {}): ConfigSet {
   const jestCfg = getJestConfig(jestConfig, tsJestConfig)
@@ -86,6 +88,7 @@ export function makeCompiler(
 ): TsJestCompiler {
   tsJestConfig = { ...tsJestConfig }
   tsJestConfig.diagnostics = {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     ...(tsJestConfig.diagnostics as any),
     pretty: false,
   }

@@ -1,4 +1,5 @@
 import tsJestPresets from '../../../presets'
+import type { RawCompilerOptions } from "../../../src/raw-compiler-options";
 import { PackageSets } from '../../__helpers__/templates'
 import { configureTestCase } from '../../__helpers__/test-case'
 import { nodeWithESMSupport } from '../../__helpers__/test-case/utils'
@@ -13,11 +14,7 @@ console.log = jest.fn()
 // System = 4,
 // ES2015 = 5,
 // ESNext = 6
-interface TestOptions {
-  module: string
-  allowSyntheticDefaultImports?: boolean
-  esModuleInterop?: boolean
-}
+type TestOptions = Pick<RawCompilerOptions, 'module' | 'allowSyntheticDefaultImports' | 'esModuleInterop'>
 // eslint-disable-next-line jest/no-export
 export const enum AllPreset {
   DEFAULT = 'default',
@@ -46,7 +43,7 @@ const runTestForOptions = (options: TestOptions, preset: AllPresetType = AllPres
   const testCase = configureTestCase('module-kinds',
     {
       jestConfig: tsJestPresetToUse,
-      tsJestConfig: { tsconfig: options as any, diagnostics: { warnOnly: true } },
+      tsJestConfig: { tsconfig: options, diagnostics: { warnOnly: true } },
       noCache: true,
     },
   )

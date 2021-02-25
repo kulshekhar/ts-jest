@@ -49,6 +49,7 @@ const definePreset = (fullName: string): TsJestPresetDescriptor => ({
 })
 
 /** @internal */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const allPresets: Record<JestPresetNames, TsJestPresetDescriptor> = {} as any
 /** @internal */
 export const defaults = (allPresets[JestPresetNames.default] = definePreset(JestPresetNames.default))

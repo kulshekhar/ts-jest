@@ -8,6 +8,7 @@ import type { RunTestOptions, RunWithTemplateIteratorContext, RunWithTemplatesIt
 
 export default class RunDescriptor {
   protected _options: RunTestOptions
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   protected _sourcePackageJson: any
 
   constructor(readonly name: string, options: RunTestOptions = {}) {
@@ -18,6 +19,7 @@ export default class RunDescriptor {
     return join(Paths.e2eSourceDir, this.name)
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   get sourcePackageJson(): any {
     try {
       return this._sourcePackageJson || (this._sourcePackageJson = require(join(this.sourceDir, 'package.json')))

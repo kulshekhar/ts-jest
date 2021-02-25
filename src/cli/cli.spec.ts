@@ -13,7 +13,7 @@ const fs = mocked(_fs)
 let lastExitCode: number | undefined
 
 const runCli = async (
-  ...args: any[]
+  ...args: any[] // eslint-disable-line @typescript-eslint/no-explicit-any
 ): Promise<{ stdout: string; stderr: string; exitCode: number | undefined; log: string }> => {
   mockedProcess.stderr.clear()
   mockedProcess.stdout.clear()
@@ -30,6 +30,7 @@ const runCli = async (
   }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 let mockedProcess: any
 const FAKE_CWD = normalize('/foo/bar')
 const FAKE_PKG = normalize(`${FAKE_CWD}/package.json`)

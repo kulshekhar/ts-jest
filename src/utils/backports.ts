@@ -14,8 +14,10 @@ export const backportJestConfig = <T extends Config.InitialOptions | Config.Proj
 ): T => {
   logger.debug({ ...context, config }, 'backporting config')
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { globals = {} } = (config || {}) as any
   const { 'ts-jest': tsJest = {} } = globals
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const mergeTsJest: any = {}
   let hadWarnings = false
   const warnConfig = (oldPath: string, newPath: string, note?: string) => {
@@ -93,6 +95,7 @@ export const backportJestConfig = <T extends Config.InitialOptions | Config.Proj
   }
 
   return {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     ...(config as any),
     globals: {
       ...globals,
