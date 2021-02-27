@@ -21,9 +21,17 @@ describe('TsJestCompiler', () => {
 
   describe('getCompiledOutput', () => {
     test('should call getCompiledOutput from compiler instance', () => {
-      compiler.getCompiledOutput(fileContent, fileName, false)
+      compiler.getCompiledOutput(fileContent, fileName, {
+        depGraphs: new Map(),
+        supportsStaticESM: false,
+        watchMode: false,
+      })
 
-      expect(TsCompiler.prototype.getCompiledOutput).toHaveBeenCalledWith(fileContent, fileName, false)
+      expect(TsCompiler.prototype.getCompiledOutput).toHaveBeenCalledWith(fileContent, fileName, {
+        depGraphs: new Map(),
+        supportsStaticESM: false,
+        watchMode: false,
+      })
     })
   })
 })

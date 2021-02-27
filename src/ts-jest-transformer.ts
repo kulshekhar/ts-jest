@@ -25,6 +25,7 @@ interface CachedConfigSet {
   compiler: CompilerInstance
   depGraphs: Map<string, DepGraphInfo>
   tsResolvedModulesCachePath: string | undefined
+  watchMode: boolean
 }
 
 interface TsJestHooksMap {
@@ -49,6 +50,7 @@ export class TsJestTransformer implements SyncTransformer {
   private _tsResolvedModulesCachePath: string | undefined
   private _transformCfgStr!: string
   private _depGraphs: Map<string, DepGraphInfo> = new Map<string, DepGraphInfo>()
+  private _watchMode = false
 
   constructor() {
     this._logger = rootLogger.child({ namespace: 'ts-jest-transformer' })
@@ -74,6 +76,7 @@ export class TsJestTransformer implements SyncTransformer {
       this._compiler = ccs.compiler
       this._depGraphs = ccs.depGraphs
       this._tsResolvedModulesCachePath = ccs.tsResolvedModulesCachePath
+      this._watchMode = ccs.watchMode
       configSet = ccs.configSet
     } else {
       // try to look-it up by stringified version
@@ -90,6 +93,7 @@ export class TsJestTransformer implements SyncTransformer {
         this._compiler = serializedCcs.compiler
         this._depGraphs = serializedCcs.depGraphs
         this._tsResolvedModulesCachePath = serializedCcs.tsResolvedModulesCachePath
+        this._watchMode = serializedCcs.watchMode
         configSet = serializedCcs.configSet
       } else {
         // create the new record in the index
@@ -104,6 +108,7 @@ export class TsJestTransformer implements SyncTransformer {
         this._transformCfgStr = `${new JsonableValue(jest).serialized}${configSet.cacheSuffix}`
         this._createCompiler(configSet, cacheFS)
         this._getFsCachedResolvedModules(configSet)
+        this._watchMode = process.argv.includes('--watch')
         TsJestTransformer._cachedConfigSets.push({
           jestConfig: new JsonableValue(config),
           configSet,
@@ -111,6 +116,7 @@ export class TsJestTransformer implements SyncTransformer {
           compiler: this._compiler,
           depGraphs: this._depGraphs,
           tsResolvedModulesCachePath: this._tsResolvedModulesCachePath,
+          watchMode: this._watchMode,
         })
       }
     }
@@ -168,7 +174,11 @@ export class TsJestTransformer implements SyncTransformer {
       result = fileContent
     } else if (isJsFile || isTsFile) {
       // transpile TS code (source maps are included)
-      result = this._compiler.getCompiledOutput(fileContent, filePath, transformOptions.supportsStaticESM)
+      result = this._compiler.getCompiledOutput(fileContent, filePath, {
+        depGraphs: this._depGraphs,
+        supportsStaticESM: transformOptions.supportsStaticESM,
+        watchMode: this._watchMode,
+      })
     } else {
       // we should not get called for files with other extension than js[x], ts[x] and d.ts,
       // TypeScript will bail if we try to compile, and if it was to call babel, users can

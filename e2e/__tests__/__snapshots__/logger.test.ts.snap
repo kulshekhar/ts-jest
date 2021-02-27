@@ -27,13 +27,13 @@ Array [
   "[level:20] getCompiledOutput(): compiling using language service",
   "[level:20] updateMemoryCache: update memory cache for language service",
   "[level:20] visitSourceFileNode(): hoisting",
-  "[level:20] getCompiledOutput(): computing diagnostics using language service",
+  "[level:20] _doTypeChecking(): computing diagnostics using language service",
   "[level:20] computing cache key for <cwd>/Hello.ts",
   "[level:20] processing <cwd>/Hello.ts",
   "[level:20] getCompiledOutput(): compiling using language service",
   "[level:20] updateMemoryCache: update memory cache for language service",
   "[level:20] visitSourceFileNode(): hoisting",
-  "[level:20] getCompiledOutput(): computing diagnostics using language service",
+  "[level:20] _doTypeChecking(): computing diagnostics using language service",
 ]
 `;
 
@@ -68,14 +68,14 @@ Array [
   "[level:20] getCompiledOutput(): compiling using language service",
   "[level:20] updateMemoryCache: update memory cache for language service",
   "[level:20] visitSourceFileNode(): hoisting",
-  "[level:20] getCompiledOutput(): computing diagnostics using language service",
+  "[level:20] _doTypeChecking(): computing diagnostics using language service",
   "[level:20] calling babel-jest processor",
   "[level:20] computing cache key for <cwd>/Hello.ts",
   "[level:20] processing <cwd>/Hello.ts",
   "[level:20] getCompiledOutput(): compiling using language service",
   "[level:20] updateMemoryCache: update memory cache for language service",
   "[level:20] visitSourceFileNode(): hoisting",
-  "[level:20] getCompiledOutput(): computing diagnostics using language service",
+  "[level:20] _doTypeChecking(): computing diagnostics using language service",
   "[level:20] calling babel-jest processor",
 ]
 `;
@@ -112,14 +112,14 @@ Array [
   "[level:20] getCompiledOutput(): compiling using language service",
   "[level:20] updateMemoryCache: update memory cache for language service",
   "[level:20] visitSourceFileNode(): hoisting",
-  "[level:20] getCompiledOutput(): computing diagnostics using language service",
+  "[level:20] _doTypeChecking(): computing diagnostics using language service",
   "[level:20] calling babel-jest processor",
   "[level:20] computing cache key for <cwd>/Hello.ts",
   "[level:20] processing <cwd>/Hello.ts",
   "[level:20] getCompiledOutput(): compiling using language service",
   "[level:20] updateMemoryCache: update memory cache for language service",
   "[level:20] visitSourceFileNode(): hoisting",
-  "[level:20] getCompiledOutput(): computing diagnostics using language service",
+  "[level:20] _doTypeChecking(): computing diagnostics using language service",
   "[level:20] calling babel-jest processor",
 ]
 `;

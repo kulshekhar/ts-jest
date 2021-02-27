@@ -1,28 +1,4 @@
 {
-  "compilerOptions": {
-    "declaration": false,
-    "noEmit": true,
-    "downlevelIteration": true,
-    "esModuleInterop": true,
-    "experimentalDecorators": true,
-    "inlineSourceMap": true,
-    "lib": ["esnext"],
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "noEmitOnError": true,
-    "noFallthroughCasesInSwitch": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noImplicitReturns": true,
-    "importsNotUsedAsValues": "error",
-    "strict": true,
-    "skipLibCheck": true,
-    "sourceMap": false,
-    "types": [
-      "jest",
-      "node",
-      "react"
-    ]
-  },
+  "extends": "./tsconfig.json",
   "include": []
 }
