@@ -10,13 +10,13 @@ You can install `ts-jest` and dependencies all at once with one of the following
 #### NPM
 
 ```sh
-npm install --save-dev jest typescript ts-jest
+npm install --save-dev jest typescript ts-jest @types/jest
 ```
 
 #### Yarn
 
 ```sh
-yarn add --dev jest typescript ts-jest
+yarn add --dev jest typescript ts-jest @types/jest
 ```
 
 :::tip
