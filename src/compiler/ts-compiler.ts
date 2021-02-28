@@ -262,7 +262,9 @@ export class TsCompiler implements TsCompilerInstance {
       this._doTypeChecking(fileName)
       /* istanbul ignore next (this should never happen but is kept for security) */
       if (output.emitSkipped) {
-        throw new Error(interpolate(Errors.CannotCompile, { file: fileName }))
+        this._logger.warn(interpolate(Errors.CannotProcessFile, { file: fileName }))
+
+        return fileContent
       }
       // Throw an error when requiring `.d.ts` files.
       if (!output.outputFiles.length) {
