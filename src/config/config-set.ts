@@ -173,13 +173,14 @@ export class ConfigSet {
     tsBuildInfoFile: undefined,
   }
 
-  constructor(private readonly jestConfig: Config.ProjectConfig, private readonly parentLogger?: Logger) {
+  constructor(jestConfig: Config.ProjectConfig | undefined, private readonly parentLogger?: Logger) {
     this.logger = this.parentLogger
       ? this.parentLogger.child({ [LogContexts.namespace]: 'config' })
       : rootLogger.child({ namespace: 'config' })
-    this.cwd = normalize(this.jestConfig.cwd ?? process.cwd())
-    this.rootDir = normalize(this.jestConfig.rootDir ?? this.cwd)
-    const tsJestCfg = this.jestConfig.globals && this.jestConfig.globals['ts-jest']
+    this._backportJestCfg(jestConfig ?? Object.create(null))
+    this.cwd = normalize(this._jestCfg.cwd ?? process.cwd())
+    this.rootDir = normalize(this._jestCfg.rootDir ?? this.cwd)
+    const tsJestCfg = this._jestCfg.globals && this._jestCfg.globals['ts-jest']
     const options: TsJestGlobalOptions = tsJestCfg ?? Object.create(null)
     // compiler module
     this.compilerModule = importer.typescript(ImportReasons.TsJest, options.compiler ?? 'typescript')
@@ -188,7 +189,6 @@ export class ConfigSet {
 
     this.logger.debug({ compilerModule: this.compilerModule }, 'normalized compiler module config via ts-jest option')
 
-    this._backportJestCfg()
     this._matchablePatterns = [...this._jestCfg.testMatch, ...this._jestCfg.testRegex].filter(
       (pattern) =>
         /**
@@ -210,8 +210,8 @@ export class ConfigSet {
   /**
    * @internal
    */
-  private _backportJestCfg(): void {
-    const config = backportJestConfig(this.logger, this.jestConfig)
+  private _backportJestCfg(jestCfg: Config.ProjectConfig): void {
+    const config = backportJestConfig(this.logger, jestCfg)
 
     this.logger.debug({ jestConfig: config }, 'normalized jest config')
 
