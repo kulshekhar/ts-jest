@@ -1,3 +1,14 @@
+## [26.5.3](https://github.com/kulshekhar/ts-jest/compare/v26.5.2...v26.5.3) (2021-03-03)
+
+
+### Bug Fixes
+
+* **config:** create fallback jest config when jest config is undefined ([#2421](https://github.com/kulshekhar/ts-jest/issues/2421)) ([0fb6b45](https://github.com/kulshekhar/ts-jest/commit/0fb6b45e7dc3dd7588d27f09ac9a8849dff470cb)), closes [#2085](https://github.com/kulshekhar/ts-jest/issues/2085)
+* remove `@types/jest` from direct dep ([#2416](https://github.com/kulshekhar/ts-jest/issues/2416)) ([060302e](https://github.com/kulshekhar/ts-jest/commit/060302ed1eb8708df0acd7ab1d613ff06fc08cf3)), closes [#2406](https://github.com/kulshekhar/ts-jest/issues/2406) [#2411](https://github.com/kulshekhar/ts-jest/issues/2411)
+* **compiler:** return original file content on emit skip ([#2408](https://github.com/kulshekhar/ts-jest/issues/2408)) ([cfba8f4](https://github.com/kulshekhar/ts-jest/commit/cfba8f423dd59536d8b1e1374ef2b20bff2ed857)), closes [#2407](https://github.com/kulshekhar/ts-jest/issues/2407)
+
+
+
 ## [26.5.2](https://github.com/kulshekhar/ts-jest/compare/v26.5.1...v26.5.2) (2021-02-21)
 
 
