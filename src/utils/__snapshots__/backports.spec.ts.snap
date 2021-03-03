@@ -13,6 +13,11 @@ Object {
   "globals": Object {
     "ts-jest": Object {},
   },
+  "testMatch": Array [
+    "**/__tests__/**/*.[jt]s?(x)",
+    "**/?(*.)+(spec|test).[jt]s?(x)",
+  ],
+  "testRegex": Array [],
 }
 `;
 
@@ -40,6 +45,11 @@ Object {
       "stringifyContentPathRegex": "\\\\.html?$",
     },
   },
+  "testMatch": Array [
+    "**/__tests__/**/*.[jt]s?(x)",
+    "**/?(*.)+(spec|test).[jt]s?(x)",
+  ],
+  "testRegex": Array [],
 }
 `;
 
@@ -71,6 +81,11 @@ Object {
       },
     },
   },
+  "testMatch": Array [
+    "**/__tests__/**/*.[jt]s?(x)",
+    "**/?(*.)+(spec|test).[jt]s?(x)",
+  ],
+  "testRegex": Array [],
 }
 `;
 
@@ -103,6 +118,11 @@ Object {
       },
     },
   },
+  "testMatch": Array [
+    "**/__tests__/**/*.[jt]s?(x)",
+    "**/?(*.)+(spec|test).[jt]s?(x)",
+  ],
+  "testRegex": Array [],
 }
 `;
 
@@ -132,6 +152,11 @@ Object {
       "diagnostics": false,
     },
   },
+  "testMatch": Array [
+    "**/__tests__/**/*.[jt]s?(x)",
+    "**/?(*.)+(spec|test).[jt]s?(x)",
+  ],
+  "testRegex": Array [],
 }
 `;
 
@@ -163,6 +188,11 @@ Object {
       },
     },
   },
+  "testMatch": Array [
+    "**/__tests__/**/*.[jt]s?(x)",
+    "**/?(*.)+(spec|test).[jt]s?(x)",
+  ],
+  "testRegex": Array [],
 }
 `;
 
@@ -192,6 +222,11 @@ Object {
       "babelConfig": true,
     },
   },
+  "testMatch": Array [
+    "**/__tests__/**/*.[jt]s?(x)",
+    "**/?(*.)+(spec|test).[jt]s?(x)",
+  ],
+  "testRegex": Array [],
 }
 `;
 
@@ -219,6 +254,11 @@ Object {
   "globals": Object {
     "ts-jest": Object {},
   },
+  "testMatch": Array [
+    "**/__tests__/**/*.[jt]s?(x)",
+    "**/?(*.)+(spec|test).[jt]s?(x)",
+  ],
+  "testRegex": Array [],
 }
 `;
 
@@ -248,6 +288,11 @@ Object {
       "tsConfig": "tsconfig.build.json",
     },
   },
+  "testMatch": Array [
+    "**/__tests__/**/*.[jt]s?(x)",
+    "**/?(*.)+(spec|test).[jt]s?(x)",
+  ],
+  "testRegex": Array [],
 }
 `;
 
@@ -277,6 +322,11 @@ Object {
       "isolatedModules": true,
     },
   },
+  "testMatch": Array [
+    "**/__tests__/**/*.[jt]s?(x)",
+    "**/?(*.)+(spec|test).[jt]s?(x)",
+  ],
+  "testRegex": Array [],
 }
 `;
 
@@ -306,6 +356,11 @@ Object {
       "isolatedModules": false,
     },
   },
+  "testMatch": Array [
+    "**/__tests__/**/*.[jt]s?(x)",
+    "**/?(*.)+(spec|test).[jt]s?(x)",
+  ],
+  "testRegex": Array [],
 }
 `;
 
@@ -335,6 +390,11 @@ Object {
       "babelConfig": Object {},
     },
   },
+  "testMatch": Array [
+    "**/__tests__/**/*.[jt]s?(x)",
+    "**/?(*.)+(spec|test).[jt]s?(x)",
+  ],
+  "testRegex": Array [],
 }
 `;
 
@@ -365,6 +425,11 @@ Object {
       "babelConfig": true,
     },
   },
+  "testMatch": Array [
+    "**/__tests__/**/*.[jt]s?(x)",
+    "**/?(*.)+(spec|test).[jt]s?(x)",
+  ],
+  "testRegex": Array [],
 }
 `;
 

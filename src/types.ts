@@ -155,10 +155,12 @@ export interface TsJestGlobalOptions {
   stringifyContentPathRegex?: string | RegExp
 }
 
+/**
+ * For typings in `jest.config.ts`
+ */
 export interface GlobalConfigTsJest extends Config.ConfigGlobals {
   'ts-jest': TsJestGlobalOptions
 }
-
 export interface InitialOptionsTsJest extends Config.InitialOptions {
   globals?: GlobalConfigTsJest
 }

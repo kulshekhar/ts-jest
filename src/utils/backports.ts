@@ -2,6 +2,7 @@ import type { Config } from '@jest/types'
 import { LogContexts, Logger } from 'bs-logger'
 
 import { Deprecations, Helps, interpolate } from './messages'
+import { DEFAULT_JEST_TEST_MATCH } from '../constants'
 
 const context = { [LogContexts.namespace]: 'backports' }
 
@@ -94,6 +95,8 @@ export const backportJestConfig = <T extends Config.InitialOptions | Config.Proj
 
   return {
     ...(config as any),
+    testMatch: config.testMatch ?? DEFAULT_JEST_TEST_MATCH,
+    testRegex: config.testRegex ?? [],
     globals: {
       ...globals,
       'ts-jest': {
