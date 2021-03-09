@@ -307,30 +307,30 @@ Jest configuration written to "${normalize('/foo/bar/package.json')}".
       )
       const res = await runCli(...noOption, pkgPaths.current)
       expect(res).toMatchInlineSnapshot(`
-        Object {
-          "exitCode": 0,
-          "log": "",
-          "stderr": "
-        Migrated Jest configuration:
+Object {
+  "exitCode": 0,
+  "log": "",
+  "stderr": "
+Migrated Jest configuration:
 
 
-        Detected preset 'default' as the best matching preset for your configuration.
-        Visit https://kulshekhar.github.io/ts-jest/user/config/#jest-preset for more information about presets.
+Detected preset 'default' as the best matching preset for your configuration.
+Visit https://kulshekhar.github.io/ts-jest/user/config/#jest-preset for more information about presets.
 
-        ",
-          "stdout": "\\"jest\\": {
-          \\"globals\\": {
-            \\"ts-jest\\": {
-              \\"tsconfig\\": {
-                \\"target\\": \\"es6\\"
-              }
-            }
-          },
-          \\"preset\\": \\"ts-jest\\"
-        }
-        ",
-        }
-      `)
+",
+  "stdout": "\\"jest\\": {
+  \\"globals\\": {
+    \\"ts-jest\\": {
+      \\"tsconfig\\": {
+        \\"target\\": \\"es6\\"
+      }
+    }
+  },
+  \\"preset\\": \\"ts-jest\\"
+}
+",
+}
+`)
       expect(fs.writeFileSync).not.toHaveBeenCalled()
     })
 
@@ -346,24 +346,24 @@ Jest configuration written to "${normalize('/foo/bar/package.json')}".
       )
       const res = await runCli(...fullOptions, pkgPaths.current)
       expect(res).toMatchInlineSnapshot(`
-        Object {
-          "exitCode": 0,
-          "log": "",
-          "stderr": "
-        Migrated Jest configuration:
-        ",
-          "stdout": "\\"jest\\": {
-          \\"globals\\": {
-            \\"ts-jest\\": {
-              \\"tsconfig\\": {
-                \\"target\\": \\"es6\\"
-              }
-            }
-          }
-        }
-        ",
-        }
-      `)
+Object {
+  "exitCode": 0,
+  "log": "",
+  "stderr": "
+Migrated Jest configuration:
+",
+  "stdout": "\\"jest\\": {
+  \\"globals\\": {
+    \\"ts-jest\\": {
+      \\"tsconfig\\": {
+        \\"target\\": \\"es6\\"
+      }
+    }
+  }
+}
+",
+}
+`)
       expect(fs.writeFileSync).not.toHaveBeenCalled()
     })
 
@@ -388,29 +388,29 @@ Jest configuration written to "${normalize('/foo/bar/package.json')}".
       )
       const res = await runCli(...noOption, pkgPaths.current)
       expect(res.stdout).toMatchInlineSnapshot(`
-        "\\"jest\\": {
-          \\"globals\\": {
-            \\"ts-jest\\": {
-              \\"tsconfig\\": {
-                \\"target\\": \\"es6\\"
-              }
-            }
-          },
-          \\"moduleFileExtensions\\": [
-            \\"js\\",
-            \\"ts\\",
-            \\"tsx\\"
-          ],
-          \\"testMatch\\": [
-            \\"**/?(*.)+(spec|test).js?(x)\\",
-            \\"**/?(*.)+(spec|test).ts?(x)\\",
-            \\"**/__tests__/**/*.js?(x)\\",
-            \\"**/__tests__/**/*.ts?(x)\\"
-          ],
-          \\"preset\\": \\"ts-jest\\"
-        }
-        "
-      `)
+"\\"jest\\": {
+  \\"globals\\": {
+    \\"ts-jest\\": {
+      \\"tsconfig\\": {
+        \\"target\\": \\"es6\\"
+      }
+    }
+  },
+  \\"moduleFileExtensions\\": [
+    \\"js\\",
+    \\"ts\\",
+    \\"tsx\\"
+  ],
+  \\"testMatch\\": [
+    \\"**/?(*.)+(spec|test).js?(x)\\",
+    \\"**/?(*.)+(spec|test).ts?(x)\\",
+    \\"**/__tests__/**/*.js?(x)\\",
+    \\"**/__tests__/**/*.ts?(x)\\"
+  ],
+  \\"preset\\": \\"ts-jest\\"
+}
+"
+`)
     })
 
     it('should reset testMatch if testRegex is used', async () => {
@@ -427,13 +427,13 @@ Jest configuration written to "${normalize('/foo/bar/package.json')}".
       )
       const res = await runCli(...noOption, pkgPaths.current)
       expect(res.stdout).toMatchInlineSnapshot(`
-        "\\"jest\\": {
-          \\"testRegex\\": \\"foo-pattern\\",
-          \\"preset\\": \\"ts-jest\\",
-          \\"testMatch\\": null
-        }
-        "
-      `)
+"\\"jest\\": {
+  \\"testRegex\\": \\"foo-pattern\\",
+  \\"preset\\": \\"ts-jest\\",
+  \\"testMatch\\": null
+}
+"
+`)
     })
 
     it('should detect best preset', async () => {
@@ -445,31 +445,31 @@ Jest configuration written to "${normalize('/foo/bar/package.json')}".
       jest.doMock(pkgPaths.nextCfg, () => ({}), { virtual: true })
       let res = await runCli(...noOption, pkgPaths.currentCfg)
       expect(res.stdout).toMatchInlineSnapshot(`
-        "module.exports = {
-          preset: 'ts-jest',
-        }
-        "
-      `)
+"module.exports = {
+  preset: 'ts-jest',
+}
+"
+`)
 
       // js-with-ts from args
       jest.doMock(pkgPaths.nextCfg, () => ({}), { virtual: true })
       res = await runCli(...noOption, '--allow-js', pkgPaths.currentCfg)
       expect(res.stdout).toMatchInlineSnapshot(`
-        "module.exports = {
-          preset: 'ts-jest/presets/js-with-ts',
-        }
-        "
-      `)
+"module.exports = {
+  preset: 'ts-jest/presets/js-with-ts',
+}
+"
+`)
 
       // js-with-ts from previous transform
       jest.doMock(pkgPaths.nextCfg, () => ({ transform: { '^.+\\.[tj]sx?$': 'ts-jest' } }), { virtual: true })
       res = await runCli(...noOption, pkgPaths.currentCfg)
       expect(res.stdout).toMatchInlineSnapshot(`
-        "module.exports = {
-          preset: 'ts-jest/presets/js-with-ts',
-        }
-        "
-      `)
+"module.exports = {
+  preset: 'ts-jest/presets/js-with-ts',
+}
+"
+`)
 
       // js-with-babel from previous transform
       jest.doMock(pkgPaths.nextCfg, () => ({ transform: { '^.+\\.jsx?$': 'babel-jest', '^.+\\.tsx?$': 'ts-jest' } }), {
@@ -477,11 +477,11 @@ Jest configuration written to "${normalize('/foo/bar/package.json')}".
       })
       res = await runCli(...noOption, pkgPaths.currentCfg)
       expect(res.stdout).toMatchInlineSnapshot(`
-        "module.exports = {
-          preset: 'ts-jest/presets/js-with-babel',
-        }
-        "
-      `)
+"module.exports = {
+  preset: 'ts-jest/presets/js-with-babel',
+}
+"
+`)
 
       // defaults when previous transform is ambiguous
       jest.doMock(
@@ -491,15 +491,15 @@ Jest configuration written to "${normalize('/foo/bar/package.json')}".
       )
       res = await runCli(...noOption, pkgPaths.currentCfg)
       expect(res.stdout).toMatchInlineSnapshot(`
-        "module.exports = {
-          transform: {
-            '^src/js/.+\\\\\\\\.jsx?$': 'babel-jest',
-            '^src/ts/.+\\\\\\\\.tsx?$': 'ts-jest',
-          },
-          preset: 'ts-jest',
-        }
-        "
-      `)
+"module.exports = {
+  transform: {
+    '^src/js/.+\\\\\\\\.jsx?$': 'babel-jest',
+    '^src/ts/.+\\\\\\\\.tsx?$': 'ts-jest',
+  },
+  preset: 'ts-jest',
+}
+"
+`)
     })
 
     it('should normalize transform values', async () => {
@@ -520,16 +520,16 @@ Jest configuration written to "${normalize('/foo/bar/package.json')}".
       )
       const res = await runCli(...noOption, pkgPaths.current)
       expect(res.stdout).toMatchInlineSnapshot(`
-        "\\"jest\\": {
-          \\"transform\\": {
-            \\"<rootDir>/src/.+\\\\\\\\.[jt]s$\\": \\"ts-jest\\",
-            \\"foo\\\\\\\\.ts\\": \\"ts-jest\\",
-            \\"bar\\\\\\\\.ts\\": \\"ts-jest\\"
-          },
-          \\"preset\\": \\"ts-jest\\"
-        }
-        "
-      `)
+"\\"jest\\": {
+  \\"transform\\": {
+    \\"<rootDir>/src/.+\\\\\\\\.[jt]s$\\": \\"ts-jest\\",
+    \\"foo\\\\\\\\.ts\\": \\"ts-jest\\",
+    \\"bar\\\\\\\\.ts\\": \\"ts-jest\\"
+  },
+  \\"preset\\": \\"ts-jest\\"
+}
+"
+`)
     })
 
     it('should output help', async () => {

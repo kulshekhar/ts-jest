@@ -113,7 +113,7 @@ export class TsJestTransformer implements Transformer {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  protected _createConfigSet(config: ProjectConfigTsJest): ConfigSet {
+  protected _createConfigSet(config: ProjectConfigTsJest | undefined): ConfigSet {
     return new ConfigSet(config)
   }
 
