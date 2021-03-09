@@ -30,6 +30,11 @@ beforeEach(() => {
   jest.clearAllMocks()
 })
 
+test('should create a default fallback jest config when jest config is undefined', () => {
+  // @ts-expect-error testing purpose
+  expect(new ConfigSet(undefined)._jestCfg).toBeDefined()
+})
+
 describe('parsedTsConfig', () => {
   const get = (tsJest?: TsJestGlobalOptions) => createConfigSet({ tsJestConfig: tsJest }).parsedTsConfig
 
