@@ -4,8 +4,8 @@
   "private": true,
   "devDependencies": {
     "@types/jest": "26.0.20",
-    "@types/node": "12.20.3",
-    "jest": "27.0.0-next.3",
+    "@types/node": "12.20.4",
+    "jest": "27.0.0-next.4",
     "typescript": "3.7.5"
   },
   "wantedDependencies": {
