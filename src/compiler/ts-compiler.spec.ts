@@ -1,14 +1,10 @@
 import { readFileSync } from 'fs'
-import { join } from 'path'
+import { join, normalize } from 'path'
 
-import { LogLevels } from 'bs-logger'
-
-import { createConfigSet, makeCompiler } from '../__helpers__/fakers'
+import { makeCompiler } from '../__helpers__/fakers'
 import { logTargetMock } from '../__helpers__/mocks'
 import { mockFolder } from '../__helpers__/path'
 import ProcessedSource from '../__helpers__/processed-source'
-
-import { TsCompiler } from './ts-compiler'
 
 const logTarget = logTargetMock()
 
@@ -22,7 +18,7 @@ describe('TsCompiler', () => {
       const compiler = makeCompiler({
         tsJestConfig: { ...baseTsJestConfig, useESM: true },
       })
-      const fileName = join(mockFolder, 'thing.spec.ts')
+      const fileName = join(mockFolder, 'thing.ts')
 
       const compiledOutput = compiler.getCompiledOutput(readFileSync(fileName, 'utf-8'), fileName, true)
 
@@ -206,7 +202,7 @@ const t: string = f(5)
   })
 
   describe('isolatedModule false', () => {
-    const baseTsJestConfig = { tsconfig: require.resolve('../../tsconfig.spec.json') }
+    const baseTsJestConfig = { tsconfig: join(process.cwd(), 'tsconfig.spec.json') }
     const jestCacheFS = new Map<string, string>()
 
     beforeEach(() => {
@@ -214,20 +210,18 @@ const t: string = f(5)
     })
 
     test('should compile codes with useESM true', () => {
-      const compiler = new TsCompiler(
-        createConfigSet({
-          tsJestConfig: {
-            ...baseTsJestConfig,
-            useESM: true,
-            tsconfig: {
-              esModuleInterop: false,
-              allowSyntheticDefaultImports: false,
-            },
+      const compiler = makeCompiler({
+        tsJestConfig: {
+          ...baseTsJestConfig,
+          tsconfig: {
+            module: 'ESNext',
+            esModuleInterop: false,
+            allowSyntheticDefaultImports: false,
           },
-        }),
-        new Map(),
-      )
-      const fileName = join(mockFolder, 'thing.spec.ts')
+          useESM: true,
+        },
+      })
+      const fileName = join(mockFolder, 'thing.ts')
 
       const compiledOutput = compiler.getCompiledOutput(readFileSync(fileName, 'utf-8'), fileName, true)
 
@@ -375,15 +369,14 @@ const t: string = f(5)
     })
 
     describe('getResolvedModules', () => {
-      const fileName = join(__dirname, '..', '__mocks__', 'thing.spec.ts')
-      const fileContent = 'const foo = 1'
+      const fileName = join(mockFolder, 'thing.ts')
 
       test('should return undefined when file name is not known to compiler', () => {
         const compiler = makeCompiler({
           tsJestConfig: baseTsJestConfig,
         })
 
-        expect(compiler.getResolvedModules(fileContent, fileName, new Map())).toEqual([])
+        expect(compiler.getResolvedModules('const foo = 1', fileName, new Map())).toEqual([])
       })
 
       test('should return undefined when it is isolatedModules true', () => {
@@ -394,12 +387,12 @@ const t: string = f(5)
           },
         })
 
-        expect(compiler.getResolvedModules(fileContent, fileName, new Map())).toEqual([])
+        expect(compiler.getResolvedModules('const foo = 1', fileName, new Map())).toEqual([])
       })
 
       test('should return undefined when file has no resolved modules', () => {
         const jestCacheFS = new Map<string, string>()
-        jestCacheFS.set(fileName, fileContent)
+        jestCacheFS.set(fileName, 'const foo = 1')
         const compiler = makeCompiler(
           {
             tsJestConfig: baseTsJestConfig,
@@ -407,13 +400,15 @@ const t: string = f(5)
           jestCacheFS,
         )
 
-        expect(compiler.getResolvedModules(fileContent, fileName, new Map())).toEqual([])
+        expect(compiler.getResolvedModules('const foo = 1', fileName, new Map())).toEqual([])
       })
 
       test('should return resolved modules when file has resolved modules', () => {
         const jestCacheFS = new Map<string, string>()
+        const importedModule1 = join(mockFolder, 'thing1.ts')
+        const importedModule2 = join(mockFolder, 'thing2.ts')
         const fileContentWithModules = readFileSync(fileName, 'utf-8')
-        jestCacheFS.set(fileName, fileContentWithModules)
+        jestCacheFS.set(importedModule1, readFileSync(importedModule1, 'utf-8'))
         const compiler = makeCompiler(
           {
             tsJestConfig: baseTsJestConfig,
@@ -421,12 +416,16 @@ const t: string = f(5)
           jestCacheFS,
         )
 
-        expect(compiler.getResolvedModules(fileContentWithModules, fileName, new Map())).not.toEqual([])
+        expect(
+          compiler
+            .getResolvedModules(fileContentWithModules, fileName, new Map())
+            .map((resolvedFileName) => normalize(resolvedFileName)),
+        ).toEqual([importedModule1, importedModule2])
       })
     })
 
     describe('diagnostics', () => {
-      const importedFileName = require.resolve('../__mocks__/thing.ts')
+      const importedFileName = join(mockFolder, 'thing.ts')
       const importedFileContent = readFileSync(importedFileName, 'utf-8')
 
       it(`shouldn't report diagnostics when file name doesn't match diagnostic file pattern`, () => {
@@ -442,21 +441,6 @@ const t: string = f(5)
         )
 
         expect(() => compiler.getCompiledOutput(importedFileContent, importedFileName, false)).not.toThrowError()
-      })
-
-      it(`shouldn't report diagnostic when processing file isn't used by any test files`, () => {
-        jestCacheFS.set('foo.ts', importedFileContent)
-        const compiler = makeCompiler(
-          {
-            tsJestConfig: baseTsJestConfig,
-          },
-          jestCacheFS,
-        )
-        logTarget.clear()
-
-        compiler.getCompiledOutput(importedFileContent, 'foo.ts', false)
-
-        expect(logTarget.filteredLines(LogLevels.debug, Infinity)).toMatchSnapshot()
       })
 
       it('should throw error when cannot compile', () => {
@@ -484,7 +468,7 @@ const t: string = f(5)
           },
           jestCacheFS,
         )
-        const fileName = join(process.cwd(), 'src', '__mocks__', 'thing.spec.ts')
+        const fileName = join(mockFolder, 'thing.ts')
         const oldSource = `
           foo.split('-');
         `
@@ -505,7 +489,7 @@ const t: string = f(5)
     test('should pass Program instance into custom transformers', () => {
       // eslint-disable-next-line no-console
       console.log = jest.fn()
-      const fileName = join(mockFolder, 'thing.spec.ts')
+      const fileName = join(mockFolder, 'thing.ts')
       const compiler = makeCompiler(
         {
           tsJestConfig: {

@@ -18,6 +18,7 @@ import type {
   CustomTransformers,
   ModuleResolutionHost,
   ModuleResolutionCache,
+  ResolvedModuleWithFailedLookupLocations,
 } from 'typescript'
 
 import { ConfigSet, TS_JEST_OUT_DIR } from '../config/config-set'
@@ -181,19 +182,7 @@ export class TsCompiler implements TsCompilerInstance {
       getDefaultLibFileName: () => this._ts.getDefaultLibFilePath(this._compilerOptions),
       getCustomTransformers: () => this._makeTransformers(this.configSet.resolvedTransformers),
       resolveModuleNames: (moduleNames: string[], containingFile: string): Array<ResolvedModuleFull | undefined> =>
-        moduleNames.map((moduleName) => {
-          const { resolvedModule } = this._ts.resolveModuleName(
-            moduleName,
-            containingFile,
-            this._compilerOptions,
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            this._moduleResolutionHost!,
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            this._moduleResolutionCache!,
-          )
-
-          return resolvedModule
-        }),
+        moduleNames.map((moduleName) => this._resolveModuleName(moduleName, containingFile).resolvedModule),
     }
 
     this._logger.debug('created language service')
@@ -208,23 +197,66 @@ export class TsCompiler implements TsCompilerInstance {
       this._runtimeCacheFS = runtimeCacheFS
     }
 
-    return this._ts
-      .preProcessFile(fileContent, true, true)
-      .importedFiles.map((importedFile) => {
-        const { resolvedModule } = this._ts.resolveModuleName(
-          importedFile.fileName,
-          fileName,
-          this._compilerOptions,
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          this._moduleResolutionHost!,
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          this._moduleResolutionCache!,
-        )
+    this._logger.debug({ fileName }, 'getResolvedModules(): resolve direct imported module paths')
 
+    const importedModulePaths: string[] = Array.from(new Set(this._getImportedModulePaths(fileContent, fileName)))
+
+    this._logger.debug(
+      { fileName },
+      'getResolvedModules(): resolve nested imported module paths from directed imported module paths',
+    )
+
+    importedModulePaths.forEach((importedModulePath) => {
+      const normalizedImportedModulePath = normalize(importedModulePath)
+      let resolvedFileContent = this._runtimeCacheFS.get(normalizedImportedModulePath)
+      if (!resolvedFileContent) {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        return resolvedModule?.resolvedFileName ?? ''
+        resolvedFileContent = this._moduleResolutionHost!.readFile(importedModulePath)!
+        this._runtimeCacheFS.set(normalizedImportedModulePath, resolvedFileContent)
+      }
+      importedModulePaths.push(
+        ...this._getImportedModulePaths(resolvedFileContent, importedModulePath).filter(
+          (modulePath) => !importedModulePaths.includes(modulePath),
+        ),
+      )
+    })
+
+    return importedModulePaths
+  }
+
+  /**
+   * @internal
+   */
+  private _getImportedModulePaths(resolvedFileContent: string, containingFile: string): string[] {
+    return this._ts
+      .preProcessFile(resolvedFileContent, true, true)
+      .importedFiles.map((importedFile) => {
+        const { resolvedModule } = this._resolveModuleName(importedFile.fileName, containingFile)
+        /* istanbul ignore next already covered  */
+        const resolvedFileName = resolvedModule?.resolvedFileName
+
+        /* istanbul ignore next already covered  */
+        return resolvedFileName && !resolvedModule?.isExternalLibraryImport ? resolvedFileName : ''
       })
-      .filter((resolvedFileName) => !!resolvedFileName)
+      .filter((resolveFileName) => !!resolveFileName)
+  }
+
+  /**
+   * @internal
+   */
+  private _resolveModuleName(
+    moduleNameToResolve: string,
+    containingFile: string,
+  ): ResolvedModuleWithFailedLookupLocations {
+    return this._ts.resolveModuleName(
+      moduleNameToResolve,
+      containingFile,
+      this._compilerOptions,
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      this._moduleResolutionHost!,
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      this._moduleResolutionCache!,
+    )
   }
 
   getCompiledOutput(fileContent: string, fileName: string, supportsStaticESM: boolean): string {
