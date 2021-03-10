@@ -3,7 +3,7 @@ import { resolve } from 'path'
 import type { Config } from '@jest/types'
 import type { Logger } from 'bs-logger'
 
-import { TsJestCompiler } from '../compiler/ts-jest-compiler'
+import { TsCompiler } from '../compiler/ts-compiler'
 import { ConfigSet } from '../config/config-set'
 import type { StringMap, TsJestGlobalOptions } from '../types'
 import type { ImportReasons } from '../utils/messages'
@@ -85,7 +85,7 @@ export function makeCompiler(
     parentConfig?: TsJestGlobalOptions
   } = {},
   jestCacheFS: StringMap = new Map<string, string>(),
-): TsJestCompiler {
+): TsCompiler {
   tsJestConfig = { ...tsJestConfig }
   tsJestConfig.diagnostics = {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -100,5 +100,5 @@ export function makeCompiler(
   }
   const cs = createConfigSet({ jestConfig, tsJestConfig, parentConfig, resolve: null })
 
-  return new TsJestCompiler(cs, jestCacheFS)
+  return new TsCompiler(cs, jestCacheFS)
 }

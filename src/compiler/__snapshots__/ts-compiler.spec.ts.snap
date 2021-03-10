@@ -19,19 +19,6 @@ exports[`TsCompiler isolatedModule false diagnostics should throw error when can
 This is usually the result of a faulty configuration or import. Make sure there is a \`.js\`, \`.json\` or another executable extension available alongside \`test-cannot-compile.d.ts\`."
 `;
 
-exports[`TsCompiler isolatedModule false diagnostics shouldn't report diagnostic when processing file isn't used by any test files 1`] = `
-Array [
-  "[level:20] getCompiledOutput(): compiling using language service
-",
-  "[level:20] updateMemoryCache: update memory cache for language service
-",
-  "[level:20] visitSourceFileNode(): hoisting
-",
-  "[level:20] getCompiledOutput(): computing diagnostics using language service
-",
-]
-`;
-
 exports[`TsCompiler isolatedModule false jsx option should compile tsx file for jsx preserve 1`] = `
 "\\"use strict\\";
 const App = () => {
@@ -49,7 +36,12 @@ const App = () => {
 `;
 
 exports[`TsCompiler isolatedModule false should compile codes with useESM true 1`] = `
-"export const thing = { a: 1, b: 2 };
+"import { getFoo } from './thing1';
+import { getFooBar } from './thing1';
+import { getBar } from './thing2';
+getFoo('foo');
+getBar('bar');
+getFooBar('foobar');
 //# "
 `;
 
@@ -81,6 +73,11 @@ exports.default = 42;
 `;
 
 exports[`TsCompiler isolatedModule true should transpile code with useESM true 1`] = `
-"export const thing = { a: 1, b: 2 };
+"import { getFoo } from './thing1';
+import { getFooBar } from './thing1';
+import { getBar } from './thing2';
+getFoo('foo');
+getBar('bar');
+getFooBar('foobar');
 //# "
 `;
