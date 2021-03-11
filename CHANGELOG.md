@@ -1,3 +1,21 @@
+# [27.0.0-next.8](https://github.com/kulshekhar/ts-jest/compare/v27.0.0-next.7...v27.0.0-next.8) (2021-03-11)
+
+
+### Bug Fixes
+
+* **compiler:** resolve nested imported modules for each processing file ([#2436](https://github.com/kulshekhar/ts-jest/issues/2436)) ([3cb9019](https://github.com/kulshekhar/ts-jest/commit/3cb9019289bb64deecffaf52e840faf6a4656092)), closes [#1390](https://github.com/kulshekhar/ts-jest/issues/1390) [#1747](https://github.com/kulshekhar/ts-jest/issues/1747)
+* **config:** create fallback jest config when jest config is `undefined` ([#2433](https://github.com/kulshekhar/ts-jest/issues/2433)) ([c6d6e4c](https://github.com/kulshekhar/ts-jest/commit/c6d6e4cd534e1c368fcb7141784ee43584525ca4)), closes [#2085](https://github.com/kulshekhar/ts-jest/issues/2085)
+* remove `@types/jest` from direct dep ([#2409](https://github.com/kulshekhar/ts-jest/issues/2409)) ([8913120](https://github.com/kulshekhar/ts-jest/commit/89131203c358c8f9e89655800e500a9e88a17334)), closes [#2406](https://github.com/kulshekhar/ts-jest/issues/2406) [#2411](https://github.com/kulshekhar/ts-jest/issues/2411)
+* **compiler:** return original file content and show warning on emit skip ([#2410](https://github.com/kulshekhar/ts-jest/issues/2410)) ([c2b2164](https://github.com/kulshekhar/ts-jest/commit/c2b2164ddd1e606fc2490326244a6efc63f6c4a0)), closes [#2407](https://github.com/kulshekhar/ts-jest/issues/2407)
+* **compiler:** type check correctly in watch mode when a file content itself has changed ([#2405](https://github.com/kulshekhar/ts-jest/issues/2405)) ([064bf3a](https://github.com/kulshekhar/ts-jest/commit/064bf3a73e9a304aa9366d27db8973b68be23ffd)), closes [#2118](https://github.com/kulshekhar/ts-jest/issues/2118)
+
+
+### Features
+
+* adopt jest **27.0.0-next.4** ([#2435](https://github.com/kulshekhar/ts-jest/issues/2435)) ([1d411f2](https://github.com/kulshekhar/ts-jest/commit/1d411f285e4f7eff7982c3917b6b91b5af617e8a))
+
+
+
 ## [26.5.3](https://github.com/kulshekhar/ts-jest/compare/v26.5.2...v26.5.3) (2021-03-03)
 
 
