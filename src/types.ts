@@ -23,7 +23,9 @@ export type TTypeScript = typeof _ts
 /**
  * @internal
  */
-export type TBabelJest = Required<Transformer>
+export type TBabelJest = {
+  default: Required<Transformer>
+}
 /**
  * @internal
  */
@@ -204,9 +206,6 @@ export interface InitialOptionsTsJest extends Config.InitialOptions {
   globals?: GlobalConfigTsJest
 }
 
-/**
- * @internal
- */
 export type StringMap = Map<string, string>
 
 export interface DepGraphInfo {

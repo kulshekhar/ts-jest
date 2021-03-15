@@ -3,9 +3,6 @@ import type { CompilerInstance, StringMap } from '../types'
 
 import { TsCompiler } from './ts-compiler'
 
-/**
- * @internal
- */
 export class TsJestCompiler implements CompilerInstance {
   private readonly _compilerInstance: CompilerInstance
 
