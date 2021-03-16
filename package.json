@@ -3,6 +3,15 @@
   "version": "27.0.0-next.8",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "exports": {
+    ".": "./dist/index.js",
+    "./presets": "./presets/index.js",
+    "./utils": "./utils/index.js",
+    "./config": "./dist/config/index.js",
+    "./transformers/path-mapping": "./dist/transformers/path-mapping.js",
+    "./ts-jest-transformer": "./dist/ts-jest-transformer.js",
+    "./package.json": "./package.json"
+  },
   "bin": {
     "ts-jest": "cli.js"
   },

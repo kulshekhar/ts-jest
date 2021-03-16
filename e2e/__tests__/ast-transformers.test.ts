@@ -30,7 +30,7 @@ describe('AST transformers', () => {
       },
       astTransformers: {
         before: [
-          'ts-jest/dist/transformers/path-mapping'
+          'ts-jest/transformers/path-mapping'
         ],
       },
     }
