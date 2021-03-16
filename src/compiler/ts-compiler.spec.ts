@@ -1,10 +1,12 @@
 import { readFileSync } from 'fs'
 import { join, normalize } from 'path'
 
-import { makeCompiler } from '../__helpers__/fakers'
+import { createConfigSet, makeCompiler } from '../__helpers__/fakers'
 import { logTargetMock } from '../__helpers__/mocks'
 import { mockFolder } from '../__helpers__/path'
 import ProcessedSource from '../__helpers__/processed-source'
+
+import { TsCompiler } from './ts-compiler'
 
 const logTarget = logTargetMock()
 
@@ -236,6 +238,20 @@ const t: string = f(5)
       expect(compiler._initialCompilerOptions.allowSyntheticDefaultImports).not.toEqual(true)
     })
 
+    test('should compile ts file which has an existing js file', () => {
+      const configSet = createConfigSet({
+        tsJestConfig: baseTsJestConfig,
+      })
+      const fileName = join(mockFolder, 'thing.ts')
+      const fileContent = readFileSync(fileName, 'utf-8')
+      configSet.parsedTsConfig.fileNames.push(...[fileName.replace('.ts', '.js'), fileName])
+      const compiler = new TsCompiler(configSet, new Map())
+
+      const compiledOutput = compiler.getCompiledOutput(fileContent, fileName, false)
+
+      expect(new ProcessedSource(compiledOutput, fileName).outputCodeWithoutMaps).toMatchSnapshot()
+    })
+
     describe('allowJs option', () => {
       const fileName = 'test-allow-js.js'
       const source = 'export default 42'
@@ -407,6 +423,7 @@ const t: string = f(5)
         const jestCacheFS = new Map<string, string>()
         const importedModule1 = join(mockFolder, 'thing1.ts')
         const importedModule2 = join(mockFolder, 'thing2.ts')
+        const importedModule3 = join(mockFolder, 'babel-foo.config.js')
         const fileContentWithModules = readFileSync(fileName, 'utf-8')
         jestCacheFS.set(importedModule1, readFileSync(importedModule1, 'utf-8'))
         const compiler = makeCompiler(
@@ -420,7 +437,7 @@ const t: string = f(5)
           compiler
             .getResolvedModules(fileContentWithModules, fileName, new Map())
             .map((resolvedFileName) => normalize(resolvedFileName)),
-        ).toEqual([importedModule1, importedModule2])
+        ).toEqual([importedModule3, importedModule1, importedModule2])
       })
     })
 

@@ -36,12 +36,33 @@ const App = () => {
 `;
 
 exports[`TsCompiler isolatedModule false should compile codes with useESM true 1`] = `
-"import { getFoo } from './thing1';
+"// @ts-expect-error testing purpose
+import babelFooCfg from './babel-foo.config';
+import { getFoo } from './thing1';
 import { getFooBar } from './thing1';
 import { getBar } from './thing2';
 getFoo('foo');
 getBar('bar');
 getFooBar('foobar');
+getFoo(JSON.stringify(babelFooCfg.presets));
+//# "
+`;
+
+exports[`TsCompiler isolatedModule false should compile ts file which has an existing js file 1`] = `
+"\\"use strict\\";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { \\"default\\": mod };
+};
+Object.defineProperty(exports, \\"__esModule\\", { value: true });
+// @ts-expect-error testing purpose
+const babel_foo_config_1 = __importDefault(require(\\"./babel-foo.config\\"));
+const thing1_1 = require(\\"./thing1\\");
+const thing1_2 = require(\\"./thing1\\");
+const thing2_1 = require(\\"./thing2\\");
+thing1_1.getFoo('foo');
+thing2_1.getBar('bar');
+thing1_2.getFooBar('foobar');
+thing1_1.getFoo(JSON.stringify(babel_foo_config_1.default.presets));
 //# "
 `;
 
@@ -73,11 +94,14 @@ exports.default = 42;
 `;
 
 exports[`TsCompiler isolatedModule true should transpile code with useESM true 1`] = `
-"import { getFoo } from './thing1';
+"// @ts-expect-error testing purpose
+import babelFooCfg from './babel-foo.config';
+import { getFoo } from './thing1';
 import { getFooBar } from './thing1';
 import { getBar } from './thing2';
 getFoo('foo');
 getBar('bar');
 getFooBar('foobar');
+getFoo(JSON.stringify(babelFooCfg.presets));
 //# "
 `;
