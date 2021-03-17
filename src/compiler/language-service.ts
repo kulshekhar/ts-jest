@@ -1,12 +1,12 @@
 import { LogContexts, Logger, LogLevels } from 'bs-logger'
 import { existsSync, readFileSync, writeFile } from 'fs'
-import { basename, normalize, join } from 'path'
+import { basename, normalize, join, extname } from 'path'
 import memoize = require('lodash/memoize')
 import mkdirp = require('mkdirp')
 import type * as _ts from 'typescript'
 
-import { ConfigSet, TS_JEST_OUT_DIR } from '../config/config-set'
-import { LINE_FEED } from '../constants'
+import type { ConfigSet } from '../config/config-set'
+import { LINE_FEED, TS_TSX_REGEX } from '../constants'
 import type { CompilerInstance, SourceOutput } from '../types'
 import { Errors, interpolate } from '../utils/messages'
 
@@ -75,10 +75,7 @@ export const initializeLanguageServiceInstance = (configs: ConfigSet, logger: Lo
   }
   // Initialize memory cache for typescript compiler
   configs.parsedTsConfig.fileNames
-    .filter(
-      (fileName: string) =>
-        !configs.isTestFile(fileName) && !fileName.includes(configs.parsedTsConfig.options.outDir ?? TS_JEST_OUT_DIR),
-    )
+    .filter((fileName: string) => TS_TSX_REGEX.test(extname(fileName)) && !configs.isTestFile(fileName))
     .forEach((fileName: string) => {
       memoryCache.files.set(fileName, {
         version: 0,
