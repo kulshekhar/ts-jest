@@ -3,7 +3,7 @@
   "private": true,
   "devDependencies": {
     "@types/jest": "^26.0.20",
-    "jest": "^27.0.0-next.4",
+    "jest": "^27.0.0-next.5",
     "typescript": "^4.2.3"
   },
   "wantedDependencies": {

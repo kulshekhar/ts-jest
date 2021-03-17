@@ -1,7 +1,7 @@
 import { existsSync, readFileSync, statSync, writeFileSync } from 'fs'
 import { join, resolve } from 'path'
 
-import type { TransformedSource, Transformer } from '@jest/transform'
+import type { SyncTransformer, TransformedSource } from '@jest/transform'
 import type { Config } from '@jest/types'
 import type { Logger } from 'bs-logger'
 import mkdirp from 'mkdirp'
@@ -9,7 +9,7 @@ import mkdirp from 'mkdirp'
 import { TsJestCompiler } from './compiler/ts-jest-compiler'
 import { ConfigSet } from './config/config-set'
 import { DECLARATION_TYPE_EXT, JS_JSX_REGEX, TS_TSX_REGEX } from './constants'
-import type { DepGraphInfo, ProjectConfigTsJest, TransformOptionsTsJest } from './types'
+import type { CompilerInstance, DepGraphInfo, ProjectConfigTsJest, TransformOptionsTsJest } from './types'
 import { importer } from './utils/importer'
 import { parse, stringify } from './utils/json'
 import { JsonableValue } from './utils/jsonable-value'
@@ -22,7 +22,7 @@ interface CachedConfigSet {
   configSet: ConfigSet
   jestConfig: JsonableValue<ProjectConfigTsJest>
   transformerCfgStr: string
-  compiler: TsJestCompiler
+  compiler: CompilerInstance
   depGraphs: Map<string, DepGraphInfo>
   tsResolvedModulesCachePath: string | undefined
 }
@@ -37,7 +37,7 @@ interface TsJestHooksMap {
  */
 export const CACHE_KEY_EL_SEPARATOR = '\x00'
 
-export class TsJestTransformer implements Transformer {
+export class TsJestTransformer implements SyncTransformer {
   /**
    * cache ConfigSet between test runs
    *
@@ -45,7 +45,7 @@ export class TsJestTransformer implements Transformer {
    */
   private static readonly _cachedConfigSets: CachedConfigSet[] = []
   private readonly _logger: Logger
-  protected _compiler!: TsJestCompiler
+  protected _compiler!: CompilerInstance
   private _tsResolvedModulesCachePath: string | undefined
   private _transformCfgStr!: string
   private _depGraphs: Map<string, DepGraphInfo> = new Map<string, DepGraphInfo>()
@@ -53,6 +53,12 @@ export class TsJestTransformer implements Transformer {
   constructor() {
     this._logger = rootLogger.child({ namespace: 'ts-jest-transformer' })
     VersionCheckers.jest.warn()
+    /**
+     * For some unknown reasons, `this` is undefined in `getCacheKey` and `process`
+     * when running Jest in ESM mode
+     */
+    this.getCacheKey = this.getCacheKey.bind(this)
+    this.process = this.process.bind(this)
 
     this._logger.debug('created new transformer')
   }
