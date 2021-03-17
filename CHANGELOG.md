@@ -1,3 +1,12 @@
+## [26.5.4](https://github.com/kulshekhar/ts-jest/compare/v26.5.3...v26.5.4) (2021-03-17)
+
+
+### Bug Fixes
+
+* **compiler:** initialize compiler with `.ts`/`.tsx`/`.d.ts` files only ([#2457](https://github.com/kulshekhar/ts-jest/issues/2457)) ([1dc731a](https://github.com/kulshekhar/ts-jest/commit/1dc731a5faf7cda59db1cc642eb99fae973b1246)), closes [#2445](https://github.com/kulshekhar/ts-jest/issues/2445)
+
+
+
 # [27.0.0-next.8](https://github.com/kulshekhar/ts-jest/compare/v27.0.0-next.7...v27.0.0-next.8) (2021-03-11)
 
 
