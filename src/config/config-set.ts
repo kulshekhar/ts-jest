@@ -253,7 +253,7 @@ export class ConfigSet {
 
       this.babelJestTransformer = importer
         .babelJest(ImportReasons.BabelJest)
-        .createTransformer(this.babelConfig) as BabelJestTransformer
+        .default.createTransformer(this.babelConfig) as BabelJestTransformer
 
       this.logger.debug('created babel-jest transformer')
     }

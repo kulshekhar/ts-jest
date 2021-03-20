@@ -21,8 +21,8 @@ import type {
   ResolvedModuleWithFailedLookupLocations,
 } from 'typescript'
 
-import { ConfigSet, TS_JEST_OUT_DIR } from '../config/config-set'
-import { LINE_FEED } from '../constants'
+import type { ConfigSet } from '../config/config-set'
+import { LINE_FEED, TS_TSX_REGEX } from '../constants'
 import type { StringMap, TsCompilerInstance, TsJestAstTransformer, TTypeScript } from '../types'
 import { rootLogger } from '../utils/logger'
 import { Errors, interpolate } from '../utils/messages'
@@ -116,12 +116,7 @@ export class TsCompiler implements TsCompilerInstance {
   private _createLanguageService(): void {
     // Initialize memory cache for typescript compiler
     this._parsedTsConfig.fileNames
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      .filter(
-        (fileName) =>
-          !this.configSet.isTestFile(fileName) &&
-          !fileName.includes(this._parsedTsConfig.options.outDir ?? TS_JEST_OUT_DIR),
-      )
+      .filter((fileName) => TS_TSX_REGEX.test(fileName) && !this.configSet.isTestFile(fileName))
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       .forEach((fileName) => this._fileVersionCache!.set(fileName, 0))
     /* istanbul ignore next */

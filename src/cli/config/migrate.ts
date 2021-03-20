@@ -3,7 +3,7 @@ import { basename, resolve } from 'path'
 
 import type { Config } from '@jest/types'
 import { createLogger } from 'bs-logger'
-import stableStringify = require('fast-json-stable-stringify')
+import stableStringify from 'fast-json-stable-stringify'
 import { stringify as stringifyJson5 } from 'json5'
 import type { Arguments } from 'yargs'
 

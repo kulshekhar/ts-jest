@@ -446,9 +446,7 @@ Array [
     }
 
     class MyTransformer extends TsJestTransformer {
-      // eslint-disable-next-line class-methods-use-this
-      protected _createCompiler(configSet: ConfigSet, cacheFS: Map<string, string>): void {
-        // @ts-expect-error testing purpose
+      protected _createCompiler(configSet: ConfigSet, cacheFS: StringMap): void {
         this._compiler = new MyTsCompiler(configSet, cacheFS)
       }
 
