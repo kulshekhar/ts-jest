@@ -3,6 +3,13 @@
   "version": "27.0.0-next.9",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "exports": {
+    ".": "./dist/index.js",
+    "./dist/*": "./dist/*.js",
+    "./presets": "./jest-preset.js",
+    "./utils": "./utils/index.js",
+    "./package.json": "./package.json"
+  },
   "bin": {
     "ts-jest": "cli.js"
   },
