@@ -8,8 +8,8 @@
     "test": "jest --no-cache"
   },
   "devDependencies": {
-    "@types/jest": "^26.0.20",
-    "jest": "^27.0.0-next.5",
+    "@types/jest": "^26.0.22",
+    "jest": "^27.0.0-next.6",
     "typescript": "^4.2.3"
   },
   "wantedDependencies": {
