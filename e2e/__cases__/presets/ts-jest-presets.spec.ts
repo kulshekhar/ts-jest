@@ -1,13 +1,15 @@
 // preset and utils should work all the time
 import * as presets from 'ts-jest/presets'
+import * as defaultPreset from 'ts-jest/jest-preset';
 import { JS_EXT_TO_TREAT_AS_ESM, TS_EXT_TO_TREAT_AS_ESM } from 'ts-jest/dist/constants'
 
 test('presets', () => {
-  expect(presets.defaults).toEqual({
+  expect(defaultPreset).toEqual({
     transform: {
       '^.+\\.tsx?$': 'ts-jest',
     },
   })
+
   expect(presets.defaultsESM).toEqual({
     extensionsToTreatAsEsm: [...TS_EXT_TO_TREAT_AS_ESM],
     transform: {
