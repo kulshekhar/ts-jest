@@ -1,6 +1,6 @@
 <h1 align="center">ts-jest</h1>
 
-<p align="center">A TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript.</p>
+<p align="center">A Jest transformer with source map support that lets you use Jest to test projects written in TypeScript.</p>
 
 <p align="center">
   <a href="https://www.npmjs.com/package/ts-jest"><img src="https://img.shields.io/npm/v/ts-jest/latest.svg?style=flat-square" alt="NPM version" /> </a>
@@ -25,7 +25,7 @@ It supports all features of TypeScript including type-checking. [Read more about
 
 [<img src="./website/static/img/discord.svg" align="left" height="24"> Ask for some help in the `Jest` Discord community](https://discord.gg/j6FKKQQrW9) or [`ts-jest` GitHub Discussion](https://github.com/kulshekhar/ts-jest/discussions)
 
-[<img src="./website/static/img/troubleshooting.png" align="left" height="24"> Before reporting any issue, be sure to check the troubleshooting page](TROUBLESHOOTING.md)
+[<img src="./website/static/img/troubleshooting.png" align="left" height="24"> Before reporting any issues, be sure to check the troubleshooting page](TROUBLESHOOTING.md)
 
 [<img src="./website/static/img/pull-request.png" align="left" height="24"> We're looking for collaborators! Want to help improve `ts-jest`?](https://github.com/kulshekhar/ts-jest/issues/223)
 
@@ -46,7 +46,7 @@ These instructions will get you setup to use `ts-jest` in your project. For more
 
 - [TypeScript](https://www.typescriptlang.org/) - JavaScript that scales
 - [Jest](https://jestjs.io/) - Delightful JavaScript Testing
-- [`ts-jest`](https://kulshekhar.github.io/ts-jest) - Jest processor for TypeScript _(yes, `ts-jest` uses itself for its tests)_
+- [`ts-jest`](https://kulshekhar.github.io/ts-jest) - Jest [transformer](https://jestjs.io/docs/next/code-transformation#writing-custom-transformers) for TypeScript _(yes, `ts-jest` uses itself for its tests)_
 
 ## Contributing
 
