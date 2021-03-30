@@ -213,9 +213,15 @@ export interface DepGraphInfo {
   resolvedModuleNames: string[]
 }
 
+export interface TsJestCompileOptions {
+  depGraphs: Map<string, DepGraphInfo>
+  watchMode: boolean
+  supportsStaticESM: boolean
+}
+
 export interface CompilerInstance {
   getResolvedModules(fileContent: string, fileName: string, runtimeCacheFS: StringMap): string[]
-  getCompiledOutput(fileContent: string, fileName: string, supportsStaticESM: boolean): string
+  getCompiledOutput(fileContent: string, fileName: string, options: TsJestCompileOptions): string
 }
 export interface TsCompilerInstance extends CompilerInstance {
   configSet: ConfigSet

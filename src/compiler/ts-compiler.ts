@@ -19,11 +19,19 @@ import type {
   ModuleResolutionHost,
   ModuleResolutionCache,
   ResolvedModuleWithFailedLookupLocations,
+  Diagnostic,
 } from 'typescript'
 
 import type { ConfigSet } from '../config/config-set'
 import { LINE_FEED, TS_TSX_REGEX } from '../constants'
-import type { StringMap, TsCompilerInstance, TsJestAstTransformer, TTypeScript } from '../types'
+import type {
+  DepGraphInfo,
+  StringMap,
+  TsCompilerInstance,
+  TsJestAstTransformer,
+  TsJestCompileOptions,
+  TTypeScript,
+} from '../types'
 import { rootLogger } from '../utils/logger'
 import { Errors, interpolate } from '../utils/messages'
 
@@ -110,6 +118,114 @@ export class TsCompiler implements TsCompilerInstance {
     }
   }
 
+  getResolvedModules(fileContent: string, fileName: string, runtimeCacheFS: StringMap): string[] {
+    // In watch mode, it is possible that the initial cacheFS becomes empty
+    if (!this.runtimeCacheFS.size) {
+      this._runtimeCacheFS = runtimeCacheFS
+    }
+
+    this._logger.debug({ fileName }, 'getResolvedModules(): resolve direct imported module paths')
+
+    const importedModulePaths: string[] = Array.from(new Set(this._getImportedModulePaths(fileContent, fileName)))
+
+    this._logger.debug(
+      { fileName },
+      'getResolvedModules(): resolve nested imported module paths from directed imported module paths',
+    )
+
+    importedModulePaths.forEach((importedModulePath) => {
+      const resolvedFileContent = this._getFileContentFromCache(importedModulePath)
+      importedModulePaths.push(
+        ...this._getImportedModulePaths(resolvedFileContent, importedModulePath).filter(
+          (modulePath) => !importedModulePaths.includes(modulePath),
+        ),
+      )
+    })
+
+    return importedModulePaths
+  }
+
+  getCompiledOutput(fileContent: string, fileName: string, options: TsJestCompileOptions): string {
+    let moduleKind = this._initialCompilerOptions.module
+    let esModuleInterop = this._initialCompilerOptions.esModuleInterop
+    let allowSyntheticDefaultImports = this._initialCompilerOptions.allowSyntheticDefaultImports
+    if (options.supportsStaticESM && this.configSet.useESM) {
+      moduleKind =
+        !moduleKind ||
+        (moduleKind &&
+          ![this._ts.ModuleKind.ES2015, this._ts.ModuleKind.ES2020, this._ts.ModuleKind.ESNext].includes(moduleKind))
+          ? this._ts.ModuleKind.ESNext
+          : moduleKind
+      // Make sure `esModuleInterop` and `allowSyntheticDefaultImports` true to support import CJS into ESM
+      esModuleInterop = true
+      allowSyntheticDefaultImports = true
+    } else {
+      moduleKind = this._ts.ModuleKind.CommonJS
+    }
+    this._compilerOptions = {
+      ...this._compilerOptions,
+      allowSyntheticDefaultImports,
+      esModuleInterop,
+      module: moduleKind,
+    }
+    if (this._languageService) {
+      this._logger.debug({ fileName }, 'getCompiledOutput(): compiling using language service')
+
+      // Must set memory cache before attempting to compile
+      this._updateMemoryCache(fileContent, fileName)
+      const output: EmitOutput = this._languageService.getEmitOutput(fileName)
+      this._doTypeChecking(fileName, options.depGraphs, options.watchMode)
+      if (output.emitSkipped) {
+        this._logger.warn(interpolate(Errors.CannotProcessFile, { file: fileName }))
+
+        return updateOutput(fileContent, fileName, '{}')
+      }
+      // Throw an error when requiring `.d.ts` files.
+      if (!output.outputFiles.length) {
+        throw new TypeError(
+          interpolate(Errors.UnableToRequireDefinitionFile, {
+            file: basename(fileName),
+          }),
+        )
+      }
+
+      return updateOutput(output.outputFiles[1].text, fileName, output.outputFiles[0].text)
+    } else {
+      this._logger.debug({ fileName }, 'getCompiledOutput(): compiling as isolated module')
+
+      const result: TranspileOutput = this._transpileOutput(fileContent, fileName)
+      if (result.diagnostics && this.configSet.shouldReportDiagnostics(fileName)) {
+        this.configSet.raiseDiagnostics(result.diagnostics, fileName, this._logger)
+      }
+
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      return updateOutput(result.outputText, fileName, result.sourceMapText!)
+    }
+  }
+
+  protected _transpileOutput(fileContent: string, fileName: string): TranspileOutput {
+    return this._ts.transpileModule(fileContent, {
+      fileName,
+      transformers: this._makeTransformers(this.configSet.resolvedTransformers),
+      compilerOptions: this._compilerOptions,
+      reportDiagnostics: this.configSet.shouldReportDiagnostics(fileName),
+    })
+  }
+
+  protected _makeTransformers(customTransformers: TsJestAstTransformer): CustomTransformers {
+    return {
+      before: customTransformers.before.map((beforeTransformer) =>
+        beforeTransformer.factory(this, beforeTransformer.options),
+      ) as Array<TransformerFactory<SourceFile> | CustomTransformerFactory>,
+      after: customTransformers.after.map((afterTransformer) =>
+        afterTransformer.factory(this, afterTransformer.options),
+      ) as Array<TransformerFactory<SourceFile> | CustomTransformerFactory>,
+      afterDeclarations: customTransformers.afterDeclarations.map((afterDeclarations) =>
+        afterDeclarations.factory(this, afterDeclarations.options),
+      ) as Array<TransformerFactory<SourceFile | Bundle>>,
+    }
+  }
+
   /**
    * @internal
    */
@@ -186,37 +302,19 @@ export class TsCompiler implements TsCompilerInstance {
     this.program = this._languageService.getProgram()
   }
 
-  getResolvedModules(fileContent: string, fileName: string, runtimeCacheFS: StringMap): string[] {
-    // In watch mode, it is possible that the initial cacheFS becomes empty
-    if (!this.runtimeCacheFS.size) {
-      this._runtimeCacheFS = runtimeCacheFS
+  /**
+   * @internal
+   */
+  private _getFileContentFromCache(filePath: string): string {
+    const normalizedFilePath = normalize(filePath)
+    let resolvedFileContent = this._runtimeCacheFS.get(normalizedFilePath)
+    if (!resolvedFileContent) {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      resolvedFileContent = this._moduleResolutionHost!.readFile(normalizedFilePath)!
+      this._runtimeCacheFS.set(normalizedFilePath, resolvedFileContent)
     }
 
-    this._logger.debug({ fileName }, 'getResolvedModules(): resolve direct imported module paths')
-
-    const importedModulePaths: string[] = Array.from(new Set(this._getImportedModulePaths(fileContent, fileName)))
-
-    this._logger.debug(
-      { fileName },
-      'getResolvedModules(): resolve nested imported module paths from directed imported module paths',
-    )
-
-    importedModulePaths.forEach((importedModulePath) => {
-      const normalizedImportedModulePath = normalize(importedModulePath)
-      let resolvedFileContent = this._runtimeCacheFS.get(normalizedImportedModulePath)
-      if (!resolvedFileContent) {
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        resolvedFileContent = this._moduleResolutionHost!.readFile(importedModulePath)!
-        this._runtimeCacheFS.set(normalizedImportedModulePath, resolvedFileContent)
-      }
-      importedModulePaths.push(
-        ...this._getImportedModulePaths(resolvedFileContent, importedModulePath).filter(
-          (modulePath) => !importedModulePaths.includes(modulePath),
-        ),
-      )
-    })
-
-    return importedModulePaths
+    return resolvedFileContent
   }
 
   /**
@@ -254,91 +352,6 @@ export class TsCompiler implements TsCompilerInstance {
     )
   }
 
-  getCompiledOutput(fileContent: string, fileName: string, supportsStaticESM: boolean): string {
-    let moduleKind = this._initialCompilerOptions.module
-    let esModuleInterop = this._initialCompilerOptions.esModuleInterop
-    let allowSyntheticDefaultImports = this._initialCompilerOptions.allowSyntheticDefaultImports
-    if (supportsStaticESM && this.configSet.useESM) {
-      moduleKind =
-        !moduleKind ||
-        (moduleKind &&
-          ![this._ts.ModuleKind.ES2015, this._ts.ModuleKind.ES2020, this._ts.ModuleKind.ESNext].includes(moduleKind))
-          ? this._ts.ModuleKind.ESNext
-          : moduleKind
-      // Make sure `esModuleInterop` and `allowSyntheticDefaultImports` true to support import CJS into ESM
-      esModuleInterop = true
-      allowSyntheticDefaultImports = true
-    } else {
-      moduleKind = this._ts.ModuleKind.CommonJS
-    }
-    this._compilerOptions = {
-      ...this._compilerOptions,
-      allowSyntheticDefaultImports,
-      esModuleInterop,
-      module: moduleKind,
-    }
-    if (this._languageService) {
-      this._logger.debug({ fileName }, 'getCompiledOutput(): compiling using language service')
-
-      // Must set memory cache before attempting to compile
-      this._updateMemoryCache(fileContent, fileName)
-      const output: EmitOutput = this._languageService.getEmitOutput(fileName)
-
-      this._logger.debug({ fileName }, 'getCompiledOutput(): computing diagnostics using language service')
-
-      this._doTypeChecking(fileName)
-      /* istanbul ignore next (this should never happen but is kept for security) */
-      if (output.emitSkipped) {
-        this._logger.warn(interpolate(Errors.CannotProcessFile, { file: fileName }))
-
-        return fileContent
-      }
-      // Throw an error when requiring `.d.ts` files.
-      if (!output.outputFiles.length) {
-        throw new TypeError(
-          interpolate(Errors.UnableToRequireDefinitionFile, {
-            file: basename(fileName),
-          }),
-        )
-      }
-
-      return updateOutput(output.outputFiles[1].text, fileName, output.outputFiles[0].text)
-    } else {
-      this._logger.debug({ fileName }, 'getCompiledOutput(): compiling as isolated module')
-
-      const result: TranspileOutput = this._transpileOutput(fileContent, fileName)
-      if (result.diagnostics && this.configSet.shouldReportDiagnostics(fileName)) {
-        this.configSet.raiseDiagnostics(result.diagnostics, fileName, this._logger)
-      }
-
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      return updateOutput(result.outputText, fileName, result.sourceMapText!)
-    }
-  }
-
-  protected _transpileOutput(fileContent: string, fileName: string): TranspileOutput {
-    return this._ts.transpileModule(fileContent, {
-      fileName,
-      transformers: this._makeTransformers(this.configSet.resolvedTransformers),
-      compilerOptions: this._compilerOptions,
-      reportDiagnostics: this.configSet.shouldReportDiagnostics(fileName),
-    })
-  }
-
-  protected _makeTransformers(customTransformers: TsJestAstTransformer): CustomTransformers {
-    return {
-      before: customTransformers.before.map((beforeTransformer) =>
-        beforeTransformer.factory(this, beforeTransformer.options),
-      ) as Array<TransformerFactory<SourceFile> | CustomTransformerFactory>,
-      after: customTransformers.after.map((afterTransformer) =>
-        afterTransformer.factory(this, afterTransformer.options),
-      ) as Array<TransformerFactory<SourceFile> | CustomTransformerFactory>,
-      afterDeclarations: customTransformers.afterDeclarations.map((afterDeclarations) =>
-        afterDeclarations.factory(this, afterDeclarations.options),
-      ) as Array<TransformerFactory<SourceFile | Bundle>>,
-    }
-  }
-
   /**
    * @internal
    */
@@ -356,7 +369,6 @@ export class TsCompiler implements TsCompilerInstance {
   /**
    * @internal
    */
-  /* istanbul ignore next */
   private _updateMemoryCache(contents: string, fileName: string): void {
     this._logger.debug({ fileName }, 'updateMemoryCache: update memory cache for language service')
 
@@ -368,7 +380,7 @@ export class TsCompiler implements TsCompilerInstance {
       shouldIncrementProjectVersion = true
     } else {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      const prevVersion = this._fileVersionCache!.get(fileName) ?? 0
+      const prevVersion = this._fileVersionCache!.get(fileName)!
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       const previousContents = this._fileContentCache!.get(fileName)
       // Avoid incrementing cache when nothing has changed.
@@ -377,8 +389,7 @@ export class TsCompiler implements TsCompilerInstance {
         this._fileVersionCache!.set(fileName, prevVersion + 1)
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         this._fileContentCache!.set(fileName, contents)
-        // Only bump project version when file is modified in cache, not when discovered for the first time
-        if (hit) shouldIncrementProjectVersion = true
+        shouldIncrementProjectVersion = true
       }
       /**
        * When a file is from node_modules or referenced to a referenced project and jest wants to transform it, we need
@@ -395,16 +406,40 @@ export class TsCompiler implements TsCompilerInstance {
   /**
    * @internal
    */
-  private _doTypeChecking(fileName: string): void {
+  private _doTypeChecking(fileName: string, depGraphs: Map<string, DepGraphInfo>, watchMode: boolean): void {
     if (this.configSet.shouldReportDiagnostics(fileName)) {
+      this._logger.debug({ fileName }, '_doTypeChecking(): computing diagnostics using language service')
+
       // Get the relevant diagnostics - this is 3x faster than `getPreEmitDiagnostics`.
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      const diagnostics = this._languageService!.getSemanticDiagnostics(fileName).concat(
+      const diagnostics: Diagnostic[] = [
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        this._languageService!.getSyntacticDiagnostics(fileName),
-      )
+        ...this._languageService!.getSemanticDiagnostics(fileName),
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        ...this._languageService!.getSyntacticDiagnostics(fileName),
+      ]
       // will raise or just warn diagnostics depending on config
       this.configSet.raiseDiagnostics(diagnostics, fileName, this._logger)
+    }
+    if (watchMode) {
+      this._logger.debug({ fileName }, '_doTypeChecking(): starting watch mode computing diagnostics')
+
+      for (const entry of depGraphs.entries()) {
+        const normalizedModuleNames = entry[1].resolvedModuleNames.map((moduleName) => normalize(moduleName))
+        const fileToReTypeCheck = entry[0]
+        if (normalizedModuleNames.includes(fileName) && this.configSet.shouldReportDiagnostics(fileToReTypeCheck)) {
+          this._logger.debug({ fileToReTypeCheck }, '_doTypeChecking(): computing diagnostics using language service')
+
+          this._updateMemoryCache(this._getFileContentFromCache(fileToReTypeCheck), fileToReTypeCheck)
+          const importedModulesDiagnostics = [
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            ...this._languageService!.getSemanticDiagnostics(fileToReTypeCheck),
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            ...this._languageService!.getSyntacticDiagnostics(fileToReTypeCheck),
+          ]
+          // will raise or just warn diagnostics depending on config
+          this.configSet.raiseDiagnostics(importedModulesDiagnostics, fileName, this._logger)
+        }
+      }
     }
   }
 }

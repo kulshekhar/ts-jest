@@ -44,6 +44,7 @@ Array [
   "compiler",
   "depGraphs",
   "tsResolvedModulesCachePath",
+  "watchMode",
 ]
 `)
     })

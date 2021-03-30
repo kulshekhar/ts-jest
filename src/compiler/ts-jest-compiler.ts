@@ -1,5 +1,5 @@
 import type { ConfigSet } from '../config/config-set'
-import type { CompilerInstance, StringMap } from '../types'
+import type { CompilerInstance, StringMap, TsJestCompileOptions } from '../types'
 
 import { TsCompiler } from './ts-compiler'
 
@@ -15,7 +15,7 @@ export class TsJestCompiler implements CompilerInstance {
     return this._compilerInstance.getResolvedModules(fileContent, fileName, runtimeCacheFS)
   }
 
-  getCompiledOutput(fileContent: string, fileName: string, supportsStaticESM: boolean): string {
-    return this._compilerInstance.getCompiledOutput(fileContent, fileName, supportsStaticESM)
+  getCompiledOutput(fileContent: string, fileName: string, options: TsJestCompileOptions): string {
+    return this._compilerInstance.getCompiledOutput(fileContent, fileName, options)
   }
 }
