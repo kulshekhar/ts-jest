@@ -25,6 +25,7 @@ export interface RawCompilerOptions {
   noEmitHelpers?: boolean
   noEmitOnError?: boolean
   noImplicitAny?: boolean
+  noImplicitOverride?: boolean
   noImplicitThis?: boolean
   noUnusedLocals?: boolean
   noUnusedParameters?: boolean

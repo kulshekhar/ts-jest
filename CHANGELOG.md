@@ -1,3 +1,18 @@
+# [27.0.0-next.10](https://github.com/kulshekhar/ts-jest/compare/v27.0.0-next.9...v27.0.0-next.10) (2021-03-30)
+
+
+### Bug Fixes
+
+* **compiler:** retype check other files if processing file is used by those ones in watch mode ([#2481](https://github.com/kulshekhar/ts-jest/issues/2481)) ([ac8f3d0](https://github.com/kulshekhar/ts-jest/commit/ac8f3d025de67bfc2708a8422ee657fc42455513)), closes [#943](https://github.com/kulshekhar/ts-jest/issues/943)
+* declare missing export for `jest-preset` ([#2477](https://github.com/kulshekhar/ts-jest/issues/2477)) ([fc3da9b](https://github.com/kulshekhar/ts-jest/commit/fc3da9b09e366c5491633d7bf0545716531f6d76))
+
+
+### Features
+
+* support jest **27.0.0-next.6** ([#2476](https://github.com/kulshekhar/ts-jest/issues/2476)) ([6452e30](https://github.com/kulshekhar/ts-jest/commit/6452e30e818c303018b2c21aba4d4c5f901f3e63))
+
+
+
 # [27.0.0-next.9](https://github.com/kulshekhar/ts-jest/compare/v27.0.0-next.8...v27.0.0-next.9) (2021-03-19)
 
 

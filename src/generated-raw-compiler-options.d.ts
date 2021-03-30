@@ -133,6 +133,10 @@ export interface RawCompilerOptions {
      */
     noImplicitAny?: boolean;
     /**
+     * Ensure overriding members in derived classes are marked with an override modifier.
+     */
+    noImplicitOverride?: boolean;
+    /**
      * Raise error on 'this' expressions with an implied any type. Enabling this setting is recommended. Requires TypeScript version 2.0 or later.
      */
     noImplicitThis?: boolean;
