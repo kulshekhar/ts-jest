@@ -1,3 +1,24 @@
+# [27.0.0-next.10](https://github.com/kulshekhar/ts-jest/compare/v27.0.0-next.9...v27.0.0-next.10) (2021-03-30)
+
+
+### Bug Fixes
+
+* **compiler:** retype check other files if processing file is used by those ones in watch mode ([#2481](https://github.com/kulshekhar/ts-jest/issues/2481)) ([ac8f3d0](https://github.com/kulshekhar/ts-jest/commit/ac8f3d025de67bfc2708a8422ee657fc42455513)), closes [#943](https://github.com/kulshekhar/ts-jest/issues/943)
+* declare missing export for `jest-preset` ([#2477](https://github.com/kulshekhar/ts-jest/issues/2477)) ([fc3da9b](https://github.com/kulshekhar/ts-jest/commit/fc3da9b09e366c5491633d7bf0545716531f6d76))
+
+
+### Features
+
+* support jest **27.0.0-next.6** ([#2476](https://github.com/kulshekhar/ts-jest/issues/2476)) ([6452e30](https://github.com/kulshekhar/ts-jest/commit/6452e30e818c303018b2c21aba4d4c5f901f3e63))
+
+
+## BREAKING CHANGES
+
+* follow Jest node engines ([#2478](https://github.com/kulshekhar/ts-jest/pull/2478)) ([1fecf7f](https://github.com/kulshekhar/ts-jest/commit/1fecf7ff92a5f1a0cc6ea1d27026f9f54a3d5ead))
+* add `exports` field to `package.json`, see https://nodejs.org/api/packages.html#packages_package_entry_points ([#2467](https://github.com/kulshekhar/ts-jest/pull/2467)) ([d3aba3e](https://github.com/kulshekhar/ts-jest/commit/d3aba3e103f85b3a42d0e2ecaea9d3457917319e))
+
+
+
 # [27.0.0-next.9](https://github.com/kulshekhar/ts-jest/compare/v27.0.0-next.8...v27.0.0-next.9) (2021-03-19)
 
 
