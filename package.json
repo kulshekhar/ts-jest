@@ -120,7 +120,7 @@
     "execa": "latest",
     "fs-extra": "9.x",
     "glob-gitignore": "latest",
-    "husky": "4.x",
+    "husky": "6.x",
     "jest": "27.0.0-next.6",
     "js-yaml": "latest",
     "json-schema-to-typescript": "^10.1.4",
