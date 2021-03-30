@@ -2,8 +2,7 @@ const simplePlantUML = require('@akebifiky/remark-simple-plantuml')
 
 module.exports = {
   title: 'ts-jest',
-  tagline:
-    'A TypeScript preprocessor with source map support for Jest that lets you use Jest to test projects written in TypeScript.',
+  tagline: 'A Jest transformer with source map support that lets you use Jest to test projects written in TypeScript.',
   url: 'https://kulshekhar.github.io',
   baseUrl: '/ts-jest/',
   baseUrlIssueBanner: true,
