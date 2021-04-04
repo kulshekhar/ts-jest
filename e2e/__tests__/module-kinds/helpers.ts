@@ -58,7 +58,7 @@ const runTestForOptions = (options: TestOptions, preset: AllPresetType = AllPres
 }
 
 // eslint-disable-next-line jest/no-export
-export const runTestCases = (moduleKind: string, preset: AllPresetType = AllPreset.DEFAULT): void => {
+export const runTestCases = (moduleKind: RawCompilerOptions['module'], preset: AllPresetType = AllPreset.DEFAULT): void => {
   runTestForOptions({ module: moduleKind }, preset)
   runTestForOptions({ module: moduleKind, allowSyntheticDefaultImports: false }, preset)
   runTestForOptions({ module: moduleKind, allowSyntheticDefaultImports: true }, preset)

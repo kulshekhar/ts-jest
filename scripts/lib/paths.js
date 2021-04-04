@@ -24,7 +24,8 @@ const projectsToRun = [
   `${e2eExternalRepoDir}/simple-project-references`,
   `${e2eExternalRepoDir}/yarn-workspace-composite`,
 ]
-const generatedPath = path.join(process.cwd(), 'src', 'generated-raw-compiler-options.d.ts')
+const rawCompilerOptionsFileName = path.join('src', 'raw-compiler-options.ts')
+const generatedPath = path.join(process.cwd(), rawCompilerOptionsFileName)
 
 module.exports = {
   pkgDigestFile,
@@ -41,4 +42,5 @@ module.exports = {
   e2eTestsDir,
   projectsToRun,
   generatedPath,
+  rawCompilerOptionsFileName,
 }
