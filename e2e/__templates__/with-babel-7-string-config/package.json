@@ -3,12 +3,12 @@
   "version": "0.0.0-tmpl.0",
   "private": true,
   "devDependencies": {
-    "@babel/core": "7.13.10",
+    "@babel/core": "7.13.14",
     "@babel/preset-env": "7.13.12",
     "@types/jest": "26.0.22",
-    "@types/node": "12.20.6",
-    "babel-jest": "27.0.0-next.6",
-    "jest": "27.0.0-next.6",
+    "@types/node": "12.20.7",
+    "babel-jest": "27.0.0-next.7",
+    "jest": "27.0.0-next.7",
     "typescript": "4.2.3"
   },
   "wantedDependencies": {
