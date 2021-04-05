@@ -12,6 +12,7 @@ declare const testsRootDir: string
 declare const e2eTestsDir: string
 declare const projectsToRun: string[]
 declare const generatedPath: string
+declare const rawCompilerOptionsFileName: string
 
 export {
   rootDir,
@@ -28,4 +29,5 @@ export {
   e2eTestsDir,
   projectsToRun,
   generatedPath,
+  rawCompilerOptionsFileName,
 }
