@@ -7,9 +7,9 @@
   "devDependencies": {
     "@types/jest": "^26.0.22",
     "@types/jquery": "^3.5.5",
-    "jest": "^27.0.0-next.7",
+    "jest": "^27.0.0-next.8",
     "jquery": "^3.6.0",
-    "typescript": "^4.2.3"
+    "typescript": "^4.2.4"
   },
   "wantedDependencies": {
     "jquery": "latest",
