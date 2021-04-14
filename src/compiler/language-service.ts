@@ -260,11 +260,10 @@ export const initializeLanguageServiceInstance = (configs: ConfigSet, logger: Lo
       }
       /* istanbul ignore next (this should never happen but is kept for security) */
       if (output.emitSkipped) {
-        const message = interpolate(Errors.CannotProcessFile, { file: fileName })
         if (TS_TSX_REGEX.test(fileName)) {
-          throw new Error(message)
+          throw new Error(interpolate(Errors.CannotProcessFile, { file: fileName }))
         } else {
-          logger.warn(message)
+          logger.warn(interpolate(Errors.CannotProcessFileReturnOriginal, { file: fileName }))
 
           return [code, '{}']
         }
