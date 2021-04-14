@@ -195,7 +195,7 @@ describe('TsCompiler', () => {
         expect(output).toEqual(updateOutput(jsOutput, fileName, sourceMap))
       })
 
-      test('should return original file content if emitSkipped is true', () => {
+      test('should show a warning message and return original file content for non ts/tsx files if emitSkipped is true', () => {
         const compiler = makeCompiler({
           tsJestConfig: { ...baseTsJestConfig },
         })
@@ -205,15 +205,49 @@ describe('TsCompiler', () => {
           emitSkipped: true,
         } as EmitOutput)
         // @ts-expect-error testing purpose
+        compiler._logger.warn = jest.fn()
+        // @ts-expect-error testing purpose
         compiler._doTypeChecking = jest.fn()
-        const output = compiler.getCompiledOutput(fileContent, fileName, {
+        const fileToCheck = fileName.replace('.ts', '.js')
+
+        const output = compiler.getCompiledOutput(fileContent, fileToCheck, {
           depGraphs: new Map(),
           supportsStaticESM: false,
           watchMode: false,
         })
 
-        expect(output).toEqual(updateOutput(fileContent, fileName, sourceMap))
+        // @ts-expect-error testing purpose
+        expect(compiler._logger.warn).toHaveBeenCalled()
+        expect(output).toEqual(updateOutput(fileContent, fileToCheck, sourceMap))
       })
+
+      test.each([fileName, fileName.replace('.ts', '.tsx')])(
+        'should throw error for ts/tsx files if emitSkipped is true',
+        (fileToCheck) => {
+          const compiler = makeCompiler({
+            tsJestConfig: { ...baseTsJestConfig },
+          })
+          // @ts-expect-error testing purpose
+          compiler._languageService.getEmitOutput = jest.fn().mockReturnValueOnce({
+            outputFiles: [{ text: sourceMap }, { text: jsOutput }],
+            emitSkipped: true,
+          } as EmitOutput)
+          // @ts-expect-error testing purpose
+          compiler._logger.warn = jest.fn()
+          // @ts-expect-error testing purpose
+          compiler._doTypeChecking = jest.fn()
+
+          // @ts-expect-error testing purpose
+          expect(compiler._logger.warn).not.toHaveBeenCalled()
+          expect(() =>
+            compiler.getCompiledOutput(fileContent, fileToCheck, {
+              depGraphs: new Map(),
+              supportsStaticESM: false,
+              watchMode: false,
+            }),
+          ).toThrowError()
+        },
+      )
 
       test('should throw error when there are no outputFiles', () => {
         const compiler = makeCompiler({
