@@ -176,9 +176,13 @@ export class TsCompiler implements TsCompilerInstance {
       const output: EmitOutput = this._languageService.getEmitOutput(fileName)
       this._doTypeChecking(fileName, options.depGraphs, options.watchMode)
       if (output.emitSkipped) {
-        this._logger.warn(interpolate(Errors.CannotProcessFile, { file: fileName }))
+        if (TS_TSX_REGEX.test(fileName)) {
+          throw new Error(interpolate(Errors.CannotProcessFile, { file: fileName }))
+        } else {
+          this._logger.warn(interpolate(Errors.CannotProcessFileReturnOriginal, { file: fileName }))
 
-        return updateOutput(fileContent, fileName, '{}')
+          return updateOutput(fileContent, fileName, '{}')
+        }
       }
       // Throw an error when requiring `.d.ts` files.
       if (!output.outputFiles.length) {
