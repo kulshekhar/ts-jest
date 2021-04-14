@@ -260,9 +260,14 @@ export const initializeLanguageServiceInstance = (configs: ConfigSet, logger: Lo
       }
       /* istanbul ignore next (this should never happen but is kept for security) */
       if (output.emitSkipped) {
-        logger.warn(interpolate(Errors.CannotProcessFile, { file: fileName }))
+        const message = interpolate(Errors.CannotProcessFile, { file: fileName })
+        if (TS_TSX_REGEX.test(fileName)) {
+          throw new Error(message)
+        } else {
+          logger.warn(message)
 
-        return [code, '{}']
+          return [code, '{}']
+        }
       }
       // Throw an error when requiring `.d.ts` files.
       if (!output.outputFiles.length) {
