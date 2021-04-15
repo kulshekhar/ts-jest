@@ -1,3 +1,12 @@
+## [26.5.5](https://github.com/kulshekhar/ts-jest/compare/v26.5.4...v26.5.5) (2021-04-15)
+
+
+### Bug Fixes
+
+* **compiler:** return file content on emitSkipped for non ts/tsx files ([#2515](https://github.com/kulshekhar/ts-jest/issues/2515)) ([0320fb3](https://github.com/kulshekhar/ts-jest/commit/0320fb3ac22056aafe4d7ae966eab84dbf23fda9)), closes [#2513](https://github.com/kulshekhar/ts-jest/issues/2513)
+
+
+
 # [27.0.0-next.10](https://github.com/kulshekhar/ts-jest/compare/v27.0.0-next.9...v27.0.0-next.10) (2021-03-30)
 
 
