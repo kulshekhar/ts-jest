@@ -7,6 +7,21 @@
 
 
 
+# [27.0.0-next.11](https://github.com/kulshekhar/ts-jest/compare/v27.0.0-next.10...v27.0.0-next.11) (2021-04-15)
+
+
+### Bug Fixes
+
+* **compiler:** return file content on emitSkipped for non ts/tsx files ([#2519](https://github.com/kulshekhar/ts-jest/issues/2519)) ([a4e5640](https://github.com/kulshekhar/ts-jest/commit/a4e5640f54a7810c9b7aba32663ce4a53893d22f)), closes [#2513](https://github.com/kulshekhar/ts-jest/issues/2513)
+
+
+### Features
+
+* support jest **27.0.0-next.7** ([#2498](https://github.com/kulshekhar/ts-jest/issues/2498)) ([a10af91](https://github.com/kulshekhar/ts-jest/commit/a10af91e2c3128c8de732a421f743621e60dbe8e))
+* support jest **27.0.0-next.8** ([#2512](https://github.com/kulshekhar/ts-jest/issues/2512)) ([999ef60](https://github.com/kulshekhar/ts-jest/commit/999ef60c93801de5cdb1a3483af16090e3a1b52e))
+
+
+
 # [27.0.0-next.10](https://github.com/kulshekhar/ts-jest/compare/v27.0.0-next.9...v27.0.0-next.10) (2021-03-30)
 
 
