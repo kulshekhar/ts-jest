@@ -218,7 +218,7 @@ describe('TsCompiler', () => {
 
         // @ts-expect-error testing purpose
         expect(compiler._logger.warn).toHaveBeenCalled()
-        expect(output).toEqual(updateOutput(fileContent, fileToCheck, sourceMap))
+        expect(output).toEqual(updateOutput(fileContent, fileToCheck, undefined))
       })
 
       test.each([fileName, fileName.replace('.ts', '.tsx')])(

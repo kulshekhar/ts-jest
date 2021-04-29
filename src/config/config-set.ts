@@ -146,10 +146,7 @@ export class ConfigSet {
    * @internal
    */
   private readonly _overriddenCompilerOptions: Partial<CompilerOptions> = {
-    // we handle sourcemaps this way and not another
-    sourceMap: true,
     inlineSourceMap: false,
-    inlineSources: true,
     // we don't want to create declaration files
     declaration: false,
     noEmit: false, // set to true will make compiler API not emit any compiled results.
@@ -463,12 +460,16 @@ export class ConfigSet {
 
       this.logger.warn(message)
     }
+    const resultOptions = result.options
+    const sourceMap = resultOptions.sourceMap ?? true
 
     return {
       ...result,
       options: {
-        ...result.options,
-        module: result.options.module ?? this.compilerModule.ModuleKind.CommonJS,
+        ...resultOptions,
+        sourceMap,
+        inlineSources: sourceMap,
+        module: resultOptions.module ?? this.compilerModule.ModuleKind.CommonJS,
       },
     }
   }

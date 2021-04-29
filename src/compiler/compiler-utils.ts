@@ -8,14 +8,19 @@ export const SOURCE_MAPPING_PREFIX = 'sourceMappingURL='
 /**
  * Update the output remapping the source map.
  */
-export function updateOutput(outputText: string, normalizedFileName: string, sourceMap: string): string {
-  const base64Map = Buffer.from(updateSourceMap(sourceMap, normalizedFileName), 'utf8').toString('base64')
-  const sourceMapContent = `data:application/json;charset=utf-8;base64,${base64Map}`
+export function updateOutput(outputText: string, normalizedFileName: string, sourceMap: string | undefined): string {
+  if (sourceMap) {
+    const base64Map = Buffer.from(updateSourceMap(sourceMap, normalizedFileName), 'utf8').toString('base64')
+    const sourceMapContent = `data:application/json;charset=utf-8;base64,${base64Map}`
 
-  // sourceMappingURL= prefix is always at the end of compiledOutput, using lastIndexOf should be the safest way to substring
-  return (
-    outputText.slice(0, outputText.lastIndexOf(SOURCE_MAPPING_PREFIX) + SOURCE_MAPPING_PREFIX.length) + sourceMapContent
-  )
+    // sourceMappingURL= prefix is always at the end of compiledOutput, using lastIndexOf should be the safest way to substring
+    return (
+      outputText.slice(0, outputText.lastIndexOf(SOURCE_MAPPING_PREFIX) + SOURCE_MAPPING_PREFIX.length) +
+      sourceMapContent
+    )
+  } else {
+    return outputText
+  }
 }
 
 /**

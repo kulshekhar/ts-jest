@@ -28,7 +28,7 @@
     "@nestjs/core": "^7.6.15",
     "@nestjs/platform-express": "^7.6.15",
     "@nestjs/testing": "^7.6.15",
-    "@types/jest": "^26.0.22",
+    "@types/jest": "^26.0.23",
     "@types/lodash": "^4.14.168",
     "jest": "^27.0.0-next.8",
     "lodash": "^4.17.21",

@@ -6,7 +6,6 @@
     "downlevelIteration": true,
     "esModuleInterop": true,
     "experimentalDecorators": true,
-    "inlineSourceMap": true,
     "lib": ["esnext"],
     "moduleResolution": "node",
     "resolveJsonModule": true,
@@ -18,7 +17,7 @@
     "importsNotUsedAsValues": "error",
     "strict": true,
     "skipLibCheck": true,
-    "sourceMap": false,
+    "sourceMap": true,
     "types": [
       "jest",
       "node",

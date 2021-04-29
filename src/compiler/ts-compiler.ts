@@ -181,7 +181,7 @@ export class TsCompiler implements TsCompilerInstance {
         } else {
           this._logger.warn(interpolate(Errors.CannotProcessFileReturnOriginal, { file: fileName }))
 
-          return updateOutput(fileContent, fileName, '{}')
+          return updateOutput(fileContent, fileName, undefined)
         }
       }
       // Throw an error when requiring `.d.ts` files.
@@ -193,7 +193,9 @@ export class TsCompiler implements TsCompilerInstance {
         )
       }
 
-      return updateOutput(output.outputFiles[1].text, fileName, output.outputFiles[0].text)
+      return this._compilerOptions.sourceMap
+        ? updateOutput(output.outputFiles[1].text, fileName, output.outputFiles[0].text)
+        : updateOutput(output.outputFiles[0].text, fileName, undefined)
     } else {
       this._logger.debug({ fileName }, 'getCompiledOutput(): compiling as isolated module')
 
