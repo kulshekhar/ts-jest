@@ -21,7 +21,13 @@ module.exports = {
       type: 'category',
       label: 'Guides',
       collapsed: false,
-      items: ['guides/test-helpers', 'guides/esm-support', 'guides/react-native', 'guides/troubleshooting'],
+      items: [
+        'guides/test-helpers',
+        'guides/esm-support',
+        'guides/react-native',
+        'guides/using-with-monorepo',
+        'guides/troubleshooting',
+      ],
     },
     {
       type: 'doc',

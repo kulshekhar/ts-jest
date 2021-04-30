@@ -65,6 +65,10 @@
         },
         {
           "type": "doc",
+          "id": "version-26.5/guides/using-with-monorepo"
+        },
+        {
+          "type": "doc",
           "id": "version-26.5/guides/troubleshooting"
         }
       ]
