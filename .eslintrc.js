@@ -40,6 +40,7 @@ module.exports = {
         '@typescript-eslint/no-var-requires': 'off',
         '@typescript-eslint/prefer-ts-expect-error': 'error',
         'jest/valid-title': 'off',
+        'jest/no-conditional-expect': 'off',
         'import/order': [
           'error',
           {
