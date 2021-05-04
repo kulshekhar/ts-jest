@@ -118,7 +118,7 @@
     "eslint-plugin-prefer-arrow": "latest",
     "eslint-plugin-prettier": "latest",
     "execa": "latest",
-    "fs-extra": "9.x",
+    "fs-extra": "10.x",
     "glob-gitignore": "latest",
     "husky": "4.x",
     "jest": "27.0.0-next.8",
