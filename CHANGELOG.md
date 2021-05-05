@@ -1,3 +1,12 @@
+## [26.5.6](https://github.com/kulshekhar/ts-jest/compare/v26.5.5...v26.5.6) (2021-05-05)
+
+
+### Code Refactoring
+
+* refactor(config): show warning message for `sourceMap: false` ([#2557](https://github.com/kulshekhar/ts-jest/pull/2557)) ([cf60990](https://github.com/kulshekhar/ts-jest/commit/cf609900e2c5937755123bd08ca2c5f2ff5e0651)).
+
+
+
 ## [26.5.5](https://github.com/kulshekhar/ts-jest/compare/v26.5.4...v26.5.5) (2021-04-15)
 
 
