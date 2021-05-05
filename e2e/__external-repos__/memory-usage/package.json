@@ -30,10 +30,10 @@
     "@nestjs/testing": "^7.6.15",
     "@types/jest": "^26.0.23",
     "@types/lodash": "^4.14.168",
-    "jest": "^27.0.0-next.8",
+    "jest": "^27.0.0-next.9",
     "lodash": "^4.17.21",
     "reflect-metadata": "^0.1.13",
-    "rxjs": "^6.6.7",
+    "rxjs": "^7.0.0",
     "typescript": "^4.2.4",
     "weak-napi": "^2.0.2"
   }
