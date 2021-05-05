@@ -34,6 +34,7 @@ Array [
   "[level:20] updateMemoryCache: update memory cache for language service",
   "[level:20] visitSourceFileNode(): hoisting",
   "[level:20] _doTypeChecking(): computing diagnostics using language service",
+  "[level:20] created new transformer",
 ]
 `;
 
@@ -77,6 +78,7 @@ Array [
   "[level:20] visitSourceFileNode(): hoisting",
   "[level:20] _doTypeChecking(): computing diagnostics using language service",
   "[level:20] calling babel-jest processor",
+  "[level:20] created new transformer",
 ]
 `;
 
@@ -121,6 +123,7 @@ Array [
   "[level:20] visitSourceFileNode(): hoisting",
   "[level:20] _doTypeChecking(): computing diagnostics using language service",
   "[level:20] calling babel-jest processor",
+  "[level:20] created new transformer",
 ]
 `;
 
