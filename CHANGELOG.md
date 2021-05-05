@@ -1,3 +1,17 @@
+# [27.0.0-next.12](https://github.com/kulshekhar/ts-jest/compare/v27.0.0-next.11...v27.0.0-next.12) (2021-05-05)
+
+
+### Features
+
+* **config:** allow disable sourcemap ([#2544](https://github.com/kulshekhar/ts-jest/issues/2544)) ([47da6ad](https://github.com/kulshekhar/ts-jest/commit/47da6ada5089e58e9bc68ce8e9bc9e17aaa127ae))
+
+
+## BREAKING CHANGES
+
+* By default, `ts-jest` will use `sourceMap` option from your `tsconfig`. If users want to have sourcemap on, they need to either remove `sourceMap` or set `sourceMap: true` in `tsconfig`
+
+
+
 ## [26.5.5](https://github.com/kulshekhar/ts-jest/compare/v26.5.4...v26.5.5) (2021-04-15)
 
 
