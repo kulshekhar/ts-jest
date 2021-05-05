@@ -452,6 +452,13 @@ export class ConfigSet {
 
     // parse json, merge config extending others, ...
     const result = ts.parseJsonConfigFileContent(config, ts.sys, basePath, undefined, configFileName)
+    if (result.options.sourceMap === false) {
+      this.logger.warn(
+        interpolate(Deprecations.SourceMapFalseNote, {
+          path: result.options.configFilePath,
+        }),
+      )
+    }
     const { _overriddenCompilerOptions: forcedOptions } = this
     const finalOptions = result.options
     // Target ES5 output by default (instead of ES3).

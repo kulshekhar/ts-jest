@@ -42,6 +42,7 @@ export const enum Deprecations {
   TsConfig = 'The option `tsConfig` is deprecated and will be removed in ts-jest 27, use `tsconfig` instead',
   PackageJson = 'The option `packageJson` is deprecated and will be removed in ts-jest 27. This option is not used by internal `ts-jest`',
   PathRegex = 'The option `pathRegex` is deprecated and will be removed in ts-jest 27, use `exclude` instead',
+  SourceMapFalseNote = 'Got `sourceMap: false` from tsconfig file "{{path}}". This will disable source map support in ts-jest 27. Please set `sourceMap: true` in your tsconfig file "{{path}}" if you want to keep source map support on',
 }
 
 /**
