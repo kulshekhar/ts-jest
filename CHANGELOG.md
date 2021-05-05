@@ -3,7 +3,7 @@
 
 ### Code Refactoring
 
-* refactor(config): show warning message for `sourceMap: false` (#2557)
+* refactor(config): show warning message for `sourceMap: false` ([#2557](https://github.com/kulshekhar/ts-jest/pull/2557)) ([cf60990](https://github.com/kulshekhar/ts-jest/commit/cf609900e2c5937755123bd08ca2c5f2ff5e0651)).
 
 
 
