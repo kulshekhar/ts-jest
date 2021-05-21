@@ -67,7 +67,7 @@
     "bs-logger": "0.x",
     "buffer-from": "1.x",
     "fast-json-stable-stringify": "2.x",
-    "jest-util": "27.0.0-next.9",
+    "jest-util": "27.0.0-next.11",
     "json5": "2.x",
     "lodash": "4.x",
     "make-error": "1.x",
