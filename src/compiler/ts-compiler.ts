@@ -257,7 +257,7 @@ export class TsCompiler implements TsCompilerInstance {
         // `createProgram` again (which is very slow). Using a `string` assertion here to avoid
         // TypeScript errors from the function signature (expects `(x: string) => string`).
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        return version === undefined ? ((undefined as any) as string) : String(version)
+        return version === undefined ? (undefined as any as string) : String(version)
       },
       getScriptSnapshot: (fileName: string) => {
         const normalizedFileName = normalize(fileName)
