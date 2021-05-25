@@ -1,6 +1,6 @@
 {
   "name": "ts-jest",
-  "version": "27.0.0-next.12",
+  "version": "27.0.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "exports": {

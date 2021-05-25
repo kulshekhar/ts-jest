@@ -1,3 +1,126 @@
+# [27.0.0](https://github.com/kulshekhar/ts-jest/compare/v26.5.6...v27.0.0) (2021-05-25)
+
+
+### Bug Fixes
+
+* **compiler:** return file content on emitSkipped for non ts/tsx files ([#2519](https://github.com/kulshekhar/ts-jest/issues/2519)) ([a4e5640](https://github.com/kulshekhar/ts-jest/commit/a4e5640f54a7810c9b7aba32663ce4a53893d22f)), closes [#2513](https://github.com/kulshekhar/ts-jest/issues/2513)
+* **compiler:** retype check other files if processing file is used by those ones in watch mode ([#2481](https://github.com/kulshekhar/ts-jest/issues/2481)) ([ac8f3d0](https://github.com/kulshekhar/ts-jest/commit/ac8f3d025de67bfc2708a8422ee657fc42455513)), closes [#943](https://github.com/kulshekhar/ts-jest/issues/943)
+* **compiler:** initialize compiler with `.ts`/`.tsx`/`.d.ts` files only ([#2458](https://github.com/kulshekhar/ts-jest/issues/2458)) ([a89f0e2](https://github.com/kulshekhar/ts-jest/commit/a89f0e2061e01440337dde4134639ff6a2d69936)), closes [#2445](https://github.com/kulshekhar/ts-jest/issues/2445)
+* **compiler:** resolve nested imported modules for each processing file ([#2436](https://github.com/kulshekhar/ts-jest/issues/2436)) ([3cb9019](https://github.com/kulshekhar/ts-jest/commit/3cb9019289bb64deecffaf52e840faf6a4656092)), closes [#1390](https://github.com/kulshekhar/ts-jest/issues/1390) [#1747](https://github.com/kulshekhar/ts-jest/issues/1747)
+* **config:** create fallback jest config when jest config is `undefined` ([#2433](https://github.com/kulshekhar/ts-jest/issues/2433)) ([c6d6e4c](https://github.com/kulshekhar/ts-jest/commit/c6d6e4cd534e1c368fcb7141784ee43584525ca4)), closes [#2085](https://github.com/kulshekhar/ts-jest/issues/2085)
+* remove `@types/jest` from direct dep ([#2409](https://github.com/kulshekhar/ts-jest/issues/2409)) ([8913120](https://github.com/kulshekhar/ts-jest/commit/89131203c358c8f9e89655800e500a9e88a17334)), closes [#2406](https://github.com/kulshekhar/ts-jest/issues/2406) [#2411](https://github.com/kulshekhar/ts-jest/issues/2411)
+* **compiler:** return original file content and show warning on emit skip ([#2410](https://github.com/kulshekhar/ts-jest/issues/2410)) ([c2b2164](https://github.com/kulshekhar/ts-jest/commit/c2b2164ddd1e606fc2490326244a6efc63f6c4a0)), closes [#2407](https://github.com/kulshekhar/ts-jest/issues/2407)
+* **compiler:** type check correctly in watch mode when a file content itself has changed ([#2405](https://github.com/kulshekhar/ts-jest/issues/2405)) ([064bf3a](https://github.com/kulshekhar/ts-jest/commit/064bf3a73e9a304aa9366d27db8973b68be23ffd)), closes [#2118](https://github.com/kulshekhar/ts-jest/issues/2118)
+* **compiler:** exclude files in `outDir` from compiler source files ([#2375](https://github.com/kulshekhar/ts-jest/issues/2375)) ([ec68c74](https://github.com/kulshekhar/ts-jest/commit/ec68c74bccf56d682a7ed9e5c48ea676dcf3fbf9)), closes [#2350](https://github.com/kulshekhar/ts-jest/issues/2350) [#2374](https://github.com/kulshekhar/ts-jest/issues/2374)
+* **config:** cache config and compiler correctly between runs ([#2356](https://github.com/kulshekhar/ts-jest/issues/2356)) ([5f91336](https://github.com/kulshekhar/ts-jest/commit/5f91336b9023da1051cc85b509ad02c525679fcb))
+* **config:** improve emit skipped error message ([#2358](https://github.com/kulshekhar/ts-jest/issues/2358)) ([2ae8df4](https://github.com/kulshekhar/ts-jest/commit/2ae8df4515d6f6e975e57719a89184b5583f9e2f)), closes [#2350](https://github.com/kulshekhar/ts-jest/issues/2350)
+* **typings:** set correct typing for `tsconfig` option ([#2383](https://github.com/kulshekhar/ts-jest/issues/2383)) ([584324a](https://github.com/kulshekhar/ts-jest/commit/584324a60c0784275e9bf8bcfd0814735a250d24)), closes [#2368](https://github.com/kulshekhar/ts-jest/issues/2368)
+* **config:** invalidate Jest transform cache when `astTransformers` value changes ([#2345](https://github.com/kulshekhar/ts-jest/issues/2345)) ([d726016](https://github.com/kulshekhar/ts-jest/commit/d726016a17a26215fad782cf57bb9b9bec807307))
+* reduce size of `node_modules` when adding `ts-jest` ([#2263](https://github.com/kulshekhar/ts-jest/issues/2263)) ([8e0675c](https://github.com/kulshekhar/ts-jest/commit/8e0675c02b6095af6656df50c8782c01ad9e87a3))
+
+
+### Features
+
+* **config:** allow disable sourcemap ([#2544](https://github.com/kulshekhar/ts-jest/issues/2544)) ([47da6ad](https://github.com/kulshekhar/ts-jest/commit/47da6ada5089e58e9bc68ce8e9bc9e17aaa127ae))
+* **compiler:** expose `TsCompiler` as public api ([#2344](https://github.com/kulshekhar/ts-jest/issues/2344)) ([871cd6a](https://github.com/kulshekhar/ts-jest/commit/871cd6a3abb10569a04d05f72bbb41c952665ed4))
+* **config:** support typed config options for jest config typescript ([#2335](https://github.com/kulshekhar/ts-jest/issues/2335)) ([3cfc37b](https://github.com/kulshekhar/ts-jest/commit/3cfc37b1eba125fe861cea0415095dbe1f538520))
+* **presets:** add typing for `presets` entry point ([#2337](https://github.com/kulshekhar/ts-jest/issues/2337)) ([1a3058f](https://github.com/kulshekhar/ts-jest/commit/1a3058f3b7f8a2e377cb6a7e829cea310a06d4fa))
+* **compiler:** allow custom transformers to access internal `Program` ([#2299](https://github.com/kulshekhar/ts-jest/issues/2299)) ([387964f](https://github.com/kulshekhar/ts-jest/commit/387964faed14ce24d2cf8170a04eee244d69b8b9))
+* **config:** replace `pathRegex` with `exclude` ([#2295](https://github.com/kulshekhar/ts-jest/issues/2295)) ([f2f99c3](https://github.com/kulshekhar/ts-jest/commit/f2f99c3a46ac18a1fd6cc98922329b71a7e8c4e8))
+* **config:** type checking `js` files based on `checkJs` ([#2283](https://github.com/kulshekhar/ts-jest/issues/2283)) ([1e04433](https://github.com/kulshekhar/ts-jest/commit/1e044335a38907ff5c06eb43efeb2e5fd9769a0c))
+* **compiler:** support ESM for `isolatedModules: false` ([#2269](https://github.com/kulshekhar/ts-jest/issues/2269)) ([9bb0c05](https://github.com/kulshekhar/ts-jest/commit/9bb0c054a3a7bd8949b0c12b2bb42348f69e2e2e)), closes [#1709](https://github.com/kulshekhar/ts-jest/issues/1709)
+* **compiler:** support ESM for `isolatedModule: true` ([#2219](https://github.com/kulshekhar/ts-jest/issues/2219)) ([e101db0](https://github.com/kulshekhar/ts-jest/commit/e101db01095ce75ce9a48e27a1d9bf84bb8e19ee)), closes [#1709](https://github.com/kulshekhar/ts-jest/issues/1709)
+* **presets:** add 3 new presets to work with ESM ([#2207](https://github.com/kulshekhar/ts-jest/issues/2207)) ([c277858](https://github.com/kulshekhar/ts-jest/commit/c277858c7820d8873c2d7d0c6e3704a47868d600))
+* allow subclasses of `TsJestTransformer` to have version checking ([#2176](https://github.com/kulshekhar/ts-jest/issues/2176)) ([ca8d7c4](https://github.com/kulshekhar/ts-jest/commit/ca8d7c44779105ef208d17cdd8c6baaf96b479ad))
+
+
+### Performance Improvements
+
+* reuse jest file system cache for `isolatedModules: false` ([#2189](https://github.com/kulshekhar/ts-jest/issues/2189)) ([68f446b](https://github.com/kulshekhar/ts-jest/commit/68f446b8351bb8925ac4822aa631aa6b23f2f711))
+
+
+### Code Refactoring
+
+* **config:** remove support for `astTransformers` string array ([#2129](https://github.com/kulshekhar/ts-jest/issues/2129)) ([1e0b2ce](https://github.com/kulshekhar/ts-jest/commit/1e0b2ce5599a35c108712456e455bf29c8c5fd24))
+* **config:** remove support for `packageJson` option ([#2128](https://github.com/kulshekhar/ts-jest/issues/2128)) ([05916b9](https://github.com/kulshekhar/ts-jest/commit/05916b920160da5b43a20b47025eea43b4a1a5c3))
+* move jest transformer class to package entry ([#2122](https://github.com/kulshekhar/ts-jest/issues/2122)) ([5bbfd06](https://github.com/kulshekhar/ts-jest/commit/5bbfd06a0c114dbecd75b763bcfa76d4a6203ab1))
+* **config:** remove support for `tsConfig` option ([#2127](https://github.com/kulshekhar/ts-jest/issues/2127)) ([3cc9b80](https://github.com/kulshekhar/ts-jest/commit/3cc9b806be2b2096b981253d39ca40df65bb0f7b))
+
+
+## BREAKING CHANGES
+
+* By default, `ts-jest` will use `sourceMap` option from your `tsconfig`. If users want to have sourcemap on, they need to set `sourceMap: true` in `tsconfig`.
+* follow Jest support Node engines ([#2478](https://github.com/kulshekhar/ts-jest/pull/2478)) ([1fecf7f](https://github.com/kulshekhar/ts-jest/commit/1fecf7ff92a5f1a0cc6ea1d27026f9f54a3d5ead))
+* add `exports` field to `package.json`, see https://nodejs.org/api/packages.html#packages_package_entry_points ([#2467](https://github.com/kulshekhar/ts-jest/pull/2467)) ([d3aba3e](https://github.com/kulshekhar/ts-jest/commit/d3aba3e103f85b3a42d0e2ecaea9d3457917319e))
+* `ts-jest` custom AST transformer function signature has changed to
+```
+import type { TsCompilerInstance } from 'ts-jest/dist/types'
+
+export function factory(compilerInstance: TsCompilerInstance) {
+   //...
+}
+```
+* One is currently using `pathRegex` should use `exclude` with `glob` patterns.
+* If one currently relies on type check for `js` files, please set `checkJs: true` in your tsconfig.
+* Now both `isolatedModules: true` and `isolatedModule: false` codes are in one single class `TsCompiler` which is an instance created in `TsJestCompiler` based on config option `compiler` with value `typescript` or `ttypescript`.
+* **config:** `packageJson` config option is not used in internal `ts-jest` so this option is now removed.
+* **config:** One is defining ast transformers in `jest.config.js`/`package.json` should change to
+```
+// jest.config.js
+module.exports = {
+   //...
+   globals: {
+      'ts-jest': {
+         astTransformers: {
+           before: ['your_before_transformer_path'],
+           after: ['your_after_transformer_path'],
+           afterDeclarations: ['your_afterDeclarations_transformer_path'],
+         }
+      }
+   }
+}
+```
+
+or
+```
+// package.json
+{
+  "jest": {
+     "globals": {
+        "ts-jest": {
+           "astTransformers": {
+              "before": ["your_before_transformer_path"],
+              "after": ["your_after_transformer_path"],
+              "afterDeclarations": ["your_afterDeclarations_transformer_path"]
+           }
+        }
+     }
+  }
+}
+```
+* One currently refers type in `jest.config.js`
+```
+/** @typedef {import('ts-jest')} */
+module.exports = {
+  //...
+}
+```
+
+should change to
+```
+/** @typedef {import('ts-jest/dist/types')} */
+module.exports = {
+  //...
+}
+```
+* Remove possibilities to import `mocked`, `createJestPreset`, `pathsToModuleNameMapper` from package entry. One should change to
+```
+import { mocked, createJestPreset, pathsToModuleNameMapper` } from 'ts-jest/utils'
+```
+* **config:** One currently uses `tsConfig` should change to `tsconfig` in your `jest.config.js` or `package.json`.
+
+
+
 ## [26.5.6](https://github.com/kulshekhar/ts-jest/compare/v26.5.5...v26.5.6) (2021-05-05)
 
 
@@ -38,12 +161,6 @@
 * **compiler:** return file content on emitSkipped for non ts/tsx files ([#2519](https://github.com/kulshekhar/ts-jest/issues/2519)) ([a4e5640](https://github.com/kulshekhar/ts-jest/commit/a4e5640f54a7810c9b7aba32663ce4a53893d22f)), closes [#2513](https://github.com/kulshekhar/ts-jest/issues/2513)
 
 
-### Features
-
-* support jest **27.0.0-next.7** ([#2498](https://github.com/kulshekhar/ts-jest/issues/2498)) ([a10af91](https://github.com/kulshekhar/ts-jest/commit/a10af91e2c3128c8de732a421f743621e60dbe8e))
-* support jest **27.0.0-next.8** ([#2512](https://github.com/kulshekhar/ts-jest/issues/2512)) ([999ef60](https://github.com/kulshekhar/ts-jest/commit/999ef60c93801de5cdb1a3483af16090e3a1b52e))
-
-
 
 # [27.0.0-next.10](https://github.com/kulshekhar/ts-jest/compare/v27.0.0-next.9...v27.0.0-next.10) (2021-03-30)
 
@@ -51,12 +168,6 @@
 ### Bug Fixes
 
 * **compiler:** retype check other files if processing file is used by those ones in watch mode ([#2481](https://github.com/kulshekhar/ts-jest/issues/2481)) ([ac8f3d0](https://github.com/kulshekhar/ts-jest/commit/ac8f3d025de67bfc2708a8422ee657fc42455513)), closes [#943](https://github.com/kulshekhar/ts-jest/issues/943)
-* declare missing export for `jest-preset` ([#2477](https://github.com/kulshekhar/ts-jest/issues/2477)) ([fc3da9b](https://github.com/kulshekhar/ts-jest/commit/fc3da9b09e366c5491633d7bf0545716531f6d76))
-
-
-### Features
-
-* support jest **27.0.0-next.6** ([#2476](https://github.com/kulshekhar/ts-jest/issues/2476)) ([6452e30](https://github.com/kulshekhar/ts-jest/commit/6452e30e818c303018b2c21aba4d4c5f901f3e63))
 
 
 ## BREAKING CHANGES
@@ -72,11 +183,6 @@
 ### Bug Fixes
 
 * **compiler:** initialize compiler with `.ts`/`.tsx`/`.d.ts` files only ([#2458](https://github.com/kulshekhar/ts-jest/issues/2458)) ([a89f0e2](https://github.com/kulshekhar/ts-jest/commit/a89f0e2061e01440337dde4134639ff6a2d69936)), closes [#2445](https://github.com/kulshekhar/ts-jest/issues/2445)
-
-
-### Features
-
-* adopt `jest@27.0.0-next.5` ([#2450](https://github.com/kulshekhar/ts-jest/issues/2450)) ([b714da3](https://github.com/kulshekhar/ts-jest/commit/b714da36e2cb9fa7cc22591b12f301d904334a3f)), closes [#2459](https://github.com/kulshekhar/ts-jest/issues/2459)
 
 
 
@@ -99,11 +205,6 @@
 * remove `@types/jest` from direct dep ([#2409](https://github.com/kulshekhar/ts-jest/issues/2409)) ([8913120](https://github.com/kulshekhar/ts-jest/commit/89131203c358c8f9e89655800e500a9e88a17334)), closes [#2406](https://github.com/kulshekhar/ts-jest/issues/2406) [#2411](https://github.com/kulshekhar/ts-jest/issues/2411)
 * **compiler:** return original file content and show warning on emit skip ([#2410](https://github.com/kulshekhar/ts-jest/issues/2410)) ([c2b2164](https://github.com/kulshekhar/ts-jest/commit/c2b2164ddd1e606fc2490326244a6efc63f6c4a0)), closes [#2407](https://github.com/kulshekhar/ts-jest/issues/2407)
 * **compiler:** type check correctly in watch mode when a file content itself has changed ([#2405](https://github.com/kulshekhar/ts-jest/issues/2405)) ([064bf3a](https://github.com/kulshekhar/ts-jest/commit/064bf3a73e9a304aa9366d27db8973b68be23ffd)), closes [#2118](https://github.com/kulshekhar/ts-jest/issues/2118)
-
-
-### Features
-
-* adopt jest **27.0.0-next.4** ([#2435](https://github.com/kulshekhar/ts-jest/issues/2435)) ([1d411f2](https://github.com/kulshekhar/ts-jest/commit/1d411f285e4f7eff7982c3917b6b91b5af617e8a))
 
 
 
@@ -264,18 +365,12 @@ export function factory(compilerInstance: TsCompilerInstance) {
 
 ### BREAKING CHANGES
 
-* By default, when no `target` is defined in `tsconfig`, `ts-jest` will transform codes to ES2015 syntax
 * Now both `isolatedModules: true` and `isolatedModule: false` codes are in one single class `TsCompiler` which is an instance created in `TsJestCompiler` based on config option `compiler` with value `typescript` or `ttypescript`.
 
 
 
 
 # [27.0.0-alpha.0](https://github.com/kulshekhar/ts-jest/compare/v26.4.4...v27.0.0-alpha.0) (2020-11-11)
-
-
-### Build System
-
-* **devs-infra:** build package with target `es2015` ([#2130](https://github.com/kulshekhar/ts-jest/issues/2130)) ([6bd101c](https://github.com/kulshekhar/ts-jest/commit/6bd101ccde60e263352de5bee4a6bd38987eb0ca))
 
 
 ### Code Refactoring
@@ -289,7 +384,6 @@ export function factory(compilerInstance: TsCompilerInstance) {
 ### BREAKING CHANGES
 
 * **config:** `packageJson` config option is not used in internal `ts-jest` so this option is now removed
-* **devs-infra:** `ts-jest` no longer ships with `es5` build but now with `es2015`
 * **config:** One is defining ast transformers in `jest.config.js`/`package.json` should change to
 ```
 // jest.config.js
