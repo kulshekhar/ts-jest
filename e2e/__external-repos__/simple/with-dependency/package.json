@@ -38,13 +38,13 @@
   "devDependencies": {
     "@types/jest": "^26.0.23",
     "dependency": "file:../dependency",
-    "jest": "^27.0.0-next.11",
+    "jest": "^27.0.1",
     "typescript": "^4.2.4"
   },
   "wantedDependencies": {
     "typescript": "latest",
     "@types/jest": "latest",
-    "jest": "next"
+    "jest": "latest"
   },
   "main": "./index.ts"
 }
