@@ -413,27 +413,69 @@ Migrated Jest configuration:
 `)
     })
 
-    it('should reset testMatch if testRegex is used', async () => {
+    test.each([
+      {
+        jest: {
+          preset: 'ts-jest',
+        },
+      },
+      {
+        jest: {
+          preset: 'ts-jest/foo',
+        },
+      },
+      {
+        jest: {
+          preset: 'foo-preset',
+        },
+      },
+    ])('should migrate preset if valid preset value is used', async (jestCfg) => {
       expect.assertions(1)
       fs.existsSync.mockImplementation(() => true)
-      jest.mock(
-        pkgPaths.next,
-        () => ({
-          jest: {
-            testRegex: 'foo-pattern',
-          },
-        }),
-        { virtual: true },
-      )
+      jest.mock(pkgPaths.next, () => jestCfg, { virtual: true })
+
       const res = await runCli(...noOption, pkgPaths.current)
-      expect(res.stdout).toMatchInlineSnapshot(`
-"\\"jest\\": {
-  \\"testRegex\\": \\"foo-pattern\\",
-  \\"preset\\": \\"ts-jest\\",
-  \\"testMatch\\": null
-}
-"
-`)
+
+      expect(res.stdout ? res.stdout : res.stderr).toMatchSnapshot()
+    })
+
+    test.each([
+      {
+        jest: {
+          testRegex: 'foo-pattern',
+          testMatch: ['**/__tests__/**/*.(spec|test).[tj]s?(x)'],
+        },
+      },
+      {
+        jest: {
+          testRegex: ['foo-pattern'],
+          testMatch: ['**/__tests__/**/*.(spec|test).[tj]s?(x)'],
+        },
+      },
+      {
+        jest: {
+          testRegex: [],
+          testMatch: ['**/__tests__/**/*.(spec|test).[tj]s?(x)'],
+        },
+      },
+      {
+        jest: {
+          testMatch: ['**/__tests__/**/*.(spec|test).[tj]s?(x)'],
+        },
+      },
+      {
+        jest: {
+          testRegex: 'foo-pattern',
+        },
+      },
+    ])('should reset testMatch if testRegex is used', async (jestCfg) => {
+      expect.assertions(1)
+      fs.existsSync.mockImplementation(() => true)
+      jest.mock(pkgPaths.next, () => jestCfg, { virtual: true })
+
+      const res = await runCli(...noOption, pkgPaths.current)
+
+      expect(res.stdout).toMatchSnapshot()
     })
 
     it('should detect best preset', async () => {

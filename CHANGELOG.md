@@ -115,7 +115,7 @@ module.exports = {
 ```
 * Remove possibilities to import `mocked`, `createJestPreset`, `pathsToModuleNameMapper` from package entry. One should change to
 ```
-import { mocked, createJestPreset, pathsToModuleNameMapper` } from 'ts-jest/utils'
+import { mocked, createJestPreset, pathsToModuleNameMapper } from 'ts-jest/utils'
 ```
 * **config:** One currently uses `tsConfig` should change to `tsconfig` in your `jest.config.js` or `package.json`.
 
