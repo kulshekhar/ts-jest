@@ -1,0 +1,67 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`config migrate should migrate preset if valid preset value is used 1`] = `
+"
+No migration needed for given Jest configuration
+    "
+`;
+
+exports[`config migrate should migrate preset if valid preset value is used 2`] = `
+"\\"jest\\": {
+  \\"preset\\": \\"ts-jest\\"
+}
+"
+`;
+
+exports[`config migrate should migrate preset if valid preset value is used 3`] = `
+"
+No migration needed for given Jest configuration
+    "
+`;
+
+exports[`config migrate should reset testMatch if testRegex is used 1`] = `
+"\\"jest\\": {
+  \\"testRegex\\": \\"foo-pattern\\",
+  \\"preset\\": \\"ts-jest\\"
+}
+"
+`;
+
+exports[`config migrate should reset testMatch if testRegex is used 2`] = `
+"\\"jest\\": {
+  \\"testRegex\\": [
+    \\"foo-pattern\\"
+  ],
+  \\"preset\\": \\"ts-jest\\"
+}
+"
+`;
+
+exports[`config migrate should reset testMatch if testRegex is used 3`] = `
+"\\"jest\\": {
+  \\"testRegex\\": [],
+  \\"testMatch\\": [
+    \\"**/__tests__/**/*.(spec|test).[tj]s?(x)\\"
+  ],
+  \\"preset\\": \\"ts-jest\\"
+}
+"
+`;
+
+exports[`config migrate should reset testMatch if testRegex is used 4`] = `
+"\\"jest\\": {
+  \\"testMatch\\": [
+    \\"**/__tests__/**/*.(spec|test).[tj]s?(x)\\"
+  ],
+  \\"preset\\": \\"ts-jest\\"
+}
+"
+`;
+
+exports[`config migrate should reset testMatch if testRegex is used 5`] = `
+"\\"jest\\": {
+  \\"testRegex\\": \\"foo-pattern\\",
+  \\"preset\\": \\"ts-jest\\"
+}
+"
+`;

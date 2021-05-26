@@ -71,19 +71,19 @@ export const run: CliCommand = async (args: Arguments /* , logger: Logger*/) => 
       }
     }
     // ensure we are using a preset
-    presetName = presetName || JestPresetNames.default
+    presetName = presetName ?? JestPresetNames.default
     preset = allPresets[presetName]
     footNotes.push(
       `Detected preset '${preset.label}' as the best matching preset for your configuration.
 Visit https://kulshekhar.github.io/ts-jest/user/config/#jest-preset for more information about presets.
 `,
     )
-  } else if (migratedConfig.preset && migratedConfig.preset.startsWith('ts-jest')) {
+  } else if (migratedConfig.preset?.startsWith('ts-jest')) {
     if (args.jestPreset === false) {
       delete migratedConfig.preset
     } else {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      preset = (allPresets as any)[migratedConfig.preset] || defaults
+      preset = (allPresets as any)[migratedConfig.preset] ?? defaults
     }
   }
 
@@ -91,21 +91,20 @@ Visit https://kulshekhar.github.io/ts-jest/user/config/#jest-preset for more inf
   if (preset) migratedConfig.preset = preset.name
 
   // check the extensions
-  if (migratedConfig.moduleFileExtensions && migratedConfig.moduleFileExtensions.length && preset) {
-    const presetValue = dedupSort(preset.value.moduleFileExtensions || []).join('::')
+  if (migratedConfig.moduleFileExtensions?.length && preset) {
+    const presetValue = dedupSort(preset.value.moduleFileExtensions ?? []).join('::')
     const migratedValue = dedupSort(migratedConfig.moduleFileExtensions).join('::')
     if (presetValue === migratedValue) {
       delete migratedConfig.moduleFileExtensions
     }
   }
   // there is a testRegex, remove our testMatch
-  if (migratedConfig.testRegex && preset) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    migratedConfig.testMatch = null as any
+  if ((typeof migratedConfig.testRegex === 'string' || migratedConfig.testRegex?.length) && preset) {
+    delete migratedConfig.testMatch
   }
   // check the testMatch
-  else if (migratedConfig.testMatch && migratedConfig.testMatch.length && preset) {
-    const presetValue = dedupSort(preset.value.testMatch || []).join('::')
+  else if (migratedConfig.testMatch?.length && preset) {
+    const presetValue = dedupSort(preset.value.testMatch ?? []).join('::')
     const migratedValue = dedupSort(migratedConfig.testMatch).join('::')
     if (presetValue === migratedValue) {
       delete migratedConfig.testMatch
@@ -190,20 +189,20 @@ function cleanupConfig(config: Config.InitialOptions): void {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       delete (config as any).globals['ts-jest']
     }
-    if (Object.keys(config.globals).length === 0) {
+    if (!Object.keys(config.globals).length) {
       delete config.globals
     }
   }
-  if (config.transform && Object.keys(config.transform).length === 0) {
+  if (config.transform && !Object.keys(config.transform).length) {
     delete config.transform
   }
   if (config.moduleFileExtensions) {
     config.moduleFileExtensions = dedupSort(config.moduleFileExtensions)
-    if (config.moduleFileExtensions.length === 0) delete config.moduleFileExtensions
+    if (!config.moduleFileExtensions.length) delete config.moduleFileExtensions
   }
   if (config.testMatch) {
     config.testMatch = dedupSort(config.testMatch)
-    if (config.testMatch.length === 0) delete config.testMatch
+    if (!config.testMatch.length) delete config.testMatch
   }
   if (config.preset === JestPresetNames.default) config.preset = defaults.name
 }
