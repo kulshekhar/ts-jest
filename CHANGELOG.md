@@ -1,3 +1,24 @@
+## [27.0.1](https://github.com/kulshekhar/ts-jest/compare/v27.0.0...v27.0.1) (2021-05-26)
+
+
+### Bug Fixes
+
+* **cli:** keep `testMatch` if old jest config contains it ([#2618](https://github.com/kulshekhar/ts-jest/issues/2618)) ([c568f49](https://github.com/kulshekhar/ts-jest/commit/c568f49907fb5559ba1e8c67f1ec5d5eb4af920a)), closes [#2616](https://github.com/kulshekhar/ts-jest/issues/2616)
+* **compiler:** make sure `isolatedModules: false` use updated compiler options ([#2628](https://github.com/kulshekhar/ts-jest/issues/2628)) ([348e30f](https://github.com/kulshekhar/ts-jest/commit/348e30f426803efc51ecba26ab42619938fcb5af)), closes [#2629](https://github.com/kulshekhar/ts-jest/issues/2629)
+* add missing export `presets` ([#2624](https://github.com/kulshekhar/ts-jest/issues/2624)) ([0ea025e](https://github.com/kulshekhar/ts-jest/commit/0ea025ebb456d3a31671e31fac0b401c2734a2b1)), closes [#2623](https://github.com/kulshekhar/ts-jest/issues/2623)
+
+
+
+## [27.0.1](https://github.com/kulshekhar/ts-jest/compare/v27.0.0...v27.0.1) (2021-05-26)
+
+
+### Bug Fixes
+
+* **cli:** keep `testMatch` if old jest config contains it ([#2618](https://github.com/kulshekhar/ts-jest/issues/2618)) ([c568f49](https://github.com/kulshekhar/ts-jest/commit/c568f49907fb5559ba1e8c67f1ec5d5eb4af920a)), closes [#2616](https://github.com/kulshekhar/ts-jest/issues/2616)
+* add missing export `presets` ([#2624](https://github.com/kulshekhar/ts-jest/issues/2624)) ([0ea025e](https://github.com/kulshekhar/ts-jest/commit/0ea025ebb456d3a31671e31fac0b401c2734a2b1)), closes [#2623](https://github.com/kulshekhar/ts-jest/issues/2623)
+
+
+
 # [27.0.0](https://github.com/kulshekhar/ts-jest/compare/v26.5.6...v27.0.0) (2021-05-25)
 
 
