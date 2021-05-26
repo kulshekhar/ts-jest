@@ -32,6 +32,7 @@ import type {
   TsJestCompileOptions,
   TTypeScript,
 } from '../types'
+import { stringify } from '../utils/json'
 import { rootLogger } from '../utils/logger'
 import { Errors, interpolate } from '../utils/messages'
 
@@ -404,6 +405,9 @@ export class TsCompiler implements TsCompilerInstance {
       if (!this._parsedTsConfig.fileNames.includes(fileName)) {
         shouldIncrementProjectVersion = true
       }
+    }
+    if (stringify(this._compilerOptions) !== stringify(this._initialCompilerOptions)) {
+      shouldIncrementProjectVersion = true
     }
 
     if (shouldIncrementProjectVersion) this._projectVersion++

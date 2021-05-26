@@ -329,6 +329,14 @@ describe('TsCompiler', () => {
     beforeEach(() => {
       // @ts-expect-error testing purpose
       compiler._projectVersion = 1
+      /**
+       * This is to ensure that `compilerOptions` value and `_parsedTsConfig.fileNames` are always like
+       * when compiler instance is created since here we only create compiler instance once for all the tests below.
+       */
+      // @ts-expect-error testing purpose.
+      compiler._compilerOptions = { ...compiler._initialCompilerOptions }
+      // @ts-expect-error testing purpose.
+      compiler._parsedTsConfig.fileNames = []
       fileContentCache.clear()
       fileVersionCache.clear()
     })
@@ -352,6 +360,29 @@ describe('TsCompiler', () => {
       compiler._fileContentCache = fileContentCache
       // @ts-expect-error testing purpose
       compiler._fileVersionCache = fileVersionCache
+
+      // @ts-expect-error testing purpose
+      compiler._updateMemoryCache(fileContent, fileName)
+
+      // @ts-expect-error testing purpose
+      expect(compiler._projectVersion).toEqual(2)
+    })
+
+    test('should increase project version if processing file is in compiler file list', () => {
+      // @ts-expect-error testing purpose
+      compiler._parsedTsConfig.fileNames.push(fileName)
+      fileContentCache.set(fileName, fileContent)
+      fileVersionCache.set(fileName, 1)
+      // @ts-expect-error testing purpose
+      compiler._fileContentCache = fileContentCache
+      // @ts-expect-error testing purpose
+      compiler._fileVersionCache = fileVersionCache
+      // @ts-expect-error testing purpose
+      compiler._compilerOptions = {
+        // @ts-expect-error testing purpose
+        ...compiler._compilerOptions,
+        module: ModuleKind.AMD,
+      }
 
       // @ts-expect-error testing purpose
       compiler._updateMemoryCache(fileContent, fileName)
