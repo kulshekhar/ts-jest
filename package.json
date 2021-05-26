@@ -7,7 +7,7 @@
     ".": "./dist/index.js",
     "./dist/*": "./dist/*.js",
     "./jest-preset": "./jest-preset.js",
-    "./preset": "./presets/index.js",
+    "./presets": "./presets/index.js",
     "./utils": "./utils/index.js",
     "./package.json": "./package.json"
   },
