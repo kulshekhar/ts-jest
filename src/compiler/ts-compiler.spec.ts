@@ -3,12 +3,13 @@ import { basename, join, normalize } from 'path'
 
 import { DiagnosticCategory, EmitOutput, ModuleKind, ScriptTarget, TranspileOutput } from 'typescript'
 
-import { makeCompiler } from '../__helpers__/fakers'
+import { createConfigSet, makeCompiler } from '../__helpers__/fakers'
 import { mockFolder } from '../__helpers__/path'
 import type { DepGraphInfo } from '../types'
 import { Errors, interpolate } from '../utils/messages'
 
 import { updateOutput } from './compiler-utils'
+import { TsCompiler } from './ts-compiler'
 
 const baseTsJestConfig = { tsconfig: join(process.cwd(), 'tsconfig.spec.json') }
 
@@ -163,9 +164,12 @@ describe('TsCompiler', () => {
       const sourceMap = '{}'
 
       test.each([true, false])('should compile codes with useESM %p', (useESM) => {
-        const compiler = makeCompiler({
+        const configSet = createConfigSet({
           tsJestConfig: { ...baseTsJestConfig, useESM },
         })
+        const emptyFile = join(mockFolder, 'empty.ts')
+        configSet.parsedTsConfig.fileNames.push(emptyFile)
+        const compiler = new TsCompiler(configSet, new Map())
         // @ts-expect-error testing purpose
         compiler._languageService.getEmitOutput = jest.fn().mockReturnValueOnce({
           outputFiles: [{ text: sourceMap }, { text: jsOutput }],
@@ -193,6 +197,13 @@ describe('TsCompiler', () => {
         expect(esModuleInterop).toEqual(useESM ? true : esModuleInterop)
         expect(allowSyntheticDefaultImports).toEqual(useESM ? true : allowSyntheticDefaultImports)
         expect(output).toEqual(updateOutput(jsOutput, fileName, sourceMap))
+
+        // @ts-expect-error testing purpose
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        compiler._languageService!.getSemanticDiagnostics(fileName)
+
+        // @ts-expect-error testing purpose
+        expect(compiler._fileContentCache.has(emptyFile)).toBe(true)
       })
 
       test('should show a warning message and return original file content for non ts/tsx files if emitSkipped is true', () => {

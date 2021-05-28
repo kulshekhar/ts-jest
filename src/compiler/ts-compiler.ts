@@ -266,7 +266,7 @@ export class TsCompiler implements TsCompilerInstance {
 
         this._logger.trace({ normalizedFileName, cacheHit: hit }, 'getScriptSnapshot():', 'cache', hit ? 'hit' : 'miss')
 
-        // Read contents from TypeScript memory cache.
+        // Read file content from either memory cache or Jest runtime cache or fallback to file system read
         if (!hit) {
           const fileContent =
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -274,7 +274,7 @@ export class TsCompiler implements TsCompilerInstance {
             this._runtimeCacheFS.get(normalizedFileName) ??
             this._cachedReadFile?.(normalizedFileName) ??
             undefined
-          if (fileContent) {
+          if (fileContent !== undefined) {
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             this._fileContentCache!.set(normalizedFileName, fileContent)
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
