@@ -119,6 +119,7 @@
     "eslint-plugin-prettier": "latest",
     "execa": "latest",
     "fs-extra": "10.x",
+    "glob": "^7.1.7",
     "glob-gitignore": "latest",
     "husky": "4.x",
     "jest": "^27.0.0",

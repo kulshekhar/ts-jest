@@ -13,9 +13,7 @@
     "downlevelIteration": true,
     "strict": true,
     "moduleResolution": "node",
-    "esModuleInterop": true
-  },
-  "include": [
-    "./src"
-  ]
+    "esModuleInterop": true,
+    "noEmitOnError": true
+  }
 }
