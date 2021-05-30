@@ -32,7 +32,6 @@ import type {
   TsJestCompileOptions,
   TTypeScript,
 } from '../types'
-import { stringify } from '../utils/json'
 import { rootLogger } from '../utils/logger'
 import { Errors, interpolate } from '../utils/messages'
 
@@ -150,6 +149,7 @@ export class TsCompiler implements TsCompilerInstance {
     let moduleKind = this._initialCompilerOptions.module
     let esModuleInterop = this._initialCompilerOptions.esModuleInterop
     let allowSyntheticDefaultImports = this._initialCompilerOptions.allowSyntheticDefaultImports
+    const currentModuleKind = this._compilerOptions.module
     if (options.supportsStaticESM && this.configSet.useESM) {
       moduleKind =
         !moduleKind ||
@@ -173,7 +173,7 @@ export class TsCompiler implements TsCompilerInstance {
       this._logger.debug({ fileName }, 'getCompiledOutput(): compiling using language service')
 
       // Must set memory cache before attempting to compile
-      this._updateMemoryCache(fileContent, fileName)
+      this._updateMemoryCache(fileContent, fileName, currentModuleKind === moduleKind)
       const output: EmitOutput = this._languageService.getEmitOutput(fileName)
       this._doTypeChecking(fileName, options.depGraphs, options.watchMode)
       if (output.emitSkipped) {
@@ -376,7 +376,7 @@ export class TsCompiler implements TsCompilerInstance {
   /**
    * @internal
    */
-  private _updateMemoryCache(contents: string, fileName: string): void {
+  private _updateMemoryCache(contents: string, fileName: string, isModuleKindTheSame = true): void {
     this._logger.debug({ fileName }, 'updateMemoryCache: update memory cache for language service')
 
     let shouldIncrementProjectVersion = false
@@ -402,12 +402,9 @@ export class TsCompiler implements TsCompilerInstance {
        * When a file is from node_modules or referenced to a referenced project and jest wants to transform it, we need
        * to make sure that the Program is updated with this information
        */
-      if (!this._parsedTsConfig.fileNames.includes(fileName)) {
+      if (!this._parsedTsConfig.fileNames.includes(fileName) || !isModuleKindTheSame) {
         shouldIncrementProjectVersion = true
       }
-    }
-    if (stringify(this._compilerOptions) !== stringify(this._initialCompilerOptions)) {
-      shouldIncrementProjectVersion = true
     }
 
     if (shouldIncrementProjectVersion) this._projectVersion++
