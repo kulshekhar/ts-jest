@@ -498,26 +498,27 @@ describe('raiseDiagnostics', () => {
       category = ts.DiagnosticCategory.Warning,
     }: // eslint-disable-next-line @typescript-eslint/no-explicit-any
     Partial<ts.Diagnostic> = {}): ts.Diagnostic => ({ messageText, code, category } as any)
-    it('should throw when diagnostics contains file path and exclude config matches file path', () => {
+    test('should not throw when diagnostics contains file path and exclude config matches file path', () => {
       const cs = createConfigSet({
         logger,
         tsJestConfig: { diagnostics: { exclude: ['src/__mocks__/index.ts'], pretty: false } },
       })
       logger.target.clear()
 
+      expect(() => cs.raiseDiagnostics([makeDiagnostic()], 'src/__mocks__/index.ts', logger)).not.toThrow()
+    })
+
+    test("should throw when diagnostics contains file path and exclude config doesn't match file path", () => {
+      const cs = createConfigSet({
+        logger,
+        tsJestConfig: { diagnostics: { exclude: ['/bar/'], pretty: false } },
+      })
+      cs.compilerModule.formatDiagnostics = jest.fn().mockReturnValueOnce('warning TS9999: foo')
+      logger.target.clear()
+
       expect(() =>
         cs.raiseDiagnostics([makeDiagnostic()], 'src/__mocks__/index.ts', logger),
       ).toThrowErrorMatchingInlineSnapshot(`"warning TS9999: foo"`)
-    })
-
-    it("should not throw when diagnostics contains file path and exclude config doesn't match file path", () => {
-      const cs = createConfigSet({
-        logger,
-        tsJestConfig: { diagnostics: { warnOnly: true, exclude: ['/bar/'], pretty: false } },
-      })
-      logger.target.clear()
-
-      expect(() => cs.raiseDiagnostics([makeDiagnostic()], 'src/__mocks__/index.ts', logger)).not.toThrow()
     })
   })
 
@@ -536,41 +537,40 @@ describe('raiseDiagnostics', () => {
     }: // eslint-disable-next-line @typescript-eslint/no-explicit-any
     Partial<ts.Diagnostic> = {}): ts.Diagnostic => ({ messageText, code, category, file } as any)
 
-    it("should not throw when exclude config doesn't match source file path", () => {
+    test(`should throw when exclude config doesn't match source file path`, () => {
       const cs = createConfigSet({
         logger,
         tsJestConfig: { diagnostics: { exclude: ['/foo/'], pretty: false, ignoreCodes: [1111] } },
       })
+      cs.compilerModule.formatDiagnostics = jest.fn().mockReturnValueOnce('warning TS9999: foo')
       logger.target.clear()
 
-      expect(() => cs.raiseDiagnostics([makeDiagnostic()])).not.toThrow()
+      expect(() => cs.raiseDiagnostics([makeDiagnostic()])).toThrowErrorMatchingInlineSnapshot(`"warning TS9999: foo"`)
     })
 
-    it("should throw when exclude config doesn't match source file path", () => {
+    it(`should not throw when exclude config doesn't match source file path`, () => {
       const cs = createConfigSet({
         logger,
         tsJestConfig: { diagnostics: { exclude: ['src/__mocks__/index.ts'], pretty: false } },
       })
       logger.target.clear()
 
-      expect(() => cs.raiseDiagnostics([makeDiagnostic()])).toThrowErrorMatchingInlineSnapshot(
-        `"Debug Failure. False expression: position cannot precede the beginning of the file"`,
-      )
+      expect(() => cs.raiseDiagnostics([makeDiagnostic()])).not.toThrow()
     })
   })
 }) // raiseDiagnostics
 
 describe('shouldReportDiagnostics', () => {
-  it('should return correct value for ts/tsx files', () => {
+  test('should return correct value for ts/tsx files', () => {
     let cs = createConfigSet({
       tsJestConfig: {
         tsconfig: false,
-        diagnostics: { exclude: ['**/foo/*.ts', '**/foo/*.tsx'] },
+        diagnostics: { exclude: ['**/foo/*.ts', 'NOTHING'] },
       } as any, // eslint-disable-line @typescript-eslint/no-explicit-any
     })
 
-    expect(cs.shouldReportDiagnostics('/foo/index.ts')).toBe(true)
-    expect(cs.shouldReportDiagnostics('/bar/index.tsx')).toBe(false)
+    expect(cs.shouldReportDiagnostics('/foo/index.ts')).toBe(false)
+    expect(cs.shouldReportDiagnostics('/bar/index.tsx')).toBe(true)
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     cs = createConfigSet({ tsJestConfig: { tsconfig: false } as any })
@@ -597,8 +597,8 @@ describe('shouldReportDiagnostics', () => {
       },
     })
 
-    expect(cs.shouldReportDiagnostics('/foo/index.js')).toBe(true)
-    expect(cs.shouldReportDiagnostics('/foo/index.jsx')).toBe(true)
+    expect(cs.shouldReportDiagnostics('/foo/index.js')).toBe(false)
+    expect(cs.shouldReportDiagnostics('/foo/index.jsx')).toBe(false)
   })
 }) // shouldReportDiagnostics
 
