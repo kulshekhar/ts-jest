@@ -141,7 +141,7 @@ export class ConfigSet {
   /**
    * @internal
    */
-  private _shouldGetDiagnosticsForFile!: (filePath: string) => boolean
+  private _shouldIgnoreDiagnosticsForFile!: (filePath: string) => boolean
   /**
    * @internal
    */
@@ -277,9 +277,9 @@ export class ConfigSet {
         throws: diagnosticsOpt,
       }
     }
-    this._shouldGetDiagnosticsForFile = this._diagnostics.exclude.length
+    this._shouldIgnoreDiagnosticsForFile = this._diagnostics.exclude.length
       ? globsToMatcher(this._diagnostics.exclude)
-      : () => true
+      : () => false
 
     this.logger.debug({ diagnostics: this._diagnostics }, 'normalized diagnostics config via ts-jest option')
 
@@ -549,8 +549,8 @@ export class ConfigSet {
     const fileExtension = extname(filePath)
 
     return JS_JSX_EXTENSIONS.includes(fileExtension)
-      ? this.parsedTsConfig.options.checkJs && this._shouldGetDiagnosticsForFile(filePath)
-      : this._shouldGetDiagnosticsForFile(filePath)
+      ? this.parsedTsConfig.options.checkJs && !this._shouldIgnoreDiagnosticsForFile(filePath)
+      : !this._shouldIgnoreDiagnosticsForFile(filePath)
   }
 
   /**
