@@ -379,24 +379,16 @@ describe('TsCompiler', () => {
       expect(compiler._projectVersion).toEqual(2)
     })
 
-    test('should increase project version if processing file is in compiler file list', () => {
-      // @ts-expect-error testing purpose
-      compiler._parsedTsConfig.fileNames.push(fileName)
+    test('should increase project version if module value has changed', () => {
       fileContentCache.set(fileName, fileContent)
       fileVersionCache.set(fileName, 1)
       // @ts-expect-error testing purpose
       compiler._fileContentCache = fileContentCache
       // @ts-expect-error testing purpose
       compiler._fileVersionCache = fileVersionCache
-      // @ts-expect-error testing purpose
-      compiler._compilerOptions = {
-        // @ts-expect-error testing purpose
-        ...compiler._compilerOptions,
-        module: ModuleKind.AMD,
-      }
 
       // @ts-expect-error testing purpose
-      compiler._updateMemoryCache(fileContent, fileName)
+      compiler._updateMemoryCache(fileContent, fileName, false)
 
       // @ts-expect-error testing purpose
       expect(compiler._projectVersion).toEqual(2)
