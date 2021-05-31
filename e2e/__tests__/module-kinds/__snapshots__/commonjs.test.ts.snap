@@ -17,6 +17,15 @@ exports[`Module commonjs run with options: {"module":"commonjs","allowSyntheticD
       5 export = lib
         ~~~~~~~~~~~~
       This module is declared with using 'export =', and can only be used with a default import when using the 'esModuleInterop' flag.
+  import-default.spec.ts:1:8 - error TS1259: Module '"<cwd>/lib"' can only be default-imported using the 'esModuleInterop' flag
+  
+  1 import lib from './lib'
+           ~~~
+  
+    lib.d.ts:5:1
+      5 export = lib
+        ~~~~~~~~~~~~
+      This module is declared with using 'export =', and can only be used with a default import when using the 'esModuleInterop' flag.
   FAIL ./import-default.spec.ts
     ● import default
   
@@ -86,6 +95,15 @@ exports[`Module commonjs run with options: {"module":"commonjs","esModuleInterop
   PASS ./import-legacy.spec.ts
   PASS ./import-star.spec.ts
   ts-jest[ts-compiler] (WARN) import-default.spec.ts:1:8 - error TS1259: Module '"<cwd>/lib"' can only be default-imported using the 'esModuleInterop' flag
+  
+  1 import lib from './lib'
+           ~~~
+  
+    lib.d.ts:5:1
+      5 export = lib
+        ~~~~~~~~~~~~
+      This module is declared with using 'export =', and can only be used with a default import when using the 'esModuleInterop' flag.
+  import-default.spec.ts:1:8 - error TS1259: Module '"<cwd>/lib"' can only be default-imported using the 'esModuleInterop' flag
   
   1 import lib from './lib'
            ~~~
@@ -174,6 +192,15 @@ exports[`Module commonjs run with options: {"module":"commonjs"} with template d
   PASS ./import-legacy.spec.ts
   PASS ./import-star.spec.ts
   ts-jest[ts-compiler] (WARN) import-default.spec.ts:1:8 - error TS1259: Module '"<cwd>/lib"' can only be default-imported using the 'esModuleInterop' flag
+  
+  1 import lib from './lib'
+           ~~~
+  
+    lib.d.ts:5:1
+      5 export = lib
+        ~~~~~~~~~~~~
+      This module is declared with using 'export =', and can only be used with a default import when using the 'esModuleInterop' flag.
+  import-default.spec.ts:1:8 - error TS1259: Module '"<cwd>/lib"' can only be default-imported using the 'esModuleInterop' flag
   
   1 import lib from './lib'
            ~~~
