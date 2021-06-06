@@ -1,7 +1,7 @@
 import { readFileSync } from 'fs'
 import { basename, join, normalize } from 'path'
 
-import { DiagnosticCategory, EmitOutput, ModuleKind, ScriptTarget, TranspileOutput } from 'typescript'
+import { CompilerOptions, DiagnosticCategory, EmitOutput, TranspileOutput } from 'typescript'
 
 import { createConfigSet, makeCompiler } from '../__helpers__/fakers'
 import { mockFolder } from '../__helpers__/path'
@@ -76,9 +76,30 @@ describe('TsCompiler', () => {
       const fileName = join(mockFolder, 'thing.ts')
       const fileContent = 'const bar = 1'
 
-      test.each([true, false])('should transpile code with useESM %p', (useESM) => {
+      test.each([
+        {
+          useESM: true,
+          babelConfig: true,
+          supportsStaticESM: false,
+        },
+        {
+          useESM: true,
+          babelConfig: false,
+          supportsStaticESM: true,
+        },
+        {
+          useESM: true,
+          babelConfig: false,
+          supportsStaticESM: false,
+        },
+        {
+          useESM: false,
+          babelConfig: false,
+          supportsStaticESM: true,
+        },
+      ])('should transpile code with config %p', ({ useESM, babelConfig, supportsStaticESM }) => {
         const compiler = makeCompiler({
-          tsJestConfig: { ...baseTsJestConfig, isolatedModules: true, useESM },
+          tsJestConfig: { ...baseTsJestConfig, isolatedModules: true, useESM, babelConfig },
         })
         const transformersStub = {
           before: [],
@@ -86,34 +107,26 @@ describe('TsCompiler', () => {
           afterDeclarations: [],
         }
         // @ts-expect-error testing purpose
-        compiler._ts.transpileModule = jest.fn().mockReturnValueOnce({
+        const transpileMock = (compiler._ts.transpileModule = jest.fn().mockReturnValueOnce({
           sourceMapText: '{}',
           outputText: 'var bar = 1',
           diagnostics: [],
-        } as TranspileOutput)
+        } as TranspileOutput))
         // @ts-expect-error testing purpose
         compiler._makeTransformers = jest.fn().mockReturnValueOnce(transformersStub)
         compiler.getCompiledOutput(fileContent, fileName, {
           depGraphs: new Map(),
-          supportsStaticESM: true,
+          supportsStaticESM,
           watchMode: false,
         })
-        // @ts-expect-error testing purpose
-        const compilerOptions = compiler._compilerOptions
 
-        // @ts-expect-error testing purpose
-        expect(compiler._ts.transpileModule).toHaveBeenCalledWith(fileContent, {
-          fileName,
-          compilerOptions: {
-            ...compilerOptions,
-            module: useESM ? ModuleKind.ESNext : ModuleKind.CommonJS,
-            target: useESM ? ScriptTarget.ES2015 : compilerOptions.target,
-            esModuleInterop: useESM ? true : compilerOptions.esModuleInterop,
-            allowSyntheticDefaultImports: useESM ? true : compilerOptions.allowSyntheticDefaultImports,
-          },
-          transformers: transformersStub,
-          reportDiagnostics: compiler.configSet.shouldReportDiagnostics(fileName),
-        })
+        const usedCompilerOptions = transpileMock.mock.calls[0][1].compilerOptions as CompilerOptions
+        expect(transpileMock).toHaveBeenCalled()
+        expect({
+          module: usedCompilerOptions.module,
+          esModuleInterop: usedCompilerOptions.esModuleInterop,
+          allowSyntheticDefaultImports: usedCompilerOptions.allowSyntheticDefaultImports,
+        }).toMatchSnapshot()
       })
 
       test.each([true, false])('should report diagnostics if shouldReportDiagnostics is %p', (shouldReport) => {
@@ -163,9 +176,30 @@ describe('TsCompiler', () => {
       const jsOutput = 'var bar = 1'
       const sourceMap = '{}'
 
-      test.each([true, false])('should compile codes with useESM %p', (useESM) => {
+      test.each([
+        {
+          useESM: true,
+          babelConfig: true,
+          supportsStaticESM: false,
+        },
+        {
+          useESM: true,
+          babelConfig: false,
+          supportsStaticESM: true,
+        },
+        {
+          useESM: true,
+          babelConfig: false,
+          supportsStaticESM: false,
+        },
+        {
+          useESM: false,
+          babelConfig: false,
+          supportsStaticESM: true,
+        },
+      ])('should compile codes with useESM %p', ({ useESM, babelConfig, supportsStaticESM }) => {
         const configSet = createConfigSet({
-          tsJestConfig: { ...baseTsJestConfig, useESM },
+          tsJestConfig: { ...baseTsJestConfig, useESM, babelConfig },
         })
         const emptyFile = join(mockFolder, 'empty.ts')
         configSet.parsedTsConfig.fileNames.push(emptyFile)
@@ -180,22 +214,17 @@ describe('TsCompiler', () => {
 
         const output = compiler.getCompiledOutput(fileContent, fileName, {
           depGraphs: new Map(),
-          supportsStaticESM: true,
+          supportsStaticESM,
           watchMode: false,
         })
 
         // @ts-expect-error testing purpose
-        const compileTarget = compiler._compilerOptions.target
-        // @ts-expect-error testing purpose
-        const moduleKind = compiler._compilerOptions.module
-        // @ts-expect-error testing purpose
-        const esModuleInterop = compiler._compilerOptions.esModuleInterop
-        // @ts-expect-error testing purpose
-        const allowSyntheticDefaultImports = compiler._compilerOptions.allowSyntheticDefaultImports
-        expect(compileTarget).toEqual(useESM ? ScriptTarget.ES2015 : compileTarget)
-        expect(moduleKind).toEqual(useESM ? ModuleKind.ESNext : moduleKind)
-        expect(esModuleInterop).toEqual(useESM ? true : esModuleInterop)
-        expect(allowSyntheticDefaultImports).toEqual(useESM ? true : allowSyntheticDefaultImports)
+        const usedCompilerOptions = compiler._compilerOptions
+        expect({
+          module: usedCompilerOptions.module,
+          esModuleInterop: usedCompilerOptions.esModuleInterop,
+          allowSyntheticDefaultImports: usedCompilerOptions.allowSyntheticDefaultImports,
+        }).toMatchSnapshot()
         expect(output).toEqual(updateOutput(jsOutput, fileName, sourceMap))
 
         // @ts-expect-error testing purpose

@@ -1,0 +1,65 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TsCompiler getCompiledOutput isolatedModules false should compile codes with useESM {"babelConfig": false, "supportsStaticESM": false, "useESM": true} 1`] = `
+Object {
+  "allowSyntheticDefaultImports": undefined,
+  "esModuleInterop": true,
+  "module": 1,
+}
+`;
+
+exports[`TsCompiler getCompiledOutput isolatedModules false should compile codes with useESM {"babelConfig": false, "supportsStaticESM": true, "useESM": false} 1`] = `
+Object {
+  "allowSyntheticDefaultImports": undefined,
+  "esModuleInterop": true,
+  "module": 1,
+}
+`;
+
+exports[`TsCompiler getCompiledOutput isolatedModules false should compile codes with useESM {"babelConfig": false, "supportsStaticESM": true, "useESM": true} 1`] = `
+Object {
+  "allowSyntheticDefaultImports": true,
+  "esModuleInterop": true,
+  "module": 99,
+}
+`;
+
+exports[`TsCompiler getCompiledOutput isolatedModules false should compile codes with useESM {"babelConfig": true, "supportsStaticESM": false, "useESM": true} 1`] = `
+Object {
+  "allowSyntheticDefaultImports": true,
+  "esModuleInterop": true,
+  "module": 99,
+}
+`;
+
+exports[`TsCompiler getCompiledOutput isolatedModules true should transpile code with config {"babelConfig": false, "supportsStaticESM": false, "useESM": true} 1`] = `
+Object {
+  "allowSyntheticDefaultImports": undefined,
+  "esModuleInterop": true,
+  "module": 1,
+}
+`;
+
+exports[`TsCompiler getCompiledOutput isolatedModules true should transpile code with config {"babelConfig": false, "supportsStaticESM": true, "useESM": false} 1`] = `
+Object {
+  "allowSyntheticDefaultImports": undefined,
+  "esModuleInterop": true,
+  "module": 1,
+}
+`;
+
+exports[`TsCompiler getCompiledOutput isolatedModules true should transpile code with config {"babelConfig": false, "supportsStaticESM": true, "useESM": true} 1`] = `
+Object {
+  "allowSyntheticDefaultImports": true,
+  "esModuleInterop": true,
+  "module": 99,
+}
+`;
+
+exports[`TsCompiler getCompiledOutput isolatedModules true should transpile code with config {"babelConfig": true, "supportsStaticESM": false, "useESM": true} 1`] = `
+Object {
+  "allowSyntheticDefaultImports": true,
+  "esModuleInterop": true,
+  "module": 99,
+}
+`;

@@ -150,7 +150,10 @@ export class TsCompiler implements TsCompilerInstance {
     let esModuleInterop = this._initialCompilerOptions.esModuleInterop
     let allowSyntheticDefaultImports = this._initialCompilerOptions.allowSyntheticDefaultImports
     const currentModuleKind = this._compilerOptions.module
-    if (options.supportsStaticESM && this.configSet.useESM) {
+    if (
+      (this.configSet.babelJestTransformer || (!this.configSet.babelJestTransformer && options.supportsStaticESM)) &&
+      this.configSet.useESM
+    ) {
       moduleKind =
         !moduleKind ||
         (moduleKind &&
