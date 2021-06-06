@@ -1,3 +1,17 @@
+## [27.0.3](https://github.com/kulshekhar/ts-jest/compare/v27.0.2...v27.0.3) (2021-06-06)
+
+
+### Bug Fixes
+
+* revert `exports` field to support all node versions ([#2658](https://github.com/kulshekhar/ts-jest/issues/2658)) ([132c8ba](https://github.com/kulshekhar/ts-jest/commit/132c8ba85c3e61b7d9ede0dc9730580b79618ab7))
+
+
+### Features
+
+* emit ESM codes if using ESM mode with Babel ([#2661](https://github.com/kulshekhar/ts-jest/issues/2661)) ([9b55404](https://github.com/kulshekhar/ts-jest/commit/9b55404a8dfc760238e19786da98a2edf043b9da)), closes [#2650](https://github.com/kulshekhar/ts-jest/issues/2650)
+
+
+
 ## [27.0.2](https://github.com/kulshekhar/ts-jest/compare/v27.0.1...v27.0.2) (2021-05-30)
 
 
