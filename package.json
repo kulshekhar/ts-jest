@@ -122,7 +122,7 @@
     "npm-run-all": "latest",
     "prettier": "2.3.1",
     "source-map": "latest",
-    "typescript": "~4.2.4"
+    "typescript": "~4.3.4"
   },
   "lint-staged": {
     "*.{ts,tsx,js,jsx}": [
