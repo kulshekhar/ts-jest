@@ -113,7 +113,7 @@
     "fs-extra": "10.x",
     "glob": "^7.1.7",
     "glob-gitignore": "latest",
-    "husky": "4.x",
+    "husky": "7.x",
     "jest": "^27.0.0",
     "js-yaml": "latest",
     "json-schema-to-typescript": "^10.1.4",
