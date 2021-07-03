@@ -352,6 +352,10 @@ Array [
       `)
     })
 
+    test('should allow detection of ts-jest', () => {
+      expect(process.env.TS_JEST).toBe('1')
+    })
+
     test.each(['foo.ts', 'foo.tsx'])('should process ts/tsx file', (filePath) => {
       const fileContent = 'const foo = 1'
       const output = 'var foo = 1'
