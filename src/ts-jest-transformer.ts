@@ -63,6 +63,7 @@ export class TsJestTransformer implements SyncTransformer {
     this.process = this.process.bind(this)
 
     this._logger.debug('created new transformer')
+    process.env.TS_JEST = '1'
   }
 
   private _configsFor(transformOptions: TransformOptionsTsJest): ConfigSet {
