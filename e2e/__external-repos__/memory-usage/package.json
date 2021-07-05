@@ -24,17 +24,17 @@
     "weak-napi": "latest"
   },
   "devDependencies": {
-    "@nestjs/common": "^7.6.17",
-    "@nestjs/core": "^7.6.17",
-    "@nestjs/platform-express": "^7.6.17",
-    "@nestjs/testing": "^7.6.17",
+    "@nestjs/common": "^7.6.18",
+    "@nestjs/core": "^7.6.18",
+    "@nestjs/platform-express": "^7.6.18",
+    "@nestjs/testing": "^7.6.18",
     "@types/jest": "^26.0.23",
     "@types/lodash": "^4.14.170",
-    "jest": "^27.0.3",
+    "jest": "^27.0.6",
     "lodash": "^4.17.21",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.1.0",
-    "typescript": "^4.3.2",
+    "typescript": "^4.3.5",
     "weak-napi": "^2.0.2"
   }
 }
