@@ -8,6 +8,8 @@ const logger = rootLogger.child({ namespace: 'versions' })
 
 /**
  * @internal
+ *
+ * Don't forget to update peerDependencies in package.json when changing these.
  */
 const enum ExpectedVersions {
   Jest = '>=27.0.0 <28',
