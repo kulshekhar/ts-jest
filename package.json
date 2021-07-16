@@ -70,10 +70,14 @@
   "peerDependencies": {
     "jest": "^27.0.0",
     "typescript": ">=3.8 <5.0",
-    "babel-jest": ">=27.0.0 <28.0.0-0"
+    "babel-jest": ">=27.0.0 <28",
+    "@babel/core": ">=7.0.0-beta.0 <8"
   },
   "peerDependenciesMeta": {
     "babel-jest": {
+      "optional": true
+    },
+    "@babel/core": {
       "optional": true
     }
   },
