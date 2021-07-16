@@ -61,8 +61,10 @@ Or through TypeScript (if `ts-node` is installed):
 import type { InitialOptionsTsJest } from 'ts-jest/dist/types'
 
 const config: InitialOptionsTsJests = {
-  'ts-jest': {
-    // ts-jest configuration goes here
+  globals: {
+    'ts-jest': {
+      // ts-jest configuration goes here
+    },
   },
 }
 export default config
