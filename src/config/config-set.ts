@@ -299,13 +299,24 @@ export class ConfigSet {
     this.resolvedTransformers.before = [require('../transformers/hoist-jest')]
     const { astTransformers } = options
     if (astTransformers) {
+      const resolveTransformerFunc = (transformerPath: string) => {
+        const transformerFunc = require(transformerPath)
+        if (!transformerFunc.version) {
+          this.logger.warn(Errors.MissingTransformerVersion, { file: transformerPath })
+        }
+        if (!transformerFunc.name) {
+          this.logger.warn(Errors.MissingTransformerName, { file: transformerPath })
+        }
+
+        return transformerFunc
+      }
       const resolveTransformers = (transformers: Array<string | AstTransformer>): AstTransformerDesc[] =>
         transformers.map((transformer) => {
           if (typeof transformer === 'string') {
-            return require(this.resolvePath(transformer, { nodeResolve: true }))
+            return resolveTransformerFunc(this.resolvePath(transformer, { nodeResolve: true }))
           } else {
             return {
-              ...require(this.resolvePath(transformer.path, { nodeResolve: true })),
+              ...resolveTransformerFunc(this.resolvePath(transformer.path, { nodeResolve: true })),
               options: transformer.options,
             }
           }
@@ -356,14 +367,15 @@ export class ConfigSet {
         version: this.compilerModule.version,
         digest: this.tsJestDigest,
         babelConfig: this.babelConfig,
-        compilerModule: this.compilerModule,
         tsconfig: {
           options: this.parsedTsConfig.options,
           raw: this.parsedTsConfig.raw,
         },
         isolatedModules: this.isolatedModules,
         diagnostics: this._diagnostics,
-        transformers: this.resolvedTransformers,
+        transformers: Object.values(this.resolvedTransformers)
+          .reduce((prevVal, currentVal) => [...prevVal, currentVal])
+          .map((transformer: AstTransformerDesc) => `${transformer.name}-${transformer.version}`),
       }),
     )
     if (!this._jestCfg.cache) {

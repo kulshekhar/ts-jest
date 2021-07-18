@@ -59,6 +59,8 @@ Object {
   "before": Array [
     Object {
       "factory": [Function],
+      "name": "hoist-jest",
+      "version": 1,
     },
   ],
 }
@@ -71,6 +73,8 @@ Object {
   "before": Array [
     Object {
       "factory": [Function],
+      "name": "hoist-jest",
+      "version": 1,
     },
     Object {
       "factory": [Function],
@@ -90,6 +94,8 @@ Object {
   "before": Array [
     Object {
       "factory": [Function],
+      "name": "hoist-jest",
+      "version": 1,
     },
   ],
 }
@@ -106,6 +112,8 @@ Object {
   "before": Array [
     Object {
       "factory": [Function],
+      "name": "hoist-jest",
+      "version": 1,
     },
   ],
 }
@@ -118,6 +126,8 @@ Object {
   "before": Array [
     Object {
       "factory": [Function],
+      "name": "hoist-jest",
+      "version": 1,
     },
     Object {
       "factory": [Function],
@@ -125,6 +135,36 @@ Object {
     },
   ],
 }
+`;
+
+exports[`customTransformers should return an object containing all resolved transformers: warning-log 1`] = `Array []`;
+
+exports[`customTransformers should return an object containing all resolved transformers: warning-log 2`] = `
+Array [
+  "[level:40] The AST transformer {{file}} must have an \`export const version = <your_transformer_version>",
+  "[level:40] The AST transformer {{file}} must have an \`export const name = <your_transformer_name>",
+]
+`;
+
+exports[`customTransformers should return an object containing all resolved transformers: warning-log 3`] = `
+Array [
+  "[level:40] The AST transformer {{file}} must have an \`export const version = <your_transformer_version>",
+  "[level:40] The AST transformer {{file}} must have an \`export const name = <your_transformer_name>",
+]
+`;
+
+exports[`customTransformers should return an object containing all resolved transformers: warning-log 4`] = `
+Array [
+  "[level:40] The AST transformer {{file}} must have an \`export const version = <your_transformer_version>",
+  "[level:40] The AST transformer {{file}} must have an \`export const name = <your_transformer_name>",
+]
+`;
+
+exports[`customTransformers should return an object containing all resolved transformers: warning-log 5`] = `
+Array [
+  "[level:40] The AST transformer {{file}} must have an \`export const version = <your_transformer_version>",
+  "[level:40] The AST transformer {{file}} must have an \`export const name = <your_transformer_name>",
+]
 `;
 
 exports[`isTestFile should return a boolean value whether the file matches test pattern 1`] = `true`;

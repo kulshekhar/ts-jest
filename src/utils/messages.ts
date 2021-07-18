@@ -19,6 +19,8 @@ export const enum Errors {
   MismatchNodeTargetMapping = 'There is a mismatch between your NodeJs version {{nodeJsVer}} and your TypeScript target {{compilationTarget}}. This might lead to some unexpected errors when running tests with `ts-jest`. To fix this, you can check https://github.com/microsoft/TypeScript/wiki/Node-Target-Mapping',
   CannotProcessFileReturnOriginal = "Unable to process '{{file}}', falling back to original file content. You can also configure Jest config option `transformIgnorePatterns` to ignore {{file}} from transformation or make sure that `outDir` in your tsconfig is neither `''` or `'.'`",
   CannotProcessFile = "Unable to process '{{file}}', please make sure that `outDir` in your tsconfig is neither `''` or `'.'`. You can also configure Jest config option `transformIgnorePatterns` to inform `ts-jest` to transform {{file}}",
+  MissingTransformerName = 'The AST transformer {{file}} must have an `export const name = <your_transformer_name>`',
+  MissingTransformerVersion = 'The AST transformer {{file}} must have an `export const version = <your_transformer_version>`',
 }
 
 /**

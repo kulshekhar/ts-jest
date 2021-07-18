@@ -11,6 +11,14 @@ import type * as _ts from 'typescript'
 
 import type { TsCompilerInstance } from '../types'
 
+/**
+ * Remember to increase the version whenever transformer's content is changed. This is to inform Jest to not reuse
+ * the previous cache which contains old transformer's content
+ */
+export const version = 1
+// Used for constructing cache key
+export const name = 'hoist-jest'
+
 const isBaseDir = (base: string, dir: string) => !relative(base, dir)?.startsWith('.')
 
 /**
