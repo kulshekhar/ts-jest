@@ -18,6 +18,20 @@ module.exports = {
 }
 ```
 
+### TypeScript Configuration
+
+Create a new `tsconfig.spec.json` at the root of your project with the following content
+
+```json
+// tsconfig.spec.json
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "jsx": "react"
+  }
+}
+```
+
 ### Jest config
 
 In the same way that you moved Babel config, move Jest config from `jest` key of `package.json` to `jest.config.js`. It should look like this:
@@ -27,19 +41,16 @@ In the same way that you moved Babel config, move Jest config from `jest` key of
 const { defaults: tsjPreset } = require('ts-jest/presets')
 
 module.exports = {
-  ...tsjPreset,
   preset: 'react-native',
-  transform: {
-    ...tsjPreset.transform,
-    '\\.js$': '<rootDir>/node_modules/react-native/jest/preprocessor.js',
-  },
   globals: {
     'ts-jest': {
-      babelConfig: true,
+      tsconfig: 'tsconfig.spec.json',
     },
   },
-  // This is the only part which you can keep
-  // from the above linked tutorial's config:
-  cacheDirectory: '.jest/cache',
+  transform: {
+    '^.+\\.jsx$': 'babel-jest',
+    '^.+\\.tsx?$': 'ts-jest',
+  },
+  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
 }
 ```
