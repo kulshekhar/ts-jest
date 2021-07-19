@@ -14,6 +14,14 @@ import type {
 import type { TsCompilerInstance } from '../types'
 
 /**
+ * Remember to increase the version whenever transformer's content is changed. This is to inform Jest to not reuse
+ * the previous cache which contains old transformer's content
+ */
+export const version = 1
+// Used for constructing cache key
+export const name = 'hoist-jest'
+
+/**
  * What methods of `jest` we should hoist
  */
 const HOIST_METHODS = ['mock', 'unmock', 'enableAutomock', 'disableAutomock', 'deepUnmock']

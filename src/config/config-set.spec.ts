@@ -2,15 +2,17 @@
 import { join, resolve } from 'path'
 
 import type { Transformer } from '@jest/transform'
-import { testing } from 'bs-logger'
+import { LogLevels, testing } from 'bs-logger'
 import ts from 'typescript'
 
 import { createConfigSet } from '../__helpers__/fakers'
 import { logTargetMock } from '../__helpers__/mocks'
-import type { TsJestGlobalOptions } from '../types'
+import type { AstTransformerDesc, TsJestGlobalOptions } from '../types'
 import * as _backports from '../utils/backports'
 import { getPackageVersion } from '../utils/get-package-version'
+import { stringify } from '../utils/json'
 import { normalizeSlashes } from '../utils/normalize-slashes'
+import { sha1 } from '../utils/sha1'
 import { mocked } from '../utils/testing'
 
 import { ConfigSet, MY_DIGEST } from './config-set'
@@ -158,7 +160,9 @@ describe('customTransformers', () => {
       ],
     },
   ])('should return an object containing all resolved transformers', (data) => {
+    const logger = testing.createLoggerMock()
     const cs = createConfigSet({
+      logger,
       jestConfig: {
         rootDir: 'src',
         cwd: 'src',
@@ -169,6 +173,9 @@ describe('customTransformers', () => {
       resolve: null,
     })
 
+    expect(
+      logger.target.filteredLines(LogLevels.warn).map((logLine) => logLine.substring(0, logLine.indexOf('>') + 1)),
+    ).toMatchSnapshot('warning-log')
     expect(cs.resolvedTransformers).toMatchSnapshot()
   })
 })
@@ -335,23 +342,51 @@ describe('babelJestTransformer', () => {
 
 describe('tsCacheDir', () => {
   const cacheName = 'configSetTmp'
-  const cacheDir = join(process.cwd(), cacheName)
+  const cacheDir = join(cacheName)
   const partialTsJestCacheDir = join(cacheDir, 'ts-jest')
 
-  it.each([undefined, Object.create(null)])(
+  it.each([
+    undefined,
+    {
+      'ts-jest': {
+        astTransformers: {
+          before: ['hummy-transformer'],
+        },
+      },
+    },
+  ])(
     'should return value from which is the combination of ts jest config and jest config when running test with cache',
     (data) => {
-      expect(
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        createConfigSet({
-          jestConfig: {
-            cache: true,
-            cacheDirectory: cacheDir,
-            globals: data,
-          },
-          resolve: null,
-        }).tsCacheDir!.indexOf(partialTsJestCacheDir),
-      ).toEqual(0)
+      const configSet = createConfigSet({
+        jestConfig: {
+          cache: true,
+          cacheDirectory: cacheDir,
+          globals: data,
+        },
+        resolve: null,
+      })
+
+      expect(configSet.cacheSuffix).toEqual(
+        sha1(
+          stringify({
+            version: configSet.compilerModule.version,
+            digest: configSet.tsJestDigest,
+            babelConfig: configSet.babelConfig,
+            tsconfig: {
+              options: configSet.parsedTsConfig.options,
+              raw: configSet.parsedTsConfig.raw,
+            },
+            isolatedModules: configSet.isolatedModules,
+            // @ts-expect-error testing purpose
+            diagnostics: configSet._diagnostics,
+            transformers: Object.values(configSet.resolvedTransformers)
+              .reduce((prevVal, currentVal) => [...prevVal, currentVal])
+              .map((transformer: AstTransformerDesc) => `${transformer.name}-${transformer.version}`),
+          }),
+        ),
+      )
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      expect(configSet.tsCacheDir!.indexOf(partialTsJestCacheDir)).toEqual(0)
     },
   )
 
