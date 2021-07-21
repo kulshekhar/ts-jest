@@ -1,3 +1,20 @@
+## [27.0.4](https://github.com/kulshekhar/ts-jest/compare/v27.0.3...v27.0.4) (2021-07-21)
+
+
+### Bug Fixes
+
+* add `@types/jest` as optional `peerDependencies` to solve yarn 2 ([#2756](https://github.com/kulshekhar/ts-jest/issues/2756)) ([5fbf43e](https://github.com/kulshekhar/ts-jest/commit/5fbf43e64691d5146add1da4690a14b3095c4234))
+* add `babel-jest` as optional `peerDependencies` to solve yarn 2 ([#2751](https://github.com/kulshekhar/ts-jest/issues/2751)) ([8bede2e](https://github.com/kulshekhar/ts-jest/commit/8bede2e57546a18999b96871069f1f94a3ecf3c1))
+* **config:** include AST transformer's `name` and `version` into cache key ([#2755](https://github.com/kulshekhar/ts-jest/issues/2755)) ([310fb9a](https://github.com/kulshekhar/ts-jest/commit/310fb9a1d7b40a8274d6fb93745e66a6da891a75)), closes [#2753](https://github.com/kulshekhar/ts-jest/issues/2753)
+
+
+### Features
+
+* link jest config types on `npx ts-jest:init` ([#2742](https://github.com/kulshekhar/ts-jest/issues/2742)) ([f51ba05](https://github.com/kulshekhar/ts-jest/commit/f51ba0507568ba8a5dece48c159d7857a2ed61d6))
+* set env var `TS_JEST` to allow detecting of `ts-jest` ([#2717](https://github.com/kulshekhar/ts-jest/issues/2717)) ([56c137a](https://github.com/kulshekhar/ts-jest/commit/56c137a3c1906f49cb0b9e044fa8e233707cbaa4)), closes [#2716](https://github.com/kulshekhar/ts-jest/issues/2716)
+
+
+
 ## [27.0.3](https://github.com/kulshekhar/ts-jest/compare/v27.0.2...v27.0.3) (2021-06-06)
 
 
