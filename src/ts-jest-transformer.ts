@@ -1,10 +1,9 @@
-import { existsSync, readFileSync, statSync, writeFileSync } from 'fs'
+import { existsSync, readFileSync, statSync, writeFileSync, mkdirSync } from 'fs'
 import { join, resolve } from 'path'
 
 import type { SyncTransformer, TransformedSource } from '@jest/transform'
 import type { Config } from '@jest/types'
 import type { Logger } from 'bs-logger'
-import mkdirp from 'mkdirp'
 
 import { TsJestCompiler } from './compiler/ts-jest-compiler'
 import { ConfigSet } from './config/config-set'
@@ -283,7 +282,7 @@ export class TsJestTransformer implements SyncTransformer {
     const cacheDir = configSet.tsCacheDir
     if (!configSet.isolatedModules && cacheDir) {
       // Make sure the cache directory exists before continuing.
-      mkdirp.sync(cacheDir)
+      mkdirSync(cacheDir, { recursive: true })
       this._tsResolvedModulesCachePath = join(cacheDir, sha1('ts-jest-resolved-modules', CACHE_KEY_EL_SEPARATOR))
       try {
         const cachedTSResolvedModules = readFileSync(this._tsResolvedModulesCachePath, 'utf-8')

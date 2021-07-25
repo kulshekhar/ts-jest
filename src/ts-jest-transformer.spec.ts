@@ -3,7 +3,6 @@ import { join } from 'path'
 
 import { Logger, LogLevels } from 'bs-logger'
 import { removeSync, writeFileSync } from 'fs-extra'
-import mkdirp from 'mkdirp'
 
 import { createConfigSet } from './__helpers__/fakers'
 import { logTargetMock } from './__helpers__/mocks'
@@ -126,7 +125,7 @@ Array [
         resolvedModuleNames: [],
       })
       const resolvedModulesCacheDir = join(tsCacheDir, sha1('ts-jest-resolved-modules', CACHE_KEY_EL_SEPARATOR))
-      mkdirp.sync(tsCacheDir)
+      fs.mkdirSync(tsCacheDir, { recursive: true })
       writeFileSync(resolvedModulesCacheDir, stringify([...depGraphs]))
 
       // @ts-expect-error testing purpose
