@@ -135,7 +135,7 @@ Jest configuration written to "${normalize('/foo/bar/jest.config.js')}".
       expect(fs.writeFileSync.mock.calls).toEqual([
         [
           normalize('/foo/bar/jest.config.js'),
-          `/** @type {import('@ts-jest/dist/types').InitialOptionsTsJest} */
+          `/** @type {import('ts-jest/dist/types').InitialOptionsTsJest} */
 module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
@@ -159,7 +159,7 @@ Jest configuration written to "${normalize('/foo/bar/jest.config.foo.js')}".
           normalize('/foo/bar/jest.config.foo.js'),
           `const { jsWithTs: tsjPreset } = require('ts-jest/presets');
 
-/** @type {import('@ts-jest/dist/types').InitialOptionsTsJest} */
+/** @type {import('ts-jest/dist/types').InitialOptionsTsJest} */
 module.exports = {
   ...tsjPreset,
   globals: {
