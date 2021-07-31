@@ -233,6 +233,35 @@ Array [
 ]
 `;
 
+exports[`backportJestConfig with "globals.ts-jest.tsConfig" set to 'tsconfig.build.json' should have changed the config correctly: before 1`] = `
+Object {
+  "globals": Object {
+    "ts-jest": Object {
+      "tsConfig": "tsconfig.build.json",
+    },
+  },
+}
+`;
+
+exports[`backportJestConfig with "globals.ts-jest.tsConfig" set to 'tsconfig.build.json' should have changed the config correctly: migrated 1`] = `
+Object {
+  "globals": Object {
+    "ts-jest": Object {
+      "tsconfig": "tsconfig.build.json",
+    },
+  },
+}
+`;
+
+exports[`backportJestConfig with "globals.ts-jest.tsConfig" set to 'tsconfig.build.json' should warn the user 1`] = `
+Array [
+  "[level:40] \\"[jest-config].globals.ts-jest.tsConfig\\" is deprecated, use \\"[jest-config].globals.ts-jest.tsconfig\\" instead.
+",
+  "[level:40] Your Jest configuration is outdated. Use the CLI to help migrating it: ts-jest config:migrate <config-file>.
+",
+]
+`;
+
 exports[`backportJestConfig with "globals.ts-jest.tsConfigFile" set to 'tsconfig.build.json' should have changed the config correctly: before 1`] = `
 Object {
   "globals": Object {

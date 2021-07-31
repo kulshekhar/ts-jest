@@ -51,7 +51,7 @@ describe('parsedTsConfig', () => {
   })
 
   it('should fallback to ES2015 as default target and CommonJS as default module when no target or module defined in tsconfig', () => {
-    const compilerOptions = get({ tsconfig: 'tsconfig.spec.json' }).options
+    const compilerOptions = get({ tsconfig: 'src/__mocks__/tsconfig-mocks.json' }).options
 
     expect(compilerOptions.target).toBe(ts.ScriptTarget.ES2015)
     expect(compilerOptions.module).toBe(ts.ModuleKind.CommonJS)
