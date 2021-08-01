@@ -60,7 +60,7 @@ Or through TypeScript (if `ts-node` is installed):
 // jest.config.ts
 import type { InitialOptionsTsJest } from 'ts-jest/dist/types'
 
-const config: InitialOptionsTsJests = {
+const config: InitialOptionsTsJest = {
   globals: {
     'ts-jest': {
       // ts-jest configuration goes here
