@@ -12,36 +12,38 @@ const tsconfigMap = {
   'mocks/*': ['test/mocks/*'],
   'test/*/mock': ['test/mocks/*', 'test/__mocks__/*'],
   '@foo-bar/common': ['../common/dist/library'],
+  '@pkg/*': ['./packages/*'],
 }
 
 describe('pathsToModuleNameMapper', () => {
-  it('should convert tsconfig mapping with no given prefix', () => {
+  test('should convert tsconfig mapping with no given prefix', () => {
     expect(pathsToModuleNameMapper(tsconfigMap)).toMatchInlineSnapshot(`
-      Object {
-        "^@foo\\\\-bar/common$": "../common/dist/library",
-        "^api/(.*)$": "src/api/$1",
-        "^client$": Array [
-          "src/client",
-          "src/client/index",
-        ],
-        "^log$": "src/utils/log",
-        "^mocks/(.*)$": "test/mocks/$1",
-        "^server$": "src/server",
-        "^test/(.*)$": "test/$1",
-        "^test/(.*)/mock$": Array [
-          "test/mocks/$1",
-          "test/__mocks__/$1",
-        ],
-        "^util/(.*)$": "src/utils/$1",
-      }
-    `)
+Object {
+  "^@foo\\\\-bar/common$": "../common/dist/library",
+  "^@pkg/(.*)$": "./packages/$1",
+  "^api/(.*)$": "src/api/$1",
+  "^client$": Array [
+    "src/client",
+    "src/client/index",
+  ],
+  "^log$": "src/utils/log",
+  "^mocks/(.*)$": "test/mocks/$1",
+  "^server$": "src/server",
+  "^test/(.*)$": "test/$1",
+  "^test/(.*)/mock$": Array [
+    "test/mocks/$1",
+    "test/__mocks__/$1",
+  ],
+  "^util/(.*)$": "src/utils/$1",
+}
+`)
   })
 
-  it.each(['<rootDir>/', 'foo'])('should convert tsconfig mapping with given prefix', (prefix) => {
+  test.each(['<rootDir>/', 'foo'])('should convert tsconfig mapping with given prefix', (prefix) => {
     expect(pathsToModuleNameMapper(tsconfigMap, { prefix })).toMatchSnapshot(prefix)
   })
 
-  it('should warn about mapping it cannot handle', () => {
+  test('should warn about mapping it cannot handle', () => {
     const log = logTargetMock()
     log.clear()
     expect(

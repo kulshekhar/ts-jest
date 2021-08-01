@@ -41,9 +41,11 @@ export const pathsToModuleNameMapper = (
       jestMap[pattern] = paths.length === 1 ? paths[0] : paths
     } else if (segments.length === 2) {
       const paths = toPaths.map((target) => {
+        const enrichedTarget =
+          target.startsWith('./') && prefix !== '' ? target.substring(target.indexOf('/') + 1) : target
         const enrichedPrefix = prefix !== '' && !prefix.endsWith('/') ? `${prefix}/` : prefix
 
-        return `${enrichedPrefix}${target.replace(/\*/g, '$1')}`
+        return `${enrichedPrefix}${enrichedTarget.replace(/\*/g, '$1')}`
       })
       pattern = `^${escapeRegex(segments[0])}(.*)${escapeRegex(segments[1])}$`
       jestMap[pattern] = paths.length === 1 ? paths[0] : paths
