@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "module": "CommonJS",
+    "target": "ES5",
     "declaration": false,
     "noEmit": true,
     "downlevelIteration": true,

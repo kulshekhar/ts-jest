@@ -62,6 +62,14 @@ export const backportJestConfig = <T extends Config.InitialOptions | Config.Proj
     delete tsJest.tsConfigFile
   }
 
+  if ('tsConfig' in tsJest) {
+    warnConfig('globals.ts-jest.tsConfig', 'globals.ts-jest.tsconfig')
+    if (tsJest.tsConfig) {
+      mergeTsJest.tsconfig = tsJest.tsConfig
+    }
+    delete tsJest.tsConfig
+  }
+
   if ('enableTsDiagnostics' in tsJest) {
     warnConfig('globals.ts-jest.enableTsDiagnostics', 'globals.ts-jest.diagnostics')
     if (tsJest.enableTsDiagnostics) {
