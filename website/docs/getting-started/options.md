@@ -70,6 +70,13 @@ const config: InitialOptionsTsJest = {
 export default config
 ```
 
+:::important
+
+When using TypeScript Jest config file, Jest will use `ts-node` to compile the config file. `ts-jest` doesn't take part in
+that process.
+
+:::
+
 ### Options
 
 All options have default values which should fit most of the projects. Click on the option's name to see details and example(s).
