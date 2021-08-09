@@ -40,26 +40,27 @@ module.exports = {
 
 - Check github folder names if its identical to you local folder names. Sometimes github never updates your folder names even if you rename it locally. If this happens rename your folders via github or use this command `git mv <source> <destination>` and commit changes.
 
+## Transform (node)-module explicitly
+
 ### PROBLEM
 
 SyntaxError: Cannot use import statement outside a module
 
 ### SOLUTION
-One of the node modules that is used doesn't need to be transpiled.
 
-There is a good chance that the error message shows which one:
+One of the node modules hasn't the correct syntax for Jests execution step. It needs to
+be transformed first.
+
+There is a good chance that the error message shows which module is affected:
 
 ```shell
     SyntaxError: Cannot use import statement outside a module
-      20 | <script lang="ts">
-      21 | import Vue from "vue";
     > 22 | import Component from "../../node_modules/some-module/lib";
          | ^
 ```
-In this case **some-module** is the problem.
-
-This module needs to be ignored in the transformation process. Add the following to the
-configuration file:
+In this case **some-module** is the problem and needs to be transformed.
+By adding the following line to the configuration file it will tell Jest which modules
+shouldnt be ignored during the transformation step:
 
 ```javascript
 module.exports = {
@@ -68,6 +69,6 @@ module.exports = {
 };
 ```
 
-**some-module** and **another-module** will be ignored in the transformation process.
+**some-module** and **another-module** will be transformed.
 
 For more information see [here](https://stackoverflow.com/questions/63389757/jest-unit-test-syntaxerror-cannot-use-import-statement-outside-a-module) and [here](https://stackoverflow.com/questions/52035066/how-to-write-jest-transformignorepatterns).
