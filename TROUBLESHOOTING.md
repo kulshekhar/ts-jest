@@ -58,6 +58,7 @@ There is a good chance that the error message shows which module is affected:
     > 22 | import Component from "../../node_modules/some-module/lib";
          | ^
 ```
+
 In this case **some-module** is the problem and needs to be transformed.
 By adding the following line to the configuration file it will tell Jest which modules
 shouldnt be ignored during the transformation step:
