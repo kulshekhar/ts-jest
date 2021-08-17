@@ -1,3 +1,19 @@
+## [27.0.5](https://github.com/kulshekhar/ts-jest/compare/v27.0.4...v27.0.5) (2021-08-14)
+
+
+### Bug Fixes
+
+* **cli:** add migration `tsConfig` option for `ts-jest` config options ([#2794](https://github.com/kulshekhar/ts-jest/issues/2794)) ([781710b](https://github.com/kulshekhar/ts-jest/commit/781710bf6b84853fffbb02543062a726fe1ad9c2)), closes [#2764](https://github.com/kulshekhar/ts-jest/issues/2764)
+* **cli:** fix `config:init` genarate invalid type comment ([#2773](https://github.com/kulshekhar/ts-jest/issues/2773)) ([ede8a20](https://github.com/kulshekhar/ts-jest/commit/ede8a2061e20b717c0d56e4d81a3cd0ec7db8b1a)), closes [#2772](https://github.com/kulshekhar/ts-jest/issues/2772)
+* **config:** handle  `./` in tsconfig `paths` for `pathsToModuleNameMapper`  ([#2797](https://github.com/kulshekhar/ts-jest/issues/2797)) ([42ff5e4](https://github.com/kulshekhar/ts-jest/commit/42ff5e469fb5d315b92e85eee105e5a040949c01)), closes [#2709](https://github.com/kulshekhar/ts-jest/issues/2709)
+
+
+### Code Refactoring
+
+* use native `Buffer.from` and `mkdird` ([#2774](https://github.com/kulshekhar/ts-jest/issues/2774)) ([4869660](https://github.com/kulshekhar/ts-jest/commit/4869660e3917deb063745c5acaf079123d6d2ca8))
+
+
+
 ## [27.0.4](https://github.com/kulshekhar/ts-jest/compare/v27.0.3...v27.0.4) (2021-07-21)
 
 
