@@ -102,7 +102,7 @@
     "@types/js-yaml": "latest",
     "@types/lodash": "4.x",
     "@types/micromatch": "4.x",
-    "@types/node": "16.7.1",
+    "@types/node": "16.7.2",
     "@types/node-fetch": "^2.5.8",
     "@types/react": "17.x",
     "@types/semver": "latest",
