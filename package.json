@@ -128,7 +128,7 @@
     "js-yaml": "latest",
     "json-schema-to-typescript": "^10.1.4",
     "lint-staged": "latest",
-    "node-fetch": "^2.6.1",
+    "node-fetch": "^3.0.0",
     "npm-run-all": "latest",
     "prettier": "2.3.2",
     "source-map": "latest",
