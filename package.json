@@ -103,7 +103,7 @@
     "@types/lodash": "4.x",
     "@types/micromatch": "4.x",
     "@types/node": "16.7.10",
-    "@types/node-fetch": "^2.5.8",
+    "@types/node-fetch": "^3.0.3",
     "@types/react": "17.x",
     "@types/semver": "latest",
     "@types/yargs": "latest",
