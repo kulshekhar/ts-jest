@@ -130,7 +130,7 @@
     "lint-staged": "latest",
     "node-fetch": "^3.0.0",
     "npm-run-all": "latest",
-    "prettier": "2.3.2",
+    "prettier": "2.4.0",
     "source-map": "latest",
     "typescript": "~4.2.4"
   },
