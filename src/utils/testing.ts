@@ -18,12 +18,12 @@ export type MaybeMockedConstructor<T> = T extends new (...args: any[]) => infer 
   : T
 export type MockedFunction<T extends MockableFunction> = MockWithArgs<T> & { [K in keyof T]: T[K] }
 export type MockedFunctionDeep<T extends MockableFunction> = MockWithArgs<T> & MockedObjectDeep<T>
-export type MockedObject<T> = MaybeMockedConstructor<T> &
-  { [K in MethodKeysOf<T>]: T[K] extends MockableFunction ? MockedFunction<T[K]> : T[K] } &
-  { [K in PropertyKeysOf<T>]: T[K] }
-export type MockedObjectDeep<T> = MaybeMockedConstructor<T> &
-  { [K in MethodKeysOf<T>]: T[K] extends MockableFunction ? MockedFunctionDeep<T[K]> : T[K] } &
-  { [K in PropertyKeysOf<T>]: MaybeMockedDeep<T[K]> }
+export type MockedObject<T> = MaybeMockedConstructor<T> & {
+  [K in MethodKeysOf<T>]: T[K] extends MockableFunction ? MockedFunction<T[K]> : T[K]
+} & { [K in PropertyKeysOf<T>]: T[K] }
+export type MockedObjectDeep<T> = MaybeMockedConstructor<T> & {
+  [K in MethodKeysOf<T>]: T[K] extends MockableFunction ? MockedFunctionDeep<T[K]> : T[K]
+} & { [K in PropertyKeysOf<T>]: MaybeMockedDeep<T[K]> }
 
 export type MaybeMockedDeep<T> = T extends MockableFunction
   ? MockedFunctionDeep<T>

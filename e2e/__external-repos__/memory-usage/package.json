@@ -28,13 +28,13 @@
     "@nestjs/core": "^8.0.6",
     "@nestjs/platform-express": "^8.0.6",
     "@nestjs/testing": "^8.0.6",
-    "@types/jest": "^27.0.0",
+    "@types/jest": "^27.0.1",
     "@types/lodash": "^4.14.172",
-    "jest": "^27.0.6",
+    "jest": "^27.1.1",
     "lodash": "^4.17.21",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.3.0",
-    "typescript": "^4.3.5",
+    "typescript": "^4.4.2",
     "weak-napi": "^2.0.2"
   }
 }

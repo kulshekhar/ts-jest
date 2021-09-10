@@ -39,7 +39,6 @@ export const enum Deprecations {
   ConfigOption = '"[jest-config].{{oldPath}}" is deprecated, use "[jest-config].{{newPath}}" instead.',
   ConfigOptionWithNote = '"[jest-config].{{oldPath}}" is deprecated, use "[jest-config].{{newPath}}" instead.\n    ↳ {{note}}',
   ConfigOptionUseBabelRcNote = 'See `babel-jest` related issue: https://github.com/facebook/jest/issues/3845',
-  PackageJson = 'The option `packageJson` is deprecated and will be removed in ts-jest 27. This option is not used by internal `ts-jest`',
 }
 
 /**

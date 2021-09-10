@@ -37,10 +37,10 @@
     }
   },
   "devDependencies": {
-    "@types/jest": "^27.0.0",
+    "@types/jest": "^27.0.1",
     "dependency": "file:../dependency",
-    "jest": "^27.0.6",
-    "typescript": "^4.3.5"
+    "jest": "^27.1.1",
+    "typescript": "^4.4.2"
   },
   "wantedDependencies": {
     "typescript": "latest",

@@ -2,9 +2,9 @@
   "name": "ts-jest-example",
   "private": true,
   "devDependencies": {
-    "@types/jest": "^27.0.0",
-    "jest": "^27.0.6",
-    "typescript": "^4.3.5"
+    "@types/jest": "^27.0.1",
+    "jest": "^27.1.1",
+    "typescript": "^4.4.2"
   },
   "wantedDependencies": {
     "@types/jest": "latest",
