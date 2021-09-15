@@ -36,7 +36,7 @@ function Version() {
                     <Link to={nextVersion.path}>Documentation</Link>
                   </td>
                   <td>
-                    <a href={`${repoUrl}/blob/master/CHANGELOG.md`}>Release Notes</a>
+                    <a href={`${repoUrl}/blob/main/CHANGELOG.md`}>Release Notes</a>
                   </td>
                 </tr>
               </tbody>
@@ -55,7 +55,7 @@ function Version() {
                   <Link to={latestVersion.path}>Documentation</Link>
                 </td>
                 <td>
-                  <a href={`${repoUrl}/blob/master/CHANGELOG.md`}>Release Notes</a>
+                  <a href={`${repoUrl}/blob/main/CHANGELOG.md`}>Release Notes</a>
                 </td>
               </tr>
             </tbody>
@@ -75,7 +75,7 @@ function Version() {
                       <Link to={version.path}>Documentation</Link>
                     </td>
                     <td>
-                      <a href={`${repoUrl}/blob/master/CHANGELOG.md`}>Release Notes</a>
+                      <a href={`${repoUrl}/blob/main/CHANGELOG.md`}>Release Notes</a>
                     </td>
                   </tr>
                 ))}
