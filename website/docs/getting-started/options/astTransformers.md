@@ -131,4 +131,4 @@ module.exports = {
 
 ### Writing custom TypeScript AST transformers
 
-To write a custom TypeScript AST transformers, one can take a look at [the one](https://github.com/kulshekhar/ts-jest/tree/master/src/transformers) that `ts-jest` is using.
+To write a custom TypeScript AST transformers, one can take a look at [the one](https://github.com/kulshekhar/ts-jest/tree/main/src/transformers) that `ts-jest` is using.

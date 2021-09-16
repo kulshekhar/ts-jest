@@ -83,7 +83,7 @@ module.exports = {
       {
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
-          editUrl: 'https://github.com/kulshekhar/ts-jest/edit/master/website',
+          editUrl: 'https://github.com/kulshekhar/ts-jest/edit/main/website',
           remarkPlugins: [simplePlantUML],
         },
         theme: {

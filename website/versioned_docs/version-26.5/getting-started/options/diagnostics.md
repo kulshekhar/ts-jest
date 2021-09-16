@@ -18,7 +18,7 @@ This might lead to slightly better performance, especially if you're not using J
 The `diagnostics` option's value can also accept an object for more advanced configuration. Each config. key is optional:
 
 - **`warnOnly`**: If specified and `true`, diagnostics will be reported but won't stop compilation (default: _disabled_).
-- **`ignoreCodes`**: List of TypeScript error codes to ignore. Complete list can be found [there](https://github.com/Microsoft/TypeScript/blob/master/src/compiler/diagnosticMessages.json). By default here are the ones ignored:
+- **`ignoreCodes`**: List of TypeScript error codes to ignore. Complete list can be found [there](https://github.com/Microsoft/TypeScript/blob/main/src/compiler/diagnosticMessages.json). By default here are the ones ignored:
   - `6059`: _'rootDir' is expected to contain all source files._
   - `18002`: _The 'files' list in config file is empty._ (it is strongly recommended including this one)
   - `18003`: _No inputs were found in config file._
@@ -130,7 +130,7 @@ module.exports = {
 
 ##### Ignoring some error codes
 
-All TypeScript error codes can be found [there](https://github.com/Microsoft/TypeScript/blob/master/src/compiler/diagnosticMessages.json). The `ignoreCodes` option accepts this values:
+All TypeScript error codes can be found [there](https://github.com/Microsoft/TypeScript/blob/main/src/compiler/diagnosticMessages.json). The `ignoreCodes` option accepts this values:
 
 1. A single `number` (example: `1009`): unique error code to ignore
 2. A `string` with a code (example `"1009"`, `"TS1009"` or `"TS1009"`)
