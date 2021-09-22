@@ -70,7 +70,7 @@ body:
     validations:
       required: true
   - type: textarea
-    id: context
+    id: debug-log
     attributes:
       label: Debug log
       description: You can activate the debug logger by setting the environment variable TS_JEST_LOG=ts-jest.log before running tests
