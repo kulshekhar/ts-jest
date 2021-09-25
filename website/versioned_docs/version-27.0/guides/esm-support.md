@@ -23,6 +23,9 @@ module.exports = {
       useESM: true,
     },
   },
+  moduleNameMapper: {
+    '^(\\.{1,2}/.*)\\.js$': '$1',
+  },
 }
 ```
 
@@ -36,6 +39,9 @@ module.exports = {
       "ts-jest": {
         "useESM": true
       }
+    },
+    "moduleNameMapper": {
+      "^(\\.{1,2}/.*)\\.js$": "$1"
     }
   }
 }
@@ -53,6 +59,9 @@ module.exports = {
       useESM: true,
     },
   },
+  moduleNameMapper: {
+    '^(\\.{1,2}/.*)\\.js$': '$1',
+  },
 }
 ```
 
@@ -66,6 +75,9 @@ module.exports = {
       "ts-jest": {
         "useESM": true
       }
+    },
+    "moduleNameMapper": {
+      "^(\\.{1,2}/.*)\\.js$": "$1"
     }
   }
 }
