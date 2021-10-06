@@ -1,19 +1,13 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "sourceMap": false,
-    "inlineSources": false,
-    "inlineSourceMap": false,
-    "noEmit": false,
+    "module": "CommonJS",
+    "target": "ES5",
     "declaration": true,
     "removeComments": true,
     "stripInternal": true,
     "outDir": "dist"
   },
   "include": ["src"],
-  "exclude": [
-    "**/*.spec.ts",
-    "**/*.test.ts",
-    "**/__*__"
-  ]
+  "exclude": ["**/*.spec.ts", "src/__helpers__", "**/__mocks__", "src/__serializers__"]
 }
