@@ -1,4 +1,9 @@
 {
   "extends": "./tsconfig.json",
-  "include": []
+  "compilerOptions": {
+    "module": "CommonJS",
+    "target": "ES2015",
+  },
+  "includes": ["src/**/*.spec.ts"],
+  "exclude": ["e2e"]
 }

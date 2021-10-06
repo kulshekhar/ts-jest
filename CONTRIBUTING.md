@@ -1,67 +1,120 @@
 # Contributing
 
-When contributing to this repository, please first discuss the change you wish to make via [slack](https://bit.ly/3bRHFPQ) or [issue](https://github.com/kulshekhar/ts-jest/issues) with the owners of this repository before making a change.
+When contributing to this repository, please first discuss the change you wish to make via
+[discussion](https://github.com/kulshekhar/ts-jest/discussions) or [issue](https://github.com/kulshekhar/ts-jest/issues)
+with the owners of this repository before making a change.
 
 Please note we have a code of conduct, please follow it in all your interactions with the project.
 
-## Pull Request Process
+## Workflow and Pull Requests
 
-1. Ensure the tests are passing and that you have latest `master` branch merged in.
-2. Update the `docs/` with details of your changes if required.
-3. If possible, squash your commits. There must be only one commit in your PR (until a review). Then after each review requesting changes, DO NOT squash your commits with the one before the review, so that we can see intermediate modifications.
-4. You may merge the Pull Request in once you have the sign-off of two other developers, or if you do not have permission to do that, you may request the second reviewer to merge it for you.
+The team will monitor pull requests. We'll do our best to provide updates and feedback throughout the process.
 
-## Code of Conduct
+_Before_ submitting a pull request, please make sure the following is done…
 
-### Our Pledge
+1. Fork the repo and create your branch from `main`. A guide on how to fork a repository: https://help.github.com/articles/fork-a-repo/
 
-In the interest of fostering an open and welcoming environment, we as contributors and maintainers pledge to making participation in our project and our community a harassment-free experience for everyone, regardless of age, body size, disability, ethnicity, gender identity and expression, level of experience, nationality, personal appearance, race, religion, or sexual identity and orientation.
+   Open terminal (e.g. Terminal, iTerm, Git Bash or Git Shell) and type:
 
-### Our Standards
+   ```sh-session
+   $ git clone https://github.com/<your_username>/ts-jest
+   $ cd ts-jest
+   $ git checkout -b my_branch
+   ```
 
-Examples of behavior that contributes to creating a positive environment include:
+   Note: Replace `<your_username>` with your GitHub username
 
-- Using welcoming and inclusive language
-- Being respectful of differing viewpoints and experiences
-- Gracefully accepting constructive criticism
-- Focusing on what is best for the community
-- Showing empathy towards other community members
+2. `ts-jest` uses `npm` for running development scripts. If you haven't already done so, please [install npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm).
 
-Examples of unacceptable behavior by participants include:
+3. Make sure you have a compatible version of `node` installed (As of April 14th 2021, `v14.x` is recommended).
 
-- The use of sexualized language or imagery and unwelcome sexual attention or advances
-- Trolling, insulting/derogatory comments, and personal or political attacks
-- Public or private harassment
-- Publishing others' private information, such as a physical or electronic address, without explicit permission
-- Other conduct which could reasonably be considered inappropriate in a professional setting
+   ```sh
+   node -v
+   ```
 
-### Our Responsibilities
+4. Run `npm ci`. `ts-jest` will automatically build source files into `dist/` after installing dependencies.
 
-Project maintainers are responsible for clarifying the standards of acceptable behavior and are expected to take appropriate and fair corrective action in response to any instances of unacceptable behavior.
+5. Ensure the test suite passes via `npm run test`.
 
-Project maintainers have the right and responsibility to remove, edit, or reject comments, commits, code, wiki edits, issues, and other contributions that are not aligned to this Code of Conduct, or to ban temporarily or permanently any contributor for other behaviors that they deem inappropriate, threatening, offensive, or harmful.
+### Testing
 
-### Scope
+Code that is written needs to be tested to ensure that it achieves the desired behaviour. Tests either fall into a unit
+test or an integration test.
 
-This Code of Conduct applies both within project spaces and in public spaces when an individual is representing the project or its community. Examples of representing a project or community include using an official project e-mail address, posting via an official social media account, or acting as an appointed representative at an online or offline event. Representation of a project may be further defined and clarified by project maintainers.
+##### Unit tests
 
-### Enforcement
+The unit test files are associated with source files which are in `src/`. If the scope of your work only requires a unit test,
+this is where you will write it in. Tests here usually don't require much if any setup.
 
-Instances of abusive, harassing, or otherwise unacceptable behavior may be
-reported by contacting the project team at kulshekhar@gmail.com. All
-complaints will be reviewed and investigated and will result in a response that
-is deemed necessary and appropriate to the circumstances. The project team is
-obligated to maintain confidentiality with regard to the reporter of an incident.
-Further details of specific enforcement policies may be posted separately.
+##### Integration tests
 
-Project maintainers who do not follow or enforce the Code of Conduct in good
-faith may face temporary or permanent repercussions as determined by other
-members of the project's leadership.
+There will be situations however where the work you have done cannot be tested alone using unit tests. In situations like this,
+you should write an integration test for your code. The integration tests reside within the `e2e` directory.
+Within this directory, there is a `__tests__` directory. This is where you will write the integration test itself.
+The tests within this directory execute jest itself using `run-jest.ts` and assertions are usually made on one if not all
+the output of the following `status`, `stdout` and `stderr`. The other subdirectories within the `e2e` directory are
+where you will write the files that jest will run for your integration tests. Feel free to take a look at any of the tests
+in the `__tests__` directory within `e2e` to have a better sense of how it is currently being done.
 
-### Attribution
+It is possible to run the integration test itself manually to inspect that the new behaviour is indeed correct.
+Here is a small code snippet of how to do just that. This is useful when debugging a failing test.
 
-This Code of Conduct is adapted from the [Contributor Covenant][homepage], version 1.4,
-available at [http://contributor-covenant.org/version/1/4][version]
+```bash
+$ cd e2e/test-utils
+$ node ../../node_modules/jest/bin/jest.js # It is possible to use node --inspect or ndb
+PASS  __tests__/test-utils.spec.ts
+✓ stub (3ms)
 
-[homepage]: http://contributor-covenant.org
-[version]: http://contributor-covenant.org/version/1/4/
+Test Suites: 1 passed, 1 total
+Tests:       1 passed, 1 total
+Snapshots:   0 total
+Time:        0.232 s, estimated 1 s
+Ran all test suites.
+```
+
+### Additional Workflow for any changes made to website or docs
+
+If you are making changes to the website or documentation, test the `website` folder and run the server to check if your
+changes are being displayed accurately.
+
+1. Locate to the `website` directory and install any website specific dependencies by typing in `npm ci`.
+2. Following steps are to be followed for this purpose from the root directory.
+   ```sh-session
+   $ cd website       # Only needed if you are not already in the website directory
+   $ npm ci
+   $ npm run start
+   ```
+3. You can run a development server to check if the changes you made are being displayed accurately by running `npm run start` in the website directory.
+
+The `ts-jest` website also offers documentation for older versions of `ts-jest`, which you can edit in `website/versioned_docs`.
+After making changes to the current documentation in `docs`, please check if any older versions of the documentation
+have a copy of the file where the change is also relevant and apply the changes to the `versioned_docs` as well.
+
+## Bugs
+
+### Where to Find Known Issues
+
+We will be using GitHub Issues for our public bugs. We will keep a close eye on this and try to make it clear when we
+have an internal fix in progress. Before filing a new issue, try to make sure your problem doesn't already exist.
+
+### Reporting New Issues
+
+The best way to get your bug fixed is to provide a reduced test case. Please provide a public repository with a runnable example.
+
+## How to Get in Touch
+
+[`#testing` on Reactiflux](https://discord.gg/j6FKKQQrW9) or [our GitHub discussion](https://github.com/kulshekhar/ts-jest/discussions)
+
+## Code Conventions
+
+- 2 spaces for indentation (no tabs).
+- 120 character line length strongly preferred.
+- Prefer `'` over `"`.
+- ES6 syntax when possible.
+- Use [TypeScript](https://www.typescriptlang.org/).
+- No semicolon (`;`) required
+- Trailing commas,
+
+## License
+
+By contributing to `ts-jest`, you agree that your contributions will be licensed under its MIT license.

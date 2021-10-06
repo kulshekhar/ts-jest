@@ -1,6 +1,5 @@
 dist/
 node_modules/
-e2e/
 coverage/
 website/src/**/*.js
 presets/index.d.ts

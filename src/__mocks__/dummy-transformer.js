@@ -6,13 +6,13 @@ function factory(tsCompiler) {
   // eslint-disable-next-line no-console
   console.log(tsCompiler.program)
 
-  function createVisitor(_ctx, _) {
+  function createVisitor() {
     return (node) => node
   }
 
-  return (ctx) =>
+  return () =>
     logger.wrap({ [LogContexts.logLevel]: LogLevels.debug, call: null }, 'visitSourceFileNode(): dummy', (sf) =>
-      ts.visitNode(sf, createVisitor(ctx, sf))
+      ts.visitNode(sf, createVisitor())
     )
 }
 

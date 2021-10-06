@@ -4,12 +4,13 @@ import { basename, join, normalize } from 'path'
 import { CompilerOptions, DiagnosticCategory, EmitOutput, TranspileOutput } from 'typescript'
 
 import { createConfigSet, makeCompiler } from '../__helpers__/fakers'
-import { mockFolder } from '../__helpers__/path'
 import type { DepGraphInfo } from '../types'
 import { Errors, interpolate } from '../utils/messages'
 
 import { updateOutput } from './compiler-utils'
 import { TsCompiler } from './ts-compiler'
+
+const mockFolder = join(process.cwd(), 'src', '__mocks__')
 
 const baseTsJestConfig = { tsconfig: join(process.cwd(), 'tsconfig.spec.json') }
 

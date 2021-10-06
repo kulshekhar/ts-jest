@@ -1,0 +1,33 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`on node >=12.16.0 runs test with native ESM and isolatedModules: false 1`] = `
+Test Suites: 1 passed, 1 total
+Tests:       21 passed, 21 total
+Snapshots:   0 total
+Time:        <<REPLACED>>
+Ran all test suites matching /native-esm.spec.ts/i.
+`;
+
+exports[`on node >=12.16.0 runs test with native ESM and isolatedModules: true 1`] = `
+Test Suites: 1 passed, 1 total
+Tests:       21 passed, 21 total
+Snapshots:   0 total
+Time:        <<REPLACED>>
+Ran all test suites matching /native-esm.spec.ts/i.
+`;
+
+exports[`on node >=14.3.0 supports top-level await and isolatedModules: false 1`] = `
+Test Suites: 1 passed, 1 total
+Tests:       1 passed, 1 total
+Snapshots:   0 total
+Time:        <<REPLACED>>
+Ran all test suites matching /native-esm-tla.spec.ts/i.
+`;
+
+exports[`on node >=14.3.0 supports top-level await and isolatedModules: true 1`] = `
+Test Suites: 1 passed, 1 total
+Tests:       1 passed, 1 total
+Snapshots:   0 total
+Time:        <<REPLACED>>
+Ran all test suites matching /native-esm-tla.spec.ts/i.
+`;

@@ -1,0 +1,7 @@
+{
+  "jest": {
+    "transform": {
+      "^.+.tsx?$": "<rootDir>/../../dist/index.js"
+    }
+  }
+}

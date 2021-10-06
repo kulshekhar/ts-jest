@@ -1,33 +1,43 @@
-import { allValidPackageSets } from '../__helpers__/templates'
-import { configureTestCase } from '../__helpers__/test-case'
+import runJest, { json as runWithJson } from '../run-jest'
+import { extractSortedSummary } from '../utils'
 
-describe('With diagnostics throw', () => {
-  const testCase = configureTestCase('diagnostics', {
-    noCache: true, // warnings shown only on first compilation
+const DIR = 'diagnostics'
+
+test('throw errors when running the tests inside `diagnostics/` with `isolatedModules: false`', () => {
+  const result = runJest(DIR, undefined, {
+    stripAnsi: true,
   })
 
-  testCase.runWithTemplates(allValidPackageSets, 1, (runTest, { testLabel }) => {
-    it(testLabel, () => {
-      const result = runTest()
-      expect(result.status).toBe(1)
-      expect(result).toMatchSnapshot()
-    })
-  })
+  expect(extractSortedSummary(result.stderr).rest).toMatchInlineSnapshot(`
+    "FAIL __tests__/diagnostics.spec.ts
+      ● Test suite failed to run
+
+        __tests__/diagnostics.spec.ts:3:7 - error TS2741: Property 'b' is missing in type '{ a: number; }' but required in type 'Thing'.
+
+        3 const thing: Thing = { a: 1 }
+                ~~~~~
+
+          foo.ts:1:34
+            1 export type Thing = { a: number; b: number }
+                                               ~
+            'b' is declared here."
+  `)
 })
 
-describe('With diagnostics warn only', () => {
-  const testCase = configureTestCase('diagnostics', {
-    tsJestConfig: {
-      diagnostics: { warnOnly: true },
-    },
-    noCache: true, // warnings shown only on first compilation
-  })
+test('successfully runs the tests inside `diagnostics/` with `isolatedModules: true`', () => {
+  const { json } = runWithJson(DIR, ['-c=jest-isolated.config.js'])
 
-  testCase.runWithTemplates(allValidPackageSets, 0, (runTest, { testLabel }) => {
-    it(testLabel, () => {
-      const result = runTest()
-      expect(result.status).toBe(0)
-      expect(result).toMatchSnapshot()
-    })
-  })
+  expect(json.success).toBe(true)
+})
+
+test('successfully runs the tests inside `diagnostics/` with diagnostics option `warnOnly: true`', () => {
+  const { json } = runWithJson(DIR, ['-c=jest-warn.config.js'])
+
+  expect(json.success).toBe(true)
+})
+
+test('successfully runs the tests inside `diagnostics/` with `diagnostics: false`', () => {
+  const { json } = runWithJson(DIR, ['-c=jest-disabled.config.js'])
+
+  expect(json.success).toBe(true)
 })

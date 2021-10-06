@@ -1,5 +1,0 @@
-{
-  "scripts": {
-    "test": "cd src/Tests && jest"
-  }
-}

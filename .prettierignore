@@ -1,7 +1,4 @@
 dist/
-e2e/
-!e2e/__helpers__
-!e2e/__serializers__
-!e2e/__tests__
 node_modules/
 src/**/__snapshots__/
+e2e/__tests__/__snapshots__/

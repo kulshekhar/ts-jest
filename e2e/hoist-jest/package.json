@@ -1,0 +1,23 @@
+{
+  "dependencies": {
+    "react": "^17.0.2"
+  },
+  "jest": {
+    "automock": true,
+    "globals": {
+      "ts-jest": {
+        "diagnostics": false,
+        "tsconfig": {
+          "allowJs": true
+        }
+      }
+    },
+    "moduleNameMapper": {
+      "@jest/globals": "<rootDir>/../../node_modules/@jest/globals",
+      "@types/react": "<rootDir>/../../node_modules/@types/react"
+    },
+    "transform": {
+      "^.+\\.[tj]sx?$": "<rootDir>/../../dist/index.js"
+    }
+  }
+}

@@ -1,13 +1,16 @@
-import { allValidPackageSets } from '../__helpers__/templates'
-import { configureTestCase } from '../__helpers__/test-case'
+import runJest from '../run-jest'
+import { extractSortedSummary } from '../utils'
 
-describe('Enum', () => {
-  const testCase = configureTestCase('enum')
+const DIR = 'enum'
 
-  testCase.runWithTemplates(allValidPackageSets, 0, (runTest, { testLabel }) => {
-    it(testLabel, () => {
-      const result = runTest()
-      expect(result.status).toBe(0)
-    })
-  })
+test('partial successfully runs the tests inside `enum/` with `isolatedModules: true`', () => {
+  const result = runJest(DIR)
+
+  expect(extractSortedSummary(result.stderr).rest).toMatchSnapshot()
+})
+
+test('partial successfully runs the tests inside `enum/` with `isolatedModules: false`', () => {
+  const result = runJest(DIR, ['-c=jest-isolated.config.js'])
+
+  expect(extractSortedSummary(result.stderr).rest).toMatchSnapshot()
 })

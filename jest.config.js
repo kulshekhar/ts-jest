@@ -1,20 +1,30 @@
-const baseConfig = require('./jest-base')
-
 /** @type {import('@jest/types').Config.InitialOptions} */
 module.exports = {
-  ...baseConfig,
-  rootDir: '.',
-  setupFilesAfterEnv: ['<rootDir>/src/__helpers__/setup.ts'],
-  testMatch: ['<rootDir>/src/**/*.spec.ts'],
-  testPathIgnorePatterns: ['<rootDir>/src/__mocks__/*'],
+  globals: {
+    'ts-jest': {
+      tsconfig: 'tsconfig.spec.json',
+      isolatedModules: true,
+    },
+  },
   collectCoverageFrom: [
-    '<rootDir>/src/**/*.ts',
-    '!<rootDir>/src/**/*.d.ts',
-    '!<rootDir>/src/**/*.spec.ts',
-    '!<rootDir>/src/**/*.test.ts',
-    '!<rootDir>/src/**/__*__/*',
-    '!<rootDir>/src/utils/testing.ts',
+    'src/**/*.ts',
   ],
-  snapshotSerializers: ['<rootDir>/src/__serializers__/processed-source.ts'],
-  cacheDirectory: '<rootDir>/.cache/unit',
+  modulePathIgnorePatterns: [
+    'examples/.*',
+    'website/.*',
+  ],
+  setupFilesAfterEnv: ['<rootDir>/src/__helpers__/setup-jest.ts'],
+  snapshotSerializers: [
+    require.resolve('jest-snapshot-serializer-raw'),
+  ],
+  testPathIgnorePatterns: [
+    'src/__mocks__/*',
+    '/node_modules/',
+    '/examples/',
+    '/e2e/.*/__tests__',
+    '\\.snap$',
+  ],
+  transform: {
+    '^.+\.tsx?$': '<rootDir>/dist/index.js',
+  },
 }

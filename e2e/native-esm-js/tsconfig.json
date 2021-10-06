@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "target": "ES2017",
+    "allowJs": true,
+    "checkJs": false,
+    "esModuleInterop": true,
+    "moduleResolution": "Node"
+  }
+}
