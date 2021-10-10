@@ -53,11 +53,11 @@
       "items": [
         {
           "type": "doc",
-          "id": "version-27.0/guides/test-helpers"
+          "id": "version-27.0/guides/esm-support"
         },
         {
           "type": "doc",
-          "id": "version-27.0/guides/esm-support"
+          "id": "version-27.0/guides/mock-es6-class"
         },
         {
           "type": "doc",
@@ -65,11 +65,15 @@
         },
         {
           "type": "doc",
-          "id": "version-27.0/guides/using-with-monorepo"
+          "id": "version-27.0/guides/test-helpers"
         },
         {
           "type": "doc",
           "id": "version-27.0/guides/troubleshooting"
+        },
+        {
+          "type": "doc",
+          "id": "version-27.0/guides/using-with-monorepo"
         }
       ]
     },

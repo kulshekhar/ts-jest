@@ -22,11 +22,12 @@ module.exports = {
       label: 'Guides',
       collapsed: false,
       items: [
-        'guides/test-helpers',
         'guides/esm-support',
+        'guides/mock-es6-class',
         'guides/react-native',
-        'guides/using-with-monorepo',
+        'guides/test-helpers',
         'guides/troubleshooting',
+        'guides/using-with-monorepo',
       ],
     },
     {
