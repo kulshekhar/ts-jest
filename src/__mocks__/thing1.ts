@@ -1,4 +1,4 @@
-import { camelCase } from 'lodash'
+import camelCase from 'lodash/camelCase'
 
 import { getBar } from './thing2'
 
