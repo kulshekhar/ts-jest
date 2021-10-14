@@ -1,3 +1,12 @@
+## [27.0.6](https://github.com/kulshekhar/ts-jest/compare/v27.0.5...v27.0.6) (2021-10-14)
+
+
+### Bug Fixes
+
+* use specific `lodash` package instead of full package `lodash` ([#2959](https://github.com/kulshekhar/ts-jest/issues/2959)) ([dc89fe5](https://github.com/kulshekhar/ts-jest/commit/dc89fe55f2b77da76443f827fe3055f07cf4809c)), closes [#2954](https://github.com/kulshekhar/ts-jest/issues/2954)
+
+
+
 ## [27.0.5](https://github.com/kulshekhar/ts-jest/compare/v27.0.4...v27.0.5) (2021-08-14)
 
 
