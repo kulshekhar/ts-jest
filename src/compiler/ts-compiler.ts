@@ -1,7 +1,7 @@
 import { basename, normalize } from 'path'
 
 import { LogContexts, Logger, LogLevels } from 'bs-logger'
-import memoize from 'lodash/memoize'
+import memoize from 'lodash.memoize'
 import type {
   EmitOutput,
   LanguageService,
