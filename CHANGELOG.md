@@ -1,3 +1,12 @@
+## [27.0.7](https://github.com/kulshekhar/ts-jest/compare/v27.0.6...v27.0.7) (2021-10-16)
+
+
+### Bug Fixes
+
+* correct `lodash` import ([#2978](https://github.com/kulshekhar/ts-jest/issues/2978)) ([8b60679](https://github.com/kulshekhar/ts-jest/commit/8b60679574eb60a3c8109ffd389b64b86a167e72)), closes [#2977](https://github.com/kulshekhar/ts-jest/issues/2977)
+
+
+
 ## [27.0.6](https://github.com/kulshekhar/ts-jest/compare/v27.0.5...v27.0.6) (2021-10-14)
 
 
