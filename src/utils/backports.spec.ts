@@ -1,7 +1,7 @@
 import { inspect } from 'util'
 
 import { testing } from 'bs-logger'
-import set from 'lodash/set'
+import set from 'lodash.set'
 
 import { backportJestConfig } from './backports'
 
