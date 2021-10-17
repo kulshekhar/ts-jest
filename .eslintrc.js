@@ -16,9 +16,9 @@ module.exports = {
       files: ['*.ts'],
       parser: '@typescript-eslint/parser',
       parserOptions: {
-        project: 'tsconfig.json',
+        project: 'tsconfig.eslint.json',
         impliedStrict: true,
-        createDefaultProgram: true,
+        createDefaultProgram: false,
       },
       plugins: ['eslint-plugin-prefer-arrow', 'import', 'jsdoc'],
       extends: [
@@ -31,22 +31,20 @@ module.exports = {
         '@typescript-eslint/array-type': [
           'error',
           {
-            'default': 'array-simple',
-          }
+            default: 'array-simple',
+          },
         ],
         '@typescript-eslint/comma-spacing': 'error',
         '@typescript-eslint/no-redeclare': 'error',
-        '@typescript-eslint/no-unused-vars': ["error", { "argsIgnorePattern": "^_" }],
+        '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
         '@typescript-eslint/no-var-requires': 'off',
         '@typescript-eslint/prefer-ts-expect-error': 'error',
-        'jest/valid-title': 'off',
-        'jest/no-conditional-expect': 'off',
         'import/order': [
           'error',
           {
-            'alphabetize': {
-              'order': 'asc',
-              'caseInsensitive': true,
+            alphabetize: {
+              order: 'asc',
+              caseInsensitive: true,
             },
             // this is the default order except for added `internal` in the middle
             'groups': [
@@ -58,21 +56,26 @@ module.exports = {
               'index',
             ],
             'newlines-between': 'always',
-          }
+          },
         ],
+        'jest/no-conditional-expect': 'off',
         'object-shorthand': 'error',
-        'padding-line-between-statements': [
-          'error',
-          { 'blankLine': 'always', 'prev': '*', 'next': 'return' },
-        ],
+        'padding-line-between-statements': ['error', { blankLine: 'always', prev: '*', next: 'return' }],
         'prefer-object-spread': 'error',
       },
-    }
+    },
+    {
+      files: ['*.js'],
+      extends: ['eslint:recommended', 'plugin:prettier/recommended'],
+      rules: {
+        'no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+      },
+    },
   ],
   rules: {
     'comma-spacing': 'off',
     'no-redeclare': 'off',
     'no-shadow': 'off',
-    'quotes': 'off',
+    quotes: 'off',
   },
-}
+};
