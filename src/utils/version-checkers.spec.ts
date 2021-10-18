@@ -26,6 +26,7 @@ function describeChecker(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   unsupportedVersions: any[],
 ) {
+  // eslint-disable-next-line jest/valid-title
   describe(moduleName, () => {
     beforeEach(() => {
       checker.forget()
