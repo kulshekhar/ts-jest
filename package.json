@@ -104,7 +104,7 @@
     "@types/lodash.memoize": "4.x",
     "@types/lodash.set": "4.x",
     "@types/micromatch": "4.x",
-    "@types/node": "16.11.1",
+    "@types/node": "16.11.2",
     "@types/node-fetch": "^3.0.3",
     "@types/react": "17.x",
     "@types/semver": "latest",
