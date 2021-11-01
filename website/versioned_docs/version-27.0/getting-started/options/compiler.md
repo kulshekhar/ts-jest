@@ -17,7 +17,7 @@ module.exports = {
   // [...]
   globals: {
     'ts-jest': {
-      compiler: 'ttypescript',
+      compiler: 'typescript',
     },
   },
 }
@@ -30,7 +30,7 @@ module.exports = {
   "jest": {
     "globals": {
       "ts-jest": {
-        "compiler": "ttypescript"
+        "compiler": "typescript"
       }
     }
   }
