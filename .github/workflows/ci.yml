@@ -17,42 +17,48 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     if: "!startsWith(github.ref, 'refs/tags/') && github.ref != 'refs/heads/main'"
 
-  lint-and-typecheck:
-    name: Running build and lint
+  prepare-npm-cache:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
-      - name: Get npm cache
-        id: npm-cache
-        run: echo "::set-output name=dir::$(npm config get cacheFolder)"
-      - uses: actions/cache@v2
-        with:
-          path: ${{ steps.npm-cache.outputs.dir }}
-          key: ubuntu-latest-node-12.x-npm-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ubuntu-latest-node-12.x-npm-
+      - uses: actions/checkout@v2.4.0
       - uses: actions/setup-node@v2.4.1
         with:
-          node-version: 12.x
-      - name: Install and build
+          node-version: 16.x
+          cache: npm
+      - name: Validate cache
+        run: npm ci
+
+  lint-and-typecheck:
+    name: build-lint
+    runs-on: ubuntu-latest
+    needs: prepare-npm-cache
+
+    steps:
+      - uses: actions/checkout@v2.4.0
+      - uses: actions/setup-node@v2.4.1
+        with:
+          node-version: 16.x
+          cache: npm
+      - name: Install
         run: npm ci
       - name: Run eslint
         run: npm run lint
       - name: Run prettier
-        run: npm run lint:prettier-ci
+        run: npm run lint-prettier-ci
 
-  test-ubuntu:
+  test:
     name: Node v${{ matrix.node-version }} on ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
-        node-version: [10.x, 12.x, 14.x]
-        os: [ubuntu-latest]
+        node-version: [10.x, 12.x, 14.x, 16.x]
+        os: [ubuntu-latest, windows-latest]
     runs-on: ${{ matrix.os }}
+    needs: prepare-npm-cache
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v2.4.0
       - name: Get npm cache
         id: npm-cache
         run: echo "::set-output name=dir::$(npm config get cacheFolder)"
@@ -69,11 +75,7 @@ jobs:
       - name: Install and build
         run: npm ci
       - name: Run tests with coverage
-        run: npm run test -- --coverage && cat ./coverage/lcov.info
-        env:
-          CI: true
-      - name: Run real repo tests
-        run: npm run test:external-repos
+        run: npm run test-ci -- --coverage && cat ./coverage/lcov.info
         env:
           CI: true
       - name: Coveralls parallel
@@ -83,47 +85,8 @@ jobs:
           flag-name: run-${{ matrix.node-version }}
           parallel: true
 
-  test-windows:
-    name: Node v${{ matrix.node-version }} on ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        node-version: [10.x, 12.x, 14.x]
-        os: [windows-latest]
-    runs-on: ${{ matrix.os }}
-
-    steps:
-      - name: Set git config
-        shell: bash
-        run: |
-          git config --global core.autocrlf false
-          git config --global core.symlinks true
-        if: runner.os == 'Windows'
-      - uses: actions/checkout@v2
-      - name: Get npm cache
-        id: npm-cache
-        run: echo "::set-output name=dir::$(npm config get cacheFolder)"
-      - uses: actions/cache@v2
-        with:
-          path: ${{ steps.npm-cache.outputs.dir }}
-          key: ${{ runner.os }}-node-${{ matrix.node-version }}-npm-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-${{ matrix.node-version }}-npm-
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2.4.1
-        with:
-          node-version: ${{ matrix.node-version }}
-      - name: Install and build
-        run: npm ci
-      - name: run unit tests
-        run: npm run test:unit
-      - name: run real project tests
-        run: npm run test:external-repos
-        env:
-          CI: true
-
   finish:
-    needs: test-ubuntu
+    needs: test
     runs-on: ubuntu-latest
     steps:
       - name: Coveralls finished

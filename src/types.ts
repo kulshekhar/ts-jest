@@ -10,6 +10,12 @@ declare module '@jest/types' {
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace Config {
     interface ConfigGlobals {
+      /**
+       * strangely `@ts-expect-error` doesn't work in this case when running
+       * `npm run build` vs `npm run pretest`
+       */
+      // eslint-disable-next-line
+      // @ts-ignore
       'ts-jest': TsJestGlobalOptions
     }
   }

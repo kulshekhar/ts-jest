@@ -1,8 +1,0 @@
-{
-  "name": "dependency",
-  "version": "0.0.1",
-  "peerDependencies": {
-    "typescript": "latest"
-  },
-  "main": "./index.ts"
-}

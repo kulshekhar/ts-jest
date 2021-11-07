@@ -1,0 +1,13 @@
+{
+  "jest": {
+    "extensionsToTreatAsEsm": [".ts"],
+    "globals": {
+      "ts-jest": {
+        "useESM": true
+      }
+    },
+    "transform": {
+      "^.+.tsx?$": "<rootDir>/../../dist/index.js"
+    }
+  }
+}

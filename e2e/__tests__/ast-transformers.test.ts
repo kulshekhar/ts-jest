@@ -1,103 +1,40 @@
-import { LogContexts, LogLevels } from 'bs-logger'
+import path from 'path'
 
-import { allValidPackageSets } from '../__helpers__/templates'
-import { configureTestCase } from '../__helpers__/test-case'
+import { json as runWithJson } from '../run-jest'
+import { runNpmInstall } from '../utils'
 
-describe('AST transformers', () => {
-  describe('hoisting', () => {
-    const testCase = configureTestCase('ast-transformers/hoisting', {
-      jestConfig: {
-        testEnvironment: 'node',
-        automock: true,
-      },
-    })
+describe('path-mapping', () => {
+  const DIR = 'ast-transformers/path-mapping'
 
-    testCase.runWithTemplates(allValidPackageSets, 0, (runTest, { testLabel }) => {
-      it(testLabel, () => {
-        const result = runTest()
-        expect(result.status).toBe(0)
-      })
-    })
+  test(`successfully runs the tests inside ${DIR} with isolatedModules: false`, () => {
+    const { json } = runWithJson(DIR)
+
+    expect(json.success).toBe(true)
   })
 
-  describe('path mapping', () => {
-    const tsJestConfig = {
-      tsconfig: {
-        baseUrl: '.',
-        paths: {
-          '@share/*': ['share/*']
-        }
-      },
-      astTransformers: {
-        before: [
-          'ts-jest/dist/transformers/path-mapping'
-        ],
-      },
-    }
+  test(`successfully runs the tests inside ${DIR} with isolatedModules: true`, () => {
+    const { json } = runWithJson(DIR, ['-c=jest-isolated.config.js'])
 
-    describe('without rootDirs', () => {
-      const testCase = configureTestCase('ast-transformers/path-mapping', {
-        env: { TS_JEST_LOG: 'ts-jest.log' },
-        tsJestConfig,
-      })
+    expect(json.success).toBe(true)
+  })
+})
 
-      testCase.runWithTemplates(allValidPackageSets, 0, (runTest, { testLabel }) => {
-        it(testLabel, () => {
-          const result = runTest()
-          expect(result.status).toBe(0)
-        })
-      })
-    })
+describe('transformer options', () => {
+  const DIR = path.join(__dirname, '..', 'ast-transformers', 'transformer-options')
 
-    describe('with rootDirs', () => {
-      const testCase = configureTestCase('ast-transformers/path-mapping', {
-        tsJestConfig: {
-          ...tsJestConfig,
-          tsconfig: {
-            ...tsJestConfig.tsconfig,
-            rootDirs: ['./'],
-          },
-        },
-      })
-
-      testCase.runWithTemplates(allValidPackageSets, 0, (runTest, { testLabel }) => {
-        it(testLabel, () => {
-          const result = runTest()
-          expect(result.status).toBe(0)
-        })
-      })
-    })
+  beforeEach(() => {
+    runNpmInstall(DIR)
   })
 
-  describe('with extra options', () => {
-    const testCase = configureTestCase('ast-transformers/with-extra-options', {
-      env: { TS_JEST_LOG: 'ts-jest.log' },
-      noCache: true, // no cache is required when testing against logging otherwise other tests will clear logging
-      tsJestConfig: {
-        astTransformers: {
-          before: [{
-            path: require.resolve('../__cases__/ast-transformers/with-extra-options/foo'),
-            options: {
-              foo: 'bar',
-            },
-          }],
-        },
-      },
-    })
+  test('successfully runs the tests inside `ast-transformer/transformer-options` with isolatedModules: false', () => {
+    const { json } = runWithJson(DIR)
 
-    testCase.runWithTemplates(allValidPackageSets, 0, (runTest, { testLabel }) => {
-      it(testLabel, () => {
-        const result = runTest()
-        expect(result.status).toBe(0)
-        const filteredEntries = result.logFileEntries
-          // keep only debug and above
-          .filter(m => (m.context[LogContexts.logLevel] || 0) >= LogLevels.debug)
-          // simplify entries
-          // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-          .map(e => result.normalize(`[level:${e.context[LogContexts.logLevel]}] ${e.message}`))
-          .filter(logging => logging.includes('Dummy transformer with extra options'))
-        expect(filteredEntries).toMatchSnapshot()
-      })
-    })
+    expect(json.success).toBe(true)
+  })
+
+  test('successfully runs the tests inside `ast-transformer/transformer-options` with isolatedModules: true', () => {
+    const { json } = runWithJson(DIR, ['-c=jest-isolated.config.js'])
+
+    expect(json.success).toBe(true)
   })
 })

@@ -1,0 +1,11 @@
+{
+  "dependencies": {
+    "@babel/preset-env": "^7.16.0"
+  },
+  "jest": {
+    "projects": [
+      "no-type-check",
+      "type-check"
+    ]
+  }
+}

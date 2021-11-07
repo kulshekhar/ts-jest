@@ -1,0 +1,8 @@
+{
+  "jest": {
+    "projects": [
+      "disabled",
+      "enabled"
+    ]
+  }
+}

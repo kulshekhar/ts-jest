@@ -1,0 +1,21 @@
+{
+  "type": "module",
+  "jest": {
+    "extensionsToTreatAsEsm": [".ts"],
+    "globals": {
+      "ts-jest": {
+        "useESM": true,
+        "diagnostics": {
+          "exclude": ["**/native-esm-tla.spec.ts"]
+        }
+      }
+    },
+    "roots": ["<rootDir>", "<rootDir>/../"],
+    "moduleNameMapper": {
+      "@jest/globals": "<rootDir>/../../../node_modules/@jest/globals"
+    },
+    "transform": {
+      "^.+.tsx?$": "<rootDir>/../../../dist/index.js"
+    }
+  }
+}

@@ -1,577 +1,69 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Source map with tsconfig mapRoot using template "default" should have the source maps comment 1`] = `
-  ===[ FILE: main.ts ]============================================================
-  "use strict";
-  Object.defineProperty(exports, "__esModule", { value: true });
-  exports.throwError = exports.consoleLog = void 0;
-  function consoleLog() {
-      console.log('WITHIN SOURCE');
-  }
-  exports.consoleLog = consoleLog;
-  function throwError() {
-      throw new Error('WITHIN SOURCE');
-  }
-  exports.throwError = throwError;
-  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoiPGN3ZD4vbWFpbi50cyIsIm1hcHBpbmdzIjoiOzs7QUFBQSxTQUFnQixVQUFVO0lBQ3hCLE9BQU8sQ0FBQyxHQUFHLENBQUMsZUFBZSxDQUFDLENBQUE7QUFDOUIsQ0FBQztBQUZELGdDQUVDO0FBRUQsU0FBZ0IsVUFBVTtJQUN4QixNQUFNLElBQUksS0FBSyxDQUFDLGVBQWUsQ0FBQyxDQUFBO0FBQ2xDLENBQUM7QUFGRCxnQ0FFQyIsIm5hbWVzIjpbXSwic291cmNlcyI6WyI8Y3dkPi9tYWluLnRzIl0sInNvdXJjZXNDb250ZW50IjpbImV4cG9ydCBmdW5jdGlvbiBjb25zb2xlTG9nKCkge1xuICBjb25zb2xlLmxvZygnV0lUSElOIFNPVVJDRScpXG59XG5cbmV4cG9ydCBmdW5jdGlvbiB0aHJvd0Vycm9yKCkge1xuICB0aHJvdyBuZXcgRXJyb3IoJ1dJVEhJTiBTT1VSQ0UnKVxufVxuIl0sInZlcnNpb24iOjN9
-  ===[ INLINE SOURCE MAPS ]=======================================================
-  file: <cwd>/main.ts
-  mappings: >-
-    ;;;AAAA,SAAgB,UAAU;IACxB,OAAO,CAAC,GAAG,CAAC,eAAe,CAAC,CAAA;AAC9B,CAAC;AAFD,gCAEC;AAED,SAAgB,UAAU;IACxB,MAAM,IAAI,KAAK,CAAC,eAAe,CAAC,CAAA;AAClC,CAAC;AAFD,gCAEC
-  names: []
-  sources:
-    - <cwd>/main.ts
-  sourcesContent:
-    - |
-      export function consoleLog() {
-        console.log('WITHIN SOURCE')
-      }
-  
-      export function throwError() {
-        throw new Error('WITHIN SOURCE')
-      }
-  version: 3
-  ================================================================================
+exports[`run tests with \`isolatedModules: false\` 1`] = `
+"FAIL sourcemap-disabled __tests__/source-map.spec.ts
+  ● should fail with stacktrace
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: false
+    Received: true
+
+      1 | test('should fail with stacktrace', () => {
+      2 |   expect(true).toBe(false)
+    > 3 | })
+        |   ^
+      4 |
+
+      at Object.<anonymous> (../__tests__/source-map.spec.ts:3:18)
+
+FAIL sourcemap-enabled __tests__/source-map.spec.ts
+  ● should fail with stacktrace
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: false
+    Received: true
+
+      1 | test('should fail with stacktrace', () => {
+    > 2 |   expect(true).toBe(false)
+        |                ^
+      3 | })
+      4 |
+
+      at Object.<anonymous> (../__tests__/source-map.spec.ts:2:16)"
 `;
 
-exports[`Source map with tsconfig mapRoot using template "default" should report correct line numbers 1`] = `
-  × jest --no-cache
-  ↳ exit code: 1
-  ===[ STDOUT ]===================================================================
-  console.log
-      WITHIN SOURCE
-  
-        at Object.consoleLog (main.ts:2:11)
-  
-    console.log
-      WITHIN TEST
-  
-        at Object.<anonymous> (main.spec.ts:9:13)
-  ===[ STDERR ]===================================================================
-  FAIL ./main.spec.ts
-    console.log()
-      √ from sources
-      √ from tests
-    throw new Error()
-      × throws from sources
-      × throws from tests
-  
-    ● throw new Error() › throws from sources
-  
-      WITHIN SOURCE
-  
-        4 | 
-        5 | export function throwError() {
-      > 6 |   throw new Error('WITHIN SOURCE')
-          |         ^
-        7 | }
-        8 | 
-  
-        at Object.throwError (main.ts:6:9)
-        at Object.<anonymous> (main.spec.ts:16:5)
-  
-    ● throw new Error() › throws from tests
-  
-      WITHIN TEST
-  
-        18 |   });
-        19 |   test('throws from tests', () => {
-      > 20 |     throw new Error('WITHIN TEST');
-           |           ^
-        21 |     expect(true).toBe(true);
-        22 |   });
-        23 | });
-  
-        at Object.<anonymous> (main.spec.ts:20:11)
-  
-  Test Suites: 1 failed, 1 total
-  Tests:       2 failed, 2 passed, 4 total
-  Snapshots:   0 total
-  Time:        XXs
-  Ran all test suites.
-  ================================================================================
-`;
+exports[`run tests with \`isolatedModules: true\` 1`] = `
+"FAIL sourcemap-disabled-isolated __tests__/source-map.spec.ts
+  ● should fail with stacktrace
 
-exports[`Source map with tsconfig mapRoot using template "with-babel-7" should have the source maps comment 1`] = `
-  ===[ FILE: main.ts ]============================================================
-  "use strict";
-  
-  Object.defineProperty(exports, "__esModule", {
-    value: true
-  });
-  exports.throwError = exports.consoleLog = void 0;
-  
-  function consoleLog() {
-    console.log('WITHIN SOURCE');
-  }
-  
-  exports.consoleLog = consoleLog;
-  
-  function throwError() {
-    throw new Error('WITHIN SOURCE');
-  }
-  
-  exports.throwError = throwError;
-  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJtYXBwaW5ncyI6Ijs7Ozs7OztBQUFBLFNBQWdCLFVBQWhCLEdBQTBCO0FBQ3hCLEVBQUEsT0FBTyxDQUFDLEdBQVIsQ0FBWSxlQUFaO0FBQ0Q7O0FBRkQsT0FBQSxDQUFBLFVBQUEsR0FBQSxVQUFBOztBQUlBLFNBQWdCLFVBQWhCLEdBQTBCO0FBQ3hCLFFBQU0sSUFBSSxLQUFKLENBQVUsZUFBVixDQUFOO0FBQ0Q7O0FBRkQsT0FBQSxDQUFBLFVBQUEsR0FBQSxVQUFBIiwibmFtZXMiOltdLCJzb3VyY2VzIjpbIjxjd2Q+L21haW4udHMiXSwic291cmNlc0NvbnRlbnQiOlsiZXhwb3J0IGZ1bmN0aW9uIGNvbnNvbGVMb2coKSB7XG4gIGNvbnNvbGUubG9nKCdXSVRISU4gU09VUkNFJylcbn1cblxuZXhwb3J0IGZ1bmN0aW9uIHRocm93RXJyb3IoKSB7XG4gIHRocm93IG5ldyBFcnJvcignV0lUSElOIFNPVVJDRScpXG59XG4iXSwidmVyc2lvbiI6M30=
-  ===[ INLINE SOURCE MAPS ]=======================================================
-  mappings: >-
-    ;;;;;;;AAAA,SAAgB,UAAhB,GAA0B;AACxB,EAAA,OAAO,CAAC,GAAR,CAAY,eAAZ;AACD;;AAFD,OAAA,CAAA,UAAA,GAAA,UAAA;;AAIA,SAAgB,UAAhB,GAA0B;AACxB,QAAM,IAAI,KAAJ,CAAU,eAAV,CAAN;AACD;;AAFD,OAAA,CAAA,UAAA,GAAA,UAAA
-  names: []
-  sources:
-    - <cwd>/main.ts
-  sourcesContent:
-    - |
-      export function consoleLog() {
-        console.log('WITHIN SOURCE')
-      }
-  
-      export function throwError() {
-        throw new Error('WITHIN SOURCE')
-      }
-  version: 3
-  ================================================================================
-`;
+    expect(received).toBe(expected) // Object.is equality
 
-exports[`Source map with tsconfig mapRoot using template "with-babel-7" should report correct line numbers 1`] = `
-  × jest --no-cache
-  ↳ exit code: 1
-  ===[ STDOUT ]===================================================================
-  console.log
-      WITHIN SOURCE
-  
-        at Object.consoleLog (main.ts:2:11)
-  
-    console.log
-      WITHIN TEST
-  
-        at Object.<anonymous> (main.spec.ts:9:13)
-  ===[ STDERR ]===================================================================
-  FAIL ./main.spec.ts
-    console.log()
-      √ from sources
-      √ from tests
-    throw new Error()
-      × throws from sources
-      × throws from tests
-  
-    ● throw new Error() › throws from sources
-  
-      WITHIN SOURCE
-  
-        4 | 
-        5 | export function throwError() {
-      > 6 |   throw new Error('WITHIN SOURCE')
-          |         ^
-        7 | }
-        8 | 
-  
-        at Object.throwError (main.ts:6:9)
-        at Object.<anonymous> (main.spec.ts:16:5)
-  
-    ● throw new Error() › throws from tests
-  
-      WITHIN TEST
-  
-        18 |   });
-        19 |   test('throws from tests', () => {
-      > 20 |     throw new Error('WITHIN TEST');
-           |           ^
-        21 |     expect(true).toBe(true);
-        22 |   });
-        23 | });
-  
-        at Object.<anonymous> (main.spec.ts:20:11)
-  
-  Test Suites: 1 failed, 1 total
-  Tests:       2 failed, 2 passed, 4 total
-  Snapshots:   0 total
-  Time:        XXs
-  Ran all test suites.
-  ================================================================================
-`;
+    Expected: false
+    Received: true
 
-exports[`Source map with tsconfig mapRoot using template "with-babel-7-string-config" should have the source maps comment 1`] = `
-  ===[ FILE: main.ts ]============================================================
-  "use strict";
-  
-  Object.defineProperty(exports, "__esModule", {
-    value: true
-  });
-  exports.throwError = exports.consoleLog = void 0;
-  
-  function consoleLog() {
-    console.log('WITHIN SOURCE');
-  }
-  
-  exports.consoleLog = consoleLog;
-  
-  function throwError() {
-    throw new Error('WITHIN SOURCE');
-  }
-  
-  exports.throwError = throwError;
-  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJtYXBwaW5ncyI6Ijs7Ozs7OztBQUFBLFNBQWdCLFVBQWhCLEdBQTBCO0FBQ3hCLEVBQUEsT0FBTyxDQUFDLEdBQVIsQ0FBWSxlQUFaO0FBQ0Q7O0FBRkQsT0FBQSxDQUFBLFVBQUEsR0FBQSxVQUFBOztBQUlBLFNBQWdCLFVBQWhCLEdBQTBCO0FBQ3hCLFFBQU0sSUFBSSxLQUFKLENBQVUsZUFBVixDQUFOO0FBQ0Q7O0FBRkQsT0FBQSxDQUFBLFVBQUEsR0FBQSxVQUFBIiwibmFtZXMiOltdLCJzb3VyY2VzIjpbIjxjd2Q+L21haW4udHMiXSwic291cmNlc0NvbnRlbnQiOlsiZXhwb3J0IGZ1bmN0aW9uIGNvbnNvbGVMb2coKSB7XG4gIGNvbnNvbGUubG9nKCdXSVRISU4gU09VUkNFJylcbn1cblxuZXhwb3J0IGZ1bmN0aW9uIHRocm93RXJyb3IoKSB7XG4gIHRocm93IG5ldyBFcnJvcignV0lUSElOIFNPVVJDRScpXG59XG4iXSwidmVyc2lvbiI6M30=
-  ===[ INLINE SOURCE MAPS ]=======================================================
-  mappings: >-
-    ;;;;;;;AAAA,SAAgB,UAAhB,GAA0B;AACxB,EAAA,OAAO,CAAC,GAAR,CAAY,eAAZ;AACD;;AAFD,OAAA,CAAA,UAAA,GAAA,UAAA;;AAIA,SAAgB,UAAhB,GAA0B;AACxB,QAAM,IAAI,KAAJ,CAAU,eAAV,CAAN;AACD;;AAFD,OAAA,CAAA,UAAA,GAAA,UAAA
-  names: []
-  sources:
-    - <cwd>/main.ts
-  sourcesContent:
-    - |
-      export function consoleLog() {
-        console.log('WITHIN SOURCE')
-      }
-  
-      export function throwError() {
-        throw new Error('WITHIN SOURCE')
-      }
-  version: 3
-  ================================================================================
-`;
+      1 | test('should fail with stacktrace', () => {
+      2 |   expect(true).toBe(false)
+    > 3 | })
+        |   ^
+      4 |
 
-exports[`Source map with tsconfig mapRoot using template "with-babel-7-string-config" should report correct line numbers 1`] = `
-  × jest --no-cache
-  ↳ exit code: 1
-  ===[ STDOUT ]===================================================================
-  console.log
-      WITHIN SOURCE
-  
-        at Object.consoleLog (main.ts:2:11)
-  
-    console.log
-      WITHIN TEST
-  
-        at Object.<anonymous> (main.spec.ts:9:13)
-  ===[ STDERR ]===================================================================
-  FAIL ./main.spec.ts
-    console.log()
-      √ from sources
-      √ from tests
-    throw new Error()
-      × throws from sources
-      × throws from tests
-  
-    ● throw new Error() › throws from sources
-  
-      WITHIN SOURCE
-  
-        4 | 
-        5 | export function throwError() {
-      > 6 |   throw new Error('WITHIN SOURCE')
-          |         ^
-        7 | }
-        8 | 
-  
-        at Object.throwError (main.ts:6:9)
-        at Object.<anonymous> (main.spec.ts:16:5)
-  
-    ● throw new Error() › throws from tests
-  
-      WITHIN TEST
-  
-        18 |   });
-        19 |   test('throws from tests', () => {
-      > 20 |     throw new Error('WITHIN TEST');
-           |           ^
-        21 |     expect(true).toBe(true);
-        22 |   });
-        23 | });
-  
-        at Object.<anonymous> (main.spec.ts:20:11)
-  
-  Test Suites: 1 failed, 1 total
-  Tests:       2 failed, 2 passed, 4 total
-  Snapshots:   0 total
-  Time:        XXs
-  Ran all test suites.
-  ================================================================================
-`;
+      at Object.<anonymous> (../__tests__/source-map.spec.ts:3:18)
 
-exports[`Source map without tsconfig mapRoot using template "default" should have the source maps comment 1`] = `
-  ===[ FILE: main.ts ]============================================================
-  "use strict";
-  Object.defineProperty(exports, "__esModule", { value: true });
-  exports.throwError = exports.consoleLog = void 0;
-  function consoleLog() {
-      console.log('WITHIN SOURCE');
-  }
-  exports.consoleLog = consoleLog;
-  function throwError() {
-      throw new Error('WITHIN SOURCE');
-  }
-  exports.throwError = throwError;
-  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoiPGN3ZD4vbWFpbi50cyIsIm1hcHBpbmdzIjoiOzs7QUFBQSxTQUFnQixVQUFVO0lBQ3hCLE9BQU8sQ0FBQyxHQUFHLENBQUMsZUFBZSxDQUFDLENBQUE7QUFDOUIsQ0FBQztBQUZELGdDQUVDO0FBRUQsU0FBZ0IsVUFBVTtJQUN4QixNQUFNLElBQUksS0FBSyxDQUFDLGVBQWUsQ0FBQyxDQUFBO0FBQ2xDLENBQUM7QUFGRCxnQ0FFQyIsIm5hbWVzIjpbXSwic291cmNlcyI6WyI8Y3dkPi9tYWluLnRzIl0sInNvdXJjZXNDb250ZW50IjpbImV4cG9ydCBmdW5jdGlvbiBjb25zb2xlTG9nKCkge1xuICBjb25zb2xlLmxvZygnV0lUSElOIFNPVVJDRScpXG59XG5cbmV4cG9ydCBmdW5jdGlvbiB0aHJvd0Vycm9yKCkge1xuICB0aHJvdyBuZXcgRXJyb3IoJ1dJVEhJTiBTT1VSQ0UnKVxufVxuIl0sInZlcnNpb24iOjN9
-  ===[ INLINE SOURCE MAPS ]=======================================================
-  file: <cwd>/main.ts
-  mappings: >-
-    ;;;AAAA,SAAgB,UAAU;IACxB,OAAO,CAAC,GAAG,CAAC,eAAe,CAAC,CAAA;AAC9B,CAAC;AAFD,gCAEC;AAED,SAAgB,UAAU;IACxB,MAAM,IAAI,KAAK,CAAC,eAAe,CAAC,CAAA;AAClC,CAAC;AAFD,gCAEC
-  names: []
-  sources:
-    - <cwd>/main.ts
-  sourcesContent:
-    - |
-      export function consoleLog() {
-        console.log('WITHIN SOURCE')
-      }
-  
-      export function throwError() {
-        throw new Error('WITHIN SOURCE')
-      }
-  version: 3
-  ================================================================================
-`;
+FAIL sourcemap-enabled-isolated __tests__/source-map.spec.ts
+  ● should fail with stacktrace
 
-exports[`Source map without tsconfig mapRoot using template "default" should report correct line numbers 1`] = `
-  × jest --no-cache
-  ↳ exit code: 1
-  ===[ STDOUT ]===================================================================
-  console.log
-      WITHIN SOURCE
-  
-        at Object.consoleLog (main.ts:2:11)
-  
-    console.log
-      WITHIN TEST
-  
-        at Object.<anonymous> (main.spec.ts:9:13)
-  ===[ STDERR ]===================================================================
-  FAIL ./main.spec.ts
-    console.log()
-      √ from sources
-      √ from tests
-    throw new Error()
-      × throws from sources
-      × throws from tests
-  
-    ● throw new Error() › throws from sources
-  
-      WITHIN SOURCE
-  
-        4 | 
-        5 | export function throwError() {
-      > 6 |   throw new Error('WITHIN SOURCE')
-          |         ^
-        7 | }
-        8 | 
-  
-        at Object.throwError (main.ts:6:9)
-        at Object.<anonymous> (main.spec.ts:16:5)
-  
-    ● throw new Error() › throws from tests
-  
-      WITHIN TEST
-  
-        18 |   });
-        19 |   test('throws from tests', () => {
-      > 20 |     throw new Error('WITHIN TEST');
-           |           ^
-        21 |     expect(true).toBe(true);
-        22 |   });
-        23 | });
-  
-        at Object.<anonymous> (main.spec.ts:20:11)
-  
-  Test Suites: 1 failed, 1 total
-  Tests:       2 failed, 2 passed, 4 total
-  Snapshots:   0 total
-  Time:        XXs
-  Ran all test suites.
-  ================================================================================
-`;
+    expect(received).toBe(expected) // Object.is equality
 
-exports[`Source map without tsconfig mapRoot using template "with-babel-7" should have the source maps comment 1`] = `
-  ===[ FILE: main.ts ]============================================================
-  "use strict";
-  
-  Object.defineProperty(exports, "__esModule", {
-    value: true
-  });
-  exports.throwError = exports.consoleLog = void 0;
-  
-  function consoleLog() {
-    console.log('WITHIN SOURCE');
-  }
-  
-  exports.consoleLog = consoleLog;
-  
-  function throwError() {
-    throw new Error('WITHIN SOURCE');
-  }
-  
-  exports.throwError = throwError;
-  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJtYXBwaW5ncyI6Ijs7Ozs7OztBQUFBLFNBQWdCLFVBQWhCLEdBQTBCO0FBQ3hCLEVBQUEsT0FBTyxDQUFDLEdBQVIsQ0FBWSxlQUFaO0FBQ0Q7O0FBRkQsT0FBQSxDQUFBLFVBQUEsR0FBQSxVQUFBOztBQUlBLFNBQWdCLFVBQWhCLEdBQTBCO0FBQ3hCLFFBQU0sSUFBSSxLQUFKLENBQVUsZUFBVixDQUFOO0FBQ0Q7O0FBRkQsT0FBQSxDQUFBLFVBQUEsR0FBQSxVQUFBIiwibmFtZXMiOltdLCJzb3VyY2VzIjpbIjxjd2Q+L21haW4udHMiXSwic291cmNlc0NvbnRlbnQiOlsiZXhwb3J0IGZ1bmN0aW9uIGNvbnNvbGVMb2coKSB7XG4gIGNvbnNvbGUubG9nKCdXSVRISU4gU09VUkNFJylcbn1cblxuZXhwb3J0IGZ1bmN0aW9uIHRocm93RXJyb3IoKSB7XG4gIHRocm93IG5ldyBFcnJvcignV0lUSElOIFNPVVJDRScpXG59XG4iXSwidmVyc2lvbiI6M30=
-  ===[ INLINE SOURCE MAPS ]=======================================================
-  mappings: >-
-    ;;;;;;;AAAA,SAAgB,UAAhB,GAA0B;AACxB,EAAA,OAAO,CAAC,GAAR,CAAY,eAAZ;AACD;;AAFD,OAAA,CAAA,UAAA,GAAA,UAAA;;AAIA,SAAgB,UAAhB,GAA0B;AACxB,QAAM,IAAI,KAAJ,CAAU,eAAV,CAAN;AACD;;AAFD,OAAA,CAAA,UAAA,GAAA,UAAA
-  names: []
-  sources:
-    - <cwd>/main.ts
-  sourcesContent:
-    - |
-      export function consoleLog() {
-        console.log('WITHIN SOURCE')
-      }
-  
-      export function throwError() {
-        throw new Error('WITHIN SOURCE')
-      }
-  version: 3
-  ================================================================================
-`;
+    Expected: false
+    Received: true
 
-exports[`Source map without tsconfig mapRoot using template "with-babel-7" should report correct line numbers 1`] = `
-  × jest --no-cache
-  ↳ exit code: 1
-  ===[ STDOUT ]===================================================================
-  console.log
-      WITHIN SOURCE
-  
-        at Object.consoleLog (main.ts:2:11)
-  
-    console.log
-      WITHIN TEST
-  
-        at Object.<anonymous> (main.spec.ts:9:13)
-  ===[ STDERR ]===================================================================
-  FAIL ./main.spec.ts
-    console.log()
-      √ from sources
-      √ from tests
-    throw new Error()
-      × throws from sources
-      × throws from tests
-  
-    ● throw new Error() › throws from sources
-  
-      WITHIN SOURCE
-  
-        4 | 
-        5 | export function throwError() {
-      > 6 |   throw new Error('WITHIN SOURCE')
-          |         ^
-        7 | }
-        8 | 
-  
-        at Object.throwError (main.ts:6:9)
-        at Object.<anonymous> (main.spec.ts:16:5)
-  
-    ● throw new Error() › throws from tests
-  
-      WITHIN TEST
-  
-        18 |   });
-        19 |   test('throws from tests', () => {
-      > 20 |     throw new Error('WITHIN TEST');
-           |           ^
-        21 |     expect(true).toBe(true);
-        22 |   });
-        23 | });
-  
-        at Object.<anonymous> (main.spec.ts:20:11)
-  
-  Test Suites: 1 failed, 1 total
-  Tests:       2 failed, 2 passed, 4 total
-  Snapshots:   0 total
-  Time:        XXs
-  Ran all test suites.
-  ================================================================================
-`;
+      1 | test('should fail with stacktrace', () => {
+    > 2 |   expect(true).toBe(false)
+        |                ^
+      3 | })
+      4 |
 
-exports[`Source map without tsconfig mapRoot using template "with-babel-7-string-config" should have the source maps comment 1`] = `
-  ===[ FILE: main.ts ]============================================================
-  "use strict";
-  
-  Object.defineProperty(exports, "__esModule", {
-    value: true
-  });
-  exports.throwError = exports.consoleLog = void 0;
-  
-  function consoleLog() {
-    console.log('WITHIN SOURCE');
-  }
-  
-  exports.consoleLog = consoleLog;
-  
-  function throwError() {
-    throw new Error('WITHIN SOURCE');
-  }
-  
-  exports.throwError = throwError;
-  //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJtYXBwaW5ncyI6Ijs7Ozs7OztBQUFBLFNBQWdCLFVBQWhCLEdBQTBCO0FBQ3hCLEVBQUEsT0FBTyxDQUFDLEdBQVIsQ0FBWSxlQUFaO0FBQ0Q7O0FBRkQsT0FBQSxDQUFBLFVBQUEsR0FBQSxVQUFBOztBQUlBLFNBQWdCLFVBQWhCLEdBQTBCO0FBQ3hCLFFBQU0sSUFBSSxLQUFKLENBQVUsZUFBVixDQUFOO0FBQ0Q7O0FBRkQsT0FBQSxDQUFBLFVBQUEsR0FBQSxVQUFBIiwibmFtZXMiOltdLCJzb3VyY2VzIjpbIjxjd2Q+L21haW4udHMiXSwic291cmNlc0NvbnRlbnQiOlsiZXhwb3J0IGZ1bmN0aW9uIGNvbnNvbGVMb2coKSB7XG4gIGNvbnNvbGUubG9nKCdXSVRISU4gU09VUkNFJylcbn1cblxuZXhwb3J0IGZ1bmN0aW9uIHRocm93RXJyb3IoKSB7XG4gIHRocm93IG5ldyBFcnJvcignV0lUSElOIFNPVVJDRScpXG59XG4iXSwidmVyc2lvbiI6M30=
-  ===[ INLINE SOURCE MAPS ]=======================================================
-  mappings: >-
-    ;;;;;;;AAAA,SAAgB,UAAhB,GAA0B;AACxB,EAAA,OAAO,CAAC,GAAR,CAAY,eAAZ;AACD;;AAFD,OAAA,CAAA,UAAA,GAAA,UAAA;;AAIA,SAAgB,UAAhB,GAA0B;AACxB,QAAM,IAAI,KAAJ,CAAU,eAAV,CAAN;AACD;;AAFD,OAAA,CAAA,UAAA,GAAA,UAAA
-  names: []
-  sources:
-    - <cwd>/main.ts
-  sourcesContent:
-    - |
-      export function consoleLog() {
-        console.log('WITHIN SOURCE')
-      }
-  
-      export function throwError() {
-        throw new Error('WITHIN SOURCE')
-      }
-  version: 3
-  ================================================================================
-`;
-
-exports[`Source map without tsconfig mapRoot using template "with-babel-7-string-config" should report correct line numbers 1`] = `
-  × jest --no-cache
-  ↳ exit code: 1
-  ===[ STDOUT ]===================================================================
-  console.log
-      WITHIN SOURCE
-  
-        at Object.consoleLog (main.ts:2:11)
-  
-    console.log
-      WITHIN TEST
-  
-        at Object.<anonymous> (main.spec.ts:9:13)
-  ===[ STDERR ]===================================================================
-  FAIL ./main.spec.ts
-    console.log()
-      √ from sources
-      √ from tests
-    throw new Error()
-      × throws from sources
-      × throws from tests
-  
-    ● throw new Error() › throws from sources
-  
-      WITHIN SOURCE
-  
-        4 | 
-        5 | export function throwError() {
-      > 6 |   throw new Error('WITHIN SOURCE')
-          |         ^
-        7 | }
-        8 | 
-  
-        at Object.throwError (main.ts:6:9)
-        at Object.<anonymous> (main.spec.ts:16:5)
-  
-    ● throw new Error() › throws from tests
-  
-      WITHIN TEST
-  
-        18 |   });
-        19 |   test('throws from tests', () => {
-      > 20 |     throw new Error('WITHIN TEST');
-           |           ^
-        21 |     expect(true).toBe(true);
-        22 |   });
-        23 | });
-  
-        at Object.<anonymous> (main.spec.ts:20:11)
-  
-  Test Suites: 1 failed, 1 total
-  Tests:       2 failed, 2 passed, 4 total
-  Snapshots:   0 total
-  Time:        XXs
-  Ran all test suites.
-  ================================================================================
+      at Object.<anonymous> (../__tests__/source-map.spec.ts:2:16)"
 `;

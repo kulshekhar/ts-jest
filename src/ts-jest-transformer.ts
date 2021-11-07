@@ -1,5 +1,5 @@
 import { existsSync, readFileSync, statSync, writeFileSync, mkdirSync } from 'fs'
-import { join, resolve } from 'path'
+import path from 'path'
 
 import type { SyncTransformer, TransformedSource } from '@jest/transform'
 import type { Config } from '@jest/types'
@@ -9,7 +9,6 @@ import { TsJestCompiler } from './compiler/ts-jest-compiler'
 import { ConfigSet } from './config/config-set'
 import { DECLARATION_TYPE_EXT, JS_JSX_REGEX, TS_TSX_REGEX } from './constants'
 import type { CompilerInstance, DepGraphInfo, ProjectConfigTsJest, TransformOptionsTsJest } from './types'
-import { importer } from './utils/importer'
 import { parse, stringify } from './utils/json'
 import { JsonableValue } from './utils/jsonable-value'
 import { rootLogger } from './utils/logger'
@@ -25,11 +24,6 @@ interface CachedConfigSet {
   depGraphs: Map<string, DepGraphInfo>
   tsResolvedModulesCachePath: string | undefined
   watchMode: boolean
-}
-
-interface TsJestHooksMap {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  afterProcess?(args: any[], result: string | TransformedSource): string | TransformedSource | void
 }
 
 /**
@@ -144,18 +138,7 @@ export class TsJestTransformer implements SyncTransformer {
     this._logger.debug({ fileName: filePath, transformOptions }, 'processing', filePath)
 
     let result: string | TransformedSource
-    const jestConfig = transformOptions.config
     const configs = this._configsFor(transformOptions)
-    let hooksFile = process.env.TS_JEST_HOOKS
-    let hooks: TsJestHooksMap
-    /* istanbul ignore next (cover by e2e) */
-    if (hooksFile) {
-      hooksFile = resolve(configs.cwd, hooksFile)
-
-      hooks = importer.tryTheseOr(hooksFile, {})
-    } else {
-      hooks = {}
-    }
     const shouldStringifyContent = configs.shouldStringifyContent(filePath)
     const babelJest = shouldStringifyContent ? undefined : configs.babelJestTransformer
     const isDefinitionFile = filePath.endsWith(DECLARATION_TYPE_EXT)
@@ -195,16 +178,6 @@ export class TsJestTransformer implements SyncTransformer {
 
       // do not instrument here, jest will do it anyway afterwards
       result = babelJest.process(result, filePath, { ...transformOptions, instrument: false })
-    }
-    // allows hooks (useful for internal testing)
-    /* istanbul ignore next (cover by e2e) */
-    if (hooks.afterProcess) {
-      this._logger.debug({ fileName: filePath, hookName: 'afterProcess' }, 'calling afterProcess hook')
-
-      const newResult = hooks.afterProcess([fileContent, filePath, jestConfig, transformOptions], result)
-      if (newResult !== undefined) {
-        return newResult
-      }
     }
 
     return result
@@ -283,7 +256,7 @@ export class TsJestTransformer implements SyncTransformer {
     if (!configSet.isolatedModules && cacheDir) {
       // Make sure the cache directory exists before continuing.
       mkdirSync(cacheDir, { recursive: true })
-      this._tsResolvedModulesCachePath = join(cacheDir, sha1('ts-jest-resolved-modules', CACHE_KEY_EL_SEPARATOR))
+      this._tsResolvedModulesCachePath = path.join(cacheDir, sha1('ts-jest-resolved-modules', CACHE_KEY_EL_SEPARATOR))
       try {
         const cachedTSResolvedModules = readFileSync(this._tsResolvedModulesCachePath, 'utf-8')
         this._depGraphs = new Map(parse(cachedTSResolvedModules))

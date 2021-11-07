@@ -1,7 +1,0 @@
-{
-  "compilerOptions": {
-    "target": "es5",
-    "allowJs": true,
-    "outDir": "$$ts-jest$$"
-  }
-}
