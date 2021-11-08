@@ -14,7 +14,6 @@ module.exports = {
   overrides: [
     {
       files: ['*.ts'],
-      parser: '@typescript-eslint/parser',
       parserOptions: {
         project: 'tsconfig.eslint.json',
         impliedStrict: true,
@@ -47,14 +46,7 @@ module.exports = {
               caseInsensitive: true,
             },
             // this is the default order except for added `internal` in the middle
-            'groups': [
-              'builtin',
-              'external',
-              'internal',
-              'parent',
-              'sibling',
-              'index',
-            ],
+            groups: ['builtin', 'external', 'internal', 'parent', 'sibling', 'index'],
             'newlines-between': 'always',
           },
         ],
@@ -78,4 +70,4 @@ module.exports = {
     'no-shadow': 'off',
     quotes: 'off',
   },
-};
+}

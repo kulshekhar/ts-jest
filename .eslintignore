@@ -1,7 +1,4 @@
 dist/
 node_modules/
 coverage/
-website/src/**/*.js
 presets/index.d.ts
-*.config.js
-.eslintrc.js

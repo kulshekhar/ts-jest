@@ -20,7 +20,7 @@ export const name = 'hoist-jest'
 export function factory(compilerInstance: TsCompilerInstance) {
   const ts = compilerInstance.configSet.compilerModule
   function createVisitor(ctx: TransformationContext, sf: SourceFile) {
-    const visitor: Visitor = node => {
+    const visitor: Visitor = (node) => {
       // here we can check each node and potentially return
       // new nodes if we want to leave the node as is, and
       // continue searching through child nodes:
