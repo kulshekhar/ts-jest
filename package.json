@@ -109,7 +109,7 @@
     "@typescript-eslint/parser": "4.x",
     "conventional-changelog-cli": "2.x",
     "cross-spawn": "latest",
-    "eslint": "7.x",
+    "eslint": "8.x",
     "eslint-config-prettier": "latest",
     "eslint-plugin-import": "latest",
     "eslint-plugin-jest": "latest",
