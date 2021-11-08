@@ -1,23 +1,28 @@
 import fs from 'fs'
-import { join } from 'path'
+import path from 'path'
 
-import { Logger, LogLevels } from 'bs-logger'
+import { LogLevels } from 'bs-logger'
 import { removeSync, writeFileSync } from 'fs-extra'
 
 import { createConfigSet } from './__helpers__/fakers'
 import { logTargetMock } from './__helpers__/mocks'
 import { SOURCE_MAPPING_PREFIX } from './compiler/compiler-utils'
-import { TsCompiler } from './compiler/ts-compiler'
 import { TsJestCompiler } from './compiler/ts-jest-compiler'
-import { ConfigSet } from './config/config-set'
 import { CACHE_KEY_EL_SEPARATOR, TsJestTransformer } from './ts-jest-transformer'
-import type { DepGraphInfo, ProjectConfigTsJest, StringMap } from './types'
+import type { DepGraphInfo } from './types'
 import { stringify } from './utils/json'
 import { sha1 } from './utils/sha1'
-import { VersionCheckers } from './utils/version-checkers'
 
 const logTarget = logTargetMock()
-const cacheDir = join(process.cwd(), 'tmp')
+const cacheDir = path.join(process.cwd(), 'tmp')
+const baseTransformOptions = {
+  config: {
+    testMatch: [],
+    testRegex: [],
+    extensionsToTreatAsEsm: [],
+  },
+  cacheFS: new Map(),
+} as any // eslint-disable-line @typescript-eslint/no-explicit-any
 
 beforeEach(() => {
   logTarget.clear()
@@ -36,16 +41,16 @@ describe('TsJestTransformer', () => {
 
       // @ts-expect-error testing purpose
       expect(Object.keys(TsJestTransformer._cachedConfigSets[0])).toMatchInlineSnapshot(`
-Array [
-  "jestConfig",
-  "configSet",
-  "transformerCfgStr",
-  "compiler",
-  "depGraphs",
-  "tsResolvedModulesCachePath",
-  "watchMode",
-]
-`)
+        Array [
+          "jestConfig",
+          "configSet",
+          "transformerCfgStr",
+          "compiler",
+          "depGraphs",
+          "tsResolvedModulesCachePath",
+          "watchMode",
+        ]
+      `)
     })
 
     test(
@@ -124,7 +129,7 @@ Array [
         fileContent: 'const foo = 1',
         resolvedModuleNames: [],
       })
-      const resolvedModulesCacheDir = join(tsCacheDir, sha1('ts-jest-resolved-modules', CACHE_KEY_EL_SEPARATOR))
+      const resolvedModulesCacheDir = path.join(tsCacheDir, sha1('ts-jest-resolved-modules', CACHE_KEY_EL_SEPARATOR))
       fs.mkdirSync(tsCacheDir, { recursive: true })
       writeFileSync(resolvedModulesCacheDir, stringify([...depGraphs]))
 
@@ -262,7 +267,7 @@ Array [
     test('should be different with non existed imported modules', () => {
       jest
         .spyOn(TsJestCompiler.prototype, 'getResolvedModules')
-        .mockReturnValueOnce([join(process.cwd(), 'src', '__mocks__', 'thing.ts')])
+        .mockReturnValueOnce([path.join(process.cwd(), 'src', '__mocks__', 'thing.ts')])
 
       const cacheKey1 = tr.getCacheKey(input.fileContent, input.fileName, transformOptionsWithCache)
 
@@ -280,14 +285,6 @@ Array [
   })
 
   describe('process', () => {
-    const baseTransformOptions = {
-      config: {
-        testMatch: [],
-        testRegex: [],
-        extensionsToTreatAsEsm: [],
-      },
-      cacheFS: new Map(),
-    } as any // eslint-disable-line @typescript-eslint/no-explicit-any
     let tr!: TsJestTransformer
 
     beforeEach(() => {
@@ -433,65 +430,6 @@ Array [
       if (filePath === 'foo.bar') {
         expect(logTarget.filteredLines(LogLevels.warn)[0]).toMatchSnapshot()
       }
-    })
-  })
-
-  describe('subclass extends TsJestTransformer', () => {
-    class MyTsCompiler extends TsCompiler {
-      constructor(readonly configSet: ConfigSet, readonly runtimeCacheFS: StringMap) {
-        super(configSet, runtimeCacheFS)
-      }
-    }
-
-    class MyConfigSet extends ConfigSet {
-      constructor(readonly jestConfig: ProjectConfigTsJest, readonly parentLogger?: Logger) {
-        super(jestConfig, parentLogger)
-      }
-    }
-
-    class MyTransformer extends TsJestTransformer {
-      protected _createCompiler(configSet: ConfigSet, cacheFS: StringMap): void {
-        this._compiler = new MyTsCompiler(configSet, cacheFS)
-      }
-
-      // eslint-disable-next-line class-methods-use-this
-      protected _createConfigSet(config: ProjectConfigTsJest): MyConfigSet {
-        return new MyConfigSet(config)
-      }
-    }
-    let tr: MyTransformer
-
-    beforeEach(() => {
-      tr = new MyTransformer()
-    })
-
-    test('should have jest version checking', () => {
-      VersionCheckers.jest.warn = jest.fn()
-
-      new MyTransformer()
-
-      expect(VersionCheckers.jest.warn).toHaveBeenCalled()
-    })
-
-    test('should create MyTsCompiler instance', () => {
-      // @ts-expect-error testing purpose
-      tr._createCompiler(createConfigSet(), new Map())
-
-      // @ts-expect-error testing purpose
-      expect(tr._compiler).toBeInstanceOf(MyTsCompiler)
-    })
-
-    test('should create MyConfigSet instance', () => {
-      expect(
-        // @ts-expect-error testing purpose
-        tr._createConfigSet({
-          cwd: process.cwd(),
-          extensionsToTreatAsEsm: [],
-          globals: Object.create(null),
-          testMatch: [],
-          testRegex: [],
-        }),
-      ).toBeInstanceOf(MyConfigSet)
     })
   })
 })
