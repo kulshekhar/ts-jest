@@ -1,9 +1,12 @@
+// eslint-disable-next-line no-unused-vars
 import Link from '@docusaurus/Link'
 import { translate } from '@docusaurus/Translate'
 import useBaseUrl from '@docusaurus/useBaseUrl'
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext'
+// eslint-disable-next-line no-unused-vars
 import Layout from '@theme/Layout'
 import clsx from 'clsx'
+// eslint-disable-next-line no-unused-vars
 import React from 'react'
 
 import styles from './styles.module.css'
@@ -23,6 +26,7 @@ const features = [
   },
 ]
 
+// eslint-disable-next-line no-unused-vars
 function Feature({ imageUrl, title, description }) {
   const imgUrl = useBaseUrl(imageUrl)
 

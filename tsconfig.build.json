@@ -8,9 +8,6 @@
     "stripInternal": true,
     "outDir": "dist"
   },
-  "files": [
-    "src/types.ts"
-  ],
   "include": ["src"],
   "exclude": ["**/*.spec.ts", "**/__mocks__"]
 }

@@ -6,9 +6,9 @@ module.exports = {
       tsconfig: {
         sourceMap: false,
       },
-    }
+    },
   },
   transform: {
-    '^.+.tsx?$': '<rootDir>/../../../dist/index.js'
-  }
+    '^.+.tsx?$': '<rootDir>/../../../dist/index.js',
+  },
 }

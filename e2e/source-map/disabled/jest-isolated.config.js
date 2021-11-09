@@ -10,6 +10,6 @@ module.exports = {
     },
   },
   transform: {
-    '^.+.tsx?$': '<rootDir>/../../../dist/index.js'
-  }
+    '^.+.tsx?$': '<rootDir>/../../../dist/index.js',
+  },
 }
