@@ -284,6 +284,19 @@ describe('TsJestTransformer', () => {
     })
   })
 
+  describe('getCacheKeyAsync', () => {
+    test('should call `getCacheKey` method', async () => {
+      const sourceText = 'const foo = 1'
+      const sourcePath = 'foo.ts'
+      const tr = new TsJestTransformer()
+      tr.getCacheKey = jest.fn()
+
+      await tr.getCacheKeyAsync(sourceText, sourcePath, baseTransformOptions)
+
+      expect(tr.getCacheKey).toHaveBeenCalledWith(sourceText, sourcePath, baseTransformOptions)
+    })
+  })
+
   describe('process', () => {
     let tr!: TsJestTransformer
 
@@ -430,6 +443,19 @@ describe('TsJestTransformer', () => {
       if (filePath === 'foo.bar') {
         expect(logTarget.filteredLines(LogLevels.warn)[0]).toMatchSnapshot()
       }
+    })
+  })
+
+  describe('processAsync', () => {
+    test('should call `process` method', async () => {
+      const sourceText = 'const foo = 1'
+      const sourcePath = 'foo.ts'
+      const tr = new TsJestTransformer()
+      tr.process = jest.fn()
+
+      await tr.processAsync(sourceText, sourcePath, baseTransformOptions)
+
+      expect(tr.process).toHaveBeenCalledWith(sourceText, sourcePath, baseTransformOptions)
     })
   })
 })

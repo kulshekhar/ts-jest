@@ -14,6 +14,7 @@
     "pretest": "tsc -p tsconfig.spec.json --noEmit",
     "test": "jest -i",
     "test-ci": "jest",
+    "test-examples": "node scripts/test-examples.js",
     "lint": "node_modules/.bin/eslint --ext .js,.ts .",
     "lint-fix": "node_modules/.bin/eslint --fix --ext .js,.ts .",
     "lint-prettier": "prettier '**/*.{yml,yaml,md}' --write",

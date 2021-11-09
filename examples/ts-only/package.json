@@ -1,0 +1,14 @@
+{
+  "name": "ts-only",
+  "version": "0.0.0",
+  "scripts": {
+    "test": "jest",
+    "test-esm": "node --experimental-vm-modules --no-warnings node_modules/jest/bin/jest.js -c=jest-esm.config.js"
+  },
+  "devDependencies": {
+    "@types/jest": "^27.0.2",
+    "jest": "^27.3.1",
+    "ts-jest": "^27.0.7",
+    "typescript": "~4.4.4"
+  }
+}
