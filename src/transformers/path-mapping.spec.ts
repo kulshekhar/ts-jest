@@ -1,4 +1,4 @@
-import { join } from 'path'
+import path from 'path'
 
 import { testing } from 'bs-logger'
 import ts from 'typescript'
@@ -110,7 +110,7 @@ describe('path-mapping', () => {
       })
       const createFactory = () => pathMapping.factory(new TsCompiler(configSet, new Map()))
       const transpile = (source: string) => ts.transpileModule(source, { transformers: { before: [createFactory()] } })
-      const resolvedFileNameStub = join('..', `utils/json.${extension}`)
+      const resolvedFileNameStub = path.join('..', `utils/json.${extension}`)
       jest.spyOn(ts, 'resolveModuleName').mockReturnValue({
         resolvedModule: {
           resolvedFileName: resolvedFileNameStub,
