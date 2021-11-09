@@ -1,0 +1,12 @@
+{
+  "jest": {
+    "globals": {
+      "ts-jest": {
+        "isolatedModules": true
+      }
+    },
+    "transform": {
+      "^.+\\.tsx?$": "./foo-transformer.js"
+    }
+  }
+}

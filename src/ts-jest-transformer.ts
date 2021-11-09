@@ -53,7 +53,9 @@ export class TsJestTransformer implements SyncTransformer {
      * when running Jest in ESM mode
      */
     this.getCacheKey = this.getCacheKey.bind(this)
+    this.getCacheKeyAsync = this.getCacheKeyAsync.bind(this)
     this.process = this.process.bind(this)
+    this.processAsync = this.processAsync.bind(this)
 
     this._logger.debug('created new transformer')
     process.env.TS_JEST = '1'
@@ -183,6 +185,14 @@ export class TsJestTransformer implements SyncTransformer {
     return result
   }
 
+  async processAsync(
+    sourceText: string,
+    sourcePath: Config.Path,
+    transformOptions: TransformOptionsTsJest,
+  ): Promise<TransformedSource | string> {
+    return new Promise((resolve) => resolve(this.process(sourceText, sourcePath, transformOptions)))
+  }
+
   /**
    * Jest uses this to cache the compiled version of a file
    *
@@ -246,6 +256,14 @@ export class TsJestTransformer implements SyncTransformer {
     }
 
     return sha1(...constructingCacheKeyElements)
+  }
+
+  async getCacheKeyAsync(
+    sourceText: string,
+    sourcePath: string,
+    transformOptions: TransformOptionsTsJest,
+  ): Promise<string> {
+    return new Promise((resolve) => resolve(this.getCacheKey(sourceText, sourcePath, transformOptions)))
   }
 
   /**
