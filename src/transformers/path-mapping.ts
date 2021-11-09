@@ -15,9 +15,9 @@ import type { TsCompilerInstance } from '../types'
  * Remember to increase the version whenever transformer's content is changed. This is to inform Jest to not reuse
  * the previous cache which contains old transformer's content
  */
-export const version = 1
+export const version = 2
 // Used for constructing cache key
-export const name = 'hoist-jest'
+export const name = 'path-mapping'
 
 const isBaseDir = (base: string, dir: string) => !relative(base, dir)?.startsWith('.')
 
@@ -29,6 +29,7 @@ export function factory({
 }: TsCompilerInstance): (ctx: _ts.TransformationContext) => _ts.Transformer<_ts.SourceFile> {
   const logger = configSet.logger.child({ namespace: 'ts-path-mapping' })
   const ts = configSet.compilerModule
+  const tsFactory = ts.factory ? ts.factory : ts
   const compilerOptions = configSet.parsedTsConfig.options
   const rootDirs = compilerOptions.rootDirs?.filter(isAbsolute)
 
@@ -81,17 +82,20 @@ export function factory({
        */
       if (isDynamicImport(node) || isRequire(node)) {
         rewrittenPath = rewritePath((node.arguments[0] as _ts.StringLiteral).text)
+        const argumentArrays = tsFactory.createNodeArray([tsFactory.createStringLiteral(rewrittenPath)])
 
-        return {
-          ...newNode,
-          arguments: ts.createNodeArray([ts.createStringLiteral(rewrittenPath)]),
-        }
+        return ts.factory
+          ? ts.factory.updateCallExpression(node, node.expression, node.typeArguments, argumentArrays)
+          : ts.updateCall(node, node.expression, node.typeArguments, argumentArrays)
       }
       // legacy import, e.g. import foo = require('@utils/json')
       if (ts.isExternalModuleReference(node) && ts.isStringLiteral(node.expression)) {
         rewrittenPath = rewritePath(node.expression.text)
 
-        return ts.updateExternalModuleReference(newNode as _ts.ExternalModuleReference, ts.createLiteral(rewrittenPath))
+        return tsFactory.updateExternalModuleReference(
+          newNode as _ts.ExternalModuleReference,
+          tsFactory.createStringLiteral(rewrittenPath),
+        )
       }
       /**
        * e.g.
@@ -101,19 +105,36 @@ export function factory({
       if (ts.isImportDeclaration(node) && ts.isStringLiteral(node.moduleSpecifier)) {
         rewrittenPath = rewritePath(node.moduleSpecifier.text)
 
-        return {
-          ...newNode,
-          moduleSpecifier: ts.createLiteral(rewrittenPath),
-        }
+        return tsFactory.updateImportDeclaration(
+          node,
+          node.decorators,
+          node.modifiers,
+          node.importClause,
+          tsFactory.createStringLiteral(rewrittenPath),
+        )
       }
       // e.g. export * as jsonUtils from '@utils/json'
       if (ts.isExportDeclaration(node) && node.moduleSpecifier && ts.isStringLiteral(node.moduleSpecifier)) {
         rewrittenPath = rewritePath(node.moduleSpecifier.text)
+        const stringLiteralNode = tsFactory.createStringLiteral(rewrittenPath)
 
-        return {
-          ...newNode,
-          moduleSpecifier: ts.createLiteral(rewrittenPath),
-        }
+        return ts.factory
+          ? ts.factory.updateExportDeclaration(
+              node,
+              node.decorators,
+              node.modifiers,
+              node.isTypeOnly,
+              node.exportClause,
+              stringLiteralNode,
+            )
+          : ts.updateExportDeclaration(
+              node,
+              node.decorators,
+              node.modifiers,
+              node.exportClause,
+              stringLiteralNode,
+              node.isTypeOnly,
+            )
       }
       // 3.8 import type, e.g. import type { Foo } from '@utils/json'
       if (
@@ -123,11 +144,9 @@ export function factory({
       ) {
         // `.text` instead of `getText` bc this node doesn't map to sf (it's generated d.ts)
         rewrittenPath = rewritePath(node.argument.literal.text)
+        const importArguments = tsFactory.createLiteralTypeNode(tsFactory.createStringLiteral(rewrittenPath))
 
-        return {
-          ...newNode,
-          argument: ts.createLiteralTypeNode(ts.createStringLiteral(rewrittenPath)),
-        }
+        return tsFactory.updateImportTypeNode(node, importArguments, node.qualifier, node.typeArguments, node.isTypeOf)
       }
 
       return ts.visitEachChild(node, visitor, ctx)
