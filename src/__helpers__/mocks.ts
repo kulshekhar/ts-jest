@@ -23,7 +23,8 @@ export const mockObject = <T, M>(obj: T, newProps: M): T & M & { mockRestore: ()
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   if ((obj as any).mockRestore) backup.mockRestore = Object.getOwnPropertyDescriptor(obj, 'mockRestore')
 
-  return Object.defineProperty(obj, 'mockRestore', {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return Object.defineProperty(obj as any, 'mockRestore', {
     value() {
       Object.keys(backup).forEach((key) => {
         Object.defineProperty(obj, key, backup[key])
