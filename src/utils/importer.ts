@@ -87,7 +87,6 @@ export class Importer {
       } else {
         // module does not exists in the path
         logger.debug({ requireResult: contextReq }, `module '${name}' not found`)
-        continue
       }
     }
 
@@ -179,7 +178,7 @@ function requireWrapper(moduleName: string): RequireResult {
     path = resolveModule(moduleName)
     exists = true
   } catch (error) {
-    return { error, exists, given: moduleName }
+    return { error: error as Error, exists, given: moduleName }
   }
   const result: RequireResult = { exists, path, given: moduleName }
   try {
@@ -188,7 +187,7 @@ function requireWrapper(moduleName: string): RequireResult {
     try {
       result.exports = requireModule(moduleName)
     } catch (error) {
-      result.error = error
+      result.error = error as Error
     }
   }
 

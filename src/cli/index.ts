@@ -49,6 +49,12 @@ async function cli(args: string[]): Promise<void> {
   return cmd(parsedArgv, logger)
 }
 
+const errorHasMessage = (err: unknown): err is { message: string } => {
+  if (typeof err !== 'object' || err === null) return false
+
+  return 'message' in err
+}
+
 /**
  * @internal
  */
@@ -57,7 +63,9 @@ export async function processArgv(): Promise<void> {
     await cli(process.argv.slice(2))
     process.exit(0)
   } catch (err) {
-    logger.fatal(err.message)
-    process.exit(1)
+    if (errorHasMessage(err)) {
+      logger.fatal(err.message)
+      process.exit(1)
+    }
   }
 }
