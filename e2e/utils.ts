@@ -40,7 +40,7 @@ export const runNpmInstall = (cwd: Config.Path, env?: Record<string, string>): R
     fs.writeFileSync(lockfilePath, '')
   }
 
-  return run(exists ? 'npm ci' : 'npm i', cwd, env)
+  return run(exists ? 'npm ci --no-optional' : 'npm i --no-optional', cwd, env)
 }
 
 const replaceTime = (str: string): string =>

@@ -60,7 +60,7 @@ Object {
     Object {
       "factory": [Function],
       "name": "hoist-jest",
-      "version": 1,
+      "version": 2,
     },
   ],
 }
@@ -74,7 +74,7 @@ Object {
     Object {
       "factory": [Function],
       "name": "hoist-jest",
-      "version": 1,
+      "version": 2,
     },
     Object {
       "factory": [Function],
@@ -95,7 +95,7 @@ Object {
     Object {
       "factory": [Function],
       "name": "hoist-jest",
-      "version": 1,
+      "version": 2,
     },
   ],
 }
@@ -113,7 +113,7 @@ Object {
     Object {
       "factory": [Function],
       "name": "hoist-jest",
-      "version": 1,
+      "version": 2,
     },
   ],
 }
@@ -127,7 +127,7 @@ Object {
     Object {
       "factory": [Function],
       "name": "hoist-jest",
-      "version": 1,
+      "version": 2,
     },
     Object {
       "factory": [Function],

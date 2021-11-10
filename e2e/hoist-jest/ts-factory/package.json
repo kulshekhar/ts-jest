@@ -12,12 +12,12 @@
         }
       }
     },
+    "roots": ["<rootDir>", "<rootDir>/../__tests__"],
     "moduleNameMapper": {
-      "@jest/globals": "<rootDir>/../../node_modules/@jest/globals",
-      "@types/react": "<rootDir>/../../node_modules/@types/react"
+      "react$": "<rootDir>/node_modules/react"
     },
     "transform": {
-      "^.+\\.[tj]sx?$": "<rootDir>/../../dist/index.js"
+      "^.+\\.[tj]sx?$": "<rootDir>/../../../dist/index.js"
     }
   }
 }

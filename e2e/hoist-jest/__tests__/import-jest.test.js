@@ -13,11 +13,10 @@ aliasedJest.unmock('../__test_modules__/b')
 JestGlobals.jest.unmock('../__test_modules__/c')
 
 // These will not be hoisted above imports
-// TODO: This is a bug to fix
-// {
-//   const jest = {unmock: () => {}};
-//   jest.unmock('../__test_modules__/d');
-// }
+{
+  const jest = { unmock: () => {} }
+  jest.unmock('../__test_modules__/d')
+}
 
 // tests
 
@@ -36,8 +35,7 @@ test('namespace import', () => {
   expect(c()).toBe('unmocked')
 })
 
-// TODO: Enable this once the TODO above is fixed
-test.skip('fake jest, shadowed import', () => {
+test('fake jest, shadowed import', () => {
   expect(d._isMockFunction).toBe(true)
   expect(d()).toBe(undefined)
 })

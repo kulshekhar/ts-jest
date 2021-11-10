@@ -1,15 +1,13 @@
 import path from 'path'
 
-import { testing } from 'bs-logger'
 import ts from 'typescript'
 
 import { createConfigSet } from '../__helpers__/fakers'
 import { TsCompiler } from '../compiler/ts-compiler'
 import { normalizeSlashes } from '../utils/normalize-slashes'
 
-import * as pathMapping from './path-mapping'
+import { factory as pathMapping } from './path-mapping'
 
-const logger = testing.createLoggerMock()
 const TS_JS_CODE_WITH_PATH_ALIAS = `
   import { parse } from '@utils/json'
   import hoo from '@utils/json'
@@ -51,9 +49,8 @@ describe('path-mapping', () => {
         tsJestConfig: {
           tsconfig,
         },
-        logger,
       })
-      const createFactory = () => pathMapping.factory(new TsCompiler(configSet, new Map()))
+      const createFactory = () => pathMapping(new TsCompiler(configSet, new Map()))
       const transpile = (source: string) => ts.transpileModule(source, { transformers: { before: [createFactory()] } })
       jest.spyOn(ts, 'resolveModuleName').mockReturnValue({
         resolvedModule: {
@@ -106,9 +103,8 @@ describe('path-mapping', () => {
             },
           },
         },
-        logger,
       })
-      const createFactory = () => pathMapping.factory(new TsCompiler(configSet, new Map()))
+      const createFactory = () => pathMapping(new TsCompiler(configSet, new Map()))
       const transpile = (source: string) => ts.transpileModule(source, { transformers: { before: [createFactory()] } })
       const resolvedFileNameStub = path.join('..', `utils/json.${extension}`)
       jest.spyOn(ts, 'resolveModuleName').mockReturnValue({
