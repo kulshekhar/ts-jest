@@ -1,8 +1,7 @@
 import React from 'react'
 import Mocked from '../__test_modules__/mocked'
 import Unmocked from '../__test_modules__/unmocked'
-// TODO: Enable when the 2nd TODO is fixed
-// import a from '../__test_modules__/a'
+import a from '../__test_modules__/a'
 import b from '../__test_modules__/b'
 import c from '../__test_modules__/c'
 import d from '../__test_modules__/d'
@@ -48,18 +47,17 @@ jest.mock('virtual-module', () => 'kiwi', { virtual: true })
 jest.mock('has-flow-types', () => () => 3, {
   virtual: true,
 })
+jest.mock('../__test_modules__/a')
 
 // These will not be hoisted
 jest.unmock('../__test_modules__/a').dontMock('../__test_modules__/b')
-// eslint-disable-next-line no-useless-concat
-jest.unmock('../__test_modules__/' + 'a')
 jest.dontMock('../__test_modules__/mocked')
-// TODO: This is a bug to fix
-// {
-//   const jest = {unmock: () => {}};
-//   // Would error (used before initialization) if hoisted to the top of the scope
-//   jest.unmock('../__test_modules__/a');
-// }
+
+{
+  const jest = { unmock: () => {} }
+  // Would error (used before initialization) if hoisted to the top of the scope
+  jest.unmock('../__test_modules__/a')
+}
 
 // This must not throw an error
 const myObject = { mock: () => {} }
@@ -122,9 +120,8 @@ describe('hoisting', () => {
     expect(Mocked._isMockFunction).toBe(true)
     expect(new Mocked().isMocked).toEqual(undefined)
 
-    // TODO: Enable this once the TODO above is fixed
-    // expect(a._isMockFunction).toBe(true);
-    // expect(a()).toEqual(undefined);
+    expect(a._isMockFunction).toBe(true)
+    expect(a()).toEqual(undefined)
 
     expect(b._isMockFunction).toBe(true)
     expect(b()).toEqual(undefined)

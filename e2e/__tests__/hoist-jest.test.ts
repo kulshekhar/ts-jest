@@ -1,22 +1,46 @@
-import * as path from 'path'
+import path from 'path'
+
+import execa from 'execa'
 
 import { json as runWithJson } from '../run-jest'
 import { runNpmInstall } from '../utils'
 
-const DIR = path.resolve(__dirname, '..', 'hoist-jest')
+const { createBundle } = require('../../scripts/lib/bundle')
 
-beforeEach(() => {
-  runNpmInstall(DIR)
+const executeTest = (dirName: string): void => {
+  test(`successfully runs the tests with isolatedModules: false`, () => {
+    const { json } = runWithJson(dirName)
+
+    expect(json.success).toBe(true)
+  })
+
+  test(`successfully runs the tests with isolatedModules true`, () => {
+    const { json } = runWithJson(dirName, ['-c=jest-isolated.config.js'])
+
+    expect(json.success).toBe(true)
+  })
+}
+
+describe('non-ts-factory', () => {
+  const DIR = path.resolve(__dirname, '..', 'hoist-jest', 'non-ts-factory')
+
+  beforeAll(() => {
+    runNpmInstall(DIR)
+    const bundle = createBundle()
+    execa.sync('npm', ['install', '--no-package-lock', '--no-shrinkwrap', '--no-save', bundle], {
+      cwd: DIR,
+    })
+  })
+
+  executeTest(DIR)
 })
 
-test('successfully runs the tests inside `hoist-jest/` with isolatedModules: false', () => {
-  const { json } = runWithJson(DIR)
+describe('ts-factory', () => {
+  const DIR = path.resolve(__dirname, '..', 'hoist-jest', 'ts-factory')
 
-  expect(json.success).toBe(true)
-})
+  beforeAll(() => {
+    runNpmInstall(DIR)
+  })
 
-test('successfully runs the tests inside `hoist-jest/` with isolatedModules true', () => {
-  const { json } = runWithJson(DIR, ['-c=jest-isolated.config.js'])
-
-  expect(json.success).toBe(true)
+  executeTest(DIR)
 })

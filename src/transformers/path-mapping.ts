@@ -27,7 +27,7 @@ const isBaseDir = (base: string, dir: string) => !relative(base, dir)?.startsWit
 export function factory({
   configSet,
 }: TsCompilerInstance): (ctx: _ts.TransformationContext) => _ts.Transformer<_ts.SourceFile> {
-  const logger = configSet.logger.child({ namespace: 'ts-path-mapping' })
+  const logger = configSet.logger.child({ namespace: name })
   const ts = configSet.compilerModule
   const tsFactory = ts.factory ? ts.factory : ts
   const compilerOptions = configSet.parsedTsConfig.options

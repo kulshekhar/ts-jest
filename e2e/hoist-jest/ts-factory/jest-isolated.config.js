@@ -8,7 +8,11 @@ module.exports = {
       },
     },
   },
+  roots: ['<rootDir>', '<rootDir>/../__tests__'],
+  moduleNameMapper: {
+    react$: '<rootDir>/node_modules/react',
+  },
   transform: {
-    '^.+.[tj]sx?$': '<rootDir>/../../dist/index.js',
+    '^.+.[tj]sx?$': '<rootDir>/../../../dist/index.js',
   },
 }
