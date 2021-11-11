@@ -2,11 +2,11 @@ import path from 'path'
 
 import ts from 'typescript'
 
-import { createConfigSet } from '../__helpers__/fakers'
+import { createConfigSet, makeCompiler } from '../__helpers__/fakers'
 import { TsCompiler } from '../compiler/ts-compiler'
 import { normalizeSlashes } from '../utils/normalize-slashes'
 
-import { factory as pathMapping } from './path-mapping'
+import { factory as pathMapping, name, version } from './path-mapping'
 
 const TS_JS_CODE_WITH_PATH_ALIAS = `
   import { parse } from '@utils/json'
@@ -27,7 +27,14 @@ const TS_JS_CODE_WITH_PATH_ALIAS = `
   hoo.foo(1)
 `
 
+const printer = ts.createPrinter()
+
 describe('path-mapping', () => {
+  test('should have correct transformer name and version', () => {
+    expect(name).toBe('path-mapping')
+    expect(version).toBe(2)
+  })
+
   test.each([
     {
       baseUrl: '.',
@@ -94,18 +101,6 @@ describe('path-mapping', () => {
   ])(
     'should replace alias path with relative path which is resolved from paths tsconfig with custom extensions',
     ({ code, extension }) => {
-      const configSet = createConfigSet({
-        tsJestConfig: {
-          tsconfig: {
-            baseUrl: '.',
-            paths: {
-              '@utils/*': ['src/utils/*'],
-            },
-          },
-        },
-      })
-      const createFactory = () => pathMapping(new TsCompiler(configSet, new Map()))
-      const transpile = (source: string) => ts.transpileModule(source, { transformers: { before: [createFactory()] } })
       const resolvedFileNameStub = path.join('..', `utils/json.${extension}`)
       jest.spyOn(ts, 'resolveModuleName').mockReturnValue({
         resolvedModule: {
@@ -113,12 +108,25 @@ describe('path-mapping', () => {
           extension,
         } as any, // eslint-disable-line @typescript-eslint/no-explicit-any
       })
+      const sourceFile = ts.createSourceFile(__filename, code, ts.ScriptTarget.ES2015)
+      const result = ts.transform(sourceFile, [
+        pathMapping(
+          makeCompiler({
+            tsJestConfig: {
+              tsconfig: {
+                baseUrl: '.',
+                paths: {
+                  '@utils/*': ['src/utils/*'],
+                },
+              },
+            },
+          }),
+        ),
+      ])
 
-      const out = transpile(code)
+      const transformedSourceFile = result.transformed[0]
 
-      expect(normalizeSlashes(out.outputText).replace(/\/\//g, '/')).toMatchSnapshot()
-
-      jest.resetAllMocks()
+      expect(printer.printFile(transformedSourceFile).replace(/\\\\/g, '/')).toMatchSnapshot()
     },
   )
 })

@@ -8,7 +8,7 @@ import type { TsCompilerInstance } from '../types'
  * Remember to increase the version whenever transformer's content is changed. This is to inform Jest to not reuse
  * the previous cache which contains old transformer's content
  */
-export const version = 2
+export const version = 3
 // Used for constructing cache key
 export const name = 'hoist-jest'
 
@@ -71,7 +71,9 @@ export function factory({ configSet }: TsCompilerInstance) {
     !!node.statements.find(
       (stmt) =>
         ts.isVariableStatement(stmt) &&
-        stmt.declarationList.declarations.find((decl) => decl.name.getText() !== JEST_GLOBAL_NAME) &&
+        stmt.declarationList.declarations.find(
+          (decl) => ts.isIdentifier(decl.name) && decl.name.text !== JEST_GLOBAL_NAME,
+        ) &&
         node.statements.find((stmt) => isHoistableStatement(stmt)),
     )
 
