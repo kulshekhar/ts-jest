@@ -2,11 +2,10 @@
 module.exports = {
   globals: {
     'ts-jest': {
-      diagnostics: {
-        warnOnly: true,
-      },
+      isolatedModules: true,
     },
   },
+  testEnvironment: 'jsdom',
   transform: {
     '^.+.tsx?$': '<rootDir>/../../dist/index.js',
   },

@@ -13,7 +13,7 @@ module.exports = {
   },
   overrides: [
     {
-      files: ['*.ts'],
+      files: ['*.ts', '*.tsx'],
       parserOptions: {
         project: 'tsconfig.eslint.json',
         impliedStrict: true,

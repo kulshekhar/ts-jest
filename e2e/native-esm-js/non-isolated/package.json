@@ -10,7 +10,7 @@
         }
       }
     },
-    "roots": ["<rootDir>", "<rootDir>/../"],
+    "roots": ["<rootDir>", "<rootDir>/../__tests__"],
     "moduleNameMapper": {
       "@jest/globals": "<rootDir>/../../../node_modules/@jest/globals"
     },

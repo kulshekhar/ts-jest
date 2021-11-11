@@ -1,3 +1,4 @@
+/** @type {import('../../../dist/types').InitialOptionsTsJest} */
 module.exports = {
   automock: true,
   globals: {

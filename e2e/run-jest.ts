@@ -109,7 +109,7 @@ export const json = function (dir: string, args?: string[], options: RunJestOpti
     throw new Error(
       `
       Can't parse JSON.
-      ERROR: ${e.name} ${e.message}
+      ERROR: ${(e as Error).name} ${(e as Error).message}
       STDOUT: ${result.stdout}
       STDERR: ${result.stderr}
     `,
