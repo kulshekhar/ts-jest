@@ -3,7 +3,7 @@ module.exports = {
   globals: {
     'ts-jest': {
       diagnostics: {
-        warnOnly: true,
+        exclude: ['**/__tests__/diagnostics.spec.ts'],
       },
     },
   },

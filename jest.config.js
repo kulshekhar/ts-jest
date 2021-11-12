@@ -1,4 +1,4 @@
-/** @type {import('@jest/types').Config.InitialOptions} */
+/** @type {import('./dist/types').InitialOptionsTsJest} */
 module.exports = {
   globals: {
     'ts-jest': {

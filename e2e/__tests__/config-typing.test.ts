@@ -1,7 +1,9 @@
 import { json as runWithJson } from '../run-jest'
 
-test('successfully runs the tests inside `config-typing/`', () => {
-  const { json } = runWithJson('config-typing')
+const DIR_NAME = 'config-typing'
+
+test(`successfully runs the tests inside ${DIR_NAME}`, () => {
+  const { json } = runWithJson(DIR_NAME)
 
   expect(json.success).toBe(true)
 })

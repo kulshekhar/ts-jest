@@ -1,3 +1,4 @@
+/** @type {import('../../dist/types').InitialOptionsTsJest} */
 module.exports = {
   collectCoverageFrom: ['**/*.js', '**/*.ts', '!**/node_modules/**', '!**/coverage/**'],
   globals: {

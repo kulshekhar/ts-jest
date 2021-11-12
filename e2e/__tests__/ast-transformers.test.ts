@@ -3,38 +3,30 @@ import path from 'path'
 import { json as runWithJson } from '../run-jest'
 import { runNpmInstall } from '../utils'
 
+const executeTest = (testDir: string): void => {
+  test(`successfully runs the tests inside ${testDir} with isolatedModules: false`, () => {
+    const { json } = runWithJson(testDir)
+
+    expect(json.success).toBe(true)
+  })
+
+  test(`successfully runs the tests inside ${testDir} with isolatedModules: true`, () => {
+    const { json } = runWithJson(testDir, ['-c=jest-isolated.config.js'])
+
+    expect(json.success).toBe(true)
+  })
+}
+
 describe('path-mapping', () => {
-  const DIR = 'ast-transformers/path-mapping'
-
-  test(`successfully runs the tests inside ${DIR} with isolatedModules: false`, () => {
-    const { json } = runWithJson(DIR)
-
-    expect(json.success).toBe(true)
-  })
-
-  test(`successfully runs the tests inside ${DIR} with isolatedModules: true`, () => {
-    const { json } = runWithJson(DIR, ['-c=jest-isolated.config.js'])
-
-    expect(json.success).toBe(true)
-  })
+  executeTest('ast-transformers/path-mapping')
 })
 
-describe('transformer options', () => {
-  const DIR = path.join(__dirname, '..', 'ast-transformers', 'transformer-options')
+const TRANSFORM_OPT_DIR_NAME = 'transformer-options'
 
-  beforeEach(() => {
-    runNpmInstall(DIR)
+describe('transformer-options', () => {
+  beforeAll(() => {
+    runNpmInstall(path.join(__dirname, '..', 'ast-transformers', TRANSFORM_OPT_DIR_NAME))
   })
 
-  test('successfully runs the tests inside `ast-transformer/transformer-options` with isolatedModules: false', () => {
-    const { json } = runWithJson(DIR)
-
-    expect(json.success).toBe(true)
-  })
-
-  test('successfully runs the tests inside `ast-transformer/transformer-options` with isolatedModules: true', () => {
-    const { json } = runWithJson(DIR, ['-c=jest-isolated.config.js'])
-
-    expect(json.success).toBe(true)
-  })
+  executeTest(`ast-transformers/${TRANSFORM_OPT_DIR_NAME}`)
 })

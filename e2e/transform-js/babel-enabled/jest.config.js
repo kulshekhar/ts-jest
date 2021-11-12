@@ -1,3 +1,4 @@
+/** @type {import('../../../dist/types').InitialOptionsTsJest} */
 module.exports = {
   displayName: 'babel-enabled',
   roots: ['<rootDir>', '<rootDir>/../__tests__/for-babel'],

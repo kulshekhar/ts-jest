@@ -8,7 +8,7 @@
   },
   "description": "A Jest transformer with source map support that lets you use Jest to test projects written in TypeScript",
   "scripts": {
-    "prebuild": "rimraf dist coverage",
+    "prebuild": "rimraf dist coverage *.tgz",
     "build": "tsc -p tsconfig.build.json",
     "postbuild": "node scripts/post-build.js",
     "pretest": "tsc -p tsconfig.spec.json --noEmit",

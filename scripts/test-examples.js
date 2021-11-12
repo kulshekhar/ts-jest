@@ -1,4 +1,4 @@
-const { join } = require('path')
+const path = require('path')
 
 const execa = require('execa')
 
@@ -12,7 +12,7 @@ const executeTest = (projectPath) => {
   // we change current directory
   process.chdir(projectPath)
   // reading package.json
-  const projectPkg = require(join(projectPath, 'package.json'))
+  const projectPkg = require(path.join(projectPath, 'package.json'))
   if (!projectPkg.name) projectPkg.name = 'unknown'
   if (!projectPkg.version) projectPkg.version = 'unknown'
 

@@ -1,3 +1,4 @@
+/** @type {import('../../../dist/types').InitialOptionsTsJest} */
 module.exports = {
   displayName: 'sourcemap-enabled-isolated',
   roots: ['<rootDir>', '<rootDir>/../__tests__'],

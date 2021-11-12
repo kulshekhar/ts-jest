@@ -8,18 +8,20 @@ import { runNpmInstall } from '../utils'
 const { createBundle } = require('../../scripts/lib/bundle')
 
 const executeTest = (dirName: string): void => {
-  test(`successfully runs the tests with isolatedModules: false`, () => {
+  test(`successfully runs the tests inside ${dirName} with isolatedModules: false`, () => {
     const { json } = runWithJson(dirName)
 
     expect(json.success).toBe(true)
   })
 
-  test(`successfully runs the tests with isolatedModules true`, () => {
+  test(`successfully runs the tests inside ${dirName} with isolatedModules true`, () => {
     const { json } = runWithJson(dirName, ['-c=jest-isolated.config.js'])
 
     expect(json.success).toBe(true)
   })
 }
+
+const NON_TS_FACTORY_DIR_NAME = 'non-ts-factory'
 
 describe('non-ts-factory', () => {
   const DIR = path.resolve(__dirname, '..', 'hoist-jest', 'non-ts-factory')
@@ -32,15 +34,15 @@ describe('non-ts-factory', () => {
     })
   })
 
-  executeTest(DIR)
+  executeTest(`hoist-jest/${NON_TS_FACTORY_DIR_NAME}`)
 })
 
-describe('ts-factory', () => {
-  const DIR = path.resolve(__dirname, '..', 'hoist-jest', 'ts-factory')
+const TS_FACTORY_DIR_NAME = 'ts-factory'
 
+describe('ts-factory', () => {
   beforeAll(() => {
-    runNpmInstall(DIR)
+    runNpmInstall(path.resolve(__dirname, '..', 'hoist-jest', TS_FACTORY_DIR_NAME))
   })
 
-  executeTest(DIR)
+  executeTest(`hoist-jest/${TS_FACTORY_DIR_NAME}`)
 })

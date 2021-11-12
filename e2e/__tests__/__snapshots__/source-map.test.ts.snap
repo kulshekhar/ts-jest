@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`run tests with \`isolatedModules: false\` 1`] = `
+exports[`successfully run the tests inside source-map with 'isolatedModules: false' 1`] = `
 "FAIL sourcemap-disabled __tests__/source-map.spec.ts
   ● should fail with stacktrace
 
@@ -34,7 +34,7 @@ FAIL sourcemap-enabled __tests__/source-map.spec.ts
       at Object.<anonymous> (../__tests__/source-map.spec.ts:2:16)"
 `;
 
-exports[`run tests with \`isolatedModules: true\` 1`] = `
+exports[`successfully run the tests inside source-map with 'isolatedModules: true' 1`] = `
 "FAIL sourcemap-disabled-isolated __tests__/source-map.spec.ts
   ● should fail with stacktrace
 

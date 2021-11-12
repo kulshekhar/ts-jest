@@ -1,7 +1,9 @@
 import { json as runWithJson } from '../run-jest'
 
-test('successfully runs the tests inside `test-utils/`', () => {
-  const { json } = runWithJson('test-utils', undefined, {
+const DIR_NAME = 'test-utils'
+
+test(`successfully runs the tests inside ${DIR_NAME}`, () => {
+  const { json } = runWithJson(DIR_NAME, undefined, {
     stripAnsi: true,
   })
 
