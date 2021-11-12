@@ -1,7 +1,6 @@
 import ts from 'typescript'
 
-import { createConfigSet } from '../__helpers__/fakers'
-import { TsCompiler } from '../compiler/ts-compiler'
+import { makeCompiler } from '../__helpers__/fakers'
 
 import { factory as hoistJest, name, version } from './hoist-jest'
 
@@ -164,37 +163,29 @@ const CODE_WITH_HOISTING_HAS_JEST_GLOBALS =
   console.log(jestBackticks)
 `
 
-const createFactory = () => hoistJest(new TsCompiler(createConfigSet(), new Map()))
-const transpile = (source: string, moduleKind: number) =>
-  ts.transpileModule(source, {
-    transformers: { before: [createFactory()] },
-    compilerOptions: {
-      module: moduleKind,
-      target: ts.ScriptTarget.ES2015,
-    },
-  })
-
-const executeTest = (moduleKind: number): void => {
-  test('should hoist correctly when not using @jest/globals', () => {
-    expect(transpile(CODE_WITH_HOISTING_NO_JEST_GLOBALS, moduleKind).outputText).toMatchSnapshot()
-  })
-
-  test('should hoist correctly when using with @jest/globals', () => {
-    expect(transpile(CODE_WITH_HOISTING_HAS_JEST_GLOBALS, moduleKind).outputText).toMatchSnapshot()
-  })
-}
+const printer = ts.createPrinter()
 
 describe('hoist-jest', () => {
   test('should have correct transformer name and version', () => {
     expect(name).toBe('hoist-jest')
-    expect(version).toBe(2)
+    expect(version).toBe(3)
   })
 
-  describe('with module CommonJS', () => {
-    executeTest(ts.ModuleKind.CommonJS)
+  test('should hoist correctly when not using @jest/globals', () => {
+    const sourceFile = ts.createSourceFile(__filename, CODE_WITH_HOISTING_NO_JEST_GLOBALS, ts.ScriptTarget.ES2015)
+    const result = ts.transform(sourceFile, [hoistJest(makeCompiler())])
+
+    const transformedSourceFile = result.transformed[0]
+
+    expect(printer.printFile(transformedSourceFile)).toMatchSnapshot()
   })
 
-  describe('with module ESM', () => {
-    executeTest(ts.ModuleKind.ESNext)
+  test('should hoist correctly when using with @jest/globals', () => {
+    const sourceFile = ts.createSourceFile(__filename, CODE_WITH_HOISTING_HAS_JEST_GLOBALS, ts.ScriptTarget.ES2015)
+    const result = ts.transform(sourceFile, [hoistJest(makeCompiler())])
+
+    const transformedSourceFile = result.transformed[0]
+
+    expect(printer.printFile(transformedSourceFile)).toMatchSnapshot()
   })
 })
