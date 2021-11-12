@@ -208,8 +208,7 @@ export class TsCompiler implements TsCompilerInstance {
         this.configSet.raiseDiagnostics(result.diagnostics, fileName, this._logger)
       }
 
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      return updateOutput(result.outputText, fileName, result.sourceMapText!)
+      return updateOutput(result.outputText, fileName, result.sourceMapText)
     }
   }
 
