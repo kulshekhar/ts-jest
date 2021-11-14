@@ -78,6 +78,8 @@ Object {
     },
     Object {
       "factory": [Function],
+      "name": "dummy-transformer",
+      "version": 1,
     },
   ],
 }
@@ -85,11 +87,7 @@ Object {
 
 exports[`customTransformers should return an object containing all resolved transformers 3`] = `
 Object {
-  "after": Array [
-    Object {
-      "factory": [Function],
-    },
-  ],
+  "after": Array [],
   "afterDeclarations": Array [],
   "before": Array [
     Object {
@@ -97,18 +95,25 @@ Object {
       "name": "hoist-jest",
       "version": 3,
     },
+    Object {
+      "factory": [Function],
+      "name": "funny-transformer",
+      "version": 1,
+    },
   ],
 }
 `;
 
 exports[`customTransformers should return an object containing all resolved transformers 4`] = `
 Object {
-  "after": Array [],
-  "afterDeclarations": Array [
+  "after": Array [
     Object {
       "factory": [Function],
+      "name": "dummy-transformer",
+      "version": 1,
     },
   ],
+  "afterDeclarations": Array [],
   "before": Array [
     Object {
       "factory": [Function],
@@ -122,6 +127,26 @@ Object {
 exports[`customTransformers should return an object containing all resolved transformers 5`] = `
 Object {
   "after": Array [],
+  "afterDeclarations": Array [
+    Object {
+      "factory": [Function],
+      "name": "dummy-transformer",
+      "version": 1,
+    },
+  ],
+  "before": Array [
+    Object {
+      "factory": [Function],
+      "name": "hoist-jest",
+      "version": 3,
+    },
+  ],
+}
+`;
+
+exports[`customTransformers should return an object containing all resolved transformers 6`] = `
+Object {
+  "after": Array [],
   "afterDeclarations": Array [],
   "before": Array [
     Object {
@@ -131,36 +156,15 @@ Object {
     },
     Object {
       "factory": [Function],
+      "name": "dummy-transformer",
       "options": Object {},
+      "version": 1,
     },
   ],
 }
 `;
 
-exports[`customTransformers should return an object containing all resolved transformers: warning-log 1`] = `Array []`;
-
-exports[`customTransformers should return an object containing all resolved transformers: warning-log 2`] = `
-Array [
-  "[level:40] The AST transformer {{file}} must have an \`export const version = <your_transformer_version>",
-  "[level:40] The AST transformer {{file}} must have an \`export const name = <your_transformer_name>",
-]
-`;
-
-exports[`customTransformers should return an object containing all resolved transformers: warning-log 3`] = `
-Array [
-  "[level:40] The AST transformer {{file}} must have an \`export const version = <your_transformer_version>",
-  "[level:40] The AST transformer {{file}} must have an \`export const name = <your_transformer_name>",
-]
-`;
-
-exports[`customTransformers should return an object containing all resolved transformers: warning-log 4`] = `
-Array [
-  "[level:40] The AST transformer {{file}} must have an \`export const version = <your_transformer_version>",
-  "[level:40] The AST transformer {{file}} must have an \`export const name = <your_transformer_name>",
-]
-`;
-
-exports[`customTransformers should return an object containing all resolved transformers: warning-log 5`] = `
+exports[`customTransformers should show warning log when missing version and name 1`] = `
 Array [
   "[level:40] The AST transformer {{file}} must have an \`export const version = <your_transformer_version>",
   "[level:40] The AST transformer {{file}} must have an \`export const name = <your_transformer_name>",

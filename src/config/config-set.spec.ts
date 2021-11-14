@@ -140,10 +140,34 @@ describe('compilerModule', () => {
 }) // compilerModule
 
 describe('customTransformers', () => {
-  it.each([
+  test('should show warning log when missing version and name', () => {
+    const logger = testing.createLoggerMock()
+    createConfigSet({
+      logger,
+      jestConfig: {
+        rootDir: 'src',
+        cwd: 'src',
+      } as any, // eslint-disable-line @typescript-eslint/no-explicit-any
+      tsJestConfig: {
+        astTransformers: {
+          before: ['hummy-transformer'],
+        },
+      },
+      resolve: null,
+    })
+
+    expect(
+      logger.target.filteredLines(LogLevels.warn).map((logLine) => logLine.substring(0, logLine.indexOf('>') + 1)),
+    ).toMatchSnapshot()
+  })
+
+  test.each([
     {},
     {
       before: ['dummy-transformer'],
+    },
+    {
+      before: ['__mocks__/funny-transformer.ts'],
     },
     {
       after: ['dummy-transformer'],
@@ -173,9 +197,6 @@ describe('customTransformers', () => {
       resolve: null,
     })
 
-    expect(
-      logger.target.filteredLines(LogLevels.warn).map((logLine) => logLine.substring(0, logLine.indexOf('>') + 1)),
-    ).toMatchSnapshot('warning-log')
     expect(cs.resolvedTransformers).toMatchSnapshot()
   })
 })
