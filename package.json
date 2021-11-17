@@ -87,7 +87,7 @@
     }
   },
   "devDependencies": {
-    "@commitlint/cli": "14.x",
+    "@commitlint/cli": "15.x",
     "@commitlint/config-angular": "^15.0.0",
     "@jest/transform": "^27.1.1",
     "@jest/types": "^27.1.1",
