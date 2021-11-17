@@ -1,0 +1,16 @@
+{
+  "jest": {
+    "globals": {
+      "ts-jest": {
+        "tsconfig": "<rootDir>/../tsconfig.json",
+        "astTransformers": {
+          "before": ["<rootDir>/../../../../dist/transformers/path-mapping.js"]
+        }
+      }
+    },
+    "roots": ["<rootDir>", "<rootDir>/../__tests__"],
+    "transform": {
+      "^.+\\.[tj]sx?$": "<rootDir>/../../../../dist/index.js"
+    }
+  }
+}

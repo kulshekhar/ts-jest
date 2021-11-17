@@ -24,7 +24,25 @@ const executeTest = (testDir: string): void => {
 }
 
 describe('path-mapping', () => {
-  executeTest(`${AST_TRANSFORMERS_DIR_NAME}/path-mapping`)
+  const PATH_MAPPING_DIR_NAME = 'path-mapping'
+
+  describe('ts-4.5+', () => {
+    executeTest(`${AST_TRANSFORMERS_DIR_NAME}/${PATH_MAPPING_DIR_NAME}/ts-4.5+`)
+  })
+
+  describe('ts-4.5-', () => {
+    const DIR = path.join(__dirname, '..', AST_TRANSFORMERS_DIR_NAME, PATH_MAPPING_DIR_NAME, 'ts-4.5-')
+
+    beforeAll(() => {
+      runNpmInstall(DIR)
+      const bundle = createBundle()
+      execa.sync('npm', ['install', '--no-package-lock', '--no-shrinkwrap', '--no-save', bundle], {
+        cwd: DIR,
+      })
+    })
+
+    executeTest(`${AST_TRANSFORMERS_DIR_NAME}/${PATH_MAPPING_DIR_NAME}/ts-4.5-`)
+  })
 })
 
 describe('transformer-options', () => {
@@ -42,11 +60,12 @@ describe('transformer-options', () => {
 })
 
 describe('hoist-jest', () => {
+  const HOIST_JEST_DIR_NAME = 'hoist-jest'
   const NON_TS_FACTORY_DIR_NAME = 'non-ts-factory'
   const TS_FACTORY_DIR_NAME = 'ts-factory'
 
   describe('non-ts-factory', () => {
-    const DIR = path.resolve(__dirname, '..', AST_TRANSFORMERS_DIR_NAME, 'hoist-jest', NON_TS_FACTORY_DIR_NAME)
+    const DIR = path.join(__dirname, '..', AST_TRANSFORMERS_DIR_NAME, HOIST_JEST_DIR_NAME, NON_TS_FACTORY_DIR_NAME)
 
     beforeAll(() => {
       runNpmInstall(DIR)
@@ -56,15 +75,15 @@ describe('hoist-jest', () => {
       })
     })
 
-    executeTest(`${AST_TRANSFORMERS_DIR_NAME}/hoist-jest/${NON_TS_FACTORY_DIR_NAME}`)
+    executeTest(`${AST_TRANSFORMERS_DIR_NAME}/${HOIST_JEST_DIR_NAME}/${NON_TS_FACTORY_DIR_NAME}`)
   })
 
   describe('ts-factory', () => {
     beforeAll(() => {
-      runNpmInstall(path.resolve(__dirname, '..', AST_TRANSFORMERS_DIR_NAME, 'hoist-jest', TS_FACTORY_DIR_NAME))
+      runNpmInstall(path.join(__dirname, '..', AST_TRANSFORMERS_DIR_NAME, HOIST_JEST_DIR_NAME, TS_FACTORY_DIR_NAME))
     })
 
-    executeTest(`${AST_TRANSFORMERS_DIR_NAME}/hoist-jest/${TS_FACTORY_DIR_NAME}`)
+    executeTest(`${AST_TRANSFORMERS_DIR_NAME}/${HOIST_JEST_DIR_NAME}/${TS_FACTORY_DIR_NAME}`)
   })
 })
 
