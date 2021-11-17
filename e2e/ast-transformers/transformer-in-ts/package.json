@@ -1,0 +1,14 @@
+{
+  "jest": {
+    "globals": {
+      "ts-jest": {
+        "astTransformers": {
+          "before": ["<rootDir>/../../../src/transformers/hoist-jest.ts"]
+        }
+      }
+    },
+    "transform": {
+      "^.+\\.[tj]sx?$": "<rootDir>/../../../dist/index.js"
+    }
+  }
+}

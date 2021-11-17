@@ -9,9 +9,11 @@
  * with the complete, object version of it.
  */
 import { existsSync, readFileSync } from 'fs'
+import Module from 'module'
 import { dirname, extname, isAbsolute, join, normalize, resolve } from 'path'
 
 import { LogContexts, Logger } from 'bs-logger'
+import { transformSync } from 'esbuild'
 import { globsToMatcher } from 'jest-util'
 import json5 from 'json5'
 import type { CompilerOptions, Diagnostic, FormatDiagnosticsHost, ParsedCommandLine } from 'typescript'
@@ -88,6 +90,21 @@ const toDiagnosticCodeList = (items: Array<string | number>, into: number[] = []
   }
 
   return into
+}
+
+const requireFromString = (code: string, fileName: string) => {
+  // @ts-expect-error `_nodeModulePaths` is not exposed in typing
+  const paths = Module._nodeModulePaths(dirname(fileName))
+  const parent = module.parent as Module | undefined
+  const m = new Module(fileName, parent)
+  m.filename = fileName
+  m.paths = [].concat(paths)
+  // @ts-expect-error `_compile` is not exposed in typing
+  m._compile(code, fileName)
+  const exports = m.exports
+  parent && parent.children && parent.children.splice(parent.children.indexOf(m), 1)
+
+  return exports
 }
 
 export class ConfigSet {
@@ -300,7 +317,17 @@ export class ConfigSet {
     const { astTransformers } = options
     if (astTransformers) {
       const resolveTransformerFunc = (transformerPath: string) => {
-        const transformerFunc = require(transformerPath)
+        let transformerFunc
+        if (extname(transformerPath) === '.ts') {
+          const compiledTransformer = transformSync(readFileSync(transformerPath, 'utf-8'), {
+            loader: 'ts',
+            format: 'cjs',
+            target: 'es2015',
+          }).code
+          transformerFunc = requireFromString(compiledTransformer, transformerPath.replace('.ts', '.js'))
+        } else {
+          transformerFunc = require(transformerPath)
+        }
         if (!transformerFunc.version) {
           this.logger.warn(Errors.MissingTransformerVersion, { file: transformerPath })
         }
