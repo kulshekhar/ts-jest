@@ -9,13 +9,10 @@ import { fileURLToPath } from 'url'
 
 import { jest as jestObject } from '@jest/globals'
 
-// @ts-expect-error testing purpose
 import staticImportedStatefulFromCjs from '../from-cjs.mjs'
 import { double } from '../index'
-// @ts-expect-error testing purpose
 import defaultFromCjs, { half, namedFunction } from '../named-export.cjs'
 import { bag } from '../namespace-export'
-// @ts-expect-error testing purpose
 import staticImportedStateful from '../stateful.mjs'
 // @ts-expect-error testing purpose
 import staticImportedStatefulWithQuery from '../stateful.mjs?query=1'
@@ -59,14 +56,12 @@ test('dynamic import should work', async () => {
 })
 
 test('import cjs', async () => {
-  // @ts-expect-error testing purpose
   const { default: half } = await import('../commonjs.cjs')
 
   expect(half(4)).toBe(2)
 })
 
 test('import esm from cjs', async () => {
-  // @ts-expect-error testing purpose
   const { default: halfPromise } = await import('../from-esm.cjs')
 
   expect(await halfPromise(1)).toBe(2)
@@ -74,7 +69,6 @@ test('import esm from cjs', async () => {
 
 test('require(cjs) and import(cjs) should share caches', async () => {
   const require = createRequire(import.meta.url)
-  // @ts-expect-error testing purpose
   const { default: importedStateful } = await import('../stateful.cjs')
   const requiredStateful = require('../stateful.cjs')
 
@@ -87,7 +81,6 @@ test('require(cjs) and import(cjs) should share caches', async () => {
 })
 
 test('import from mjs and import(mjs) should share caches', async () => {
-  // @ts-expect-error testing purpose
   const { default: importedStateful } = await import('../stateful.mjs')
 
   expect(importedStateful()).toBe(1)
@@ -153,7 +146,6 @@ test('namespace export', () => {
 })
 
 test('handle circular dependency', async () => {
-  // @ts-expect-error testing purpose
   const moduleA = (await import('../circular-dependent-a.mjs')).default
 
   expect(moduleA.id).toBe('circularDependentA')
@@ -177,7 +169,7 @@ test('can mock module', async () => {
     virtual: true,
   })
 
-  // @ts-expect-error testing purpose
+  // @ts-expect-error `mockedModule.mjs` has no type definition associated
   const importedMock = await import('../mockedModule.mjs')
 
   expect(Object.keys(importedMock)).toEqual(['foo'])

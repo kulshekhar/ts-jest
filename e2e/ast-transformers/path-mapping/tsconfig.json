@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "baseUrl": "./",
+    "esModuleInterop": true,
     "paths": {
       "@share/*": ["share/*"]
     }
