@@ -6,11 +6,10 @@ import { removeSync, writeFileSync } from 'fs-extra'
 
 import { createConfigSet } from './__helpers__/fakers'
 import { logTargetMock } from './__helpers__/mocks'
-import { SOURCE_MAPPING_PREFIX } from './compiler/compiler-utils'
-import { TsJestCompiler } from './compiler/ts-jest-compiler'
+import { SOURCE_MAPPING_PREFIX, TsJestCompiler } from './compiler'
 import { CACHE_KEY_EL_SEPARATOR, TsJestTransformer } from './ts-jest-transformer'
 import type { DepGraphInfo } from './types'
-import { stringify } from './utils/json'
+import { stringify } from './utils'
 import { sha1 } from './utils/sha1'
 
 const logTarget = logTargetMock()

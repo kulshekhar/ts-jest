@@ -1,4 +1,4 @@
-import type { ConfigSet } from '../config/config-set'
+import type { ConfigSet } from '../config'
 import type { CompilerInstance, StringMap, TsJestCompileOptions } from '../types'
 
 import { TsCompiler } from './ts-compiler'

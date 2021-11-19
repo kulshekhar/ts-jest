@@ -1,6 +1,6 @@
 import type { testing } from 'bs-logger'
 
-import { rootLogger } from '../utils/logger'
+import { rootLogger } from '../utils'
 
 export const logTargetMock = (): testing.LogTargetMock => (rootLogger as testing.LoggerMock).target
 

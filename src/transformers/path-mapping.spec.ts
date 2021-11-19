@@ -3,7 +3,7 @@ import path from 'path'
 import ts from 'typescript'
 
 import { createConfigSet, makeCompiler } from '../__helpers__/fakers'
-import { TsCompiler } from '../compiler/ts-compiler'
+import { TsCompiler } from '../compiler'
 import { normalizeSlashes } from '../utils/normalize-slashes'
 
 import { factory as pathMapping, name, version } from './path-mapping'

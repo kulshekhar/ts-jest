@@ -2,7 +2,7 @@ import { LogContexts, Logger } from 'bs-logger'
 import type { Arguments } from 'yargs'
 import yargsParser from 'yargs-parser'
 
-import { rootLogger } from '../utils/logger'
+import { rootLogger } from '../utils'
 
 const VALID_COMMANDS = ['help', 'config:migrate', 'config:init']
 
