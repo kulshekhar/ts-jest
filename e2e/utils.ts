@@ -4,6 +4,10 @@ import type { Config } from '@jest/types'
 import { ExecaReturnValue, sync as spawnSync } from 'execa'
 import * as fs from 'graceful-fs'
 
+import { version } from '../package.json'
+
+export const tsJestBundle = path.join(__dirname, '..', `ts-jest-${version}.tgz`)
+
 interface RunResult extends ExecaReturnValue {
   status: number
   error: Error

@@ -4,6 +4,7 @@ module.exports = {
   globals: {
     'ts-jest': {
       babelConfig: true,
+      isolatedModules: true,
       tsconfig: 'tsconfig-esm.json',
       useESM: true,
     },

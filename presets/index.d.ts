@@ -1,4 +1,4 @@
-import type { TsJestPresets } from '../dist/types'
+import type { TsJestPresets } from '../dist'
 
 declare const _default: {
     defaults: TsJestPresets;

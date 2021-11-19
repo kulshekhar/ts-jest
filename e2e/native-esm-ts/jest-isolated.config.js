@@ -1,4 +1,4 @@
-/** @type {import('../../dist/types').InitialOptionsTsJest} */
+/** @type {import('../../dist').InitialOptionsTsJest} */
 module.exports = {
   extensionsToTreatAsEsm: ['.ts'],
   globals: {

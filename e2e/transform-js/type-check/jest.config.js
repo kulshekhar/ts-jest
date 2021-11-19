@@ -1,4 +1,4 @@
-/** @type {import('../../../dist/types').InitialOptionsTsJest} */
+/** @type {import('../../../dist').InitialOptionsTsJest} */
 module.exports = {
   displayName: 'type-check',
   roots: ['<rootDir>', '<rootDir>/../__tests__/for-ts'],

@@ -26,6 +26,7 @@ jest-base.js
 
 # Tsconfig
 tsconfig.build.json
+tsconfig.eslint.json
 tsconfig.json
 tsconfig.spec.json
 

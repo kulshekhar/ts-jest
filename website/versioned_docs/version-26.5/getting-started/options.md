@@ -72,7 +72,6 @@ All options have default values which should fit most of the projects. Click on 
 [tsconfig]: options/tsconfig
 [isolatedmodules]: options/isolatedModules
 [asttransformers]: options/astTransformers
-[compilerhost]: options/compilerHost
 [diagnostics]: options/diagnostics
 [babelconfig]: options/babelConfig
 [stringifycontentpathregex]: options/stringifyContentPathRegex
