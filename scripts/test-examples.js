@@ -32,12 +32,15 @@ const executeTest = (projectPath) => {
   logger.log()
 
   execa.sync('npm', ['install', '--no-package-lock', '--no-shrinkwrap', '--no-save', bundle], { cwd: projectPath })
+  logger.log()
 
   // then we can run the tests
-  const cmdLine = ['npm', 'run', 'test', '--', '--no-cache']
-  const cmdESMLine = ['npm', 'run', 'test-esm', '--', '--no-cache']
+  const cmdLine = ['npm', 'run', 'test']
+  const cmdIsolatedLine = ['npm', 'run', 'test-isolated']
+  const cmdESMLine = ['npm', 'run', 'test-esm']
+  const cmdESMIsolatedLine = ['npm', 'run', 'test-esm-isolated']
 
-  logger.log('starting the CommonJS tests using:', ...cmdLine)
+  logger.log('starting the CommonJS tests with `isolatedModules: false` using:', ...cmdLine)
   logger.log()
 
   execa.sync(cmdLine.shift(), cmdLine, {
@@ -45,8 +48,19 @@ const executeTest = (projectPath) => {
     stdio: 'inherit',
     env: process.env,
   })
+  logger.log()
 
-  logger.log('starting the ESM tests using:', ...cmdESMLine)
+  logger.log('starting the CommonJS tests with `isolatedModules: true` using:', ...cmdIsolatedLine)
+  logger.log()
+
+  execa.sync(cmdIsolatedLine.shift(), cmdIsolatedLine, {
+    cwd: projectPath,
+    stdio: 'inherit',
+    env: process.env,
+  })
+  logger.log()
+
+  logger.log('starting the ESM tests with `isolatedModules: false` using:', ...cmdESMLine)
   logger.log()
 
   execa.sync(cmdESMLine.shift(), cmdESMLine, {
@@ -54,6 +68,17 @@ const executeTest = (projectPath) => {
     stdio: 'inherit',
     env: process.env,
   })
+  logger.log()
+
+  logger.log('starting the ESM tests with `isolatedModules: true` using:', ...cmdESMIsolatedLine)
+  logger.log()
+
+  execa.sync(cmdESMIsolatedLine.shift(), cmdESMIsolatedLine, {
+    cwd: projectPath,
+    stdio: 'inherit',
+    env: process.env,
+  })
+  logger.log()
 }
 
 exampleAppsToRun.forEach((projectPath) => {

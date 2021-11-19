@@ -3,9 +3,7 @@ import path from 'path'
 import execa from 'execa'
 
 import { json as runWithJson } from '../run-jest'
-import { runNpmInstall } from '../utils'
-
-const { createBundle } = require('../../scripts/lib/bundle')
+import { runNpmInstall, tsJestBundle } from '../utils'
 
 const AST_TRANSFORMERS_DIR_NAME = 'ast-transformers'
 
@@ -35,8 +33,7 @@ describe('path-mapping', () => {
 
     beforeAll(() => {
       runNpmInstall(DIR)
-      const bundle = createBundle()
-      execa.sync('npm', ['install', '--no-package-lock', '--no-shrinkwrap', '--no-save', bundle], {
+      execa.sync('npm', ['install', '--no-package-lock', '--no-shrinkwrap', '--no-save', tsJestBundle], {
         cwd: DIR,
       })
     })
@@ -69,8 +66,7 @@ describe('hoist-jest', () => {
 
     beforeAll(() => {
       runNpmInstall(DIR)
-      const bundle = createBundle()
-      execa.sync('npm', ['install', '--no-package-lock', '--no-shrinkwrap', '--no-save', bundle], {
+      execa.sync('npm', ['install', '--no-package-lock', '--no-shrinkwrap', '--no-save', tsJestBundle], {
         cwd: DIR,
       })
     })

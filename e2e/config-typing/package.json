@@ -1,7 +1,5 @@
 {
-  "jest": {
-    "transform": {
-      "^.+.tsx?$": "<rootDir>/../../dist/index.js"
-    }
+  "dependencies": {
+    "ts-node": "^10.4.0"
   }
 }

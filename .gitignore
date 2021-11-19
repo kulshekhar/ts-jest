@@ -45,14 +45,8 @@ jspm_packages
 .idea
 .cache
 
-# tests specific
-tests/simple-long-path/long-src-path
 # is linked to the temp dir of the os
-e2e/__workdir_synlink__
-**/.ts-jest-e2e.json
 .ts-jest-digest
-# while refactoring...
-old/
 
 # binaries
 *.tgz

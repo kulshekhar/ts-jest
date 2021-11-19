@@ -75,7 +75,7 @@ jobs:
       - name: Install and build
         run: npm ci
       - name: Run tests with coverage
-        run: npm run test-ci -- --coverage && cat ./coverage/lcov.info
+        run: npm run test -- --coverage && cat ./coverage/lcov.info
         env:
           CI: true
       - name: Coveralls parallel

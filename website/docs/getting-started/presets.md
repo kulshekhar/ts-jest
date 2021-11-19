@@ -73,7 +73,7 @@ Or through TypeScript (if `ts-node` is installed):
 
 ```ts
 // jest.config.ts
-import type { InitialOptionsTsJest } from 'ts-jest/dist/types'
+import type { InitialOptionsTsJest } from 'ts-jest'
 import { defaults as tsjPreset } from 'ts-jest/presets'
 // import { defaultsESM as tsjPreset } from 'ts-jest/presets'
 // import { jsWithTs as tsjPreset } from 'ts-jest/presets'
