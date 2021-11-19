@@ -13,7 +13,7 @@ If you use ["baseUrl" and "paths" options](https://www.typescriptlang.org/docs/h
 
 With the below config in your `tsconfig`:
 
-```js
+```json
 // tsconfig.json
 {
   "compilerOptions": {
@@ -39,7 +39,7 @@ module.exports = {
 }
 ```
 
-```js
+```json
 // OR package.json
 {
   // [...]
