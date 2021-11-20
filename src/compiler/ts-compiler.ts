@@ -22,7 +22,7 @@ import type {
   Diagnostic,
 } from 'typescript'
 
-import type { ConfigSet } from '../config/config-set'
+import type { ConfigSet } from '../config'
 import { LINE_FEED, TS_TSX_REGEX } from '../constants'
 import type {
   DepGraphInfo,
@@ -32,7 +32,7 @@ import type {
   TsJestCompileOptions,
   TTypeScript,
 } from '../types'
-import { rootLogger } from '../utils/logger'
+import { rootLogger } from '../utils'
 import { Errors, interpolate } from '../utils/messages'
 
 import { updateOutput } from './compiler-utils'

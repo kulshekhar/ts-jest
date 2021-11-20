@@ -31,10 +31,9 @@ import type {
   TsJestGlobalOptions,
   TTypeScript,
 } from '../types'
+import { stringify, rootLogger } from '../utils'
 import { backportJestConfig } from '../utils/backports'
 import { importer } from '../utils/importer'
-import { stringify } from '../utils/json'
-import { rootLogger } from '../utils/logger'
 import { Errors, ImportReasons, interpolate } from '../utils/messages'
 import { normalizeSlashes } from '../utils/normalize-slashes'
 import { sha1 } from '../utils/sha1'

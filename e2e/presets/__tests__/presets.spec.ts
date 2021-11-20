@@ -1,7 +1,7 @@
-import { JS_EXT_TO_TREAT_AS_ESM, TS_EXT_TO_TREAT_AS_ESM } from '../../../dist/constants'
-import * as presets from '../../../presets'
+import { JS_EXT_TO_TREAT_AS_ESM, TS_EXT_TO_TREAT_AS_ESM } from 'ts-jest'
+import presets from 'ts-jest/presets'
 
-const defaultPreset = require('../../../jest-preset')
+const defaultPreset = require('ts-jest/jest-preset')
 
 test('presets', () => {
   expect(defaultPreset).toEqual({
@@ -9,7 +9,6 @@ test('presets', () => {
       '^.+\\.tsx?$': 'ts-jest',
     },
   })
-
   expect(presets.defaultsESM).toEqual({
     extensionsToTreatAsEsm: [...TS_EXT_TO_TREAT_AS_ESM],
     transform: {

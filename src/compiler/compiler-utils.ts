@@ -1,4 +1,4 @@
-import { stringify } from '../utils/json'
+import { stringify } from '../utils'
 
 /**
  * Rely on TypeScript compiled output generation which contains this prefix to point to sourcemap location.

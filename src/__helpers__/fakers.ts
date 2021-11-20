@@ -3,8 +3,8 @@ import { resolve } from 'path'
 import type { Config } from '@jest/types'
 import type { Logger } from 'bs-logger'
 
-import { TsCompiler } from '../compiler/ts-compiler'
-import { ConfigSet } from '../config/config-set'
+import { TsCompiler } from '../compiler'
+import { ConfigSet } from '../config'
 import type { StringMap, TsJestGlobalOptions } from '../types'
 import type { ImportReasons } from '../utils/messages'
 

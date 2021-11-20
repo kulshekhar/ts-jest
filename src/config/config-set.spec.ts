@@ -8,12 +8,11 @@ import ts from 'typescript'
 import { createConfigSet } from '../__helpers__/fakers'
 import { logTargetMock } from '../__helpers__/mocks'
 import type { AstTransformerDesc, TsJestGlobalOptions } from '../types'
+import { stringify, mocked } from '../utils'
 import * as _backports from '../utils/backports'
 import { getPackageVersion } from '../utils/get-package-version'
-import { stringify } from '../utils/json'
 import { normalizeSlashes } from '../utils/normalize-slashes'
 import { sha1 } from '../utils/sha1'
-import { mocked } from '../utils/testing'
 
 import { ConfigSet, MY_DIGEST } from './config-set'
 
