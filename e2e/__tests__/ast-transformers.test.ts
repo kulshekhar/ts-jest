@@ -21,27 +21,6 @@ const executeTest = (testDir: string): void => {
   })
 }
 
-describe('path-mapping', () => {
-  const PATH_MAPPING_DIR_NAME = 'path-mapping'
-
-  describe('ts-4.5+', () => {
-    executeTest(`${AST_TRANSFORMERS_DIR_NAME}/${PATH_MAPPING_DIR_NAME}/ts-4.5+`)
-  })
-
-  describe('ts-4.5-', () => {
-    const DIR = path.join(__dirname, '..', AST_TRANSFORMERS_DIR_NAME, PATH_MAPPING_DIR_NAME, 'ts-4.5-')
-
-    beforeAll(() => {
-      runNpmInstall(DIR)
-      execa.sync('npm', ['install', '--no-package-lock', '--no-shrinkwrap', '--no-save', tsJestBundle], {
-        cwd: DIR,
-      })
-    })
-
-    executeTest(`${AST_TRANSFORMERS_DIR_NAME}/${PATH_MAPPING_DIR_NAME}/ts-4.5-`)
-  })
-})
-
 describe('transformer-options', () => {
   const TRANSFORM_OPT_DIR_NAME = 'transformer-options'
 
