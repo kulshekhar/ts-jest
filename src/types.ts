@@ -83,7 +83,7 @@ export interface TsJestGlobalOptions {
    *
    * @default 'typescript'
    */
-  compiler?: string
+  compiler?: 'typescript' | 'ttypescript' | string
 
   /**
    * Custom transformers (mostly used by jest presets)
