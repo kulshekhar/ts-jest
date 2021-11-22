@@ -28,6 +28,9 @@ export function factory({
   configSet,
 }: TsCompilerInstance): (ctx: _ts.TransformationContext) => _ts.Transformer<_ts.SourceFile> {
   const logger = configSet.logger.child({ namespace: name })
+  logger.warn(
+    'path-mapping AST transformer is deprecated and will be removed in `ts-jest` v28. Please use an alternative one, like https://github.com/LeDDGroup/typescript-transform-paths instead',
+  )
   const ts = configSet.compilerModule
   const tsFactory = ts.factory ? ts.factory : ts
   const compilerOptions = configSet.parsedTsConfig.options
