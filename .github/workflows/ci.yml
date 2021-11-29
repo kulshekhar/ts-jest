@@ -78,6 +78,7 @@ jobs:
         run: npm run test -- --coverage && cat ./coverage/lcov.info
         env:
           CI: true
+          DISABLE_MOCKED_WARNING: true
       - name: Coveralls parallel
         uses: coverallsapp/github-action@master
         with:
