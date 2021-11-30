@@ -1,3 +1,28 @@
+# [27.1.0](https://github.com/kulshekhar/ts-jest/compare/v27.0.7...v27.1.0) (2021-11-30)
+
+
+### Features
+
+* allow subclasses to extend `processAsync` and `getCacheKeyAsync` ([#3047](https://github.com/kulshekhar/ts-jest/issues/3047)) ([571a880](https://github.com/kulshekhar/ts-jest/commit/571a880007642c9dcbcd7bf109c5392e7eb78cc4))
+* **config:** support custom AST transformers written in TypeScript ([#3063](https://github.com/kulshekhar/ts-jest/issues/3063)) ([340a305](https://github.com/kulshekhar/ts-jest/commit/340a30573e5ff92df77c94af51c371ce4bf956e7)), closes [#2831](https://github.com/kulshekhar/ts-jest/issues/2831)
+* export `ts-jest` public apis from `index.js` ([#3080](https://github.com/kulshekhar/ts-jest/issues/3080)) ([53175dd](https://github.com/kulshekhar/ts-jest/commit/53175dd04218bf22ead464e30aa01b258c87e7af)), closes [#3045](https://github.com/kulshekhar/ts-jest/issues/3045)
+
+
+### Code Refactoring
+
+* **utils:** deprecate `mocked` util function ([#3102](https://github.com/kulshekhar/ts-jest/issues/3102)) ([55e69f1](https://github.com/kulshekhar/ts-jest/commit/55e69f12f65d678962c3087fca7673992f5f1b26))
+* define clear type for `compiler` option ([#3087](https://github.com/kulshekhar/ts-jest/issues/3087)) ([cc42daf](https://github.com/kulshekhar/ts-jest/commit/cc42daf795585887664be59956d2c52244237bda))
+* **transformers**: deprecate `path-mapping` AST transformer ([#3088](https://github.com/kulshekhar/ts-jest/issues/3088)) ([d8f6b96](https://github.com/kulshekhar/ts-jest/commit/d8f6b9624ee76a164aa7003720cd3f83fc6c4865))
+* **transformers**: use ts `factory` API for `hoisting` AST transformer ([#3058](https://github.com/kulshekhar/ts-jest/issues/3058)) ([a72f51d](https://github.com/kulshekhar/ts-jest/commit/a72f51d9b7c4ea2866e486c0aac4f4706c3ed542))
+
+
+## DEPRECATIONS
+
+* **transformers**: `path-mapping` AST transformer is deprecated and will be removed in **v28.0.0**. One should use an alternative one like https://github.com/LeDDGroup/typescript-transform-paths instead.
+* **utils**: `mocked` function is deprecated and will be removed in **v28.0.0**. The function has been integrated into `jest-mock` package as a part of Jest **27.4.0**, see https://github.com/facebook/jest/pull/12089. One should use the one from Jest instead
+
+
+
 ## [27.0.7](https://github.com/kulshekhar/ts-jest/compare/v27.0.6...v27.0.7) (2021-10-16)
 
 

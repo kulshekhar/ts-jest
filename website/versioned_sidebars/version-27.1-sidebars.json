@@ -1,0 +1,93 @@
+{
+  "version-27.1-docs": [
+    {
+      "collapsed": true,
+      "type": "category",
+      "label": "ts-jest",
+      "items": [
+        {
+          "type": "doc",
+          "id": "version-27.1/introduction"
+        },
+        {
+          "type": "doc",
+          "id": "version-27.1/processing"
+        },
+        {
+          "type": "doc",
+          "id": "version-27.1/contributing"
+        }
+      ]
+    },
+    {
+      "collapsed": false,
+      "type": "category",
+      "label": "Getting Started",
+      "items": [
+        {
+          "type": "doc",
+          "id": "version-27.1/getting-started/installation"
+        },
+        {
+          "type": "doc",
+          "id": "version-27.1/getting-started/presets"
+        },
+        {
+          "type": "doc",
+          "id": "version-27.1/getting-started/options"
+        },
+        {
+          "type": "doc",
+          "id": "version-27.1/getting-started/paths-mapping"
+        },
+        {
+          "type": "doc",
+          "id": "version-27.1/getting-started/version-checking"
+        }
+      ]
+    },
+    {
+      "collapsed": false,
+      "type": "category",
+      "label": "Guides",
+      "items": [
+        {
+          "type": "doc",
+          "id": "version-27.1/guides/esm-support"
+        },
+        {
+          "type": "doc",
+          "id": "version-27.1/guides/mock-es6-class"
+        },
+        {
+          "type": "doc",
+          "id": "version-27.1/guides/react-native"
+        },
+        {
+          "type": "doc",
+          "id": "version-27.1/guides/test-helpers"
+        },
+        {
+          "type": "doc",
+          "id": "version-27.1/guides/troubleshooting"
+        },
+        {
+          "type": "doc",
+          "id": "version-27.1/guides/using-with-monorepo"
+        }
+      ]
+    },
+    {
+      "type": "doc",
+      "id": "version-27.1/babel7-or-ts"
+    },
+    {
+      "type": "doc",
+      "id": "version-27.1/migration"
+    },
+    {
+      "type": "doc",
+      "id": "version-27.1/debugging"
+    }
+  ]
+}
