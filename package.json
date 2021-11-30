@@ -22,8 +22,8 @@
     "doc:build": "cd website && npm run build",
     "changelog": "node_modules/.bin/conventional-changelog -p angular -i CHANGELOG.md -s -r 1",
     "prepare": "npm run build",
-    "prepublishOnly": "npm run test-ci",
-    "preversion": "npm run test-ci",
+    "prepublishOnly": "npm run test",
+    "preversion": "npm run test",
     "version": "npm run changelog && git add CHANGELOG.md",
     "raw:options": "node scripts/generate-raw-compiler-options.js"
   },
