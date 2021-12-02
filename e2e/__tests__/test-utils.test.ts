@@ -14,9 +14,12 @@ beforeAll(() => {
 })
 
 test(`successfully runs the tests inside ${DIR_NAME}`, () => {
+  process.env.DISABLE_MOCKED_WARNING = 'true'
   const { json } = runWithJson(DIR_NAME, undefined, {
     stripAnsi: true,
   })
 
   expect(json.success).toBe(true)
+
+  delete process.env.DISABLE_MOCKED_WARNING
 })
