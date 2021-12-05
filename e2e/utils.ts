@@ -1,7 +1,7 @@
 import * as path from 'path'
 
 import type { Config } from '@jest/types'
-import { ExecaReturnValue, sync as spawnSync } from 'execa'
+import { ExecaReturnValue, sync as spawnSync, SyncOptions } from 'execa'
 import * as fs from 'graceful-fs'
 
 import { version } from '../package.json'
@@ -15,7 +15,7 @@ interface RunResult extends ExecaReturnValue {
 export const run = (cmd: string, cwd?: Config.Path, env?: Record<string, string>): RunResult => {
   const args = cmd.split(/\s/).slice(1)
   const spawnOptions = { cwd, env, preferLocal: false, reject: false }
-  const result = spawnSync(cmd.split(/\s/)[0], args, spawnOptions) as RunResult
+  const result = spawnSync(cmd.split(/\s/)[0], args, spawnOptions as SyncOptions) as RunResult
 
   // For compat with cross-spawn
   result.status = result.exitCode

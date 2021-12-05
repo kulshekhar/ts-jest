@@ -1,0 +1,8 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should show warning when importing from \`ts-jest/utils\` 1`] = `
+Array [
+  "ts-jest[main] (WARN) Replace any occurrences of \\"ts-jest/utils\\" with just \\"ts-jest\\".",
+  "ts-jest[main] (WARN) Replace any occurrences of \\"ts-jest/utils\\" with just \\"ts-jest\\".",
+]
+`;

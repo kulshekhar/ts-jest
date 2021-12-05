@@ -19,7 +19,7 @@ exports[`partial successfully runs the tests inside \`enum/\` with \`isolatedMod
       3 | const getTwo = (): string => HooEnum.two
       4 |
 
-      at Resolver.resolveModule (../../node_modules/jest-resolve/build/resolver.js:322:11)
+      at Resolver.resolveModule (../../node_modules/jest-resolve/build/resolver.js:324:11)
       at Object.<anonymous> (__tests__/import-from-d-ts-no-js.spec.ts:1:1)
 
 PASS __tests__/import-from-d-ts-has-js.spec.ts
@@ -45,7 +45,7 @@ exports[`partial successfully runs the tests inside \`enum/\` with \`isolatedMod
       3 | const getTwo = (): string => HooEnum.two
       4 |
 
-      at Resolver.resolveModule (../../node_modules/jest-resolve/build/resolver.js:322:11)
+      at Resolver.resolveModule (../../node_modules/jest-resolve/build/resolver.js:324:11)
       at Object.<anonymous> (__tests__/import-from-d-ts-no-js.spec.ts:1:1)
 
 PASS __tests__/import-from-d-ts-has-js.spec.ts

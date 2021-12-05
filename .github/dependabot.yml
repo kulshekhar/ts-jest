@@ -8,12 +8,21 @@ updates:
   - package-ecosystem: github-actions
     directory: /
     schedule:
-      interval: weekly
-  - package-ecosystem: 'npm' # See documentation for possible values
-    directory: '/' # Location of package manifests
-    schedule:
       interval: 'daily'
-    reviewers:
-      - 'ahnpnl'
     commit-message:
       prefix: 'build(deps-dev)'
+    labels:
+      - 'dependencies'
+
+  - package-ecosystem: 'npm'
+    directory: /
+    schedule:
+      interval: 'daily'
+    ignore:
+      - dependency-name: 'jest*'
+      - dependency-name: '@jest*'
+    commit-message:
+      prefix: 'build(deps-dev)'
+    labels:
+      - 'dependencies'
+    versioning-strategy: increase-if-necessary
