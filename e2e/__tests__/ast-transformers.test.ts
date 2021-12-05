@@ -63,10 +63,14 @@ describe('hoist-jest', () => {
 })
 
 describe('transformer-in-ts', () => {
-  const TRANSFORMER_IN_TS_DIR_NAME = `${AST_TRANSFORMERS_DIR_NAME}/transformer-in-ts`
+  const DIR = path.join(__dirname, '..', AST_TRANSFORMERS_DIR_NAME, 'transformer-in-ts')
 
-  test(`successfully runs the tests inside ${TRANSFORMER_IN_TS_DIR_NAME}`, () => {
-    const { json } = runWithJson(TRANSFORMER_IN_TS_DIR_NAME)
+  beforeAll(() => {
+    runNpmInstall(DIR)
+  })
+
+  test(`successfully runs the tests inside ${DIR}`, () => {
+    const { json } = runWithJson(DIR)
 
     expect(json.success).toBe(true)
   })

@@ -47,6 +47,7 @@ export const enum Deprecations {
 export const enum ImportReasons {
   TsJest = 'Using "ts-jest" requires this package to be installed.',
   BabelJest = 'Using "babel-jest" requires this package to be installed.',
+  EsBuild = 'Using "esbuild" requires this package to be installed.',
 }
 
 /**
