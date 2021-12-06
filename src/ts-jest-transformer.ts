@@ -10,6 +10,7 @@ import { ConfigSet } from './config'
 import { DECLARATION_TYPE_EXT, JS_JSX_REGEX, TS_TSX_REGEX } from './constants'
 import type { CompilerInstance, DepGraphInfo, ProjectConfigTsJest, TransformOptionsTsJest } from './types'
 import { parse, stringify, JsonableValue, rootLogger } from './utils'
+import { importer } from './utils/importer'
 import { Errors, interpolate } from './utils/messages'
 import { sha1 } from './utils/sha1'
 import { VersionCheckers } from './utils/version-checkers'
@@ -22,6 +23,11 @@ interface CachedConfigSet {
   depGraphs: Map<string, DepGraphInfo>
   tsResolvedModulesCachePath: string | undefined
   watchMode: boolean
+}
+
+interface TsJestHooksMap {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  afterProcess?(args: any[], result: string | TransformedSource): string | TransformedSource | void
 }
 
 /**
@@ -144,6 +150,13 @@ export class TsJestTransformer implements SyncTransformer {
     const isDefinitionFile = filePath.endsWith(DECLARATION_TYPE_EXT)
     const isJsFile = JS_JSX_REGEX.test(filePath)
     const isTsFile = !isDefinitionFile && TS_TSX_REGEX.test(filePath)
+    let hooksFile = process.env.TS_JEST_HOOKS
+    let hooks: TsJestHooksMap | undefined
+    /* istanbul ignore next (cover by e2e) */
+    if (hooksFile) {
+      hooksFile = path.resolve(configs.cwd, hooksFile)
+      hooks = importer.tryTheseOr(hooksFile, {})
+    }
     if (shouldStringifyContent) {
       // handles here what we should simply stringify
       result = `module.exports=${stringify(fileContent)}`
@@ -178,6 +191,15 @@ export class TsJestTransformer implements SyncTransformer {
 
       // do not instrument here, jest will do it anyway afterwards
       result = babelJest.process(result, filePath, { ...transformOptions, instrument: false })
+    }
+    // This is not supposed to be a public API but we keep it as some people use it
+    if (hooks?.afterProcess) {
+      this._logger.debug({ fileName: filePath, hookName: 'afterProcess' }, 'calling afterProcess hook')
+
+      const newResult = hooks.afterProcess([fileContent, filePath, transformOptions.config, transformOptions], result)
+      if (newResult) {
+        return newResult
+      }
     }
 
     return result
