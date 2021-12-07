@@ -13,10 +13,9 @@ import Module from 'module'
 import { dirname, extname, isAbsolute, join, normalize, resolve } from 'path'
 
 import { LogContexts, Logger } from 'bs-logger'
-import { transformSync } from 'esbuild'
 import { globsToMatcher } from 'jest-util'
 import json5 from 'json5'
-import type { CompilerOptions, Diagnostic, FormatDiagnosticsHost, ParsedCommandLine } from 'typescript'
+import type * as ts from 'typescript'
 
 import { DEFAULT_JEST_TEST_MATCH, JS_JSX_EXTENSIONS } from '../constants'
 import type { RawCompilerOptions } from '../raw-compiler-options'
@@ -31,7 +30,8 @@ import type {
   TsJestGlobalOptions,
   TTypeScript,
 } from '../types'
-import { stringify, rootLogger } from '../utils'
+import { TsCompilerInstance } from '../types'
+import { rootLogger, stringify } from '../utils'
 import { backportJestConfig } from '../utils/backports'
 import { importer } from '../utils/importer'
 import { Errors, ImportReasons, interpolate } from '../utils/messages'
@@ -119,7 +119,7 @@ export class ConfigSet {
   cacheSuffix!: string
   tsCacheDir: string | undefined
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  parsedTsConfig!: ParsedCommandLine | Record<string, any>
+  parsedTsConfig!: ts.ParsedCommandLine | Record<string, any>
   resolvedTransformers: TsJestAstTransformer = {
     before: [],
     after: [],
@@ -161,7 +161,7 @@ export class ConfigSet {
   /**
    * @internal
    */
-  private readonly _overriddenCompilerOptions: Partial<CompilerOptions> = {
+  private readonly _overriddenCompilerOptions: Partial<ts.CompilerOptions> = {
     inlineSourceMap: false,
     // we don't want to create declaration files
     declaration: false,
@@ -316,13 +316,22 @@ export class ConfigSet {
     const { astTransformers } = options
     if (astTransformers) {
       const resolveTransformerFunc = (transformerPath: string) => {
-        let transformerFunc
+        let transformerFunc: {
+          version: number
+          name: string
+          factory: (
+            compilerInstance: TsCompilerInstance,
+            options?: Record<string, unknown>,
+          ) => (ctx: ts.TransformationContext) => ts.Transformer<ts.SourceFile>
+        }
         if (extname(transformerPath) === '.ts') {
-          const compiledTransformer = transformSync(readFileSync(transformerPath, 'utf-8'), {
-            loader: 'ts',
-            format: 'cjs',
-            target: 'es2015',
-          }).code
+          const compiledTransformer = importer
+            .esBuild(ImportReasons.EsBuild)
+            .transformSync(readFileSync(transformerPath, 'utf-8'), {
+              loader: 'ts',
+              format: 'cjs',
+              target: 'es2015',
+            }).code
           transformerFunc = requireFromString(compiledTransformer, transformerPath.replace('.ts', '.js'))
         } else {
           transformerFunc = require(transformerPath)
@@ -423,8 +432,11 @@ export class ConfigSet {
   /**
    * @internal
    */
-  private _getAndResolveTsConfig(compilerOptions?: RawCompilerOptions, resolvedConfigFile?: string): ParsedCommandLine {
-    const result = this._resolveTsConfig(compilerOptions, resolvedConfigFile) as ParsedCommandLine
+  private _getAndResolveTsConfig(
+    compilerOptions?: RawCompilerOptions,
+    resolvedConfigFile?: string,
+  ): ts.ParsedCommandLine {
+    const result = this._resolveTsConfig(compilerOptions, resolvedConfigFile) as ts.ParsedCommandLine
     const { _overriddenCompilerOptions: forcedOptions } = this
     const finalOptions = result.options
     // Target ES2015 output by default (instead of ES3).
@@ -519,7 +531,7 @@ export class ConfigSet {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   protected _resolveTsConfig(compilerOptions?: RawCompilerOptions, resolvedConfigFile?: string): Record<string, any>
   // eslint-disable-next-line no-dupe-class-members
-  protected _resolveTsConfig(compilerOptions?: RawCompilerOptions, resolvedConfigFile?: string): ParsedCommandLine {
+  protected _resolveTsConfig(compilerOptions?: RawCompilerOptions, resolvedConfigFile?: string): ts.ParsedCommandLine {
     let config = { compilerOptions: Object.create(null) }
     let basePath = normalizeSlashes(this.rootDir)
     const ts = this.compilerModule
@@ -559,7 +571,7 @@ export class ConfigSet {
     return this._stringifyContentRegExp ? this._stringifyContentRegExp.test(filePath) : false
   }
 
-  raiseDiagnostics(diagnostics: Diagnostic[], filePath?: string, logger?: Logger): void {
+  raiseDiagnostics(diagnostics: ts.Diagnostic[], filePath?: string, logger?: Logger): void {
     const { ignoreCodes } = this._diagnostics
     const { DiagnosticCategory } = this.compilerModule
     const filteredDiagnostics =
@@ -594,12 +606,12 @@ export class ConfigSet {
   /**
    * @internal
    */
-  private _createTsError(diagnostics: readonly Diagnostic[]): TSError {
+  private _createTsError(diagnostics: readonly ts.Diagnostic[]): TSError {
     const formatDiagnostics = this._diagnostics.pretty
       ? this.compilerModule.formatDiagnosticsWithColorAndContext
       : this.compilerModule.formatDiagnostics
     /* istanbul ignore next (not possible to cover) */
-    const diagnosticHost: FormatDiagnosticsHost = {
+    const diagnosticHost: ts.FormatDiagnosticsHost = {
       getNewLine: () => '\n',
       getCurrentDirectory: () => this.cwd,
       getCanonicalFileName: (path: string) => path,

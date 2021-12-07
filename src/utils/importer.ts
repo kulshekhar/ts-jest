@@ -1,4 +1,5 @@
 import type { TBabelCore, TBabelJest, TTypeScript } from '../types'
+import type { TEsBuild } from '../types'
 
 import { rootLogger } from './logger'
 import { Memoize } from './memoize'
@@ -57,6 +58,10 @@ export class Importer {
 
   typescript(why: ImportReasons, which: string): TTypeScript {
     return this._import(why, which)
+  }
+
+  esBuild(why: ImportReasons): TEsBuild {
+    return this._import(why, 'esbuild')
   }
 
   @Memoize((...args: string[]) => args.join(':'))
@@ -119,12 +124,12 @@ export class Importer {
     return unpatched
   }
 
-  protected _import(
+  protected _import<T>(
     why: string,
     moduleName: string,
     { alternatives = [], installTip = moduleName }: ImportOptions = {},
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  ): any {
+  ): T {
     // try to load any of the alternative after trying main one
     const res = this.tryThese(moduleName, ...alternatives)
     // if we could load one, return it

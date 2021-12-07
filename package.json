@@ -52,7 +52,6 @@
   "homepage": "https://kulshekhar.github.io/ts-jest",
   "dependencies": {
     "bs-logger": "0.x",
-    "esbuild": "~0.14.0",
     "fast-json-stable-stringify": "2.x",
     "jest-util": "^27.0.0",
     "json5": "2.x",
@@ -65,17 +64,21 @@
     "@babel/core": ">=7.0.0-beta.0 <8",
     "@types/jest": "^27.0.0",
     "babel-jest": ">=27.0.0 <28",
+    "esbuild": "~0.14.0",
     "jest": "^27.0.0",
     "typescript": ">=3.8 <5.0"
   },
   "peerDependenciesMeta": {
-    "babel-jest": {
-      "optional": true
-    },
     "@babel/core": {
       "optional": true
     },
     "@types/jest": {
+      "optional": true
+    },
+    "babel-jest": {
+      "optional": true
+    },
+    "esbuild": {
       "optional": true
     }
   },
@@ -111,6 +114,7 @@
     "@typescript-eslint/parser": "^5.3.0",
     "conventional-changelog-cli": "2.x",
     "cross-spawn": "latest",
+    "esbuild": "~0.14.2",
     "eslint": "8.4.0",
     "eslint-config-prettier": "latest",
     "eslint-plugin-import": "latest",
