@@ -10,6 +10,7 @@ import { SOURCE_MAPPING_PREFIX, TsJestCompiler } from './compiler'
 import { CACHE_KEY_EL_SEPARATOR, TsJestTransformer } from './ts-jest-transformer'
 import type { DepGraphInfo } from './types'
 import { stringify } from './utils'
+import { importer } from './utils/importer'
 import { sha1 } from './utils/sha1'
 
 const logTarget = logTargetMock()
@@ -442,6 +443,18 @@ describe('TsJestTransformer', () => {
       if (filePath === 'foo.bar') {
         expect(logTarget.filteredLines(LogLevels.warn)[0]).toMatchSnapshot()
       }
+    })
+
+    test('should use afterHook file', () => {
+      importer.tryTheseOr = jest.fn().mockReturnValueOnce({ afterProcess: () => 'foo' })
+      process.env.TS_JEST_HOOKS = __filename
+
+      const fileContent = 'type Foo = number'
+      const filePath = 'foo.d.ts'
+
+      expect(tr.process(fileContent, filePath, baseTransformOptions)).toEqual('foo')
+
+      delete process.env.TS_JEST_HOOKS
     })
   })
 
