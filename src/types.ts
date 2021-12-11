@@ -1,7 +1,6 @@
 import type { Transformer, TransformOptions } from '@jest/transform'
 import type { Config } from '@jest/types'
 import type * as _babel from 'babel__core'
-import type * as _esbuild from 'esbuild'
 import type * as _ts from 'typescript'
 
 import type { ConfigSet } from './config'
@@ -27,7 +26,13 @@ declare module '@jest/types' {
  */
 export type TBabelCore = typeof _babel
 export type TTypeScript = typeof _ts
-export type TEsBuild = typeof _esbuild
+// Stimulate `esbuild` type to avoid import `esbuild` while building the assets which are shipped to npm
+export interface TEsBuild {
+  transformSync(
+    input: string,
+    options?: { loader: 'ts' | 'js'; format: 'cjs' | 'esm'; target: string },
+  ): { code: string; map: string }
+}
 /**
  * @internal
  */
