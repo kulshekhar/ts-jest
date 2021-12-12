@@ -1,6 +1,6 @@
 {
   "name": "ts-jest",
-  "version": "27.1.1",
+  "version": "27.1.2",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "bin": {
@@ -115,7 +115,7 @@
     "conventional-changelog-cli": "2.x",
     "cross-spawn": "latest",
     "esbuild": "~0.14.2",
-    "eslint": "8.4.1",
+    "eslint": "^8.4.1",
     "eslint-config-prettier": "latest",
     "eslint-plugin-import": "latest",
     "eslint-plugin-jest": "latest",
@@ -136,7 +136,6 @@
     "lodash.set": "^4.3.2",
     "node-fetch": "^3.0.0",
     "prettier": "^2.4.0",
-    "react": "^17.0.2",
     "typescript": "~4.5.2"
   },
   "lint-staged": {
