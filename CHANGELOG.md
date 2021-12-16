@@ -1,10 +1,19 @@
+## [27.1.2](https://github.com/kulshekhar/ts-jest/compare/v27.1.1...v27.1.2) (2021-12-15)
+
+
+### Bug Fixes
+
+* stimulate `esbuild` type to avoid importing `esbuild` directly ([#3147](https://github.com/kulshekhar/ts-jest/issues/3147)) ([9ace0a9](https://github.com/kulshekhar/ts-jest/commit/9ace0a9991da8bcb0f04a2e603f7601d6fb630e7))
+
+
+
 ## [27.1.1](https://github.com/kulshekhar/ts-jest/compare/v27.1.0...v27.1.1) (2021-12-07)
 
 
 ### Bug Fixes
 
 * bring back `afterProcess` hook ([#3132](https://github.com/kulshekhar/ts-jest/issues/3132)) ([2b6b86e](https://github.com/kulshekhar/ts-jest/commit/2b6b86e01dcd3d9d9906f24fe3db5cadb799146a))
-* make `esbuild` as optional peer dependency ([#3129](https://github.com/kulshekhar/ts-jest/issues/3129)) ([20258de](https://github.com/kulshekhar/ts-jest/commit/20258de54c9c10f8d2495bda174f9865a3cebc91))
+* make `esbuild` as optional peer dependency ([#3129](https://github.com/kulshekhar/ts-jest/pull/3129)) ([20258de](https://github.com/kulshekhar/ts-jest/commit/20258de54c9c10f8d2495bda174f9865a3cebc91))
 
 
 
