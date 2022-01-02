@@ -386,6 +386,8 @@ export class TsCompiler implements TsCompilerInstance {
     if (!hit) {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       this._fileVersionCache!.set(fileName, 1)
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      this._fileContentCache!.set(fileName, contents)
       shouldIncrementProjectVersion = true
     } else {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
