@@ -27,7 +27,7 @@ Create a new `tsconfig.spec.json` at the root of your project with the following
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "jsx": "react"
+    "jsx": "react-native"
   }
 }
 ```
@@ -38,8 +38,6 @@ In the same way that you moved Babel config, move Jest config from `jest` key of
 
 ```js
 // jest.config.js
-const { defaults: tsjPreset } = require('ts-jest/presets')
-
 module.exports = {
   preset: 'react-native',
   globals: {
