@@ -1,3 +1,12 @@
+## [27.1.3](https://github.com/kulshekhar/ts-jest/compare/v27.1.2...v27.1.3) (2022-01-14)
+
+
+### Bug Fixes
+
+* **compiler:** update memory cache for compiler using received file content ([#3194](https://github.com/kulshekhar/ts-jest/issues/3194)) ([e4d9541](https://github.com/kulshekhar/ts-jest/commit/e4d9541f262ca14cb25563c757c0f2345dbf5c51))
+
+
+
 ## [27.1.2](https://github.com/kulshekhar/ts-jest/compare/v27.1.1...v27.1.2) (2021-12-15)
 
 
