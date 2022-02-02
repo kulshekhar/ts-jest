@@ -103,7 +103,7 @@
     "@types/lodash.memoize": "4.x",
     "@types/lodash.set": "4.x",
     "@types/micromatch": "4.x",
-    "@types/node": "17.0.13",
+    "@types/node": "17.0.14",
     "@types/node-fetch": "^3.0.3",
     "@types/react": "17.x",
     "@types/rimraf": "^3.0.2",
