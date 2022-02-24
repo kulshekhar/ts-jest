@@ -63,7 +63,7 @@ jobs:
       # https://github.com/marketplace/actions/checkout
       - uses: actions/checkout@v2
       # https://github.com/marketplace/actions/setup-node-js-environment
-      - uses: actions/setup-node@v2.5.1
+      - uses: actions/setup-node@v3.0.0
         with:
           node-version: 12
           registry-url: https://registry.npmjs.org/
