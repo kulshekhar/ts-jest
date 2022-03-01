@@ -41,7 +41,7 @@ jobs:
       # it
       - name: Checkout code
         # https://github.com/marketplace/actions/checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
         # Runs a single command using the runners shell
       - name: Create release for tag
@@ -61,7 +61,7 @@ jobs:
 
     steps:
       # https://github.com/marketplace/actions/checkout
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       # https://github.com/marketplace/actions/setup-node-js-environment
       - uses: actions/setup-node@v3.0.0
         with:
