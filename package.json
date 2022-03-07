@@ -109,7 +109,7 @@
     "@types/rimraf": "^3.0.2",
     "@types/semver": "latest",
     "@types/yargs": "latest",
-    "@types/yargs-parser": "20.x",
+    "@types/yargs-parser": "21.x",
     "@typescript-eslint/eslint-plugin": "^5.3.0",
     "@typescript-eslint/parser": "^5.3.0",
     "conventional-changelog-cli": "2.x",
