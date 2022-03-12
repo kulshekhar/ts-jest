@@ -12,7 +12,6 @@ import * as _backports from '../utils/backports'
 import { getPackageVersion } from '../utils/get-package-version'
 import { normalizeSlashes } from '../utils/normalize-slashes'
 import { sha1 } from '../utils/sha1'
-import { mocked } from '../utils/testing'
 
 import { ConfigSet, MY_DIGEST } from './config-set'
 
@@ -20,7 +19,7 @@ jest.mock('../utils/backports')
 jest.mock('../index')
 jest.mock('../utils/get-package-version')
 
-const backports = mocked(_backports)
+const backports = jest.mocked(_backports)
 
 backports.backportJestConfig.mockImplementation((_, config) => ({
   ...config,
@@ -428,9 +427,9 @@ describe('tsCacheDir', () => {
       std: '9.10.2',
       opt: '2.0.2',
     }
-    const mock: jest.MockInstance<string | undefined, [string]> = mocked(getPackageVersion).mockImplementation(
-      (moduleName: string) => realVersions[moduleName],
-    )
+    const mock: jest.MockInstance<string | undefined, [string]> = jest
+      .mocked(getPackageVersion)
+      .mockImplementation((moduleName: string) => realVersions[moduleName])
     const cs = createConfigSet({
       jestConfig: {
         cache: true,

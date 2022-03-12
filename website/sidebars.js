@@ -25,7 +25,6 @@ module.exports = {
         'guides/esm-support',
         'guides/mock-es6-class',
         'guides/react-native',
-        'guides/test-helpers',
         'guides/troubleshooting',
         'guides/using-with-monorepo',
       ],
