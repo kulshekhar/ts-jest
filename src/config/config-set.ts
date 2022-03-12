@@ -500,8 +500,8 @@ export class ConfigSet {
     if (
       compilationTarget &&
       !this.babelConfig &&
-      ((nodeJsVer.startsWith('v10') && compilationTarget > this.compilerModule.ScriptTarget.ES2018) ||
-        (nodeJsVer.startsWith('v12') && compilationTarget > this.compilerModule.ScriptTarget.ES2019))
+      nodeJsVer.startsWith('v12') &&
+      compilationTarget > this.compilerModule.ScriptTarget.ES2019
     ) {
       const message = interpolate(Errors.MismatchNodeTargetMapping, {
         nodeJsVer: process.version,
