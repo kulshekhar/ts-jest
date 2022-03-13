@@ -2,14 +2,13 @@ import * as _fs from 'fs'
 import { normalize, resolve } from 'path'
 
 import { logTargetMock, mockObject, mockWriteStream } from '../__helpers__/mocks'
-import { mocked } from '../utils/testing'
 
 import { processArgv } from '.'
 
 // === helpers ================================================================
 jest.mock('fs')
 
-const fs = mocked(_fs)
+const fs = jest.mocked(_fs)
 let lastExitCode: number | undefined
 
 const runCli = async (
