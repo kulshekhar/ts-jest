@@ -1,4 +1,4 @@
-import { createJestPreset, pathsToModuleNameMapper } from 'ts-jest/utils'
+import { createJestPreset, pathsToModuleNameMapper } from 'ts-jest'
 
 test('should expose mocked/createJestPreset/pathsToModuleNameMapper', () => {
   expect(typeof createJestPreset).toBe('function')
