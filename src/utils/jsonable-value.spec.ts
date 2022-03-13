@@ -1,10 +1,9 @@
 import * as _json from './json'
 import { JsonableValue } from './jsonable-value'
-import { mocked } from './testing'
 
 jest.mock('./json')
 
-const { stringify } = mocked(_json)
+const { stringify } = jest.mocked(_json)
 
 stringify.mockImplementation((v) => JSON.stringify(v))
 
