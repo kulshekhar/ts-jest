@@ -1,6 +1,6 @@
 /** @type {import('../../../dist').InitialOptionsTsJest} */
 module.exports = {
-  displayName: 'babel-file',
+  displayName: 'babel-js-file',
   roots: ['<rootDir>', '<rootDir>/../__tests__/for-babel'],
   globals: {
     'ts-jest': {

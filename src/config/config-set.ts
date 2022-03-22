@@ -242,7 +242,8 @@ export class ConfigSet {
       const baseBabelCfg = { cwd: this.cwd }
       if (typeof options.babelConfig === 'string') {
         const babelCfgPath = this.resolvePath(options.babelConfig)
-        if (extname(options.babelConfig) === '.js') {
+        const babelFileExtName = extname(options.babelConfig)
+        if (babelFileExtName === '.js' || babelFileExtName === '.cjs') {
           this.babelConfig = {
             ...baseBabelCfg,
             ...require(babelCfgPath),
