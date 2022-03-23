@@ -275,35 +275,37 @@ describe('babelJestTransformer', () => {
     expect(typeof babelJest.process).toBe('function')
   })
 
-  it('should return babelJestTransformer with javascript file path', () => {
-    const FILE = 'src/__mocks__/babel-foo.config.js'
-    const cs = createConfigSet({
-      jestConfig: {
-        globals: {
-          'ts-jest': {
-            babelConfig: FILE,
+  it.each(['src/__mocks__/babel-foo.config.js', 'src/__mocks__/babel-foo.config.cjs'])(
+    'should return babelJestTransformer with javascript file path',
+    (babelFilePath) => {
+      const cs = createConfigSet({
+        jestConfig: {
+          globals: {
+            'ts-jest': {
+              babelConfig: babelFilePath,
+            },
           },
         },
-      },
-      resolve: null,
-    })
-    const babelJest = cs.babelJestTransformer as Transformer
+        resolve: null,
+      })
+      const babelJest = cs.babelJestTransformer as Transformer
 
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const babelCfg = cs.babelConfig!
-    expect(babelCfg.cwd).toEqual(cs.cwd)
-    expect(babelCfg.presets).toMatchInlineSnapshot(`
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      const babelCfg = cs.babelConfig!
+      expect(babelCfg.cwd).toEqual(cs.cwd)
+      expect(babelCfg.presets).toMatchInlineSnapshot(`
       Array [
         "@babel/preset-env",
         "@babel/preset-typescript",
         "@babel/preset-react",
       ]
     `)
-    expect(babelJest.canInstrument).toBe(true)
-    expect(babelJest.createTransformer).toBeUndefined()
-    expect(typeof babelJest.getCacheKey).toBe('function')
-    expect(typeof babelJest.process).toBe('function')
-  })
+      expect(babelJest.canInstrument).toBe(true)
+      expect(babelJest.createTransformer).toBeUndefined()
+      expect(typeof babelJest.getCacheKey).toBe('function')
+      expect(typeof babelJest.process).toBe('function')
+    },
+  )
 
   it('should return babelJestTransformer with loaded config object', () => {
     /* eslint-disable-next-line jest/no-mocks-import */
