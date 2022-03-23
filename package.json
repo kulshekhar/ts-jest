@@ -64,7 +64,6 @@
     "@babel/core": ">=7.0.0-beta.0 <8",
     "@types/jest": "^27.0.0",
     "babel-jest": ">=27.0.0 <28",
-    "esbuild": "~0.14.0",
     "jest": "^27.0.0",
     "typescript": ">=3.8 <5.0"
   },
