@@ -1,3 +1,3 @@
 module.exports = {
-  projects: ['babel-enabled', 'babel-file'],
+  projects: ['babel-enabled', 'babel-js-file', 'babel-cjs-file'],
 }
