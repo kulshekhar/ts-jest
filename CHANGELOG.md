@@ -1,3 +1,14 @@
+## [27.1.4](https://github.com/kulshekhar/ts-jest/compare/v27.1.3...v27.1.4) (2022-03-24)
+
+
+### Bug Fixes
+
+* **compiler:** revert [#3194](https://github.com/kulshekhar/ts-jest/issues/3194) ([#3362](https://github.com/kulshekhar/ts-jest/issues/3362)) ([2b7dffe](https://github.com/kulshekhar/ts-jest/commit/2b7dffeac940f779922c43cefba3f741a3911b49)), closes [#3272](https://github.com/kulshekhar/ts-jest/issues/3272)
+* remove `esbuild` from peer dependency ([#3360](https://github.com/kulshekhar/ts-jest/issues/3360)) ([8c8c1ca](https://github.com/kulshekhar/ts-jest/commit/8c8c1ca615b1edeedc9f4282557c28e82acee543)), closes [#3346](https://github.com/kulshekhar/ts-jest/issues/3346)
+* support Babel config file with `.cjs` extension ([#3361](https://github.com/kulshekhar/ts-jest/issues/3361)) ([5e5ac4a](https://github.com/kulshekhar/ts-jest/commit/5e5ac4ac286bdcce157d0bdc31f3a57202fdbdfe)), closes [#3335](https://github.com/kulshekhar/ts-jest/issues/3335)
+
+
+
 ## [27.1.3](https://github.com/kulshekhar/ts-jest/compare/v27.1.2...v27.1.3) (2022-01-14)
 
 
