@@ -3,7 +3,7 @@ id: react-native
 title: Using with React Native
 ---
 
-To use `ts-jest` with React Native + TypeScript and Babel 7, you'll first need to follow [this tutorial](https://facebook.github.io/react-native/blog/2018/05/07/using-typescript-with-react-native).
+To use `ts-jest` with React Native + TypeScript and Babel 7, you'll first need to follow [this tutorial](https://reactnative.dev/blog/2018/05/07/using-typescript-with-react-native).
 
 After that, some little modifications will be required as follows:
 
