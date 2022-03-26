@@ -36,7 +36,7 @@ export const foo = {
 
 ```ts
 // foo.spec.ts
-import { mocked } from 'ts-jest'
+import { mocked } from 'ts-jest/utils'
 import { foo } from './foo'
 jest.mock('./foo')
 
