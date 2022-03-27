@@ -5,7 +5,7 @@
   "scripts": {
     "docusaurus": "docusaurus",
     "start": "docusaurus start",
-    "build": "docusaurus build",
+    "build": "npx tsc && docusaurus build",
     "swizzle": "docusaurus swizzle",
     "deploy": "GIT_USER=kulshekhar USE_SSH=true docusaurus deploy",
     "serve": "docusaurus serve",
@@ -13,19 +13,22 @@
   },
   "dependencies": {
     "@akebifiky/remark-simple-plantuml": "^1.0.2",
-    "@docusaurus/core": "2.0.0-beta.9",
-    "@docusaurus/plugin-ideal-image": "2.0.0-beta.9",
-    "@docusaurus/plugin-pwa": "2.0.0-beta.9",
-    "@docusaurus/preset-classic": "2.0.0-beta.9",
-    "@mdx-js/react": "^1.6.21",
+    "@docusaurus/core": "^2.0.0-beta.18",
+    "@docusaurus/plugin-ideal-image": "^2.0.0-beta.18",
+    "@docusaurus/plugin-pwa": "^2.0.0-beta.18",
+    "@docusaurus/preset-classic": "^2.0.0-beta.18",
+    "@mdx-js/react": "^1.6.22",
     "clsx": "^1.1.1",
     "latest-version": "^6.0.0",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2"
+    "react": "^16.14.0",
+    "react-dom": "^16.14.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.16.0",
-    "@types/react": "^17.0.35"
+    "@babel/core": "^7.17.8",
+    "@docusaurus/module-type-aliases": "^2.0.0-beta.18",
+    "@tsconfig/docusaurus": "^1.0.5",
+    "@types/react": "^16.14.24",
+    "typescript": "~4.5.5"
   },
   "browserslist": {
     "production": [

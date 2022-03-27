@@ -1,12 +1,9 @@
-// eslint-disable-next-line no-unused-vars
 import Link from '@docusaurus/Link'
 import { translate } from '@docusaurus/Translate'
 import useBaseUrl from '@docusaurus/useBaseUrl'
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext'
-// eslint-disable-next-line no-unused-vars
 import Layout from '@theme/Layout'
 import clsx from 'clsx'
-// eslint-disable-next-line no-unused-vars
 import React from 'react'
 
 import styles from './styles.module.css'
@@ -91,7 +88,7 @@ function Home() {
             <div className="container text--center">
               <div className="row">
                 {features.map((props, idx) => (
-                  <Feature key={idx} {...props} />
+                  <Feature imageUrl={''} key={idx} {...props} />
                 ))}
               </div>
             </div>
