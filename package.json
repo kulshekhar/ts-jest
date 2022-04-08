@@ -104,7 +104,7 @@
     "@types/micromatch": "4.x",
     "@types/node": "17.0.23",
     "@types/node-fetch": "^3.0.3",
-    "@types/react": "17.x",
+    "@types/react": "18.x",
     "@types/rimraf": "^3.0.2",
     "@types/semver": "latest",
     "@types/yargs": "latest",
