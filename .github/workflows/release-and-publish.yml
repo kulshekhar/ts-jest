@@ -14,10 +14,15 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in
 # parallel
+permissions:
+  contents: read
+
 jobs:
   # For more information on setting outputs and reading them have a look at
   # https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjobs_idoutputs
   setup_variables:
+    permissions:
+      contents: none
     runs-on: ubuntu-latest
     outputs:
       isLatest: ${{ steps.release_type.outputs.latest }}
@@ -30,6 +35,8 @@ jobs:
         env:
           LATEST: ${{ contains(github.ref, '-next') != true && contains(github.ref, '-rc') != true }}
   create_release:
+    permissions:
+      contents: write # for actions/create-release to create a release
     needs: [setup_variables]
     # The type of runner that the job will run on
     runs-on: ubuntu-latest

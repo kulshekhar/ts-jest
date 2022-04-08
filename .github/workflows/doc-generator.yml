@@ -12,6 +12,9 @@ concurrency:
   group: doc-generator-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
+permissions:
+  contents: read
+
 jobs:
   checks:
     if: github.event_name != 'push'
@@ -29,6 +32,8 @@ jobs:
           npm run build
 
   build-and-deploy:
+    permissions:
+      contents: write # for JamesIves/github-pages-deploy-action to push changes in repo
     if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     steps:
