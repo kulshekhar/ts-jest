@@ -12,8 +12,14 @@ concurrency:
   group: ci-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
+permissions:
+  contents: read
+
 jobs:
   cleanup-runs:
+    permissions:
+      actions: write # for rokroskar/workflow-run-cleanup-action to obtain workflow name & cancel it
+      contents: read # for rokroskar/workflow-run-cleanup-action to obtain branch
     runs-on: ubuntu-latest
     steps:
       - uses: rokroskar/workflow-run-cleanup-action@master
@@ -52,6 +58,9 @@ jobs:
         run: npm run lint-prettier-ci
 
   test:
+    permissions:
+      checks: write # for coverallsapp/github-action to create new checks
+      contents: read # for actions/checkout to fetch code
     name: Node v${{ matrix.node-version }} on ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -93,6 +102,8 @@ jobs:
         run: npm run test-examples
 
   finish:
+    permissions:
+      checks: write # for coverallsapp/github-action to create new checks
     needs: test
     runs-on: ubuntu-latest
     steps:
