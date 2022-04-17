@@ -1,4 +1,4 @@
-/** @type {import('../../../../dist').InitialOptionsTsJest} */
+/** @type {import('../../../dist').InitialOptionsTsJest} */
 module.exports = {
   automock: true,
   globals: {
@@ -9,11 +9,10 @@ module.exports = {
       },
     },
   },
-  roots: ['<rootDir>', '<rootDir>/../__tests__'],
   moduleNameMapper: {
     react$: '<rootDir>/node_modules/react',
   },
   transform: {
-    '^.+.[tj]sx?$': 'ts-jest',
+    '^.+.[tj]sx?$': '<rootDir>/../../../dist/index.js',
   },
 }

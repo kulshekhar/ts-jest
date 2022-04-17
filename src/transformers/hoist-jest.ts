@@ -8,7 +8,7 @@ import type { TsCompilerInstance } from '../types'
  * Remember to increase the version whenever transformer's content is changed. This is to inform Jest to not reuse
  * the previous cache which contains old transformer's content
  */
-export const version = 3
+export const version = 4
 // Used for constructing cache key
 export const name = 'hoist-jest'
 
@@ -21,7 +21,6 @@ const JEST_GLOBAL_NAME = 'jest'
 export function factory({ configSet }: TsCompilerInstance) {
   const logger = configSet.logger.child({ namespace: name })
   const ts = configSet.compilerModule
-  const tsFactory = ts.factory ? ts.factory : ts
   const importNamesOfJestObj: string[] = []
 
   const isJestGlobalImport = (node: _ts.Node): node is _ts.ImportDeclaration => {
@@ -87,6 +86,7 @@ export function factory({ configSet }: TsCompilerInstance) {
     if (statements.length <= 1) {
       return statements
     }
+
     const pivot = statements[0]
     const leftPart: _ts.Statement[] = []
     const rightPart: _ts.Statement[] = []
@@ -109,11 +109,11 @@ export function factory({ configSet }: TsCompilerInstance) {
       const resultNode = ts.visitEachChild(node, visitor, ctx)
       // Since we use `visitEachChild`, we go upwards tree so all children node elements are checked first
       if (ts.isBlock(resultNode) && canHoistInBlockScope(resultNode)) {
-        const newNodeArrayStatements = tsFactory.createNodeArray(
+        const newNodeArrayStatements = ts.factory.createNodeArray(
           sortStatements(resultNode.statements as unknown as _ts.Statement[]),
         )
 
-        return tsFactory.updateBlock(resultNode, newNodeArrayStatements)
+        return ts.factory.updateBlock(resultNode, newNodeArrayStatements)
       } else {
         if (ts.isSourceFile(resultNode)) {
           resultNode.statements.forEach((stmt) => {
@@ -141,30 +141,20 @@ export function factory({ configSet }: TsCompilerInstance) {
               }
             }
           })
-          const newNodeArrayStatements = tsFactory.createNodeArray(
+          const newNodeArrayStatements = ts.factory.createNodeArray(
             sortStatements(resultNode.statements as unknown as _ts.Statement[]),
           )
           importNamesOfJestObj.length = 0
 
-          return ts.factory
-            ? ts.factory.updateSourceFile(
-                resultNode,
-                newNodeArrayStatements,
-                resultNode.isDeclarationFile,
-                resultNode.referencedFiles,
-                resultNode.typeReferenceDirectives,
-                resultNode.hasNoDefaultLib,
-                resultNode.libReferenceDirectives,
-              )
-            : ts.updateSourceFileNode(
-                resultNode,
-                newNodeArrayStatements,
-                resultNode.isDeclarationFile,
-                resultNode.referencedFiles,
-                resultNode.typeReferenceDirectives,
-                resultNode.hasNoDefaultLib,
-                resultNode.libReferenceDirectives,
-              )
+          return ts.factory.updateSourceFile(
+            resultNode,
+            newNodeArrayStatements,
+            resultNode.isDeclarationFile,
+            resultNode.referencedFiles,
+            resultNode.typeReferenceDirectives,
+            resultNode.hasNoDefaultLib,
+            resultNode.libReferenceDirectives,
+          )
         }
 
         return resultNode
