@@ -37,29 +37,16 @@ describe('transformer-options', () => {
 
 describe('hoist-jest', () => {
   const HOIST_JEST_DIR_NAME = 'hoist-jest'
-  const NON_TS_FACTORY_DIR_NAME = 'non-ts-factory'
-  const TS_FACTORY_DIR_NAME = 'ts-factory'
+  const DIR = path.join(__dirname, '..', AST_TRANSFORMERS_DIR_NAME, HOIST_JEST_DIR_NAME)
 
-  describe('non-ts-factory', () => {
-    const DIR = path.join(__dirname, '..', AST_TRANSFORMERS_DIR_NAME, HOIST_JEST_DIR_NAME, NON_TS_FACTORY_DIR_NAME)
-
-    beforeAll(() => {
-      runNpmInstall(DIR)
-      execa.sync('npm', ['install', '--no-package-lock', '--no-shrinkwrap', '--no-save', tsJestBundle], {
-        cwd: DIR,
-      })
+  beforeAll(() => {
+    runNpmInstall(DIR)
+    execa.sync('npm', ['install', '--no-package-lock', '--no-shrinkwrap', '--no-save', tsJestBundle], {
+      cwd: DIR,
     })
-
-    executeTest(`${AST_TRANSFORMERS_DIR_NAME}/${HOIST_JEST_DIR_NAME}/${NON_TS_FACTORY_DIR_NAME}`)
   })
 
-  describe('ts-factory', () => {
-    beforeAll(() => {
-      runNpmInstall(path.join(__dirname, '..', AST_TRANSFORMERS_DIR_NAME, HOIST_JEST_DIR_NAME, TS_FACTORY_DIR_NAME))
-    })
-
-    executeTest(`${AST_TRANSFORMERS_DIR_NAME}/${HOIST_JEST_DIR_NAME}/${TS_FACTORY_DIR_NAME}`)
-  })
+  executeTest(`${AST_TRANSFORMERS_DIR_NAME}/${HOIST_JEST_DIR_NAME}`)
 })
 
 describe('transformer-in-ts', () => {

@@ -168,7 +168,7 @@ const printer = ts.createPrinter()
 describe('hoist-jest', () => {
   test('should have correct transformer name and version', () => {
     expect(name).toBe('hoist-jest')
-    expect(version).toBe(3)
+    expect(version).toBe(4)
   })
 
   test('should hoist correctly when not using @jest/globals', () => {
