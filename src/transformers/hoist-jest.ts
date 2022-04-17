@@ -21,7 +21,6 @@ const JEST_GLOBAL_NAME = 'jest'
 export function factory({ configSet }: TsCompilerInstance) {
   const logger = configSet.logger.child({ namespace: name })
   const ts = configSet.compilerModule
-  const tsFactory = ts.factory ? ts.factory : ts
   const importNamesOfJestObj: string[] = []
 
   const isJestGlobalImport = (node: _ts.Node): node is _ts.ImportDeclaration => {
@@ -88,12 +87,21 @@ export function factory({ configSet }: TsCompilerInstance) {
       return statements
     }
 
-    return statements.sort((stmtA, stmtB) =>
-      isJestGlobalImport(stmtA) ||
-      (isHoistableStatement(stmtA) && !isHoistableStatement(stmtB) && !isJestGlobalImport(stmtB))
-        ? -1
-        : 1,
-    )
+    const pivot = statements[0]
+    const leftPart: _ts.Statement[] = []
+    const rightPart: _ts.Statement[] = []
+    for (let i = 1; i < statements.length; i++) {
+      const currentStatement = statements[i]
+      if (isJestGlobalImport(currentStatement)) {
+        leftPart.push(currentStatement)
+      } else {
+        isHoistableStatement(currentStatement) && !isHoistableStatement(pivot) && !isJestGlobalImport(pivot)
+          ? leftPart.push(currentStatement)
+          : rightPart.push(currentStatement)
+      }
+    }
+
+    return sortStatements(leftPart).concat(pivot, sortStatements(rightPart))
   }
 
   const createVisitor = (ctx: _ts.TransformationContext, _: _ts.SourceFile) => {
@@ -101,11 +109,11 @@ export function factory({ configSet }: TsCompilerInstance) {
       const resultNode = ts.visitEachChild(node, visitor, ctx)
       // Since we use `visitEachChild`, we go upwards tree so all children node elements are checked first
       if (ts.isBlock(resultNode) && canHoistInBlockScope(resultNode)) {
-        const newNodeArrayStatements = tsFactory.createNodeArray(
+        const newNodeArrayStatements = ts.factory.createNodeArray(
           sortStatements(resultNode.statements as unknown as _ts.Statement[]),
         )
 
-        return tsFactory.updateBlock(resultNode, newNodeArrayStatements)
+        return ts.factory.updateBlock(resultNode, newNodeArrayStatements)
       } else {
         if (ts.isSourceFile(resultNode)) {
           resultNode.statements.forEach((stmt) => {
@@ -133,30 +141,20 @@ export function factory({ configSet }: TsCompilerInstance) {
               }
             }
           })
-          const newNodeArrayStatements = tsFactory.createNodeArray(
+          const newNodeArrayStatements = ts.factory.createNodeArray(
             sortStatements(resultNode.statements as unknown as _ts.Statement[]),
           )
           importNamesOfJestObj.length = 0
 
-          return ts.factory
-            ? ts.factory.updateSourceFile(
-                resultNode,
-                newNodeArrayStatements,
-                resultNode.isDeclarationFile,
-                resultNode.referencedFiles,
-                resultNode.typeReferenceDirectives,
-                resultNode.hasNoDefaultLib,
-                resultNode.libReferenceDirectives,
-              )
-            : ts.updateSourceFileNode(
-                resultNode,
-                newNodeArrayStatements,
-                resultNode.isDeclarationFile,
-                resultNode.referencedFiles,
-                resultNode.typeReferenceDirectives,
-                resultNode.hasNoDefaultLib,
-                resultNode.libReferenceDirectives,
-              )
+          return ts.factory.updateSourceFile(
+            resultNode,
+            newNodeArrayStatements,
+            resultNode.isDeclarationFile,
+            resultNode.referencedFiles,
+            resultNode.typeReferenceDirectives,
+            resultNode.hasNoDefaultLib,
+            resultNode.libReferenceDirectives,
+          )
         }
 
         return resultNode
