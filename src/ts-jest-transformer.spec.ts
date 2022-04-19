@@ -463,11 +463,31 @@ describe('TsJestTransformer', () => {
       const sourceText = 'const foo = 1'
       const sourcePath = 'foo.ts'
       const tr = new TsJestTransformer()
-      tr.process = jest.fn()
+      // @ts-expect-error `processWithTs` is private
+      tr.processWithTs = jest.fn().mockReturnValueOnce('var foo = 1')
+      const transformOptions = {
+        ...baseTransformOptions,
+        config: {
+          ...baseTransformOptions.config,
+          globals: {
+            'ts-jest': {
+              babelConfig: true,
+            },
+          },
+        },
+      }
+      // @ts-expect-error `_configsFor` is private
+      const babelJest = tr._configsFor(transformOptions).babelJestTransformer!
+      jest.spyOn(babelJest, 'processAsync').mockResolvedValue('var foo = 1')
 
-      await tr.processAsync(sourceText, sourcePath, baseTransformOptions)
+      const resultFromTs = await tr.processAsync(sourceText, sourcePath, transformOptions)
 
-      expect(tr.process).toHaveBeenCalledWith(sourceText, sourcePath, baseTransformOptions)
+      // @ts-expect-error `processWithTs` is private
+      expect(tr.processWithTs).toHaveBeenCalledWith(sourceText, sourcePath, transformOptions)
+      expect(babelJest.processAsync).toHaveBeenCalledWith(resultFromTs, sourcePath, {
+        ...transformOptions,
+        instrument: false,
+      })
     })
   })
 })
