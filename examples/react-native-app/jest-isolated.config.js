@@ -1,11 +1,11 @@
-const baseEsmCfg = require('./jest-esm.config')
+const baseCfg = require('./jest.config')
 
 /** @type {import('ts-jest').InitialOptionsTsJest} */
 module.exports = {
-  ...baseEsmCfg,
+  ...baseCfg,
   globals: {
     'ts-jest': {
-      ...baseEsmCfg.globals['ts-jest'],
+      ...baseCfg.globals['ts-jest'],
       isolatedModules: true,
     },
   },
