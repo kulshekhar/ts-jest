@@ -230,7 +230,6 @@ describe('babelJestTransformer', () => {
     const babelCfg = cs.babelConfig!
     expect(babelCfg.cwd).toEqual(cs.cwd)
     expect(babelJest.canInstrument).toBe(true)
-    expect(babelJest.createTransformer).toBeUndefined()
     expect(typeof babelJest.getCacheKey).toBe('function')
     expect(typeof babelJest.process).toBe('function')
   })
@@ -269,7 +268,6 @@ describe('babelJestTransformer', () => {
       ]
     `)
     expect(babelJest.canInstrument).toBe(true)
-    expect(babelJest.createTransformer).toBeUndefined()
     expect(typeof babelJest.getCacheKey).toBe('function')
     expect(typeof babelJest.process).toBe('function')
   })
@@ -300,7 +298,6 @@ describe('babelJestTransformer', () => {
       ]
     `)
       expect(babelJest.canInstrument).toBe(true)
-      expect(babelJest.createTransformer).toBeUndefined()
       expect(typeof babelJest.getCacheKey).toBe('function')
       expect(typeof babelJest.process).toBe('function')
     },
@@ -332,7 +329,6 @@ describe('babelJestTransformer', () => {
       ]
     `)
     expect(babelJest.canInstrument).toBe(true)
-    expect(babelJest.createTransformer).toBeUndefined()
     expect(typeof babelJest.getCacheKey).toBe('function')
     expect(typeof babelJest.process).toBe('function')
   })
@@ -356,7 +352,6 @@ describe('babelJestTransformer', () => {
     expect(babelCfg.cwd).toEqual(cs.cwd)
     expect(babelCfg.comments).toEqual(true)
     expect(babelJest.canInstrument).toBe(true)
-    expect(babelJest.createTransformer).toBeUndefined()
     expect(typeof babelJest.getCacheKey).toBe('function')
     expect(typeof babelJest.process).toBe('function')
   })

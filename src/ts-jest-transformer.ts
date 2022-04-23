@@ -2,7 +2,6 @@ import { existsSync, readFileSync, statSync, writeFileSync, mkdirSync } from 'fs
 import path from 'path'
 
 import type { SyncTransformer, TransformedSource } from '@jest/transform'
-import type { Config } from '@jest/types'
 import type { Logger } from 'bs-logger'
 
 import { TsJestCompiler } from './compiler'
@@ -27,7 +26,7 @@ interface CachedConfigSet {
 
 interface TsJestHooksMap {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  afterProcess?(args: any[], result: string | TransformedSource): string | TransformedSource | void
+  afterProcess?(args: any[], result: TransformedSource): TransformedSource | void
 }
 
 /**
@@ -103,7 +102,6 @@ export class TsJestTransformer implements SyncTransformer {
         const jest = { ...config }
         // we need to remove some stuff from jest config
         // this which does not depend on config
-        jest.name = undefined as any // eslint-disable-line @typescript-eslint/no-explicit-any
         jest.cacheDirectory = undefined as any // eslint-disable-line @typescript-eslint/no-explicit-any
         this._transformCfgStr = `${new JsonableValue(jest).serialized}${configSet.cacheSuffix}`
         this._createCompiler(configSet, cacheFS)
@@ -136,60 +134,56 @@ export class TsJestTransformer implements SyncTransformer {
   /**
    * @public
    */
-  process(
-    sourceText: string,
-    sourcePath: Config.Path,
-    transformOptions: TransformOptionsTsJest,
-  ): TransformedSource | string {
+  process(sourceText: string, sourcePath: string, transformOptions: TransformOptionsTsJest): TransformedSource {
     this._logger.debug({ fileName: sourcePath, transformOptions }, 'processing', sourcePath)
 
     const configs = this._configsFor(transformOptions)
     const shouldStringifyContent = configs.shouldStringifyContent(sourcePath)
     const babelJest = shouldStringifyContent ? undefined : configs.babelJestTransformer
-    let result: TransformedSource | string = this.processWithTs(sourceText, sourcePath, transformOptions)
+    let result = this.processWithTs(sourceText, sourcePath, transformOptions)
     if (babelJest) {
       this._logger.debug({ fileName: sourcePath }, 'calling babel-jest processor')
 
       // do not instrument here, jest will do it anyway afterwards
-      result = babelJest.process(result, sourcePath, {
+      result = babelJest.process(result.code, sourcePath, {
         ...transformOptions,
         instrument: false,
       })
     }
-    result = this.runTsJestHook(sourcePath, sourceText, transformOptions, result) as string
+    result = this.runTsJestHook(sourcePath, sourceText, transformOptions, result)
 
     return result
   }
 
   async processAsync(
     sourceText: string,
-    sourcePath: Config.Path,
+    sourcePath: string,
     transformOptions: TransformOptionsTsJest,
-  ): Promise<TransformedSource | string> {
+  ): Promise<TransformedSource> {
     this._logger.debug({ fileName: sourcePath, transformOptions }, 'processing', sourcePath)
 
     return new Promise(async (resolve) => {
       const configs = this._configsFor(transformOptions)
       const shouldStringifyContent = configs.shouldStringifyContent(sourcePath)
       const babelJest = shouldStringifyContent ? undefined : configs.babelJestTransformer
-      let result: TransformedSource | string = this.processWithTs(sourceText, sourcePath, transformOptions)
+      let result = this.processWithTs(sourceText, sourcePath, transformOptions)
       if (babelJest) {
         this._logger.debug({ fileName: sourcePath }, 'calling babel-jest processor')
 
         // do not instrument here, jest will do it anyway afterwards
-        result = await babelJest.processAsync(result, sourcePath, {
+        result = await babelJest.processAsync(result.code, sourcePath, {
           ...transformOptions,
           instrument: false,
         })
       }
-      result = this.runTsJestHook(sourcePath, sourceText, transformOptions, result) as string
+      result = this.runTsJestHook(sourcePath, sourceText, transformOptions, result)
 
       resolve(result)
     })
   }
 
   private processWithTs(sourceText: string, sourcePath: string, transformOptions: TransformOptionsTsJest) {
-    let result: string | TransformedSource
+    let result: TransformedSource
     const configs = this._configsFor(transformOptions)
     const shouldStringifyContent = configs.shouldStringifyContent(sourcePath)
     const babelJest = shouldStringifyContent ? undefined : configs.babelJestTransformer
@@ -198,15 +192,21 @@ export class TsJestTransformer implements SyncTransformer {
     const isTsFile = !isDefinitionFile && TS_TSX_REGEX.test(sourcePath)
     if (shouldStringifyContent) {
       // handles here what we should simply stringify
-      result = `module.exports=${stringify(sourceText)}`
+      result = {
+        code: `module.exports=${stringify(sourceText)}`,
+      }
     } else if (isDefinitionFile) {
       // do not try to compile declaration files
-      result = ''
+      result = {
+        code: '',
+      }
     } else if (!configs.parsedTsConfig.options.allowJs && isJsFile) {
       // we've got a '.js' but the compiler option `allowJs` is not set or set to false
       this._logger.warn({ fileName: sourcePath }, interpolate(Errors.GotJsFileButAllowJsFalse, { path: sourcePath }))
 
-      result = sourceText
+      result = {
+        code: sourceText,
+      }
     } else if (isJsFile || isTsFile) {
       // transpile TS code (source maps are included)
       result = this._compiler.getCompiledOutput(sourceText, sourcePath, {
@@ -222,7 +222,9 @@ export class TsJestTransformer implements SyncTransformer {
 
       this._logger.warn({ fileName: sourcePath }, interpolate(message, { path: sourcePath }))
 
-      result = sourceText
+      result = {
+        code: sourceText,
+      }
     }
 
     return result
@@ -232,7 +234,7 @@ export class TsJestTransformer implements SyncTransformer {
     sourcePath: string,
     sourceText: string,
     transformOptions: TransformOptionsTsJest,
-    compiledOutput: TransformedSource | string,
+    compiledOutput: TransformedSource,
   ) {
     let hooksFile = process.env.TS_JEST_HOOKS
     let hooks: TsJestHooksMap | undefined

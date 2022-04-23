@@ -7,7 +7,6 @@ import { createConfigSet, makeCompiler } from '../__helpers__/fakers'
 import type { DepGraphInfo } from '../types'
 import { Errors, interpolate } from '../utils/messages'
 
-import { updateOutput } from './compiler-utils'
 import { TsCompiler } from './ts-compiler'
 
 const mockFolder = join(process.cwd(), 'src', '__mocks__')
@@ -226,7 +225,10 @@ describe('TsCompiler', () => {
           esModuleInterop: usedCompilerOptions.esModuleInterop,
           allowSyntheticDefaultImports: usedCompilerOptions.allowSyntheticDefaultImports,
         }).toMatchSnapshot()
-        expect(output).toEqual(updateOutput(jsOutput, fileName, sourceMap))
+        expect(output).toEqual({
+          code: jsOutput,
+          map: sourceMap,
+        })
 
         // @ts-expect-error testing purpose
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -259,7 +261,9 @@ describe('TsCompiler', () => {
 
         // @ts-expect-error testing purpose
         expect(compiler._logger.warn).toHaveBeenCalled()
-        expect(output).toEqual(updateOutput(fileContent, fileToCheck, undefined))
+        expect(output).toEqual({
+          code: fileContent,
+        })
       })
 
       test.each([fileName, fileName.replace('.ts', '.tsx')])(
