@@ -15,7 +15,7 @@
       "@jest/globals": "<rootDir>/../../../node_modules/@jest/globals"
     },
     "transform": {
-      "^.+.tsx?$": "<rootDir>/../../../dist/index.js"
+      "^.+.tsx?$": "<rootDir>/../../../legacy.js"
     }
   }
 }

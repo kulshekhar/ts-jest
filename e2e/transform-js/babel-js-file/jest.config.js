@@ -13,6 +13,6 @@ module.exports = {
     'babel-jest': '<rootDir>/../../../node_modules/babel-jest',
   },
   transform: {
-    '^.+.[tj]sx?$': '<rootDir>/../../../dist/index.js',
+    '^.+.[tj]sx?$': '<rootDir>/../../../legacy.js',
   },
 }

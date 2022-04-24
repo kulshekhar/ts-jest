@@ -1,8 +1,8 @@
-const tsJestTransformer = require('../../dist/ts-jest-transformer')
+const tsJestTransformer = require('../../dist/legacy/ts-jest-transformer')
 
 class FooTransformer extends tsJestTransformer.TsJestTransformer {
   async processAsync(sourceText, sourcePath, transformOptions) {
-    return new Promise((resolve) => resolve(this.process(sourceText, sourcePath, transformOptions)))
+    return Promise.resolve(this.process(sourceText, sourcePath, transformOptions))
   }
 }
 module.exports = {
