@@ -4,14 +4,15 @@ import path from 'path'
 import { LogLevels } from 'bs-logger'
 import { removeSync, writeFileSync } from 'fs-extra'
 
-import { createConfigSet } from './__helpers__/fakers'
-import { logTargetMock } from './__helpers__/mocks'
-import { TsJestCompiler } from './compiler'
+import { createConfigSet } from '../__helpers__/fakers'
+import { logTargetMock } from '../__helpers__/mocks'
+import { TsJestCompiler } from '../compiler'
+import type { DepGraphInfo } from '../types'
+import { stringify } from '../utils'
+import { importer } from '../utils/importer'
+import { sha1 } from '../utils/sha1'
+
 import { CACHE_KEY_EL_SEPARATOR, TsJestTransformer } from './ts-jest-transformer'
-import type { DepGraphInfo } from './types'
-import { stringify } from './utils'
-import { importer } from './utils/importer'
-import { sha1 } from './utils/sha1'
 
 const SOURCE_MAPPING_PREFIX = 'sourceMappingURL='
 

@@ -1,14 +1,16 @@
-import { TsJestTransformer } from './ts-jest-transformer'
+import { TsJestTransformer } from './legacy'
 
+export * from './legacy'
 export * from './constants'
 export * from './compiler'
 export * from './config'
 export * from './presets/create-jest-preset'
 export * from './utils'
 export * from './raw-compiler-options'
-export * from './ts-jest-transformer'
 export * from './types'
 
 export default {
-  createTransformer: (): TsJestTransformer => new TsJestTransformer(),
+  createTransformer() {
+    return new TsJestTransformer(true)
+  },
 }

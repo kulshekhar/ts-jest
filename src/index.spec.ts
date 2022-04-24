@@ -1,4 +1,4 @@
-import { TsJestTransformer } from './ts-jest-transformer'
+import { TsJestTransformer } from './legacy/ts-jest-transformer'
 
 import tsJest from '.'
 
