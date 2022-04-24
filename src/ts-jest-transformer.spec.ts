@@ -6,12 +6,14 @@ import { removeSync, writeFileSync } from 'fs-extra'
 
 import { createConfigSet } from './__helpers__/fakers'
 import { logTargetMock } from './__helpers__/mocks'
-import { SOURCE_MAPPING_PREFIX, TsJestCompiler } from './compiler'
+import { TsJestCompiler } from './compiler'
 import { CACHE_KEY_EL_SEPARATOR, TsJestTransformer } from './ts-jest-transformer'
 import type { DepGraphInfo } from './types'
 import { stringify } from './utils'
 import { importer } from './utils/importer'
 import { sha1 } from './utils/sha1'
+
+const SOURCE_MAPPING_PREFIX = 'sourceMappingURL='
 
 const logTarget = logTargetMock()
 const cacheDir = path.join(process.cwd(), 'tmp')
@@ -323,7 +325,11 @@ describe('TsJestTransformer', () => {
 
       const result = tr.process(fileContent, filePath, transformOptions)
 
-      expect(result).toMatchInlineSnapshot(`"module.exports=\\"<h1>Hello World</h1>\\""`)
+      expect(result).toMatchInlineSnapshot(`
+        Object {
+          "code": "module.exports=\\"<h1>Hello World</h1>\\"",
+        }
+      `)
     })
 
     test('should process type definition input', () => {
@@ -332,7 +338,9 @@ describe('TsJestTransformer', () => {
       tr.getCacheKey(fileContent, filePath, baseTransformOptions)
       const result = tr.process(fileContent, filePath, baseTransformOptions)
 
-      expect(result).toEqual('')
+      expect(result).toEqual({
+        code: '',
+      })
     })
 
     test('should process js file with allowJs false and show warning log', () => {
@@ -352,7 +360,9 @@ describe('TsJestTransformer', () => {
 
       const result = tr.process(fileContent, filePath, transformOptions)
 
-      expect(result).toEqual(fileContent)
+      expect(result).toEqual({
+        code: fileContent,
+      })
       expect(logTarget.lines[1].substring(0)).toMatchInlineSnapshot(`
         "[level:40] Got a \`.js\` file to compile while \`allowJs\` option is not set to \`true\` (file: foo.js). To fix this:
           - if you want TypeScript to process JS files, set \`allowJs\` to \`true\` in your TypeScript config (usually tsconfig.json)
@@ -369,11 +379,15 @@ describe('TsJestTransformer', () => {
       const fileContent = 'const foo = 1'
       const output = 'var foo = 1'
       tr.getCacheKey(fileContent, filePath, baseTransformOptions)
-      jest.spyOn(TsJestCompiler.prototype, 'getCompiledOutput').mockReturnValueOnce(output)
+      jest.spyOn(TsJestCompiler.prototype, 'getCompiledOutput').mockReturnValueOnce({
+        code: output,
+      })
 
       const result = tr.process(fileContent, filePath, baseTransformOptions)
 
-      expect(result).toEqual(output)
+      expect(result).toEqual({
+        code: output,
+      })
     })
 
     test.each(['foo.js', 'foo.jsx'])('should process js/jsx file with allowJs true', (filePath) => {
@@ -390,11 +404,15 @@ describe('TsJestTransformer', () => {
       }
       tr.getCacheKey(fileContent, filePath, transformOptions)
       logTarget.clear()
-      jest.spyOn(TsJestCompiler.prototype, 'getCompiledOutput').mockReturnValueOnce(output)
+      jest.spyOn(TsJestCompiler.prototype, 'getCompiledOutput').mockReturnValueOnce({
+        code: output,
+      })
 
       const result = tr.process(fileContent, filePath, transformOptions)
 
-      expect(result).toEqual(output)
+      expect(result).toEqual({
+        code: output,
+      })
     })
 
     test('should process file with unknown extension and show warning message without babel-jest', () => {
@@ -414,7 +432,9 @@ describe('TsJestTransformer', () => {
 
       const result = tr.process(fileContent, filePath, transformOptions)
 
-      expect(result).toEqual(fileContent)
+      expect(result).toEqual({
+        code: fileContent,
+      })
       expect(logTarget.lines[1]).toMatchInlineSnapshot(`
         "[level:40] Got a unknown file type to compile (file: foo.bar). To fix this, in your Jest config change the \`transform\` key which value is \`ts-jest\` so that it does not match this kind of files anymore.
         "
@@ -437,9 +457,7 @@ describe('TsJestTransformer', () => {
 
       const result = tr.process('foo', filePath, transformOptions)
 
-      if (typeof result !== 'string') {
-        expect(result.code.substring(0, result.code.indexOf(SOURCE_MAPPING_PREFIX))).toMatchSnapshot()
-      }
+      expect(result.code.substring(0, result.code.indexOf(SOURCE_MAPPING_PREFIX))).toMatchSnapshot()
       if (filePath === 'foo.bar') {
         expect(logTarget.filteredLines(LogLevels.warn)[0]).toMatchSnapshot()
       }
@@ -477,14 +495,17 @@ describe('TsJestTransformer', () => {
         },
       }
       // @ts-expect-error `_configsFor` is private
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       const babelJest = tr._configsFor(transformOptions).babelJestTransformer!
-      jest.spyOn(babelJest, 'processAsync').mockResolvedValue('var foo = 1')
+      jest.spyOn(babelJest, 'processAsync').mockResolvedValue({
+        code: 'var foo = 1',
+      })
 
-      const resultFromTs = await tr.processAsync(sourceText, sourcePath, transformOptions)
+      await tr.processAsync(sourceText, sourcePath, transformOptions)
 
       // @ts-expect-error `processWithTs` is private
       expect(tr.processWithTs).toHaveBeenCalledWith(sourceText, sourcePath, transformOptions)
-      expect(babelJest.processAsync).toHaveBeenCalledWith(resultFromTs, sourcePath, {
+      expect(babelJest.processAsync).toHaveBeenCalledWith(undefined, sourcePath, {
         ...transformOptions,
         instrument: false,
       })
