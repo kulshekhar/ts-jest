@@ -1,3 +1,29 @@
+# [28.0.0-next.0](https://github.com/kulshekhar/ts-jest/compare/v27.1.3...v28.0.0-next.0) (2022-04-24)
+
+
+### Bug Fixes
+
+* **legacy** invoke Babel `processAsync` for `babel-jest` in ESM mode instead of `process` ([#3430](https://github.com/kulshekhar/ts-jest/issues/3430)) ([0d7356c](https://github.com/kulshekhar/ts-jest/commit/0d7356cd767a924e5b57e3a93679eef4ca8fae51))
+
+
+### Features
+
+* **core:** drop support for Node.js 10 ([#3332](https://github.com/kulshekhar/ts-jest/issues/3332)) ([7a9aa61](https://github.com/kulshekhar/ts-jest/commit/7a9aa615ea0be881105676a17d5bd655afdc27f5))
+* **core:** remove `mocked` testing util ([#3333](https://github.com/kulshekhar/ts-jest/issues/3333)) ([2d9017d](https://github.com/kulshekhar/ts-jest/commit/2d9017ddfea39f45aa991876b314d1dbe4a36aad))
+* **core:** remove `ts-jest/utils` sub path export ([#3334](https://github.com/kulshekhar/ts-jest/issues/3334)) ([9f253d3](https://github.com/kulshekhar/ts-jest/commit/9f253d31dfcefa35ae00049d0d2dc4a3fe1b2f34))
+* mark `TsJestTransformer` as legacy ([#3451](https://github.com/kulshekhar/ts-jest/issues/3451)) ([b090179](https://github.com/kulshekhar/ts-jest/commit/b0901799adc519959a954dba5e7b8fc8b97a9665))
+
+
+### BREAKING CHANGES
+
+* Minimum support TypeScript version is now **4.3** since Jest 28 requires it
+* Jest 28 is required
+* **core:** Any imports `ts-jest/utils` should be replaced with `ts-jest`.
+* **core:** Starting from Jest 27.4, `mocked` has been integrated into Jest repo.
+* **core:** Support for Node.js v10 has been removed as Jest drops support for it
+
+
+
 ## [27.1.4](https://github.com/kulshekhar/ts-jest/compare/v27.1.3...v27.1.4) (2022-03-24)
 
 
