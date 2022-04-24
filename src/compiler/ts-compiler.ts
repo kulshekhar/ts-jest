@@ -1,25 +1,26 @@
 import { basename, normalize } from 'path'
 
+import type { TransformedSource } from '@jest/transform'
 import { LogContexts, Logger, LogLevels } from 'bs-logger'
 import memoize from 'lodash.memoize'
 import type {
+  Bundle,
+  CompilerOptions,
+  CustomTransformerFactory,
+  CustomTransformers,
+  Diagnostic,
   EmitOutput,
   LanguageService,
   LanguageServiceHost,
-  ParsedCommandLine,
-  ResolvedModuleFull,
-  TranspileOutput,
-  CompilerOptions,
-  SourceFile,
-  Program,
-  TransformerFactory,
-  Bundle,
-  CustomTransformerFactory,
-  CustomTransformers,
-  ModuleResolutionHost,
   ModuleResolutionCache,
+  ModuleResolutionHost,
+  ParsedCommandLine,
+  Program,
+  ResolvedModuleFull,
   ResolvedModuleWithFailedLookupLocations,
-  Diagnostic,
+  SourceFile,
+  TransformerFactory,
+  TranspileOutput,
 } from 'typescript'
 
 import type { ConfigSet } from '../config'
@@ -34,8 +35,6 @@ import type {
 } from '../types'
 import { rootLogger } from '../utils'
 import { Errors, interpolate } from '../utils/messages'
-
-import { updateOutput } from './compiler-utils'
 
 export class TsCompiler implements TsCompilerInstance {
   protected readonly _logger: Logger
@@ -145,7 +144,7 @@ export class TsCompiler implements TsCompilerInstance {
     return importedModulePaths
   }
 
-  getCompiledOutput(fileContent: string, fileName: string, options: TsJestCompileOptions): string {
+  getCompiledOutput(fileContent: string, fileName: string, options: TsJestCompileOptions): TransformedSource {
     let moduleKind = this._initialCompilerOptions.module
     let esModuleInterop = this._initialCompilerOptions.esModuleInterop
     let allowSyntheticDefaultImports = this._initialCompilerOptions.allowSyntheticDefaultImports
@@ -185,7 +184,9 @@ export class TsCompiler implements TsCompilerInstance {
         } else {
           this._logger.warn(interpolate(Errors.CannotProcessFileReturnOriginal, { file: fileName }))
 
-          return updateOutput(fileContent, fileName, undefined)
+          return {
+            code: fileContent,
+          }
         }
       }
       // Throw an error when requiring `.d.ts` files.
@@ -198,8 +199,13 @@ export class TsCompiler implements TsCompilerInstance {
       }
 
       return this._compilerOptions.sourceMap
-        ? updateOutput(output.outputFiles[1].text, fileName, output.outputFiles[0].text)
-        : updateOutput(output.outputFiles[0].text, fileName, undefined)
+        ? {
+            code: output.outputFiles[1].text,
+            map: output.outputFiles[0].text,
+          }
+        : {
+            code: output.outputFiles[0].text,
+          }
     } else {
       this._logger.debug({ fileName }, 'getCompiledOutput(): compiling as isolated module')
 
@@ -208,7 +214,10 @@ export class TsCompiler implements TsCompilerInstance {
         this.configSet.raiseDiagnostics(result.diagnostics, fileName, this._logger)
       }
 
-      return updateOutput(result.outputText, fileName, result.sourceMapText)
+      return {
+        code: result.outputText,
+        map: result.sourceMapText,
+      }
     }
   }
 

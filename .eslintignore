@@ -1,4 +1,6 @@
-dist/
-node_modules/
-coverage/
+dist
+node_modules
+coverage
 presets/index.d.ts
+website/build
+website/.docusaurus

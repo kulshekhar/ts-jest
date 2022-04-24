@@ -1,5 +1,6 @@
-import type { Transformer, TransformOptions } from '@jest/transform'
+import type { TransformedSource, Transformer, TransformOptions } from '@jest/transform'
 import type { Config } from '@jest/types'
+import type * as babelJest from 'babel-jest'
 import type * as _babel from 'babel__core'
 import type * as _ts from 'typescript'
 
@@ -25,6 +26,7 @@ declare module '@jest/types' {
  * @internal
  */
 export type TBabelCore = typeof _babel
+export type TBabelJest = typeof babelJest
 export type TTypeScript = typeof _ts
 // Stimulate `esbuild` type to avoid import `esbuild` while building the assets which are shipped to npm
 export interface TEsBuild {
@@ -32,12 +34,6 @@ export interface TEsBuild {
     input: string,
     options?: { loader: 'ts' | 'js'; format: 'cjs' | 'esm'; target: string },
   ): { code: string; map: string }
-}
-/**
- * @internal
- */
-export type TBabelJest = {
-  default: Required<Transformer>
 }
 /**
  * @internal
@@ -125,7 +121,7 @@ export interface TsJestGlobalOptions {
         /**
          * If specified, diagnostics of source files which path **matches** will be ignored
          */
-        exclude?: Config.Glob[]
+        exclude?: string[]
         /**
          * Logs TypeScript errors to stderr instead of throwing exceptions
          *
@@ -172,7 +168,7 @@ type TsJestConfig$tsConfig = TsJestConfig$tsConfig$file | TsJestConfig$tsConfig$
 export interface TsJestDiagnosticsCfg {
   pretty: boolean
   ignoreCodes: number[]
-  exclude: Config.Glob[]
+  exclude: string[]
   throws: boolean
   warnOnly?: boolean
 }
@@ -234,7 +230,7 @@ export interface TsJestCompileOptions {
 
 export interface CompilerInstance {
   getResolvedModules(fileContent: string, fileName: string, runtimeCacheFS: StringMap): string[]
-  getCompiledOutput(fileContent: string, fileName: string, options: TsJestCompileOptions): string
+  getCompiledOutput(fileContent: string, fileName: string, options: TsJestCompileOptions): TransformedSource
 }
 export interface TsCompilerInstance extends CompilerInstance {
   configSet: ConfigSet

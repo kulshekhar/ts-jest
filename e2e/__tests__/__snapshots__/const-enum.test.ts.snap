@@ -9,7 +9,7 @@ exports[`partial successfully runs the tests inside const-enum with 'isolatedMod
     However, Jest was able to find:
     	'../hoo-constant.d.ts'
 
-    You might want to include a file extension in your import, or update your 'moduleFileExtensions', which is currently ['js', 'jsx', 'ts', 'tsx', 'json', 'node'].
+    You might want to include a file extension in your import, or update your 'moduleFileExtensions', which is currently ['js', 'mjs', 'cjs', 'jsx', 'ts', 'tsx', 'json', 'node'].
 
     See https://jestjs.io/docs/configuration#modulefileextensions-arraystring
 
@@ -19,7 +19,7 @@ exports[`partial successfully runs the tests inside const-enum with 'isolatedMod
       3 | const getTwo = (): string => HooConstEnum.two
       4 |
 
-      at Resolver.resolveModule (../../node_modules/jest-resolve/build/resolver.js:324:11)
+      at Resolver._throwModNotFoundError (../../node_modules/jest-resolve/build/resolver.js:493:11)
       at Object.<anonymous> (__tests__/import-from-d-ts-no-js.spec.ts:1:1)
 
 PASS __tests__/import-from-d-ts-has-js.spec.ts

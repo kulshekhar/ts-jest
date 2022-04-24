@@ -1,3 +1,3 @@
-export declare enum HooEnum {
+export declare enum FooEnum {
   two = 'TWO',
 }
