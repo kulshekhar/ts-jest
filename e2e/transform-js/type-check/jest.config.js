@@ -8,6 +8,6 @@ module.exports = {
     },
   },
   transform: {
-    '^.+.[tj]sx?$': '<rootDir>/../../../dist/index.js',
+    '^.+.[tj]sx?$': '<rootDir>/../../../legacy.js',
   },
 }

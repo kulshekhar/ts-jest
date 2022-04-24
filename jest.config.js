@@ -12,6 +12,6 @@ module.exports = {
   snapshotSerializers: [require.resolve('jest-snapshot-serializer-raw')],
   testPathIgnorePatterns: ['src/__mocks__/*', '/node_modules/', '/examples/', '/e2e/.*/__tests__', '\\.snap$'],
   transform: {
-    '^.+.tsx?$': '<rootDir>/dist/index.js',
+    '^.+.tsx?$': '<rootDir>/legacy.js',
   },
 }
