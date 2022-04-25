@@ -2,7 +2,7 @@ import { TsJestTransformer } from './legacy'
 
 export * from './legacy'
 export * from './constants'
-export * from './compiler'
+export * from './legacy/compiler'
 export * from './config'
 export * from './presets/create-jest-preset'
 export * from './utils'

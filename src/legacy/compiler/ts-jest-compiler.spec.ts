@@ -1,4 +1,4 @@
-import { createConfigSet } from '../__helpers__/fakers'
+import { createConfigSet } from '../../__helpers__/fakers'
 
 import { TsCompiler } from './ts-compiler'
 import { TsJestCompiler } from './ts-jest-compiler'
