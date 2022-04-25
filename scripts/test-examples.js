@@ -31,7 +31,9 @@ const executeTest = (projectPath) => {
   logger.log('installing bundled version of ts-jest')
   logger.log()
 
-  execa.sync('npm', ['install', '--no-package-lock', '--no-shrinkwrap', '--no-save', bundle], { cwd: projectPath })
+  execa.sync('npm', ['install', '--legacy-peer-deps', '--no-package-lock', '--no-shrinkwrap', '--no-save', bundle], {
+    cwd: projectPath,
+  })
   logger.log()
 
   // then we can run the tests
