@@ -1,7 +1,7 @@
 import type { TransformedSource } from '@jest/transform'
 
-import type { ConfigSet } from '../legacy/config/config-set'
-import type { CompilerInstance, StringMap, TsJestCompileOptions } from '../types'
+import type { CompilerInstance, StringMap, TsJestCompileOptions } from '../../types'
+import type { ConfigSet } from '../config/config-set'
 
 import { TsCompiler } from './ts-compiler'
 
