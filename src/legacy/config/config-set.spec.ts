@@ -4,20 +4,20 @@ import type { Transformer } from '@jest/transform'
 import { LogLevels, testing } from 'bs-logger'
 import ts from 'typescript'
 
-import { createConfigSet } from '../__helpers__/fakers'
-import { logTargetMock } from '../__helpers__/mocks'
-import type { AstTransformerDesc, TsJestGlobalOptions } from '../types'
-import { stringify } from '../utils'
-import * as _backports from '../utils/backports'
-import { getPackageVersion } from '../utils/get-package-version'
-import { normalizeSlashes } from '../utils/normalize-slashes'
-import { sha1 } from '../utils/sha1'
+import { createConfigSet } from '../../__helpers__/fakers'
+import { logTargetMock } from '../../__helpers__/mocks'
+import type { AstTransformerDesc, TsJestGlobalOptions } from '../../types'
+import { stringify } from '../../utils'
+import * as _backports from '../../utils/backports'
+import { getPackageVersion } from '../../utils/get-package-version'
+import { normalizeSlashes } from '../../utils/normalize-slashes'
+import { sha1 } from '../../utils/sha1'
 
 import { ConfigSet, MY_DIGEST } from './config-set'
 
-jest.mock('../utils/backports')
+jest.mock('../../utils/backports')
 jest.mock('../index')
-jest.mock('../utils/get-package-version')
+jest.mock('../../utils/get-package-version')
 
 const backports = jest.mocked(_backports)
 
@@ -305,7 +305,7 @@ describe('babelJestTransformer', () => {
 
   it('should return babelJestTransformer with loaded config object', () => {
     /* eslint-disable-next-line jest/no-mocks-import */
-    const babelConfig = require('../__mocks__/babel-foo.config')
+    const babelConfig = require('../../__mocks__/babel-foo.config')
     const cs = createConfigSet({
       jestConfig: {
         globals: {
@@ -668,7 +668,9 @@ describe('resolvePath', () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const cs = createConfigSet({ jestConfig: { rootDir: '/root', cwd: '/cwd' } as any, resolve: null })
     const doResolve = (path: string) => cs.resolvePath(path, { throwIfMissing: false, nodeResolve: true })
-    expect(doResolve('json5')).toBe(resolve(__dirname, '../../node_modules/json5', require('json5/package.json').main))
+    expect(doResolve('json5')).toBe(
+      resolve(__dirname, '../../../node_modules/json5', require('json5/package.json').main),
+    )
     expect(doResolve('./bar.js')).toBe(resolve('/cwd/bar.js'))
     expect(doResolve('<rootDir>bar.js')).toBe(resolve('/root/bar.js'))
     expect(doResolve('<rootDir>/bar.js')).toBe(resolve('/root//bar.js'))

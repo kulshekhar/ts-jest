@@ -4,7 +4,7 @@ import type { Config } from '@jest/types'
 import type { Logger } from 'bs-logger'
 
 import { TsCompiler } from '../compiler'
-import { ConfigSet } from '../config'
+import { ConfigSet } from '../legacy/config/config-set'
 import type { StringMap, TsJestGlobalOptions } from '../types'
 import type { ImportReasons } from '../utils/messages'
 
