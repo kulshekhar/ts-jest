@@ -17,8 +17,8 @@ import { globsToMatcher } from 'jest-util'
 import json5 from 'json5'
 import type * as ts from 'typescript'
 
-import { DEFAULT_JEST_TEST_MATCH, JS_JSX_EXTENSIONS } from '../constants'
-import type { RawCompilerOptions } from '../raw-compiler-options'
+import { DEFAULT_JEST_TEST_MATCH, JS_JSX_EXTENSIONS } from '../../constants'
+import type { RawCompilerOptions } from '../../raw-compiler-options'
 import type {
   AstTransformer,
   AstTransformerDesc,
@@ -29,20 +29,20 @@ import type {
   TsJestDiagnosticsCfg,
   TsJestGlobalOptions,
   TTypeScript,
-} from '../types'
-import { TsCompilerInstance } from '../types'
-import { rootLogger, stringify } from '../utils'
-import { backportJestConfig } from '../utils/backports'
-import { importer } from '../utils/importer'
-import { Errors, ImportReasons, interpolate } from '../utils/messages'
-import { normalizeSlashes } from '../utils/normalize-slashes'
-import { sha1 } from '../utils/sha1'
-import { TSError } from '../utils/ts-error'
+} from '../../types'
+import { TsCompilerInstance } from '../../types'
+import { rootLogger, stringify } from '../../utils'
+import { backportJestConfig } from '../../utils/backports'
+import { importer } from '../../utils/importer'
+import { Errors, ImportReasons, interpolate } from '../../utils/messages'
+import { normalizeSlashes } from '../../utils/normalize-slashes'
+import { sha1 } from '../../utils/sha1'
+import { TSError } from '../../utils/ts-error'
 
 /**
  * @internal
  */
-export const MY_DIGEST: string = readFileSync(resolve(__dirname, '..', '..', '.ts-jest-digest'), 'utf8')
+export const MY_DIGEST: string = readFileSync(resolve(__dirname, '../../../.ts-jest-digest'), 'utf8')
 
 /**
  * @internal
@@ -313,7 +313,7 @@ export class ConfigSet {
     this.logger.debug({ tsconfig: this.parsedTsConfig }, 'normalized typescript config via ts-jest option')
 
     // transformers
-    this.resolvedTransformers.before = [require('../transformers/hoist-jest')]
+    this.resolvedTransformers.before = [require('../../transformers/hoist-jest')]
     const { astTransformers } = options
     if (astTransformers) {
       const resolveTransformerFunc = (transformerPath: string) => {

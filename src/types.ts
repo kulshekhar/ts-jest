@@ -4,7 +4,7 @@ import type * as babelJest from 'babel-jest'
 import type * as _babel from 'babel__core'
 import type * as _ts from 'typescript'
 
-import type { ConfigSet } from './config'
+import type { ConfigSet } from './legacy/config/config-set'
 import type { RawCompilerOptions } from './raw-compiler-options'
 
 declare module '@jest/types' {
