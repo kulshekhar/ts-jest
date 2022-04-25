@@ -13,7 +13,7 @@
     "@types/jest": "^27.0.2",
     "babel-jest": "28.0.0-alpha.11",
     "jest": "28.0.0-alpha.11",
-    "ts-jest": "^27.0.7",
+    "ts-jest": "28.0.0-next.0",
     "typescript": "~4.5.2"
   }
 }
