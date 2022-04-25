@@ -23,8 +23,7 @@ import type {
   TranspileOutput,
 } from 'typescript'
 
-import { LINE_FEED, TS_TSX_REGEX } from '../constants'
-import type { ConfigSet } from '../legacy/config/config-set'
+import { LINE_FEED, TS_TSX_REGEX } from '../../constants'
 import type {
   DepGraphInfo,
   StringMap,
@@ -32,9 +31,10 @@ import type {
   TsJestAstTransformer,
   TsJestCompileOptions,
   TTypeScript,
-} from '../types'
-import { rootLogger } from '../utils'
-import { Errors, interpolate } from '../utils/messages'
+} from '../../types'
+import { rootLogger } from '../../utils'
+import { Errors, interpolate } from '../../utils/messages'
+import type { ConfigSet } from '../config/config-set'
 
 export class TsCompiler implements TsCompilerInstance {
   protected readonly _logger: Logger

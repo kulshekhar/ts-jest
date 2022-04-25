@@ -3,9 +3,9 @@ import { basename, join, normalize } from 'path'
 
 import { CompilerOptions, DiagnosticCategory, EmitOutput, TranspileOutput } from 'typescript'
 
-import { createConfigSet, makeCompiler } from '../__helpers__/fakers'
-import type { DepGraphInfo } from '../types'
-import { Errors, interpolate } from '../utils/messages'
+import { createConfigSet, makeCompiler } from '../../__helpers__/fakers'
+import type { DepGraphInfo } from '../../types'
+import { Errors, interpolate } from '../../utils/messages'
 
 import { TsCompiler } from './ts-compiler'
 
