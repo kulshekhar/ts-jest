@@ -5,7 +5,6 @@ import type { SyncTransformer, TransformedSource } from '@jest/transform'
 import type { Logger } from 'bs-logger'
 
 import { TsJestCompiler } from '../compiler'
-import { ConfigSet } from '../config'
 import { DECLARATION_TYPE_EXT, JS_JSX_REGEX, TS_TSX_REGEX } from '../constants'
 import type { CompilerInstance, DepGraphInfo, ProjectConfigTsJest, TransformOptionsTsJest } from '../types'
 import { parse, stringify, JsonableValue, rootLogger } from '../utils'
@@ -13,6 +12,8 @@ import { importer } from '../utils/importer'
 import { Deprecations, Errors, interpolate } from '../utils/messages'
 import { sha1 } from '../utils/sha1'
 import { VersionCheckers } from '../utils/version-checkers'
+
+import { ConfigSet } from './config/config-set'
 
 interface CachedConfigSet {
   configSet: ConfigSet

@@ -23,8 +23,8 @@ import type {
   TranspileOutput,
 } from 'typescript'
 
-import type { ConfigSet } from '../config'
 import { LINE_FEED, TS_TSX_REGEX } from '../constants'
+import type { ConfigSet } from '../legacy/config/config-set'
 import type {
   DepGraphInfo,
   StringMap,
