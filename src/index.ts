@@ -11,6 +11,6 @@ export * from './types'
 
 export default {
   createTransformer() {
-    return new TsJestTransformer(true)
+    return new TsJestTransformer()
   },
 }

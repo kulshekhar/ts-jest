@@ -39,13 +39,6 @@ export const enum Deprecations {
   ConfigOption = '"[jest-config].{{oldPath}}" is deprecated, use "[jest-config].{{newPath}}" instead.',
   ConfigOptionWithNote = '"[jest-config].{{oldPath}}" is deprecated, use "[jest-config].{{newPath}}" instead.\n    ↳ {{note}}',
   ConfigOptionUseBabelRcNote = 'See `babel-jest` related issue: https://github.com/facebook/jest/issues/3845',
-  LegacyTransformerEntry = `Use 'ts-jest' entry point in v28 will resolve in refactored transformer. If you wish to use legacy transformer, please adjust your Jest 'transform' config. For example:
-     module.exports = {
-        transform: {
-           '^.+\\\\.tsx?$': 'ts-jest/legacy'
-        }
-     }
-  `,
 }
 
 /**
