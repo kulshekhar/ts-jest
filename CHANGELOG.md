@@ -1,3 +1,23 @@
+# [28.0.0-next.1](https://github.com/kulshekhar/ts-jest/compare/v28.0.0-next.0...v28.0.0-next.1) (2022-04-26)
+
+
+### Features
+
+* mark `ConfigSet` as legacy ([#3456](https://github.com/kulshekhar/ts-jest/issues/3456)) ([a986729](https://github.com/kulshekhar/ts-jest/commit/a98672977a679d1ed882605a3e71ed405432ffdc))
+* mark `TsCompiler` and `TsJestCompiler` as legacy ([#3457](https://github.com/kulshekhar/ts-jest/issues/3457)) ([0f2fe30](https://github.com/kulshekhar/ts-jest/commit/0f2fe306762d8549bd29737becd4aed14a650427))
+* remove `path-mapping` AST transformer ([#3455](https://github.com/kulshekhar/ts-jest/issues/3455)) ([f566869](https://github.com/kulshekhar/ts-jest/commit/f5668698f8fab78b3008d936aa5001f134f530e2))
+* set Jest peer dependencies to v28 ([#3454](https://github.com/kulshekhar/ts-jest/issues/3454)) ([1e880ff](https://github.com/kulshekhar/ts-jest/commit/1e880fffe82bca231d1d23f6508f4ab4bc31e03e))
+
+
+### BREAKING CHANGES
+
+* `path-mapping` AST transformer is no longer shipped in `ts-jest` v28. Please use an alternative one like https://github.com/LeDDGroup/typescript-transform-paths instead.
+* Any imports `ts-jest/dist/compiler/ts-compiler` should change to `ts-jest/dist/legacy/compiler/ts-compiler`
+* Any imports `ts-jest/dist/compiler/ts-jest-compiler` should change to `ts-jest/dist/legacy/compiler/ts-jest-compiler`
+* Any imports `ts-jest/dist/config/config-set` should change to `ts-jest/dist/legacy/config/config-set
+
+
+
 # [28.0.0-next.0](https://github.com/kulshekhar/ts-jest/compare/v27.1.3...v28.0.0-next.0) (2022-04-24)
 
 
@@ -21,6 +41,18 @@
 * **core:** Any imports `ts-jest/utils` should be replaced with `ts-jest`.
 * **core:** Starting from Jest 27.4, `mocked` has been integrated into Jest repo.
 * **core:** Support for Node.js v10 has been removed as Jest drops support for it
+* All presets now will they are preserved for refactored codes. If you wish to use the old codes, please do the following
+* 
+```diff
+// jest.config.js
+module.exports = {
+  // [...]
+-    preset: 'ts-jest', // or 'js-with-babel'/'js-with-ts'
++    transform: {
+        '^.+\\.tsx?$': 'ts-jest/legacy' // or '^.+\\.[tj]sx?$': 'ts-jest' to use legacy codes
+     }
+}
+```
 
 
 
