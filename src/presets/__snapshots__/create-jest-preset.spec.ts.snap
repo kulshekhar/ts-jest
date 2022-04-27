@@ -3,7 +3,7 @@
 exports[`create-jest-preset should return correct preset 1`] = `
 Object {
   "transform": Object {
-    "^.+\\\\.tsx?$": "ts-jest",
+    "^.+\\\\.tsx?$": "ts-jest/legacy",
   },
 }
 `;
@@ -19,7 +19,7 @@ Object {
 exports[`create-jest-preset should return correct preset 3`] = `
 Object {
   "transform": Object {
-    "^.+\\\\.[tj]sx?$": "ts-jest",
+    "^.+\\\\.[tj]sx?$": "ts-jest/legacy",
   },
 }
 `;
@@ -35,7 +35,7 @@ Object {
 exports[`create-jest-preset should return correct preset 5`] = `
 Object {
   "transform": Object {
-    "^.+\\\\.tsx?$": "ts-jest",
+    "^.+\\\\.tsx?$": "ts-jest/legacy",
   },
 }
 `;
@@ -69,7 +69,7 @@ Object {
     "foo",
   ],
   "transform": Object {
-    "^.+\\\\.m?[tj]sx?$": "ts-jest",
+    "^.+\\\\.m?[tj]sx?$": "ts-jest/legacy",
     "foo": "bar",
   },
 }

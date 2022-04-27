@@ -11,30 +11,37 @@ describe('create-jest-preset', () => {
 
   test.each([
     {
+      legacy: true,
       allowJs: undefined,
       extraOptions: undefined,
     },
     {
+      legacy: false,
       allowJs: false,
       extraOptions: undefined,
     },
     {
+      legacy: true,
       allowJs: true,
       extraOptions: undefined,
     },
     {
+      legacy: false,
       allowJs: true,
       extraOptions: {},
     },
     {
+      legacy: true,
       allowJs: false,
       extraOptions: {},
     },
     {
+      legacy: false,
       allowJs: false,
       extraOptions: baseExtraOptions,
     },
     {
+      legacy: true,
       allowJs: true,
       extraOptions: {
         ...baseExtraOptions,
@@ -42,6 +49,6 @@ describe('create-jest-preset', () => {
       },
     },
   ])('should return correct preset', (data) => {
-    expect(createJestPreset(data.allowJs, data.extraOptions)).toMatchSnapshot()
+    expect(createJestPreset(data.legacy, data.allowJs, data.extraOptions)).toMatchSnapshot()
   })
 })
