@@ -1,12 +1,13 @@
-import { TsJestTransformer } from './legacy'
+import { TsJestTransformer } from './legacy/ts-jest-transformer'
 
-export * from './legacy'
+export * from './config'
 export * from './constants'
 export * from './legacy/compiler'
-export * from './config'
+export * from './legacy/ts-jest-transformer'
+export * from './legacy/config/config-set'
 export * from './presets/create-jest-preset'
-export * from './utils'
 export * from './raw-compiler-options'
+export * from './utils'
 export * from './types'
 
 export default {

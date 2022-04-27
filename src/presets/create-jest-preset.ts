@@ -5,7 +5,11 @@ import { rootLogger } from '../utils'
 
 const logger = rootLogger.child({ namespace: 'jest-preset' })
 
-export function createJestPreset(allowJs = false, extraOptions: Config.InitialOptions = {}): TsJestPresets {
+export function createJestPreset(
+  legacy = false,
+  allowJs = false,
+  extraOptions: Config.InitialOptions = {},
+): TsJestPresets {
   logger.debug({ allowJs }, 'creating jest presets', allowJs ? 'handling' : 'not handling', 'JavaScript files')
 
   const { extensionsToTreatAsEsm, moduleFileExtensions, testMatch } = extraOptions
@@ -17,7 +21,9 @@ export function createJestPreset(allowJs = false, extraOptions: Config.InitialOp
     ...(testMatch ? { testMatch } : undefined),
     transform: {
       ...extraOptions.transform,
-      [allowJs ? (supportESM ? '^.+\\.m?[tj]sx?$' : '^.+\\.[tj]sx?$') : '^.+\\.tsx?$']: 'ts-jest',
+      [allowJs ? (supportESM ? '^.+\\.m?[tj]sx?$' : '^.+\\.[tj]sx?$') : '^.+\\.tsx?$']: legacy
+        ? 'ts-jest/legacy'
+        : 'ts-jest',
     },
   }
 }

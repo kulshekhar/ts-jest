@@ -54,6 +54,12 @@ module.exports = {
 
 #### Use ESM presets
 
+:::important
+
+Starting from **v28.0.0**, `ts-jest` will gradually switch to `esbuild`/`swc` to transform `ts` to `js`. To make the transition smoothly, we introduce `legacy` presets as a fallback when the new codes don't work yet.
+
+:::
+
 ```js
 // jest.config.js
 module.exports = {
