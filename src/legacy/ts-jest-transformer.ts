@@ -8,7 +8,7 @@ import { DECLARATION_TYPE_EXT, JS_JSX_REGEX, TS_TSX_REGEX } from '../constants'
 import type { CompilerInstance, DepGraphInfo, ProjectConfigTsJest, TransformOptionsTsJest } from '../types'
 import { parse, stringify, JsonableValue, rootLogger } from '../utils'
 import { importer } from '../utils/importer'
-import { Deprecations, Errors, interpolate } from '../utils/messages'
+import { Errors, interpolate } from '../utils/messages'
 import { sha1 } from '../utils/sha1'
 import { VersionCheckers } from '../utils/version-checkers'
 
@@ -49,12 +49,9 @@ export class TsJestTransformer implements SyncTransformer {
   private _depGraphs: Map<string, DepGraphInfo> = new Map<string, DepGraphInfo>()
   private _watchMode = false
 
-  constructor(isLegacy = false) {
+  constructor() {
     this._logger = rootLogger.child({ namespace: 'ts-jest-transformer' })
     VersionCheckers.jest.warn()
-    if (isLegacy) {
-      this._logger.warn(Deprecations.LegacyTransformerEntry)
-    }
     /**
      * For some unknown reasons, `this` is undefined in `getCacheKey` and `process`
      * when running Jest in ESM mode
