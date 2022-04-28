@@ -1,3 +1,17 @@
+# [28.0.0-next.2](https://github.com/kulshekhar/ts-jest/compare/v28.0.0-next.1...v28.0.0-next.2) (2022-04-27)
+
+
+### Bug Fixes
+
+* revert deprecation message for `TsJestTransformer` ([#3466](https://github.com/kulshekhar/ts-jest/issues/3466)) ([cefa0da](https://github.com/kulshekhar/ts-jest/commit/cefa0da660c4f99cf6595e253981af6855bcc80c))
+
+
+### Features
+
+* **presets:** add presets for legacy mode ([#3465](https://github.com/kulshekhar/ts-jest/issues/3465)) ([543b4ad](https://github.com/kulshekhar/ts-jest/commit/543b4ad729d20fbd46a2de5cd4660dc50b94ebe7))
+
+
+
 # [28.0.0-next.1](https://github.com/kulshekhar/ts-jest/compare/v28.0.0-next.0...v28.0.0-next.1) (2022-04-26)
 
 
