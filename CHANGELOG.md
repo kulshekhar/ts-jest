@@ -1,3 +1,12 @@
+# [28.0.0-next.3](https://github.com/kulshekhar/ts-jest/compare/v28.0.0-next.2...v28.0.0-next.3) (2022-04-29)
+
+
+### Bug Fixes
+
+* **compiler:** bring back compiled output with inline sourcemap ([#3483](https://github.com/kulshekhar/ts-jest/issues/3483)) ([e96d5b3](https://github.com/kulshekhar/ts-jest/commit/e96d5b3c94348774011ac76e91bf746a3429ade0)), closes [#3482](https://github.com/kulshekhar/ts-jest/issues/3482)
+
+
+
 # [28.0.0-next.2](https://github.com/kulshekhar/ts-jest/compare/v28.0.0-next.1...v28.0.0-next.2) (2022-04-27)
 
 
