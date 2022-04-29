@@ -19,6 +19,7 @@ import type * as ts from 'typescript'
 
 import { DEFAULT_JEST_TEST_MATCH, JS_JSX_EXTENSIONS } from '../../constants'
 import type { RawCompilerOptions } from '../../raw-compiler-options'
+import * as hoistJestTransformer from '../../transformers/hoist-jest'
 import type {
   AstTransformer,
   AstTransformerDesc,
@@ -313,7 +314,13 @@ export class ConfigSet {
     this.logger.debug({ tsconfig: this.parsedTsConfig }, 'normalized typescript config via ts-jest option')
 
     // transformers
-    this.resolvedTransformers.before = [require('../../transformers/hoist-jest')]
+    this.resolvedTransformers.before = [
+      {
+        factory: hoistJestTransformer.factory,
+        name: hoistJestTransformer.name,
+        version: hoistJestTransformer.version,
+      },
+    ]
     const { astTransformers } = options
     if (astTransformers) {
       const resolveTransformerFunc = (transformerPath: string) => {
