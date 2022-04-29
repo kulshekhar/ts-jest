@@ -36,6 +36,8 @@ import { rootLogger } from '../../utils'
 import { Errors, interpolate } from '../../utils/messages'
 import type { ConfigSet } from '../config/config-set'
 
+import { updateOutput } from './compiler-utils'
+
 export class TsCompiler implements TsCompilerInstance {
   protected readonly _logger: Logger
   protected readonly _ts: TTypeScript
@@ -197,14 +199,14 @@ export class TsCompiler implements TsCompilerInstance {
           }),
         )
       }
+      const { outputFiles } = output
 
       return this._compilerOptions.sourceMap
         ? {
-            code: output.outputFiles[1].text,
-            map: output.outputFiles[0].text,
+            code: updateOutput(outputFiles[1].text, fileName, outputFiles[0].text),
           }
         : {
-            code: output.outputFiles[0].text,
+            code: updateOutput(outputFiles[0].text, fileName),
           }
     } else {
       this._logger.debug({ fileName }, 'getCompiledOutput(): compiling as isolated module')
@@ -215,8 +217,7 @@ export class TsCompiler implements TsCompilerInstance {
       }
 
       return {
-        code: result.outputText,
-        map: result.sourceMapText,
+        code: updateOutput(result.outputText, fileName, result.sourceMapText),
       }
     }
   }
