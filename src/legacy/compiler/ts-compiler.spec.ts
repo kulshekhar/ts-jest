@@ -1,12 +1,13 @@
 import { readFileSync } from 'fs'
 import { basename, join, normalize } from 'path'
 
-import { CompilerOptions, DiagnosticCategory, EmitOutput, TranspileOutput } from 'typescript'
+import { type CompilerOptions, DiagnosticCategory, type EmitOutput, type TranspileOutput } from 'typescript'
 
 import { createConfigSet, makeCompiler } from '../../__helpers__/fakers'
 import type { DepGraphInfo } from '../../types'
 import { Errors, interpolate } from '../../utils/messages'
 
+import { updateOutput } from './compiler-utils'
 import { TsCompiler } from './ts-compiler'
 
 const mockFolder = join(process.cwd(), 'src', '__mocks__')
@@ -226,8 +227,7 @@ describe('TsCompiler', () => {
           allowSyntheticDefaultImports: usedCompilerOptions.allowSyntheticDefaultImports,
         }).toMatchSnapshot()
         expect(output).toEqual({
-          code: jsOutput,
-          map: sourceMap,
+          code: updateOutput(jsOutput, fileName, sourceMap),
         })
 
         // @ts-expect-error testing purpose
@@ -262,7 +262,7 @@ describe('TsCompiler', () => {
         // @ts-expect-error testing purpose
         expect(compiler._logger.warn).toHaveBeenCalled()
         expect(output).toEqual({
-          code: fileContent,
+          code: updateOutput(fileContent, fileToCheck),
         })
       })
 
