@@ -71,7 +71,7 @@ module.exports = {
   globals: {
     'ts-jest': {
       diagnostics: {
-        exclude: ['**/*.spec.ts'],
+        exclude: ['!**/*.(spec|test).ts'],
       },
     },
   },
@@ -86,7 +86,7 @@ module.exports = {
     "globals": {
       "ts-jest": {
         "diagnostics": {
-          "exclude": ["**/*.spec.ts"]
+          "exclude": ["!**/*.(spec|test).ts"]
         }
       }
     }
