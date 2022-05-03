@@ -1,47 +1,4 @@
-# [28.0.0-next.3](https://github.com/kulshekhar/ts-jest/compare/v28.0.0-next.2...v28.0.0-next.3) (2022-04-29)
-
-
-### Bug Fixes
-
-* **compiler:** bring back compiled output with inline sourcemap ([#3483](https://github.com/kulshekhar/ts-jest/issues/3483)) ([e96d5b3](https://github.com/kulshekhar/ts-jest/commit/e96d5b3c94348774011ac76e91bf746a3429ade0)), closes [#3482](https://github.com/kulshekhar/ts-jest/issues/3482)
-
-
-
-# [28.0.0-next.2](https://github.com/kulshekhar/ts-jest/compare/v28.0.0-next.1...v28.0.0-next.2) (2022-04-27)
-
-
-### Bug Fixes
-
-* revert deprecation message for `TsJestTransformer` ([#3466](https://github.com/kulshekhar/ts-jest/issues/3466)) ([cefa0da](https://github.com/kulshekhar/ts-jest/commit/cefa0da660c4f99cf6595e253981af6855bcc80c))
-
-
-### Features
-
-* **presets:** add presets for legacy mode ([#3465](https://github.com/kulshekhar/ts-jest/issues/3465)) ([543b4ad](https://github.com/kulshekhar/ts-jest/commit/543b4ad729d20fbd46a2de5cd4660dc50b94ebe7))
-
-
-
-# [28.0.0-next.1](https://github.com/kulshekhar/ts-jest/compare/v28.0.0-next.0...v28.0.0-next.1) (2022-04-26)
-
-
-### Features
-
-* mark `ConfigSet` as legacy ([#3456](https://github.com/kulshekhar/ts-jest/issues/3456)) ([a986729](https://github.com/kulshekhar/ts-jest/commit/a98672977a679d1ed882605a3e71ed405432ffdc))
-* mark `TsCompiler` and `TsJestCompiler` as legacy ([#3457](https://github.com/kulshekhar/ts-jest/issues/3457)) ([0f2fe30](https://github.com/kulshekhar/ts-jest/commit/0f2fe306762d8549bd29737becd4aed14a650427))
-* remove `path-mapping` AST transformer ([#3455](https://github.com/kulshekhar/ts-jest/issues/3455)) ([f566869](https://github.com/kulshekhar/ts-jest/commit/f5668698f8fab78b3008d936aa5001f134f530e2))
-* set Jest peer dependencies to v28 ([#3454](https://github.com/kulshekhar/ts-jest/issues/3454)) ([1e880ff](https://github.com/kulshekhar/ts-jest/commit/1e880fffe82bca231d1d23f6508f4ab4bc31e03e))
-
-
-### BREAKING CHANGES
-
-* `path-mapping` AST transformer is no longer shipped in `ts-jest` v28. Please use an alternative one like https://github.com/LeDDGroup/typescript-transform-paths instead.
-* Any imports `ts-jest/dist/compiler/ts-compiler` should change to `ts-jest/dist/legacy/compiler/ts-compiler`
-* Any imports `ts-jest/dist/compiler/ts-jest-compiler` should change to `ts-jest/dist/legacy/compiler/ts-jest-compiler`
-* Any imports `ts-jest/dist/config/config-set` should change to `ts-jest/dist/legacy/config/config-set
-
-
-
-# [28.0.0-next.0](https://github.com/kulshekhar/ts-jest/compare/v27.1.3...v28.0.0-next.0) (2022-04-24)
+# [28.0.0](https://github.com/kulshekhar/ts-jest/compare/v28.0.0-next.3...v28.0.0) (2022-05-02)
 
 
 ### Bug Fixes
@@ -51,6 +8,11 @@
 
 ### Features
 
+* **presets:** add presets for legacy mode ([#3465](https://github.com/kulshekhar/ts-jest/issues/3465)) ([543b4ad](https://github.com/kulshekhar/ts-jest/commit/543b4ad729d20fbd46a2de5cd4660dc50b94ebe7))
+* mark `ConfigSet` as legacy ([#3456](https://github.com/kulshekhar/ts-jest/issues/3456)) ([a986729](https://github.com/kulshekhar/ts-jest/commit/a98672977a679d1ed882605a3e71ed405432ffdc))
+* mark `TsCompiler` and `TsJestCompiler` as legacy ([#3457](https://github.com/kulshekhar/ts-jest/issues/3457)) ([0f2fe30](https://github.com/kulshekhar/ts-jest/commit/0f2fe306762d8549bd29737becd4aed14a650427))
+* remove `path-mapping` AST transformer ([#3455](https://github.com/kulshekhar/ts-jest/issues/3455)) ([f566869](https://github.com/kulshekhar/ts-jest/commit/f5668698f8fab78b3008d936aa5001f134f530e2))
+* set Jest peer dependencies to v28 ([#3454](https://github.com/kulshekhar/ts-jest/issues/3454)) ([1e880ff](https://github.com/kulshekhar/ts-jest/commit/1e880fffe82bca231d1d23f6508f4ab4bc31e03e))
 * **core:** drop support for Node.js 10 ([#3332](https://github.com/kulshekhar/ts-jest/issues/3332)) ([7a9aa61](https://github.com/kulshekhar/ts-jest/commit/7a9aa615ea0be881105676a17d5bd655afdc27f5))
 * **core:** remove `mocked` testing util ([#3333](https://github.com/kulshekhar/ts-jest/issues/3333)) ([2d9017d](https://github.com/kulshekhar/ts-jest/commit/2d9017ddfea39f45aa991876b314d1dbe4a36aad))
 * **core:** remove `ts-jest/utils` sub path export ([#3334](https://github.com/kulshekhar/ts-jest/issues/3334)) ([9f253d3](https://github.com/kulshekhar/ts-jest/commit/9f253d31dfcefa35ae00049d0d2dc4a3fe1b2f34))
@@ -59,23 +21,15 @@
 
 ### BREAKING CHANGES
 
-* Minimum support TypeScript version is now **4.3** since Jest 28 requires it
-* Jest 28 is required
+* `path-mapping` AST transformer is no longer shipped in `ts-jest` v28. Please use an alternative one like https://github.com/LeDDGroup/typescript-transform-paths instead.
+* Any imports `ts-jest/dist/compiler/ts-compiler` should change to `ts-jest/dist/legacy/compiler/ts-compiler`
+* Any imports `ts-jest/dist/compiler/ts-jest-compiler` should change to `ts-jest/dist/legacy/compiler/ts-jest-compiler`
+* Any imports `ts-jest/dist/config/config-set` should change to `ts-jest/dist/legacy/config/config-set`
+* Minimum support `TypeScript` version is now **4.3** since Jest 28 requires it.
+* **Jest 28** is required.
 * **core:** Any imports `ts-jest/utils` should be replaced with `ts-jest`.
 * **core:** Starting from Jest 27.4, `mocked` has been integrated into Jest repo.
-* **core:** Support for Node.js v10 has been removed as Jest drops support for it
-* All presets now will they are preserved for refactored codes. If you wish to use the old codes, please do the following
-* 
-```diff
-// jest.config.js
-module.exports = {
-  // [...]
--    preset: 'ts-jest', // or 'js-with-babel'/'js-with-ts'
-+    transform: {
-        '^.+\\.tsx?$': 'ts-jest/legacy' // or '^.+\\.[tj]sx?$': 'ts-jest' to use legacy codes
-     }
-}
-```
+* **core:** Support for Node.js v10 has been removed as Jest drops support for it.
 
 
 
