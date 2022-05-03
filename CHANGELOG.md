@@ -1,3 +1,12 @@
+## [28.0.1](https://github.com/kulshekhar/ts-jest/compare/v28.0.0...v28.0.1) (2022-05-03)
+
+
+### Bug Fixes
+
+* lower the required node version to ^16.10 ([#3495](https://github.com/kulshekhar/ts-jest/issues/3495)) ([3a4e48a](https://github.com/kulshekhar/ts-jest/commit/3a4e48afffa56f76efb98f48ad3e07a92731748e)), closes [#3494](https://github.com/kulshekhar/ts-jest/issues/3494)
+
+
+
 # [28.0.0](https://github.com/kulshekhar/ts-jest/compare/v28.0.0-next.3...v28.0.0) (2022-05-02)
 
 
