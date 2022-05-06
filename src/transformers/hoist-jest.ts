@@ -8,7 +8,7 @@ import type { TsCompilerInstance } from '../types'
  * Remember to increase the version whenever transformer's content is changed. This is to inform Jest to not reuse
  * the previous cache which contains old transformer's content
  */
-export const version = 3
+export const version = 4
 // Used for constructing cache key
 export const name = 'hoist-jest'
 
@@ -87,21 +87,13 @@ export function factory({ configSet }: TsCompilerInstance) {
     if (statements.length <= 1) {
       return statements
     }
-    const pivot = statements[0]
-    const leftPart: _ts.Statement[] = []
-    const rightPart: _ts.Statement[] = []
-    for (let i = 1; i < statements.length; i++) {
-      const currentStatement = statements[i]
-      if (isJestGlobalImport(currentStatement)) {
-        leftPart.push(currentStatement)
-      } else {
-        isHoistableStatement(currentStatement) && !isHoistableStatement(pivot) && !isJestGlobalImport(pivot)
-          ? leftPart.push(currentStatement)
-          : rightPart.push(currentStatement)
-      }
-    }
 
-    return sortStatements(leftPart).concat(pivot, sortStatements(rightPart))
+    return statements.sort((stmtA, stmtB) =>
+      isJestGlobalImport(stmtA) ||
+      (isHoistableStatement(stmtA) && !isHoistableStatement(stmtB) && !isJestGlobalImport(stmtB))
+        ? -1
+        : 1,
+    )
   }
 
   const createVisitor = (ctx: _ts.TransformationContext, _: _ts.SourceFile) => {
