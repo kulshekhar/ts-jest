@@ -51,6 +51,15 @@
 
 
 
+## [27.1.5](https://github.com/kulshekhar/ts-jest/compare/v27.1.3...v27.1.4) (2022-05-17)
+
+
+### Bug Fixes
+
+* **transformers** use `Array.sort` in hoisting transformer ([#3498](https://github.com/kulshekhar/ts-jest/pull/3498)) ([e400a6e](https://github.com/kulshekhar/ts-jest/commit/e400a6ec0e4706f606ae9b1e2897b0bb1cff6343)), fixes [#3476](https://github.com/kulshekhar/ts-jest/issues/3476)
+
+
+
 ## [27.1.4](https://github.com/kulshekhar/ts-jest/compare/v27.1.3...v27.1.4) (2022-03-24)
 
 
