@@ -1,3 +1,12 @@
+## [28.0.3](https://github.com/kulshekhar/ts-jest/compare/v28.0.2...v28.0.3) (2022-05-23)
+
+
+### Bug Fixes
+
+* **security:** update version of `json5` ([#3528](https://github.com/kulshekhar/ts-jest/issues/3528)) ([b31f5ba](https://github.com/kulshekhar/ts-jest/commit/b31f5bab142466fd8b6157ec03eff7316584e51d))
+
+
+
 ## [28.0.2](https://github.com/kulshekhar/ts-jest/compare/v28.0.1...v28.0.2) (2022-05-07)
 
 
