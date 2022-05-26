@@ -17,7 +17,7 @@
     "@docusaurus/plugin-ideal-image": "^2.0.0-beta.18",
     "@docusaurus/plugin-pwa": "^2.0.0-beta.18",
     "@docusaurus/preset-classic": "^2.0.0-beta.18",
-    "@mdx-js/react": "^1.6.22",
+    "@mdx-js/react": "2.1.1",
     "clsx": "^1.1.1",
     "latest-version": "^6.0.0",
     "react": "^16.14.0",
