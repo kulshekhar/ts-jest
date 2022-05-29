@@ -424,9 +424,7 @@ describe('tsCacheDir', () => {
       std: '9.10.2',
       opt: '2.0.2',
     }
-    const mock: jest.MockInstance<string | undefined, [string]> = jest
-      .mocked(getPackageVersion)
-      .mockImplementation((moduleName: string) => realVersions[moduleName])
+    const mock = jest.mocked(getPackageVersion).mockImplementation((moduleName: string) => realVersions[moduleName])
     const cs = createConfigSet({
       jestConfig: {
         cache: true,
@@ -565,7 +563,7 @@ describe('raiseDiagnostics', () => {
         logger,
         tsJestConfig: { diagnostics: { exclude: ['/bar/'], pretty: false } },
       })
-      cs.compilerModule.formatDiagnostics = jest.fn().mockReturnValueOnce('warning TS9999: foo')
+      cs.compilerModule.formatDiagnostics = jest.fn<() => string>().mockReturnValueOnce('warning TS9999: foo')
       logger.target.clear()
 
       expect(() =>
@@ -594,7 +592,7 @@ describe('raiseDiagnostics', () => {
         logger,
         tsJestConfig: { diagnostics: { exclude: ['/foo/'], pretty: false, ignoreCodes: [1111] } },
       })
-      cs.compilerModule.formatDiagnostics = jest.fn().mockReturnValueOnce('warning TS9999: foo')
+      cs.compilerModule.formatDiagnostics = jest.fn<() => string>().mockReturnValueOnce('warning TS9999: foo')
       logger.target.clear()
 
       expect(() => cs.raiseDiagnostics([makeDiagnostic()])).toThrowErrorMatchingInlineSnapshot(`"warning TS9999: foo"`)
@@ -687,23 +685,10 @@ describe('resolvePath', () => {
 }) // resolvePath
 
 describe('_resolveTsConfig', () => {
-  let findConfig!: jest.SpyInstance<string | undefined>
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  let readConfig!: jest.SpyInstance<{ config?: any; error?: ts.Diagnostic }>
-  let parseConfig!: jest.SpyInstance<ts.ParsedCommandLine>
+  const findConfig = jest.spyOn(ts, 'findConfigFile')
+  const readConfig = jest.spyOn(ts, 'readConfigFile')
+  const parseConfig = jest.spyOn(ts, 'parseJsonConfigFileContent')
   let cs!: ConfigSet
-
-  beforeAll(() => {
-    findConfig = jest.spyOn(ts, 'findConfigFile')
-    readConfig = jest.spyOn(ts, 'readConfigFile')
-    parseConfig = jest.spyOn(ts, 'parseJsonConfigFileContent')
-  })
-
-  afterAll(() => {
-    findConfig.mockRestore()
-    readConfig.mockRestore()
-    parseConfig.mockRestore()
-  })
 
   describe('cannot resolve configFileName', () => {
     beforeEach(() => {

@@ -4,8 +4,8 @@ import { TsCompiler } from './ts-compiler'
 import { TsJestCompiler } from './ts-jest-compiler'
 
 describe('TsJestCompiler', () => {
-  TsCompiler.prototype.getResolvedModules = jest.fn()
-  TsCompiler.prototype.getCompiledOutput = jest.fn()
+  jest.spyOn(TsCompiler.prototype, 'getResolvedModules').mockReset()
+  jest.spyOn(TsCompiler.prototype, 'getCompiledOutput').mockReset()
   const runtimeCacheFS = new Map<string, string>()
   const fileContent = 'const foo = 1'
   const fileName = 'foo.ts'
