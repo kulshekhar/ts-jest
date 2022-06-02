@@ -62,7 +62,7 @@
   },
   "peerDependencies": {
     "@babel/core": ">=7.0.0-beta.0 <8",
-    "@types/jest": "^27.0.0",
+    "@types/jest": "^27.0.0 || ^28.0.0",
     "babel-jest": "^28.0.0",
     "jest": "^28.0.0",
     "typescript": ">=4.3"
@@ -96,7 +96,7 @@
     "@types/babel__core": "7.x",
     "@types/cross-spawn": "latest",
     "@types/fs-extra": "latest",
-    "@types/jest": "^27.0.3",
+    "@types/jest": "28.1.0",
     "@types/js-yaml": "latest",
     "@types/lodash.camelcase": "4.x",
     "@types/lodash.memoize": "4.x",
