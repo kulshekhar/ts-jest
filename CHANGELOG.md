@@ -1,3 +1,12 @@
+## [28.0.4](https://github.com/kulshekhar/ts-jest/compare/v28.0.3...v28.0.4) (2022-06-02)
+
+
+### Bug Fixes
+
+* remove `@types/jest` from peer deps ([#3592](https://github.com/kulshekhar/ts-jest/issues/3592)) ([b66b656](https://github.com/kulshekhar/ts-jest/commit/b66b656e0f29eea9234a4d1e883c6d249437f03c))
+
+
+
 ## [28.0.3](https://github.com/kulshekhar/ts-jest/compare/v28.0.2...v28.0.3) (2022-05-23)
 
 
