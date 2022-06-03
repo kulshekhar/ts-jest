@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "typescript-transform-paths": "^3.3.1",
-    "ttypescript": "^1.5.12"
+    "ttypescript": "^1.5.13"
   },
   "jest": {
     "globals": {
