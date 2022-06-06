@@ -6,5 +6,6 @@
     "checkJs": false,
     "esModuleInterop": true,
     "moduleResolution": "Node"
-  }
+  },
+  "files": ["../../globals.d.ts"]
 }

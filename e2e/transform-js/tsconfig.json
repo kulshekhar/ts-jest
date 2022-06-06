@@ -3,5 +3,6 @@
     "allowJs": true,
     "esModuleInterop": true,
     "sourceMap": false
-  }
+  },
+  "files": ["../../globals.d.ts"]
 }
