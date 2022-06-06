@@ -1,6 +1,5 @@
 import { basename, normalize } from 'path'
 
-import type { TransformedSource } from '@jest/transform'
 import { LogContexts, Logger, LogLevels } from 'bs-logger'
 import memoize from 'lodash.memoize'
 import type {
@@ -25,13 +24,13 @@ import type {
 
 import { LINE_FEED, TS_TSX_REGEX } from '../../constants'
 import type {
-  DepGraphInfo,
   StringMap,
   TsCompilerInstance,
   TsJestAstTransformer,
   TsJestCompileOptions,
   TTypeScript,
 } from '../../types'
+import { CompiledOutput } from '../../types'
 import { rootLogger } from '../../utils'
 import { Errors, interpolate } from '../../utils/messages'
 import type { ConfigSet } from '../config/config-set'
@@ -146,11 +145,12 @@ export class TsCompiler implements TsCompilerInstance {
     return importedModulePaths
   }
 
-  getCompiledOutput(fileContent: string, fileName: string, options: TsJestCompileOptions): TransformedSource {
+  getCompiledOutput(fileContent: string, fileName: string, options: TsJestCompileOptions): CompiledOutput {
     let moduleKind = this._initialCompilerOptions.module
     let esModuleInterop = this._initialCompilerOptions.esModuleInterop
     let allowSyntheticDefaultImports = this._initialCompilerOptions.allowSyntheticDefaultImports
     const currentModuleKind = this._compilerOptions.module
+    const isEsmMode = this.configSet.useESM && options.supportsStaticESM
     if (
       (this.configSet.babelJestTransformer || (!this.configSet.babelJestTransformer && options.supportsStaticESM)) &&
       this.configSet.useESM
@@ -179,7 +179,34 @@ export class TsCompiler implements TsCompilerInstance {
       // Must set memory cache before attempting to compile
       this._updateMemoryCache(fileContent, fileName, currentModuleKind === moduleKind)
       const output: EmitOutput = this._languageService.getEmitOutput(fileName)
-      this._doTypeChecking(fileName, options.depGraphs, options.watchMode)
+      const diagnostics = this.getDiagnostics(fileName)
+      if (!isEsmMode && diagnostics.length) {
+        this.configSet.raiseDiagnostics(diagnostics, fileName, this._logger)
+        if (options.watchMode) {
+          this._logger.debug({ fileName }, '_doTypeChecking(): starting watch mode computing diagnostics')
+
+          for (const entry of options.depGraphs.entries()) {
+            const normalizedModuleNames = entry[1].resolvedModuleNames.map((moduleName) => normalize(moduleName))
+            const fileToReTypeCheck = entry[0]
+            if (normalizedModuleNames.includes(fileName) && this.configSet.shouldReportDiagnostics(fileToReTypeCheck)) {
+              this._logger.debug(
+                { fileToReTypeCheck },
+                '_doTypeChecking(): computing diagnostics using language service',
+              )
+
+              this._updateMemoryCache(this._getFileContentFromCache(fileToReTypeCheck), fileToReTypeCheck)
+              const importedModulesDiagnostics = [
+                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                ...this._languageService!.getSemanticDiagnostics(fileToReTypeCheck),
+                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                ...this._languageService!.getSyntacticDiagnostics(fileToReTypeCheck),
+              ]
+              // will raise or just warn diagnostics depending on config
+              this.configSet.raiseDiagnostics(importedModulesDiagnostics, fileName, this._logger)
+            }
+          }
+        }
+      }
       if (output.emitSkipped) {
         if (TS_TSX_REGEX.test(fileName)) {
           throw new Error(interpolate(Errors.CannotProcessFile, { file: fileName }))
@@ -204,9 +231,11 @@ export class TsCompiler implements TsCompilerInstance {
       return this._compilerOptions.sourceMap
         ? {
             code: updateOutput(outputFiles[1].text, fileName, outputFiles[0].text),
+            diagnostics,
           }
         : {
             code: updateOutput(outputFiles[0].text, fileName),
+            diagnostics,
           }
     } else {
       this._logger.debug({ fileName }, 'getCompiledOutput(): compiling as isolated module')
@@ -425,40 +454,20 @@ export class TsCompiler implements TsCompilerInstance {
   /**
    * @internal
    */
-  private _doTypeChecking(fileName: string, depGraphs: Map<string, DepGraphInfo>, watchMode: boolean): void {
+  private getDiagnostics(fileName: string): Diagnostic[] {
+    const diagnostics: Diagnostic[] = []
     if (this.configSet.shouldReportDiagnostics(fileName)) {
       this._logger.debug({ fileName }, '_doTypeChecking(): computing diagnostics using language service')
 
       // Get the relevant diagnostics - this is 3x faster than `getPreEmitDiagnostics`.
-      const diagnostics: Diagnostic[] = [
+      diagnostics.push(
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         ...this._languageService!.getSemanticDiagnostics(fileName),
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         ...this._languageService!.getSyntacticDiagnostics(fileName),
-      ]
-      // will raise or just warn diagnostics depending on config
-      this.configSet.raiseDiagnostics(diagnostics, fileName, this._logger)
+      )
     }
-    if (watchMode) {
-      this._logger.debug({ fileName }, '_doTypeChecking(): starting watch mode computing diagnostics')
 
-      for (const entry of depGraphs.entries()) {
-        const normalizedModuleNames = entry[1].resolvedModuleNames.map((moduleName) => normalize(moduleName))
-        const fileToReTypeCheck = entry[0]
-        if (normalizedModuleNames.includes(fileName) && this.configSet.shouldReportDiagnostics(fileToReTypeCheck)) {
-          this._logger.debug({ fileToReTypeCheck }, '_doTypeChecking(): computing diagnostics using language service')
-
-          this._updateMemoryCache(this._getFileContentFromCache(fileToReTypeCheck), fileToReTypeCheck)
-          const importedModulesDiagnostics = [
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            ...this._languageService!.getSemanticDiagnostics(fileToReTypeCheck),
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            ...this._languageService!.getSyntacticDiagnostics(fileToReTypeCheck),
-          ]
-          // will raise or just warn diagnostics depending on config
-          this.configSet.raiseDiagnostics(importedModulesDiagnostics, fileName, this._logger)
-        }
-      }
-    }
+    return diagnostics
   }
 }

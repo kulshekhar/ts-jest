@@ -593,7 +593,7 @@ export class ConfigSet {
             return !ignoreCodes.includes(diagnostic.code)
           })
     if (!filteredDiagnostics.length) return
-    const error = this._createTsError(filteredDiagnostics)
+    const error = this.createTsError(filteredDiagnostics)
     // only throw if `warnOnly` and it is a warning or error
     const importantCategories = [DiagnosticCategory.Warning, DiagnosticCategory.Error]
     if (this._diagnostics.throws && filteredDiagnostics.some((d) => importantCategories.includes(d.category))) {
@@ -614,7 +614,7 @@ export class ConfigSet {
   /**
    * @internal
    */
-  private _createTsError(diagnostics: readonly ts.Diagnostic[]): TSError {
+  createTsError(diagnostics: readonly ts.Diagnostic[]): TSError {
     const formatDiagnostics = this._diagnostics.pretty
       ? this.compilerModule.formatDiagnosticsWithColorAndContext
       : this.compilerModule.formatDiagnostics
