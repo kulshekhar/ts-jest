@@ -58,7 +58,7 @@
     "lodash.memoize": "4.x",
     "make-error": "1.x",
     "semver": "7.x",
-    "yargs-parser": "^20.x"
+    "yargs-parser": "^21.0.1"
   },
   "peerDependencies": {
     "@babel/core": ">=7.0.0-beta.0 <8",
@@ -103,7 +103,7 @@
     "@types/rimraf": "^3.0.2",
     "@types/semver": "latest",
     "@types/yargs": "latest",
-    "@types/yargs-parser": "20.x",
+    "@types/yargs-parser": "21.x",
     "@typescript-eslint/eslint-plugin": "^5.27.0",
     "@typescript-eslint/parser": "^5.27.0",
     "babel-jest": "^28.1.0",

@@ -5,16 +5,15 @@ import type { Config } from '@jest/types'
 import { createLogger } from 'bs-logger'
 import stableStringify from 'fast-json-stable-stringify'
 import { stringify as stringifyJson5 } from 'json5'
-import type { Arguments } from 'yargs'
 
-import type { CliCommand } from '..'
+import type { CliCommand, CliCommandArgs } from '..'
 import { backportJestConfig } from '../../utils/backports'
 import { JestPresetNames, TsJestPresetDescriptor, allPresets, defaults } from '../helpers/presets'
 
 /**
  * @internal
  */
-export const run: CliCommand = async (args: Arguments /* , logger: Logger*/) => {
+export const run: CliCommand = async (args: CliCommandArgs /* , logger: Logger*/) => {
   const nullLogger = createLogger({ targets: [] })
   const file = args._[0]?.toString()
   const filePath = resolve(process.cwd(), file)
