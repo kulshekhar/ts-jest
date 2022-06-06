@@ -1,6 +1,5 @@
 {
   "extends": [
-    ":dependencyDashboard",
     "group:babelMonorepo",
     "group:commitlintMonorepo",
     "group:docusaurusMonorepo",
