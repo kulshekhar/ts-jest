@@ -8,15 +8,14 @@ import { existsSync, readFileSync, writeFileSync } from 'fs'
 import { basename, join } from 'path'
 
 import { stringify as stringifyJson5 } from 'json5'
-import type { Arguments } from 'yargs'
 
-import type { CliCommand } from '..'
+import type { CliCommand, CliCommandArgs } from '..'
 import { TsJestPresetDescriptor, defaults, jsWIthBabel, jsWithTs } from '../helpers/presets'
 
 /**
  * @internal
  */
-export const run: CliCommand = async (args: Arguments /* , logger: Logger */) => {
+export const run: CliCommand = async (args: CliCommandArgs /* , logger: Logger */) => {
   const file = args._[0]?.toString() ?? 'jest.config.js'
   const filePath = join(process.cwd(), file)
   const name = basename(file)
