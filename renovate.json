@@ -53,10 +53,7 @@
     },
     {
       "matchPaths": ["e2e/**"],
-      "matchPackageNames": [
-        "react",
-        "react-intl"
-      ],
+      "matchPackagePatterns": ["react"],
       "groupName": "React e2e packages",
       "enabled": true
     },
