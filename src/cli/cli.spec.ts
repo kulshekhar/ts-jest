@@ -34,7 +34,8 @@ let mockedProcess: any
 const FAKE_CWD = normalize('/foo/bar')
 const FAKE_PKG = normalize(`${FAKE_CWD}/package.json`)
 fs.existsSync.mockImplementation((f) => f === FAKE_PKG)
-fs.readFileSync.mockImplementation((f) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+fs.readFileSync.mockImplementation((f): any => {
   if (f === FAKE_PKG) return JSON.stringify({ name: 'mock', version: '0.0.0-mock.0' })
   throw new Error('ENOENT')
 })

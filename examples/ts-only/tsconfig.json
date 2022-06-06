@@ -2,5 +2,6 @@
   "compilerOptions": {
     "module": "CommonJS",
     "target": "ES2015"
-  }
+  },
+  "files": ["globals.d.ts"]
 }

@@ -292,7 +292,7 @@ describe('TsJestTransformer', () => {
       const sourceText = 'const foo = 1'
       const sourcePath = 'foo.ts'
       const tr = new TsJestTransformer()
-      tr.getCacheKey = jest.fn()
+      tr.getCacheKey = jest.fn<typeof tr.getCacheKey>()
 
       await tr.getCacheKeyAsync(sourceText, sourcePath, baseTransformOptions)
 

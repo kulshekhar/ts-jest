@@ -92,7 +92,6 @@
     "@types/babel__core": "7.x",
     "@types/cross-spawn": "latest",
     "@types/fs-extra": "latest",
-    "@types/jest": "^27.5.2",
     "@types/js-yaml": "latest",
     "@types/lodash.camelcase": "4.x",
     "@types/lodash.memoize": "4.x",

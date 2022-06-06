@@ -10,5 +10,6 @@
         "transform": "typescript-transform-paths",
       }
     ]
-  }
+  },
+  "files": ["../../../globals.d.ts"]
 }
