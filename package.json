@@ -107,6 +107,7 @@
     "@types/yargs-parser": "20.x",
     "@typescript-eslint/eslint-plugin": "^5.27.0",
     "@typescript-eslint/parser": "^5.27.0",
+    "babel-jest": "^28.1.0",
     "conventional-changelog-cli": "2.x",
     "cross-spawn": "latest",
     "esbuild": "~0.14.42",
