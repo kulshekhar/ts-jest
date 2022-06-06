@@ -93,7 +93,11 @@ module.exports = {
     ],
   ],
   themeConfig: {
-    hideableSidebar: true,
+    docs: {
+      sidebar: {
+        hideable: true,
+      },
+    },
     colorMode: {
       defaultMode: 'light',
       disableSwitch: false,
