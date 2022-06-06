@@ -62,7 +62,7 @@ export class TsCompiler implements TsCompilerInstance {
   /**
    * @internal
    */
-  private readonly _cachedReadFile: ((fileName: string) => string | undefined) | undefined
+  private readonly _cachedReadFile: LanguageServiceHost['readFile'] | undefined
   /**
    * @internal
    */
@@ -301,7 +301,7 @@ export class TsCompiler implements TsCompilerInstance {
         return this._ts.ScriptSnapshot.fromString(contents)
       },
       fileExists: memoize(this._ts.sys.fileExists),
-      readFile: this._cachedReadFile,
+      readFile: this._cachedReadFile ?? this._ts.sys.readFile,
       readDirectory: memoize(this._ts.sys.readDirectory),
       getDirectories: memoize(this._ts.sys.getDirectories),
       directoryExists: memoize(this._ts.sys.directoryExists),
