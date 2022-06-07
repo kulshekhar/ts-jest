@@ -10,8 +10,8 @@
   "devDependencies": {
     "@babel/core": "^7.18.2",
     "@babel/preset-env": "^7.18.2",
-    "babel-jest": "^28.1.0",
-    "jest": "^28.1.0",
+    "babel-jest": "^28.1.1",
+    "jest": "^28.1.1",
     "ts-jest": "^28.0.4",
     "typescript": "~4.7.3"
   }
