@@ -228,9 +228,13 @@ export interface TsJestCompileOptions {
   supportsStaticESM: boolean
 }
 
+export interface CompiledOutput extends TransformedSource {
+  diagnostics?: _ts.Diagnostic[]
+}
+
 export interface CompilerInstance {
   getResolvedModules(fileContent: string, fileName: string, runtimeCacheFS: StringMap): string[]
-  getCompiledOutput(fileContent: string, fileName: string, options: TsJestCompileOptions): TransformedSource
+  getCompiledOutput(fileContent: string, fileName: string, options: TsJestCompileOptions): CompiledOutput
 }
 export interface TsCompilerInstance extends CompilerInstance {
   configSet: ConfigSet

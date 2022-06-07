@@ -5,7 +5,13 @@ import type { SyncTransformer, TransformedSource } from '@jest/transform'
 import type { Logger } from 'bs-logger'
 
 import { DECLARATION_TYPE_EXT, JS_JSX_REGEX, TS_TSX_REGEX } from '../constants'
-import type { CompilerInstance, DepGraphInfo, ProjectConfigTsJest, TransformOptionsTsJest } from '../types'
+import type {
+  CompiledOutput,
+  CompilerInstance,
+  DepGraphInfo,
+  ProjectConfigTsJest,
+  TransformOptionsTsJest,
+} from '../types'
 import { parse, stringify, JsonableValue, rootLogger } from '../utils'
 import { importer } from '../utils/importer'
 import { Errors, interpolate } from '../utils/messages'
@@ -141,7 +147,9 @@ export class TsJestTransformer implements SyncTransformer {
     const configs = this._configsFor(transformOptions)
     const shouldStringifyContent = configs.shouldStringifyContent(sourcePath)
     const babelJest = shouldStringifyContent ? undefined : configs.babelJestTransformer
-    let result = this.processWithTs(sourceText, sourcePath, transformOptions)
+    let result: TransformedSource = {
+      code: this.processWithTs(sourceText, sourcePath, transformOptions).code,
+    }
     if (babelJest) {
       this._logger.debug({ fileName: sourcePath }, 'calling babel-jest processor')
 
@@ -163,11 +171,18 @@ export class TsJestTransformer implements SyncTransformer {
   ): Promise<TransformedSource> {
     this._logger.debug({ fileName: sourcePath, transformOptions }, 'processing', sourcePath)
 
-    return new Promise(async (resolve) => {
+    return new Promise(async (resolve, reject) => {
       const configs = this._configsFor(transformOptions)
       const shouldStringifyContent = configs.shouldStringifyContent(sourcePath)
       const babelJest = shouldStringifyContent ? undefined : configs.babelJestTransformer
-      let result = this.processWithTs(sourceText, sourcePath, transformOptions)
+      let result: TransformedSource
+      const processWithTsResult = this.processWithTs(sourceText, sourcePath, transformOptions)
+      result = {
+        code: processWithTsResult.code,
+      }
+      if (processWithTsResult.diagnostics?.length) {
+        reject(configs.createTsError(processWithTsResult.diagnostics))
+      }
       if (babelJest) {
         this._logger.debug({ fileName: sourcePath }, 'calling babel-jest processor')
 
@@ -183,7 +198,11 @@ export class TsJestTransformer implements SyncTransformer {
     })
   }
 
-  private processWithTs(sourceText: string, sourcePath: string, transformOptions: TransformOptionsTsJest) {
+  private processWithTs(
+    sourceText: string,
+    sourcePath: string,
+    transformOptions: TransformOptionsTsJest,
+  ): CompiledOutput {
     let result: TransformedSource
     const configs = this._configsFor(transformOptions)
     const shouldStringifyContent = configs.shouldStringifyContent(sourcePath)
@@ -330,7 +349,7 @@ export class TsJestTransformer implements SyncTransformer {
     sourcePath: string,
     transformOptions: TransformOptionsTsJest,
   ): Promise<string> {
-    return new Promise((resolve) => resolve(this.getCacheKey(sourceText, sourcePath, transformOptions)))
+    return Promise.resolve(this.getCacheKey(sourceText, sourcePath, transformOptions))
   }
 
   /**

@@ -1,6 +1,4 @@
-import type { TransformedSource } from '@jest/transform'
-
-import type { CompilerInstance, StringMap, TsJestCompileOptions } from '../../types'
+import type { CompilerInstance, CompiledOutput, StringMap, TsJestCompileOptions } from '../../types'
 import type { ConfigSet } from '../config/config-set'
 
 import { TsCompiler } from './ts-compiler'
@@ -17,7 +15,7 @@ export class TsJestCompiler implements CompilerInstance {
     return this._compilerInstance.getResolvedModules(fileContent, fileName, runtimeCacheFS)
   }
 
-  getCompiledOutput(fileContent: string, fileName: string, options: TsJestCompileOptions): TransformedSource {
+  getCompiledOutput(fileContent: string, fileName: string, options: TsJestCompileOptions): CompiledOutput {
     return this._compilerInstance.getCompiledOutput(fileContent, fileName, options)
   }
 }

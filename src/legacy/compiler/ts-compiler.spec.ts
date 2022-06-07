@@ -5,8 +5,8 @@ import {
   type CompilerOptions,
   DiagnosticCategory,
   type EmitOutput,
-  type TranspileOutput,
   type transpileModule,
+  type TranspileOutput,
 } from 'typescript'
 
 import { createConfigSet, makeCompiler } from '../../__helpers__/fakers'
@@ -217,7 +217,7 @@ describe('TsCompiler', () => {
           emitSkipped: false,
         } as EmitOutput)
         // @ts-expect-error testing purpose
-        compiler._doTypeChecking = jest.fn()
+        compiler.getDiagnostics = jest.fn().mockReturnValue([])
 
         const output = compiler.getCompiledOutput(fileContent, fileName, {
           depGraphs: new Map(),
@@ -234,6 +234,7 @@ describe('TsCompiler', () => {
         }).toMatchSnapshot()
         expect(output).toEqual({
           code: updateOutput(jsOutput, fileName, sourceMap),
+          diagnostics: [],
         })
 
         // @ts-expect-error testing purpose
@@ -256,7 +257,7 @@ describe('TsCompiler', () => {
         // @ts-expect-error testing purpose
         compiler._logger.warn = jest.fn()
         // @ts-expect-error testing purpose
-        compiler._doTypeChecking = jest.fn()
+        compiler.getDiagnostics = jest.fn().mockReturnValue([])
         const fileToCheck = fileName.replace('.ts', '.js')
 
         const output = compiler.getCompiledOutput(fileContent, fileToCheck, {
@@ -286,7 +287,7 @@ describe('TsCompiler', () => {
           // @ts-expect-error testing purpose
           compiler._logger.warn = jest.fn()
           // @ts-expect-error testing purpose
-          compiler._doTypeChecking = jest.fn()
+          compiler.getDiagnostics = jest.fn().mockReturnValue([])
 
           // @ts-expect-error testing purpose
           expect(compiler._logger.warn).not.toHaveBeenCalled()
@@ -310,7 +311,7 @@ describe('TsCompiler', () => {
           emitSkipped: false,
         } as EmitOutput)
         // @ts-expect-error testing purpose
-        compiler._doTypeChecking = jest.fn()
+        compiler.getDiagnostics = jest.fn().mockReturnValue([])
 
         expect(() =>
           compiler.getCompiledOutput(fileContent, fileName, {
@@ -527,7 +528,7 @@ describe('TsCompiler', () => {
     )
   })
 
-  describe('_doTypeChecking', () => {
+  describe('getDiagnostics', () => {
     const fileName = join(mockFolder, 'thing.ts')
     const fileName1 = join(mockFolder, 'thing1.ts')
     const fileContent = 'const bar = 1'
@@ -596,10 +597,10 @@ describe('TsCompiler', () => {
       },
     )
 
-    test.each([true, false])(
+    test(
       'should/should not report diagnostics in watch mode when shouldReportDiagnostics is %p ' +
         'and processing file is used by other files',
-      (shouldReport) => {
+      () => {
         const compiler = makeCompiler({
           tsJestConfig: { ...baseTsJestConfig, useESM: false },
         })
@@ -627,11 +628,7 @@ describe('TsCompiler', () => {
           },
         ]
         compiler.configSet.raiseDiagnostics = jest.fn()
-        compiler.configSet.shouldReportDiagnostics = jest
-          .fn<(f: string) => boolean>()
-          .mockImplementation((fileToCheck) => {
-            return fileToCheck === fileName1 ? shouldReport : false
-          })
+        compiler.configSet.shouldReportDiagnostics = jest.fn<(f: string) => boolean>().mockReturnValue(false)
         // @ts-expect-error testing purpose
         compiler._languageService.getEmitOutput = jest.fn().mockReturnValueOnce({
           outputFiles: [{ text: sourceMap }, { text: jsOutput }],
@@ -654,24 +651,11 @@ describe('TsCompiler', () => {
           watchMode: true,
         })
 
-        if (shouldReport) {
-          // @ts-expect-error testing purpose
-          expect(compiler._languageService?.getSemanticDiagnostics).toHaveBeenCalledWith(fileName1)
-          // @ts-expect-error testing purpose
-          expect(compiler._languageService?.getSyntacticDiagnostics).toHaveBeenCalledWith(fileName1)
-          expect(compiler.configSet.raiseDiagnostics).toHaveBeenCalledWith(
-            diagnostics,
-            fileName,
-            // @ts-expect-error testing purpose
-            compiler._logger,
-          )
-        } else {
-          // @ts-expect-error testing purpose
-          expect(compiler._languageService?.getSemanticDiagnostics).not.toHaveBeenCalled()
-          // @ts-expect-error testing purpose
-          expect(compiler._languageService?.getSyntacticDiagnostics).not.toHaveBeenCalled()
-          expect(compiler.configSet.raiseDiagnostics).not.toHaveBeenCalled()
-        }
+        // @ts-expect-error testing purpose
+        expect(compiler._languageService?.getSemanticDiagnostics).not.toHaveBeenCalled()
+        // @ts-expect-error testing purpose
+        expect(compiler._languageService?.getSyntacticDiagnostics).not.toHaveBeenCalled()
+        expect(compiler.configSet.raiseDiagnostics).not.toHaveBeenCalled()
       },
     )
 
