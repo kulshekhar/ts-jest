@@ -7,7 +7,7 @@ To use `ts-jest` with ESM support:
 
 - Check [ESM Jest documentation](https://jestjs.io/docs/en/ecmascript-modules).
 - Enable [useESM](../getting-started/options/useESM) `true` for `ts-jest` config.
-- Include `*.ts` in [extensionsToTreatAsEsm](https://jestjs.io/docs/en/next/configuration#extensionstotreatasesm-arraystring) Jest config option.
+- Include `.ts` in [extensionsToTreatAsEsm](https://jestjs.io/docs/en/next/configuration#extensionstotreatasesm-arraystring) Jest config option.
 - Ensure that `tsconfig` has `module` with value for ESM, e.g. `ES2015` or `ES2020` etc...
 
 ### ESM presets
