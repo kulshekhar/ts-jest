@@ -8,7 +8,7 @@
     "test-esm-isolated": "node --experimental-vm-modules --no-warnings node_modules/jest/bin/jest.js -c=jest-esm-isolated.config.js --no-cache"
   },
   "devDependencies": {
-    "jest": "^28.1.0",
+    "jest": "^28.1.1",
     "ts-jest": "^28.0.4",
     "typescript": "~4.7.3"
   }
