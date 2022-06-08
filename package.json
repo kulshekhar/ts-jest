@@ -109,7 +109,7 @@
     "babel-jest": "^28.1.1",
     "conventional-changelog-cli": "2.x",
     "cross-spawn": "latest",
-    "esbuild": "~0.14.42",
+    "esbuild": "~0.14.43",
     "eslint": "^8.17.0",
     "eslint-config-prettier": "latest",
     "eslint-plugin-import": "latest",
