@@ -1,3 +1,12 @@
+## [28.0.5](https://github.com/kulshekhar/ts-jest/compare/v28.0.4...v28.0.5) (2022-06-11)
+
+
+### Bug Fixes
+
+* **legacy:** throw type check error in ESM mode with `reject` ([#3618](https://github.com/kulshekhar/ts-jest/issues/3618)) ([7dd01ff](https://github.com/kulshekhar/ts-jest/commit/7dd01ffe0c7ad3add87b11227964544f2586355a)), closes [#3507](https://github.com/kulshekhar/ts-jest/issues/3507)
+
+
+
 ## [28.0.4](https://github.com/kulshekhar/ts-jest/compare/v28.0.3...v28.0.4) (2022-06-02)
 
 
