@@ -4,7 +4,8 @@
     "group:commitlintMonorepo",
     "group:docusaurusMonorepo",
     ":prHourlyLimit2",
-    "workarounds:all"
+    "workarounds:all",
+    "helpers:pinGitHubActionDigests"
   ],
   "timezone": "UTC",
   "rangeStrategy": "bump",
