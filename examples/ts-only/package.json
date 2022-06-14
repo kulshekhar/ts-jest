@@ -9,7 +9,7 @@
   },
   "devDependencies": {
     "jest": "^28.1.1",
-    "ts-jest": "^28.0.4",
+    "ts-jest": "^28.0.5",
     "typescript": "~4.7.3"
   }
 }
