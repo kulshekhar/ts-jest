@@ -1,0 +1,40 @@
+name: Test
+
+on:
+  workflow_call:
+    inputs:
+      os:
+        required: true
+        type: string
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: [12.x, 14.x, 16.x]
+    name: Node v${{ matrix.node-version }} on ${{ inputs.os }}
+    runs-on: ${{ inputs.os }}
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: npm
+      - name: Install and build
+        run: npm ci
+      - name: Run tests with coverage
+        run: npm run test -- --coverage && cat ./coverage/lcov.info
+        env:
+          CI: true
+          DISABLE_MOCKED_WARNING: true
+      - name: Coveralls parallel
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.github_token }}
+          flag-name: run-${{ matrix.node-version }}
+          parallel: true
+      - name: Run tests in example projects
+        run: npm run test-examples
