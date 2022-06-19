@@ -539,6 +539,18 @@ describe('raiseDiagnostics', () => {
         ]
       `)
     })
+
+    it('should not throw when diagnostics is false', () => {
+      const cs = createConfigSet({
+        filterDiagnostics,
+        logger,
+        tsJestConfig: { diagnostics: false },
+      })
+
+      logger.target.clear()
+      expect(() => cs.raiseDiagnostics([])).not.toThrow()
+      expect(() => cs.raiseDiagnostics([makeDiagnostic()])).not.toThrow()
+    })
   })
 
   describe("diagnostics don't contain source file", () => {

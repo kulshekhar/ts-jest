@@ -295,9 +295,13 @@ export class ConfigSet {
         throws: diagnosticsOpt,
       }
     }
-    this._shouldIgnoreDiagnosticsForFile = this._diagnostics.exclude.length
-      ? globsToMatcher(this._diagnostics.exclude)
-      : () => false
+    if (diagnosticsOpt) {
+      this._shouldIgnoreDiagnosticsForFile = this._diagnostics.exclude.length
+        ? globsToMatcher(this._diagnostics.exclude)
+        : () => false
+    } else {
+      this._shouldIgnoreDiagnosticsForFile = () => true
+    }
 
     this.logger.debug({ diagnostics: this._diagnostics }, 'normalized diagnostics config via ts-jest option')
 

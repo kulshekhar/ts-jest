@@ -1,4 +1,4 @@
-import { Thing } from '../foo'
+import type { Thing } from '../foo'
 
 const thing: Thing = { a: 1 }
 

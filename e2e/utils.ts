@@ -1,7 +1,6 @@
 import * as path from 'path'
 
-import type { Config } from '@jest/types'
-import { ExecaReturnValue, sync as spawnSync, SyncOptions } from 'execa'
+import { type ExecaReturnValue, sync as spawnSync, type SyncOptions } from 'execa'
 import * as fs from 'graceful-fs'
 
 import { version } from '../package.json'
@@ -12,7 +11,7 @@ interface RunResult extends ExecaReturnValue {
   status: number
   error: Error
 }
-export const run = (cmd: string, cwd?: Config.Path, env?: Record<string, string>): RunResult => {
+export const run = (cmd: string, cwd?: string, env?: Record<string, string>): RunResult => {
   const args = cmd.split(/\s/).slice(1)
   const spawnOptions = { cwd, env, preferLocal: false, reject: false }
   const result = spawnSync(cmd.split(/\s/)[0], args, spawnOptions as SyncOptions) as RunResult
@@ -34,7 +33,7 @@ export const run = (cmd: string, cwd?: Config.Path, env?: Record<string, string>
   return result
 }
 
-export const runNpmInstall = (cwd: Config.Path, env?: Record<string, string>): RunResult => {
+export const runNpmInstall = (cwd: string, env?: Record<string, string>): RunResult => {
   const lockfilePath = path.resolve(cwd, 'package-lock.json')
   let exists = true
 
