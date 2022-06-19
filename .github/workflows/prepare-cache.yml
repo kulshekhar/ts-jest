@@ -1,0 +1,22 @@
+name: Prepare CI cache
+
+on:
+  workflow_call:
+    inputs:
+      os:
+        required: true
+        type: string
+
+jobs:
+  prepare-npm-cache:
+    name: Prepare npm cache for ${{ inputs.os }}
+    runs-on: ${{ inputs.os }}
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: lts/*
+          cache: npm
+      - name: Validate cache
+        run: npm ci
