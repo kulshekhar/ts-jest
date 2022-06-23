@@ -19,7 +19,7 @@
     "@docusaurus/preset-classic": "^2.0.0-beta.21",
     "@mdx-js/react": "^1.6.22",
     "clsx": "^1.1.1",
-    "latest-version": "^6.0.0",
+    "latest-version": "^7.0.0",
     "react": "^16.14.0",
     "react-dom": "^16.14.0"
   },
