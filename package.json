@@ -126,7 +126,7 @@
     "jest": "^28.1.1",
     "jest-snapshot-serializer-raw": "^1.2.0",
     "js-yaml": "latest",
-    "json-schema-to-typescript": "^10.1.5",
+    "json-schema-to-typescript": "^11.0.1",
     "lint-staged": "latest",
     "lodash.camelcase": "^4.3.0",
     "lodash.set": "^4.3.2",
