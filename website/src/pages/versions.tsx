@@ -1,15 +1,24 @@
 import Link from '@docusaurus/Link'
-import { useVersions, useLatestVersion } from '@docusaurus/plugin-content-docs/client'
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext'
 import Layout from '@theme/Layout'
 import React from 'react'
 
+import versions from '../../versions.json'
+
 function Version() {
   const { siteConfig } = useDocusaurusContext()
-  const versions = useVersions()
-  const latestVersion = useLatestVersion()
-  const pastVersions = versions.filter((version) => version !== latestVersion && version.name !== 'current')
-  const nextVersion = versions[0]
+  const latestVersion = {
+    label: versions[0],
+    path: 'https://thymikee.github.io/jest-preset-angular/docs',
+  }
+  const pastVersions = versions.slice(1).map((version) => ({
+    label: version,
+    path: `https://thymikee.github.io/jest-preset-angular/docs/${version}`,
+  }))
+  const nextVersion = {
+    label: 'Next',
+    path: 'https://thymikee.github.io/jest-preset-angular/docs/next',
+  }
   const repoUrl = `https://github.com/${siteConfig.organizationName}/${siteConfig.projectName}`
 
   return (
@@ -55,14 +64,14 @@ function Version() {
           </table>
         </div>
 
-        {pastVersions.length > 0 && (
+        {pastVersions.length && (
           <div className="margin-bottom--lg">
             <h3 id="archive">Past versions (Not maintained anymore)</h3>
             <p>Here you can find documentation for previous versions of Docusaurus.</p>
             <table>
               <tbody>
                 {pastVersions.map((version) => (
-                  <tr key={version.name}>
+                  <tr key={version.label}>
                     <th>{version.label}</th>
                     <td>
                       <Link to={version.path}>Documentation</Link>
