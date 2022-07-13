@@ -1,3 +1,14 @@
+## [28.0.6](https://github.com/kulshekhar/ts-jest/compare/v28.0.5...v28.0.6) (2022-07-13)
+
+
+### Bug Fixes
+
+* **config:** don't show diagnostics warning with `diagnostics: false` ([#3647](https://github.com/kulshekhar/ts-jest/issues/3647)) ([9a9bc02](https://github.com/kulshekhar/ts-jest/commit/9a9bc02935968fb5eb9fd3614a1f7cce019b80d8)), closes [#3638](https://github.com/kulshekhar/ts-jest/issues/3638)
+* **legacy:** add `useCaseSensitiveFileNames` wherever needed ([#3683](https://github.com/kulshekhar/ts-jest/issues/3683)) ([c40bc34](https://github.com/kulshekhar/ts-jest/commit/c40bc34625d63cccc0db7296e616af27868fe1fe)), closes [#3665](https://github.com/kulshekhar/ts-jest/issues/3665)
+* set `@jest/types` as peer dependency ([#3633](https://github.com/kulshekhar/ts-jest/issues/3633)) ([24567e1](https://github.com/kulshekhar/ts-jest/commit/24567e13d2780ad8a11c7ff35f9151ec53f8c211))
+
+
+
 ## [28.0.5](https://github.com/kulshekhar/ts-jest/compare/v28.0.4...v28.0.5) (2022-06-11)
 
 
