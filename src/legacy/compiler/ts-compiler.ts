@@ -108,10 +108,11 @@ export class TsCompiler implements TsCompilerInstance {
         getCurrentDirectory: () => this.configSet.cwd,
         realpath: this._ts.sys.realpath && memoize(this._ts.sys.realpath),
         getDirectories: memoize(this._ts.sys.getDirectories),
+        useCaseSensitiveFileNames: () => this._ts.sys.useCaseSensitiveFileNames,
       }
       this._moduleResolutionCache = this._ts.createModuleResolutionCache(
         this.configSet.cwd,
-        (x) => x,
+        this._ts.sys.useCaseSensitiveFileNames ? (x) => x : (x) => x.toLowerCase(),
         this._compilerOptions,
       )
       this._createLanguageService()
@@ -285,6 +286,7 @@ export class TsCompiler implements TsCompilerInstance {
       .forEach((fileName) => this._fileVersionCache!.set(fileName, 0))
     /* istanbul ignore next */
     const serviceHost: LanguageServiceHost = {
+      useCaseSensitiveFileNames: () => this._ts.sys.useCaseSensitiveFileNames,
       getProjectVersion: () => String(this._projectVersion),
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       getScriptFileNames: () => [...this._fileVersionCache!.keys()],
@@ -346,7 +348,10 @@ export class TsCompiler implements TsCompilerInstance {
 
     this._logger.debug('created language service')
 
-    this._languageService = this._ts.createLanguageService(serviceHost, this._ts.createDocumentRegistry())
+    this._languageService = this._ts.createLanguageService(
+      serviceHost,
+      this._ts.createDocumentRegistry(this._ts.sys.useCaseSensitiveFileNames, this.configSet.cwd),
+    )
     this.program = this._languageService.getProgram()
   }
 
