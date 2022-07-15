@@ -71,6 +71,9 @@
     "@babel/core": {
       "optional": true
     },
+    "@jest/types": {
+      "optional": true
+    },
     "babel-jest": {
       "optional": true
     },
