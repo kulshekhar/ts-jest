@@ -1,3 +1,12 @@
+## [28.0.7](https://github.com/kulshekhar/ts-jest/compare/v28.0.6...v28.0.7) (2022-07-15)
+
+
+### Bug Fixes
+
+* update `@jest/types` to be an optional peer dependency ([#3690](https://github.com/kulshekhar/ts-jest/issues/3690)) ([8a8c3fa](https://github.com/kulshekhar/ts-jest/commit/8a8c3fafecffd19380171c661e94246024cae2ff)), closes [#3689](https://github.com/kulshekhar/ts-jest/issues/3689)
+
+
+
 ## [28.0.6](https://github.com/kulshekhar/ts-jest/compare/v28.0.5...v28.0.6) (2022-07-13)
 
 
