@@ -52,15 +52,13 @@ jobs:
 
         # Runs a single command using the runners shell
       - name: Create release for tag
-        uses: actions/create-release@latest
-        env:
-          # this is provided by github, you don't need to do anything here
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ github.ref }}
-          release_name: ${{ github.ref }}
+          body: Please refer to [CHANGELOG.md](https://github.com/kulshekhar/ts-jest/blob/main/CHANGELOG.md) for details.
           draft: false
           prerelease: ${{ needs.setup_variables.outputs.isLatest != 'true' }}
+          token: ${{ secrets.GITHUB_TOKEN }}
 
   publish_to_npm:
     needs: [setup_variables, create_release]
@@ -72,7 +70,7 @@ jobs:
       # https://github.com/marketplace/actions/setup-node-js-environment
       - uses: actions/setup-node@2fddd8803e2f5c9604345a0b591c3020ee971a93 # tag=v3.4.1
         with:
-          node-version: 12
+          node-version: 16
           registry-url: https://registry.npmjs.org/
       - name: Check lock file
         # runs npm install using package-lock.json and verifies
