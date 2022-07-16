@@ -69,11 +69,6 @@ jobs:
     steps:
       # https://github.com/marketplace/actions/checkout
       - uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b # tag=v3
-      # https://github.com/marketplace/actions/setup-node-js-environment
-      - uses: actions/setup-node@2fddd8803e2f5c9604345a0b591c3020ee971a93 # tag=v3.4.1
-        with:
-          node-version: 12
-          registry-url: https://registry.npmjs.org/
       - name: Check lock file
         # runs npm install using package-lock.json and verifies
         # if dependencies are matching with package.json or not
