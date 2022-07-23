@@ -376,7 +376,7 @@ describe('TsJestTransformer', () => {
       expect(process.env.TS_JEST).toBe('1')
     })
 
-    test.each(['foo.ts', 'foo.tsx'])('should process ts/tsx file', (filePath) => {
+    test.each(['foo.ts', 'foo.tsx', 'foo.mts', 'foo.mtsx'])('should process ts/tsx file', (filePath) => {
       const fileContent = 'const foo = 1'
       const output = 'var foo = 1'
       tr.getCacheKey(fileContent, filePath, baseTransformOptions)
@@ -391,30 +391,33 @@ describe('TsJestTransformer', () => {
       })
     })
 
-    test.each(['foo.js', 'foo.jsx'])('should process js/jsx file with allowJs true', (filePath) => {
-      const fileContent = 'const foo = 1'
-      const output = 'var foo = 1'
-      const transformOptions = {
-        ...baseTransformOptions,
-        config: {
-          ...baseTransformOptions.config,
-          globals: {
-            'ts-jest': { tsconfig: { allowJs: true } },
+    test.each(['foo.js', 'foo.jsx', 'foo.mjs', 'foo.mjsx'])(
+      'should process js/jsx file with allowJs true',
+      (filePath) => {
+        const fileContent = 'const foo = 1'
+        const output = 'var foo = 1'
+        const transformOptions = {
+          ...baseTransformOptions,
+          config: {
+            ...baseTransformOptions.config,
+            globals: {
+              'ts-jest': { tsconfig: { allowJs: true } },
+            },
           },
-        },
-      }
-      tr.getCacheKey(fileContent, filePath, transformOptions)
-      logTarget.clear()
-      jest.spyOn(TsJestCompiler.prototype, 'getCompiledOutput').mockReturnValueOnce({
-        code: output,
-      })
+        }
+        tr.getCacheKey(fileContent, filePath, transformOptions)
+        logTarget.clear()
+        jest.spyOn(TsJestCompiler.prototype, 'getCompiledOutput').mockReturnValueOnce({
+          code: output,
+        })
 
-      const result = tr.process(fileContent, filePath, transformOptions)
+        const result = tr.process(fileContent, filePath, transformOptions)
 
-      expect(result).toEqual({
-        code: output,
-      })
-    })
+        expect(result).toEqual({
+          code: output,
+        })
+      },
+    )
 
     test('should process file with unknown extension and show warning message without babel-jest', () => {
       const fileContent = 'foo'
