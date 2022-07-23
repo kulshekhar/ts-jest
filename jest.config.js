@@ -14,4 +14,5 @@ module.exports = {
   transform: {
     '^.+.tsx?$': '<rootDir>/legacy.js',
   },
+  coverageProvider: 'v8',
 }
