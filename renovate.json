@@ -39,8 +39,24 @@
       "groupName": "Jest packages"
     },
     {
+      "extends": ["monorepo:babel"],
+      "matchPackagePatterns": ["@babel"],
+      "groupName": "Babel packages"
+    },
+    {
       "extends": ["packages:eslint"],
+      "matchPackagePatterns": ["eslint-plugin", "lint-staged"],
       "groupName": "ESLint packages"
+    },
+    {
+      "extends": ["monorepo:commitlint"],
+      "matchPackagePatterns": ["@commitlint"],
+      "groupName": "Commitlint packages"
+    },
+    {
+      "matchPackagePatterns": ["@types"],
+      "matchUpdateTypes": ["patch", "minor"],
+      "groupName": "@types packages"
     },
     {
       "matchPackagePrefixes": ["esbuild"],
