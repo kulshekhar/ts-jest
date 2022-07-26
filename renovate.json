@@ -54,7 +54,7 @@
       "groupName": "Commitlint packages"
     },
     {
-      "matchPackagePatterns": ["@types"],
+      "matchPackagePatterns": ["@types/"],
       "matchUpdateTypes": ["patch", "minor"],
       "groupName": "@types packages"
     },
