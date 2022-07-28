@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "esbuild": "~0.14.50"
+    "esbuild": "~0.14.51"
   },
   "jest": {
     "globals": {
