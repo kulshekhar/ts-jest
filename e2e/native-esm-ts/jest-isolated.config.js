@@ -7,7 +7,8 @@ module.exports = {
       useESM: true,
     },
   },
+  resolver: '<rootDir>/mjs-resolver.ts',
   transform: {
-    '^.+.tsx?$': '<rootDir>/../../legacy.js',
+    '^.+\\.m?tsx?$': '<rootDir>/../../legacy.js',
   },
 }
