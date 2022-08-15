@@ -1,3 +1,12 @@
+## [28.0.8](https://github.com/kulshekhar/ts-jest/compare/v28.0.7...v28.0.8) (2022-08-14)
+
+
+### Bug Fixes
+
+* allow `.mts` to be processed ([#3713](https://github.com/kulshekhar/ts-jest/issues/3713)) ([effae71](https://github.com/kulshekhar/ts-jest/commit/effae717369860e16cb0ccbf24027651493b9bf1)), closes [#3702](https://github.com/kulshekhar/ts-jest/issues/3702)
+
+
+
 ## [28.0.7](https://github.com/kulshekhar/ts-jest/compare/v28.0.6...v28.0.7) (2022-07-15)
 
 

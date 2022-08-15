@@ -93,3 +93,22 @@ module.exports = {
   }
 }
 ```
+
+#### Support `.mts` extension
+
+To work with `.mts` extension, besides the requirement to run Jest and `ts-jest` in ESM mode, there are a few extra requirements to be met:
+
+- `package.json` should contain `"type": "module"`
+- A custom Jest resolver to resolve `.mjs` extension, see our simple one at https://github.com/kulshekhar/ts-jest/blob/main/e2e/native-esm-ts/mjs-resolver.ts
+- `tsconfig.json` should at least contain these following options
+
+```json
+{
+  "compilerOptions": {
+    "module": "Node16", // or "NodeNext"
+    "target": "ESNext",
+    "moduleResolution": "Node16", // or "NodeNext"
+    "esModuleInterop": true
+  }
+}
+```
