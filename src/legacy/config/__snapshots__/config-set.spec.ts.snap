@@ -1,8 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`_resolveTsConfig resolve configFileName normally module in tsConfig is not the same as forced module and allowSyntheticDefaultImports is false in tsConfig should use correct paths when searching 1`] = `
-Array [
-  Object {
+[
+  {
     "category": 3,
     "code": 151001,
     "file": undefined,
@@ -14,8 +14,8 @@ Array [
 `;
 
 exports[`_resolveTsConfig resolve configFileName normally module in tsConfig is not the same as forced module and allowSyntheticDefaultImports is false in tsConfig should use given tsconfig path 1`] = `
-Array [
-  Object {
+[
+  {
     "category": 3,
     "code": 151001,
     "file": undefined,
@@ -27,8 +27,8 @@ Array [
 `;
 
 exports[`_resolveTsConfig resolve configFileName normally module in tsConfig is not the same as forced module and esModuleInterop is not in tsConfig should use correct paths when searching 1`] = `
-Array [
-  Object {
+[
+  {
     "category": 3,
     "code": 151001,
     "file": undefined,
@@ -40,8 +40,8 @@ Array [
 `;
 
 exports[`_resolveTsConfig resolve configFileName normally module in tsConfig is not the same as forced module and esModuleInterop is not in tsConfig should use given tsconfig path 1`] = `
-Array [
-  Object {
+[
+  {
     "category": 3,
     "code": 151001,
     "file": undefined,
@@ -53,11 +53,11 @@ Array [
 `;
 
 exports[`customTransformers should return an object containing all resolved transformers 1`] = `
-Object {
-  "after": Array [],
-  "afterDeclarations": Array [],
-  "before": Array [
-    Object {
+{
+  "after": [],
+  "afterDeclarations": [],
+  "before": [
+    {
       "factory": [Function],
       "name": "hoist-jest",
       "version": 4,
@@ -67,16 +67,16 @@ Object {
 `;
 
 exports[`customTransformers should return an object containing all resolved transformers 2`] = `
-Object {
-  "after": Array [],
-  "afterDeclarations": Array [],
-  "before": Array [
-    Object {
+{
+  "after": [],
+  "afterDeclarations": [],
+  "before": [
+    {
       "factory": [Function],
       "name": "hoist-jest",
       "version": 4,
     },
-    Object {
+    {
       "factory": [Function],
       "name": "dummy-transformer",
       "version": 1,
@@ -86,16 +86,16 @@ Object {
 `;
 
 exports[`customTransformers should return an object containing all resolved transformers 3`] = `
-Object {
-  "after": Array [],
-  "afterDeclarations": Array [],
-  "before": Array [
-    Object {
+{
+  "after": [],
+  "afterDeclarations": [],
+  "before": [
+    {
       "factory": [Function],
       "name": "hoist-jest",
       "version": 4,
     },
-    Object {
+    {
       "factory": [Function],
       "name": "funny-transformer",
       "version": 1,
@@ -105,17 +105,17 @@ Object {
 `;
 
 exports[`customTransformers should return an object containing all resolved transformers 4`] = `
-Object {
-  "after": Array [
-    Object {
+{
+  "after": [
+    {
       "factory": [Function],
       "name": "dummy-transformer",
       "version": 1,
     },
   ],
-  "afterDeclarations": Array [],
-  "before": Array [
-    Object {
+  "afterDeclarations": [],
+  "before": [
+    {
       "factory": [Function],
       "name": "hoist-jest",
       "version": 4,
@@ -125,17 +125,17 @@ Object {
 `;
 
 exports[`customTransformers should return an object containing all resolved transformers 5`] = `
-Object {
-  "after": Array [],
-  "afterDeclarations": Array [
-    Object {
+{
+  "after": [],
+  "afterDeclarations": [
+    {
       "factory": [Function],
       "name": "dummy-transformer",
       "version": 1,
     },
   ],
-  "before": Array [
-    Object {
+  "before": [
+    {
       "factory": [Function],
       "name": "hoist-jest",
       "version": 4,
@@ -145,19 +145,19 @@ Object {
 `;
 
 exports[`customTransformers should return an object containing all resolved transformers 6`] = `
-Object {
-  "after": Array [],
-  "afterDeclarations": Array [],
-  "before": Array [
-    Object {
+{
+  "after": [],
+  "afterDeclarations": [],
+  "before": [
+    {
       "factory": [Function],
       "name": "hoist-jest",
       "version": 4,
     },
-    Object {
+    {
       "factory": [Function],
       "name": "dummy-transformer",
-      "options": Object {},
+      "options": {},
       "version": 1,
     },
   ],
@@ -165,7 +165,7 @@ Object {
 `;
 
 exports[`customTransformers should show warning log when missing version and name 1`] = `
-Array [
+[
   "[level:40] The AST transformer {{file}} must have an \`export const version = <your_transformer_version>",
   "[level:40] The AST transformer {{file}} must have an \`export const name = <your_transformer_name>",
 ]

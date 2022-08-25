@@ -1,11 +1,11 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`pathsToModuleNameMapper should convert tsconfig mapping with given prefix: <rootDir>/ 1`] = `
-Object {
-  "^@foo\\\\-bar/common$": "<rootDir>/../common/dist/library",
+{
+  "^@foo\\-bar/common$": "<rootDir>/../common/dist/library",
   "^@pkg/(.*)$": "<rootDir>/packages/$1",
   "^api/(.*)$": "<rootDir>/src/api/$1",
-  "^client$": Array [
+  "^client$": [
     "<rootDir>/src/client",
     "<rootDir>/src/client/index",
   ],
@@ -13,7 +13,7 @@ Object {
   "^mocks/(.*)$": "<rootDir>/test/mocks/$1",
   "^server$": "<rootDir>/src/server",
   "^test/(.*)$": "<rootDir>/test/$1",
-  "^test/(.*)/mock$": Array [
+  "^test/(.*)/mock$": [
     "<rootDir>/test/mocks/$1",
     "<rootDir>/test/__mocks__/$1",
   ],
@@ -22,11 +22,11 @@ Object {
 `;
 
 exports[`pathsToModuleNameMapper should convert tsconfig mapping with given prefix: foo 1`] = `
-Object {
-  "^@foo\\\\-bar/common$": "foo/../common/dist/library",
+{
+  "^@foo\\-bar/common$": "foo/../common/dist/library",
   "^@pkg/(.*)$": "foo/packages/$1",
   "^api/(.*)$": "foo/src/api/$1",
-  "^client$": Array [
+  "^client$": [
     "foo/src/client",
     "foo/src/client/index",
   ],
@@ -34,7 +34,7 @@ Object {
   "^mocks/(.*)$": "foo/test/mocks/$1",
   "^server$": "foo/src/server",
   "^test/(.*)$": "foo/test/$1",
-  "^test/(.*)/mock$": Array [
+  "^test/(.*)/mock$": [
     "foo/test/mocks/$1",
     "foo/test/__mocks__/$1",
   ],
