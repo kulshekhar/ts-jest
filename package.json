@@ -92,7 +92,7 @@
     "@commitlint/cli": "17.x",
     "@commitlint/config-angular": "^17.0.3",
     "@jest/transform": "^28.1.3",
-    "@jest/types": "^28.1.3",
+    "@jest/types": "^29.0.0",
     "@types/babel__core": "7.x",
     "@types/cross-spawn": "latest",
     "@types/fs-extra": "latest",
