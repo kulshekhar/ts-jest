@@ -131,8 +131,8 @@ describe('compilerModule', () => {
         },
       }),
     ).toThrowErrorMatchingInlineSnapshot(`
-      "Unable to load the module \\"ttypescript\\". Using \\"ts-jest\\" requires this package to be installed. To fix it:
-          ↳ install \\"ttypescript\\": \`npm i -D ttypescript\` (or \`yarn add --dev ttypescript\`)"
+      "Unable to load the module "ttypescript". Using "ts-jest" requires this package to be installed. To fix it:
+          ↳ install "ttypescript": \`npm i -D ttypescript\` (or \`yarn add --dev ttypescript\`)"
     `)
   })
 }) // compilerModule
@@ -261,7 +261,7 @@ describe('babelJestTransformer', () => {
     const babelCfg = cs.babelConfig!
     expect(babelCfg.cwd).toEqual(cs.cwd)
     expect(babelCfg.presets).toMatchInlineSnapshot(`
-      Array [
+      [
         "@babel/preset-env",
         "@babel/preset-typescript",
         "@babel/preset-react",
@@ -291,7 +291,7 @@ describe('babelJestTransformer', () => {
       const babelCfg = cs.babelConfig!
       expect(babelCfg.cwd).toEqual(cs.cwd)
       expect(babelCfg.presets).toMatchInlineSnapshot(`
-      Array [
+      [
         "@babel/preset-env",
         "@babel/preset-typescript",
         "@babel/preset-react",
@@ -322,7 +322,7 @@ describe('babelJestTransformer', () => {
     const babelCfg = cs.babelConfig!
     expect(babelCfg.cwd).toEqual(cs.cwd)
     expect(babelCfg.presets).toMatchInlineSnapshot(`
-      Array [
+      [
         "@babel/preset-env",
         "@babel/preset-typescript",
         "@babel/preset-react",
@@ -533,7 +533,7 @@ describe('raiseDiagnostics', () => {
       expect(() => cs.raiseDiagnostics([])).not.toThrow()
       expect(() => cs.raiseDiagnostics([makeDiagnostic()])).not.toThrow()
       expect(logger.target.lines).toMatchInlineSnapshot(`
-        Array [
+        [
           "[level:40] warning TS9999: foo
         ",
         ]

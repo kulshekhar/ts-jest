@@ -44,7 +44,7 @@ describe('TsJestTransformer', () => {
 
       // @ts-expect-error testing purpose
       expect(Object.keys(TsJestTransformer._cachedConfigSets[0])).toMatchInlineSnapshot(`
-        Array [
+        [
           "jestConfig",
           "configSet",
           "transformerCfgStr",
@@ -327,8 +327,8 @@ describe('TsJestTransformer', () => {
       const result = tr.process(fileContent, filePath, transformOptions)
 
       expect(result).toMatchInlineSnapshot(`
-        Object {
-          "code": "module.exports=\\"<h1>Hello World</h1>\\"",
+        {
+          "code": "module.exports="<h1>Hello World</h1>"",
         }
       `)
     })

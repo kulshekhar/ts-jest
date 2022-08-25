@@ -1,76 +1,76 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`create-jest-preset should return correct preset 1`] = `
-Object {
-  "transform": Object {
-    "^.+\\\\.tsx?$": "ts-jest/legacy",
+{
+  "transform": {
+    "^.+\\.tsx?$": "ts-jest/legacy",
   },
 }
 `;
 
 exports[`create-jest-preset should return correct preset 2`] = `
-Object {
-  "transform": Object {
-    "^.+\\\\.tsx?$": "ts-jest",
+{
+  "transform": {
+    "^.+\\.tsx?$": "ts-jest",
   },
 }
 `;
 
 exports[`create-jest-preset should return correct preset 3`] = `
-Object {
-  "transform": Object {
-    "^.+\\\\.[tj]sx?$": "ts-jest/legacy",
+{
+  "transform": {
+    "^.+\\.[tj]sx?$": "ts-jest/legacy",
   },
 }
 `;
 
 exports[`create-jest-preset should return correct preset 4`] = `
-Object {
-  "transform": Object {
-    "^.+\\\\.[tj]sx?$": "ts-jest",
+{
+  "transform": {
+    "^.+\\.[tj]sx?$": "ts-jest",
   },
 }
 `;
 
 exports[`create-jest-preset should return correct preset 5`] = `
-Object {
-  "transform": Object {
-    "^.+\\\\.tsx?$": "ts-jest/legacy",
+{
+  "transform": {
+    "^.+\\.tsx?$": "ts-jest/legacy",
   },
 }
 `;
 
 exports[`create-jest-preset should return correct preset 6`] = `
-Object {
-  "moduleFileExtensions": Array [
+{
+  "moduleFileExtensions": [
     "bar",
   ],
-  "testMatch": Array [
+  "testMatch": [
     "foo",
   ],
-  "transform": Object {
-    "^.+\\\\.tsx?$": "ts-jest",
+  "transform": {
+    "^.+\\.tsx?$": "ts-jest",
     "foo": "bar",
   },
 }
 `;
 
 exports[`create-jest-preset should return correct preset 7`] = `
-Object {
-  "extensionsToTreatAsEsm": Array [
+{
+  "extensionsToTreatAsEsm": [
     ".jsx",
     ".ts",
     ".tsx",
     ".mts",
   ],
-  "moduleFileExtensions": Array [
+  "moduleFileExtensions": [
     "bar",
   ],
-  "testMatch": Array [
+  "testMatch": [
     "foo",
   ],
-  "transform": Object {
-    "^.+\\\\.m?[tj]sx?$": "ts-jest/legacy",
+  "transform": {
+    "^.+\\.m?[tj]sx?$": "ts-jest/legacy",
     "foo": "bar",
   },
 }

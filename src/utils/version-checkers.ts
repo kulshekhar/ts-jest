@@ -12,9 +12,9 @@ const logger = rootLogger.child({ namespace: 'versions' })
  * Don't forget to update peerDependencies in package.json when changing these.
  */
 const enum ExpectedVersions {
-  Jest = '>=28.0.0 <29',
+  Jest = '>=29.0.0 <30',
   TypeScript = '>=4.3 <5',
-  BabelJest = '>=28.0.0 <29',
+  BabelJest = '>=29.0.0 <30',
   BabelCore = '>=7.0.0-beta.0 <8',
 }
 
