@@ -1,11 +1,13 @@
 /** @type {import('../../dist').InitialOptionsTsJest} */
 module.exports = {
-  globals: {
-    'ts-jest': {
-      isolatedModules: true,
-    },
-  },
   transform: {
-    '^.+.tsx?$': '<rootDir>/../../legacy.js',
+    '^.+.tsx?$': [
+      '<rootDir>/../../legacy.js',
+      {
+        'ts-jest': {
+          isolatedModules: true,
+        },
+      },
+    ],
   },
 }

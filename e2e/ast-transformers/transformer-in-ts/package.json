@@ -3,15 +3,12 @@
     "esbuild": "~0.15.5"
   },
   "jest": {
-    "globals": {
-      "ts-jest": {
+    "transform": {
+      "^.+\\.[tj]sx?$": ["<rootDir>/../../../legacy.js", {
         "astTransformers": {
           "before": ["<rootDir>/../../../src/transformers/hoist-jest.ts"]
         }
-      }
-    },
-    "transform": {
-      "^.+\\.[tj]sx?$": "<rootDir>/../../../legacy.js"
+      }]
     }
   }
 }

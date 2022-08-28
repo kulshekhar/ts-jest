@@ -115,12 +115,27 @@ Visit https://kulshekhar.github.io/ts-jest/user/config/#jest-preset for more inf
     Object.keys(migratedConfig.transform).forEach((key) => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const val = (migratedConfig.transform as any)[key]
-      if (typeof val === 'string' && /\/?ts-jest(?:\/preprocessor\.js)?$/.test(val)) {
+      if (typeof val === 'string' && /\/?ts-jest?(?:\/preprocessor\.js)?$/.test(val)) {
         // eslint-disable-next-line
         ;(migratedConfig.transform as any)[key] = 'ts-jest'
       }
     })
   }
+
+  // migrate globals config to transformer config
+  const globalsTsJestConfig = migratedConfig.globals?.['ts-jest']
+  if (globalsTsJestConfig && migratedConfig.transform) {
+    Object.keys(migratedConfig.transform).forEach((key) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const val = (migratedConfig.transform as any)[key]
+      if (typeof val === 'string' && val.includes('ts-jest')) {
+        // eslint-disable-next-line
+        ;(migratedConfig.transform as any)[key] = Object.keys(globalsTsJestConfig).length ? [val, globalsTsJestConfig] : val
+      }
+    })
+    delete (migratedConfig.globals ?? Object.create(null))['ts-jest']
+  }
+
   // check if it's the same as the preset's one
   if (
     preset &&

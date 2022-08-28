@@ -1,12 +1,5 @@
 module.exports = {
   roots: ['<rootDir>/src'],
-  globals: {
-    'ts-jest': {
-      babelConfig: {
-        presets: ['react-app'],
-      },
-    },
-  },
   collectCoverageFrom: ['src/**/*.{js,jsx,ts,tsx}', '!src/**/*.d.ts'],
   setupFiles: ['react-app-polyfill/jsdom'],
   setupFilesAfterEnv: ['<rootDir>/src/setupTests.ts'],
@@ -14,7 +7,14 @@ module.exports = {
   testEnvironment: 'jsdom',
   transform: {
     '^.+\\.(js|jsx|mjs|cjs)$': '<rootDir>/config/jest/babelTransform.js',
-    '^.+\\.(ts|tsx)$': 'ts-jest',
+    '^.+\\.(ts|tsx)$': [
+      'ts-jest',
+      {
+        babelConfig: {
+          presets: ['react-app'],
+        },
+      },
+    ],
     '^.+\\.css$': '<rootDir>/config/jest/cssTransform.js',
     '^(?!.*\\.(js|jsx|mjs|cjs|ts|tsx|css|json)$)': '<rootDir>/config/jest/fileTransform.js',
   },

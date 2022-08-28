@@ -4,11 +4,17 @@ const baseCfg = require('./jest.config')
 module.exports = {
   ...baseCfg,
   preset: 'ts-jest/presets/js-with-babel-esm',
-  globals: {
-    'ts-jest': {
-      ...baseCfg.globals['ts-jest'],
-      tsconfig: 'tsconfig-esm.json',
-      useESM: true,
-    },
+  transform: {
+    ...baseCfg.transform,
+    '^.+\\.tsx?$': [
+      'ts-jest',
+      {
+        babelConfig: {
+          presets: ['react-app'],
+        },
+        tsconfig: 'tsconfig-esm.json',
+        useESM: true,
+      },
+    ],
   },
 }

@@ -2,14 +2,14 @@
 module.exports = {
   displayName: 'sourcemap-disabled',
   roots: ['<rootDir>', '<rootDir>/../__tests__'],
-  globals: {
-    'ts-jest': {
-      tsconfig: {
-        sourceMap: false,
-      },
-    },
-  },
   transform: {
-    '^.+.tsx?$': '<rootDir>/../../../legacy.js',
+    '^.+.tsx?$': [
+      '<rootDir>/../../../legacy.js',
+      {
+        tsconfig: {
+          sourceMap: false,
+        },
+      },
+    ],
   },
 }

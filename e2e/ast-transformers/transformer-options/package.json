@@ -5,8 +5,8 @@
     "react-intl": "^6.1.0"
   },
   "jest": {
-    "globals": {
-      "ts-jest": {
+    "transform": {
+      "^.+\\.[tj]sx?$": ["<rootDir>/../../../legacy.js", {
         "astTransformers": {
           "before": [
             {
@@ -17,10 +17,7 @@
             }
           ]
         }
-      }
-    },
-    "transform": {
-      "^.+\\.[tj]sx?$": "<rootDir>/../../../legacy.js"
+      }]
     }
   }
 }

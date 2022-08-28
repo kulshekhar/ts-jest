@@ -11,10 +11,11 @@ import type {
   DepGraphInfo,
   ProjectConfigTsJest,
   TransformOptionsTsJest,
+  TsJestGlobalOptions,
 } from '../types'
 import { parse, stringify, JsonableValue, rootLogger } from '../utils'
 import { importer } from '../utils/importer'
-import { Errors, interpolate } from '../utils/messages'
+import { Deprecations, Errors, interpolate } from '../utils/messages'
 import { sha1 } from '../utils/sha1'
 import { VersionCheckers } from '../utils/version-checkers'
 
@@ -55,7 +56,7 @@ export class TsJestTransformer implements SyncTransformer {
   private _depGraphs: Map<string, DepGraphInfo> = new Map<string, DepGraphInfo>()
   private _watchMode = false
 
-  constructor() {
+  constructor(private readonly tsJestConfig?: TsJestGlobalOptions) {
     this._logger = rootLogger.child({ namespace: 'ts-jest-transformer' })
     VersionCheckers.jest.warn()
     /**
@@ -105,7 +106,19 @@ export class TsJestTransformer implements SyncTransformer {
         // create the new record in the index
         this._logger.info('no matching config-set found, creating a new one')
 
-        configSet = this._createConfigSet(config)
+        if (config.globals?.['ts-jest']) {
+          this._logger.warn(Deprecations.GlobalsTsJestConfigOption)
+        }
+        configSet = this._createConfigSet(
+          this.tsJestConfig
+            ? {
+                ...config,
+                globals: {
+                  'ts-jest': this.tsJestConfig,
+                },
+              }
+            : config,
+        )
         const jest = { ...config }
         // we need to remove some stuff from jest config
         // this which does not depend on config
