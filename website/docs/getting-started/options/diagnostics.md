@@ -35,10 +35,13 @@ The `diagnostics` option's value can also accept an object for more advanced con
 // jest.config.js
 module.exports = {
   // [...]
-  globals: {
-    'ts-jest': {
-      diagnostics: false,
-    },
+  transform: {
+    '<regex_match_files': [
+      'ts-jest',
+      {
+        diagnostics: false,
+      },
+    ],
   },
 }
 ```
@@ -48,10 +51,13 @@ module.exports = {
 {
   // [...]
   "jest": {
-    "globals": {
-      "ts-jest": {
-        "diagnostics": false
-      }
+    "transform": {
+      "<regex_match_files>": [
+        "ts-jest",
+        {
+          "diagnostics": false
+        }
+      ]
     }
   }
 }
@@ -67,12 +73,15 @@ Assuming all your test files ends with `.spec.ts` or `.test.ts`, using the follo
 // jest.config.js
 module.exports = {
   // [...]
-  globals: {
-    'ts-jest': {
-      diagnostics: {
-        exclude: ['!**/*.(spec|test).ts'],
+  transform: {
+    '<regex_match_files': [
+      'ts-jest',
+      {
+        diagnostics: {
+          exclude: ['!**/*.(spec|test).ts'],
+        },
       },
-    },
+    ],
   },
 }
 ```
@@ -82,12 +91,15 @@ module.exports = {
 {
   // [...]
   "jest": {
-    "globals": {
-      "ts-jest": {
-        "diagnostics": {
-          "exclude": ["!**/*.(spec|test).ts"]
+    "transform": {
+      "<regex_match_files>": [
+        "ts-jest",
+        {
+          "diagnostics": {
+            "exclude": ["!**/*.(spec|test).ts"]
+          }
         }
-      }
+      ]
     }
   }
 }
@@ -101,12 +113,15 @@ While some diagnostics are stop-blockers for the compilation, most of them are n
 // jest.config.js
 module.exports = {
   // [...]
-  globals: {
-    'ts-jest': {
-      diagnostics: {
-        warnOnly: true,
+  transform: {
+    '<regex_match_files': [
+      'ts-jest',
+      {
+        diagnostics: {
+          warnOnly: true,
+        },
       },
-    },
+    ],
   },
 }
 ```
@@ -116,12 +131,15 @@ module.exports = {
 {
   // [...]
   "jest": {
-    "globals": {
-      "ts-jest": {
-        "diagnostics": {
-          "warnOnly": true
+    "transform": {
+      "<regex_match_files>": [
+        "ts-jest",
+        {
+          "diagnostics": {
+            "warnOnly": true
+          }
         }
-      }
+      ]
     }
   }
 }
@@ -140,12 +158,15 @@ All TypeScript error codes can be found [there](https://github.com/Microsoft/Typ
 // jest.config.js
 module.exports = {
   // [...]
-  globals: {
-    'ts-jest': {
-      diagnostics: {
-        ignoreCodes: [2571, 6031, 18003],
+  transform: {
+    '<regex_match_files': [
+      'ts-jest',
+      {
+        diagnostics: {
+          ignoreCodes: [2571, 6031, 18003],
+        },
       },
-    },
+    ],
   },
 }
 ```
@@ -155,12 +176,15 @@ module.exports = {
 {
   // [...]
   "jest": {
-    "globals": {
-      "ts-jest": {
-        "diagnostics": {
-          "ignoreCodes": [2571, 6031, 18003]
+    "transform": {
+      "<regex_match_files>": [
+        "ts-jest",
+        {
+          "diagnostics": {
+            "ignoreCodes": [2571, 6031, 18003]
+          }
         }
-      }
+      ]
     }
   }
 }

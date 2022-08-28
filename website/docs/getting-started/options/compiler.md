@@ -15,10 +15,13 @@ If you use a custom compiler, such as `ttypescript`, make sure its API is the sa
 // jest.config.js
 module.exports = {
   // [...]
-  globals: {
-    'ts-jest': {
-      compiler: 'ttypescript',
-    },
+  transform: {
+    '<regex_match_files': [
+      'ts-jest',
+      {
+        compiler: 'ttypescript',
+      },
+    ],
   },
 }
 ```
@@ -28,10 +31,13 @@ module.exports = {
 {
   // [...]
   "jest": {
-    "globals": {
-      "ts-jest": {
-        "compiler": "ttypescript"
-      }
+    "transform": {
+      "<regex_match_files>": [
+        "ts-jest",
+        {
+          "compiler": "ttypescript"
+        }
+      ]
     }
   }
 }

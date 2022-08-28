@@ -23,13 +23,16 @@ There are also [3 presets](../getting-started/presets.md) to work with ESM.
 module.exports = {
   // [...]
   extensionsToTreatAsEsm: ['.ts'],
-  globals: {
-    'ts-jest': {
-      useESM: true,
-    },
-  },
   moduleNameMapper: {
     '^(\\.{1,2}/.*)\\.js$': '$1',
+  },
+  transform: {
+    '<regex_match_files': [
+      'ts-jest',
+      {
+        useESM: true,
+      },
+    ],
   },
 }
 ```
@@ -40,13 +43,16 @@ module.exports = {
   // [...]
   "jest": {
     "extensionsToTreatAsEsm": [".ts"],
-    "globals": {
-      "ts-jest": {
-        "useESM": true
-      }
-    },
     "moduleNameMapper": {
       "^(\\.{1,2}/.*)\\.js$": "$1"
+    },
+    "transform": {
+      "<regex_match_files>": [
+        "ts-jest",
+        {
+          "useESM": true
+        }
+      ]
     }
   }
 }
@@ -65,13 +71,16 @@ Starting from **v28.0.0**, `ts-jest` will gradually switch to `esbuild`/`swc` to
 module.exports = {
   // [...]
   preset: 'ts-jest/presets/default-esm', // or other ESM presets
-  globals: {
-    'ts-jest': {
-      useESM: true,
-    },
-  },
   moduleNameMapper: {
     '^(\\.{1,2}/.*)\\.js$': '$1',
+  },
+  transform: {
+    '<regex_match_files': [
+      'ts-jest',
+      {
+        useESM: true,
+      },
+    ],
   },
 }
 ```
@@ -82,13 +91,16 @@ module.exports = {
   // [...]
   "jest": {
     "preset": "ts-jest/presets/default-esm", // or other ESM presets,
-    "globals": {
-      "ts-jest": {
-        "useESM": true
-      }
-    },
     "moduleNameMapper": {
       "^(\\.{1,2}/.*)\\.js$": "$1"
+    },
+    "transform": {
+      "<regex_match_files>": [
+        "ts-jest",
+        {
+          "useESM": true
+        }
+      ]
     }
   }
 }

@@ -20,12 +20,15 @@ The option is `astTransformers` and it allows ones to specify which 3 types of T
 // jest.config.js
 module.exports = {
   // [...]
-  globals: {
-    'ts-jest': {
-      astTransformers: {
-        before: ['my-custom-transformer'],
+  transform: {
+    '<regex_match_files>': [
+      'ts-jest',
+      {
+        astTransformers: {
+          before: ['my-custom-transformer'],
+        },
       },
-    },
+    ],
   },
 }
 ```
@@ -35,12 +38,15 @@ module.exports = {
 {
   // [...]
   "jest": {
-    "globals": {
-      "ts-jest": {
-        "astTransformers": {
-          "before": ["my-custom-transformer"]
+    "transform": {
+      "<regex_match_files>": [
+        "ts-jest",
+        {
+          "astTransformers": {
+            "before": ["my-custom-transformer"]
+          }
         }
-      }
+      ]
     }
   }
 }
@@ -52,17 +58,20 @@ module.exports = {
 // jest.config.js
 module.exports = {
   // [...]
-  globals: {
-    'ts-jest': {
-      astTransformers: {
-        before: [
-          {
-            path: 'my-custom-transformer-that-needs-extra-opts',
-            options: {}, // extra options to pass to transformers here
-          },
-        ],
+  transform: {
+    '<regex_match_files>': [
+      'ts-jest',
+      {
+        astTransformers: {
+          before: [
+            {
+              path: 'my-custom-transformer-that-needs-extra-opts',
+              options: {}, // extra options to pass to transformers here
+            },
+          ],
+        },
       },
-    },
+    ],
   },
 }
 ```
@@ -72,17 +81,20 @@ module.exports = {
 {
   // [...]
   "jest": {
-    "globals": {
-      "ts-jest": {
-        "astTransformers": {
-          "before": [
-            {
-              "path": "my-custom-transformer-that-needs-extra-opts",
-              "options": {} // extra options to pass to transformers here
-            }
-          ]
+    "transform": {
+      "<regex_match_files>": [
+        "ts-jest",
+        {
+          "astTransformers": {
+            "before": [
+              {
+                "path": "my-custom-transformer-that-needs-extra-opts",
+                "options": {} // extra options to pass to transformers here
+              }
+            ]
+          }
         }
-      }
+      ]
     }
   }
 }

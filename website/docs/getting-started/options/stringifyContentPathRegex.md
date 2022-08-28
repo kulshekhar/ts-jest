@@ -26,10 +26,13 @@ module.exports = {
     ...tsjPreset.transform,
     '\\.html$': 'ts-jest',
   },
-  globals: {
-    'ts-jest': {
-      stringifyContentPathRegex: /\.html$/,
-    },
+  transform: {
+    '<regex_match_files': [
+      'ts-jest',
+      {
+        stringifyContentPathRegex: /\.html$/,
+      },
+    ],
   },
 }
 ```
@@ -41,12 +44,12 @@ module.exports = {
   "jest": {
     "moduleFileExtensions": ["js", "ts", "html"],
     "transform": {
-      "\\.(html|ts|js)$": "ts-jest"
-    },
-    "globals": {
-      "ts-jest": {
-        "stringifyContentPathRegex": "\\.html$"
-      }
+      "\\.(html|ts|js)$": [
+        "ts-jest",
+        {
+          "stringifyContentPathRegex": "\\.html$"
+        }
+      ]
     }
   }
 }

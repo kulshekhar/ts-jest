@@ -5,7 +5,7 @@ title: Options
 
 ### Introduction
 
-All `ts-jest` specific options are located under the `globals` of Jest config object in the `package.json` file of your project,
+All `ts-jest` specific options can be defined in Jest `transform` config object in the `package.json` file of your project,
 or through a `jest.config.js`, or `jest.config.ts` file.
 
 ```json
@@ -13,10 +13,13 @@ or through a `jest.config.js`, or `jest.config.ts` file.
 {
   // [...]
   "jest": {
-    "globals": {
-      "ts-jest": {
-        // ts-jest configuration goes here
-      }
+    "transform": {
+      "<regex_match_files>": [
+        "ts-jest",
+        {
+          // ts-jest configuration goes here
+        }
+      ]
     }
   }
 }
@@ -28,10 +31,13 @@ Or through JavaScript:
 // jest.config.js
 module.exports = {
   // [...]
-  globals: {
-    'ts-jest': {
-      // ts-jest configuration goes here
-    },
+  transform: {
+    '<regex_match_files>': [
+      'ts-jest',
+      {
+        // ts-jest configuration goes here
+      },
+    ],
   },
 }
 ```
@@ -44,10 +50,13 @@ To utilize IDE suggestions, you can use `JSDoc` comments to provide suggested `t
 /** @type {import('ts-jest').InitialOptionsTsJest} */
 module.exports = config = {
   // [...]
-  globals: {
-    'ts-jest': {
-      // ts-jest configuration goes here and your IDE will suggest which configs when typing
-    },
+  transform: {
+    '<regex_match_files>': [
+      'ts-jest',
+      {
+        // ts-jest configuration goes here and your IDE will suggest which configs when typing
+      },
+    ],
   },
 }
 ```
@@ -61,10 +70,13 @@ Or through TypeScript (if `ts-node` is installed):
 import type { InitialOptionsTsJest } from 'ts-jest'
 
 const config: InitialOptionsTsJest = {
-  globals: {
-    'ts-jest': {
-      // ts-jest configuration goes here
-    },
+  transform: {
+    '<regex_match_files>': [
+      'ts-jest',
+      {
+        // ts-jest configuration goes here
+      },
+    ],
   },
 }
 export default config
