@@ -2,20 +2,17 @@
   "type": "module",
   "jest": {
     "extensionsToTreatAsEsm": [".ts"],
-    "globals": {
-      "ts-jest": {
-        "useESM": true,
-        "diagnostics": {
-          "exclude": ["**/native-esm-tla.spec.ts"]
-        }
-      }
-    },
     "roots": ["<rootDir>", "<rootDir>/../__tests__"],
     "moduleNameMapper": {
       "@jest/globals": "<rootDir>/../../../node_modules/@jest/globals"
     },
     "transform": {
-      "^.+.tsx?$": "<rootDir>/../../../legacy.js"
+      "^.+.tsx?$": ["<rootDir>/../../../legacy.js", {
+        "useESM": true,
+        "diagnostics": {
+          "exclude": ["**/native-esm-tla.spec.ts"]
+        }
+      }]
     }
   }
 }

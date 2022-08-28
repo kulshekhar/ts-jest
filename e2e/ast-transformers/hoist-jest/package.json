@@ -4,18 +4,15 @@
   },
   "jest": {
     "automock": true,
-    "globals": {
-      "ts-jest": {
-        "tsconfig": {
-          "allowJs": true
-        }
-      }
-    },
     "moduleNameMapper": {
       "react$": "<rootDir>/node_modules/react"
     },
     "transform": {
-      "^.+\\.[tj]sx?$": "<rootDir>/../../../legacy.js"
+      "^.+\\.[tj]sx?$": ["<rootDir>/../../../legacy.js", {
+        "tsconfig": {
+          "allowJs": true
+        }
+      }]
     }
   }
 }

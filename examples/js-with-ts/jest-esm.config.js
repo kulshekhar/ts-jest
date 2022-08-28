@@ -1,10 +1,13 @@
 /** @type {import('ts-jest').InitialOptionsTsJest} */
 module.exports = {
   preset: 'ts-jest/presets/js-with-ts-esm',
-  globals: {
-    'ts-jest': {
-      tsconfig: 'tsconfig-esm.json',
-      useESM: true,
-    },
+  transform: {
+    '^.+\\.m?[tj]sx?$': [
+      'ts-jest',
+      {
+        tsconfig: 'tsconfig-esm.json',
+        useESM: true,
+      },
+    ],
   },
 }

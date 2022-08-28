@@ -4,13 +4,10 @@
     "ttypescript": "^1.5.13"
   },
   "jest": {
-    "globals": {
-      "ts-jest": {
-        "compiler": "ttypescript"
-      }
-    },
     "transform": {
-      "^.+.tsx?$": "<rootDir>/../../../legacy.js"
+      "^.+.tsx?$": ["<rootDir>/../../../legacy.js", {
+        "compiler": "ttypescript"
+      }]
     }
   }
 }

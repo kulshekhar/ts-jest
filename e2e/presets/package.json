@@ -1,15 +1,12 @@
 {
   "jest": {
-    "globals": {
-      "ts-jest": {
+    "transform": {
+      "^.+.[tj]sx?$": ["<rootDir>/../../legacy.js", {
         "isolatedModules": true,
         "tsconfig": {
           "allowJs": true
         }
-      }
-    },
-    "transform": {
-      "^.+.[tj]sx?$": "<rootDir>/../../legacy.js"
+      }]
     }
   }
 }

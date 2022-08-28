@@ -1,5 +1,21 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`config migrate should migrate globals ts-jest config to transformer config 1`] = `
+""jest": {
+  "transform": {
+    "^.+\\\\.jsx?$": "babel-jest",
+    "^.+\\\\.tsx?$": [
+      "ts-jest",
+      {
+        "tsconfig": "./tsconfig.json"
+      }
+    ]
+  },
+  "preset": "ts-jest/presets/js-with-babel"
+}
+"
+`;
+
 exports[`config migrate should migrate preset if valid preset value is used 1`] = `
 "
 No migration needed for given Jest configuration

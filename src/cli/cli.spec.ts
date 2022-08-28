@@ -600,5 +600,27 @@ Jest configuration written to "${normalize('/foo/bar/package.json')}".
         }
       `)
     })
+
+    it('should migrate globals ts-jest config to transformer config', async () => {
+      fs.existsSync.mockImplementation(() => true)
+      jest.mock(
+        pkgPaths.next,
+        () => ({
+          jest: {
+            globals: {
+              'ts-jest': {
+                tsconfig: './tsconfig.json',
+              },
+            },
+            transform: { '^.+\\.jsx?$': 'babel-jest', '^.+\\.tsx?$': 'ts-jest' },
+          },
+        }),
+        { virtual: true },
+      )
+
+      const res = await runCli(...noOption, pkgPaths.current)
+
+      expect(res.stdout).toMatchSnapshot()
+    })
   }) // migrate
 }) // config
