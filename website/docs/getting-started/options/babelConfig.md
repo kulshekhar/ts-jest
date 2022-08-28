@@ -18,10 +18,13 @@ The option is `babelConfig` and it works pretty much as the `tsconfig` option, e
 // jest.config.js
 module.exports = {
   // [...]
-  globals: {
-    'ts-jest': {
-      babelConfig: true,
-    },
+  transform: {
+    '<regex_match_files>': [
+      'ts-jest',
+      {
+        babelConfig: true,
+      },
+    ],
   },
 }
 ```
@@ -31,10 +34,13 @@ module.exports = {
 {
   // [...]
   "jest": {
-    "globals": {
-      "ts-jest": {
-        "babelConfig": true
-      }
+    "transform": {
+      "<regex_match_files>": [
+        "ts-jest",
+        {
+          "babelConfig": true
+        }
+      ]
     }
   }
 }
@@ -48,10 +54,13 @@ The path should be relative to the current working directory where you start Jes
 // jest.config.js
 module.exports = {
   // [...]
-  globals: {
-    'ts-jest': {
-      babelConfig: 'babelrc.test.js',
-    },
+  transform: {
+    '<regex_match_files>': [
+      'ts-jest',
+      {
+        babelConfig: 'babelrc.test.js',
+      },
+    ],
   },
 }
 ```
@@ -60,10 +69,13 @@ module.exports = {
 // OR jest.config.js with require for babelrc
 module.exports = {
   // [...]
-  globals: {
-    'ts-jest': {
-      babelConfig: require('./babelrc.test.js'),
-    },
+  transform: {
+    '<regex_match_files>': [
+      'ts-jest',
+      {
+        babelConfig: require('./babelrc.test.js'),
+      },
+    ],
   },
 }
 ```
@@ -73,10 +85,13 @@ module.exports = {
 {
   // [...]
   "jest": {
-    "globals": {
-      "ts-jest": {
-        "babelConfig": "babelrc.test.js"
-      }
+    "transform": {
+      "<regex_match_files>": [
+        "ts-jest",
+        {
+          "babelConfig": "babelrc.test.js"
+        }
+      ]
     }
   }
 }
@@ -90,13 +105,16 @@ Refer to the [Babel options](https://babeljs.io/docs/en/next/options) to know wh
 // jest.config.js
 module.exports = {
   // [...]
-  globals: {
-    'ts-jest': {
-      babelConfig: {
-        comments: false,
-        plugins: ['@babel/plugin-transform-for-of'],
+  transform: {
+    '<regex_match_files>': [
+      'ts-jest',
+      {
+        babelConfig: {
+          comments: false,
+          plugins: ['@babel/plugin-transform-for-of'],
+        },
       },
-    },
+    ],
   },
 }
 ```
@@ -106,13 +124,16 @@ module.exports = {
 {
   // [...]
   "jest": {
-    "globals": {
-      "ts-jest": {
-        "babelConfig": {
-          "comments": false,
-          "plugins": ["@babel/plugin-transform-for-of"]
+    "transform": {
+      "<regex_match_files>": [
+        "ts-jest",
+        {
+          "babelConfig": {
+            "comments": false,
+            "plugins": ["@babel/plugin-transform-for-of"]
+          }
         }
-      }
+      ]
     }
   }
 }

@@ -16,10 +16,13 @@ Here is how to disable type-checking and compile each file as an isolated module
 // jest.config.js
 module.exports = {
   // [...]
-  globals: {
-    'ts-jest': {
-      isolatedModules: true,
-    },
+  transform: {
+    '<regex_match_files': [
+      'ts-jest',
+      {
+        isolatedModules: true,
+      },
+    ],
   },
 }
 ```
@@ -29,10 +32,13 @@ module.exports = {
 {
   // [...]
   "jest": {
-    "globals": {
-      "ts-jest": {
-        "isolatedModules": true
-      }
+    "transform": {
+      "<regex_match_files>": [
+        "ts-jest",
+        {
+          "isolatedModules": true
+        }
+      ]
     }
   }
 }

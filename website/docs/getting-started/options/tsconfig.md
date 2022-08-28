@@ -18,10 +18,13 @@ The path should be relative to the current working directory where you start Jes
 // jest.config.js
 module.exports = {
   // [...]
-  globals: {
-    'ts-jest': {
-      tsconfig: 'tsconfig.test.json',
-    },
+  transform: {
+    '<regex_match_files': [
+      'ts-jest',
+      {
+        tsconfig: 'tsconfig.test.json',
+      },
+    ],
   },
 }
 ```
@@ -31,10 +34,13 @@ module.exports = {
 {
   // [...]
   "jest": {
-    "globals": {
-      "ts-jest": {
-        "tsconfig": "tsconfig.test.json"
-      }
+    "transform": {
+      "<regex_match_files>": [
+        "ts-jest",
+        {
+          "tsconfig": "tsconfig.test.json"
+        }
+      ]
     }
   }
 }
@@ -49,12 +55,15 @@ It's basically the same object you'd put in your `tsconfig.json`'s `compilerOpti
 // jest.config.js
 module.exports = {
   // [...]
-  globals: {
-    'ts-jest': {
-      tsconfig: {
-        importHelpers: true,
+  transform: {
+    '<regex_match_files': [
+      'ts-jest',
+      {
+        tsconfig: {
+          importHelpers: true,
+        },
       },
-    },
+    ],
   },
 }
 ```
@@ -64,12 +73,15 @@ module.exports = {
 {
   // [...]
   "jest": {
-    "globals": {
-      "ts-jest": {
-        "tsconfig": {
-          "importHelpers": true
+    "transform": {
+      "<regex_match_files>": [
+        "ts-jest",
+        {
+          "tsconfig": {
+            "importHelpers": true
+          }
         }
-      }
+      ]
     }
   }
 }
@@ -83,10 +95,13 @@ By default `ts-jest` will try to find a `tsconfig.json` in your project. But you
 // jest.config.js
 module.exports = {
   // [...]
-  globals: {
-    'ts-jest': {
-      tsconfig: false,
-    },
+  transform: {
+    '<regex_match_files': [
+      'ts-jest',
+      {
+        tsconfig: false,
+      },
+    ],
   },
 }
 ```
@@ -96,10 +111,15 @@ module.exports = {
 {
   // [...]
   "jest": {
-    "globals": {
-      "ts-jest": {
-        "tsconfig": false
-      }
+    "transform": {
+      "<regex_match_files>": [
+        "ts-jest",
+        {
+          "tsconfig": {
+            "tsconfig": false
+          }
+        }
+      ]
     }
   }
 }

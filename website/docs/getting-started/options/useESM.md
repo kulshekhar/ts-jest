@@ -12,10 +12,13 @@ The default value is **false**, `ts-jest` will transform codes to `CommonJS` syn
 // jest.config.js
 module.exports = {
   // [...]
-  globals: {
-    'ts-jest': {
-      useESM: true,
-    },
+  transform: {
+    '<regex_match_files': [
+      'ts-jest',
+      {
+        useESM: true,
+      },
+    ],
   },
 }
 ```
@@ -25,10 +28,13 @@ module.exports = {
 {
   // [...]
   "jest": {
-    "globals": {
-      "ts-jest": {
-        "useESM": true
-      }
+    "transform": {
+      "<regex_match_files>": [
+        "ts-jest",
+        {
+          "useESM": true
+        }
+      ]
     }
   }
 }
