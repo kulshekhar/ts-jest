@@ -1,3 +1,17 @@
+# [29.0.0-next.0](https://github.com/kulshekhar/ts-jest/compare/v28.0.8...v29.0.0-next.0) (2022-08-28)
+
+
+### Features
+
+* support Jest 29 ([#3767](https://github.com/kulshekhar/ts-jest/issues/3767)) ([94b553b](https://github.com/kulshekhar/ts-jest/commit/94b553ba085c52db60f7a7078e3a74d9a02121b1))
+
+
+### BREAKING CHANGES
+
+* **Jest 29** is required.
+
+
+
 ## [28.0.8](https://github.com/kulshekhar/ts-jest/compare/v28.0.7...v28.0.8) (2022-08-14)
 
 
