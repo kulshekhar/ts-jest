@@ -73,7 +73,7 @@ jobs:
   finish:
     permissions:
       checks: write # for coverallsapp/github-action to create new checks
-    needs: test-ubuntu
+    needs: [test-ubuntu, test-windows]
     runs-on: ubuntu-latest
     steps:
       - name: Coveralls finished
