@@ -13,10 +13,10 @@
   },
   "dependencies": {
     "@akebifiky/remark-simple-plantuml": "^1.0.2",
-    "@docusaurus/core": "^2.0.1",
-    "@docusaurus/plugin-ideal-image": "^2.0.1",
-    "@docusaurus/plugin-pwa": "^2.0.1",
-    "@docusaurus/preset-classic": "^2.0.1",
+    "@docusaurus/core": "^2.1.0",
+    "@docusaurus/plugin-ideal-image": "^2.1.0",
+    "@docusaurus/plugin-pwa": "^2.1.0",
+    "@docusaurus/preset-classic": "^2.1.0",
     "@mdx-js/react": "^1.6.22",
     "clsx": "^1.2.1",
     "latest-version": "^7.0.0",
@@ -25,7 +25,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.18.13",
-    "@docusaurus/module-type-aliases": "^2.0.1",
+    "@docusaurus/module-type-aliases": "^2.1.0",
     "@tsconfig/docusaurus": "^1.0.6",
     "@types/react": "^16.14.24",
     "typescript": "~4.8.2"
