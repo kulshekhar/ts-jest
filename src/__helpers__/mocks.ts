@@ -4,7 +4,10 @@ import { rootLogger } from '../utils'
 
 export const logTargetMock = (): testing.LogTargetMock => (rootLogger as testing.LoggerMock).target
 
-export const mockObject = <T, M>(obj: T, newProps: M): T & M & { mockRestore: () => T } => {
+export const mockObject = <T, M extends Record<string, unknown>>(
+  obj: T,
+  newProps: M,
+): T & M & { mockRestore: () => T } => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const backup: Record<string, any> = Object.create(null)
 
