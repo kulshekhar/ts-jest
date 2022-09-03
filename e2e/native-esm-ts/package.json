@@ -1,7 +1,7 @@
 {
   "type": "module",
   "devDependencies": {
-    "@jest/globals": "^29.0.1"
+    "@jest/globals": "^29.0.2"
   },
   "jest": {
     "extensionsToTreatAsEsm": [".ts"],
