@@ -16,11 +16,10 @@ const logger = rootLogger.child({ [LogContexts.namespace]: 'path-mapper' })
 
 export const pathsToModuleNameMapper = (
   mapping: TsPathMapping,
-  { prefix = '' }: { prefix: string } = Object.create(null),
+  { prefix = '', useESM = false }: { prefix?: string; useESM?: boolean } = {},
 ): JestPathMapping => {
   const jestMap: JestPathMapping = {}
   for (const fromPath of Object.keys(mapping)) {
-    let pattern: string
     const toPaths = mapping[fromPath]
     // check that we have only one target path
     if (toPaths.length === 0) {
@@ -37,8 +36,8 @@ export const pathsToModuleNameMapper = (
 
         return `${enrichedPrefix}${target}`
       })
-      pattern = `^${escapeRegex(fromPath)}$`
-      jestMap[pattern] = paths.length === 1 ? paths[0] : paths
+      const cjsPattern = `^${escapeRegex(fromPath)}$`
+      jestMap[cjsPattern] = paths.length === 1 ? paths[0] : paths
     } else if (segments.length === 2) {
       const paths = toPaths.map((target) => {
         const enrichedTarget =
@@ -47,11 +46,19 @@ export const pathsToModuleNameMapper = (
 
         return `${enrichedPrefix}${enrichedTarget.replace(/\*/g, '$1')}`
       })
-      pattern = `^${escapeRegex(segments[0])}(.*)${escapeRegex(segments[1])}$`
-      jestMap[pattern] = paths.length === 1 ? paths[0] : paths
+      if (useESM) {
+        const esmPattern = `^${escapeRegex(segments[0])}(.*)${escapeRegex(segments[1])}\\.js$`
+        jestMap[esmPattern] = paths.length === 1 ? paths[0] : paths
+      }
+      const cjsPattern = `^${escapeRegex(segments[0])}(.*)${escapeRegex(segments[1])}$`
+      jestMap[cjsPattern] = paths.length === 1 ? paths[0] : paths
     } else {
       logger.warn(interpolate(Errors.NotMappingMultiStarPath, { path: fromPath }))
     }
+  }
+
+  if (useESM) {
+    jestMap['^(\\.{1,2}/.*)\\.js$'] = '$1'
   }
 
   return jestMap

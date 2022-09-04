@@ -1,6 +1,7 @@
 import { test, expect } from '@jest/globals'
 
-import { double } from '../double'
+import { double } from '../double.js'
+import { quadruple } from '../quadruple/index.js'
 import { triple } from '../triple.mjs'
 
 test('double', () => {
@@ -9,6 +10,10 @@ test('double', () => {
 
 test('triple', () => {
   expect(triple(2)).toBe(6)
+})
+
+test('quadruple', () => {
+  expect(quadruple(2)).toBe(8)
 })
 
 test('import.meta', () => {

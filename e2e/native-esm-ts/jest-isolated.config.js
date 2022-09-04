@@ -1,7 +1,8 @@
+import config from './jest.config.js'
+
 /** @type {import('../../dist').JestConfigWithTsJest} */
-module.exports = {
-  extensionsToTreatAsEsm: ['.ts'],
-  resolver: '<rootDir>/mjs-resolver.ts',
+export default {
+  ...config,
   transform: {
     '^.+\\.m?tsx?$': [
       '<rootDir>/../../legacy.js',

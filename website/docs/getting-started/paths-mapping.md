@@ -94,3 +94,9 @@ const jestConfig: JestConfigWithTsJest = {
 
 export default jestConfig
 ```
+
+With extra options as 2nd argument:
+
+- `prefix`: append prefix to each of mapped config in the result
+- `useESM`: when using `type: module` in `package.json`, TypeScript enforces users to have explicit `js` extension when importing
+  a `ts` file. This option is to help `pathsToModuleNameMapper` to create a config to suit with this scenario.
