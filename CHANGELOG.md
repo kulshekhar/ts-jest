@@ -1,3 +1,25 @@
+# [29.0.0](https://github.com/kulshekhar/ts-jest/compare/v29.0.0-next.1...v29.0.0) (2022-09-08)
+
+
+### Features
+
+* drop Node 12 and Node 17 support ([#3787](https://github.com/kulshekhar/ts-jest/issues/3787)) ([0f1de16](https://github.com/kulshekhar/ts-jest/commit/0f1de16608dcc7a8ab00bf7fd6a01ebcec6a210a))
+* migrate globals config to transformer config ([#3780](https://github.com/kulshekhar/ts-jest/issues/3780)) ([31e5843](https://github.com/kulshekhar/ts-jest/commit/31e584355434c4fc96022f9e8b41f04c11d24343))
+* support Jest 29 ([#3767](https://github.com/kulshekhar/ts-jest/issues/3767)) ([94b553b](https://github.com/kulshekhar/ts-jest/commit/94b553ba085c52db60f7a7078e3a74d9a02121b1))
+
+
+### DEPRECATIONS
+
+* Define `ts-jest` config under `globals` is now deprecated. Please define the config via transformer config instead.
+
+
+### BREAKING CHANGES
+
+* Only Node 14, 16 and 18 are supported
+* **Jest 29** is required.
+
+
+
 # [29.0.0-next.1](https://github.com/kulshekhar/ts-jest/compare/v29.0.0-next.0...v29.0.0-next.1) (2022-09-02)
 
 
