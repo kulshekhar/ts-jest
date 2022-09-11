@@ -1,4 +1,4 @@
-/** @type {import('../../dist').InitialOptionsTsJest} */
+/** @type {import('../../dist').JestConfigWithTsJest} */
 module.exports = {
   extensionsToTreatAsEsm: ['.ts'],
   resolver: '<rootDir>/mjs-resolver.ts',

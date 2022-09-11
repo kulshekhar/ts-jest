@@ -27,7 +27,6 @@ import type {
   BabelJestTransformer,
   ProjectConfigTsJest,
   TsJestAstTransformer,
-  TsJestDiagnosticsCfg,
   TsJestGlobalOptions,
   TTypeScript,
 } from '../../types'
@@ -39,6 +38,14 @@ import { Errors, ImportReasons, interpolate } from '../../utils/messages'
 import { normalizeSlashes } from '../../utils/normalize-slashes'
 import { sha1 } from '../../utils/sha1'
 import { TSError } from '../../utils/ts-error'
+
+interface TsJestDiagnosticsCfg {
+  pretty: boolean
+  ignoreCodes: number[]
+  exclude: string[]
+  throws: boolean
+  warnOnly?: boolean
+}
 
 /**
  * @internal

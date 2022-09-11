@@ -1,6 +1,6 @@
-import type { InitialOptionsTsJest } from 'ts-jest'
+import type { JestConfigWithTsJest } from '../../dist'
 
-const jestCfg: InitialOptionsTsJest = {
+const jestCfg: JestConfigWithTsJest = {
   transform: {
     '^.+.tsx?$': [
       'ts-jest',
