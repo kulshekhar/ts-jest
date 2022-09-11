@@ -1,6 +1,6 @@
 const baseCfg = require('./jest.config')
 
-/** @type {import('ts-jest').InitialOptionsTsJest} */
+/** @type {import('ts-jest').JestConfigWithTsJest} */
 module.exports = {
   ...baseCfg,
   preset: 'ts-jest/presets/js-with-babel-esm',

@@ -1,7 +1,7 @@
 const baseEsmCfg = require('./jest-esm.config')
 const baseCfg = require('./jest.config')
 
-/** @type {import('ts-jest').InitialOptionsTsJest} */
+/** @type {import('ts-jest').JestConfigWithTsJest} */
 module.exports = {
   ...baseEsmCfg,
   transform: {

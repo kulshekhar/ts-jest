@@ -26,9 +26,15 @@ declare module '@jest/types' {
  * @internal
  */
 export type TBabelCore = typeof _babel
+/**
+ * @internal
+ */
 export type TBabelJest = typeof babelJest
 export type TTypeScript = typeof _ts
 // Stimulate `esbuild` type to avoid import `esbuild` while building the assets which are shipped to npm
+/**
+ * @internal
+ */
 export interface TEsBuild {
   transformSync(
     input: string,
@@ -62,6 +68,9 @@ export interface ConfigCustomTransformer {
   afterDeclarations?: Array<string | AstTransformer>
 }
 
+/**
+ * @deprecated use `TsJestTransformerOptions` instead
+ */
 export interface TsJestGlobalOptions {
   /**
    * Compiler options. It can be:
@@ -156,67 +165,44 @@ export interface TsJestGlobalOptions {
   useESM?: boolean
 }
 
-interface TsJestConfig$tsConfig$file {
-  kind: 'file'
-  value: string | undefined
-}
-interface TsJestConfig$tsConfig$inline {
-  kind: 'inline'
-  value: _ts.CompilerOptions
-}
-type TsJestConfig$tsConfig = TsJestConfig$tsConfig$file | TsJestConfig$tsConfig$inline | undefined
-export interface TsJestDiagnosticsCfg {
-  pretty: boolean
-  ignoreCodes: number[]
-  exclude: string[]
-  throws: boolean
-  warnOnly?: boolean
-}
-interface TsJestConfig$babelConfig$file {
-  kind: 'file'
-  value: string | undefined
-}
-interface TsJestConfig$babelConfig$inline {
-  kind: 'inline'
-  value: BabelConfig
-}
-type TsJestConfig$babelConfig = TsJestConfig$babelConfig$file | TsJestConfig$babelConfig$inline | undefined
-/**
- * @internal
- */
-export interface TsJestConfig {
-  tsconfig: TsJestConfig$tsConfig
-  isolatedModules: boolean
-  compiler: string
-  diagnostics: TsJestDiagnosticsCfg
-  babelConfig: TsJestConfig$babelConfig
-  transformers: ConfigCustomTransformer
-  // to deprecate / deprecated === === ===
-  stringifyContentPathRegex: string | undefined
-}
-
 /**
  * For transformers which extends `ts-jest`
+ * @deprecated use `JestConfigWithTsJest` instead
  */
 export interface ProjectConfigTsJest extends Config.ProjectConfig {
   globals: GlobalConfigTsJest
 }
+/**
+ * @deprecated use `JestConfigWithTsJest` instead
+ */
 export interface TransformOptionsTsJest extends TransformOptions {
   config: ProjectConfigTsJest
 }
 
 /**
  * For typings in `jest.config.ts`
+ * @deprecated use `JestConfigWithTsJest` instead
  */
 export interface GlobalConfigTsJest extends Config.ConfigGlobals {
   'ts-jest': TsJestGlobalOptions
 }
+/**
+ * @deprecated use `JestConfigWithTsJest` instead
+ */
 export interface InitialOptionsTsJest extends Config.InitialOptions {
   globals?: GlobalConfigTsJest
 }
+type TsJestTransformerOptions = TsJestGlobalOptions
+export interface JestConfigWithTsJest extends Partial<Omit<Config.ProjectConfig, 'transform'>> {
+  transform: {
+    [regex: string]: 'ts-jest' | ['ts-jest', TsJestTransformerOptions] | string | [string, Record<string, unknown>]
+  }
+}
 
 export type StringMap = Map<string, string>
-
+/**
+ * @internal
+ */
 export interface DepGraphInfo {
   fileContent: string
   resolvedModuleNames: string[]
