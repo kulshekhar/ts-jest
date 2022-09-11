@@ -7,8 +7,14 @@ on:
         required: true
         type: string
 
+permissions: # added using https://github.com/step-security/secure-workflows
+  contents: read
+
 jobs:
   test:
+    permissions:
+      checks: write # for coverallsapp/github-action to create new checks
+      contents: read # for actions/checkout to fetch code
     strategy:
       fail-fast: false
       matrix:
