@@ -109,17 +109,17 @@ export class TsJestTransformer implements SyncTransformer {
         if (config.globals?.['ts-jest']) {
           this._logger.warn(Deprecations.GlobalsTsJestConfigOption)
         }
-        configSet = this._createConfigSet(
-          this.tsJestConfig
-            ? {
-                ...config,
-                globals: {
-                  'ts-jest': this.tsJestConfig,
-                },
-              }
-            : config,
-        )
-        const jest = { ...config }
+        const migratedConfig = this.tsJestConfig
+          ? {
+              ...config,
+              globals: {
+                ...(config.globals ?? Object.create(null)),
+                'ts-jest': this.tsJestConfig,
+              },
+            }
+          : config
+        configSet = this._createConfigSet(migratedConfig)
+        const jest = { ...migratedConfig }
         // we need to remove some stuff from jest config
         // this which does not depend on config
         jest.cacheDirectory = undefined as any // eslint-disable-line @typescript-eslint/no-explicit-any
