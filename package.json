@@ -114,7 +114,7 @@
     "conventional-changelog-cli": "2.x",
     "cross-spawn": "latest",
     "esbuild": "~0.15.7",
-    "eslint": "^8.23.0",
+    "eslint": "^8.23.1",
     "eslint-config-prettier": "latest",
     "eslint-plugin-import": "latest",
     "eslint-plugin-jest": "latest",
