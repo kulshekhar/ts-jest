@@ -14,20 +14,16 @@ Let's say for example that you have a file `foo.ts` which contains `export defau
 
 In the `jest.config.js` version, you could do as in the `package.json` version of the config, but extending from the preset will ensure more compatibility without any changes when updating.
 
-```js
-// jest.config.js
-// Here `defaults` can be replaced with any other preset
+```js tab
 const { defaults: tsjPreset } = require('ts-jest/presets')
 
+/** @type {import('ts-jest').JestConfigWithTsJest} */
 module.exports = {
   // [...]
   moduleFileExtensions: [...tsjPreset.moduleFileExtensions, 'html'],
   transform: {
     ...tsjPreset.transform,
-    '\\.html$': 'ts-jest',
-  },
-  transform: {
-    '<regex_match_files': [
+    '\\.html$': [
       'ts-jest',
       {
         stringifyContentPathRegex: /\.html$/,
@@ -37,8 +33,26 @@ module.exports = {
 }
 ```
 
-```json
-// OR package.json
+```ts tab
+import type { JestConfigWithTsJest } from './types'
+import tsJestPresets from 'ts-jest/presets'
+
+const jestConfig: JestConfigWithTsJest = {
+  // [...]
+  moduleFileExtensions: [...tsJestPresets.defaults.moduleFileExtensions, 'html'],
+  transform: {
+    ...tsJestPresets.defaults.transform,
+    '\\.html$': [
+      'ts-jest',
+      {
+        stringifyContentPathRegex: /\.html$/,
+      },
+    ],
+  },
+}
+```
+
+```JSON tab
 {
   // [...]
   "jest": {

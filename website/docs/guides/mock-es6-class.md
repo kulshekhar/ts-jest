@@ -7,7 +7,15 @@ TypeScript is transpiling your ts file and your module is likely being imported 
 `const soundPlayer = require('./sound-player')`. Therefore creating an instance of the class that was exported as
 a default will look like this: `new soundPlayer.default()`. However if you are mocking the class as suggested by the documentation.
 
-```js
+```js tab
+jest.mock('./sound-player', () => {
+  return jest.fn().mockImplementation(() => {
+    return { playSoundFile: mockPlaySoundFile }
+  })
+})
+```
+
+```ts tab
 jest.mock('./sound-player', () => {
   return jest.fn().mockImplementation(() => {
     return { playSoundFile: mockPlaySoundFile }
@@ -24,7 +32,19 @@ TypeError: sound_player_1.default is not a constructor
 because `soundPlayer.default` does not point to a function. Your mock has to return an object which has a property default
 that points to a function.
 
-```js
+```js tab
+jest.mock('./sound-player', () => {
+  return {
+    default: jest.fn().mockImplementation(() => {
+      return {
+        playSoundFile: mockPlaySoundFile,
+      }
+    }),
+  }
+})
+```
+
+```ts tab
 jest.mock('./sound-player', () => {
   return {
     default: jest.fn().mockImplementation(() => {
@@ -38,7 +58,15 @@ jest.mock('./sound-player', () => {
 
 For named imports, like `import { OAuth2 } from './oauth'`, replace `default` with imported module name, `OAuth2` in this example:
 
-```js
+```js tab
+jest.mock('./oauth', () => {
+    return {
+        OAuth2: ... // mock here
+    }
+})
+```
+
+```ts tab
 jest.mock('./oauth', () => {
     return {
         OAuth2: ... // mock here
