@@ -7,28 +7,20 @@ You can use the `config:migrate` tool of `ts-jest` CLI if you're coming from an 
 
 _If you're using `jest.config.js`:_
 
-### NPM
-
-```sh
+```npm tab
 npx ts-jest config:migrate jest.config.js
 ```
 
-### Yarn
-
-```sh
+```Yarn tab
 yarn ts-jest config:migrate jest.config.js
 ```
 
 _If you're using `jest` config property of `package.json`:_
 
-### NPM
-
-```sh
+```npm tab
 npx ts-jest config:migrate package.json
 ```
 
-### Yarn
-
-```sh
+```Yarn tab
 yarn ts-jest config:migrate package.json
 ```

@@ -11,8 +11,8 @@ If you use a custom compiler, such as `ttypescript`, make sure its API is the sa
 
 ### Example
 
-```js
-// jest.config.js
+```js tab
+/** @type {import('ts-jest').JestConfigWithTsJest} */
 module.exports = {
   // [...]
   transform: {
@@ -26,8 +26,25 @@ module.exports = {
 }
 ```
 
-```json
-// OR package.json
+```ts tab
+import type { JestConfigWithTsJest } from './types'
+
+const jestConfig: JestConfigWithTsJest = {
+  // [...]
+  transform: {
+    '<regex_match_files': [
+      'ts-jest',
+      {
+        compiler: 'ttypescript',
+      },
+    ],
+  },
+}
+
+export default jestConfig
+```
+
+```JSON tab
 {
   // [...]
   "jest": {

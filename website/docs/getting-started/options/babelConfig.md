@@ -14,8 +14,8 @@ The option is `babelConfig` and it works pretty much as the `tsconfig` option, e
 
 #### Use default `babelrc` file
 
-```js
-// jest.config.js
+```js tab
+/** @type {import('ts-jest').JestConfigWithTsJest} */
 module.exports = {
   // [...]
   transform: {
@@ -29,7 +29,25 @@ module.exports = {
 }
 ```
 
-```json
+```ts tab
+import type { JestConfigWithTsJest } from './types'
+
+const jestConfig: JestConfigWithTsJest = {
+  // [...]
+  transform: {
+    '<regex_match_files>': [
+      'ts-jest',
+      {
+        babelConfig: true,
+      },
+    ],
+  },
+}
+
+export default jestConfig
+```
+
+```JSON tab
 // OR package.json
 {
   // [...]
@@ -50,8 +68,8 @@ module.exports = {
 
 The path should be relative to the current working directory where you start Jest from. You can also use `\<rootDir>` in the path, or use an absolute path (this last one is strongly not recommended).
 
-```js
-// jest.config.js
+```js tab
+/** @type {import('ts-jest').JestConfigWithTsJest} */
 module.exports = {
   // [...]
   transform: {
@@ -65,23 +83,25 @@ module.exports = {
 }
 ```
 
-```js
-// OR jest.config.js with require for babelrc
-module.exports = {
+```ts tab
+import type { JestConfigWithTsJest } from './types'
+
+const jestConfig: JestConfigWithTsJest = {
   // [...]
   transform: {
     '<regex_match_files>': [
       'ts-jest',
       {
-        babelConfig: require('./babelrc.test.js'),
+        babelConfig: 'babelrc.test.js',
       },
     ],
   },
 }
+
+export default jestConfig
 ```
 
-```json
-// OR package.json
+```JSON tab
 {
   // [...]
   "jest": {
@@ -97,12 +117,48 @@ module.exports = {
 }
 ```
 
+or importing directly the config file:
+
+```js tab
+/** @type {import('ts-jest').JestConfigWithTsJest} */
+module.exports = {
+  // [...]
+  transform: {
+    '<regex_match_files>': [
+      'ts-jest',
+      {
+        babelConfig: require('./babelrc.test.js'),
+      },
+    ],
+  },
+}
+```
+
+```ts tab
+import type { JestConfigWithTsJest } from './types'
+import babelConfig from './babelrc.test.js'
+
+const jestConfig: JestConfigWithTsJest = {
+  // [...]
+  transform: {
+    '<regex_match_files>': [
+      'ts-jest',
+      {
+        babelConfig,
+      },
+    ],
+  },
+}
+
+export default jestConfig
+```
+
 #### Inline compiler options
 
 Refer to the [Babel options](https://babeljs.io/docs/en/next/options) to know what can be used there.
 
-```js
-// jest.config.js
+```js tab
+/** @type {import('ts-jest').JestConfigWithTsJest} */
 module.exports = {
   // [...]
   transform: {
@@ -119,8 +175,28 @@ module.exports = {
 }
 ```
 
-```json
-// OR package.json
+```ts tab
+import type { JestConfigWithTsJest } from './types'
+
+const jestConfig: JestConfigWithTsJest = {
+  // [...]
+  transform: {
+    '<regex_match_files>': [
+      'ts-jest',
+      {
+        babelConfig: {
+          comments: false,
+          plugins: ['@babel/plugin-transform-for-of'],
+        },
+      },
+    ],
+  },
+}
+
+export default jestConfig
+```
+
+```JSON tab
 {
   // [...]
   "jest": {

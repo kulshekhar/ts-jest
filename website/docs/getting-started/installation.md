@@ -7,16 +7,8 @@ title: Installation
 
 You can install `ts-jest` and dependencies all at once with one of the following commands.
 
-#### NPM
-
-```sh
+```bash npm2yarn
 npm install --save-dev jest typescript ts-jest @types/jest
-```
-
-#### Yarn
-
-```sh
-yarn add --dev jest typescript ts-jest @types/jest
 ```
 
 :::tip
@@ -34,15 +26,11 @@ To make it transpile TypeScript with `ts-jest`, we will need to create a configu
 
 `ts-jest` can create the configuration file for you automatically:
 
-#### NPM
-
-```sh
+```npm tab
 npx ts-jest config:init
 ```
 
-#### Yarn
-
-```sh
+```Yarn tab
 yarn ts-jest config:init
 ```
 
