@@ -18,8 +18,8 @@ There are also [3 presets](../getting-started/presets.md) to work with ESM.
 
 #### Manual configuration
 
-```js
-// jest.config.js
+```js tab
+/** @type {import('ts-jest').JestConfigWithTsJest} */
 module.exports = {
   // [...]
   extensionsToTreatAsEsm: ['.ts'],
@@ -37,8 +37,29 @@ module.exports = {
 }
 ```
 
-```json
-// OR package.json
+```ts tab
+import type { JestConfigWithTsJest } from './types'
+
+const jestConfig: JestConfigWithTsJest = {
+  // [...]
+  extensionsToTreatAsEsm: ['.ts'],
+  moduleNameMapper: {
+    '^(\\.{1,2}/.*)\\.js$': '$1',
+  },
+  transform: {
+    '<regex_match_files': [
+      'ts-jest',
+      {
+        useESM: true,
+      },
+    ],
+  },
+}
+
+export default jestConfig
+```
+
+```JSON tab
 {
   // [...]
   "jest": {
@@ -66,8 +87,8 @@ Starting from **v28.0.0**, `ts-jest` will gradually switch to `esbuild`/`swc` to
 
 :::
 
-```js
-// jest.config.js
+```js tab
+/** @type {import('ts-jest').JestConfigWithTsJest} */
 module.exports = {
   // [...]
   preset: 'ts-jest/presets/default-esm', // or other ESM presets
@@ -85,8 +106,29 @@ module.exports = {
 }
 ```
 
-```json
-// OR package.json
+```ts tab
+import type { JestConfigWithTsJest } from './types'
+
+const jestConfig: JestConfigWithTsJest = {
+  // [...]
+  preset: 'ts-jest/presets/default-esm', // or other ESM presets
+  moduleNameMapper: {
+    '^(\\.{1,2}/.*)\\.js$': '$1',
+  },
+  transform: {
+    '<regex_match_files': [
+      'ts-jest',
+      {
+        useESM: true,
+      },
+    ],
+  },
+}
+
+export default jestConfig
+```
+
+```JSON tab
 {
   // [...]
   "jest": {

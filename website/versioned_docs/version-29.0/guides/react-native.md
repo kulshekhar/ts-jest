@@ -11,11 +11,21 @@ After that, some little modifications will be required as follows:
 
 If you didn't yet, move any Babel config from `.babelrc` to `babel.config.js`. It should at least contain:
 
-```js
-// babel.config.js
+```js tab
+/** @type {import('ts-jest').JestConfigWithTsJest} */
 module.exports = {
   presets: ['module:metro-react-native-babel-preset'],
 }
+```
+
+```ts tab
+import type { JestConfigWithTsJest } from './types'
+
+const jestConfig: JestConfigWithTsJest = {
+  presets: ['module:metro-react-native-babel-preset'],
+}
+
+export default jestConfig
 ```
 
 ### TypeScript Configuration
@@ -36,10 +46,10 @@ Create a new `tsconfig.spec.json` at the root of your project with the following
 
 In the same way that you moved Babel config, move Jest config from `jest` key of `package.json` to `jest.config.js`. It should look like this:
 
-```js
-// jest.config.js
+```js tab
 const { defaults: tsjPreset } = require('ts-jest/presets')
 
+/** @type {import('ts-jest').JestConfigWithTsJest} */
 module.exports = {
   preset: 'react-native',
   transform: {
@@ -53,4 +63,25 @@ module.exports = {
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
 }
+```
+
+```ts tab
+import { defaults as tsjPreset } from 'ts-jest/presets'
+import type { JestConfigWithTsJest } from './types'
+
+const jestConfig: JestConfigWithTsJest = {
+  preset: 'react-native',
+  transform: {
+    '^.+\\.jsx$': 'babel-jest',
+    '^.+\\.tsx?$': [
+      'ts-jest',
+      {
+        tsconfig: 'tsconfig.spec.json',
+      },
+    ],
+  },
+  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
+}
+
+export default jestConfig
 ```

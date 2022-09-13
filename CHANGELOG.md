@@ -1,3 +1,17 @@
+## [29.0.1](https://github.com/kulshekhar/ts-jest/compare/v29.0.0...v29.0.1) (2022-09-13)
+
+
+### Bug Fixes
+
+* **legacy:** include existing globals config in cached config ([#3803](https://github.com/kulshekhar/ts-jest/issues/3803)) ([e79be47](https://github.com/kulshekhar/ts-jest/commit/e79be47d2b81a677d0dd39d84328a38ca0f0ffc6))
+
+
+### Features
+
+* add typings for `ts-jest` options via `transform` config ([#3805](https://github.com/kulshekhar/ts-jest/issues/3805)) ([664b0f2](https://github.com/kulshekhar/ts-jest/commit/664b0f2b446a36dd7661f4840ca3dd7722f1f6ff))
+
+
+
 # [29.0.0](https://github.com/kulshekhar/ts-jest/compare/v29.0.0-next.1...v29.0.0) (2022-09-08)
 
 

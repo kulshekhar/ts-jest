@@ -28,8 +28,8 @@ With the below config in your `tsconfig`:
 
 #### Jest config (without helper)
 
-```js
-// jest.config.js
+```js tab
+/** @type {import('ts-jest').JestConfigWithTsJest} */
 module.exports = {
   // [...]
   moduleNameMapper: {
@@ -39,8 +39,21 @@ module.exports = {
 }
 ```
 
-```json
-// OR package.json
+```ts tab
+import type { JestConfigWithTsJest } from './types'
+
+const jestConfig: JestConfigWithTsJest = {
+  // [...]
+  moduleNameMapper: {
+    '^@App/(.*)$': '<rootDir>/src/$1',
+    '^lib/(.*)$': '<rootDir>/common/$1',
+  },
+}
+
+export default jestConfig
+```
+
+```JSON tab
 {
   // [...]
   "jest": {
@@ -54,15 +67,30 @@ module.exports = {
 
 #### Jest config (with helper)
 
-```js
-// jest.config.js
+```js tab
 const { pathsToModuleNameMapper } = require('ts-jest')
 // In the following statement, replace `./tsconfig` with the path to your `tsconfig` file
 // which contains the path mapping (ie the `compilerOptions.paths` option):
 const { compilerOptions } = require('./tsconfig')
 
+/** @type {import('ts-jest').JestConfigWithTsJest} */
 module.exports = {
   // [...]
   moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths /*, { prefix: '<rootDir>/' } */),
 }
+```
+
+```ts tab
+import { pathsToModuleNameMapper } from 'ts-jest'
+// In the following statement, replace `./tsconfig` with the path to your `tsconfig` file
+// which contains the path mapping (ie the `compilerOptions.paths` option):
+import { compilerOptions } from './tsconfig'
+import type { JestConfigWithTsJest } from './types'
+
+const jestConfig: JestConfigWithTsJest = {
+  // [...]
+  moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths /*, { prefix: '<rootDir>/' } */),
+}
+
+export default jestConfig
 ```

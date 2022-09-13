@@ -17,14 +17,10 @@ export TS_JEST_LOG=ts-jest.log
 
 **Windows**
 
-Command Prompt (cmd)
-
-```
+```Command Prompt tab
 set TS_JEST_LOG=ts-jest.log
 ```
 
-PowerShell
-
-```
+```PowerShell tab
 $env:TS_JEST_LOG = 'ts-jest.log'
 ```

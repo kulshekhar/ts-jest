@@ -12,8 +12,8 @@ Here is how to disable type-checking and compile each file as an isolated module
 
 ### Example
 
-```js
-// jest.config.js
+```js tab
+/** @type {import('ts-jest').JestConfigWithTsJest} */
 module.exports = {
   // [...]
   transform: {
@@ -27,8 +27,25 @@ module.exports = {
 }
 ```
 
-```json
-// OR package.json
+```ts tab
+import type { JestConfigWithTsJest } from 'ts-jest'
+
+const jestConfig: JestConfigWithTsJest = {
+  // [...]
+  transform: {
+    '<regex_match_files': [
+      'ts-jest',
+      {
+        isolatedModules: true,
+      },
+    ],
+  },
+}
+
+export default jestConfig
+```
+
+```JSON tab
 {
   // [...]
   "jest": {

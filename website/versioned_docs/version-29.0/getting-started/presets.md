@@ -33,8 +33,8 @@ Starting from **v28.0.0**, `ts-jest` will gradually opt in adoption of `esbuild`
 In most cases, simply setting the `preset` key to the desired preset name in your Jest config should be enough to start
 using TypeScript with Jest (assuming you added `ts-jest` to your `devDependencies` of course):
 
-```js
-// jest.config.js
+```js tab
+/** @type {import('ts-jest').JestConfigWithTsJest} */
 module.exports = {
   // [...]
   // Replace `ts-jest` with the preset you want to use
@@ -43,8 +43,20 @@ module.exports = {
 }
 ```
 
-```json
-// OR package.json
+```ts tab
+import type { JestConfigWithTsJest } from './types'
+
+const jestConfig: JestConfigWithTsJest = {
+  // [...]
+  // Replace `ts-jest` with the preset you want to use
+  // from the above list
+  preset: 'ts-jest',
+}
+
+export default jestConfig
+```
+
+```JSON tab
 {
   // [...]
   "jest": {
@@ -63,8 +75,7 @@ Any preset can also be used with other options.
 If you're already using another preset, you might want only some specific settings from the chosen `ts-jest` preset.
 In this case you'll need to use the JavaScript version of Jest config (comment/uncomment according to your use case):
 
-```js
-// jest.config.js
+```js tab
 const { defaults: tsjPreset } = require('ts-jest/presets')
 // const { defaultsESM: tsjPreset } = require('ts-jest/presets')
 // const { jsWithTs: tsjPreset } = require('ts-jest/presets')
@@ -72,6 +83,7 @@ const { defaults: tsjPreset } = require('ts-jest/presets')
 // const { jsWithBabel: tsjPreset } = require('ts-jest/presets')
 // const { jsWithBabelESM: tsjPreset } = require('ts-jest/presets')
 
+/** @type {import('ts-jest').JestConfigWithTsJest} */
 module.exports = {
   // [...]
   transform: {
@@ -81,19 +93,17 @@ module.exports = {
 }
 ```
 
-Or through TypeScript (if `ts-node` is installed):
+```ts tab
+import type { JestConfigWithTsJest } from './types'
 
-```ts
-// jest.config.ts
-import type { InitialOptionsTsJest } from 'ts-jest'
 import { defaults as tsjPreset } from 'ts-jest/presets'
-// import { defaultsESM as tsjPreset } from 'ts-jest/presets'
-// import { jsWithTs as tsjPreset } from 'ts-jest/presets'
-// import { jsWithTsESM as tsjPreset } from 'ts-jest/presets'
-// import { jsWithBabel as tsjPreset } from 'ts-jest/presets'
-// import { jsWithBabelESM as tsjPreset } from 'ts-jest/presets'
+// import { defaultsESM as tsjPreset } from 'ts-jest/presets';
+// import { jsWithTs as tsjPreset } from 'ts-jest/presets';
+// import { jsWithTsESM as tsjPreset } from 'ts-jest/presets';
+// import { jsWithBabel as tsjPreset } from 'ts-jest/presets';
+// import { jsWithBabelESM as tsjPreset } from 'ts-jest/presets';
 
-const config: InitialOptionsTsJest = {
+const jestConfig: JestConfigWithTsJest = {
   // [...]
   transform: {
     ...tsjPreset.transform,
@@ -101,5 +111,5 @@ const config: InitialOptionsTsJest = {
   },
 }
 
-export default config
+export default jestConfig
 ```
