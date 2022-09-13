@@ -16,8 +16,8 @@ The option is `astTransformers` and it allows ones to specify which 3 types of T
 
 #### Basic Transformers
 
-```js
-// jest.config.js
+```js tab
+/** @type {import('ts-jest').JestConfigWithTsJest} */
 module.exports = {
   // [...]
   transform: {
@@ -33,8 +33,27 @@ module.exports = {
 }
 ```
 
-```json
-// OR package.json
+```ts tab
+import type { JestConfigWithTsJest } from './types'
+
+const jestConfig: JestConfigWithTsJest = {
+  // [...]
+  transform: {
+    '<regex_match_files>': [
+      'ts-jest',
+      {
+        astTransformers: {
+          before: ['my-custom-transformer'],
+        },
+      },
+    ],
+  },
+}
+
+export default jestConfig
+```
+
+```JSON tab
 {
   // [...]
   "jest": {
@@ -54,8 +73,8 @@ module.exports = {
 
 #### Configuring transformers with options
 
-```js
-// jest.config.js
+```js tab
+/** @type {import('ts-jest').JestConfigWithTsJest} */
 module.exports = {
   // [...]
   transform: {
@@ -76,8 +95,32 @@ module.exports = {
 }
 ```
 
-```json
-// OR package.json
+```ts tab
+import type { JestConfigWithTsJest } from './types'
+
+const jestConfig: JestConfigWithTsJest = {
+  // [...]
+  transform: {
+    '<regex_match_files>': [
+      'ts-jest',
+      {
+        astTransformers: {
+          before: [
+            {
+              path: 'my-custom-transformer-that-needs-extra-opts',
+              options: {}, // extra options to pass to transformers here
+            },
+          ],
+        },
+      },
+    ],
+  },
+}
+
+export default jestConfig
+```
+
+```JSON tab
 {
   // [...]
   "jest": {
