@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "@babel/preset-env": "^7.19.0"
+    "@babel/preset-env": "^7.19.1"
   },
   "jest": {
     "projects": [
