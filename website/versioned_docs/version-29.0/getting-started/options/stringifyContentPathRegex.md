@@ -34,7 +34,7 @@ module.exports = {
 ```
 
 ```ts tab
-import type { JestConfigWithTsJest } from './types'
+import type { JestConfigWithTsJest } from 'ts-jest'
 import tsJestPresets from 'ts-jest/presets'
 
 const jestConfig: JestConfigWithTsJest = {

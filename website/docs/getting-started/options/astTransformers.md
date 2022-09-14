@@ -34,7 +34,7 @@ module.exports = {
 ```
 
 ```ts tab
-import type { JestConfigWithTsJest } from './types'
+import type { JestConfigWithTsJest } from 'ts-jest'
 
 const jestConfig: JestConfigWithTsJest = {
   // [...]
@@ -96,7 +96,7 @@ module.exports = {
 ```
 
 ```ts tab
-import type { JestConfigWithTsJest } from './types'
+import type { JestConfigWithTsJest } from 'ts-jest'
 
 const jestConfig: JestConfigWithTsJest = {
   // [...]

@@ -44,7 +44,7 @@ module.exports = {
 ```
 
 ```ts tab
-import type { JestConfigWithTsJest } from './types'
+import type { JestConfigWithTsJest } from 'ts-jest'
 
 const jestConfig: JestConfigWithTsJest = {
   // [...]
@@ -94,7 +94,7 @@ module.exports = {
 ```
 
 ```ts tab
-import type { JestConfigWithTsJest } from './types'
+import type { JestConfigWithTsJest } from 'ts-jest'
 
 import { defaults as tsjPreset } from 'ts-jest/presets'
 // import { defaultsESM as tsjPreset } from 'ts-jest/presets';
