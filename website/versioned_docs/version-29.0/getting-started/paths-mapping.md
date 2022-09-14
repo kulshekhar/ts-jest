@@ -40,7 +40,7 @@ module.exports = {
 ```
 
 ```ts tab
-import type { JestConfigWithTsJest } from './types'
+import type { JestConfigWithTsJest } from 'ts-jest'
 
 const jestConfig: JestConfigWithTsJest = {
   // [...]
@@ -85,7 +85,7 @@ import { pathsToModuleNameMapper } from 'ts-jest'
 // In the following statement, replace `./tsconfig` with the path to your `tsconfig` file
 // which contains the path mapping (ie the `compilerOptions.paths` option):
 import { compilerOptions } from './tsconfig'
-import type { JestConfigWithTsJest } from './types'
+import type { JestConfigWithTsJest } from 'ts-jest'
 
 const jestConfig: JestConfigWithTsJest = {
   // [...]

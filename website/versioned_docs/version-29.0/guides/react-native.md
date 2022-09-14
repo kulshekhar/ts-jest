@@ -19,7 +19,7 @@ module.exports = {
 ```
 
 ```ts tab
-import type { JestConfigWithTsJest } from './types'
+import type { JestConfigWithTsJest } from 'ts-jest'
 
 const jestConfig: JestConfigWithTsJest = {
   presets: ['module:metro-react-native-babel-preset'],
@@ -67,7 +67,7 @@ module.exports = {
 
 ```ts tab
 import { defaults as tsjPreset } from 'ts-jest/presets'
-import type { JestConfigWithTsJest } from './types'
+import type { JestConfigWithTsJest } from 'ts-jest'
 
 const jestConfig: JestConfigWithTsJest = {
   preset: 'react-native',
