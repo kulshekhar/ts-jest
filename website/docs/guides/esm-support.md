@@ -27,7 +27,7 @@ module.exports = {
     '^(\\.{1,2}/.*)\\.js$': '$1',
   },
   transform: {
-    '<regex_match_files': [
+    '<regex_match_files>': [
       'ts-jest',
       {
         useESM: true,
@@ -47,7 +47,7 @@ const jestConfig: JestConfigWithTsJest = {
     '^(\\.{1,2}/.*)\\.js$': '$1',
   },
   transform: {
-    '<regex_match_files': [
+    '<regex_match_files>': [
       'ts-jest',
       {
         useESM: true,
@@ -96,7 +96,7 @@ module.exports = {
     '^(\\.{1,2}/.*)\\.js$': '$1',
   },
   transform: {
-    '<regex_match_files': [
+    '<regex_match_files>': [
       'ts-jest',
       {
         useESM: true,
@@ -116,7 +116,7 @@ const jestConfig: JestConfigWithTsJest = {
     '^(\\.{1,2}/.*)\\.js$': '$1',
   },
   transform: {
-    '<regex_match_files': [
+    '<regex_match_files>': [
       'ts-jest',
       {
         useESM: true,
