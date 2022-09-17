@@ -17,7 +17,7 @@ declare module '@jest/types' {
        */
       // eslint-disable-next-line
       // @ts-ignore
-      'ts-jest': TsJestGlobalOptions
+      'ts-jest'?: TsJestGlobalOptions
     }
   }
 }
@@ -184,7 +184,7 @@ export interface TransformOptionsTsJest extends TransformOptions {
  * @deprecated use `JestConfigWithTsJest` instead
  */
 export interface GlobalConfigTsJest extends Config.ConfigGlobals {
-  'ts-jest': TsJestGlobalOptions
+  'ts-jest'?: TsJestGlobalOptions
 }
 /**
  * @deprecated use `JestConfigWithTsJest` instead
@@ -193,16 +193,13 @@ export interface InitialOptionsTsJest extends Config.InitialOptions {
   globals?: GlobalConfigTsJest
 }
 type TsJestTransformerOptions = TsJestGlobalOptions
-export interface JestConfigWithTsJest extends Partial<Omit<Config.ProjectConfig, 'transform'>> {
-  transform: {
+export interface JestConfigWithTsJest extends Omit<Config.InitialOptions, 'transform'> {
+  transform?: {
     [regex: string]: 'ts-jest' | ['ts-jest', TsJestTransformerOptions] | string | [string, Record<string, unknown>]
   }
 }
 
 export type StringMap = Map<string, string>
-/**
- * @internal
- */
 export interface DepGraphInfo {
   fileContent: string
   resolvedModuleNames: string[]

@@ -9,6 +9,9 @@ const jestCfg: JestConfigWithTsJest = {
       },
     ],
   },
+  globals: {
+    aaa: true,
+  },
 }
 
 export default jestCfg
