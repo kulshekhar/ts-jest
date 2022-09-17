@@ -13,7 +13,7 @@ The default value is **false**, `ts-jest` will transform codes to `CommonJS` syn
 module.exports = {
   // [...]
   transform: {
-    '<regex_match_files': [
+    '<regex_match_files>': [
       'ts-jest',
       {
         useESM: true,
@@ -29,7 +29,7 @@ import type { JestConfigWithTsJest } from 'ts-jest'
 const jestConfig: JestConfigWithTsJest = {
   // [...]
   transform: {
-    '<regex_match_files': [
+    '<regex_match_files>': [
       'ts-jest',
       {
         useESM: true,

@@ -16,7 +16,7 @@ If you use a custom compiler, such as `ttypescript`, make sure its API is the sa
 module.exports = {
   // [...]
   transform: {
-    '<regex_match_files': [
+    '<regex_match_files>': [
       'ts-jest',
       {
         compiler: 'ttypescript',
@@ -32,7 +32,7 @@ import type { JestConfigWithTsJest } from 'ts-jest'
 const jestConfig: JestConfigWithTsJest = {
   // [...]
   transform: {
-    '<regex_match_files': [
+    '<regex_match_files>': [
       'ts-jest',
       {
         compiler: 'ttypescript',
