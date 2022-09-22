@@ -89,7 +89,7 @@ export const run: CliCommand = async (args: CliCommandArgs /* , logger: Logger *
     if (!jestPreset) {
       content.push(`${preset.jsImport('tsjPreset')};`, '')
     }
-    content.push(`/** @type {import('ts-jest/dist/types').InitialOptionsTsJest} */`)
+    content.push(`/** @type {import('ts-jest').JestConfigWithTsJest} */`)
     content.push('module.exports = {')
     if (jestPreset) {
       content.push(`  preset: '${preset.name}',`)
