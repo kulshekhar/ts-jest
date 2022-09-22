@@ -1,3 +1,22 @@
+## [29.0.2](https://github.com/kulshekhar/ts-jest/compare/v29.0.1...v29.0.2) (2022-09-23)
+
+
+### Bug Fixes
+
+* mark `ts-jest` as optional in `ConfigGlobals` ([#3816](https://github.com/kulshekhar/ts-jest/issues/3816)) ([cbb88bb](https://github.com/kulshekhar/ts-jest/commit/cbb88bba34dbb852d8f4013be6e020769feb306d)), closes [#3815](https://github.com/kulshekhar/ts-jest/issues/3815)
+* use correct typings for `config:init` command ([#3825](https://github.com/kulshekhar/ts-jest/issues/3825)) ([21b94db](https://github.com/kulshekhar/ts-jest/commit/21b94dbca25b762f79e63b92dea12d830f444570))
+
+
+
+## [29.0.2](https://github.com/kulshekhar/ts-jest/compare/v29.0.1...v29.0.2) (2022-09-22)
+
+
+### Bug Fixes
+
+* mark `ts-jest` as optional in `ConfigGlobals` ([#3816](https://github.com/kulshekhar/ts-jest/issues/3816)) ([cbb88bb](https://github.com/kulshekhar/ts-jest/commit/cbb88bba34dbb852d8f4013be6e020769feb306d)), closes [#3815](https://github.com/kulshekhar/ts-jest/issues/3815)
+
+
+
 ## [29.0.1](https://github.com/kulshekhar/ts-jest/compare/v29.0.0...v29.0.1) (2022-09-13)
 
 
