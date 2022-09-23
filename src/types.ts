@@ -192,7 +192,7 @@ export interface GlobalConfigTsJest extends Config.ConfigGlobals {
 export interface InitialOptionsTsJest extends Config.InitialOptions {
   globals?: GlobalConfigTsJest
 }
-type TsJestTransformerOptions = TsJestGlobalOptions
+export type TsJestTransformerOptions = TsJestGlobalOptions
 export interface JestConfigWithTsJest extends Omit<Config.InitialOptions, 'transform'> {
   transform?: {
     [regex: string]: 'ts-jest' | ['ts-jest', TsJestTransformerOptions] | string | [string, Record<string, unknown>]

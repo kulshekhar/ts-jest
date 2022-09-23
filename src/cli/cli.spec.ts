@@ -162,11 +162,11 @@ Jest configuration written to "${normalize('/foo/bar/jest.config.foo.js')}".
 /** @type {import('ts-jest').JestConfigWithTsJest} */
 module.exports = {
   ...tsjPreset,
-  globals: {
-    'ts-jest': {
+  transform: {
+    '^.+\\\\.[tj]sx?$': ['ts-jest', {
       tsconfig: 'tsconfig.test.json',
       babelConfig: true,
-    },
+    }],
   },
 };`,
         ],
@@ -197,6 +197,7 @@ Jest configuration written to "${normalize('/foo/bar/package.json')}".
         ],
       ])
     })
+
     it('should update package.json (with all options set)', async () => {
       expect.assertions(2)
       const res = await runCli(...fullOptions, 'package.json')
@@ -216,13 +217,13 @@ Jest configuration written to "${normalize('/foo/bar/package.json')}".
   "version": "0.0.0-mock.0",
   "jest": {
     "transform": {
-      "^.+\\\\.[tj]sx?$": "ts-jest"
-    },
-    "globals": {
-      "ts-jest": {
-        "tsconfig": "tsconfig.test.json",
-        "babelConfig": true
-      }
+      "^.+\\\\.[tj]sx?$": [
+        "ts-jest",
+        {
+          "tsconfig": "tsconfig.test.json",
+          "babelConfig": true
+        }
+      ]
     }
   }
 }`,
