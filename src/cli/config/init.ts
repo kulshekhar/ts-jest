@@ -10,7 +10,8 @@ import { basename, join } from 'path'
 import { stringify as stringifyJson5 } from 'json5'
 
 import type { CliCommand, CliCommandArgs } from '..'
-import { TsJestPresetDescriptor, defaults, jsWIthBabel, jsWithTs } from '../helpers/presets'
+import type { JestConfigWithTsJest, TsJestTransformerOptions } from '../../types'
+import { type TsJestPresetDescriptor, defaults, jsWIthBabel, jsWithTs } from '../helpers/presets'
 
 /**
  * @internal
@@ -25,7 +26,8 @@ export const run: CliCommand = async (args: CliCommandArgs /* , logger: Logger *
   const hasPackage = isPackage || existsSync(pkgFile)
   // read config
   const { jestPreset = true, tsconfig: askedTsconfig, force, jsdom } = args
-  const tsconfig = askedTsconfig === 'tsconfig.json' ? undefined : askedTsconfig
+  const tsconfig =
+    askedTsconfig === 'tsconfig.json' ? undefined : (askedTsconfig as TsJestTransformerOptions['tsconfig'])
   // read package
   const pkgJson = hasPackage ? JSON.parse(readFileSync(pkgFile, 'utf8')) : {}
 
@@ -72,17 +74,36 @@ export const run: CliCommand = async (args: CliCommandArgs /* , logger: Logger *
 
   if (isPackage) {
     // package.json config
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const base: any = jestPreset ? { preset: preset.name } : { ...preset.value }
-    if (!jsdom) base.testEnvironment = 'node'
-    if (tsconfig || shouldPostProcessWithBabel) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const tsJestConf: any = {}
-      base.globals = { 'ts-jest': tsJestConf }
-      if (tsconfig) tsJestConf.tsconfig = tsconfig
-      if (shouldPostProcessWithBabel) tsJestConf.babelConfig = true
+    const jestConfig: JestConfigWithTsJest = jestPreset ? { preset: preset.name } : { ...preset.value }
+    if (!jsdom) jestConfig.testEnvironment = 'node'
+    const transformerConfig = Object.entries(jestConfig.transform ?? {}).reduce((acc, [fileRegex, transformerName]) => {
+      if (transformerName === 'ts-jest') {
+        if (tsconfig || shouldPostProcessWithBabel) {
+          const tsJestConf: TsJestTransformerOptions = {}
+          if (tsconfig) tsJestConf.tsconfig = tsconfig
+          if (shouldPostProcessWithBabel) tsJestConf.babelConfig = true
+
+          return {
+            ...acc,
+            [fileRegex]: [transformerName, tsJestConf],
+          }
+        }
+
+        return {
+          ...acc,
+          [fileRegex]: transformerName,
+        }
+      }
+
+      return acc
+    }, {})
+    if (Object.keys(transformerConfig).length) {
+      jestConfig.transform = {
+        ...jestConfig.transform,
+        ...transformerConfig,
+      }
     }
-    body = JSON.stringify({ ...pkgJson, jest: base }, undefined, '  ')
+    body = JSON.stringify({ ...pkgJson, jest: jestConfig }, undefined, '  ')
   } else {
     // js config
     const content = []
@@ -99,11 +120,11 @@ export const run: CliCommand = async (args: CliCommandArgs /* , logger: Logger *
     if (!jsdom) content.push("  testEnvironment: 'node',")
 
     if (tsconfig || shouldPostProcessWithBabel) {
-      content.push('  globals: {')
-      content.push("    'ts-jest': {")
+      content.push('  transform: {')
+      content.push("    '^.+\\\\.[tj]sx?$': ['ts-jest', {")
       if (tsconfig) content.push(`      tsconfig: ${stringifyJson5(tsconfig)},`)
       if (shouldPostProcessWithBabel) content.push('      babelConfig: true,')
-      content.push('    },')
+      content.push('    }],')
       content.push('  },')
     }
     content.push('};')
