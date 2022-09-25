@@ -2,14 +2,5 @@
   "type": "module",
   "devDependencies": {
     "@jest/globals": "^29.0.3"
-  },
-  "jest": {
-    "extensionsToTreatAsEsm": [".ts"],
-    "resolver": "<rootDir>/mjs-resolver.ts",
-    "transform": {
-      "^.+\\.m?tsx?$": ["<rootDir>/../../legacy.js", {
-        "useESM": true
-      }]
-    }
   }
 }

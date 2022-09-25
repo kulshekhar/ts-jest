@@ -3,6 +3,9 @@
     "module": "Node16",
     "target": "ESNext",
     "moduleResolution": "Node16",
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "paths": {
+      "@quadruple/*": ["quadruple/*"]
+    }
   }
 }
