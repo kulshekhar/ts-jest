@@ -36,7 +36,9 @@ The `diagnostics` option's value can also accept an object for more advanced con
 module.exports = {
   // [...]
   transform: {
-    '<regex_match_files>': [
+    // '^.+\\.[tj]sx?$' to process js/ts with `ts-jest`
+    // '^.+\\.m?[tj]sx?$' to process js/ts/mjs/mts with `ts-jest`
+    '^.+\\.tsx?$': [
       'ts-jest',
       {
         diagnostics: false,
@@ -52,7 +54,9 @@ import type { JestConfigWithTsJest } from 'ts-jest'
 const jestConfig: JestConfigWithTsJest = {
   // [...]
   transform: {
-    '<regex_match_files>': [
+    // '^.+\\.[tj]sx?$' to process js/ts with `ts-jest`
+    // '^.+\\.m?[tj]sx?$' to process js/ts/mjs/mts with `ts-jest`
+    '^.+\\.tsx?$': [
       'ts-jest',
       {
         diagnostics: false,
@@ -69,7 +73,9 @@ export default jestConfig
   // [...]
   "jest": {
     "transform": {
-      "<regex_match_files>": [
+      // '^.+\\.[tj]sx?$' to process js/ts with `ts-jest`
+      // '^.+\\.m?[tj]sx?$' to process js/ts/mjs/mts with `ts-jest`
+      "^.+\\.tsx?$": [
         "ts-jest",
         {
           "diagnostics": false
@@ -91,7 +97,9 @@ Assuming all your test files ends with `.spec.ts` or `.test.ts`, using the follo
 module.exports = {
   // [...]
   transform: {
-    '<regex_match_files>': [
+    // '^.+\\.[tj]sx?$' to process js/ts with `ts-jest`
+    // '^.+\\.m?[tj]sx?$' to process js/ts/mjs/mts with `ts-jest`
+    '^.+\\.tsx?$': [
       'ts-jest',
       {
         diagnostics: {
@@ -109,7 +117,9 @@ import type { JestConfigWithTsJest } from 'ts-jest'
 const jestConfig: JestConfigWithTsJest = {
   // [...]
   transform: {
-    '<regex_match_files>': [
+    // '^.+\\.[tj]sx?$' to process js/ts with `ts-jest`
+    // '^.+\\.m?[tj]sx?$' to process js/ts/mjs/mts with `ts-jest`
+    '^.+\\.tsx?$': [
       'ts-jest',
       {
         diagnostics: {
@@ -129,7 +139,9 @@ export default jestConfig
   // [...]
   "jest": {
     "transform": {
-      "<regex_match_files>": [
+      // '^.+\\.[tj]sx?$' to process js/ts with `ts-jest`
+      // '^.+\\.m?[tj]sx?$' to process js/ts/mjs/mts with `ts-jest`
+      "^.+\\.tsx?$": [
         "ts-jest",
         {
           "diagnostics": {
@@ -151,7 +163,9 @@ While some diagnostics are stop-blockers for the compilation, most of them are n
 module.exports = {
   // [...]
   transform: {
-    '<regex_match_files>': [
+    // '^.+\\.[tj]sx?$' to process js/ts with `ts-jest`
+    // '^.+\\.m?[tj]sx?$' to process js/ts/mjs/mts with `ts-jest`
+    '^.+\\.tsx?$': [
       'ts-jest',
       {
         diagnostics: {
@@ -169,7 +183,9 @@ import type { JestConfigWithTsJest } from 'ts-jest'
 const jestConfig: JestConfigWithTsJest = {
   // [...]
   transform: {
-    '<regex_match_files>': [
+    // '^.+\\.[tj]sx?$' to process js/ts with `ts-jest`
+    // '^.+\\.m?[tj]sx?$' to process js/ts/mjs/mts with `ts-jest`
+    '^.+\\.tsx?$': [
       'ts-jest',
       {
         diagnostics: {
@@ -188,7 +204,9 @@ export default jestConfig
   // [...]
   "jest": {
     "transform": {
-      "<regex_match_files>": [
+      // '^.+\\.[tj]sx?$' to process js/ts with `ts-jest`
+      // '^.+\\.m?[tj]sx?$' to process js/ts/mjs/mts with `ts-jest`
+      "^.+\\.tsx?$": [
         "ts-jest",
         {
           "diagnostics": {
@@ -215,7 +233,9 @@ All TypeScript error codes can be found [there](https://github.com/Microsoft/Typ
 module.exports = {
   // [...]
   transform: {
-    '<regex_match_files>': [
+    // '^.+\\.[tj]sx?$' to process js/ts with `ts-jest`
+    // '^.+\\.m?[tj]sx?$' to process js/ts/mjs/mts with `ts-jest`
+    '^.+\\.tsx?$': [
       'ts-jest',
       {
         diagnostics: {
@@ -233,7 +253,9 @@ import type { JestConfigWithTsJest } from 'ts-jest'
 const jestConfig: JestConfigWithTsJest = {
   // [...]
   transform: {
-    '<regex_match_files>': [
+    // '^.+\\.[tj]sx?$' to process js/ts with `ts-jest`
+    // '^.+\\.m?[tj]sx?$' to process js/ts/mjs/mts with `ts-jest`
+    '^.+\\.tsx?$': [
       'ts-jest',
       {
         diagnostics: {
@@ -252,7 +274,9 @@ export default jestConfig
   // [...]
   "jest": {
     "transform": {
-      "<regex_match_files>": [
+    // '^.+\\.[tj]sx?$' to process js/ts with `ts-jest`
+      // '^.+\\.m?[tj]sx?$' to process js/ts/mjs/mts with `ts-jest`
+      "^.+\\.tsx?$": [
         "ts-jest",
         {
           "diagnostics": {
