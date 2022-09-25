@@ -6,71 +6,71 @@ const defaultPreset = require('ts-jest/jest-preset')
 test('presets', () => {
   expect(defaultPreset).toEqual({
     transform: {
-      '^.+\\.tsx?$': 'ts-jest',
+      '^.+\\.tsx?$': ['ts-jest', {}],
     },
   })
   expect(presets.defaultsLegacy).toEqual({
     transform: {
-      '^.+\\.tsx?$': 'ts-jest/legacy',
+      '^.+\\.tsx?$': ['ts-jest/legacy', {}],
     },
   })
   expect(presets.defaultsESM).toEqual({
     extensionsToTreatAsEsm: [...TS_EXT_TO_TREAT_AS_ESM],
     transform: {
-      '^.+\\.tsx?$': 'ts-jest',
+      '^.+\\.tsx?$': ['ts-jest', { useESM: true }],
     },
   })
   expect(presets.defaultsESMLegacy).toEqual({
     extensionsToTreatAsEsm: [...TS_EXT_TO_TREAT_AS_ESM],
     transform: {
-      '^.+\\.tsx?$': 'ts-jest/legacy',
+      '^.+\\.tsx?$': ['ts-jest/legacy', { useESM: true }],
     },
   })
   expect(presets.jsWithTs).toEqual({
     transform: {
-      '^.+\\.[tj]sx?$': 'ts-jest',
+      '^.+\\.[tj]sx?$': ['ts-jest', {}],
     },
   })
   expect(presets.jsWithTsLegacy).toEqual({
     transform: {
-      '^.+\\.[tj]sx?$': 'ts-jest/legacy',
+      '^.+\\.[tj]sx?$': ['ts-jest/legacy', {}],
     },
   })
   expect(presets.jsWithTsESM).toEqual({
     extensionsToTreatAsEsm: [...JS_EXT_TO_TREAT_AS_ESM, ...TS_EXT_TO_TREAT_AS_ESM],
     transform: {
-      '^.+\\.m?[tj]sx?$': 'ts-jest',
+      '^.+\\.m?[tj]sx?$': ['ts-jest', { useESM: true }],
     },
   })
   expect(presets.jsWithTsESMLegacy).toEqual({
     extensionsToTreatAsEsm: [...JS_EXT_TO_TREAT_AS_ESM, ...TS_EXT_TO_TREAT_AS_ESM],
     transform: {
-      '^.+\\.m?[tj]sx?$': 'ts-jest/legacy',
+      '^.+\\.m?[tj]sx?$': ['ts-jest/legacy', { useESM: true }],
     },
   })
   expect(presets.jsWithBabel).toEqual({
     transform: {
-      '^.+\\.tsx?$': 'ts-jest',
+      '^.+\\.tsx?$': ['ts-jest', {}],
       '^.+\\.jsx?$': 'babel-jest',
     },
   })
   expect(presets.jsWithBabelLegacy).toEqual({
     transform: {
-      '^.+\\.tsx?$': 'ts-jest/legacy',
+      '^.+\\.tsx?$': ['ts-jest/legacy', {}],
       '^.+\\.jsx?$': 'babel-jest',
     },
   })
   expect(presets.jsWithBabelESM).toEqual({
     extensionsToTreatAsEsm: [...JS_EXT_TO_TREAT_AS_ESM, ...TS_EXT_TO_TREAT_AS_ESM],
     transform: {
-      '^.+\\.tsx?$': 'ts-jest',
+      '^.+\\.tsx?$': ['ts-jest', { useESM: true }],
       '^.+\\.m?[j]sx?$': 'babel-jest',
     },
   })
   expect(presets.jsWithBabelESMLegacy).toEqual({
     extensionsToTreatAsEsm: [...JS_EXT_TO_TREAT_AS_ESM, ...TS_EXT_TO_TREAT_AS_ESM],
     transform: {
-      '^.+\\.tsx?$': 'ts-jest/legacy',
+      '^.+\\.tsx?$': ['ts-jest/legacy', { useESM: true }],
       '^.+\\.m?[j]sx?$': 'babel-jest',
     },
   })

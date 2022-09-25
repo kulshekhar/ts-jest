@@ -1,5 +1,6 @@
 {
-  "name": "js-with-ts",
+  "name": "type-module",
+  "type": "module",
   "version": "0.0.0",
   "scripts": {
     "test": "jest --no-cache",

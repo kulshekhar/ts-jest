@@ -137,12 +137,34 @@ Visit https://kulshekhar.github.io/ts-jest/user/config/#jest-preset for more inf
   }
 
   // check if it's the same as the preset's one
-  if (
-    preset &&
-    migratedConfig.transform &&
-    stableStringify(migratedConfig.transform) === stableStringify(preset.value.transform)
-  ) {
-    delete migratedConfig.transform
+  if (preset && migratedConfig.transform) {
+    if (stableStringify(migratedConfig.transform) === stableStringify(preset.value.transform)) {
+      delete migratedConfig.transform
+    } else {
+      const migratedConfigTransform = migratedConfig.transform
+      const presetValueTransform = preset.value.transform
+      if (migratedConfigTransform && presetValueTransform) {
+        migratedConfig.transform = Object.entries(migratedConfigTransform).reduce(
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          (acc: undefined | Record<string, any>, [fileRegex, transformerConfig]) => {
+            const presetValueTransformerConfig = presetValueTransform[fileRegex]
+            const shouldRemoveDuplicatedConfig =
+              (presetValueTransformerConfig &&
+                Array.isArray(presetValueTransformerConfig) &&
+                transformerConfig === presetValueTransformerConfig[0] &&
+                !Object.keys(presetValueTransformerConfig[1]).length) ||
+              transformerConfig === presetValueTransformerConfig
+
+            return shouldRemoveDuplicatedConfig
+              ? acc
+              : acc
+              ? { ...acc, [fileRegex]: transformerConfig }
+              : { [fileRegex]: transformerConfig }
+          },
+          undefined,
+        )
+      }
+    }
   }
 
   // cleanup

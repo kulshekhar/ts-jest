@@ -76,8 +76,8 @@ export const run: CliCommand = async (args: CliCommandArgs /* , logger: Logger *
     // package.json config
     const jestConfig: JestConfigWithTsJest = jestPreset ? { preset: preset.name } : { ...preset.value }
     if (!jsdom) jestConfig.testEnvironment = 'node'
-    const transformerConfig = Object.entries(jestConfig.transform ?? {}).reduce((acc, [fileRegex, transformerName]) => {
-      if (transformerName === 'ts-jest') {
+    const transformerConfig = Object.entries(jestConfig.transform ?? {}).reduce(
+      (acc, [fileRegex, transformerConfig]) => {
         if (tsconfig || shouldPostProcessWithBabel) {
           const tsJestConf: TsJestTransformerOptions = {}
           if (tsconfig) tsJestConf.tsconfig = tsconfig
@@ -85,18 +85,20 @@ export const run: CliCommand = async (args: CliCommandArgs /* , logger: Logger *
 
           return {
             ...acc,
-            [fileRegex]: [transformerName, tsJestConf],
+            [fileRegex]:
+              typeof transformerConfig === 'string'
+                ? [transformerConfig, tsJestConf]
+                : [transformerConfig[0], { ...transformerConfig[1], ...tsJestConf }],
           }
         }
 
         return {
           ...acc,
-          [fileRegex]: transformerName,
+          [fileRegex]: transformerConfig,
         }
-      }
-
-      return acc
-    }, {})
+      },
+      {},
+    )
     if (Object.keys(transformerConfig).length) {
       jestConfig.transform = {
         ...jestConfig.transform,
