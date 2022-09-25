@@ -3,7 +3,6 @@
 exports[`config migrate should migrate globals ts-jest config to transformer config 1`] = `
 ""jest": {
   "transform": {
-    "^.+\\\\.jsx?$": "babel-jest",
     "^.+\\\\.tsx?$": [
       "ts-jest",
       {

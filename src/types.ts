@@ -52,11 +52,6 @@ export type BabelJestTransformer = {
  */
 export type BabelConfig = _babel.TransformOptions
 
-export type TsJestPresets = Pick<
-  Config.InitialOptions,
-  'extensionsToTreatAsEsm' | 'moduleFileExtensions' | 'transform' | 'testMatch'
->
-
 export interface AstTransformer<T = Record<string, unknown>> {
   path: string
   options?: T
@@ -195,9 +190,20 @@ export interface InitialOptionsTsJest extends Config.InitialOptions {
 export type TsJestTransformerOptions = TsJestGlobalOptions
 export interface JestConfigWithTsJest extends Omit<Config.InitialOptions, 'transform'> {
   transform?: {
-    [regex: string]: 'ts-jest' | ['ts-jest', TsJestTransformerOptions] | string | [string, Record<string, unknown>]
+    [regex: string]:
+      | 'ts-jest'
+      | 'ts-jest/legacy'
+      | ['ts-jest', TsJestTransformerOptions]
+      | ['ts-jest/legacy', TsJestTransformerOptions]
+      | string
+      | Config.TransformerConfig
   }
 }
+
+export type TsJestPresets = Pick<
+  JestConfigWithTsJest,
+  'extensionsToTreatAsEsm' | 'moduleFileExtensions' | 'transform' | 'testMatch'
+>
 
 export type StringMap = Map<string, string>
 export interface DepGraphInfo {

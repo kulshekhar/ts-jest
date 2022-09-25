@@ -3,7 +3,10 @@
 exports[`create-jest-preset should return correct preset 1`] = `
 {
   "transform": {
-    "^.+\\.tsx?$": "ts-jest/legacy",
+    "^.+\\.tsx?$": [
+      "ts-jest/legacy",
+      {},
+    ],
   },
 }
 `;
@@ -11,7 +14,10 @@ exports[`create-jest-preset should return correct preset 1`] = `
 exports[`create-jest-preset should return correct preset 2`] = `
 {
   "transform": {
-    "^.+\\.tsx?$": "ts-jest",
+    "^.+\\.tsx?$": [
+      "ts-jest",
+      {},
+    ],
   },
 }
 `;
@@ -19,7 +25,10 @@ exports[`create-jest-preset should return correct preset 2`] = `
 exports[`create-jest-preset should return correct preset 3`] = `
 {
   "transform": {
-    "^.+\\.[tj]sx?$": "ts-jest/legacy",
+    "^.+\\.[tj]sx?$": [
+      "ts-jest/legacy",
+      {},
+    ],
   },
 }
 `;
@@ -27,7 +36,10 @@ exports[`create-jest-preset should return correct preset 3`] = `
 exports[`create-jest-preset should return correct preset 4`] = `
 {
   "transform": {
-    "^.+\\.[tj]sx?$": "ts-jest",
+    "^.+\\.[tj]sx?$": [
+      "ts-jest",
+      {},
+    ],
   },
 }
 `;
@@ -35,7 +47,10 @@ exports[`create-jest-preset should return correct preset 4`] = `
 exports[`create-jest-preset should return correct preset 5`] = `
 {
   "transform": {
-    "^.+\\.tsx?$": "ts-jest/legacy",
+    "^.+\\.tsx?$": [
+      "ts-jest/legacy",
+      {},
+    ],
   },
 }
 `;
@@ -49,7 +64,10 @@ exports[`create-jest-preset should return correct preset 6`] = `
     "foo",
   ],
   "transform": {
-    "^.+\\.tsx?$": "ts-jest",
+    "^.+\\.tsx?$": [
+      "ts-jest",
+      {},
+    ],
     "foo": "bar",
   },
 }
@@ -70,7 +88,12 @@ exports[`create-jest-preset should return correct preset 7`] = `
     "foo",
   ],
   "transform": {
-    "^.+\\.m?[tj]sx?$": "ts-jest/legacy",
+    "^.+\\.m?[tj]sx?$": [
+      "ts-jest/legacy",
+      {
+        "useESM": true,
+      },
+    ],
     "foo": "bar",
   },
 }

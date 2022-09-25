@@ -1,6 +1,6 @@
 import type { Config } from '@jest/types'
 
-import type { TsJestPresets } from '../types'
+import type { TsJestPresets, TsJestTransformerOptions } from '../types'
 import { rootLogger } from '../utils'
 
 const logger = rootLogger.child({ namespace: 'jest-preset' })
@@ -14,6 +14,7 @@ export function createJestPreset(
 
   const { extensionsToTreatAsEsm, moduleFileExtensions, testMatch } = extraOptions
   const supportESM = extensionsToTreatAsEsm?.length
+  const tsJestTransformOptions: TsJestTransformerOptions = supportESM ? { useESM: true } : {}
 
   return {
     ...(extensionsToTreatAsEsm ? { extensionsToTreatAsEsm } : undefined),
@@ -22,8 +23,8 @@ export function createJestPreset(
     transform: {
       ...extraOptions.transform,
       [allowJs ? (supportESM ? '^.+\\.m?[tj]sx?$' : '^.+\\.[tj]sx?$') : '^.+\\.tsx?$']: legacy
-        ? 'ts-jest/legacy'
-        : 'ts-jest',
+        ? ['ts-jest/legacy', tsJestTransformOptions]
+        : ['ts-jest', tsJestTransformOptions],
     },
   }
 }
