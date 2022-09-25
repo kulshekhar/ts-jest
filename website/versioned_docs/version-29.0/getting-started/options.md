@@ -13,7 +13,9 @@ or through a `jest.config.js`, or `jest.config.ts` file.
 module.exports = {
   // [...]
   transform: {
-    '<regex_match_files>': [
+    // '^.+\\.[tj]sx?$' to process js/ts with `ts-jest`
+    // '^.+\\.m?[tj]sx?$' to process js/ts/mjs/mts with `ts-jest`
+    '^.+\\.tsx?$': [
       'ts-jest',
       {
         // ts-jest configuration goes here
@@ -29,7 +31,9 @@ import type { JestConfigWithTsJest } from 'ts-jest'
 const jestConfig: JestConfigWithTsJest = {
   // [...]
   transform: {
-    '<regex_match_files>': [
+    // '^.+\\.[tj]sx?$' to process js/ts with `ts-jest`
+    // '^.+\\.m?[tj]sx?$' to process js/ts/mjs/mts with `ts-jest`
+    '^.+\\.tsx?$': [
       'ts-jest',
       {
         // ts-jest configuration goes here
@@ -44,7 +48,9 @@ const jestConfig: JestConfigWithTsJest = {
   // [...]
   "jest": {
     "transform": {
-      "<regex_match_files>": [
+      // '^.+\\.[tj]sx?$' to process js/ts with `ts-jest`
+      // '^.+\\.m?[tj]sx?$' to process js/ts/mjs/mts with `ts-jest`
+      "^.+\\.tsx?$": [
         "ts-jest",
         {
           // ts-jest configuration goes here

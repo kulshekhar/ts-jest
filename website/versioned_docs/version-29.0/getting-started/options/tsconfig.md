@@ -19,7 +19,9 @@ The path should be relative to the current working directory where you start Jes
 module.exports = {
   // [...]
   transform: {
-    '<regex_match_files>': [
+    // '^.+\\.[tj]sx?$' to process js/ts with `ts-jest`
+    // '^.+\\.m?[tj]sx?$' to process js/ts/mjs/mts with `ts-jest`
+    '^.+\\.tsx?$': [
       'ts-jest',
       {
         tsconfig: 'tsconfig.test.json',
@@ -35,7 +37,9 @@ import type { JestConfigWithTsJest } from 'ts-jest'
 const jestConfig: JestConfigWithTsJest = {
   // [...]
   transform: {
-    '<regex_match_files>': [
+    // '^.+\\.[tj]sx?$' to process js/ts with `ts-jest`
+    // '^.+\\.m?[tj]sx?$' to process js/ts/mjs/mts with `ts-jest`
+    '^.+\\.tsx?$': [
       'ts-jest',
       {
         tsconfig: 'tsconfig.test.json',
@@ -52,7 +56,9 @@ export default jestConfig
   // [...]
   "jest": {
     "transform": {
-      "<regex_match_files>": [
+      // '^.+\\.[tj]sx?$' to process js/ts with `ts-jest`
+      // '^.+\\.m?[tj]sx?$' to process js/ts/mjs/mts with `ts-jest`
+      "^.+\\.tsx?$": [
         "ts-jest",
         {
           "tsconfig": "tsconfig.test.json"
@@ -73,7 +79,9 @@ It's basically the same object you'd put in your `tsconfig.json`'s `compilerOpti
 module.exports = {
   // [...]
   transform: {
-    '<regex_match_files>': [
+    // '^.+\\.[tj]sx?$' to process js/ts with `ts-jest`
+    // '^.+\\.m?[tj]sx?$' to process js/ts/mjs/mts with `ts-jest`
+    '^.+\\.tsx?$': [
       'ts-jest',
       {
         tsconfig: {
@@ -91,7 +99,9 @@ import type { JestConfigWithTsJest } from 'ts-jest'
 const jestConfig: JestConfigWithTsJest = {
   // [...]
   transform: {
-    '<regex_match_files>': [
+    // '^.+\\.[tj]sx?$' to process js/ts with `ts-jest`
+    // '^.+\\.m?[tj]sx?$' to process js/ts/mjs/mts with `ts-jest`
+    '^.+\\.tsx?$': [
       'ts-jest',
       {
         tsconfig: {
@@ -110,7 +120,9 @@ export default jestConfig
   // [...]
   "jest": {
     "transform": {
-      "<regex_match_files>": [
+      // '^.+\\.[tj]sx?$' to process js/ts with `ts-jest`
+      // '^.+\\.m?[tj]sx?$' to process js/ts/mjs/mts with `ts-jest`
+      "^.+\\.tsx?$": [
         "ts-jest",
         {
           "tsconfig": {
@@ -132,7 +144,9 @@ By default `ts-jest` will try to find a `tsconfig.json` in your project. But you
 module.exports = {
   // [...]
   transform: {
-    '<regex_match_files>': [
+    // '^.+\\.[tj]sx?$' to process js/ts with `ts-jest`
+    // '^.+\\.m?[tj]sx?$' to process js/ts/mjs/mts with `ts-jest`
+    '^.+\\.tsx?$': [
       'ts-jest',
       {
         tsconfig: false,
@@ -148,7 +162,9 @@ import type { JestConfigWithTsJest } from 'ts-jest'
 const jestConfig: JestConfigWithTsJest = {
   // [...]
   transform: {
-    '<regex_match_files>': [
+    // '^.+\\.[tj]sx?$' to process js/ts with `ts-jest`
+    // '^.+\\.m?[tj]sx?$' to process js/ts/mjs/mts with `ts-jest`
+    '^.+\\.tsx?$': [
       'ts-jest',
       {
         tsconfig: false,
@@ -165,7 +181,9 @@ export default jestConfig
   // [...]
   "jest": {
     "transform": {
-      "<regex_match_files>": [
+      // '^.+\\.[tj]sx?$' to process js/ts with `ts-jest`
+      // '^.+\\.m?[tj]sx?$' to process js/ts/mjs/mts with `ts-jest`
+      "^.+\\.tsx?$": [
         "ts-jest",
         {
           "tsconfig": {

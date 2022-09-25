@@ -27,7 +27,9 @@ module.exports = {
     '^(\\.{1,2}/.*)\\.js$': '$1',
   },
   transform: {
-    '<regex_match_files>': [
+    // '^.+\\.[tj]sx?$' to process js/ts with `ts-jest`
+    // '^.+\\.m?[tj]sx?$' to process js/ts/mjs/mts with `ts-jest`
+    '^.+\\.tsx?$': [
       'ts-jest',
       {
         useESM: true,
@@ -47,7 +49,9 @@ const jestConfig: JestConfigWithTsJest = {
     '^(\\.{1,2}/.*)\\.js$': '$1',
   },
   transform: {
-    '<regex_match_files>': [
+    // '^.+\\.[tj]sx?$' to process js/ts with `ts-jest`
+    // '^.+\\.m?[tj]sx?$' to process js/ts/mjs/mts with `ts-jest`
+    '^.+\\.tsx?$': [
       'ts-jest',
       {
         useESM: true,
@@ -68,7 +72,9 @@ export default jestConfig
       "^(\\.{1,2}/.*)\\.js$": "$1"
     },
     "transform": {
-      "<regex_match_files>": [
+      // '^.+\\.[tj]sx?$' to process js/ts with `ts-jest`
+      // '^.+\\.m?[tj]sx?$' to process js/ts/mjs/mts with `ts-jest`
+      "^.+\\.tsx?$": [
         "ts-jest",
         {
           "useESM": true
@@ -96,7 +102,9 @@ module.exports = {
     '^(\\.{1,2}/.*)\\.js$': '$1',
   },
   transform: {
-    '<regex_match_files>': [
+    // '^.+\\.[tj]sx?$' to process js/ts with `ts-jest`
+    // '^.+\\.m?[tj]sx?$' to process js/ts/mjs/mts with `ts-jest`
+    '^.+\\.tsx?$': [
       'ts-jest',
       {
         useESM: true,
@@ -116,7 +124,9 @@ const jestConfig: JestConfigWithTsJest = {
     '^(\\.{1,2}/.*)\\.js$': '$1',
   },
   transform: {
-    '<regex_match_files>': [
+    // '^.+\\.[tj]sx?$' to process js/ts with `ts-jest`
+    // '^.+\\.m?[tj]sx?$' to process js/ts/mjs/mts with `ts-jest`
+    '^.+\\.tsx?$': [
       'ts-jest',
       {
         useESM: true,
@@ -137,7 +147,9 @@ export default jestConfig
       "^(\\.{1,2}/.*)\\.js$": "$1"
     },
     "transform": {
-      "<regex_match_files>": [
+      // '^.+\\.[tj]sx?$' to process js/ts with `ts-jest`
+      // '^.+\\.m?[tj]sx?$' to process js/ts/mjs/mts with `ts-jest`
+      "^.+\\.tsx?$": [
         "ts-jest",
         {
           "useESM": true

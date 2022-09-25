@@ -16,7 +16,9 @@ If you use a custom compiler, such as `ttypescript`, make sure its API is the sa
 module.exports = {
   // [...]
   transform: {
-    '<regex_match_files>': [
+    // '^.+\\.[tj]sx?$' to process js/ts with `ts-jest`
+    // '^.+\\.m?[tj]sx?$' to process js/ts/mjs/mts with `ts-jest`
+    '^.+\\.tsx?$': [
       'ts-jest',
       {
         compiler: 'ttypescript',
@@ -32,7 +34,9 @@ import type { JestConfigWithTsJest } from 'ts-jest'
 const jestConfig: JestConfigWithTsJest = {
   // [...]
   transform: {
-    '<regex_match_files>': [
+    // '^.+\\.[tj]sx?$' to process js/ts with `ts-jest`
+    // '^.+\\.m?[tj]sx?$' to process js/ts/mjs/mts with `ts-jest`
+    '^.+\\.tsx?$': [
       'ts-jest',
       {
         compiler: 'ttypescript',
@@ -49,7 +53,9 @@ export default jestConfig
   // [...]
   "jest": {
     "transform": {
-      "<regex_match_files>": [
+      // '^.+\\.[tj]sx?$' to process js/ts with `ts-jest`
+      // '^.+\\.m?[tj]sx?$' to process js/ts/mjs/mts with `ts-jest`
+      "^.+\\.tsx?$": [
         "ts-jest",
         {
           "compiler": "ttypescript"

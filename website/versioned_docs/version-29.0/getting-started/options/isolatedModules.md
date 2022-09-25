@@ -17,7 +17,9 @@ Here is how to disable type-checking and compile each file as an isolated module
 module.exports = {
   // [...]
   transform: {
-    '<regex_match_files>': [
+    // '^.+\\.[tj]sx?$' to process js/ts with `ts-jest`
+    // '^.+\\.m?[tj]sx?$' to process js/ts/mjs/mts with `ts-jest`
+    '^.+\\.tsx?$': [
       'ts-jest',
       {
         isolatedModules: true,
@@ -33,7 +35,9 @@ import type { JestConfigWithTsJest } from 'ts-jest'
 const jestConfig: JestConfigWithTsJest = {
   // [...]
   transform: {
-    '<regex_match_files>': [
+    // '^.+\\.[tj]sx?$' to process js/ts with `ts-jest`
+    // '^.+\\.m?[tj]sx?$' to process js/ts/mjs/mts with `ts-jest`
+    '^.+\\.tsx?$': [
       'ts-jest',
       {
         isolatedModules: true,
@@ -50,7 +54,9 @@ export default jestConfig
   // [...]
   "jest": {
     "transform": {
-      "<regex_match_files>": [
+    // '^.+\\.[tj]sx?$' to process js/ts with `ts-jest`
+      // '^.+\\.m?[tj]sx?$' to process js/ts/mjs/mts with `ts-jest`
+      "^.+\\.tsx?$": [
         "ts-jest",
         {
           "isolatedModules": true
