@@ -9,7 +9,7 @@ const DIR = path.resolve(__dirname, '..', 'native-esm-js', 'non-isolated')
 const ISOLATED_MODULES_DIR = path.resolve(__dirname, '..', 'native-esm-js', 'isolated')
 
 // The versions where vm.Module exists and commonjs with "exports" is not broken
-onNodeVersions('>=12.16.0', () => {
+onNodeVersions('>=14.15.0', () => {
   test('runs test with native ESM and isolatedModules: false', () => {
     const { exitCode, stderr, stdout } = runJest(DIR, ['native-esm.spec.ts'], {
       nodeOptions: '--experimental-vm-modules --no-warnings',
