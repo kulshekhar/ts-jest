@@ -109,12 +109,17 @@ export class TsJestTransformer implements SyncTransformer {
         if (config.globals?.['ts-jest']) {
           this._logger.warn(Deprecations.GlobalsTsJestConfigOption)
         }
+        const jestGlobalsConfig = config.globals ?? {}
+        const tsJestGlobalsConfig = jestGlobalsConfig['ts-jest'] ?? {}
         const migratedConfig = this.tsJestConfig
           ? {
               ...config,
               globals: {
-                ...(config.globals ?? Object.create(null)),
-                'ts-jest': this.tsJestConfig,
+                ...jestGlobalsConfig,
+                'ts-jest': {
+                  ...tsJestGlobalsConfig,
+                  ...this.tsJestConfig,
+                },
               },
             }
           : config
