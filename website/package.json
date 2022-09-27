@@ -23,7 +23,7 @@
     "docusaurus-remark-plugin-tab-blocks": "^1.2.0",
     "latest-version": "^7.0.0",
     "react": "^16.14.0",
-    "react-dom": "^16.14.0"
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.19.1",
