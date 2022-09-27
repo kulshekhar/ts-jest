@@ -304,7 +304,7 @@ describe('TsJestTransformer', () => {
     let tr!: TsJestTransformer
 
     beforeEach(() => {
-      tr = new TsJestTransformer()
+      tr = new TsJestTransformer({})
       jest.spyOn(TsJestCompiler.prototype, 'getResolvedModules').mockReturnValueOnce([])
     })
 
