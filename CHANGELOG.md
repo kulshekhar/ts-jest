@@ -1,3 +1,18 @@
+## [29.0.3](https://github.com/kulshekhar/ts-jest/compare/v29.0.2...v29.0.3) (2022-09-28)
+
+
+### Bug Fixes
+
+* merge config from `globals` with transformer config correctly ([#3842](https://github.com/kulshekhar/ts-jest/issues/3842)) ([9c9fd60](https://github.com/kulshekhar/ts-jest/commit/9c9fd6097aea36a6e8b06b0e8841df22896f9121)), closes [#3841](https://github.com/kulshekhar/ts-jest/issues/3841)
+* **presets:** allow merging transform config when using presets ([#3833](https://github.com/kulshekhar/ts-jest/issues/3833)) ([afc6a94](https://github.com/kulshekhar/ts-jest/commit/afc6a948b17c2dc22be51b1a9475a0f6ecbbc372))
+
+
+### Features
+
+* add `useESM` option to `pathsToModuleNameMapper` options ([#3792](https://github.com/kulshekhar/ts-jest/issues/3792)) ([eabe906](https://github.com/kulshekhar/ts-jest/commit/eabe906e1dd6b132a7b0d05ffc13172cd8a6b73b))
+
+
+
 ## [29.0.2](https://github.com/kulshekhar/ts-jest/compare/v29.0.1...v29.0.2) (2022-09-23)
 
 
