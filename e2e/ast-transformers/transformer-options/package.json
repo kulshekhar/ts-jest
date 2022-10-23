@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "@formatjs/ts-transformer": "^3.11.0",
+    "@formatjs/ts-transformer": "^3.11.1",
     "react": "^18.2.0",
     "react-intl": "^6.2.1"
   },
