@@ -63,6 +63,8 @@ const { compilerOptions } = require('./tsconfig')
 
 module.exports = {
   // [...]
+  roots: ['<rootDir>'],
+  modulePaths: [compilerOptions.baseUrl], // <-- This will be set to 'baseUrl' value
   moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths /*, { prefix: '<rootDir>/' } */),
 }
 ```
