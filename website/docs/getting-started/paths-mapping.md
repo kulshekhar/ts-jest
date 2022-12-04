@@ -76,6 +76,8 @@ const { compilerOptions } = require('./tsconfig')
 /** @type {import('ts-jest').JestConfigWithTsJest} */
 module.exports = {
   // [...]
+  roots: ['<rootDir>'],
+  modulePaths: [compilerOptions.baseUrl], // <-- This will be set to 'baseUrl' value
   moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths /*, { prefix: '<rootDir>/' } */),
 }
 ```
@@ -89,6 +91,8 @@ import type { JestConfigWithTsJest } from 'ts-jest'
 
 const jestConfig: JestConfigWithTsJest = {
   // [...]
+  roots: ['<rootDir>'],
+  modulePaths: [compilerOptions.baseUrl], // <-- This will be set to 'baseUrl' value
   moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths /*, { prefix: '<rootDir>/' } */),
 }
 
