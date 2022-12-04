@@ -5,6 +5,12 @@ title: Options
 
 ### Introduction
 
+:::caution
+
+If you are using custom `transform` config, please remove `preset` from your Jest config to avoid issues that Jest doesn't transform files correctly.
+
+:::
+
 All `ts-jest` specific options can be defined in Jest `transform` config object in the `package.json` file of your project,
 or through a `jest.config.js`, or `jest.config.ts` file.
 
