@@ -11,6 +11,12 @@ Starting from **v28.0.0**, `ts-jest` will gradually opt in adoption of `esbuild`
 
 :::
 
+:::caution
+
+If you are using custom `transform` config, please remove `preset` from your Jest config to avoid issues that Jest doesn't transform files correctly.
+
+:::
+
 `ts-jest` comes with several presets, covering most of the project's base configuration:
 
 | Preset name                                                           | Description                                                                                                                                                                                         |
