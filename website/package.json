@@ -26,7 +26,7 @@
     "react-dom": "^16.14.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.20.2",
+    "@babel/core": "^7.20.12",
     "@docusaurus/module-type-aliases": "^2.2.0",
     "@tsconfig/docusaurus": "^1.0.6",
     "@types/react": "^16.14.24",
