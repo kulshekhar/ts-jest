@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "typescript-transform-paths": "^3.4.4",
+    "typescript-transform-paths": "^3.4.6",
     "ttypescript": "^1.5.15"
   },
   "jest": {
