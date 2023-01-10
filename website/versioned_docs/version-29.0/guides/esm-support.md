@@ -14,6 +14,12 @@ To use `ts-jest` with ESM support:
 
 There are also [3 presets](../getting-started/presets.md) to work with ESM.
 
+:::caution
+
+If you are using custom `transform` config, please remove `preset` from your Jest config to avoid issues that Jest doesn't transform files correctly.
+
+:::
+
 ### Examples
 
 #### Manual configuration

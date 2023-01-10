@@ -48,11 +48,11 @@ jobs:
       # it
       - name: Checkout code
         # https://github.com/marketplace/actions/checkout
-        uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8 # tag=v3
+        uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c # v3
 
         # Runs a single command using the runners shell
       - name: Create release for tag
-        uses: softprops/action-gh-release@1e07f4398721186383de40550babbdf2b84acfc5 # tag=v1
+        uses: softprops/action-gh-release@de2c0eb89ae2a093876385947365aca7b0e5f844 # v1
         with:
           tag_name: ${{ github.ref }}
           body: Please refer to [CHANGELOG.md](https://github.com/kulshekhar/ts-jest/blob/main/CHANGELOG.md) for details.
@@ -66,9 +66,9 @@ jobs:
 
     steps:
       # https://github.com/marketplace/actions/checkout
-      - uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8 # tag=v3
+      - uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c # v3
       # https://github.com/marketplace/actions/setup-node-js-environment
-      - uses: actions/setup-node@8c91899e586c5b171469028077307d293428b516 # tag=v3.5.1
+      - uses: actions/setup-node@64ed1c7eab4cce3362f8c340dee64e5eaeef8f7c # v3.6.0
         with:
           node-version: 16
           registry-url: https://registry.npmjs.org/
