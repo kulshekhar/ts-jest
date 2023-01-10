@@ -1,3 +1,13 @@
+## [29.0.4](https://github.com/kulshekhar/ts-jest/compare/v29.0.3...v29.0.4) (2023-01-10)
+
+
+### Bug Fixes
+
+* **transformer:** don't use cache when `tsJestConfig` is different ([#3966](https://github.com/kulshekhar/ts-jest/issues/3966)) ([a445638](https://github.com/kulshekhar/ts-jest/commit/a445638ca631911e8ab1a896ffdfcd21506ce71a))
+* bump `json5` to `2.2.3` ([#3976](https://github.com/kulshekhar/ts-jest/pull/3976))([b9f7809](https://github.com/kulshekhar/ts-jest/commit/b9f7809948309f92534aeba63f3ffb01cb7dc536))
+
+
+
 ## [29.0.3](https://github.com/kulshekhar/ts-jest/compare/v29.0.2...v29.0.3) (2022-09-28)
 
 
