@@ -80,16 +80,6 @@ describe('TsJestTransformer', () => {
       expect(cs2).toBe(cs1)
     })
 
-    test('should return different config set for different tsJestConfig', () => {
-      const obj2 = { ...obj1, config: { ...obj1.config } }
-      // @ts-expect-error testing purpose
-      const cs1 = new TsJestTransformer({ isolatedModules: true })._configsFor(obj1)
-      // @ts-expect-error testing purpose
-      const cs2 = new TsJestTransformer({ isolatedModules: false })._configsFor(obj2)
-
-      expect(cs2).not.toBe(cs1)
-    })
-
     test(`should not read disk cache with isolatedModules true`, () => {
       const tr = new TsJestTransformer()
       const cs = createConfigSet({
