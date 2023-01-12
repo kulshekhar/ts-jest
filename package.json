@@ -90,7 +90,7 @@
   },
   "devDependencies": {
     "@commitlint/cli": "17.x",
-    "@commitlint/config-angular": "^17.4.0",
+    "@commitlint/config-angular": "^17.4.2",
     "@jest/transform": "^29.1.2",
     "@jest/types": "^29.1.2",
     "@types/babel__core": "7.x",
