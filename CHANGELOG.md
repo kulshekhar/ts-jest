@@ -1,3 +1,12 @@
+## [29.0.5](https://github.com/kulshekhar/ts-jest/compare/v29.0.4...v29.0.5) (2023-01-13)
+
+
+### Reverts
+
+* Revert "fix(transformer): don't use cache when `tsJestConfig` is different (#3966)" ([185eb18](https://github.com/kulshekhar/ts-jest/commit/185eb189d7076c717a107066817d2d6959a8fe39)), closes [#3966](https://github.com/kulshekhar/ts-jest/issues/3966)
+
+
+
 ## [29.0.4](https://github.com/kulshekhar/ts-jest/compare/v29.0.3...v29.0.4) (2023-01-10)
 
 
