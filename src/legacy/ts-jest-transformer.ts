@@ -86,25 +86,8 @@ export class TsJestTransformer implements SyncTransformer {
       this._watchMode = ccs.watchMode
       configSet = ccs.configSet
     } else {
-      if (config.globals?.['ts-jest']) {
-        this._logger.warn(Deprecations.GlobalsTsJestConfigOption)
-      }
-      const jestGlobalsConfig = config.globals ?? {}
-      const tsJestGlobalsConfig = jestGlobalsConfig['ts-jest'] ?? {}
-      const migratedConfig = this.tsJestConfig
-        ? {
-            ...config,
-            globals: {
-              ...jestGlobalsConfig,
-              'ts-jest': {
-                ...tsJestGlobalsConfig,
-                ...this.tsJestConfig,
-              },
-            },
-          }
-        : config
       // try to look-it up by stringified version
-      const serializedJestCfg = stringify(migratedConfig)
+      const serializedJestCfg = stringify(config)
       const serializedCcs = TsJestTransformer._cachedConfigSets.find(
         (cs) => cs.jestConfig.serialized === serializedJestCfg,
       )
@@ -122,6 +105,24 @@ export class TsJestTransformer implements SyncTransformer {
       } else {
         // create the new record in the index
         this._logger.info('no matching config-set found, creating a new one')
+
+        if (config.globals?.['ts-jest']) {
+          this._logger.warn(Deprecations.GlobalsTsJestConfigOption)
+        }
+        const jestGlobalsConfig = config.globals ?? {}
+        const tsJestGlobalsConfig = jestGlobalsConfig['ts-jest'] ?? {}
+        const migratedConfig = this.tsJestConfig
+          ? {
+              ...config,
+              globals: {
+                ...jestGlobalsConfig,
+                'ts-jest': {
+                  ...tsJestGlobalsConfig,
+                  ...this.tsJestConfig,
+                },
+              },
+            }
+          : config
         configSet = this._createConfigSet(migratedConfig)
         const jest = { ...migratedConfig }
         // we need to remove some stuff from jest config
