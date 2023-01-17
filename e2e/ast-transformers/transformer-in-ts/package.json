@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "esbuild": "~0.17.0"
+    "esbuild": "~0.17.1"
   },
   "jest": {
     "transform": {
