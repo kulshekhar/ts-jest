@@ -330,7 +330,7 @@ describe('TsJestTransformer', () => {
       expect(process.env.TS_JEST).toBe('1')
     })
 
-    test.each(['foo.ts', 'foo.tsx', 'foo.mts', 'foo.mtsx'])('should process ts/tsx file', (filePath) => {
+    test.each(['foo.ts', 'foo.tsx', 'foo.cts', 'foo.mts', 'foo.mtsx'])('should process ts/tsx file', (filePath) => {
       const fileContent = 'const foo = 1'
       const output = 'var foo = 1'
       tr.getCacheKey(fileContent, filePath, baseTransformOptions)
@@ -345,7 +345,7 @@ describe('TsJestTransformer', () => {
       })
     })
 
-    test.each(['foo.js', 'foo.jsx', 'foo.mjs', 'foo.mjsx'])(
+    test.each(['foo.js', 'foo.jsx', 'foo.cjs', 'foo.mjs', 'foo.mjsx'])(
       'should process js/jsx file with allowJs true',
       (filePath) => {
         const fileContent = 'const foo = 1'
