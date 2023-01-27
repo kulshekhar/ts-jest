@@ -2,7 +2,7 @@
   "dependencies": {
     "@formatjs/ts-transformer": "^3.11.5",
     "react": "^18.2.0",
-    "react-intl": "^6.2.5"
+    "react-intl": "^6.2.6"
   },
   "jest": {
     "transform": {
