@@ -10,6 +10,6 @@
     }
   },
   "devDependencies": {
-    "jest-environment-jsdom": "^29.1.2"
+    "jest-environment-jsdom": "^29.5.0"
   }
 }
