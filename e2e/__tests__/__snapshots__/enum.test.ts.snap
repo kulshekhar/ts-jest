@@ -19,7 +19,7 @@ exports[`partial successfully runs the tests inside enum with 'isolatedModules: 
       3 | const getTwo = (): string => FooEnum.two
       4 |
 
-      at Resolver._throwModNotFoundError (../../node_modules/jest-resolve/build/resolver.js:487:11)
+      at Resolver._throwModNotFoundError (../../node_modules/jest-resolve/build/resolver.js:427:11)
       at Object.<anonymous> (__tests__/import-from-d-ts-no-js.spec.ts:1:1)
 
 PASS __tests__/import-from-d-ts-has-js.spec.ts
@@ -45,7 +45,7 @@ exports[`partial successfully runs the tests inside enum with 'isolatedModules: 
       3 | const getTwo = (): string => FooEnum.two
       4 |
 
-      at Resolver._throwModNotFoundError (../../node_modules/jest-resolve/build/resolver.js:487:11)
+      at Resolver._throwModNotFoundError (../../node_modules/jest-resolve/build/resolver.js:427:11)
       at Object.<anonymous> (__tests__/import-from-d-ts-no-js.spec.ts:1:1)
 
 PASS __tests__/import-from-d-ts-has-js.spec.ts
