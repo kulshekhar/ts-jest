@@ -6,7 +6,7 @@ module.exports = {
   preset: 'ts-jest/presets/js-with-babel-esm',
   transform: {
     ...baseCfg.transform,
-    '^.+\\.tsx?$': [
+    '^.+\\.(ts|tsx)$': [
       'ts-jest',
       {
         babelConfig: {
