@@ -5,7 +5,7 @@ module.exports = {
   ...baseCfg,
   transform: {
     ...baseCfg.transform,
-    '^.+\\.tsx?$': [
+    '^.+\\.(ts|tsx)$': [
       'ts-jest',
       {
         babelConfig: {
