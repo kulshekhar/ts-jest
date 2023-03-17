@@ -9,13 +9,12 @@ const moduleNotFound = (mod: string) => {
   throw err
 }
 const fakeFullPath = (mod: string) => `/root/${mod}.js`
-const requireModule = jest.fn((mod) => (mod in modules ? modules[mod]() : moduleNotFound(mod)))
-const resolveModule = jest.fn((mod) => (mod in modules ? fakeFullPath(mod) : moduleNotFound(mod)))
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-__requireModule(requireModule as any, resolveModule)
+const requireModule = jest.fn((mod: string) => (mod in modules ? modules[mod]() : moduleNotFound(mod)))
+const resolveModule = jest.fn((mod: string) => (mod in modules ? fakeFullPath(mod) : moduleNotFound(mod)))
+__requireModule(requireModule, resolveModule)
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-let modules!: { [key: string]: () => any }
+let modules: { [key: string]: () => any }
 beforeEach(() => {
   modules = {}
   requireModule.mockClear()
@@ -90,8 +89,8 @@ describe('tryTheseOr', () => {
 })
 
 describe('patcher', () => {
-  const patch1 = jest.fn((mod) => ({ ...mod, p1: true }))
-  const patch2 = jest.fn((mod) => ({ ...mod, p2: true }))
+  const patch1 = jest.fn((mod: object) => ({ ...mod, p1: true }))
+  const patch2 = jest.fn((mod: object) => ({ ...mod, p2: true }))
 
   it('should apply patches correctly', () => {
     const imp = new Importer({ foo: [patch1, patch2] })
