@@ -135,7 +135,7 @@
     "lodash.set": "^4.3.2",
     "node-fetch": "^3.3.1",
     "prettier": "^2.8.6",
-    "typescript": "~4.9.5"
+    "typescript": "~5.0.2"
   },
   "lint-staged": {
     "*.{ts,tsx,js,jsx}": [
