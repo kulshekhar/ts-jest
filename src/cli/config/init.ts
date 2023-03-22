@@ -11,7 +11,8 @@ import { stringify as stringifyJson5 } from 'json5'
 
 import type { CliCommand, CliCommandArgs } from '..'
 import type { JestConfigWithTsJest, TsJestTransformerOptions } from '../../types'
-import { type TsJestPresetDescriptor, defaults, jsWIthBabel, jsWithTs } from '../helpers/presets'
+import { defaults, jsWIthBabel, jsWithTs } from '../helpers/presets'
+import type { TsJestPresetDescriptor } from '../helpers/presets'
 
 /**
  * @internal

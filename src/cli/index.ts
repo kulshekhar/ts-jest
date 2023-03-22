@@ -1,4 +1,5 @@
-import { LogContexts, type Logger } from 'bs-logger'
+import { LogContexts } from 'bs-logger'
+import type { Logger } from 'bs-logger'
 import type { Arguments } from 'yargs'
 import yargsParser from 'yargs-parser'
 

@@ -155,9 +155,16 @@ export function factory({ configSet }: TsCompilerInstance) {
     return visitor
   }
 
+  type TransformFactoryType = _ts.Transformer<_ts.SourceFile>
+
   // returns the transformer factory
-  return (ctx: _ts.TransformationContext): _ts.Transformer<_ts.SourceFile> =>
-    logger.wrap({ [LogContexts.logLevel]: LogLevels.debug, call: null }, 'visitSourceFileNode(): hoist jest', (sf) =>
-      ts.visitNode(sf, createVisitor(ctx, sf)),
-    )
+  return (ctx: _ts.TransformationContext): TransformFactoryType => {
+    const context = { [LogContexts.logLevel]: LogLevels.debug, call: null }
+    const message = 'visitSourceFileNode(): hoist jest'
+    const func = (sf: _ts.SourceFile) => {
+      return ts.visitNode(sf, createVisitor(ctx, sf))
+    }
+
+    return logger.wrap(context, message, func) as TransformFactoryType
+  }
 }
