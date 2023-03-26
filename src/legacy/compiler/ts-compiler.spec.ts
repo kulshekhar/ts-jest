@@ -1,13 +1,8 @@
 import { readFileSync } from 'fs'
 import { basename, join, normalize } from 'path'
 
-import {
-  type CompilerOptions,
-  DiagnosticCategory,
-  type EmitOutput,
-  type transpileModule,
-  type TranspileOutput,
-} from 'typescript'
+import type { CompilerOptions, EmitOutput, transpileModule, TranspileOutput } from 'typescript'
+import * as ts from 'typescript'
 
 import { createConfigSet, makeCompiler } from '../../__helpers__/fakers'
 import type { DepGraphInfo } from '../../types'
@@ -15,6 +10,15 @@ import { Errors, interpolate } from '../../utils/messages'
 
 import { updateOutput } from './compiler-utils'
 import { TsCompiler } from './ts-compiler'
+
+jest.mock('typescript', () => {
+  const actualModule = jest.requireActual('typescript') as typeof ts
+
+  return {
+    __esModule: true,
+    ...actualModule,
+  }
+})
 
 const mockFolder = join(process.cwd(), 'src', '__mocks__')
 
@@ -147,7 +151,7 @@ describe('TsCompiler', () => {
           outputText: 'var bar = 1',
           diagnostics: [
             {
-              category: DiagnosticCategory.Error,
+              category: ts.DiagnosticCategory.Error,
               code: 123,
               messageText: 'An error occurs',
               file: undefined,
@@ -550,7 +554,7 @@ describe('TsCompiler', () => {
         } as EmitOutput)
         const diagnostics = [
           {
-            category: DiagnosticCategory.Error,
+            category: ts.DiagnosticCategory.Error,
             code: 123,
             messageText: 'An error occurs',
             file: undefined,
@@ -558,7 +562,7 @@ describe('TsCompiler', () => {
             length: 1,
           },
           {
-            category: DiagnosticCategory.Error,
+            category: ts.DiagnosticCategory.Error,
             code: 456,
             messageText: 'An error occurs',
             file: undefined,
@@ -611,7 +615,7 @@ describe('TsCompiler', () => {
         })
         const diagnostics = [
           {
-            category: DiagnosticCategory.Error,
+            category: ts.DiagnosticCategory.Error,
             code: 123,
             messageText: 'An error occurs',
             file: undefined,
@@ -619,7 +623,7 @@ describe('TsCompiler', () => {
             length: 1,
           },
           {
-            category: DiagnosticCategory.Error,
+            category: ts.DiagnosticCategory.Error,
             code: 456,
             messageText: 'An error occurs',
             file: undefined,

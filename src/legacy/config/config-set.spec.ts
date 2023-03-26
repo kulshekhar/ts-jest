@@ -2,7 +2,7 @@ import { join, resolve } from 'path'
 
 import type { Transformer } from '@jest/transform'
 import { LogLevels, testing } from 'bs-logger'
-import ts from 'typescript'
+import * as ts from 'typescript'
 
 import { createConfigSet } from '../../__helpers__/fakers'
 import { logTargetMock } from '../../__helpers__/mocks'
@@ -18,6 +18,15 @@ import { ConfigSet, MY_DIGEST } from './config-set'
 jest.mock('../../utils/backports')
 jest.mock('../index')
 jest.mock('../../utils/get-package-version')
+
+jest.mock('typescript', () => {
+  const actualModule = jest.requireActual('typescript') as typeof ts
+
+  return {
+    __esModule: true,
+    ...actualModule,
+  }
+})
 
 const backports = jest.mocked(_backports)
 
