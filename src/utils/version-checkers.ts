@@ -13,7 +13,7 @@ const logger = rootLogger.child({ namespace: 'versions' })
  */
 const enum ExpectedVersions {
   Jest = '>=29.0.0 <30',
-  TypeScript = '>=4.3 <5',
+  TypeScript = '>=4.3 <6',
   BabelJest = '>=29.0.0 <30',
   BabelCore = '>=7.0.0-beta.0 <8',
 }
@@ -43,9 +43,7 @@ type CheckVersionAction = 'warn' | 'throw'
  * @internal
  */
 function checkVersion(name: string, expectedRange: string, action?: Exclude<CheckVersionAction, 'throw'>): boolean
-// eslint-disable-next-line no-redeclare
 function checkVersion(name: string, expectedRange: string, action: 'throw'): true | never
-// eslint-disable-next-line no-redeclare
 function checkVersion(
   name: string,
   expectedRange: string,
