@@ -1,0 +1,16 @@
+{
+  "dependencies": {
+    "typescript-transform-paths": "^3.4.6",
+    "ttsc": "0.0.5"
+  },
+  "jest": {
+    "transform": {
+      "^.+.tsx?$": [
+        "<rootDir>/../../../legacy.js",
+        {
+          "compiler": "ttsc"
+        }
+      ]
+    }
+  }
+}

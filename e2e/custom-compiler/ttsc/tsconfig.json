@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "module": "CommonJS",
+    "paths": {
+      "@share/*": ["share/*"]
+    },
+    "plugins": [
+      {
+        "transform": "typescript-transform-paths",
+      }
+    ]
+  },
+  "files": ["../../../globals.d.ts"]
+}

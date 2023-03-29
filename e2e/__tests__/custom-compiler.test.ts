@@ -30,3 +30,24 @@ describe.skip('ttypescript', () => {
     expect(json.success).toBe(true)
   })
 })
+
+/**
+ * Development has progressed since being cloned to ttsc due to slow ttypescript development.
+ * Support for typescript@5 has been added at the same time as the existing ttypescript behavior.
+ * Additional info can be found on the following links:
+ * @see https://github.com/cevek/ttypescript/issues/146
+ * @see https://github.com/cevek/ttypescript/issues/140
+ */
+describe('ttsc', () => {
+  const TTS_DIR_NAME = 'ttsc'
+
+  beforeAll(() => {
+    runNpmInstall(path.join(__dirname, '..', DIR_NAME, TTS_DIR_NAME))
+  })
+
+  test(`successfully runs the tests inside ${DIR_NAME}/${TTS_DIR_NAME}`, () => {
+    const { json } = runWithJson(`${DIR_NAME}/${TTS_DIR_NAME}`)
+
+    expect(json.success).toBe(true)
+  })
+})
