@@ -753,7 +753,7 @@ describe('_resolveTsConfig', () => {
 
       const conf = cs.parsedTsConfig
       expect(conf.options.configFilePath).toBeUndefined()
-      expect(findConfig).not.toBeCalled()
+      expect(findConfig).not.toHaveBeenCalled()
       expect(readConfig.mock.calls[0][0]).toBe('/foo/tsconfig.bar.json')
       expect(parseConfig).not.toHaveBeenCalled()
     })
@@ -822,7 +822,7 @@ describe('_resolveTsConfig', () => {
 
         const conf = cs.parsedTsConfig
         expect(conf.options.path).toBe(tscfgPathStub)
-        expect(findConfig).not.toBeCalled()
+        expect(findConfig).not.toHaveBeenCalled()
         expect(readConfig.mock.calls[0][0]).toBe(tscfgPathStub)
         expect(parseConfig.mock.calls[0][2]).toBe('/foo')
         expect(parseConfig.mock.calls[0][4]).toBe(tscfgPathStub)
@@ -884,7 +884,7 @@ describe('_resolveTsConfig', () => {
 
         const conf = cs.parsedTsConfig
         expect(conf.options.path).toBe(tscfgPathStub)
-        expect(findConfig).not.toBeCalled()
+        expect(findConfig).not.toHaveBeenCalled()
         expect(readConfig.mock.calls[0][0]).toBe(tscfgPathStub)
         expect(parseConfig.mock.calls[0][2]).toBe('/foo')
         expect(parseConfig.mock.calls[0][4]).toBe(tscfgPathStub)
@@ -947,7 +947,7 @@ describe('_resolveTsConfig', () => {
 
         const conf = cs.parsedTsConfig
         expect(conf.options.path).toBe(tscfgPathStub)
-        expect(findConfig).not.toBeCalled()
+        expect(findConfig).not.toHaveBeenCalled()
         expect(readConfig.mock.calls[0][0]).toBe(tscfgPathStub)
         expect(parseConfig.mock.calls[0][2]).toBe('/foo')
         expect(parseConfig.mock.calls[0][4]).toBe(tscfgPathStub)
@@ -1010,7 +1010,7 @@ describe('_resolveTsConfig', () => {
 
         const conf = cs.parsedTsConfig
         expect(conf.options.path).toBe(tscfgPathStub)
-        expect(findConfig).not.toBeCalled()
+        expect(findConfig).not.toHaveBeenCalled()
         expect(readConfig.mock.calls[0][0]).toBe(tscfgPathStub)
         expect(parseConfig.mock.calls[0][2]).toBe('/foo')
         expect(parseConfig.mock.calls[0][4]).toBe(tscfgPathStub)
