@@ -1,3 +1,12 @@
+# [29.1.0](https://github.com/kulshekhar/ts-jest/compare/v29.0.5...v29.1.0) (2023-03-26)
+
+
+### Features
+
+* Support TypeScript 5.x ([#4064](https://github.com/kulshekhar/ts-jest/issues/4064)) ([db98cc9](https://github.com/kulshekhar/ts-jest/commit/87f27821db99be411288b50a4f9baa7bedb98cc9)), closes [#4048](https://github.com/kulshekhar/ts-jest/issues/4048)
+
+
+
 ## [29.0.5](https://github.com/kulshekhar/ts-jest/compare/v29.0.4...v29.0.5) (2023-01-13)
 
 
