@@ -65,10 +65,10 @@
   "scripts": {
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
-    "test": "jest --no-cache",
-    "test-isolated": "jest -c=jest-isolated.config.js --no-cache",
-    "test-esm": "node --experimental-vm-modules --no-warnings node_modules/jest/bin/jest.js -c=jest-esm.config.js --no-cache",
-    "test-esm-isolated": "node --experimental-vm-modules --no-warnings node_modules/jest/bin/jest.js -c=jest-esm-isolated.config.js --no-cache"
+    "test": "jest -c=jest.config.cjs --no-cache",
+    "test-isolated": "jest -c=jest-isolated.config.cjs --no-cache",
+    "test-esm": "node --experimental-vm-modules --no-warnings node_modules/jest/bin/jest.js -c=jest-esm.config.mjs --no-cache",
+    "test-esm-isolated": "node --experimental-vm-modules --no-warnings node_modules/jest/bin/jest.js -c=jest-esm-isolated.config.mjs --no-cache"
   },
   "browserslist": {
     "production": [

@@ -1,4 +1,4 @@
-const baseCfg = require('./jest.config')
+const baseCfg = require('./jest.config.cjs')
 
 /** @type {import('ts-jest').JestConfigWithTsJest} */
 module.exports = {
