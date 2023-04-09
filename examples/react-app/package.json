@@ -54,8 +54,8 @@
     "style-loader": "^3.3.1",
     "tailwindcss": "^3.0.2",
     "terser-webpack-plugin": "^5.2.5",
-    "ts-jest": "^29.0.2",
-    "typescript": "^4.5.5",
+    "ts-jest": "^29.1.0",
+    "typescript": "~5.0.3",
     "web-vitals": "^2.1.4",
     "webpack": "^5.76.0",
     "webpack-dev-server": "^4.6.0",
@@ -65,10 +65,10 @@
   "scripts": {
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
-    "test": "jest --no-cache",
-    "test-isolated": "jest -c=jest-isolated.config.js --no-cache",
-    "test-esm": "node --experimental-vm-modules --no-warnings node_modules/jest/bin/jest.js -c=jest-esm.config.js --no-cache",
-    "test-esm-isolated": "node --experimental-vm-modules --no-warnings node_modules/jest/bin/jest.js -c=jest-esm-isolated.config.js --no-cache"
+    "test": "jest -c=jest.config.cjs --no-cache",
+    "test-isolated": "jest -c=jest-isolated.config.cjs --no-cache",
+    "test-esm": "node --experimental-vm-modules --no-warnings node_modules/jest/bin/jest.js -c=jest-esm.config.mjs --no-cache",
+    "test-esm-isolated": "node --experimental-vm-modules --no-warnings node_modules/jest/bin/jest.js -c=jest-esm-isolated.config.mjs --no-cache"
   },
   "browserslist": {
     "production": [

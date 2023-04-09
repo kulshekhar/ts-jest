@@ -1,11 +1,14 @@
+const preset = require('ts-jest/presets')
+
 /** @type {import('ts-jest').JestConfigWithTsJest} */
 module.exports = {
-  preset: 'ts-jest/presets/js-with-babel',
+  ...preset.jsWithBabel,
   transform: {
-    '^.+\\.tsx?$': [
+    '^.+\.[tj]sx?$': [
       'ts-jest',
       {
         babelConfig: true,
+        isolatedModules: true,
       },
     ],
   },

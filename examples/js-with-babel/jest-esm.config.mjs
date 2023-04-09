@@ -1,12 +1,13 @@
+import preset from 'ts-jest/presets/index.js'
+
 /** @type {import('ts-jest').JestConfigWithTsJest} */
-module.exports = {
-  preset: 'ts-jest/presets/js-with-babel-esm',
+export default {
+  ...preset.jsWithBabelESM,
   transform: {
-    '^.+\\.tsx?$': [
+    '^.+\.[tj]sx?$': [
       'ts-jest',
       {
         babelConfig: true,
-        isolatedModules: true,
         tsconfig: 'tsconfig-esm.json',
         useESM: true,
       },
