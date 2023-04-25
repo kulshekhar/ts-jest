@@ -124,7 +124,7 @@
     "fs-extra": "11.x",
     "glob": "^10.2.2",
     "glob-gitignore": "latest",
-    "husky": "4.x",
+    "husky": "8.x",
     "jest": "^29.5.0",
     "jest-snapshot-serializer-raw": "^1.2.0",
     "js-yaml": "latest",
