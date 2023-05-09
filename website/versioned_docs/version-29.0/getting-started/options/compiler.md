@@ -21,7 +21,7 @@ module.exports = {
     '^.+\\.tsx?$': [
       'ts-jest',
       {
-        compiler: 'ttypescript',
+        compiler: 'typescript',
       },
     ],
   },
