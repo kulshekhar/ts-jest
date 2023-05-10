@@ -12,12 +12,13 @@ export function createJestPreset(
 ): TsJestPresets {
   logger.debug({ allowJs }, 'creating jest presets', allowJs ? 'handling' : 'not handling', 'JavaScript files')
 
-  const { extensionsToTreatAsEsm, moduleFileExtensions, testMatch } = extraOptions
+  const { extensionsToTreatAsEsm, moduleFileExtensions, testMatch, moduleNameMapper } = extraOptions
   const supportESM = extensionsToTreatAsEsm?.length
   const tsJestTransformOptions: TsJestTransformerOptions = supportESM ? { useESM: true } : {}
 
   return {
     ...(extensionsToTreatAsEsm ? { extensionsToTreatAsEsm } : undefined),
+    ...(moduleNameMapper ? { moduleNameMapper } : undefined),
     ...(moduleFileExtensions ? { moduleFileExtensions } : undefined),
     ...(testMatch ? { testMatch } : undefined),
     transform: {
