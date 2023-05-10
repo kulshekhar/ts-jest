@@ -9,7 +9,7 @@ module.exports = {
     return createJestPreset(true, false)
   },
   get defaultsESM() {
-    return createJestPreset(false, false, { extensionsToTreatAsEsm: TS_EXT_TO_TREAT_AS_ESM })
+    return createJestPreset(false, false, { extensionsToTreatAsEsm: TS_EXT_TO_TREAT_AS_ESM, moduleNameMapper: {'^(\\.{1,2}/.*)\\.js$': '$1'} })
   },
   get defaultsESMLegacy() {
     return createJestPreset(true, false, { extensionsToTreatAsEsm: TS_EXT_TO_TREAT_AS_ESM })
