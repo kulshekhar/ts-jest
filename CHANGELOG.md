@@ -1,3 +1,12 @@
+## [29.1.1](https://github.com/kulshekhar/ts-jest/compare/v29.1.0...v29.1.1) (2023-06-23)
+
+
+### Security Fixes
+
+* bump `semver` to `7.5.3`
+
+
+
 # [29.1.0](https://github.com/kulshekhar/ts-jest/compare/v29.0.5...v29.1.0) (2023-03-26)
 
 
