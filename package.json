@@ -1,6 +1,6 @@
 {
   "name": "ts-jest",
-  "version": "29.1.0",
+  "version": "29.1.1",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "bin": {
@@ -57,7 +57,7 @@
     "json5": "^2.2.3",
     "lodash.memoize": "4.x",
     "make-error": "1.x",
-    "semver": "7.x",
+    "semver": "^7.5.3",
     "yargs-parser": "^21.0.1"
   },
   "peerDependencies": {
