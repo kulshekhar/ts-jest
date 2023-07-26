@@ -43,4 +43,4 @@ However, answer `no` to the Jest question about whether or not to enable TypeScr
 
 For customizing jest, please follow their [official guide online](https://jestjs.io/docs/en/configuration.html).
 
-`ts-jest` specific options can be found [here](options).
+`ts-jest` specific options can be found [here](https://kulshekhar.github.io/ts-jest/docs/getting-started/options). 
