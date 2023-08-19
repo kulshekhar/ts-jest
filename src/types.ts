@@ -170,8 +170,8 @@ export interface ProjectConfigTsJest extends Config.ProjectConfig {
 /**
  * @deprecated use `JestConfigWithTsJest` instead
  */
-export interface TransformOptionsTsJest extends TransformOptions {
-  config: ProjectConfigTsJest
+export interface TransformOptionsTsJest<TransformerConfig = unknown> extends TransformOptions<TransformerConfig> {
+  config: Config.ProjectConfig
 }
 
 /**
