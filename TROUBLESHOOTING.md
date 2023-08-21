@@ -61,7 +61,7 @@ There is a good chance that the error message shows which module is affected:
 
 In this case **some-module** is the problem and needs to be transformed.
 By adding the following line to the configuration file it will tell Jest which modules
-shouldnt be ignored during the transformation step:
+shouldn't be ignored during the transformation step:
 
 ```javascript
 module.exports = {
@@ -71,5 +71,7 @@ module.exports = {
 ```
 
 **some-module** and **another-module** will be transformed.
+
+Note that if you are using Babel with a `.babelrc` config file, you will need to rename it to `babel.config.json` in order to compile any part of `node_modules`, as described in the [Babel docs](https://babeljs.io/docs/configuration#whats-your-use-case).
 
 For more information see [here](https://stackoverflow.com/questions/63389757/jest-unit-test-syntaxerror-cannot-use-import-statement-outside-a-module) and [here](https://stackoverflow.com/questions/52035066/how-to-write-jest-transformignorepatterns).
