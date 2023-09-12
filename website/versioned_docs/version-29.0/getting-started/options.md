@@ -89,11 +89,11 @@ All options have default values which should fit most of the projects. Click on 
 | [**`stringifyContentPathRegex`**][stringifycontentpathregex] | [Files which will become modules returning self content.][stringifycontentpathregex] | `string`\|`RegExp`            | _disabled_     |
 | [**`useESM`**][useesm]                                       | [Enable ESM support][useesm]                                                         | `boolean`                     | _auto_         |
 
-[compiler]: options/compiler
-[tsconfig]: options/tsconfig
-[isolatedmodules]: options/isolatedModules
-[asttransformers]: options/astTransformers
-[diagnostics]: options/diagnostics
-[babelconfig]: options/babelConfig
-[stringifycontentpathregex]: options/stringifyContentPathRegex
-[useesm]: options/useESM
+[compiler]: compiler
+[tsconfig]: tsconfig
+[isolatedmodules]: isolatedModules
+[asttransformers]: astTransformers
+[diagnostics]: diagnostics
+[babelconfig]: babelConfig
+[stringifycontentpathregex]: stringifyContentPathRegex
+[useesm]: useESM
