@@ -108,14 +108,15 @@ export const run: CliCommand = async (args: CliCommandArgs /* , logger: Logger *
     body = JSON.stringify({ ...pkgJson, jest: jestConfig }, undefined, '  ')
   } else {
     // js config
-    const usesModules = pkgJson.type === 'module'
-
     const content = []
     if (!jestPreset) {
       content.push(`${preset.jsImport('tsjPreset')};`, '')
     }
     content.push(`/** @type {import('ts-jest').JestConfigWithTsJest} */`)
-    content.push(usesModules ? 'const jestConfig = {' : 'module.exports = {')
+
+    const usesModules = pkgJson.type === 'module'
+    content.push(usesModules ? 'export default {' : 'module.exports = {')
+
     if (jestPreset) {
       content.push(`  preset: '${preset.name}',`)
     } else {
@@ -132,10 +133,6 @@ export const run: CliCommand = async (args: CliCommandArgs /* , logger: Logger *
       content.push('  },')
     }
     content.push('};')
-
-    if (usesModules) {
-      content.push('\nexport default jestConfig;')
-    }
 
     // join all together
     body = content.join('\n')
