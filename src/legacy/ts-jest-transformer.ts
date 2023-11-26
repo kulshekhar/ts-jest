@@ -189,31 +189,29 @@ export class TsJestTransformer implements SyncTransformer {
   ): Promise<TransformedSource> {
     this._logger.debug({ fileName: sourcePath, transformOptions }, 'processing', sourcePath)
 
-    return new Promise(async (resolve, reject) => {
-      const configs = this._configsFor(transformOptions)
-      const shouldStringifyContent = configs.shouldStringifyContent(sourcePath)
-      const babelJest = shouldStringifyContent ? undefined : configs.babelJestTransformer
-      let result: TransformedSource
-      const processWithTsResult = this.processWithTs(sourceText, sourcePath, transformOptions)
-      result = {
-        code: processWithTsResult.code,
-      }
-      if (processWithTsResult.diagnostics?.length) {
-        reject(configs.createTsError(processWithTsResult.diagnostics))
-      }
-      if (babelJest) {
-        this._logger.debug({ fileName: sourcePath }, 'calling babel-jest processor')
+    const configs = this._configsFor(transformOptions)
+    const shouldStringifyContent = configs.shouldStringifyContent(sourcePath)
+    const babelJest = shouldStringifyContent ? undefined : configs.babelJestTransformer
+    let result: TransformedSource
+    const processWithTsResult = this.processWithTs(sourceText, sourcePath, transformOptions)
+    result = {
+      code: processWithTsResult.code,
+    }
+    if (processWithTsResult.diagnostics?.length) {
+      throw configs.createTsError(processWithTsResult.diagnostics)
+    }
+    if (babelJest) {
+      this._logger.debug({ fileName: sourcePath }, 'calling babel-jest processor')
 
-        // do not instrument here, jest will do it anyway afterwards
-        result = await babelJest.processAsync(result.code, sourcePath, {
-          ...transformOptions,
-          instrument: false,
-        })
-      }
-      result = this.runTsJestHook(sourcePath, sourceText, transformOptions, result)
+      // do not instrument here, jest will do it anyway afterwards
+      result = await babelJest.processAsync(result.code, sourcePath, {
+        ...transformOptions,
+        instrument: false,
+      })
+    }
+    result = this.runTsJestHook(sourcePath, sourceText, transformOptions, result)
 
-      resolve(result)
-    })
+    return result
   }
 
   private processWithTs(
