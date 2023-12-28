@@ -191,6 +191,10 @@ describe('TsJestTransformer', () => {
         }),
         tr.getCacheKey(input.fileContent, input.fileName, {
           ...input.transformOptions,
+          supportsStaticESM: true,
+        }),
+        tr.getCacheKey(input.fileContent, input.fileName, {
+          ...input.transformOptions,
           config: { ...input.transformOptions.config, rootDir: '/bar' },
         }),
       ]
@@ -227,6 +231,27 @@ describe('TsJestTransformer', () => {
           ...input.transformOptions.config,
           globals: { 'ts-jest': { isolatedModules: true } },
         },
+      })
+
+      jest.spyOn(TsJestCompiler.prototype, 'getResolvedModules').mockReturnValueOnce([])
+      const tr1 = new TsJestTransformer()
+      const cacheKey2 = tr1.getCacheKey(input.fileContent, input.fileName, transformOptionsWithCache)
+
+      expect(TsJestCompiler.prototype.getResolvedModules).toHaveBeenCalledTimes(1)
+      expect(TsJestCompiler.prototype.getResolvedModules).toHaveBeenCalledWith(
+        input.fileContent,
+        input.fileName,
+        new Map(),
+      )
+      expect(cacheKey1).not.toEqual(cacheKey2)
+    })
+
+    test('should be different between supportsStaticESM true and supportsStaticESM false', () => {
+      jest.spyOn(TsJestCompiler.prototype, 'getResolvedModules').mockReturnValueOnce([])
+
+      const cacheKey1 = tr.getCacheKey(input.fileContent, input.fileName, {
+        ...transformOptionsWithCache,
+        supportsStaticESM: true,
       })
 
       jest.spyOn(TsJestCompiler.prototype, 'getResolvedModules').mockReturnValueOnce([])

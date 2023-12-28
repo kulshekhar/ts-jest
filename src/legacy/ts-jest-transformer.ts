@@ -308,13 +308,15 @@ export class TsJestTransformer implements SyncTransformer {
     this._logger.debug({ fileName: filePath, transformOptions }, 'computing cache key for', filePath)
 
     // we do not instrument, ensure it is false all the time
-    const { instrument = false } = transformOptions
+    const { supportsStaticESM, instrument = false } = transformOptions
     const constructingCacheKeyElements = [
       this._transformCfgStr,
       CACHE_KEY_EL_SEPARATOR,
       configs.rootDir,
       CACHE_KEY_EL_SEPARATOR,
       `instrument:${instrument ? 'on' : 'off'}`,
+      CACHE_KEY_EL_SEPARATOR,
+      `supportsStaticESM:${supportsStaticESM ? 'on' : 'off'}`,
       CACHE_KEY_EL_SEPARATOR,
       fileContent,
       CACHE_KEY_EL_SEPARATOR,
