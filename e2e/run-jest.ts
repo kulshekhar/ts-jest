@@ -3,7 +3,6 @@ import * as path from 'path'
 import type { FormattedTestResults } from '@jest/test-result'
 import execa from 'execa'
 import * as fs from 'graceful-fs'
-import semver from 'semver'
 import stripAnsi from 'strip-ansi'
 
 import { normalizeIcons } from './utils'
@@ -114,20 +113,5 @@ export const json = function (dir: string, args?: string[], options: RunJestOpti
       STDERR: ${result.stderr}
     `,
     )
-  }
-}
-
-export const onNodeVersions = (versionRange: string, testBody: () => void): void => {
-  const description = `on node ${versionRange}`
-  if (semver.satisfies(process.versions.node, versionRange)) {
-    // eslint-disable-next-line jest/valid-title
-    describe(description, () => {
-      testBody()
-    })
-  } else {
-    // eslint-disable-next-line jest/valid-title,jest/no-disabled-tests
-    describe.skip(description, () => {
-      testBody()
-    })
   }
 }
