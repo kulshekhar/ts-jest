@@ -1,3 +1,14 @@
+## [29.1.2](https://github.com/kulshekhar/ts-jest/compare/v29.1.1...v29.1.2) (2024-01-22)
+
+
+### Bug Fixes
+
+* calculated cache key based on `supportsStaticESM` ([a5d6f2d](https://github.com/kulshekhar/ts-jest/commit/a5d6f2d4f4bfa1c7c217f6faf9310958797b436f))
+* correct error handling in `processAsync` ([e7be4bf](https://github.com/kulshekhar/ts-jest/commit/e7be4bf6a863cd76efec28f40fdd5193b2f50bad)), closes [#4207](https://github.com/kulshekhar/ts-jest/issues/4207)
+* use `Config.ProjectConfig` ([918312b](https://github.com/kulshekhar/ts-jest/commit/918312bee22a795ec6bb347f95df4c1ff0a054de)), closes [#4028](https://github.com/kulshekhar/ts-jest/issues/4028)
+
+
+
 ## [29.1.1](https://github.com/kulshekhar/ts-jest/compare/v29.1.0...v29.1.1) (2023-06-23)
 
 
