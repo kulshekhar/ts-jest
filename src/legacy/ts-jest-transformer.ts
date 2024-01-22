@@ -9,9 +9,8 @@ import type {
   CompiledOutput,
   CompilerInstance,
   DepGraphInfo,
-  ProjectConfigTsJest,
-  TransformOptionsTsJest,
-  TsJestGlobalOptions,
+  TsJestTransformerOptions,
+  TsJestTransformOptions,
 } from '../types'
 import { parse, stringify, JsonableValue, rootLogger } from '../utils'
 import { importer } from '../utils/importer'
@@ -24,7 +23,7 @@ import { ConfigSet } from './config/config-set'
 
 interface CachedConfigSet {
   configSet: ConfigSet
-  jestConfig: JsonableValue<ProjectConfigTsJest>
+  jestConfig: JsonableValue<TsJestTransformOptions['config']>
   transformerCfgStr: string
   compiler: CompilerInstance
   depGraphs: Map<string, DepGraphInfo>
@@ -42,7 +41,7 @@ interface TsJestHooksMap {
  */
 export const CACHE_KEY_EL_SEPARATOR = '\x00'
 
-export class TsJestTransformer implements SyncTransformer {
+export class TsJestTransformer implements SyncTransformer<TsJestTransformerOptions> {
   /**
    * cache ConfigSet between test runs
    *
@@ -56,7 +55,7 @@ export class TsJestTransformer implements SyncTransformer {
   private _depGraphs: Map<string, DepGraphInfo> = new Map<string, DepGraphInfo>()
   private _watchMode = false
 
-  constructor(private readonly tsJestConfig?: TsJestGlobalOptions) {
+  constructor(private readonly tsJestConfig?: TsJestTransformOptions['transformerConfig']) {
     this._logger = rootLogger.child({ namespace: 'ts-jest-transformer' })
     VersionCheckers.jest.warn()
     /**
@@ -72,7 +71,7 @@ export class TsJestTransformer implements SyncTransformer {
     process.env.TS_JEST = '1'
   }
 
-  private _configsFor(transformOptions: TransformOptionsTsJest): ConfigSet {
+  private _configsFor(transformOptions: TsJestTransformOptions): ConfigSet {
     const { config, cacheFS } = transformOptions
     const ccs: CachedConfigSet | undefined = TsJestTransformer._cachedConfigSets.find(
       (cs) => cs.jestConfig.value === config,
@@ -148,7 +147,7 @@ export class TsJestTransformer implements SyncTransformer {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  protected _createConfigSet(config: ProjectConfigTsJest | undefined): ConfigSet {
+  protected _createConfigSet(config: TsJestTransformOptions['config'] | undefined): ConfigSet {
     return new ConfigSet(config)
   }
 
@@ -159,7 +158,7 @@ export class TsJestTransformer implements SyncTransformer {
   /**
    * @public
    */
-  process(sourceText: string, sourcePath: string, transformOptions: TransformOptionsTsJest): TransformedSource {
+  process(sourceText: string, sourcePath: string, transformOptions: TsJestTransformOptions): TransformedSource {
     this._logger.debug({ fileName: sourcePath, transformOptions }, 'processing', sourcePath)
 
     const configs = this._configsFor(transformOptions)
@@ -185,7 +184,7 @@ export class TsJestTransformer implements SyncTransformer {
   async processAsync(
     sourceText: string,
     sourcePath: string,
-    transformOptions: TransformOptionsTsJest,
+    transformOptions: TsJestTransformOptions,
   ): Promise<TransformedSource> {
     this._logger.debug({ fileName: sourcePath, transformOptions }, 'processing', sourcePath)
 
@@ -217,7 +216,7 @@ export class TsJestTransformer implements SyncTransformer {
   private processWithTs(
     sourceText: string,
     sourcePath: string,
-    transformOptions: TransformOptionsTsJest,
+    transformOptions: TsJestTransformOptions,
   ): CompiledOutput {
     let result: TransformedSource
     const configs = this._configsFor(transformOptions)
@@ -269,7 +268,7 @@ export class TsJestTransformer implements SyncTransformer {
   private runTsJestHook(
     sourcePath: string,
     sourceText: string,
-    transformOptions: TransformOptionsTsJest,
+    transformOptions: TsJestTransformOptions,
     compiledOutput: TransformedSource,
   ) {
     let hooksFile = process.env.TS_JEST_HOOKS
@@ -302,7 +301,7 @@ export class TsJestTransformer implements SyncTransformer {
    *
    * @public
    */
-  getCacheKey(fileContent: string, filePath: string, transformOptions: TransformOptionsTsJest): string {
+  getCacheKey(fileContent: string, filePath: string, transformOptions: TsJestTransformOptions): string {
     const configs = this._configsFor(transformOptions)
 
     this._logger.debug({ fileName: filePath, transformOptions }, 'computing cache key for', filePath)
@@ -365,7 +364,7 @@ export class TsJestTransformer implements SyncTransformer {
   async getCacheKeyAsync(
     sourceText: string,
     sourcePath: string,
-    transformOptions: TransformOptionsTsJest,
+    transformOptions: TsJestTransformOptions,
   ): Promise<string> {
     return Promise.resolve(this.getCacheKey(sourceText, sourcePath, transformOptions))
   }

@@ -188,6 +188,9 @@ export interface InitialOptionsTsJest extends Config.InitialOptions {
   globals?: GlobalConfigTsJest
 }
 export type TsJestTransformerOptions = TsJestGlobalOptions
+
+export type TsJestTransformOptions = TransformOptions<TsJestTransformerOptions>
+
 export interface JestConfigWithTsJest extends Omit<Config.InitialOptions, 'transform'> {
   transform?: {
     [regex: string]:

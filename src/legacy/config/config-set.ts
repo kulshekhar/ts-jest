@@ -25,9 +25,8 @@ import type {
   AstTransformerDesc,
   BabelConfig,
   BabelJestTransformer,
-  ProjectConfigTsJest,
   TsJestAstTransformer,
-  TsJestGlobalOptions,
+  TsJestTransformOptions,
   TTypeScript,
 } from '../../types'
 import { TsCompilerInstance } from '../../types'
@@ -145,7 +144,7 @@ export class ConfigSet {
   /**
    * @internal
    */
-  private _jestCfg!: ProjectConfigTsJest
+  private _jestCfg!: TsJestTransformOptions['config']
   /**
    * @internal
    */
@@ -187,7 +186,7 @@ export class ConfigSet {
     tsBuildInfoFile: undefined,
   }
 
-  constructor(jestConfig: ProjectConfigTsJest | undefined, readonly parentLogger?: Logger) {
+  constructor(jestConfig: TsJestTransformOptions['config'] | undefined, readonly parentLogger?: Logger) {
     this.logger = this.parentLogger
       ? this.parentLogger.child({ [LogContexts.namespace]: 'config' })
       : rootLogger.child({ namespace: 'config' })
@@ -224,7 +223,7 @@ export class ConfigSet {
   /**
    * @internal
    */
-  private _backportJestCfg(jestCfg: ProjectConfigTsJest): void {
+  private _backportJestCfg(jestCfg: TsJestTransformOptions['config']): void {
     const config = backportJestConfig(this.logger, jestCfg)
 
     this.logger.debug({ jestConfig: config }, 'normalized jest config')
@@ -239,7 +238,7 @@ export class ConfigSet {
   /**
    * @internal
    */
-  private _setupConfigSet(options: TsJestGlobalOptions): void {
+  private _setupConfigSet(options: TsJestTransformOptions['transformerConfig']): void {
     // useESM
     this.useESM = options.useESM ?? false
 
