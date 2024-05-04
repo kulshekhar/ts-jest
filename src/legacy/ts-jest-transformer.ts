@@ -1,4 +1,4 @@
-import { existsSync, readFileSync, statSync, writeFileSync, mkdirSync } from 'fs'
+import { existsSync, statSync } from 'fs'
 import path from 'path'
 
 import type { SyncTransformer, TransformedSource } from '@jest/transform'
@@ -12,7 +12,7 @@ import type {
   TsJestTransformerOptions,
   TsJestTransformOptions,
 } from '../types'
-import { parse, stringify, JsonableValue, rootLogger } from '../utils'
+import { stringify, JsonableValue, rootLogger } from '../utils'
 import { importer } from '../utils/importer'
 import { Deprecations, Errors, interpolate } from '../utils/messages'
 import { sha1 } from '../utils/sha1'
@@ -27,7 +27,6 @@ interface CachedConfigSet {
   transformerCfgStr: string
   compiler: CompilerInstance
   depGraphs: Map<string, DepGraphInfo>
-  tsResolvedModulesCachePath: string | undefined
   watchMode: boolean
 }
 
@@ -50,7 +49,6 @@ export class TsJestTransformer implements SyncTransformer<TsJestTransformerOptio
   private static readonly _cachedConfigSets: CachedConfigSet[] = []
   private readonly _logger: Logger
   protected _compiler!: CompilerInstance
-  private _tsResolvedModulesCachePath: string | undefined
   private _transformCfgStr!: string
   private _depGraphs: Map<string, DepGraphInfo> = new Map<string, DepGraphInfo>()
   private _watchMode = false
@@ -81,7 +79,6 @@ export class TsJestTransformer implements SyncTransformer<TsJestTransformerOptio
       this._transformCfgStr = ccs.transformerCfgStr
       this._compiler = ccs.compiler
       this._depGraphs = ccs.depGraphs
-      this._tsResolvedModulesCachePath = ccs.tsResolvedModulesCachePath
       this._watchMode = ccs.watchMode
       configSet = ccs.configSet
     } else {
@@ -98,7 +95,6 @@ export class TsJestTransformer implements SyncTransformer<TsJestTransformerOptio
         this._transformCfgStr = serializedCcs.transformerCfgStr
         this._compiler = serializedCcs.compiler
         this._depGraphs = serializedCcs.depGraphs
-        this._tsResolvedModulesCachePath = serializedCcs.tsResolvedModulesCachePath
         this._watchMode = serializedCcs.watchMode
         configSet = serializedCcs.configSet
       } else {
@@ -129,7 +125,6 @@ export class TsJestTransformer implements SyncTransformer<TsJestTransformerOptio
         jest.cacheDirectory = undefined as any // eslint-disable-line @typescript-eslint/no-explicit-any
         this._transformCfgStr = `${new JsonableValue(jest).serialized}${configSet.cacheSuffix}`
         this._createCompiler(configSet, cacheFS)
-        this._getFsCachedResolvedModules(configSet)
         this._watchMode = process.argv.includes('--watch')
         TsJestTransformer._cachedConfigSets.push({
           jestConfig: new JsonableValue(config),
@@ -137,7 +132,6 @@ export class TsJestTransformer implements SyncTransformer<TsJestTransformerOptio
           transformerCfgStr: this._transformCfgStr,
           compiler: this._compiler,
           depGraphs: this._depGraphs,
-          tsResolvedModulesCachePath: this._tsResolvedModulesCachePath,
           watchMode: this._watchMode,
         })
       }
@@ -321,7 +315,7 @@ export class TsJestTransformer implements SyncTransformer<TsJestTransformerOptio
       CACHE_KEY_EL_SEPARATOR,
       filePath,
     ]
-    if (!configs.isolatedModules && this._tsResolvedModulesCachePath) {
+    if (!configs.isolatedModules && configs.tsCacheDir) {
       let resolvedModuleNames: string[]
       if (this._depGraphs.get(filePath)?.fileContent === fileContent) {
         this._logger.debug(
@@ -346,7 +340,6 @@ export class TsJestTransformer implements SyncTransformer<TsJestTransformerOptio
           fileContent,
           resolvedModuleNames,
         })
-        writeFileSync(this._tsResolvedModulesCachePath, stringify([...this._depGraphs]))
       }
       resolvedModuleNames.forEach((moduleName) => {
         constructingCacheKeyElements.push(
@@ -367,21 +360,5 @@ export class TsJestTransformer implements SyncTransformer<TsJestTransformerOptio
     transformOptions: TsJestTransformOptions,
   ): Promise<string> {
     return Promise.resolve(this.getCacheKey(sourceText, sourcePath, transformOptions))
-  }
-
-  /**
-   * Subclasses extends `TsJestTransformer` can call this method to get resolved module disk cache
-   */
-  private _getFsCachedResolvedModules(configSet: ConfigSet): void {
-    const cacheDir = configSet.tsCacheDir
-    if (!configSet.isolatedModules && cacheDir) {
-      // Make sure the cache directory exists before continuing.
-      mkdirSync(cacheDir, { recursive: true })
-      this._tsResolvedModulesCachePath = path.join(cacheDir, sha1('ts-jest-resolved-modules', CACHE_KEY_EL_SEPARATOR))
-      try {
-        const cachedTSResolvedModules = readFileSync(this._tsResolvedModulesCachePath, 'utf-8')
-        this._depGraphs = new Map(parse(cachedTSResolvedModules))
-      } catch (e) {}
-    }
   }
 }

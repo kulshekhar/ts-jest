@@ -2,17 +2,13 @@ import fs from 'fs'
 import path from 'path'
 
 import { LogLevels } from 'bs-logger'
-import { removeSync, writeFileSync } from 'fs-extra'
+import { removeSync } from 'fs-extra'
 
-import { createConfigSet } from '../__helpers__/fakers'
 import { logTargetMock } from '../__helpers__/mocks'
-import type { DepGraphInfo } from '../types'
-import { stringify } from '../utils'
 import { importer } from '../utils/importer'
-import { sha1 } from '../utils/sha1'
 
 import { TsJestCompiler } from './compiler'
-import { CACHE_KEY_EL_SEPARATOR, TsJestTransformer } from './ts-jest-transformer'
+import { TsJestTransformer } from './ts-jest-transformer'
 
 const SOURCE_MAPPING_PREFIX = 'sourceMappingURL='
 
@@ -50,7 +46,6 @@ describe('TsJestTransformer', () => {
           "transformerCfgStr",
           "compiler",
           "depGraphs",
-          "tsResolvedModulesCachePath",
           "watchMode",
         ]
       `)
@@ -78,72 +73,6 @@ describe('TsJestTransformer', () => {
       const cs2 = new TsJestTransformer()._configsFor(obj2)
 
       expect(cs2).toBe(cs1)
-    })
-
-    test(`should not read disk cache with isolatedModules true`, () => {
-      const tr = new TsJestTransformer()
-      const cs = createConfigSet({
-        jestConfig: {
-          globals: { 'ts-jest': { isolatedModules: true } },
-        },
-      })
-      const readFileSyncSpy = jest.spyOn(fs, 'readFileSync')
-
-      // @ts-expect-error testing purpose
-      tr._getFsCachedResolvedModules(cs)
-
-      expect(readFileSyncSpy).not.toHaveBeenCalled()
-
-      readFileSyncSpy.mockRestore()
-    })
-
-    test(`should not read disk cache with isolatedModules false and no jest cache`, () => {
-      const tr = new TsJestTransformer()
-      const cs = createConfigSet({
-        jestConfig: {
-          globals: { 'ts-jest': { isolatedModules: false } },
-        },
-      })
-      const readFileSyncSpy = jest.spyOn(fs, 'readFileSync')
-
-      // @ts-expect-error testing purpose
-      tr._getFsCachedResolvedModules(cs)
-
-      expect(readFileSyncSpy).not.toHaveBeenCalled()
-
-      readFileSyncSpy.mockRestore()
-    })
-
-    test(`should read disk cache with isolatedModules false and use jest cache`, () => {
-      const readFileSyncSpy = jest.spyOn(fs, 'readFileSync')
-      const fileName = 'foo.ts'
-      const tr = new TsJestTransformer()
-      const cs = createConfigSet({
-        jestConfig: {
-          cache: true,
-          cacheDirectory: cacheDir,
-          globals: { 'ts-jest': { isolatedModules: false } },
-        },
-      })
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      const tsCacheDir = cs.tsCacheDir!
-      const depGraphs: Map<string, DepGraphInfo> = new Map<string, DepGraphInfo>()
-      depGraphs.set(fileName, {
-        fileContent: 'const foo = 1',
-        resolvedModuleNames: [],
-      })
-      const resolvedModulesCacheDir = path.join(tsCacheDir, sha1('ts-jest-resolved-modules', CACHE_KEY_EL_SEPARATOR))
-      fs.mkdirSync(tsCacheDir, { recursive: true })
-      writeFileSync(resolvedModulesCacheDir, stringify([...depGraphs]))
-
-      // @ts-expect-error testing purpose
-      tr._getFsCachedResolvedModules(cs)
-
-      // @ts-expect-error testing purpose
-      expect(tr._depGraphs.has(fileName)).toBe(true)
-      expect(readFileSyncSpy.mock.calls).toEqual(expect.arrayContaining([[resolvedModulesCacheDir, 'utf-8']]))
-
-      removeSync(cacheDir)
     })
   })
 
