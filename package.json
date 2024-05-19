@@ -114,7 +114,7 @@
     "@typescript-eslint/eslint-plugin": "^5.60.0",
     "@typescript-eslint/parser": "^5.60.0",
     "babel-jest": "^29.5.0",
-    "conventional-changelog-cli": "2.x",
+    "conventional-changelog-cli": "2.2.2",
     "cross-spawn": "latest",
     "esbuild": "~0.17.19",
     "eslint": "^8.42.0",
