@@ -1,6 +1,6 @@
 {
   "type": "module",
   "devDependencies": {
-    "@jest/globals": "^29.5.0"
+    "@jest/globals": "^29.7.0"
   }
 }
