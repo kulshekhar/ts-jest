@@ -1,3 +1,18 @@
+## [29.1.3](https://github.com/kulshekhar/ts-jest/compare/v29.1.2...v29.1.3) (2024-05-21)
+
+
+### Bug Fixes
+
+* add `@jest/transform` as an optional peer dependency ([0ba7f86](https://github.com/kulshekhar/ts-jest/commit/0ba7f861c3e1905de5627b4e5d2a2cadad011b67))
+* bring back Node 14 support ([eda56a7](https://github.com/kulshekhar/ts-jest/commit/eda56a779789d70963b7572e2914b2a3a25ac43a))
+
+
+### Performance Improvements
+
+* remove ts resolved module cache file ([4c88da5](https://github.com/kulshekhar/ts-jest/commit/4c88da58991b000aa90ea489acfa6aed39b36120))
+
+
+
 ## [29.1.2](https://github.com/kulshekhar/ts-jest/compare/v29.1.1...v29.1.2) (2024-01-22)
 
 
