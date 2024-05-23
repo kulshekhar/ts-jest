@@ -301,7 +301,7 @@ describe('TsCompiler', () => {
               supportsStaticESM: false,
               watchMode: false,
             }),
-          ).toThrowError()
+          ).toThrow()
         },
       )
 
@@ -323,7 +323,7 @@ describe('TsCompiler', () => {
             supportsStaticESM: false,
             watchMode: false,
           }),
-        ).toThrowError(
+        ).toThrow(
           new TypeError(
             interpolate(Errors.UnableToRequireDefinitionFile, {
               file: basename(fileName),

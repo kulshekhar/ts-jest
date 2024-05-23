@@ -158,8 +158,8 @@ Visit https://kulshekhar.github.io/ts-jest/user/config/#jest-preset for more inf
             return shouldRemoveDuplicatedConfig
               ? acc
               : acc
-              ? { ...acc, [fileRegex]: transformerConfig }
-              : { [fileRegex]: transformerConfig }
+                ? { ...acc, [fileRegex]: transformerConfig }
+                : { [fileRegex]: transformerConfig }
           },
           undefined,
         )

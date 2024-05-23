@@ -1,6 +1,6 @@
 import { color } from '../entry'
 
-jest.mock('some-module', () => ({} as Partial<Record<string, unknown>>), { virtual: true })
+jest.mock('some-module', () => ({}) as Partial<Record<string, unknown>>, { virtual: true })
 
 jest.mock('../entry', () => {
   return { color: 'blue' }
