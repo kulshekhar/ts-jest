@@ -14,6 +14,7 @@ const logger = rootLogger.child({ namespace: 'versions' })
 const enum ExpectedVersions {
   Jest = '>=29.0.0 <30',
   TypeScript = '>=4.3 <6',
+  // eslint-disable-next-line @typescript-eslint/no-duplicate-enum-values
   BabelJest = '>=29.0.0 <30',
   BabelCore = '>=7.0.0-beta.0 <8',
 }
