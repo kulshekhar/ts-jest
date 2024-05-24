@@ -1,6 +1,8 @@
-const simplePlantUML = require('@akebifiky/remark-simple-plantuml')
+import simplePlantUML from '@akebifiky/remark-simple-plantuml'
+import type { Config } from '@docusaurus/types'
+import { themes } from 'prism-react-renderer'
 
-module.exports = {
+const config: Config = {
   title: 'ts-jest',
   tagline: 'A Jest transformer with source map support that lets you use Jest to test projects written in TypeScript.',
   url: 'https://kulshekhar.github.io',
@@ -84,7 +86,7 @@ module.exports = {
         docs: {
           showLastUpdateAuthor: true,
           showLastUpdateTime: true,
-          sidebarPath: require.resolve('./sidebars.js'),
+          sidebarPath: './sidebars.js',
           editUrl: 'https://github.com/kulshekhar/ts-jest/edit/main/website',
           remarkPlugins: [
             simplePlantUML,
@@ -115,8 +117,8 @@ module.exports = {
         '⭐️ If you like ts-jest, give it a star on <a target="_blank" rel="noopener noreferrer" href="https://github.com/kulshekhar/ts-jest">GitHub</a>! ⭐️',
     },
     prism: {
-      theme: require('prism-react-renderer/themes/github'),
-      darkTheme: require('prism-react-renderer/themes/dracula'),
+      theme: themes.github,
+      darkTheme: themes.dracula,
     },
     navbar: {
       hideOnScroll: true,
@@ -203,3 +205,5 @@ module.exports = {
     },
   },
 }
+
+export default config

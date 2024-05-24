@@ -7,15 +7,15 @@
       "items": [
         {
           "type": "doc",
-          "id": "version-26.5/introduction"
+          "id": "introduction"
         },
         {
           "type": "doc",
-          "id": "version-26.5/processing"
+          "id": "processing"
         },
         {
           "type": "doc",
-          "id": "version-26.5/contributing"
+          "id": "contributing"
         }
       ]
     },
@@ -26,23 +26,23 @@
       "items": [
         {
           "type": "doc",
-          "id": "version-26.5/getting-started/installation"
+          "id": "getting-started/installation"
         },
         {
           "type": "doc",
-          "id": "version-26.5/getting-started/presets"
+          "id": "getting-started/presets"
         },
         {
           "type": "doc",
-          "id": "version-26.5/getting-started/options"
+          "id": "getting-started/options"
         },
         {
           "type": "doc",
-          "id": "version-26.5/getting-started/paths-mapping"
+          "id": "getting-started/paths-mapping"
         },
         {
           "type": "doc",
-          "id": "version-26.5/getting-started/version-checking"
+          "id": "getting-started/version-checking"
         }
       ]
     },
@@ -53,41 +53,41 @@
       "items": [
         {
           "type": "doc",
-          "id": "version-26.5/guides/esm-support"
+          "id": "guides/esm-support"
         },
         {
           "type": "doc",
-          "id": "version-26.5/guides/mock-es6-class"
+          "id": "guides/mock-es6-class"
         },
         {
           "type": "doc",
-          "id": "version-26.5/guides/react-native"
+          "id": "guides/react-native"
         },
         {
           "type": "doc",
-          "id": "version-26.5/guides/test-helpers"
+          "id": "guides/test-helpers"
         },
         {
           "type": "doc",
-          "id": "version-26.5/guides/troubleshooting"
+          "id": "guides/troubleshooting"
         },
         {
           "type": "doc",
-          "id": "version-26.5/guides/using-with-monorepo"
+          "id": "guides/using-with-monorepo"
         }
       ]
     },
     {
       "type": "doc",
-      "id": "version-26.5/babel7-or-ts"
+      "id": "babel7-or-ts"
     },
     {
       "type": "doc",
-      "id": "version-26.5/migration"
+      "id": "migration"
     },
     {
       "type": "doc",
-      "id": "version-26.5/debugging"
+      "id": "debugging"
     }
   ]
 }
