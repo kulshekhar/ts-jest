@@ -93,8 +93,8 @@
     }
   },
   "devDependencies": {
-    "@commitlint/cli": "17.8.1",
-    "@commitlint/config-angular": "^17.8.1",
+    "@commitlint/cli": "^19.3.0",
+    "@commitlint/config-angular": "^19.3.0",
     "@jest/transform": "^29.7.0",
     "@jest/types": "^29.6.3",
     "@types/babel__core": "7.20.5",
@@ -114,7 +114,7 @@
     "@typescript-eslint/eslint-plugin": "^7.10.0",
     "@typescript-eslint/parser": "^7.10.0",
     "babel-jest": "^29.7.0",
-    "conventional-changelog-cli": "2.2.2",
+    "conventional-changelog-cli": "^5.0.0",
     "cross-spawn": "latest",
     "esbuild": "~0.21.3",
     "eslint": "^8.57.0",
