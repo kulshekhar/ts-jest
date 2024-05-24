@@ -28,7 +28,7 @@
   "devDependencies": {
     "@babel/core": "^7.24.5",
     "@docusaurus/module-type-aliases": "^2.4.3",
-    "@tsconfig/docusaurus": "^1.0.7",
+    "@tsconfig/docusaurus": "^2.0.3",
     "@types/react": "^16.14.24",
     "typescript": "~5.1.3"
   },
