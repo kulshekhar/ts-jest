@@ -130,7 +130,7 @@
     "glob-gitignore": "latest",
     "husky": "4.x",
     "jest": "^29.7.0",
-    "jest-snapshot-serializer-raw": "^1.2.0",
+    "jest-snapshot-serializer-raw": "^2.0.0",
     "js-yaml": "latest",
     "json-schema-to-typescript": "^13.1.2",
     "lint-staged": "latest",
