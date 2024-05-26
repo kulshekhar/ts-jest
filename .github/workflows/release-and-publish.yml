@@ -52,7 +52,7 @@ jobs:
 
         # Runs a single command using the runners shell
       - name: Create release for tag
-        uses: softprops/action-gh-release@de2c0eb89ae2a093876385947365aca7b0e5f844 # v1
+        uses: softprops/action-gh-release@69320dbe05506a9a39fc8ae11030b214ec2d1f87 # v2
         with:
           tag_name: ${{ github.ref }}
           body: Please refer to [CHANGELOG.md](https://github.com/kulshekhar/ts-jest/blob/main/CHANGELOG.md) for details.
