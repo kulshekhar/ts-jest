@@ -1,3 +1,17 @@
+## [29.1.4](https://github.com/kulshekhar/ts-jest/compare/v29.1.3...v29.1.4) (2024-05-28)
+
+
+### Bug Fixes
+
+* fix(transformer): allow transforming of .cts/.mts extensions. (#3996) ([b8f6eaa](https://github.com/kulshekhar/ts-jest/commit/b8f6eaa)), closes [#3996](https://github.com/kulshekhar/ts-jest/issues/3996)
+
+
+### Features
+
+* feat: make cli generate esm config based on `type: "module"` (#4210) ([81a5f64](https://github.com/kulshekhar/ts-jest/commit/81a5f64)), closes [#4210](https://github.com/kulshekhar/ts-jest/issues/4210) [#4012](https://github.com/kulshekhar/ts-jest/issues/4012)
+
+
+
 ## [29.1.3](https://github.com/kulshekhar/ts-jest/compare/v29.1.2...v29.1.3) (2024-05-21)
 
 
