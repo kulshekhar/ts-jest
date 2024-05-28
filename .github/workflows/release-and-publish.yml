@@ -26,6 +26,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       isLatest: ${{ steps.release_type.outputs.latest }}
+
     steps:
       - id: release_type
         name: Identify release type
@@ -34,6 +35,7 @@ jobs:
         run: echo "::set-output name=latest::$LATEST"
         env:
           LATEST: ${{ contains(github.ref, '-next') != true && contains(github.ref, '-rc') != true }}
+
   create_release:
     permissions:
       contents: write # for actions/create-release to create a release
@@ -52,13 +54,16 @@ jobs:
 
         # Runs a single command using the runners shell
       - name: Create release for tag
-        uses: softprops/action-gh-release@69320dbe05506a9a39fc8ae11030b214ec2d1f87 # v2
+        uses: actions/create-release@latest
+        env:
+          # this is provided by github, you don't need to do anything here
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ github.ref }}
+          release_name: ${{ github.ref }}
           body: Please refer to [CHANGELOG.md](https://github.com/kulshekhar/ts-jest/blob/main/CHANGELOG.md) for details.
           draft: false
           prerelease: ${{ needs.setup_variables.outputs.isLatest != 'true' }}
-          token: ${{ secrets.GITHUB_TOKEN }}
 
   publish_to_npm:
     needs: [setup_variables, create_release]
@@ -70,7 +75,7 @@ jobs:
       # https://github.com/marketplace/actions/setup-node-js-environment
       - uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
         with:
-          node-version: 16
+          node-version: 20
           registry-url: https://registry.npmjs.org/
       - name: Check lock file
         # runs npm install using package-lock.json and verifies
