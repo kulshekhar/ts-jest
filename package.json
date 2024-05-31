@@ -105,7 +105,7 @@
     "@types/lodash.memoize": "4.1.9",
     "@types/lodash.set": "4.3.9",
     "@types/micromatch": "4.0.7",
-    "@types/node": "20.12.13",
+    "@types/node": "20.13.0",
     "@types/react": "18.x",
     "@types/rimraf": "^4.0.5",
     "@types/semver": "latest",
