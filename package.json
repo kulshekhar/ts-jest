@@ -107,7 +107,6 @@
     "@types/micromatch": "4.0.7",
     "@types/node": "20.13.0",
     "@types/react": "18.x",
-    "@types/rimraf": "^4.0.5",
     "@types/semver": "latest",
     "@types/yargs": "latest",
     "@types/yargs-parser": "21.0.3",
