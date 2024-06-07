@@ -1,4 +1,4 @@
-name: CI
+miname: CI
 
 on:
   push:
@@ -26,7 +26,7 @@ jobs:
       os: windows-latest
 
   lint:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     needs: prepare-npm-cache-ubuntu
 
     steps:
