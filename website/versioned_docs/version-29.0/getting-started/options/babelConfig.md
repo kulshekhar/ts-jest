@@ -15,6 +15,7 @@ The option is `babelConfig` and it works pretty much as the `tsconfig` option, e
 #### Use default `babelrc` file
 
 ```js tab
+// jest.config.js
 /** @type {import('ts-jest').JestConfigWithTsJest} */
 module.exports = {
   // [...]
@@ -32,6 +33,7 @@ module.exports = {
 ```
 
 ```ts tab
+// jest.config.ts
 import type { JestConfigWithTsJest } from 'ts-jest'
 
 const jestConfig: JestConfigWithTsJest = {
@@ -52,7 +54,7 @@ export default jestConfig
 ```
 
 ```JSON tab
-// OR package.json
+// package.json
 {
   // [...]
   "jest": {
@@ -75,6 +77,7 @@ export default jestConfig
 The path should be relative to the current working directory where you start Jest from. You can also use `\<rootDir>` in the path, or use an absolute path (this last one is strongly not recommended).
 
 ```js tab
+// jest.config.js
 /** @type {import('ts-jest').JestConfigWithTsJest} */
 module.exports = {
   // [...]
@@ -92,6 +95,7 @@ module.exports = {
 ```
 
 ```ts tab
+// jest.config.ts
 import type { JestConfigWithTsJest } from 'ts-jest'
 
 const jestConfig: JestConfigWithTsJest = {
@@ -112,6 +116,7 @@ export default jestConfig
 ```
 
 ```JSON tab
+// package.json
 {
   // [...]
   "jest": {
@@ -132,6 +137,7 @@ export default jestConfig
 or importing directly the config file:
 
 ```js tab
+// jest.config.js
 /** @type {import('ts-jest').JestConfigWithTsJest} */
 module.exports = {
   // [...]
@@ -149,6 +155,7 @@ module.exports = {
 ```
 
 ```ts tab
+// jest.config.ts
 import type { JestConfigWithTsJest } from 'ts-jest'
 import babelConfig from './babelrc.test.js'
 
@@ -174,6 +181,7 @@ export default jestConfig
 Refer to the [Babel options](https://babeljs.io/docs/en/next/options) to know what can be used there.
 
 ```js tab
+// jest.config.js
 /** @type {import('ts-jest').JestConfigWithTsJest} */
 module.exports = {
   // [...]
@@ -194,6 +202,7 @@ module.exports = {
 ```
 
 ```ts tab
+// jest.config.ts
 import type { JestConfigWithTsJest } from 'ts-jest'
 
 const jestConfig: JestConfigWithTsJest = {
@@ -217,6 +226,7 @@ export default jestConfig
 ```
 
 ```JSON tab
+// package.json
 {
   // [...]
   "jest": {

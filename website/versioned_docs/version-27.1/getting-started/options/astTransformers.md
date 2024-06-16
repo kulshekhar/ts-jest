@@ -31,7 +31,7 @@ module.exports = {
 ```
 
 ```json
-// OR package.json
+// package.json
 {
   // [...]
   "jest": {
@@ -120,7 +120,7 @@ module.exports = {
 ```
 
 ```json
-// OR package.json
+// package.json
 {
   // [...]
   "jest": {

@@ -27,7 +27,7 @@ module.exports = {
 ```
 
 ```json
-// OR package.json
+// package.json
 {
   // [...]
   "jest": {
@@ -56,8 +56,10 @@ module.exports = {
 }
 ```
 
+or
+
 ```js
-// OR jest.config.js with require for babelrc
+// jest.config.js
 module.exports = {
   // [...]
   globals: {
@@ -69,7 +71,7 @@ module.exports = {
 ```
 
 ```json
-// OR package.json
+// package.json
 {
   // [...]
   "jest": {
@@ -102,7 +104,7 @@ module.exports = {
 ```
 
 ```json
-// OR package.json
+// package.json
 {
   // [...]
   "jest": {

@@ -32,6 +32,7 @@ The `diagnostics` option's value can also accept an object for more advanced con
 #### Disabling diagnostics
 
 ```js tab
+// jest.config.js
 /** @type {import('ts-jest').JestConfigWithTsJest} */
 module.exports = {
   // [...]
@@ -49,6 +50,7 @@ module.exports = {
 ```
 
 ```ts tab
+// jest.config.ts
 import type { JestConfigWithTsJest } from 'ts-jest'
 
 const jestConfig: JestConfigWithTsJest = {
@@ -69,6 +71,7 @@ export default jestConfig
 ```
 
 ```JSON tab
+// package.json
 {
   // [...]
   "jest": {
@@ -93,6 +96,7 @@ export default jestConfig
 Assuming all your test files ends with `.spec.ts` or `.test.ts`, using the following config will enable error reporting only for those files:
 
 ```js tab
+// jest.config.js
 /** @type {import('ts-jest').JestConfigWithTsJest} */
 module.exports = {
   // [...]
@@ -112,6 +116,7 @@ module.exports = {
 ```
 
 ```ts tab
+// jest.config.ts
 import type { JestConfigWithTsJest } from 'ts-jest'
 
 const jestConfig: JestConfigWithTsJest = {
@@ -134,7 +139,7 @@ export default jestConfig
 ```
 
 ```JSON tab
-// OR package.json
+// package.json
 {
   // [...]
   "jest": {
@@ -159,6 +164,7 @@ export default jestConfig
 While some diagnostics are stop-blockers for the compilation, most of them are not. If you want the compilation (and so your tests) to continue when encountering those, set the `warnOnly` to `true`:
 
 ```js tab
+// jest.config.js
 /** @type {import('ts-jest').JestConfigWithTsJest} */
 module.exports = {
   // [...]
@@ -178,6 +184,7 @@ module.exports = {
 ```
 
 ```ts tab
+// jest.config.ts
 import type { JestConfigWithTsJest } from 'ts-jest'
 
 const jestConfig: JestConfigWithTsJest = {
@@ -200,6 +207,7 @@ export default jestConfig
 ```
 
 ```JSON tab
+// package.json
 {
   // [...]
   "jest": {
@@ -229,6 +237,7 @@ All TypeScript error codes can be found [there](https://github.com/Microsoft/Typ
 4. An `array` of one or more from `1` or `3` (example: `[1009, "TS2571", "6031"]`)
 
 ```js tab
+// jest.config.js
 /** @type {import('ts-jest').JestConfigWithTsJest} */
 module.exports = {
   // [...]
@@ -248,6 +257,7 @@ module.exports = {
 ```
 
 ```ts tab
+// jest.config.ts
 import type { JestConfigWithTsJest } from 'ts-jest'
 
 const jestConfig: JestConfigWithTsJest = {
@@ -270,6 +280,7 @@ export default jestConfig
 ```
 
 ```JSON tab
+// package.json
 {
   // [...]
   "jest": {

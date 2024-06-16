@@ -17,6 +17,7 @@ The option is `astTransformers` and it allows ones to specify which 3 types of T
 #### Basic Transformers
 
 ```js tab
+// jest.config.js
 /** @type {import('ts-jest').JestConfigWithTsJest} */
 module.exports = {
   // [...]
@@ -36,6 +37,7 @@ module.exports = {
 ```
 
 ```ts tab
+// jest.config.ts
 import type { JestConfigWithTsJest } from 'ts-jest'
 
 const jestConfig: JestConfigWithTsJest = {
@@ -58,6 +60,7 @@ export default jestConfig
 ```
 
 ```JSON tab
+// package.json
 {
   // [...]
   "jest": {
@@ -80,6 +83,7 @@ export default jestConfig
 #### Configuring transformers with options
 
 ```js tab
+// jest.config.js
 /** @type {import('ts-jest').JestConfigWithTsJest} */
 module.exports = {
   // [...]
@@ -104,6 +108,7 @@ module.exports = {
 ```
 
 ```ts tab
+// jest.config.ts
 import type { JestConfigWithTsJest } from 'ts-jest'
 
 const jestConfig: JestConfigWithTsJest = {
@@ -131,6 +136,7 @@ export default jestConfig
 ```
 
 ```JSON tab
+// package.json
 {
   // [...]
   "jest": {

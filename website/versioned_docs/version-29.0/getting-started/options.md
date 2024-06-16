@@ -15,6 +15,7 @@ All `ts-jest` specific options can be defined in Jest `transform` config object 
 or through a `jest.config.js`, or `jest.config.ts` file.
 
 ```js tab
+// jest.config.js
 /** @type {import('ts-jest').JestConfigWithTsJest} */
 module.exports = {
   // [...]
@@ -32,6 +33,7 @@ module.exports = {
 ```
 
 ```ts tab
+// jest.config.ts
 import type { JestConfigWithTsJest } from 'ts-jest'
 
 const jestConfig: JestConfigWithTsJest = {
@@ -50,6 +52,7 @@ const jestConfig: JestConfigWithTsJest = {
 ```
 
 ```JSON tab
+// package.json
 {
   // [...]
   "jest": {
