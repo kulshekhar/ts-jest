@@ -40,6 +40,7 @@ In most cases, simply setting the `preset` key to the desired preset name in you
 using TypeScript with Jest (assuming you added `ts-jest` to your `devDependencies` of course):
 
 ```js tab
+// jest.config.js
 /** @type {import('ts-jest').JestConfigWithTsJest} */
 module.exports = {
   // [...]
@@ -50,6 +51,7 @@ module.exports = {
 ```
 
 ```ts tab
+// jest.config.ts
 import type { JestConfigWithTsJest } from 'ts-jest'
 
 const jestConfig: JestConfigWithTsJest = {
@@ -63,6 +65,8 @@ export default jestConfig
 ```
 
 ```JSON tab
+// package.json
+
 {
   // [...]
   "jest": {
@@ -82,6 +86,7 @@ If you're already using another preset, you might want only some specific settin
 In this case you'll need to use the JavaScript version of Jest config (comment/uncomment according to your use case):
 
 ```js tab
+// jest.config.js
 const { defaults: tsjPreset } = require('ts-jest/presets')
 // const { defaultsESM: tsjPreset } = require('ts-jest/presets')
 // const { jsWithTs: tsjPreset } = require('ts-jest/presets')
@@ -100,6 +105,7 @@ module.exports = {
 ```
 
 ```ts tab
+// jest.config.ts
 import type { JestConfigWithTsJest } from 'ts-jest'
 
 import { defaults as tsjPreset } from 'ts-jest/presets'

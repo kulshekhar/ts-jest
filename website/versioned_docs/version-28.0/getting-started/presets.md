@@ -44,7 +44,7 @@ module.exports = {
 ```
 
 ```json
-// OR package.json
+// package.json
 {
   // [...]
   "jest": {

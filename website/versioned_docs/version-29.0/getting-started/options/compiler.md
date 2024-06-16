@@ -12,6 +12,7 @@ If you use a custom compiler, such as `ttypescript`, make sure its API is the sa
 ### Example
 
 ```js tab
+// jest.config.js
 /** @type {import('ts-jest').JestConfigWithTsJest} */
 module.exports = {
   // [...]
@@ -29,6 +30,7 @@ module.exports = {
 ```
 
 ```ts tab
+// jest.config.ts
 import type { JestConfigWithTsJest } from 'ts-jest'
 
 const jestConfig: JestConfigWithTsJest = {
@@ -49,6 +51,7 @@ export default jestConfig
 ```
 
 ```JSON tab
+// package.json
 {
   // [...]
   "jest": {

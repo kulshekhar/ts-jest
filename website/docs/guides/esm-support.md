@@ -25,6 +25,7 @@ If you are using custom `transform` config, please remove `preset` from your Jes
 #### Manual configuration
 
 ```js tab
+// jest.config.js
 /** @type {import('ts-jest').JestConfigWithTsJest} */
 module.exports = {
   // [...]
@@ -46,6 +47,7 @@ module.exports = {
 ```
 
 ```ts tab
+// jest.config.ts
 import type { JestConfigWithTsJest } from 'ts-jest'
 
 const jestConfig: JestConfigWithTsJest = {
@@ -70,6 +72,7 @@ export default jestConfig
 ```
 
 ```JSON tab
+// package.json
 {
   // [...]
   "jest": {
@@ -100,6 +103,7 @@ Starting from **v28.0.0**, `ts-jest` will gradually switch to `esbuild`/`swc` to
 :::
 
 ```js tab
+// jest.config.js
 /** @type {import('ts-jest').JestConfigWithTsJest} */
 module.exports = {
   // [...]
@@ -121,6 +125,7 @@ module.exports = {
 ```
 
 ```ts tab
+// jest.config.ts
 import type { JestConfigWithTsJest } from 'ts-jest'
 
 const jestConfig: JestConfigWithTsJest = {
@@ -145,6 +150,7 @@ export default jestConfig
 ```
 
 ```JSON tab
+// package.json
 {
   // [...]
   "jest": {
@@ -175,6 +181,7 @@ To work with `.mts` extension, besides the requirement to run Jest and `ts-jest`
 - `tsconfig.json` should at least contain these following options
 
 ```json
+// tsconfig.spec.json
 {
   "compilerOptions": {
     "module": "Node16", // or "NodeNext"

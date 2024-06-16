@@ -35,7 +35,7 @@ module.exports = {
 ```
 
 ```json
-// OR package.json
+// package.json
 {
   // [...]
   "jest": {
@@ -77,7 +77,7 @@ module.exports = {
 ```
 
 ```json
-// OR package.json
+// package.json
 {
   // [...]
   "jest": {
@@ -103,6 +103,7 @@ To work with `.mts` extension, besides the requirement to run Jest and `ts-jest`
 - `tsconfig.json` should at least contain these following options
 
 ```json
+// tsconfig.spec.json
 {
   "compilerOptions": {
     "module": "Node16", // or "NodeNext"

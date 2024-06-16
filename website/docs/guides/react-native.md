@@ -12,6 +12,7 @@ After that, some little modifications will be required as follows:
 If you didn't yet, move any Babel config from `.babelrc` to `babel.config.js`. It should at least contain:
 
 ```js tab
+// jest.config.js
 /** @type {import('ts-jest').JestConfigWithTsJest} */
 module.exports = {
   presets: ['module:metro-react-native-babel-preset'],
@@ -19,6 +20,7 @@ module.exports = {
 ```
 
 ```ts tab
+// jest.config.ts
 import type { JestConfigWithTsJest } from 'ts-jest'
 
 const jestConfig: JestConfigWithTsJest = {
@@ -47,6 +49,7 @@ Create a new `tsconfig.spec.json` at the root of your project with the following
 In the same way that you moved Babel config, move Jest config from `jest` key of `package.json` to `jest.config.js`. It should look like this:
 
 ```js tab
+// jest.config.js
 const { defaults: tsjPreset } = require('ts-jest/presets')
 
 /** @type {import('ts-jest').JestConfigWithTsJest} */
@@ -66,6 +69,7 @@ module.exports = {
 ```
 
 ```ts tab
+// jest.config.ts
 import { defaults as tsjPreset } from 'ts-jest/presets'
 import type { JestConfigWithTsJest } from 'ts-jest'
 

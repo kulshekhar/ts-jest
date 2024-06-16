@@ -15,6 +15,7 @@ Let's say for example that you have a file `foo.ts` which contains `export defau
 In the `jest.config.js` version, you could do as in the `package.json` version of the config, but extending from the preset will ensure more compatibility without any changes when updating.
 
 ```js tab
+// jest.config.js
 const { defaults: tsjPreset } = require('ts-jest/presets')
 
 /** @type {import('ts-jest').JestConfigWithTsJest} */
@@ -34,6 +35,7 @@ module.exports = {
 ```
 
 ```ts tab
+// jest.config.ts
 import type { JestConfigWithTsJest } from 'ts-jest'
 import tsJestPresets from 'ts-jest/presets'
 
@@ -53,6 +55,7 @@ const jestConfig: JestConfigWithTsJest = {
 ```
 
 ```JSON tab
+// package.json
 {
   // [...]
   "jest": {

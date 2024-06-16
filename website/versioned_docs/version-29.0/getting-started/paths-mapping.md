@@ -29,6 +29,7 @@ With the below config in your `tsconfig`:
 #### Jest config (without helper)
 
 ```js tab
+// jest.config.js
 /** @type {import('ts-jest').JestConfigWithTsJest} */
 module.exports = {
   // [...]
@@ -40,6 +41,7 @@ module.exports = {
 ```
 
 ```ts tab
+// jest.config.ts
 import type { JestConfigWithTsJest } from 'ts-jest'
 
 const jestConfig: JestConfigWithTsJest = {
@@ -54,6 +56,7 @@ export default jestConfig
 ```
 
 ```JSON tab
+// package.json
 {
   // [...]
   "jest": {
@@ -68,6 +71,7 @@ export default jestConfig
 #### Jest config (with helper)
 
 ```js tab
+// jest.config.js
 const { pathsToModuleNameMapper } = require('ts-jest')
 // In the following statement, replace `./tsconfig` with the path to your `tsconfig` file
 // which contains the path mapping (ie the `compilerOptions.paths` option):
@@ -83,6 +87,7 @@ module.exports = {
 ```
 
 ```ts tab
+// jest.config.ts
 import { pathsToModuleNameMapper } from 'ts-jest'
 // In the following statement, replace `./tsconfig` with the path to your `tsconfig` file
 // which contains the path mapping (ie the `compilerOptions.paths` option):
@@ -98,3 +103,9 @@ const jestConfig: JestConfigWithTsJest = {
 
 export default jestConfig
 ```
+
+With extra options as 2nd argument:
+
+- `prefix`: append prefix to each of mapped config in the result
+- `useESM`: when using `type: module` in `package.json`, TypeScript enforces users to have explicit `js` extension when importing
+  a `ts` file. This option is to help `pathsToModuleNameMapper` to create a config to suit with this scenario.
