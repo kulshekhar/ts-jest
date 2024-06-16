@@ -472,9 +472,14 @@ export class ConfigSet {
       ? this.compilerModule.ModuleKind.CommonJS
       : this.compilerModule.ModuleKind.ESNext
     const moduleValue = finalOptions.module ?? defaultModule
+    const warningModulesForEsmInterop = [
+      this.compilerModule.ModuleKind.CommonJS,
+      this.compilerModule.ModuleKind.Node16,
+      this.compilerModule.ModuleKind.NodeNext,
+    ]
     if (
       !this.babelConfig &&
-      moduleValue !== this.compilerModule.ModuleKind.CommonJS &&
+      !warningModulesForEsmInterop.includes(moduleValue) &&
       !(finalOptions.esModuleInterop || finalOptions.allowSyntheticDefaultImports)
     ) {
       result.errors.push({

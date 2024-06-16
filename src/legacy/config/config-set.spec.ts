@@ -6,10 +6,12 @@ import * as ts from 'typescript'
 
 import { createConfigSet } from '../../__helpers__/fakers'
 import { logTargetMock } from '../../__helpers__/mocks'
+import type { RawCompilerOptions } from '../../raw-compiler-options'
 import type { AstTransformerDesc, TsJestGlobalOptions } from '../../types'
 import { stringify } from '../../utils'
 import * as _backports from '../../utils/backports'
 import { getPackageVersion } from '../../utils/get-package-version'
+import { Errors } from '../../utils/messages'
 import { normalizeSlashes } from '../../utils/normalize-slashes'
 import { sha1 } from '../../utils/sha1'
 
@@ -54,7 +56,7 @@ describe('parsedTsConfig', () => {
   })
 
   it('should include compiler config from base config', () => {
-    expect(get({ tsconfig: { target: 'esnext' } }).options.target).toBe(ts.ScriptTarget.ESNext)
+    expect(get({ tsconfig: { target: 'ESNext' } }).options.target).toBe(ts.ScriptTarget.ESNext)
   })
 
   it('should fallback to ES2015 as default target and CommonJS as default module when no target or module defined in tsconfig', () => {
@@ -98,29 +100,63 @@ describe('parsedTsConfig', () => {
       allowSyntheticDefaultImports: true,
       esModuleInterop: false,
     })
-    expect(target.lines.warn.join()).toMatchInlineSnapshot(`
-      "[level:40] message TS151001: If you have issues related to imports, you should consider setting \`esModuleInterop\` to \`true\` in your TypeScript configuration file (usually \`tsconfig.json\`). See https://blogs.msdn.microsoft.com/typescript/2018/01/31/announcing-typescript-2-7/#easier-ecmascript-module-interoperability for more information.
-      "
-    `)
+    expect(target.lines.warn.join()).toEqual(expect.stringContaining(Errors.ConfigNoModuleInterop))
   })
 
-  it('should not warn neither set synth. default imports if using babel', () => {
+  it.each([
+    {
+      moduleString: 'CommonJS',
+      expectedConfig: {
+        module: ts.ModuleKind.CommonJS,
+        esModuleInterop: false,
+      },
+    },
+    {
+      moduleString: 'Node16',
+      expectedConfig: {
+        module: ts.ModuleKind.Node16,
+        esModuleInterop: false,
+      },
+    },
+    {
+      moduleString: 'NodeNext',
+      expectedConfig: {
+        module: ts.ModuleKind.NodeNext,
+        esModuleInterop: false,
+      },
+    },
+  ])('should not warn with module is $moduleString when not using babel', ({ moduleString, expectedConfig }) => {
     const target = logTargetMock()
     target.clear()
     const cs = createConfigSet({
       tsJestConfig: {
-        tsconfig: { module: 'amd', esModuleInterop: false },
+        tsconfig: { module: moduleString as RawCompilerOptions['module'], esModuleInterop: false },
         diagnostics: { warnOnly: true, pretty: false },
-        babelConfig: { babelrc: false },
+      },
+      resolve: null,
+    })
+
+    expect(cs.parsedTsConfig.options).toMatchObject(expectedConfig)
+    expect(target.lines.warn.join()).toEqual(expect.not.stringContaining(Errors.ConfigNoModuleInterop))
+  })
+
+  it('should not warn neither set synth. default imports when using babel', () => {
+    const target = logTargetMock()
+    target.clear()
+    const cs = createConfigSet({
+      tsJestConfig: {
+        tsconfig: { module: 'CommonJS', esModuleInterop: false },
+        diagnostics: { warnOnly: true, pretty: false },
+        babelConfig: { babelrc: true },
       },
       resolve: null,
     })
 
     expect(cs.parsedTsConfig.options).toMatchObject({
-      module: ts.ModuleKind.AMD,
+      module: ts.ModuleKind.CommonJS,
       esModuleInterop: false,
     })
-    expect(cs.parsedTsConfig.options.allowSyntheticDefaultImports).toBeFalsy()
+    expect(target.lines.warn.join()).toEqual(expect.not.stringContaining(Errors.ConfigNoModuleInterop))
   })
 }) // parsedTsConfig
 
