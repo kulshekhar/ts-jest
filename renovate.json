@@ -1,7 +1,6 @@
 {
   "extends": [
     "group:babelMonorepo",
-    "group:commitlintMonorepo",
     "group:docusaurusMonorepo",
     ":prHourlyLimit2",
     "workarounds:all",
@@ -23,7 +22,7 @@
   ],
   "packageRules": [
     {
-      "matchPaths": ["examples/**"],
+      "matchPaths": ["**/*"],
       "matchUpdateTypes": ["major"],
       "enabled": false
     },
@@ -64,6 +63,10 @@
     },
     {
       "matchDepTypes": ["peerDependencies"],
+      "enabled": false
+    },
+    {
+      "matchPackagePatterns": ["@commitlint"],
       "enabled": false
     }
   ]
