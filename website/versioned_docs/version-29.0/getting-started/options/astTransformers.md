@@ -22,8 +22,8 @@ The option is `astTransformers` and it allows ones to specify which 3 types of T
 module.exports = {
   // [...]
   transform: {
-    // '^.+\\.[tj]sx?$' to process js/ts with `ts-jest`
-    // '^.+\\.m?[tj]sx?$' to process js/ts/mjs/mts with `ts-jest`
+    // '^.+\\.[tj]sx?$' to process ts,js,tsx,jsx with `ts-jest`
+    // '^.+\\.m?[tj]sx?$' to process ts,js,tsx,jsx,mts,mjs,mtsx,mjsx with `ts-jest`
     '^.+\\.tsx?$': [
       'ts-jest',
       {
@@ -43,8 +43,8 @@ import type { JestConfigWithTsJest } from 'ts-jest'
 const jestConfig: JestConfigWithTsJest = {
   // [...]
   transform: {
-    // '^.+\\.[tj]sx?$' to process js/ts with `ts-jest`
-    // '^.+\\.m?[tj]sx?$' to process js/ts/mjs/mts with `ts-jest`
+    // '^.+\\.[tj]sx?$' to process ts,js,tsx,jsx with `ts-jest`
+    // '^.+\\.m?[tj]sx?$' to process ts,js,tsx,jsx,mts,mjs,mtsx,mjsx with `ts-jest`
     '^.+\\.tsx?$': [
       'ts-jest',
       {
@@ -65,8 +65,8 @@ export default jestConfig
   // [...]
   "jest": {
     "transform": {
-      // '^.+\\.[tj]sx?$' to process js/ts with `ts-jest`
-      // '^.+\\.m?[tj]sx?$' to process js/ts/mjs/mts with `ts-jest`
+      // '^.+\\.[tj]sx?$' to process ts,js,tsx,jsx with `ts-jest`
+      // '^.+\\.m?[tj]sx?$' to process ts,js,tsx,jsx,mts,mjs,mtsx,mjsx with `ts-jest`
       "^.+\\.tsx?$": [
         "ts-jest",
         {
@@ -88,8 +88,8 @@ export default jestConfig
 module.exports = {
   // [...]
   transform: {
-    // '^.+\\.[tj]sx?$' to process js/ts with `ts-jest`
-    // '^.+\\.m?[tj]sx?$' to process js/ts/mjs/mts with `ts-jest`
+    // '^.+\\.[tj]sx?$' to process ts,js,tsx,jsx with `ts-jest`
+    // '^.+\\.m?[tj]sx?$' to process ts,js,tsx,jsx,mts,mjs,mtsx,mjsx with `ts-jest`
     '^.+\\.tsx?$': [
       'ts-jest',
       {
@@ -114,8 +114,8 @@ import type { JestConfigWithTsJest } from 'ts-jest'
 const jestConfig: JestConfigWithTsJest = {
   // [...]
   transform: {
-    // '^.+\\.[tj]sx?$' to process js/ts with `ts-jest`
-    // '^.+\\.m?[tj]sx?$' to process js/ts/mjs/mts with `ts-jest`
+    // '^.+\\.[tj]sx?$' to process ts,js,tsx,jsx with `ts-jest`
+    // '^.+\\.m?[tj]sx?$' to process ts,js,tsx,jsx,mts,mjs,mtsx,mjsx with `ts-jest`
     '^.+\\.tsx?$': [
       'ts-jest',
       {
@@ -141,8 +141,8 @@ export default jestConfig
   // [...]
   "jest": {
     "transform": {
-      // '^.+\\.[tj]sx?$' to process js/ts with `ts-jest`
-      // '^.+\\.m?[tj]sx?$' to process js/ts/mjs/mts with `ts-jest`
+      // '^.+\\.[tj]sx?$' to process ts,js,tsx,jsx with `ts-jest`
+      // '^.+\\.m?[tj]sx?$' to process ts,js,tsx,jsx,mts,mjs,mtsx,mjsx with `ts-jest`
       "^.+\\.tsx?$": [
         "ts-jest",
         {

@@ -34,8 +34,8 @@ module.exports = {
     '^(\\.{1,2}/.*)\\.js$': '$1',
   },
   transform: {
-    // '^.+\\.[tj]sx?$' to process js/ts with `ts-jest`
-    // '^.+\\.m?[tj]sx?$' to process js/ts/mjs/mts with `ts-jest`
+    // '^.+\\.[tj]sx?$' to process ts,js,tsx,jsx with `ts-jest`
+    // '^.+\\.m?[tj]sx?$' to process ts,js,tsx,jsx,mts,mjs,mtsx,mjsx with `ts-jest`
     '^.+\\.tsx?$': [
       'ts-jest',
       {
@@ -57,8 +57,8 @@ const jestConfig: JestConfigWithTsJest = {
     '^(\\.{1,2}/.*)\\.js$': '$1',
   },
   transform: {
-    // '^.+\\.[tj]sx?$' to process js/ts with `ts-jest`
-    // '^.+\\.m?[tj]sx?$' to process js/ts/mjs/mts with `ts-jest`
+    // '^.+\\.[tj]sx?$' to process ts,js,tsx,jsx with `ts-jest`
+    // '^.+\\.m?[tj]sx?$' to process ts,js,tsx,jsx,mts,mjs,mtsx,mjsx with `ts-jest`
     '^.+\\.tsx?$': [
       'ts-jest',
       {
@@ -81,8 +81,8 @@ export default jestConfig
       "^(\\.{1,2}/.*)\\.js$": "$1"
     },
     "transform": {
-      // '^.+\\.[tj]sx?$' to process js/ts with `ts-jest`
-      // '^.+\\.m?[tj]sx?$' to process js/ts/mjs/mts with `ts-jest`
+      // '^.+\\.[tj]sx?$' to process ts,js,tsx,jsx with `ts-jest`
+      // '^.+\\.m?[tj]sx?$' to process ts,js,tsx,jsx,mts,mjs,mtsx,mjsx with `ts-jest`
       "^.+\\.tsx?$": [
         "ts-jest",
         {
@@ -112,8 +112,8 @@ module.exports = {
     '^(\\.{1,2}/.*)\\.js$': '$1',
   },
   transform: {
-    // '^.+\\.[tj]sx?$' to process js/ts with `ts-jest`
-    // '^.+\\.m?[tj]sx?$' to process js/ts/mjs/mts with `ts-jest`
+    // '^.+\\.[tj]sx?$' to process ts,js,tsx,jsx with `ts-jest`
+    // '^.+\\.m?[tj]sx?$' to process ts,js,tsx,jsx,mts,mjs,mtsx,mjsx with `ts-jest`
     '^.+\\.tsx?$': [
       'ts-jest',
       {
@@ -135,8 +135,8 @@ const jestConfig: JestConfigWithTsJest = {
     '^(\\.{1,2}/.*)\\.js$': '$1',
   },
   transform: {
-    // '^.+\\.[tj]sx?$' to process js/ts with `ts-jest`
-    // '^.+\\.m?[tj]sx?$' to process js/ts/mjs/mts with `ts-jest`
+    // '^.+\\.[tj]sx?$' to process ts,js,tsx,jsx with `ts-jest`
+    // '^.+\\.m?[tj]sx?$' to process ts,js,tsx,jsx,mts,mjs,mtsx,mjsx with `ts-jest`
     '^.+\\.tsx?$': [
       'ts-jest',
       {
@@ -159,8 +159,8 @@ export default jestConfig
       "^(\\.{1,2}/.*)\\.js$": "$1"
     },
     "transform": {
-      // '^.+\\.[tj]sx?$' to process js/ts with `ts-jest`
-      // '^.+\\.m?[tj]sx?$' to process js/ts/mjs/mts with `ts-jest`
+      // '^.+\\.[tj]sx?$' to process ts,js,tsx,jsx with `ts-jest`
+      // '^.+\\.m?[tj]sx?$' to process ts,js,tsx,jsx,mts,mjs,mtsx,mjsx with `ts-jest`
       "^.+\\.tsx?$": [
         "ts-jest",
         {
@@ -181,6 +181,7 @@ To work with `.mts` extension, besides the requirement to run Jest and `ts-jest`
 - `tsconfig.json` should at least contain these following options
 
 ```json
+// tsconfig.spec.json
 {
   "compilerOptions": {
     "module": "Node16", // or "NodeNext"
