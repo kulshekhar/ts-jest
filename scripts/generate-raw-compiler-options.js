@@ -1,7 +1,6 @@
 const fs = require('fs')
 
 const { compile } = require('json-schema-to-typescript')
-const fetch = require('node-fetch')
 const execa = require('execa')
 
 const { generatedPath, rawCompilerOptionsFileName } = require('./lib/paths')
