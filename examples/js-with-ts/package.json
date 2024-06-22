@@ -10,6 +10,6 @@
   "devDependencies": {
     "jest": "^29.7.0",
     "ts-jest": "^29.1.5",
-    "typescript": "~5.4.5"
+    "typescript": "~5.5.2"
   }
 }
