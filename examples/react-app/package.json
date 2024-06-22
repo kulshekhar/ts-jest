@@ -1,90 +1,32 @@
 {
   "name": "react-app",
-  "version": "0.1.0",
   "private": true,
-  "dependencies": {
-    "@babel/core": "^7.16.0",
-    "@pmmmwh/react-refresh-webpack-plugin": "^0.5.3",
-    "@svgr/webpack": "^6.3.1",
-    "@testing-library/jest-dom": "^5.16.1",
-    "@testing-library/react": "^12.1.2",
-    "@testing-library/user-event": "^13.5.0",
-    "@types/node": "^16.11.21",
-    "@types/react": "^17.0.38",
-    "@types/react-dom": "^17.0.11",
-    "babel-jest": "^29.0.3",
-    "babel-loader": "^8.2.3",
-    "babel-plugin-named-asset-import": "^0.3.8",
-    "babel-preset-react-app": "^10.0.1",
-    "bfj": "^7.0.2",
-    "browserslist": "^4.18.1",
-    "camelcase": "^6.2.1",
-    "case-sensitive-paths-webpack-plugin": "^2.4.0",
-    "css-loader": "^6.5.1",
-    "css-minimizer-webpack-plugin": "^3.2.0",
-    "dotenv": "^10.0.0",
-    "dotenv-expand": "^5.1.0",
-    "eslint": "^8.3.0",
-    "eslint-config-react-app": "^7.0.0",
-    "eslint-webpack-plugin": "^3.1.1",
-    "file-loader": "^6.2.0",
-    "fs-extra": "^10.0.0",
-    "html-webpack-plugin": "^5.5.0",
-    "identity-obj-proxy": "^3.0.0",
-    "jest": "^29.0.3",
-    "jest-environment-jsdom": "^29.0.3",
-    "jest-resolve": "^29.0.3",
-    "mini-css-extract-plugin": "^2.4.5",
-    "postcss": "^8.4.4",
-    "postcss-flexbugs-fixes": "^5.0.2",
-    "postcss-loader": "^6.2.1",
-    "postcss-normalize": "^10.0.1",
-    "postcss-preset-env": "^7.0.1",
-    "prompts": "^2.4.2",
-    "react": "^17.0.2",
-    "react-app-polyfill": "^3.0.0",
-    "react-dev-utils": "^12.0.0",
-    "react-dom": "^17.0.2",
-    "react-refresh": "^0.11.0",
-    "resolve": "^1.20.0",
-    "resolve-url-loader": "^4.0.0",
-    "sass-loader": "^12.3.0",
-    "semver": "^7.5.2",
-    "source-map-loader": "^3.0.0",
-    "style-loader": "^3.3.1",
-    "tailwindcss": "^3.0.2",
-    "terser-webpack-plugin": "^5.2.5",
-    "ts-jest": "^29.1.0",
-    "typescript": "~5.4.5",
-    "web-vitals": "^2.1.4",
-    "webpack": "^5.76.0",
-    "webpack-dev-server": "^4.6.0",
-    "webpack-manifest-plugin": "^4.0.2",
-    "workbox-webpack-plugin": "^6.4.1"
-  },
+  "version": "0.0.0",
   "scripts": {
-    "start": "node scripts/start.js",
-    "build": "node scripts/build.js",
+    "dev": "vite",
+    "build": "tsc -b && vite build",
     "test": "jest -c=jest.config.cjs --no-cache",
     "test-isolated": "jest -c=jest-isolated.config.cjs --no-cache",
     "test-esm": "node --experimental-vm-modules --no-warnings node_modules/jest/bin/jest.js -c=jest-esm.config.mjs --no-cache",
-    "test-esm-isolated": "node --experimental-vm-modules --no-warnings node_modules/jest/bin/jest.js -c=jest-esm-isolated.config.mjs --no-cache"
+    "test-esm-isolated": "node --experimental-vm-modules --no-warnings node_modules/jest/bin/jest.js -c=jest-esm-isolated.config.mjs --no-cache",
+    "preview": "vite preview"
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   },
-  "babel": {
-    "presets": [
-      "react-app"
-    ]
+  "devDependencies": {
+    "@testing-library/dom": "^10.1.0",
+    "@testing-library/jest-dom": "^6.4.6",
+    "@testing-library/react": "^16.0.0",
+    "@types/jest": "^29.5.12",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react-swc": "^3.5.0",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "ts-jest": "^29.1.5",
+    "typescript": "^5.2.2",
+    "vite": "^5.3.1"
   }
 }
