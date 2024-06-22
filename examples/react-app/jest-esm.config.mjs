@@ -6,13 +6,10 @@ export default {
   preset: 'ts-jest/presets/js-with-babel-esm',
   transform: {
     ...baseCfg.transform,
-    '^.+\\.(ts|tsx)$': [
+    '^.+\\.(ts|tsx|js|jsx|mjs|cjs)$': [
       'ts-jest',
       {
-        babelConfig: {
-          presets: ['react-app'],
-        },
-        tsconfig: 'tsconfig-esm.json',
+        tsconfig: 'tsconfig-esm.spec.json',
         useESM: true,
       },
     ],

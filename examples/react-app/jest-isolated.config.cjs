@@ -5,13 +5,11 @@ module.exports = {
   ...baseCfg,
   transform: {
     ...baseCfg.transform,
-    '^.+\\.(ts|tsx)$': [
+    '^.+\\.(ts|tsx|js|jsx|mjs|cjs)$': [
       'ts-jest',
       {
-        babelConfig: {
-          presets: ['react-app'],
-        },
         isolatedModules: true,
+        tsconfig: 'tsconfig.spec.json',
       },
     ],
   },

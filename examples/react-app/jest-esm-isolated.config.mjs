@@ -5,14 +5,11 @@ export default {
   ...baseEsmCfg,
   transform: {
     ...baseEsmCfg.transform,
-    '^.+\\.(ts|tsx)$': [
+    '^.+\\.(ts|tsx|js|jsx|mjs|cjs)$': [
       'ts-jest',
       {
-        babelConfig: {
-          presets: ['react-app'],
-        },
         isolatedModules: true,
-        tsconfig: 'tsconfig-esm.json',
+        tsconfig: 'tsconfig-esm.spec.json',
         useESM: true,
       },
     ],
