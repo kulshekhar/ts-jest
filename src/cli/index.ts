@@ -2,6 +2,7 @@ import { LogContexts, type Logger } from 'bs-logger'
 import type { Arguments } from 'yargs'
 import yargsParser from 'yargs-parser'
 
+import type { TsJestTransformerOptions } from '../types'
 import { rootLogger } from '../utils'
 
 const VALID_COMMANDS = ['help', 'config:migrate', 'config:init']
@@ -11,7 +12,14 @@ const logger = rootLogger.child({ [LogContexts.namespace]: 'cli', [LogContexts.a
 /**
  * @internal
  */
-export type CliCommandArgs = Omit<Arguments, '$0'> & { _: Array<string | number> }
+export type CliCommandArgs = Omit<Arguments, '$0'> & { _: Array<string | number> } & {
+  jestPreset?: boolean
+  force?: boolean
+  tsconfig?: TsJestTransformerOptions['tsconfig']
+  babel?: boolean
+  jsdom?: boolean
+  js?: 'ts' | 'babel'
+}
 /**
  * @internal
  */

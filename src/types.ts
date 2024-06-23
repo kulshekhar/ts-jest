@@ -4,6 +4,7 @@ import type * as babelJest from 'babel-jest'
 import type * as _babel from 'babel__core'
 import type * as _ts from 'typescript'
 
+import { JS_TRANSFORM_PATTERN, TS_JS_TRANSFORM_PATTERN, TS_TRANSFORM_PATTERN } from './constants'
 import type { ConfigSet } from './legacy/config/config-set'
 import type { RawCompilerOptions } from './raw-compiler-options'
 
@@ -203,6 +204,9 @@ export interface JestConfigWithTsJest extends Omit<Config.InitialOptions, 'trans
   }
 }
 
+/**
+ * @deprecated use `DefaultPreset`/`JsWithTsPreset`/`JsWithBabelPreset` instead
+ */
 export type TsJestPresets = Pick<
   JestConfigWithTsJest,
   'extensionsToTreatAsEsm' | 'moduleFileExtensions' | 'transform' | 'testMatch'
@@ -247,4 +251,21 @@ export interface TsJestAstTransformer {
   before: AstTransformerDesc[]
   after: AstTransformerDesc[]
   afterDeclarations: AstTransformerDesc[]
+}
+
+export type DefaultPreset = {
+  transform: {
+    [TS_TRANSFORM_PATTERN]: ['ts-jest', Omit<TsJestTransformerOptions, 'useESM' | 'babelConfig'>]
+  }
+}
+export type JsWithTsPreset = {
+  transform: {
+    [TS_JS_TRANSFORM_PATTERN]: ['ts-jest', Omit<TsJestTransformerOptions, 'useESM' | 'babelConfig'>]
+  }
+}
+export type JsWithBabelPreset = {
+  transform: {
+    [JS_TRANSFORM_PATTERN]: ['babel-jest', babelConfig: BabelConfig]
+    [TS_TRANSFORM_PATTERN]: ['ts-jest', Omit<TsJestTransformerOptions, 'useESM'>]
+  }
 }

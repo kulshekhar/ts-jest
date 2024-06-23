@@ -42,7 +42,8 @@ export const enum Deprecations {
   GlobalsTsJestConfigOption = 'Define `ts-jest` config under `globals` is deprecated. Please do\n' +
     'transform: {\n' +
     "    <transform_regex>: ['ts-jest', { /* ts-jest config goes here in Jest */ }],\n" +
-    '},',
+    '},\n' +
+    'See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/presets#advanced',
 }
 
 /**
