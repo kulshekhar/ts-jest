@@ -1,6 +1,123 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`create-jest-preset should return correct preset 1`] = `
+exports[`create-jest-preset CJS presets createLegacyDefaultPreset should return preset config 1`] = `
+{
+  "transform": {
+    "^.+.tsx?$": [
+      "ts-jest",
+      {
+        "tsconfig": "tsconfig.spec.json",
+      },
+    ],
+  },
+}
+`;
+
+exports[`create-jest-preset CJS presets createLegacyJsWithTsPreset should return preset config 1`] = `
+{
+  "transform": {
+    "^.+.[tj]sx?$": [
+      "ts-jest",
+      {
+        "isolatedModules": true,
+        "tsconfig": "tsconfig.spec.json",
+      },
+    ],
+  },
+}
+`;
+
+exports[`create-jest-preset CJS presets createLegacyWithBabelPreset should return preset config 1`] = `
+{
+  "transform": {
+    "^.+.jsx?$": [
+      "babel-jest",
+      {
+        "babelrc": true,
+      },
+    ],
+    "^.+.tsx?$": [
+      "ts-jest",
+      {
+        "babelConfig": true,
+        "tsconfig": "tsconfig.spec.json",
+      },
+    ],
+  },
+}
+`;
+
+exports[`create-jest-preset ESM presets createLegacyDefaultEsmPreset should return preset config 1`] = `
+{
+  "extensionsToTreatAsEsm": [
+    ".jsx",
+    ".ts",
+    ".tsx",
+    ".mts",
+  ],
+  "transform": {
+    "^.+\\.m?tsx?$": [
+      "ts-jest",
+      {
+        "tsconfig": "tsconfig.spec.json",
+        "useESM": true,
+      },
+    ],
+  },
+}
+`;
+
+exports[`create-jest-preset ESM presets createLegacyJsWithBabelEsmPreset should return preset config 1`] = `
+{
+  "extensionsToTreatAsEsm": [
+    ".jsx",
+    ".ts",
+    ".tsx",
+    ".mts",
+  ],
+  "transform": {
+    "^.+\\.m?jsx?$": [
+      "babel-jest",
+      {
+        "babelrc": true,
+      },
+    ],
+    "^.+\\.m?tsx?$": [
+      "ts-jest",
+      {
+        "babelConfig": {
+          "babelrc": true,
+        },
+        "tsconfig": "tsconfig.spec.json",
+        "useESM": true,
+      },
+    ],
+  },
+}
+`;
+
+exports[`create-jest-preset ESM presets createLegacyJsWithTsEsmPreset should return preset config 1`] = `
+{
+  "extensionsToTreatAsEsm": [
+    ".jsx",
+    ".ts",
+    ".tsx",
+    ".mts",
+  ],
+  "transform": {
+    "^.+\\.m?[tj]sx?$": [
+      "ts-jest",
+      {
+        "isolatedModules": true,
+        "tsconfig": "tsconfig.spec.json",
+        "useESM": true,
+      },
+    ],
+  },
+}
+`;
+
+exports[`create-jest-preset createJestPreset should return correct preset 1`] = `
 {
   "transform": {
     "^.+\\.tsx?$": [
@@ -11,7 +128,7 @@ exports[`create-jest-preset should return correct preset 1`] = `
 }
 `;
 
-exports[`create-jest-preset should return correct preset 2`] = `
+exports[`create-jest-preset createJestPreset should return correct preset 2`] = `
 {
   "transform": {
     "^.+\\.tsx?$": [
@@ -22,7 +139,7 @@ exports[`create-jest-preset should return correct preset 2`] = `
 }
 `;
 
-exports[`create-jest-preset should return correct preset 3`] = `
+exports[`create-jest-preset createJestPreset should return correct preset 3`] = `
 {
   "transform": {
     "^.+\\.[tj]sx?$": [
@@ -33,7 +150,7 @@ exports[`create-jest-preset should return correct preset 3`] = `
 }
 `;
 
-exports[`create-jest-preset should return correct preset 4`] = `
+exports[`create-jest-preset createJestPreset should return correct preset 4`] = `
 {
   "transform": {
     "^.+\\.[tj]sx?$": [
@@ -44,7 +161,7 @@ exports[`create-jest-preset should return correct preset 4`] = `
 }
 `;
 
-exports[`create-jest-preset should return correct preset 5`] = `
+exports[`create-jest-preset createJestPreset should return correct preset 5`] = `
 {
   "transform": {
     "^.+\\.tsx?$": [
@@ -55,7 +172,7 @@ exports[`create-jest-preset should return correct preset 5`] = `
 }
 `;
 
-exports[`create-jest-preset should return correct preset 6`] = `
+exports[`create-jest-preset createJestPreset should return correct preset 6`] = `
 {
   "moduleFileExtensions": [
     "bar",
@@ -73,7 +190,7 @@ exports[`create-jest-preset should return correct preset 6`] = `
 }
 `;
 
-exports[`create-jest-preset should return correct preset 7`] = `
+exports[`create-jest-preset createJestPreset should return correct preset 7`] = `
 {
   "extensionsToTreatAsEsm": [
     ".jsx",

@@ -7,11 +7,13 @@
 import { existsSync, readFileSync, writeFileSync } from 'fs'
 import { basename, join } from 'path'
 
+import ejs from 'ejs'
 import { stringify as stringifyJson5 } from 'json5'
 
 import type { CliCommand, CliCommandArgs } from '..'
+import { JEST_CONFIG_EJS_TEMPLATE, TS_JS_TRANSFORM_PATTERN, TS_TRANSFORM_PATTERN } from '../../constants'
 import type { JestConfigWithTsJest, TsJestTransformerOptions } from '../../types'
-import { type TsJestPresetDescriptor, defaults, jsWIthBabel, jsWithTs } from '../helpers/presets'
+import { type TsJestPresetDescriptor, defaults, jsWIthBabel, jsWithTs, JestPresetNames } from '../helpers/presets'
 
 /**
  * @internal
@@ -107,34 +109,38 @@ export const run: CliCommand = async (args: CliCommandArgs /* , logger: Logger *
     }
     body = JSON.stringify({ ...pkgJson, jest: jestConfig }, undefined, '  ')
   } else {
-    // js config
-    const content: string[] = []
-    if (!jestPreset) {
-      content.push(`${preset.jsImport('tsjPreset')};`, '')
+    let transformPattern = TS_TRANSFORM_PATTERN
+    let transformValue = !tsconfig
+      ? `'ts-jest'`
+      : `
+        [
+          'ts-jest',
+          {
+            tsconfig: ${stringifyJson5(tsconfig)}
+          }
+        ]
+      `
+    if (preset.name === JestPresetNames.jsWithTs) {
+      transformPattern = TS_JS_TRANSFORM_PATTERN
+    } else if (preset.name === JestPresetNames.jsWIthBabel) {
+      transformValue = !tsconfig
+        ? `'ts-jest'`
+        : `
+        [
+          'ts-jest',
+          {
+            babelConfig: true,
+            tsconfig: ${stringifyJson5(tsconfig)}
+          }
+        ]
+      `
     }
-    content.push(`/** @type {import('ts-jest').JestConfigWithTsJest} */`)
-    const usesModules = pkgJson.type === 'module'
-    content.push(usesModules ? 'export default {' : 'module.exports = {')
-
-    if (jestPreset) {
-      content.push(`  preset: '${preset.name}',`)
-    } else {
-      content.push('  ...tsjPreset,')
-    }
-    if (!jsdom) content.push("  testEnvironment: 'node',")
-
-    if (tsconfig || shouldPostProcessWithBabel) {
-      content.push('  transform: {')
-      content.push("    '^.+\\\\.[tj]sx?$': ['ts-jest', {")
-      if (tsconfig) content.push(`      tsconfig: ${stringifyJson5(tsconfig)},`)
-      if (shouldPostProcessWithBabel) content.push('      babelConfig: true,')
-      content.push('    }],')
-      content.push('  },')
-    }
-    content.push('};')
-
-    // join all together
-    body = content.join('\n')
+    body = ejs.render(JEST_CONFIG_EJS_TEMPLATE, {
+      exportKind: pkgJson.type === 'module' ? 'export default' : 'module.exports =',
+      testEnvironment: jsdom ? 'jsdom' : 'node',
+      transformPattern,
+      transformValue,
+    })
   }
 
   writeFileSync(filePath, body)
@@ -160,11 +166,11 @@ Arguments:
 
 Options:
   --force               Discard any existing Jest config
-  --js ts|babel         Process .js files with ts-jest if 'ts' or with
+  --js ts|babel         Process '.js' files with ts-jest if 'ts' or with
                         babel-jest if 'babel'
-  --no-jest-preset      Disable the use of Jest presets
+  --jest-preset         Toggle using preset
   --tsconfig <file>     Path to the tsconfig.json file
-  --babel               Pipe babel-jest after ts-jest
-  --jsdom               Use jsdom as test environment instead of node
+  --babel               Enable using Babel to process 'js' resulted content from 'ts-jest' processing
+  --jsdom               Use 'jsdom' as test environment instead of 'node'
 `)
 }
