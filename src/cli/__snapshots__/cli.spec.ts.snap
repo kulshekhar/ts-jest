@@ -1,5 +1,119 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`config init should create a jest config file with cli options for config type default 1`] = `
+"/** @type {import('ts-jest').JestConfigWithTsJest} **/
+module.exports = {
+  testEnvironment: "node",
+  transform: {
+    "^.+.tsx?$": ["ts-jest",{}],
+  },
+};"
+`;
+
+exports[`config init should create a jest config file with cli options for config type default and type "module" package.json 1`] = `
+"/** @type {import('ts-jest').JestConfigWithTsJest} **/
+export default {
+  testEnvironment: "node",
+  transform: {
+    "^.+.tsx?$": ["ts-jest",{}],
+  },
+};"
+`;
+
+exports[`config init should create a jest config file with cli options for config type js-with-babel-full-options 1`] = `
+"/** @type {import('ts-jest').JestConfigWithTsJest} **/
+module.exports = {
+  testEnvironment: "jsdom",
+  transform: {
+    "^.+.jsx?$": ["babel-jest",{}],
+  },
+};"
+`;
+
+exports[`config init should create a jest config file with cli options for config type js-with-babel-full-options and type "module" package.json 1`] = `
+"/** @type {import('ts-jest').JestConfigWithTsJest} **/
+export default {
+  testEnvironment: "jsdom",
+  transform: {
+    "^.+.jsx?$": ["babel-jest",{}],
+  },
+};"
+`;
+
+exports[`config init should create a jest config file with cli options for config type js-with-ts-full-options 1`] = `
+"/** @type {import('ts-jest').JestConfigWithTsJest} **/
+module.exports = {
+  testEnvironment: "jsdom",
+  transform: {
+    "^.+.[tj]sx?$": ["ts-jest",{tsconfig:"tsconfig.test.json"}],
+  },
+};"
+`;
+
+exports[`config init should create a jest config file with cli options for config type js-with-ts-full-options and type "module" package.json 1`] = `
+"/** @type {import('ts-jest').JestConfigWithTsJest} **/
+export default {
+  testEnvironment: "jsdom",
+  transform: {
+    "^.+.[tj]sx?$": ["ts-jest",{tsconfig:"tsconfig.test.json"}],
+  },
+};"
+`;
+
+exports[`config init should update package.json for config type default when user defines jest config via package.json 1`] = `
+"{
+  "name": "mock",
+  "version": "0.0.0-mock.0",
+  "jest": {
+    "transform": {
+      "^.+.tsx?$": [
+        "ts-jest",
+        {}
+      ]
+    }
+  }
+}"
+`;
+
+exports[`config init should update package.json for config type js-with-babel-full-options when user defines jest config via package.json 1`] = `
+"{
+  "name": "mock",
+  "version": "0.0.0-mock.0",
+  "jest": {
+    "transform": {
+      "^.+.jsx?$": [
+        "babel-jest",
+        {}
+      ],
+      "^.+.tsx?$": [
+        "ts-jest",
+        {
+          "tsconfig": "tsconfig.test.json",
+          "babelConfig": true
+        }
+      ]
+    }
+  }
+}"
+`;
+
+exports[`config init should update package.json for config type js-with-ts-full-options when user defines jest config via package.json 1`] = `
+"{
+  "name": "mock",
+  "version": "0.0.0-mock.0",
+  "jest": {
+    "transform": {
+      "^.+.[tj]sx?$": [
+        "ts-jest",
+        {
+          "tsconfig": "tsconfig.test.json"
+        }
+      ]
+    }
+  }
+}"
+`;
+
 exports[`config migrate should migrate globals ts-jest config to transformer config 1`] = `
 ""jest": {
   "transform": {

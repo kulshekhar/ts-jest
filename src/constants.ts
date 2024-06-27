@@ -22,8 +22,8 @@ export const DEFAULT_JEST_TEST_MATCH = ['**/__tests__/**/*.[jt]s?(x)', '**/?(*.)
  */
 export const JEST_CONFIG_EJS_TEMPLATE = `/** @type {import('ts-jest').JestConfigWithTsJest} **/
 <%= exportKind %> {
-  testEnvironment: '<%= testEnvironment %>',
+  testEnvironment: "<%= testEnvironment %>",
   transform: {
-    '<%= transformPattern %>': <%- transformValue %>,
+    "<%= transformPattern %>": <%- transformValue %>,
   },
 };`

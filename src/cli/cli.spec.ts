@@ -112,179 +112,73 @@ describe('config', () => {
   // briefly tested, see header comment in `config/init.ts`
   describe('init', () => {
     const noOption = ['config:init']
-    const fullOptions = [
-      ...noOption,
-      '--tsconfig',
-      'tsconfig.test.json',
-      '--jsdom',
-      '--jest-preset',
-      '--js',
-      'ts',
-      '--babel',
+    const cliOptionCases = [
+      {
+        cliOptions: [...noOption],
+        configType: 'default',
+      },
+      {
+        cliOptions: [...noOption, '--tsconfig', 'tsconfig.test.json', '--jsdom', '--js', 'ts'],
+        configType: 'js-with-ts-full-options',
+      },
+      {
+        cliOptions: [...noOption, '--tsconfig', 'tsconfig.test.json', '--jsdom', '--js', 'babel'],
+        configType: 'js-with-babel-full-options',
+      },
     ]
 
-    it('should create a jest.config.js (without options)', async () => {
-      fs.existsSync.mockImplementation((f) => f === FAKE_PKG)
-      fs.readFileSync
+    it.each(cliOptionCases)(
+      'should create a jest config file with cli options for config type $configType',
+      async ({ cliOptions }) => {
+        fs.existsSync.mockImplementation((f) => f === FAKE_PKG)
+        fs.readFileSync
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          .mockImplementationOnce((f): any => {
+            if (f === FAKE_PKG) return JSON.stringify({ name: 'mock', version: '0.0.0-mock.0' })
+            throw new Error('ENOENT')
+          })
+        expect.assertions(2)
+        await runCli(...cliOptions)
+
+        expect(fs.writeFileSync.mock.calls[0][0]).toBe(normalize('/foo/bar/jest.config.js'))
+        expect(fs.writeFileSync.mock.calls[0][1]).toMatchSnapshot()
+      },
+    )
+
+    it.each(cliOptionCases)(
+      'should create a jest config file with cli options for config type $configType and type "module" package.json',
+      async ({ cliOptions }) => {
+        fs.existsSync.mockImplementation((f) => f === FAKE_PKG)
+        fs.readFileSync
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          .mockImplementationOnce((f): any => {
+            if (f === FAKE_PKG) return JSON.stringify({ name: 'mock', version: '0.0.0-mock.0', type: 'module' })
+            throw new Error('ENOENT')
+          })
+        expect.assertions(2)
+        await runCli(...cliOptions)
+
+        expect(fs.writeFileSync.mock.calls[0][0]).toBe(normalize('/foo/bar/jest.config.js'))
+        expect(fs.writeFileSync.mock.calls[0][1]).toMatchSnapshot()
+      },
+    )
+
+    it.each(cliOptionCases)(
+      'should update package.json for config type $configType when user defines jest config via package.json',
+      async ({ cliOptions }) => {
+        fs.existsSync.mockImplementation((f) => f === FAKE_PKG)
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        .mockImplementationOnce((f): any => {
+        fs.readFileSync.mockImplementationOnce((f): any => {
           if (f === FAKE_PKG) return JSON.stringify({ name: 'mock', version: '0.0.0-mock.0' })
           throw new Error('ENOENT')
         })
-      expect.assertions(3)
-      const res = await runCli(...noOption)
+        expect.assertions(2)
+        await runCli(...cliOptions, 'package.json')
 
-      expect(res).toEqual({
-        exitCode: 0,
-        log: '',
-        stderr: `
-Jest configuration written to "${normalize('/foo/bar/jest.config.js')}".
-`,
-        stdout: '',
-      })
-      expect(fs.writeFileSync.mock.calls[0][0]).toBe(normalize('/foo/bar/jest.config.js'))
-      expect(fs.writeFileSync.mock.calls[0][1]).toMatchInlineSnapshot(`
-        "/** @type {import('ts-jest').JestConfigWithTsJest} **/
-        module.exports = {
-          testEnvironment: 'node',
-          transform: {
-            '^.+.tsx?$': 'ts-jest',
-          },
-        };"
-      `)
-    })
-
-    it('should create a jest.config.foo.js (with all options set)', async () => {
-      fs.existsSync.mockImplementation((f) => f === FAKE_PKG)
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      fs.readFileSync.mockImplementationOnce((f): any => {
-        if (f === FAKE_PKG) return JSON.stringify({ name: 'mock', version: '0.0.0-mock.0' })
-        throw new Error('ENOENT')
-      })
-      expect.assertions(3)
-      const res = await runCli(...fullOptions, 'jest.config.foo.js')
-
-      expect(res).toEqual({
-        exitCode: 0,
-        log: '',
-        stderr: `
-Jest configuration written to "${normalize('/foo/bar/jest.config.foo.js')}".
-`,
-        stdout: '',
-      })
-      expect(fs.writeFileSync.mock.calls[0][0]).toBe(normalize('/foo/bar/jest.config.foo.js'))
-      expect(fs.writeFileSync.mock.calls[0][1]).toMatchInlineSnapshot(`
-        "/** @type {import('ts-jest').JestConfigWithTsJest} **/
-        module.exports = {
-          testEnvironment: 'jsdom',
-          transform: {
-            '^.+.[tj]sx?$': 
-                [
-                  'ts-jest',
-                  {
-                    tsconfig: 'tsconfig.test.json'
-                  }
-                ]
-              ,
-          },
-        };"
-      `)
-    })
-
-    it('should create jest config with type "module" package.json', async () => {
-      fs.existsSync.mockImplementation((f) => f === FAKE_PKG)
-      fs.readFileSync
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        .mockImplementationOnce((f): any => {
-          if (f === FAKE_PKG) return JSON.stringify({ name: 'mock', version: '0.0.0-mock.0', type: 'module' })
-          throw new Error('ENOENT')
-        })
-      expect.assertions(3)
-      const res = await runCli(...noOption)
-
-      expect(res).toEqual({
-        exitCode: 0,
-        log: '',
-        stderr: `
-Jest configuration written to "${normalize('/foo/bar/jest.config.js')}".
-`,
-        stdout: '',
-      })
-      expect(fs.writeFileSync.mock.calls[0][0]).toBe(normalize('/foo/bar/jest.config.js'))
-      expect(fs.writeFileSync.mock.calls[0][1]).toMatchInlineSnapshot(`
-        "/** @type {import('ts-jest').JestConfigWithTsJest} **/
-        export default {
-          testEnvironment: 'node',
-          transform: {
-            '^.+.tsx?$': 'ts-jest',
-          },
-        };"
-      `)
-    })
-
-    it('should update package.json (without options)', async () => {
-      fs.existsSync.mockImplementation((f) => f === FAKE_PKG)
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      fs.readFileSync.mockImplementationOnce((f): any => {
-        if (f === FAKE_PKG) return JSON.stringify({ name: 'mock', version: '0.0.0-mock.0' })
-        throw new Error('ENOENT')
-      })
-      expect.assertions(2)
-      const res = await runCli(...noOption, 'package.json')
-
-      expect(res).toEqual({
-        exitCode: 0,
-        log: '',
-        stderr: `
-Jest configuration written to "${normalize('/foo/bar/package.json')}".
-`,
-        stdout: '',
-      })
-      expect(fs.writeFileSync.mock.calls).toEqual([
-        [
-          normalize('/foo/bar/package.json'),
-          `{
-  "name": "mock",
-  "version": "0.0.0-mock.0",
-  "jest": {
-    "preset": "ts-jest",
-    "testEnvironment": "node"
-  }
-}`,
-        ],
-      ])
-    })
-
-    it('should update package.json (with all options set)', async () => {
-      fs.existsSync.mockImplementation((f) => f === FAKE_PKG)
-      fs.readFileSync
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        .mockImplementationOnce((f): any => {
-          if (f === FAKE_PKG) return JSON.stringify({ name: 'mock', version: '0.0.0-mock.0' })
-          throw new Error('ENOENT')
-        })
-      expect.assertions(3)
-      const res = await runCli(...fullOptions, 'package.json')
-
-      expect(res).toEqual({
-        exitCode: 0,
-        log: '',
-        stderr: `
-Jest configuration written to "${normalize('/foo/bar/package.json')}".
-`,
-        stdout: '',
-      })
-      expect(fs.writeFileSync.mock.calls[0][0]).toBe(normalize('/foo/bar/package.json'))
-      expect(fs.writeFileSync.mock.calls[0][1]).toMatchInlineSnapshot(`
-        "{
-          "name": "mock",
-          "version": "0.0.0-mock.0",
-          "jest": {
-            "preset": "ts-jest/presets/js-with-ts"
-          }
-        }"
-      `)
-    })
+        expect(fs.writeFileSync.mock.calls[0][0]).toBe(normalize('/foo/bar/package.json'))
+        expect(fs.writeFileSync.mock.calls[0][1]).toMatchSnapshot()
+      },
+    )
 
     it('should output help', async () => {
       fs.existsSync.mockImplementation((f) => f === FAKE_PKG)
@@ -314,7 +208,7 @@ Jest configuration written to "${normalize('/foo/bar/package.json')}".
           --force               Discard any existing Jest config
           --js ts|babel         Process '.js' files with ts-jest if 'ts' or with
                                 babel-jest if 'babel'
-          --jest-preset         Toggle using preset
+          --no-jest-preset      Disable the use of Jest presets
           --tsconfig <file>     Path to the tsconfig.json file
           --babel               Enable using Babel to process 'js' resulted content from 'ts-jest' processing
           --jsdom               Use 'jsdom' as test environment instead of 'node'
@@ -687,4 +581,4 @@ Jest configuration written to "${normalize('/foo/bar/package.json')}".
       expect(res.stdout).toMatchSnapshot()
     })
   }) // migrate
-}) // config
+})

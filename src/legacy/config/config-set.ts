@@ -186,10 +186,7 @@ export class ConfigSet {
     tsBuildInfoFile: undefined,
   }
 
-  constructor(
-    jestConfig: TsJestTransformOptions['config'] | undefined,
-    readonly parentLogger?: Logger,
-  ) {
+  constructor(jestConfig: TsJestTransformOptions['config'] | undefined, readonly parentLogger?: Logger) {
     this.logger = this.parentLogger
       ? this.parentLogger.child({ [LogContexts.namespace]: 'config' })
       : rootLogger.child({ namespace: 'config' })
