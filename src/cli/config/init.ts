@@ -41,6 +41,12 @@ export const run: CliCommand = async (args: CliCommandArgs /* , logger: Logger *
   const tsconfig =
     askedTsconfig === 'tsconfig.json' ? undefined : (askedTsconfig as TsJestTransformerOptions['tsconfig'])
   const pkgJsonContent = isPackageJsonExisted ? JSON.parse(readFileSync(pkgFile, 'utf8')) : {}
+  if (shouldPostProcessWithBabel) {
+    console.warn(
+      `The option --babel is deprecated and will be removed in the next major version.` +
+        ` Please specify 'js' option value (see more with npx ts-jest help) if you wish 'ts-jest' to process 'js' with TypeScript API or Babel.`,
+    )
+  }
 
   if (isPackageJsonConfig && !isJestConfigFileExisted) {
     throw new Error(`File ${file} does not exists.`)
