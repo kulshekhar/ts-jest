@@ -81,10 +81,7 @@ export class TsCompiler implements TsCompilerInstance {
 
   program: Program | undefined
 
-  constructor(
-    readonly configSet: ConfigSet,
-    readonly runtimeCacheFS: StringMap,
-  ) {
+  constructor(readonly configSet: ConfigSet, readonly runtimeCacheFS: StringMap) {
     this._ts = configSet.compilerModule
     this._logger = rootLogger.child({ namespace: 'ts-compiler' })
     this._parsedTsConfig = this.configSet.parsedTsConfig as ParsedCommandLine

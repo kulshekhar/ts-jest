@@ -20,10 +20,7 @@ export const INSPECT_CUSTOM = inspect.custom || 'inspect'
 export class TSError extends BaseError {
   name = 'TSError'
 
-  constructor(
-    public diagnosticText: string,
-    public diagnosticCodes: number[],
-  ) {
+  constructor(public diagnosticText: string, public diagnosticCodes: number[]) {
     super(
       interpolate(Errors.UnableToCompileTypeScript, {
         diagnostics: diagnosticText.trim(),
