@@ -1,7 +1,8 @@
 {
   "compilerOptions": {
     "module": "CommonJS",
-    "target": "ES2021"
+    "target": "ES2021",
+    "lib": ["es2022", "esnext.disposable", "dom"]
   },
   "files": ["globals.d.ts"]
 }
