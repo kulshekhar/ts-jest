@@ -12,11 +12,7 @@ import { stringify as stringifyJson5 } from 'json5'
 
 import type { CliCommand, CliCommandArgs } from '..'
 import { JEST_CONFIG_EJS_TEMPLATE } from '../../constants'
-import {
-  createLegacyDefaultPreset,
-  createLegacyJsWithTsPreset,
-  createLegacyWithBabelPreset,
-} from '../../presets/create-jest-preset'
+import { createDefaultPreset, createJsWithTsPreset, createJsWithBabelPreset } from '../../presets/create-jest-preset'
 import type { DefaultPreset, JsWithBabelPreset, JsWithTsPreset, TsJestTransformerOptions } from '../../types'
 
 const ensureOnlyUsingDoubleQuotes = (str: string): string => {
@@ -69,11 +65,11 @@ export const run: CliCommand = async (args: CliCommandArgs /* , logger: Logger *
   const resolvedTsconfigOption = tsconfig ? { tsconfig: `${stringifyJson5(tsconfig)}` } : undefined
   let transformConfig: DefaultPreset | JsWithTsPreset | JsWithBabelPreset
   if (jsFilesProcessor === 'babel' || shouldPostProcessWithBabel) {
-    transformConfig = createLegacyWithBabelPreset(resolvedTsconfigOption)
+    transformConfig = createJsWithBabelPreset(resolvedTsconfigOption)
   } else if (jsFilesProcessor === 'ts') {
-    transformConfig = createLegacyJsWithTsPreset(resolvedTsconfigOption)
+    transformConfig = createJsWithTsPreset(resolvedTsconfigOption)
   } else {
-    transformConfig = createLegacyDefaultPreset(resolvedTsconfigOption)
+    transformConfig = createDefaultPreset(resolvedTsconfigOption)
   }
   if (isPackageJsonConfig) {
     body = ensureOnlyUsingDoubleQuotes(

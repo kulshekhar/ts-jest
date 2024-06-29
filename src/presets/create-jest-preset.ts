@@ -49,10 +49,10 @@ export function createJestPreset(
   }
 }
 
-export function createLegacyDefaultPreset(
+export function createDefaultPreset(
   tsJestTransformOptions: Omit<TsJestTransformerOptions, 'useESM' | 'babelConfig'> = {},
 ): DefaultPreset {
-  logger.debug('creating default legacy CJS Jest preset')
+  logger.debug('creating default CJS Jest preset')
 
   return {
     transform: {
@@ -61,10 +61,10 @@ export function createLegacyDefaultPreset(
   }
 }
 
-export function createLegacyJsWithTsPreset(
+export function createJsWithTsPreset(
   tsJestTransformOptions: Omit<TsJestTransformerOptions, 'useESM' | 'babelConfig'> = {},
 ): JsWithTsPreset {
-  logger.debug('creating legacy Js with Ts CJS Jest preset')
+  logger.debug('creating Js with Ts CJS Jest preset')
 
   return {
     transform: {
@@ -73,10 +73,10 @@ export function createLegacyJsWithTsPreset(
   }
 }
 
-export function createLegacyWithBabelPreset(
+export function createJsWithBabelPreset(
   tsJestTransformOptions: Omit<TsJestTransformerOptions, 'useESM'> = {},
 ): JsWithBabelPreset {
-  logger.debug('creating legacy JS with Babel CJS Jest preset')
+  logger.debug('creating JS with Babel CJS Jest preset')
 
   const babelConfig = tsJestTransformOptions.babelConfig
 
@@ -94,13 +94,13 @@ export function createLegacyWithBabelPreset(
   }
 }
 
-export function createLegacyDefaultEsmPreset(tsJestTransformOptions: Omit<TsJestTransformerOptions, 'useESM'> = {}): {
+export function createDefaultEsmPreset(tsJestTransformOptions: Omit<TsJestTransformerOptions, 'useESM'> = {}): {
   extensionsToTreatAsEsm: string[]
   transform: {
     [ESM_TS_TRANSFORM_PATTERN]: ['ts-jest', { useESM: true } & typeof tsJestTransformOptions]
   }
 } {
-  logger.debug('creating default legacy ESM Jest preset')
+  logger.debug('creating default ESM Jest preset')
 
   return {
     extensionsToTreatAsEsm: [...JS_EXT_TO_TREAT_AS_ESM, ...TS_EXT_TO_TREAT_AS_ESM],
@@ -116,13 +116,13 @@ export function createLegacyDefaultEsmPreset(tsJestTransformOptions: Omit<TsJest
   }
 }
 
-export function createLegacyJsWithTsEsmPreset(tsJestTransformOptions: Omit<TsJestTransformerOptions, 'useESM'> = {}): {
+export function createJsWithTsEsmPreset(tsJestTransformOptions: Omit<TsJestTransformerOptions, 'useESM'> = {}): {
   extensionsToTreatAsEsm: string[]
   transform: {
     [ESM_TS_JS_TRANSFORM_PATTERN]: ['ts-jest', { useESM: true } & typeof tsJestTransformOptions]
   }
 } {
-  logger.debug('creating Js with Ts legacy ESM Jest preset')
+  logger.debug('creating Js with Ts ESM Jest preset')
 
   return {
     extensionsToTreatAsEsm: [...JS_EXT_TO_TREAT_AS_ESM, ...TS_EXT_TO_TREAT_AS_ESM],
@@ -138,14 +138,14 @@ export function createLegacyJsWithTsEsmPreset(tsJestTransformOptions: Omit<TsJes
   }
 }
 
-export function createLegacyWithBabelEsmPreset(tsJestTransformOptions: Omit<TsJestTransformerOptions, 'useESM'> = {}): {
+export function createJsWithBabelEsmPreset(tsJestTransformOptions: Omit<TsJestTransformerOptions, 'useESM'> = {}): {
   extensionsToTreatAsEsm: string[]
   transform: {
     [ESM_JS_TRANSFORM_PATTERN]: ['babel-jest', babelConfig: BabelConfig]
     [ESM_TS_TRANSFORM_PATTERN]: ['ts-jest', { useESM: true } & typeof tsJestTransformOptions]
   }
 } {
-  logger.debug('creating JS with Babel legacy ESM Jest preset')
+  logger.debug('creating JS with Babel ESM Jest preset')
 
   const babelConfig = tsJestTransformOptions.babelConfig
 

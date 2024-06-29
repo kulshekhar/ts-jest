@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`create-jest-preset CJS presets createLegacyDefaultPreset should return preset config 1`] = `
+exports[`create-jest-preset CJS presets createDefaultPreset should return preset config 1`] = `
 {
   "transform": {
     "^.+.tsx?$": [
@@ -13,7 +13,7 @@ exports[`create-jest-preset CJS presets createLegacyDefaultPreset should return 
 }
 `;
 
-exports[`create-jest-preset CJS presets createLegacyJsWithTsPreset should return preset config 1`] = `
+exports[`create-jest-preset CJS presets createJsWithTsPreset should return preset config 1`] = `
 {
   "transform": {
     "^.+.[tj]sx?$": [
@@ -27,7 +27,7 @@ exports[`create-jest-preset CJS presets createLegacyJsWithTsPreset should return
 }
 `;
 
-exports[`create-jest-preset CJS presets createLegacyWithBabelPreset should return preset config 1`] = `
+exports[`create-jest-preset CJS presets createWithBabelPreset should return preset config 1`] = `
 {
   "transform": {
     "^.+.jsx?$": [
@@ -47,7 +47,7 @@ exports[`create-jest-preset CJS presets createLegacyWithBabelPreset should retur
 }
 `;
 
-exports[`create-jest-preset ESM presets createLegacyDefaultEsmPreset should return preset config 1`] = `
+exports[`create-jest-preset ESM presets createDefaultEsmPreset should return preset config 1`] = `
 {
   "extensionsToTreatAsEsm": [
     ".jsx",
@@ -67,7 +67,28 @@ exports[`create-jest-preset ESM presets createLegacyDefaultEsmPreset should retu
 }
 `;
 
-exports[`create-jest-preset ESM presets createLegacyJsWithBabelEsmPreset should return preset config 1`] = `
+exports[`create-jest-preset ESM presets createJsWithTsEsmPreset should return preset config 1`] = `
+{
+  "extensionsToTreatAsEsm": [
+    ".jsx",
+    ".ts",
+    ".tsx",
+    ".mts",
+  ],
+  "transform": {
+    "^.+\\.m?[tj]sx?$": [
+      "ts-jest",
+      {
+        "isolatedModules": true,
+        "tsconfig": "tsconfig.spec.json",
+        "useESM": true,
+      },
+    ],
+  },
+}
+`;
+
+exports[`create-jest-preset ESM presets createWithBabelEsmPreset should return preset config 1`] = `
 {
   "extensionsToTreatAsEsm": [
     ".jsx",
@@ -88,27 +109,6 @@ exports[`create-jest-preset ESM presets createLegacyJsWithBabelEsmPreset should 
         "babelConfig": {
           "babelrc": true,
         },
-        "tsconfig": "tsconfig.spec.json",
-        "useESM": true,
-      },
-    ],
-  },
-}
-`;
-
-exports[`create-jest-preset ESM presets createLegacyJsWithTsEsmPreset should return preset config 1`] = `
-{
-  "extensionsToTreatAsEsm": [
-    ".jsx",
-    ".ts",
-    ".tsx",
-    ".mts",
-  ],
-  "transform": {
-    "^.+\\.m?[tj]sx?$": [
-      "ts-jest",
-      {
-        "isolatedModules": true,
         "tsconfig": "tsconfig.spec.json",
         "useESM": true,
       },
