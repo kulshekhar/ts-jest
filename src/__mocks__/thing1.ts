@@ -1,6 +1,4 @@
-import camelCase from 'lodash.camelcase'
-
-import { getBar } from './thing2'
+import { camelCase, getBar } from './thing2'
 
 export function getFoo(msg: string): string {
   return camelCase(msg) + getBar(msg)

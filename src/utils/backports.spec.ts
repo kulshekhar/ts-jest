@@ -1,12 +1,32 @@
 import { inspect } from 'util'
 
 import { testing } from 'bs-logger'
-import set from 'lodash.set'
 
 import { backportJestConfig } from './backports'
 
 const logger = testing.createLoggerMock()
 const logTarget = logger.target
+
+function set<T>(obj: T, path: string | string[], value: unknown): T {
+  if (!path) return obj
+
+  if (!Array.isArray(path)) {
+    path = path.toString().match(/[^.[\]]+/g) || []
+  }
+
+  path.reduce((acc, key, index) => {
+    if (index === path.length - 1) {
+      acc[key] = value
+    } else if (!acc[key]) {
+      acc[key] = {}
+    }
+
+    return acc[key]
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  }, obj as Record<string, any>)
+
+  return obj
+}
 
 beforeEach(() => {
   logTarget.clear()
