@@ -135,8 +135,6 @@
     "js-yaml": "latest",
     "json-schema-to-typescript": "^13.1.2",
     "lint-staged": "latest",
-    "lodash.camelcase": "^4.3.0",
-    "lodash.set": "^4.3.2",
     "prettier": "^2.8.8",
     "typescript": "~5.5.2"
   },
