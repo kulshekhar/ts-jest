@@ -2,12 +2,12 @@ import { JS_EXT_TO_TREAT_AS_ESM, TS_EXT_TO_TREAT_AS_ESM } from '../constants'
 
 import {
   createJestPreset,
-  createLegacyDefaultPreset,
-  createLegacyWithBabelPreset,
-  createLegacyJsWithTsPreset,
-  createLegacyDefaultEsmPreset,
-  createLegacyJsWithTsEsmPreset,
-  createLegacyWithBabelEsmPreset,
+  createDefaultPreset,
+  createJsWithBabelPreset,
+  createJsWithTsPreset,
+  createDefaultEsmPreset,
+  createJsWithTsEsmPreset,
+  createJsWithBabelEsmPreset,
 } from './create-jest-preset'
 
 describe('create-jest-preset', () => {
@@ -63,20 +63,20 @@ describe('create-jest-preset', () => {
   })
 
   describe('CJS presets', () => {
-    describe('createLegacyDefaultPreset', () => {
+    describe('createDefaultPreset', () => {
       it('should return preset config', () => {
         expect(
-          createLegacyDefaultPreset({
+          createDefaultPreset({
             tsconfig: 'tsconfig.spec.json',
           }),
         ).toMatchSnapshot()
       })
     })
 
-    describe('createLegacyJsWithTsPreset', () => {
+    describe('createJsWithTsPreset', () => {
       it('should return preset config', () => {
         expect(
-          createLegacyJsWithTsPreset({
+          createJsWithTsPreset({
             tsconfig: 'tsconfig.spec.json',
             isolatedModules: true,
           }),
@@ -84,10 +84,10 @@ describe('create-jest-preset', () => {
       })
     })
 
-    describe('createLegacyWithBabelPreset', () => {
+    describe('createWithBabelPreset', () => {
       it('should return preset config', () => {
         expect(
-          createLegacyWithBabelPreset({
+          createJsWithBabelPreset({
             tsconfig: 'tsconfig.spec.json',
             babelConfig: {
               babelrc: true,
@@ -99,20 +99,20 @@ describe('create-jest-preset', () => {
   })
 
   describe('ESM presets', () => {
-    describe('createLegacyDefaultEsmPreset', () => {
+    describe('createDefaultEsmPreset', () => {
       it('should return preset config', () => {
         expect(
-          createLegacyDefaultEsmPreset({
+          createDefaultEsmPreset({
             tsconfig: 'tsconfig.spec.json',
           }),
         ).toMatchSnapshot()
       })
     })
 
-    describe('createLegacyJsWithTsEsmPreset', () => {
+    describe('createJsWithTsEsmPreset', () => {
       it('should return preset config', () => {
         expect(
-          createLegacyJsWithTsEsmPreset({
+          createJsWithTsEsmPreset({
             tsconfig: 'tsconfig.spec.json',
             isolatedModules: true,
           }),
@@ -120,10 +120,10 @@ describe('create-jest-preset', () => {
       })
     })
 
-    describe('createLegacyJsWithBabelEsmPreset', () => {
+    describe('createWithBabelEsmPreset', () => {
       it('should return preset config', () => {
         expect(
-          createLegacyWithBabelEsmPreset({
+          createJsWithBabelEsmPreset({
             tsconfig: 'tsconfig.spec.json',
             babelConfig: {
               babelrc: true,
