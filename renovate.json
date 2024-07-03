@@ -33,13 +33,13 @@
       "groupName": "Jest packages"
     },
     {
-      "matchPackagePatterns": ["eslint", "lint-staged"],
+      "extends": ["packages:eslint"],
+      "excludePackageNames": ["eslint-plugin-prettier", "eslint-config-prettier"],
       "groupName": "ESLint packages"
     },
     {
-      "matchPackagePatterns": ["@types"],
-      "matchUpdateTypes": ["patch", "minor"],
-      "groupName": "@types packages"
+      "matchPackagePatterns": ["prettier"],
+      "groupName": "Prettier packages"
     },
     {
       "matchPackagePrefixes": ["esbuild"],
