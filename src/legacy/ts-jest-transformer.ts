@@ -53,7 +53,7 @@ export class TsJestTransformer implements SyncTransformer<TsJestTransformerOptio
   private _depGraphs: Map<string, DepGraphInfo> = new Map<string, DepGraphInfo>()
   private _watchMode = false
 
-  constructor(private readonly tsJestConfig?: TsJestTransformOptions['transformerConfig']) {
+  constructor(private readonly transformerOptions?: TsJestTransformerOptions) {
     this._logger = rootLogger.child({ namespace: 'ts-jest-transformer' })
     VersionCheckers.jest.warn()
     /**
@@ -106,14 +106,14 @@ export class TsJestTransformer implements SyncTransformer<TsJestTransformerOptio
         }
         const jestGlobalsConfig = config.globals ?? {}
         const tsJestGlobalsConfig = jestGlobalsConfig['ts-jest'] ?? {}
-        const migratedConfig = this.tsJestConfig
+        const migratedConfig = this.transformerOptions
           ? {
               ...config,
               globals: {
                 ...jestGlobalsConfig,
                 'ts-jest': {
                   ...tsJestGlobalsConfig,
-                  ...this.tsJestConfig,
+                  ...this.transformerOptions,
                 },
               },
             }

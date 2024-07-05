@@ -5,7 +5,7 @@ import type { Logger } from 'bs-logger'
 
 import { TsCompiler } from '../legacy/compiler'
 import { ConfigSet } from '../legacy/config/config-set'
-import type { StringMap, TsJestGlobalOptions } from '../types'
+import type { StringMap, TsJestTransformerOptions } from '../types'
 import type { ImportReasons } from '../utils/messages'
 
 export function filePath(relPath: string): string {
@@ -19,7 +19,7 @@ const defaultTestMatch = ['**/__tests__/**/*.[jt]s?(x)', '**/?(*.)+(spec|test).[
 
 function getJestConfig<T extends Config.ProjectConfig>(
   options?: Partial<Config.InitialOptions | Config.ProjectConfig>,
-  tsJestOptions?: TsJestGlobalOptions,
+  tsJestOptions?: TsJestTransformerOptions,
 ): T {
   const res = {
     globals: {},
@@ -47,7 +47,7 @@ export function createConfigSet({
   ...others
 }: {
   jestConfig?: Partial<Config.ProjectConfig>
-  tsJestConfig?: TsJestGlobalOptions
+  tsJestConfig?: TsJestTransformerOptions
   logger?: Logger
   resolve?: ((path: string) => string) | null
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -81,8 +81,8 @@ export function makeCompiler(
     parentConfig,
   }: {
     jestConfig?: Partial<Config.ProjectConfig>
-    tsJestConfig?: TsJestGlobalOptions
-    parentConfig?: TsJestGlobalOptions
+    tsJestConfig?: TsJestTransformerOptions
+    parentConfig?: TsJestTransformerOptions
   } = {},
   jestCacheFS: StringMap = new Map<string, string>(),
 ): TsCompiler {
