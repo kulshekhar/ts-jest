@@ -250,7 +250,7 @@ export type JsWithTsPreset = {
 }
 export type JsWithBabelPreset = {
   transform: {
-    [JS_TRANSFORM_PATTERN]: ['babel-jest', babelConfig: BabelConfig]
+    [JS_TRANSFORM_PATTERN]: 'babel-jest'
     [TS_TRANSFORM_PATTERN]: ['ts-jest', Omit<TsJestTransformerOptions, 'useESM'>]
   }
 }

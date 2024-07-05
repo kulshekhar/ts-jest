@@ -30,16 +30,13 @@ exports[`create-jest-preset CJS presets createJsWithTsPreset should return prese
 exports[`create-jest-preset CJS presets createWithBabelPreset should return preset config 1`] = `
 {
   "transform": {
-    "^.+.jsx?$": [
-      "babel-jest",
-      {
-        "babelrc": true,
-      },
-    ],
+    "^.+.jsx?$": "babel-jest",
     "^.+.tsx?$": [
       "ts-jest",
       {
-        "babelConfig": true,
+        "babelConfig": {
+          "babelrc": true,
+        },
         "tsconfig": "tsconfig.spec.json",
       },
     ],
@@ -97,12 +94,7 @@ exports[`create-jest-preset ESM presets createWithBabelEsmPreset should return p
     ".mts",
   ],
   "transform": {
-    "^.+\\.m?jsx?$": [
-      "babel-jest",
-      {
-        "babelrc": true,
-      },
-    ],
+    "^.+\\.m?jsx?$": "babel-jest",
     "^.+\\.m?tsx?$": [
       "ts-jest",
       {

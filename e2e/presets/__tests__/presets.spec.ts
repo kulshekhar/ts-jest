@@ -1,6 +1,8 @@
 import { JS_EXT_TO_TREAT_AS_ESM, TS_EXT_TO_TREAT_AS_ESM } from 'ts-jest'
 import presets from 'ts-jest/presets'
 
+import extendedJestConfig from '../extended-jest-config'
+
 const defaultPreset = require('ts-jest/jest-preset')
 
 test('presets', () => {
@@ -74,4 +76,8 @@ test('presets', () => {
       '^.+\\.m?[j]sx?$': 'babel-jest',
     },
   })
+})
+
+test('should allow extending jest config without type issues when using create preset util functions', () => {
+  expect(extendedJestConfig).toBeTruthy()
 })

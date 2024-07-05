@@ -11,7 +11,6 @@ import {
   ESM_JS_TRANSFORM_PATTERN,
 } from '../constants'
 import type {
-  BabelConfig,
   DefaultPreset,
   JsWithBabelPreset,
   JsWithTsPreset,
@@ -78,18 +77,10 @@ export function createJsWithBabelPreset(
 ): JsWithBabelPreset {
   logger.debug('creating JS with Babel CJS Jest preset')
 
-  const babelConfig = tsJestTransformOptions.babelConfig
-
   return {
     transform: {
-      [JS_TRANSFORM_PATTERN]: ['babel-jest', typeof babelConfig === 'object' ? babelConfig : {}],
-      [TS_TRANSFORM_PATTERN]: [
-        'ts-jest',
-        {
-          ...tsJestTransformOptions,
-          babelConfig: true,
-        },
-      ],
+      [JS_TRANSFORM_PATTERN]: 'babel-jest',
+      [TS_TRANSFORM_PATTERN]: ['ts-jest', tsJestTransformOptions],
     },
   }
 }
@@ -141,24 +132,21 @@ export function createJsWithTsEsmPreset(tsJestTransformOptions: Omit<TsJestTrans
 export function createJsWithBabelEsmPreset(tsJestTransformOptions: Omit<TsJestTransformerOptions, 'useESM'> = {}): {
   extensionsToTreatAsEsm: string[]
   transform: {
-    [ESM_JS_TRANSFORM_PATTERN]: ['babel-jest', babelConfig: BabelConfig]
+    [ESM_JS_TRANSFORM_PATTERN]: 'babel-jest'
     [ESM_TS_TRANSFORM_PATTERN]: ['ts-jest', { useESM: true } & typeof tsJestTransformOptions]
   }
 } {
   logger.debug('creating JS with Babel ESM Jest preset')
 
-  const babelConfig = tsJestTransformOptions.babelConfig
-
   return {
     extensionsToTreatAsEsm: [...JS_EXT_TO_TREAT_AS_ESM, ...TS_EXT_TO_TREAT_AS_ESM],
     transform: {
-      [ESM_JS_TRANSFORM_PATTERN]: ['babel-jest', typeof babelConfig === 'object' ? babelConfig : {}],
+      [ESM_JS_TRANSFORM_PATTERN]: 'babel-jest',
       [ESM_TS_TRANSFORM_PATTERN]: [
         'ts-jest',
         {
           ...tsJestTransformOptions,
           useESM: true,
-          babelConfig,
         },
       ],
     },
