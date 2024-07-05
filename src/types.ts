@@ -8,21 +8,6 @@ import { JS_TRANSFORM_PATTERN, TS_JS_TRANSFORM_PATTERN, TS_TRANSFORM_PATTERN } f
 import type { ConfigSet } from './legacy/config/config-set'
 import type { RawCompilerOptions } from './raw-compiler-options'
 
-declare module '@jest/types' {
-  // eslint-disable-next-line @typescript-eslint/no-namespace
-  namespace Config {
-    interface ConfigGlobals {
-      /**
-       * strangely `@ts-expect-error` doesn't work in this case when running
-       * `npm run build` vs `npm run pretest`
-       */
-      // eslint-disable-next-line
-      // @ts-ignore
-      'ts-jest'?: TsJestGlobalOptions
-    }
-  }
-}
-
 /**
  * @internal
  */
@@ -267,5 +252,20 @@ export type JsWithBabelPreset = {
   transform: {
     [JS_TRANSFORM_PATTERN]: ['babel-jest', babelConfig: BabelConfig]
     [TS_TRANSFORM_PATTERN]: ['ts-jest', Omit<TsJestTransformerOptions, 'useESM'>]
+  }
+}
+
+declare module '@jest/types' {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
+  namespace Config {
+    interface ConfigGlobals {
+      /**
+       * strangely `@ts-expect-error` doesn't work in this case when running
+       * `npm run build` vs `npm run pretest`
+       */
+      // eslint-disable-next-line
+      // @ts-ignore
+      'ts-jest'?: TsJestTransformerOptions
+    }
   }
 }

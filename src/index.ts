@@ -1,5 +1,5 @@
 import { TsJestTransformer } from './legacy/ts-jest-transformer'
-import type { TsJestGlobalOptions } from './types'
+import type { TsJestTransformerOptions } from './types'
 
 export * from './config'
 export * from './constants'
@@ -12,7 +12,7 @@ export * from './utils'
 export * from './types'
 
 export default {
-  createTransformer(tsJestConfig?: TsJestGlobalOptions) {
+  createTransformer(tsJestConfig?: TsJestTransformerOptions) {
     return new TsJestTransformer(tsJestConfig)
   },
 }

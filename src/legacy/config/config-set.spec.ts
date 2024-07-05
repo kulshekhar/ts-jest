@@ -7,7 +7,7 @@ import * as ts from 'typescript'
 import { createConfigSet } from '../../__helpers__/fakers'
 import { logTargetMock } from '../../__helpers__/mocks'
 import type { RawCompilerOptions } from '../../raw-compiler-options'
-import type { AstTransformerDesc, TsJestGlobalOptions } from '../../types'
+import type { AstTransformerDesc, TsJestTransformerOptions } from '../../types'
 import { stringify } from '../../utils'
 import * as _backports from '../../utils/backports'
 import { getPackageVersion } from '../../utils/get-package-version'
@@ -47,7 +47,7 @@ test('should create a default fallback jest config when jest config is undefined
 })
 
 describe('parsedTsConfig', () => {
-  const get = (tsJest?: TsJestGlobalOptions) => createConfigSet({ tsJestConfig: tsJest }).parsedTsConfig
+  const get = (tsJest?: TsJestTransformerOptions) => createConfigSet({ tsJestConfig: tsJest }).parsedTsConfig
 
   it('should read file list from default tsconfig', () => {
     // since the default is to lookup for tsconfig,
