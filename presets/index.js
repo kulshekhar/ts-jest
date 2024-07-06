@@ -1,29 +1,35 @@
 const { JS_EXT_TO_TREAT_AS_ESM, TS_EXT_TO_TREAT_AS_ESM } = require('../dist/constants')
-const { createJestPreset } = require('../dist/presets/create-jest-preset')
+const {
+  createJestPreset,
+  createDefaultPreset,
+  createDefaultEsmPreset,
+  createJsWithTsPreset,
+  createJsWithTsEsmPreset,
+  createJsWithBabelPreset,
+  createJsWithBabelEsmPreset,
+} = require('../dist/presets/create-jest-preset')
 
 module.exports = {
   get defaults() {
-    return createJestPreset()
+    return createDefaultPreset()
   },
   get defaultsLegacy() {
     return createJestPreset(true, false)
   },
   get defaultsESM() {
-    return createJestPreset(false, false, { extensionsToTreatAsEsm: TS_EXT_TO_TREAT_AS_ESM })
+    return createDefaultEsmPreset()
   },
   get defaultsESMLegacy() {
     return createJestPreset(true, false, { extensionsToTreatAsEsm: TS_EXT_TO_TREAT_AS_ESM })
   },
   get jsWithTs() {
-    return createJestPreset(false, true)
+    return createJsWithTsPreset()
   },
   get jsWithTsLegacy() {
     return createJestPreset(true, true)
   },
   get jsWithTsESM() {
-    return createJestPreset(false, true, {
-      extensionsToTreatAsEsm: [...JS_EXT_TO_TREAT_AS_ESM, ...TS_EXT_TO_TREAT_AS_ESM],
-    })
+    return createJsWithTsEsmPreset()
   },
   get jsWithTsESMLegacy() {
     return createJestPreset(true, true, {
@@ -31,11 +37,7 @@ module.exports = {
     })
   },
   get jsWithBabel() {
-    return createJestPreset(false, false, {
-      transform: {
-        '^.+\\.jsx?$': 'babel-jest',
-      },
-    })
+    return createJsWithBabelPreset()
   },
   get jsWithBabelLegacy() {
     return createJestPreset(true, false, {
@@ -45,12 +47,7 @@ module.exports = {
     })
   },
   get jsWithBabelESM() {
-    return createJestPreset(false, false, {
-      extensionsToTreatAsEsm: [...JS_EXT_TO_TREAT_AS_ESM, ...TS_EXT_TO_TREAT_AS_ESM],
-      transform: {
-        '^.+\\.m?[j]sx?$': 'babel-jest',
-      },
-    })
+    return createJsWithBabelEsmPreset()
   },
   get jsWithBabelESMLegacy() {
     return createJestPreset(true, false, {
