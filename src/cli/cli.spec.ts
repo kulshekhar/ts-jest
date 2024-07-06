@@ -2,6 +2,7 @@ import * as _fs from 'fs'
 import { normalize, resolve } from 'path'
 
 import { logTargetMock, mockObject, mockWriteStream } from '../__helpers__/mocks'
+import { JS_TRANSFORM_PATTERN, TS_JS_TRANSFORM_PATTERN, TS_TRANSFORM_PATTERN } from '../constants'
 
 import { processArgv } from '.'
 
@@ -261,32 +262,38 @@ describe('config', () => {
       jest.mock(
         pkgPaths.next,
         () => ({
-          jest: { globals: { __TS_CONFIG__: { target: 'es6' } } },
+          jest: {
+            globals: {
+              'ts-jest': {
+                tsconfig: { target: 'es6' },
+              },
+            },
+          },
         }),
         { virtual: true },
       )
+
       const res = await runCli(...noOption, pkgPaths.current)
+
       expect(res).toMatchInlineSnapshot(`
         {
           "exitCode": 0,
-          "log": "",
+          "log": "[level:20] creating default CJS Jest preset
+        ",
           "stderr": "
         Migrated Jest configuration:
-
-
-        Detected preset 'default' as the best matching preset for your configuration.
-        Visit https://kulshekhar.github.io/ts-jest/user/config/#jest-preset for more information about presets.
-
         ",
           "stdout": ""jest": {
-          "globals": {
-            "ts-jest": {
-              "tsconfig": {
-                "target": "es6"
+          "transform": {
+            "^.+.tsx?$": [
+              "ts-jest",
+              {
+                "tsconfig": {
+                  "target": "es6"
+                }
               }
-            }
-          },
-          "preset": "ts-jest"
+            ]
+          }
         }
         ",
         }
@@ -300,25 +307,37 @@ describe('config', () => {
       jest.mock(
         pkgPaths.next,
         () => ({
-          jest: { globals: { __TS_CONFIG__: { target: 'es6' } } },
+          jest: {
+            globals: {
+              'ts-jest': {
+                tsconfig: { target: 'es6' },
+              },
+            },
+          },
         }),
         { virtual: true },
       )
+
       const res = await runCli(...fullOptions, pkgPaths.current)
+
       expect(res).toMatchInlineSnapshot(`
         {
           "exitCode": 0,
-          "log": "",
+          "log": "[level:20] creating Js with Ts CJS Jest preset
+        ",
           "stderr": "
         Migrated Jest configuration:
         ",
           "stdout": ""jest": {
-          "globals": {
-            "ts-jest": {
-              "tsconfig": {
-                "target": "es6"
+          "transform": {
+            "^.+.[tj]sx?$": [
+              "ts-jest",
+              {
+                "tsconfig": {
+                  "target": "es6"
+                }
               }
-            }
+            ]
           }
         }
         ",
@@ -327,14 +346,18 @@ describe('config', () => {
       expect(fs.writeFileSync).not.toHaveBeenCalled()
     })
 
-    it('should detect same option values', async () => {
+    it('should generate transform options while keeping other jest config options', async () => {
       expect.assertions(1)
       fs.existsSync.mockImplementation(() => true)
       jest.mock(
         pkgPaths.next,
         () => ({
           jest: {
-            globals: { __TS_CONFIG__: { target: 'es6' } },
+            globals: {
+              'ts-jest': {
+                tsconfig: { target: 'es6' },
+              },
+            },
             moduleFileExtensions: ['ts', 'tsx', 'js'],
             testMatch: [
               '**/__tests__/**/*.js?(x)',
@@ -346,16 +369,11 @@ describe('config', () => {
         }),
         { virtual: true },
       )
+
       const res = await runCli(...noOption, pkgPaths.current)
+
       expect(res.stdout).toMatchInlineSnapshot(`
         ""jest": {
-          "globals": {
-            "ts-jest": {
-              "tsconfig": {
-                "target": "es6"
-              }
-            }
-          },
           "moduleFileExtensions": [
             "js",
             "ts",
@@ -367,13 +385,22 @@ describe('config', () => {
             "**/__tests__/**/*.js?(x)",
             "**/__tests__/**/*.ts?(x)"
           ],
-          "preset": "ts-jest"
+          "transform": {
+            "^.+.tsx?$": [
+              "ts-jest",
+              {
+                "tsconfig": {
+                  "target": "es6"
+                }
+              }
+            ]
+          }
         }
         "
       `)
     })
 
-    test.each([
+    it.each([
       {
         jest: {
           preset: 'ts-jest',
@@ -399,7 +426,7 @@ describe('config', () => {
       expect(res.stdout ? res.stdout : res.stderr).toMatchSnapshot()
     })
 
-    test.each([
+    it.each([
       {
         jest: {
           testRegex: 'foo-pattern',
@@ -438,67 +465,102 @@ describe('config', () => {
       expect(res.stdout).toMatchSnapshot()
     })
 
-    it('should detect best preset', async () => {
-      expect.assertions(5)
+    it('should generate transform config with default CLI options', async () => {
       fs.existsSync.mockImplementation(() => true)
       jest.mock(pkgPaths.next, () => ({}), { virtual: true })
-
-      // defaults
       jest.doMock(pkgPaths.nextCfg, () => ({}), { virtual: true })
-      let res = await runCli(...noOption, pkgPaths.currentCfg)
+
+      const res = await runCli(...noOption, pkgPaths.currentCfg)
+
       expect(res.stdout).toMatchInlineSnapshot(`
         "module.exports = {
-          preset: 'ts-jest',
+          transform: {
+            '^.+.tsx?$': [
+              'ts-jest',
+              {},
+            ],
+          },
         }
         "
       `)
+    })
 
-      // js-with-ts from args
+    it('should generate transform config with allow-js in CLI options', async () => {
+      fs.existsSync.mockImplementation(() => true)
+      jest.mock(pkgPaths.next, () => ({}), { virtual: true })
       jest.doMock(pkgPaths.nextCfg, () => ({}), { virtual: true })
-      res = await runCli(...noOption, '--allow-js', pkgPaths.currentCfg)
+
+      const res = await runCli(...noOption, '--allow-js', pkgPaths.currentCfg)
+
       expect(res.stdout).toMatchInlineSnapshot(`
         "module.exports = {
-          preset: 'ts-jest/presets/js-with-ts',
+          transform: {
+            '^.+.[tj]sx?$': [
+              'ts-jest',
+              {},
+            ],
+          },
         }
         "
       `)
+    })
 
-      // js-with-ts from previous transform
-      jest.doMock(pkgPaths.nextCfg, () => ({ transform: { '^.+\\.[tj]sx?$': 'ts-jest' } }), { virtual: true })
-      res = await runCli(...noOption, pkgPaths.currentCfg)
-      expect(res.stdout).toMatchInlineSnapshot(`
-        "module.exports = {
-          preset: 'ts-jest/presets/js-with-ts',
-        }
-        "
-      `)
+    it.each([
+      {
+        name: 'js-with-babel',
+        transform: {
+          [JS_TRANSFORM_PATTERN]: 'babel-jest',
+          [TS_TRANSFORM_PATTERN]: 'ts-jest',
+        },
+      },
+      {
+        name: 'js-with-ts',
+        transform: {
+          [TS_JS_TRANSFORM_PATTERN]: 'ts-jest',
+        },
+      },
+    ])('should generate transform config with existing transform options for $name', async ({ transform }) => {
+      fs.existsSync.mockImplementation(() => true)
+      jest.mock(pkgPaths.next, () => ({}), { virtual: true })
+      jest.doMock(
+        pkgPaths.nextCfg,
+        () => ({
+          transform,
+        }),
+        {
+          virtual: true,
+        },
+      )
 
-      // js-with-babel from previous transform
-      jest.doMock(pkgPaths.nextCfg, () => ({ transform: { '^.+\\.jsx?$': 'babel-jest', '^.+\\.tsx?$': 'ts-jest' } }), {
-        virtual: true,
-      })
-      res = await runCli(...noOption, pkgPaths.currentCfg)
-      expect(res.stdout).toMatchInlineSnapshot(`
-        "module.exports = {
-          preset: 'ts-jest/presets/js-with-babel',
-        }
-        "
-      `)
+      const res = await runCli(...noOption, pkgPaths.currentCfg)
 
-      // defaults when previous transform is ambiguous
+      expect(res.stdout).toMatchSnapshot()
+    })
+
+    it('should generate transform config by merging existing transform options with default transform options', async () => {
+      fs.existsSync.mockImplementation(() => true)
+      jest.mock(pkgPaths.next, () => ({}), { virtual: true })
       jest.doMock(
         pkgPaths.nextCfg,
         () => ({ transform: { '^src/js/.+\\.jsx?$': 'babel-jest', '^src/ts/.+\\.tsx?$': 'ts-jest' } }),
         { virtual: true },
       )
-      res = await runCli(...noOption, pkgPaths.currentCfg)
+
+      const res = await runCli(...noOption, pkgPaths.currentCfg)
+
       expect(res.stdout).toMatchInlineSnapshot(`
         "module.exports = {
           transform: {
             '^src/js/.+\\\\.jsx?$': 'babel-jest',
-            '^src/ts/.+\\\\.tsx?$': 'ts-jest',
+            '^src/ts/.+\\\\.tsx?$': [
+              'ts-jest',
+              {},
+            ],
+            '^.+.tsx?$': [
+              'ts-jest',
+              {},
+            ],
           },
-          preset: 'ts-jest',
         }
         "
       `)
@@ -520,15 +582,29 @@ describe('config', () => {
         }),
         { virtual: true },
       )
+
       const res = await runCli(...noOption, pkgPaths.current)
+
       expect(res.stdout).toMatchInlineSnapshot(`
         ""jest": {
           "transform": {
-            "<rootDir>/src/.+\\\\.[jt]s$": "ts-jest",
-            "foo\\\\.ts": "ts-jest",
-            "bar\\\\.ts": "ts-jest"
-          },
-          "preset": "ts-jest"
+            "<rootDir>/src/.+\\\\.[jt]s$": [
+              "ts-jest",
+              {}
+            ],
+            "foo\\\\.ts": [
+              "ts-jest",
+              {}
+            ],
+            "bar\\\\.ts": [
+              "ts-jest",
+              {}
+            ],
+            "^.+.tsx?$": [
+              "ts-jest",
+              {}
+            ]
+          }
         }
         "
       `)
@@ -536,6 +612,7 @@ describe('config', () => {
 
     it('should output help', async () => {
       const res = await runCli('help', noOption[0])
+
       expect(res).toMatchInlineSnapshot(`
         {
           "exitCode": 0,
@@ -557,28 +634,6 @@ describe('config', () => {
         ",
         }
       `)
-    })
-
-    it('should migrate globals ts-jest config to transformer config', async () => {
-      fs.existsSync.mockImplementation(() => true)
-      jest.mock(
-        pkgPaths.next,
-        () => ({
-          jest: {
-            globals: {
-              'ts-jest': {
-                tsconfig: './tsconfig.json',
-              },
-            },
-            transform: { '^.+\\.jsx?$': 'babel-jest', '^.+\\.tsx?$': 'ts-jest' },
-          },
-        }),
-        { virtual: true },
-      )
-
-      const res = await runCli(...noOption, pkgPaths.current)
-
-      expect(res.stdout).toMatchSnapshot()
     })
   }) // migrate
 })

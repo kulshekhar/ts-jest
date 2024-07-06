@@ -110,44 +110,80 @@ exports[`config init should update package.json for config type js-with-ts-full-
 }"
 `;
 
-exports[`config migrate should migrate globals ts-jest config to transformer config 1`] = `
-""jest": {
-  "transform": {
-    "^.+\\\\.tsx?$": [
-      "ts-jest",
-      {
-        "tsconfig": "./tsconfig.json"
-      }
-    ]
+exports[`config migrate should generate transform config with existing transform options for js-with-babel 1`] = `
+"module.exports = {
+  transform: {
+    '^.+.jsx?$': 'babel-jest',
+    '^.+.tsx?$': [
+      'ts-jest',
+      {},
+    ],
   },
-  "preset": "ts-jest/presets/js-with-babel"
+}
+"
+`;
+
+exports[`config migrate should generate transform config with existing transform options for js-with-ts 1`] = `
+"module.exports = {
+  transform: {
+    '^.+.[tj]sx?$': [
+      'ts-jest',
+      {},
+    ],
+    '^.+.tsx?$': [
+      'ts-jest',
+      {},
+    ],
+  },
 }
 "
 `;
 
 exports[`config migrate should migrate preset if valid preset value is used 1`] = `
+""jest": {
+  "transform": {
+    "^.+.tsx?$": [
+      "ts-jest",
+      {}
+    ]
+  }
+}
 "
-No migration needed for given Jest configuration
-    "
 `;
 
 exports[`config migrate should migrate preset if valid preset value is used 2`] = `
 ""jest": {
-  "preset": "ts-jest"
+  "transform": {
+    "^.+.tsx?$": [
+      "ts-jest",
+      {}
+    ]
+  }
 }
 "
 `;
 
 exports[`config migrate should migrate preset if valid preset value is used 3`] = `
+""jest": {
+  "transform": {
+    "^.+.tsx?$": [
+      "ts-jest",
+      {}
+    ]
+  }
+}
 "
-No migration needed for given Jest configuration
-    "
 `;
 
 exports[`config migrate should reset testMatch if testRegex is used 1`] = `
 ""jest": {
   "testRegex": "foo-pattern",
-  "preset": "ts-jest"
+  "transform": {
+    "^.+.tsx?$": [
+      "ts-jest",
+      {}
+    ]
+  }
 }
 "
 `;
@@ -157,7 +193,12 @@ exports[`config migrate should reset testMatch if testRegex is used 2`] = `
   "testRegex": [
     "foo-pattern"
   ],
-  "preset": "ts-jest"
+  "transform": {
+    "^.+.tsx?$": [
+      "ts-jest",
+      {}
+    ]
+  }
 }
 "
 `;
@@ -168,7 +209,12 @@ exports[`config migrate should reset testMatch if testRegex is used 3`] = `
   "testMatch": [
     "**/__tests__/**/*.(spec|test).[tj]s?(x)"
   ],
-  "preset": "ts-jest"
+  "transform": {
+    "^.+.tsx?$": [
+      "ts-jest",
+      {}
+    ]
+  }
 }
 "
 `;
@@ -178,7 +224,12 @@ exports[`config migrate should reset testMatch if testRegex is used 4`] = `
   "testMatch": [
     "**/__tests__/**/*.(spec|test).[tj]s?(x)"
   ],
-  "preset": "ts-jest"
+  "transform": {
+    "^.+.tsx?$": [
+      "ts-jest",
+      {}
+    ]
+  }
 }
 "
 `;
@@ -186,7 +237,12 @@ exports[`config migrate should reset testMatch if testRegex is used 4`] = `
 exports[`config migrate should reset testMatch if testRegex is used 5`] = `
 ""jest": {
   "testRegex": "foo-pattern",
-  "preset": "ts-jest"
+  "transform": {
+    "^.+.tsx?$": [
+      "ts-jest",
+      {}
+    ]
+  }
 }
 "
 `;
