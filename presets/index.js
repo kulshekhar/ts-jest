@@ -1,12 +1,16 @@
-const { JS_EXT_TO_TREAT_AS_ESM, TS_EXT_TO_TREAT_AS_ESM } = require('../dist/constants')
 const {
-  createJestPreset,
   createDefaultPreset,
   createDefaultEsmPreset,
   createJsWithTsPreset,
   createJsWithTsEsmPreset,
   createJsWithBabelPreset,
   createJsWithBabelEsmPreset,
+  createDefaultLegacyPreset,
+  createDefaultEsmLegacyPreset,
+  createJsWithTsLegacyPreset,
+  createJsWithTsEsmLegacyPreset,
+  createJsWithBabelLegacyPreset,
+  createJsWithBabelEsmLegacyPreset,
 } = require('../dist/presets/create-jest-preset')
 
 module.exports = {
@@ -14,47 +18,36 @@ module.exports = {
     return createDefaultPreset()
   },
   get defaultsLegacy() {
-    return createJestPreset(true, false)
+    return createDefaultLegacyPreset()
   },
   get defaultsESM() {
     return createDefaultEsmPreset()
   },
   get defaultsESMLegacy() {
-    return createJestPreset(true, false, { extensionsToTreatAsEsm: TS_EXT_TO_TREAT_AS_ESM })
+    return createDefaultEsmLegacyPreset()
   },
   get jsWithTs() {
     return createJsWithTsPreset()
   },
   get jsWithTsLegacy() {
-    return createJestPreset(true, true)
+    return createJsWithTsLegacyPreset()
   },
   get jsWithTsESM() {
     return createJsWithTsEsmPreset()
   },
   get jsWithTsESMLegacy() {
-    return createJestPreset(true, true, {
-      extensionsToTreatAsEsm: [...JS_EXT_TO_TREAT_AS_ESM, ...TS_EXT_TO_TREAT_AS_ESM],
-    })
+    return createJsWithTsEsmLegacyPreset()
   },
   get jsWithBabel() {
     return createJsWithBabelPreset()
   },
   get jsWithBabelLegacy() {
-    return createJestPreset(true, false, {
-      transform: {
-        '^.+\\.jsx?$': 'babel-jest',
-      },
-    })
+    return createJsWithBabelLegacyPreset()
   },
   get jsWithBabelESM() {
     return createJsWithBabelEsmPreset()
   },
   get jsWithBabelESMLegacy() {
-    return createJestPreset(true, false, {
-      extensionsToTreatAsEsm: [...JS_EXT_TO_TREAT_AS_ESM, ...TS_EXT_TO_TREAT_AS_ESM],
-      transform: {
-        '^.+\\.m?[j]sx?$': 'babel-jest',
-      },
-    })
+    return createJsWithBabelEsmLegacyPreset()
   },
 }
