@@ -1,12 +1,16 @@
 import {
-  JS_EXT_TO_TREAT_AS_ESM,
-  TS_EXT_TO_TREAT_AS_ESM,
   createDefaultPreset,
+  createDefaultLegacyPreset,
   createDefaultEsmPreset,
+  createDefaultEsmLegacyPreset,
   createJsWithTsPreset,
+  createJsWithTsLegacyPreset,
   createJsWithTsEsmPreset,
+  createJsWithTsEsmLegacyPreset,
   createJsWithBabelPreset,
+  createJsWithBabelLegacyPreset,
   createJsWithBabelEsmPreset,
+  createJsWithBabelEsmLegacyPreset,
 } from 'ts-jest'
 // @ts-expect-error we have this file but we don't have type definition for it
 import defaultPreset from 'ts-jest/jest-preset'
@@ -16,46 +20,17 @@ import extendedJestConfig from '../extended-jest-config'
 
 test('presets', () => {
   expect(defaultPreset).toEqual(createDefaultPreset())
-  expect(presets.defaultsLegacy).toEqual({
-    transform: {
-      '^.+\\.tsx?$': ['ts-jest/legacy', {}],
-    },
-  })
+  expect(presets.defaultsLegacy).toEqual(createDefaultLegacyPreset())
   expect(presets.defaultsESM).toEqual(createDefaultEsmPreset())
-  expect(presets.defaultsESMLegacy).toEqual({
-    extensionsToTreatAsEsm: [...TS_EXT_TO_TREAT_AS_ESM],
-    transform: {
-      '^.+\\.tsx?$': ['ts-jest/legacy', { useESM: true }],
-    },
-  })
+  expect(presets.defaultsESMLegacy).toEqual(createDefaultEsmLegacyPreset())
   expect(presets.jsWithTs).toEqual(createJsWithTsPreset())
-  expect(presets.jsWithTsLegacy).toEqual({
-    transform: {
-      '^.+\\.[tj]sx?$': ['ts-jest/legacy', {}],
-    },
-  })
+  expect(presets.jsWithTsLegacy).toEqual(createJsWithTsLegacyPreset())
   expect(presets.jsWithTsESM).toEqual(createJsWithTsEsmPreset())
-  expect(presets.jsWithTsESMLegacy).toEqual({
-    extensionsToTreatAsEsm: [...JS_EXT_TO_TREAT_AS_ESM, ...TS_EXT_TO_TREAT_AS_ESM],
-    transform: {
-      '^.+\\.m?[tj]sx?$': ['ts-jest/legacy', { useESM: true }],
-    },
-  })
+  expect(presets.jsWithTsESMLegacy).toEqual(createJsWithTsEsmLegacyPreset())
   expect(presets.jsWithBabel).toEqual(createJsWithBabelPreset())
-  expect(presets.jsWithBabelLegacy).toEqual({
-    transform: {
-      '^.+\\.tsx?$': ['ts-jest/legacy', {}],
-      '^.+\\.jsx?$': 'babel-jest',
-    },
-  })
+  expect(presets.jsWithBabelLegacy).toEqual(createJsWithBabelLegacyPreset())
   expect(presets.jsWithBabelESM).toEqual(createJsWithBabelEsmPreset())
-  expect(presets.jsWithBabelESMLegacy).toEqual({
-    extensionsToTreatAsEsm: [...JS_EXT_TO_TREAT_AS_ESM, ...TS_EXT_TO_TREAT_AS_ESM],
-    transform: {
-      '^.+\\.tsx?$': ['ts-jest/legacy', { useESM: true }],
-      '^.+\\.m?[j]sx?$': 'babel-jest',
-    },
-  })
+  expect(presets.jsWithBabelESMLegacy).toEqual(createJsWithBabelEsmLegacyPreset())
 })
 
 test('should allow extending jest config without type issues when using create preset util functions', () => {
