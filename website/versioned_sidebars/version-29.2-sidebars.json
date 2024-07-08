@@ -1,0 +1,89 @@
+{
+  "version-29.1-docs": [
+    {
+      "collapsed": true,
+      "type": "category",
+      "label": "ts-jest",
+      "items": [
+        {
+          "type": "doc",
+          "id": "introduction"
+        },
+        {
+          "type": "doc",
+          "id": "processing"
+        },
+        {
+          "type": "doc",
+          "id": "contributing"
+        }
+      ]
+    },
+    {
+      "collapsed": false,
+      "type": "category",
+      "label": "Getting Started",
+      "items": [
+        {
+          "type": "doc",
+          "id": "getting-started/installation"
+        },
+        {
+          "type": "doc",
+          "id": "getting-started/presets"
+        },
+        {
+          "type": "doc",
+          "id": "getting-started/options"
+        },
+        {
+          "type": "doc",
+          "id": "getting-started/paths-mapping"
+        },
+        {
+          "type": "doc",
+          "id": "getting-started/version-checking"
+        }
+      ]
+    },
+    {
+      "collapsed": false,
+      "type": "category",
+      "label": "Guides",
+      "items": [
+        {
+          "type": "doc",
+          "id": "guides/esm-support"
+        },
+        {
+          "type": "doc",
+          "id": "guides/mock-es6-class"
+        },
+        {
+          "type": "doc",
+          "id": "guides/react-native"
+        },
+        {
+          "type": "doc",
+          "id": "guides/troubleshooting"
+        },
+        {
+          "type": "doc",
+          "id": "guides/using-with-monorepo"
+        }
+      ]
+    },
+    {
+      "type": "doc",
+      "id": "babel7-or-ts"
+    },
+    {
+      "type": "doc",
+      "id": "migration"
+    },
+    {
+      "type": "doc",
+      "id": "debugging"
+    }
+  ]
+}
