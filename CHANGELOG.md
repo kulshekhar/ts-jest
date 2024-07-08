@@ -1,4 +1,4 @@
-## 29.2.0 (2024-07-08)
+## [29.2.0](https://github.com/kulshekhar/ts-jest/compare/v29.1.5...v29.2.0) (2024-07-08)
 
 
 ### Bug Fixes
@@ -29,7 +29,7 @@
 
 
 
-## [29.1.5](https://github.com/kulshekhar/ts-jest/compare/v29.1.4...v29.1.5) (2024-06-16)
+### [29.1.5](https://github.com/kulshekhar/ts-jest/compare/v29.1.4...v29.1.5) (2024-06-16)
 
 
 ### Bug Fixes
@@ -38,7 +38,7 @@
 
 
 
-## [29.1.4](https://github.com/kulshekhar/ts-jest/compare/v29.1.3...v29.1.4) (2024-05-28)
+### [29.1.4](https://github.com/kulshekhar/ts-jest/compare/v29.1.3...v29.1.4) (2024-05-28)
 
 
 ### Bug Fixes
@@ -52,7 +52,7 @@
 
 
 
-## [29.1.3](https://github.com/kulshekhar/ts-jest/compare/v29.1.2...v29.1.3) (2024-05-21)
+### [29.1.3](https://github.com/kulshekhar/ts-jest/compare/v29.1.2...v29.1.3) (2024-05-21)
 
 
 ### Bug Fixes
@@ -67,7 +67,7 @@
 
 
 
-## [29.1.2](https://github.com/kulshekhar/ts-jest/compare/v29.1.1...v29.1.2) (2024-01-22)
+### [29.1.2](https://github.com/kulshekhar/ts-jest/compare/v29.1.1...v29.1.2) (2024-01-22)
 
 
 ### Bug Fixes
@@ -87,7 +87,7 @@
 
 
 
-# [29.1.0](https://github.com/kulshekhar/ts-jest/compare/v29.0.5...v29.1.0) (2023-03-26)
+## [29.1.0](https://github.com/kulshekhar/ts-jest/compare/v29.0.5...v29.1.0) (2023-03-26)
 
 
 ### Features
@@ -96,7 +96,7 @@
 
 
 
-## [29.0.5](https://github.com/kulshekhar/ts-jest/compare/v29.0.4...v29.0.5) (2023-01-13)
+### [29.0.5](https://github.com/kulshekhar/ts-jest/compare/v29.0.4...v29.0.5) (2023-01-13)
 
 
 ### Reverts
@@ -105,7 +105,7 @@
 
 
 
-## [29.0.4](https://github.com/kulshekhar/ts-jest/compare/v29.0.3...v29.0.4) (2023-01-10)
+### [29.0.4](https://github.com/kulshekhar/ts-jest/compare/v29.0.3...v29.0.4) (2023-01-10)
 
 
 ### Bug Fixes
@@ -115,7 +115,7 @@
 
 
 
-## [29.0.3](https://github.com/kulshekhar/ts-jest/compare/v29.0.2...v29.0.3) (2022-09-28)
+### [29.0.3](https://github.com/kulshekhar/ts-jest/compare/v29.0.2...v29.0.3) (2022-09-28)
 
 
 ### Bug Fixes
@@ -130,7 +130,7 @@
 
 
 
-## [29.0.2](https://github.com/kulshekhar/ts-jest/compare/v29.0.1...v29.0.2) (2022-09-23)
+### [29.0.2](https://github.com/kulshekhar/ts-jest/compare/v29.0.1...v29.0.2) (2022-09-23)
 
 
 ### Bug Fixes
@@ -140,16 +140,7 @@
 
 
 
-## [29.0.2](https://github.com/kulshekhar/ts-jest/compare/v29.0.1...v29.0.2) (2022-09-22)
-
-
-### Bug Fixes
-
-* mark `ts-jest` as optional in `ConfigGlobals` ([#3816](https://github.com/kulshekhar/ts-jest/issues/3816)) ([cbb88bb](https://github.com/kulshekhar/ts-jest/commit/cbb88bba34dbb852d8f4013be6e020769feb306d)), closes [#3815](https://github.com/kulshekhar/ts-jest/issues/3815)
-
-
-
-## [29.0.1](https://github.com/kulshekhar/ts-jest/compare/v29.0.0...v29.0.1) (2022-09-13)
+### [29.0.1](https://github.com/kulshekhar/ts-jest/compare/v29.0.0...v29.0.1) (2022-09-13)
 
 
 ### Bug Fixes
