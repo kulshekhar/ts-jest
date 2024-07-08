@@ -20,15 +20,15 @@ exports[`TsCompiler getCompiledOutput isolatedModules false should compile codes
 {
   "allowSyntheticDefaultImports": true,
   "esModuleInterop": true,
-  "module": 99,
+  "module": 1,
 }
 `;
 
 exports[`TsCompiler getCompiledOutput isolatedModules false should compile codes with useESM {"babelConfig": true, "supportsStaticESM": false, "useESM": true} 1`] = `
 {
-  "allowSyntheticDefaultImports": true,
+  "allowSyntheticDefaultImports": undefined,
   "esModuleInterop": true,
-  "module": 99,
+  "module": 1,
 }
 `;
 
@@ -52,14 +52,14 @@ exports[`TsCompiler getCompiledOutput isolatedModules true should transpile code
 {
   "allowSyntheticDefaultImports": true,
   "esModuleInterop": true,
-  "module": 99,
+  "module": 1,
 }
 `;
 
 exports[`TsCompiler getCompiledOutput isolatedModules true should transpile code with config {"babelConfig": true, "supportsStaticESM": false, "useESM": true} 1`] = `
 {
-  "allowSyntheticDefaultImports": true,
+  "allowSyntheticDefaultImports": undefined,
   "esModuleInterop": true,
-  "module": 99,
+  "module": 1,
 }
 `;
