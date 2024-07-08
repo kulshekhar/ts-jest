@@ -146,34 +146,41 @@ export class TsCompiler implements TsCompilerInstance {
     return importedModulePaths
   }
 
+  private fixupCompilerOptionsForModuleKind(compilerOptions: CompilerOptions, isEsm: boolean): CompilerOptions {
+    if (!isEsm) {
+      const moduleKind = compilerOptions.module ?? this._ts.ModuleKind.CommonJS
+      const moduleKindValue = [
+        this._ts.ModuleKind.CommonJS,
+        this._ts.ModuleKind.Node16,
+        this._ts.ModuleKind.NodeNext,
+      ].includes(moduleKind)
+        ? moduleKind
+        : this._ts.ModuleKind.CommonJS
+
+      return {
+        ...compilerOptions,
+        module: moduleKindValue,
+      }
+    }
+
+    const moduleKind = compilerOptions.module ?? this._ts.ModuleKind.ESNext
+    const esModuleInterop = [this._ts.ModuleKind.Node16, this._ts.ModuleKind.NodeNext].includes(moduleKind)
+      ? true
+      : compilerOptions.esModuleInterop
+
+    return {
+      ...compilerOptions,
+      module: moduleKind,
+      esModuleInterop: esModuleInterop ?? false,
+      allowSyntheticDefaultImports: esModuleInterop ?? compilerOptions.allowSyntheticDefaultImports,
+    }
+  }
+
   getCompiledOutput(fileContent: string, fileName: string, options: TsJestCompileOptions): CompiledOutput {
-    let moduleKind = this._initialCompilerOptions.module
-    let esModuleInterop = this._initialCompilerOptions.esModuleInterop
-    let allowSyntheticDefaultImports = this._initialCompilerOptions.allowSyntheticDefaultImports
+    const moduleKind = this._initialCompilerOptions.module
     const currentModuleKind = this._compilerOptions.module
     const isEsmMode = this.configSet.useESM && options.supportsStaticESM
-    if (
-      (this.configSet.babelJestTransformer || (!this.configSet.babelJestTransformer && options.supportsStaticESM)) &&
-      this.configSet.useESM
-    ) {
-      moduleKind =
-        !moduleKind ||
-        (moduleKind &&
-          ![this._ts.ModuleKind.ES2015, this._ts.ModuleKind.ES2020, this._ts.ModuleKind.ESNext].includes(moduleKind))
-          ? this._ts.ModuleKind.ESNext
-          : moduleKind
-      // Make sure `esModuleInterop` and `allowSyntheticDefaultImports` true to support import CJS into ESM
-      esModuleInterop = true
-      allowSyntheticDefaultImports = true
-    } else {
-      moduleKind = this._ts.ModuleKind.CommonJS
-    }
-    this._compilerOptions = {
-      ...this._compilerOptions,
-      allowSyntheticDefaultImports,
-      esModuleInterop,
-      module: moduleKind,
-    }
+    this._compilerOptions = this.fixupCompilerOptionsForModuleKind(this._initialCompilerOptions, isEsmMode)
     if (this._languageService) {
       this._logger.debug({ fileName }, 'getCompiledOutput(): compiling using language service')
 

@@ -1,12 +1,13 @@
-import { pathsToModuleNameMapper } from '../../dist/index.js'
+import { pathsToModuleNameMapper, createDefaultEsmPreset } from '../../dist/index.js'
 import { createRequire } from 'module'
 
 const require = createRequire(import.meta.url)
 const tsConfig = require('./tsconfig.json')
+const esmPreset = createDefaultEsmPreset()
 
 /** @type {import('../../dist').JestConfigWithTsJest} */
 export default {
-  extensionsToTreatAsEsm: ['.ts'],
+  ...esmPreset,
   resolver: '<rootDir>/mjs-resolver.ts',
   moduleNameMapper: pathsToModuleNameMapper(tsConfig.compilerOptions.paths, {
     prefix: '<rootDir>',
