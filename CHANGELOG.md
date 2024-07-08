@@ -22,7 +22,7 @@
 * test: switch `react-app` to use Vite ([827c8ad](https://github.com/kulshekhar/ts-jest/commit/827c8ad))
 
 
-### DEPRECATIONS
+## DEPRECATIONS
 
 * refactor(cli): deprecate cli option `babel` ([9617029](https://github.com/kulshekhar/ts-jest/commit/9617029)). Please use CLI argument `--js babel` instead.
 * `createJestPreset` is deprecated. Please check documentation at https://kulshekhar.github.io/ts-jest/docs/getting-started/presets to see alternative solutions.
