@@ -1,3 +1,34 @@
+## 29.2.0 (2024-07-08)
+
+
+### Bug Fixes
+
+* fix: don't show warning message with Node16/NodeNext ([99c4f49](https://github.com/kulshekhar/ts-jest/commit/99c4f49)), closes [#4266](https://github.com/kulshekhar/ts-jest/issues/4266)
+
+
+### Features
+
+* feat(cli): allow migrating cjs `presets` to `transform` config ([22fb027](https://github.com/kulshekhar/ts-jest/commit/22fb027))
+* feat(presets): add util functions to create ESM presets ([06f78ed](https://github.com/kulshekhar/ts-jest/commit/06f78ed))
+* feat(presets): add util functions to create CJS presets ([f9cc3c0](https://github.com/kulshekhar/ts-jest/commit/f9cc3c0))
+
+
+### Code refactoring
+
+* refactor: replace lodash deps with native js implementation ([40f1708](https://github.com/kulshekhar/ts-jest/commit/40f1708))
+* refactor: use `TsJestTransformerOptions` type everywhere possibly ([7d001be](https://github.com/kulshekhar/ts-jest/commit/7d001be))
+* refactor(cli): use new preset util functions to initialize test config ([c2b56ca](https://github.com/kulshekhar/ts-jest/commit/c2b56ca))
+* refactor(presets): use create preset util functions for cjs presets ([922d6d0](https://github.com/kulshekhar/ts-jest/commit/922d6d0))
+* test: switch `react-app` to use Vite ([827c8ad](https://github.com/kulshekhar/ts-jest/commit/827c8ad))
+
+
+### DEPRECATIONS
+
+* refactor(cli): deprecate cli option `babel` ([9617029](https://github.com/kulshekhar/ts-jest/commit/9617029)). Please use CLI argument `--js babel` instead.
+* `createJestPreset` is deprecated. Please check documentation at https://kulshekhar.github.io/ts-jest/docs/getting-started/presets to see alternative solutions.
+
+
+
 ## [29.1.5](https://github.com/kulshekhar/ts-jest/compare/v29.1.4...v29.1.5) (2024-06-16)
 
 
