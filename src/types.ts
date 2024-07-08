@@ -196,14 +196,6 @@ export interface JestConfigWithTsJest extends Omit<Config.InitialOptions, 'trans
   }
 }
 
-/**
- * @deprecated use `DefaultPreset`/`JsWithTsPreset`/`JsWithBabelPreset` instead
- */
-export type TsJestPresets = Pick<
-  JestConfigWithTsJest,
-  'extensionsToTreatAsEsm' | 'moduleFileExtensions' | 'transform' | 'testMatch'
->
-
 export type StringMap = Map<string, string>
 export interface DepGraphInfo {
   fileContent: string
@@ -245,7 +237,15 @@ export interface TsJestAstTransformer {
   afterDeclarations: AstTransformerDesc[]
 }
 
-export type DefaultTransformOptions = Omit<TsJestTransformerOptions, 'useESM' | 'babelConfig'>
+/**
+ * @deprecated use other preset types below instead
+ */
+export type TsJestPresets = Pick<
+  JestConfigWithTsJest,
+  'extensionsToTreatAsEsm' | 'moduleFileExtensions' | 'transform' | 'testMatch'
+>
+
+export type DefaultTransformOptions = Omit<TsJestTransformerOptions, 'useESM'>
 export type DefaultPreset = {
   transform: {
     [TS_TRANSFORM_PATTERN]: ['ts-jest', DefaultTransformOptions]
@@ -271,7 +271,7 @@ export type DefaultEsmLegacyPreset = {
   }
 }
 
-export type JsWithTsTransformOptions = Omit<TsJestTransformerOptions, 'useESM' | 'babelConfig'>
+export type JsWithTsTransformOptions = Omit<TsJestTransformerOptions, 'useESM'>
 export type JsWithTsPreset = {
   transform: {
     [TS_JS_TRANSFORM_PATTERN]: ['ts-jest', JsWithTsTransformOptions]
