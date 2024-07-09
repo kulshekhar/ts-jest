@@ -12,7 +12,7 @@
     "importHelpers": true,
     "skipLibCheck": true,
     "target": "ESNext",
-    "module": "CommonJS",
+    "module": "Node16",
     "lib": ["ESNext", "dom"],
     "types": ["jest"]
   }

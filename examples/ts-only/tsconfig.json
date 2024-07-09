@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "module": "CommonJS",
+    "module": "Node16",
     "target": "ESNext",
     "skipLibCheck": true,
     "types": ["jest"]
