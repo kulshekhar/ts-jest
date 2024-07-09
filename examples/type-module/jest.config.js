@@ -1,8 +1,8 @@
-import preset from 'ts-jest/presets/index.js'
+import { createDefaultPreset } from 'ts-jest'
 
 /** @type {import('ts-jest').JestConfigWithTsJest} */
 const jestConfig = {
-  ...preset.defaults,
+  ...createDefaultPreset(),
 }
 
 export default jestConfig

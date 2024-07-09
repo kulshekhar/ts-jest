@@ -1,16 +1,10 @@
-import preset from 'ts-jest/presets/index.js'
+import { createDefaultPreset } from 'ts-jest'
 
 /** @type {import('ts-jest').JestConfigWithTsJest} */
 const jestConfig = {
-  ...preset.defaults,
-  transform: {
-    '^.+\\.tsx?$': [
-      'ts-jest',
-      {
-        isolatedModules: true,
-      },
-    ],
-  },
+  ...createDefaultPreset({
+    isolatedModules: true,
+  }),
 }
 
 export default jestConfig
