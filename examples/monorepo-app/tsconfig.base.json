@@ -9,10 +9,11 @@
     "declaration": false,
     "downlevelIteration": true,
     "experimentalDecorators": true,
-    "moduleResolution": "node",
     "importHelpers": true,
+    "skipLibCheck": true,
     "target": "ESNext",
     "module": "CommonJS",
-    "lib": ["ESNext", "dom"]
+    "lib": ["ESNext", "dom"],
+    "types": ["jest"]
   }
 }

@@ -2,6 +2,9 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "module": "CommonJS",
-    "moduleResolution": "Node"
+    "target": "ESNext",
+    "moduleResolution": "Node10",
+    "skipLibCheck": true,
+    "types": ["jest"]
   }
 }
