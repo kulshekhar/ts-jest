@@ -1,18 +1,11 @@
-import preset from 'ts-jest/presets/index.js'
+import { createDefaultEsmPreset } from 'ts-jest'
 
 /** @type {import('ts-jest').JestConfigWithTsJest} */
 const jestConfig = {
-  ...preset.defaultsESM,
-  transform: {
-    '^.+\\.tsx?$': [
-      'ts-jest',
-      {
-        isolatedModules: true,
-        tsconfig: 'tsconfig-esm.json',
-        useESM: true,
-      },
-    ],
-  },
+  ...createDefaultEsmPreset({
+    tsconfig: 'tsconfig-esm.json',
+    isolatedModules: true,
+  }),
 }
 
 export default jestConfig

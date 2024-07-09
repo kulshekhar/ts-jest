@@ -1,17 +1,17 @@
-import baseCfg from './jest.config.cjs'
+import { createDefaultEsmPreset } from 'ts-jest'
+
+const defaultPreset = createDefaultEsmPreset({
+  tsconfig: 'tsconfig-esm.spec.json',
+})
 
 /** @type {import('ts-jest').JestConfigWithTsJest} */
 export default {
-  ...baseCfg,
-  preset: 'ts-jest/presets/js-with-babel-esm',
+  ...defaultPreset,
+  setupFilesAfterEnv: ['<rootDir>/src/setupTests.ts'],
+  testEnvironment: 'jsdom',
   transform: {
-    ...baseCfg.transform,
-    '^.+\\.(ts|tsx|js|jsx|mjs|cjs)$': [
-      'ts-jest',
-      {
-        tsconfig: 'tsconfig-esm.spec.json',
-        useESM: true,
-      },
-    ],
+    ...defaultPreset.transform,
+    '^.+\\.css$': '<rootDir>/config/jest/cssTransform.js',
+    '^(?!.*\\.(js|jsx|mjs|cjs|ts|tsx|css|json)$)': '<rootDir>/config/jest/fileTransform.js',
   },
 }

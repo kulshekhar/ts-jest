@@ -1,6 +1,6 @@
-const preset = require('ts-jest/presets');
+const { createDefaultPreset } = require('ts-jest');
 
 /** @type {import('ts-jest').JestConfigWithTsJest} */
 module.exports = {
-  ...preset.defaults,
+  ...createDefaultPreset()
 }
