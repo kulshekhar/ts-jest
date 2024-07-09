@@ -52,6 +52,7 @@
   "homepage": "https://kulshekhar.github.io/ts-jest",
   "dependencies": {
     "bs-logger": "0.x",
+    "ejs": "^3.0.0",
     "fast-json-stable-stringify": "2.x",
     "jest-util": "^29.0.0",
     "json5": "^2.2.3",
@@ -116,7 +117,6 @@
     "babel-jest": "^29.7.0",
     "conventional-changelog-cli": "^5.0.0",
     "cross-spawn": "latest",
-    "ejs": "^3.1.10",
     "esbuild": "~0.21.5",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
