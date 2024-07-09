@@ -1,8 +1,9 @@
 {
   "compilerOptions": {
     "module": "CommonJS",
-    "target": "ES2015",
-    "allowJs": true
-  },
-  "files": ["globals.d.ts"]
+    "target": "ESNext",
+    "allowJs": true,
+    "types": ["jest"],
+    "skipLibCheck": true
+  }
 }

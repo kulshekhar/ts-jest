@@ -1,7 +1,8 @@
 {
   "compilerOptions": {
     "module": "CommonJS",
-    "target": "ES2021"
-  },
-  "files": ["globals.d.ts"]
+    "target": "ESNext",
+    "skipLibCheck": true,
+    "types": ["jest"]
+  }
 }
