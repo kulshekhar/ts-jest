@@ -5,6 +5,7 @@ import type { CompilerOptions, EmitOutput, transpileModule, TranspileOutput } fr
 import * as ts from 'typescript'
 
 import { createConfigSet, makeCompiler } from '../../__helpers__/fakers'
+import type { RawCompilerOptions } from '../../raw-compiler-options'
 import type { DepGraphInfo } from '../../types'
 import { Errors, interpolate } from '../../utils/messages'
 
@@ -190,64 +191,80 @@ describe('TsCompiler', () => {
       test.each([
         {
           useESM: true,
-          babelConfig: true,
-          supportsStaticESM: false,
-        },
-        {
-          useESM: true,
-          babelConfig: false,
           supportsStaticESM: true,
+          moduleValue: 'ESNext',
+          expectedModule: ts.ModuleKind.ESNext,
+          expectedEsModuleInterop: false,
         },
         {
           useESM: true,
-          babelConfig: false,
+          supportsStaticESM: true,
+          moduleValue: 'NodeNext',
+          expectedModule: ts.ModuleKind.NodeNext,
+          expectedEsModuleInterop: true,
+        },
+        {
+          useESM: true,
           supportsStaticESM: false,
+          moduleValue: 'ESNext',
+          expectedModule: ts.ModuleKind.CommonJS,
+          expectedEsModuleInterop: false,
         },
         {
           useESM: false,
-          babelConfig: false,
           supportsStaticESM: true,
+          moduleValue: 'ESNext',
+          expectedModule: ts.ModuleKind.CommonJS,
+          expectedEsModuleInterop: false,
         },
-      ])('should compile codes with useESM %p', ({ useESM, babelConfig, supportsStaticESM }) => {
-        const configSet = createConfigSet({
-          tsJestConfig: { ...baseTsJestConfig, useESM, babelConfig },
-        })
-        const emptyFile = join(mockFolder, 'empty.ts')
-        configSet.parsedTsConfig.fileNames.push(emptyFile)
-        const compiler = new TsCompiler(configSet, new Map())
-        // @ts-expect-error testing purpose
-        compiler._languageService.getEmitOutput = jest.fn().mockReturnValueOnce({
-          outputFiles: [{ text: sourceMap }, { text: jsOutput }],
-          emitSkipped: false,
-        } as EmitOutput)
-        // @ts-expect-error testing purpose
-        compiler.getDiagnostics = jest.fn().mockReturnValue([])
+      ])(
+        'should compile codes with useESM %p',
+        ({ useESM, supportsStaticESM, moduleValue, expectedModule, expectedEsModuleInterop }) => {
+          const configSet = createConfigSet({
+            tsJestConfig: {
+              ...baseTsJestConfig,
+              useESM,
+              tsconfig: {
+                module: moduleValue as unknown as RawCompilerOptions['module'],
+                esModuleInterop: false,
+              },
+            },
+          })
+          const emptyFile = join(mockFolder, 'empty.ts')
+          configSet.parsedTsConfig.fileNames.push(emptyFile)
+          const compiler = new TsCompiler(configSet, new Map())
+          // @ts-expect-error testing purpose
+          compiler._languageService.getEmitOutput = jest.fn().mockReturnValueOnce({
+            outputFiles: [{ text: sourceMap }, { text: jsOutput }],
+            emitSkipped: false,
+          } as EmitOutput)
+          // @ts-expect-error testing purpose
+          compiler.getDiagnostics = jest.fn().mockReturnValue([])
 
-        const output = compiler.getCompiledOutput(fileContent, fileName, {
-          depGraphs: new Map(),
-          supportsStaticESM,
-          watchMode: false,
-        })
+          const output = compiler.getCompiledOutput(fileContent, fileName, {
+            depGraphs: new Map(),
+            supportsStaticESM,
+            watchMode: false,
+          })
 
-        // @ts-expect-error testing purpose
-        const usedCompilerOptions = compiler._compilerOptions
-        expect({
-          module: usedCompilerOptions.module,
-          esModuleInterop: usedCompilerOptions.esModuleInterop,
-          allowSyntheticDefaultImports: usedCompilerOptions.allowSyntheticDefaultImports,
-        }).toMatchSnapshot()
-        expect(output).toEqual({
-          code: updateOutput(jsOutput, fileName, sourceMap),
-          diagnostics: [],
-        })
+          // @ts-expect-error testing purpose
+          const usedCompilerOptions = compiler._compilerOptions
 
-        // @ts-expect-error testing purpose
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        compiler._languageService!.getSemanticDiagnostics(fileName)
+          expect(usedCompilerOptions.module).toBe(expectedModule)
+          expect(usedCompilerOptions.esModuleInterop).toBe(expectedEsModuleInterop)
+          expect(output).toEqual({
+            code: updateOutput(jsOutput, fileName, sourceMap),
+            diagnostics: [],
+          })
 
-        // @ts-expect-error testing purpose
-        expect(compiler._fileContentCache.has(emptyFile)).toBe(true)
-      })
+          // @ts-expect-error testing purpose
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          compiler._languageService!.getSemanticDiagnostics(fileName)
+
+          // @ts-expect-error testing purpose
+          expect(compiler._fileContentCache.has(emptyFile)).toBe(true)
+        },
+      )
 
       test('should show a warning message and return original file content for non ts/tsx files if emitSkipped is true', () => {
         const compiler = makeCompiler({
