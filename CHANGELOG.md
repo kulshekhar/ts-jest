@@ -9,8 +9,8 @@
 ### Features
 
 * feat(cli): allow migrating cjs `presets` to `transform` config ([22fb027](https://github.com/kulshekhar/ts-jest/commit/22fb027))
-* feat(presets): add util functions to create ESM presets ([06f78ed](https://github.com/kulshekhar/ts-jest/commit/06f78ed))
-* feat(presets): add util functions to create CJS presets ([f9cc3c0](https://github.com/kulshekhar/ts-jest/commit/f9cc3c0))
+* feat(presets): add util functions to create ESM presets ([06f78ed](https://github.com/kulshekhar/ts-jest/commit/06f78ed)), close [#4200](https://github.com/kulshekhar/ts-jest/issues/4200)
+* feat(presets): add util functions to create CJS presets ([f9cc3c0](https://github.com/kulshekhar/ts-jest/commit/f9cc3c0)), close [#4200](https://github.com/kulshekhar/ts-jest/issues/4200)
 
 
 ### Code refactoring
