@@ -1,3 +1,12 @@
+### [29.2.2](https://github.com/kulshekhar/ts-jest/compare/v29.2.1...v29.2.2) (2024-07-10)
+
+
+### Bug Fixes
+
+* fix(compiler): update memory cache after changing `module` value ([94db43f](https://github.com/kulshekhar/ts-jest/commit/94db43f)), closes [#4439](https://github.com/kulshekhar/ts-jest/issues/4439)
+
+
+
 ### [29.2.1](https://github.com/kulshekhar/ts-jest/compare/v29.2.0...v29.2.1) (2024-07-10)
 
 
