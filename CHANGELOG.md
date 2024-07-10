@@ -1,3 +1,14 @@
+### [29.2.1](https://github.com/kulshekhar/ts-jest/compare/v29.2.0...v29.2.1) (2024-07-10)
+
+
+### Bug Fixes
+
+* fix: move `ejs` to `dep` instead of `peerDep` ([26e31a7](https://github.com/kulshekhar/ts-jest/commit/26e31a7))
+* fix: set `allowSyntheticDefaultImports` properly ([ff4b302](https://github.com/kulshekhar/ts-jest/commit/ff4b302)), closes [#4156](https://github.com/kulshekhar/ts-jest/issues/4156)
+* fix(compiler): support `Node16/NodeNext` value for `target` ([2f5cc0c](https://github.com/kulshekhar/ts-jest/commit/2f5cc0c)), closes [#4198](https://github.com/kulshekhar/ts-jest/issues/4198)
+
+
+
 ## [29.2.0](https://github.com/kulshekhar/ts-jest/compare/v29.1.5...v29.2.0) (2024-07-08)
 
 
