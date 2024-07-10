@@ -172,7 +172,6 @@ export class TsCompiler implements TsCompilerInstance {
       ...compilerOptions,
       module: moduleKind,
       esModuleInterop: esModuleInterop ?? false,
-      allowSyntheticDefaultImports: esModuleInterop ?? compilerOptions.allowSyntheticDefaultImports,
     }
   }
 

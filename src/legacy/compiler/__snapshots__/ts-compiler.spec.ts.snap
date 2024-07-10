@@ -18,7 +18,7 @@ exports[`TsCompiler getCompiledOutput isolatedModules false should compile codes
 
 exports[`TsCompiler getCompiledOutput isolatedModules false should compile codes with useESM {"babelConfig": false, "supportsStaticESM": true, "useESM": true} 1`] = `
 {
-  "allowSyntheticDefaultImports": true,
+  "allowSyntheticDefaultImports": undefined,
   "esModuleInterop": true,
   "module": 1,
 }
@@ -50,7 +50,7 @@ exports[`TsCompiler getCompiledOutput isolatedModules true should transpile code
 
 exports[`TsCompiler getCompiledOutput isolatedModules true should transpile code with config {"babelConfig": false, "supportsStaticESM": true, "useESM": true} 1`] = `
 {
-  "allowSyntheticDefaultImports": true,
+  "allowSyntheticDefaultImports": undefined,
   "esModuleInterop": true,
   "module": 1,
 }

@@ -487,11 +487,6 @@ export class ConfigSet {
         start: undefined,
         length: undefined,
       })
-      // at least enable synthetic default imports (except if it's set in the input config)
-      /* istanbul ignore next (already covered in unit test) */
-      if (!('allowSyntheticDefaultImports' in finalOptions)) {
-        finalOptions.allowSyntheticDefaultImports = true
-      }
     }
     // Make sure when allowJs is enabled, outDir is required to have when using allowJs: true
     if (finalOptions.allowJs && !finalOptions.outDir) {

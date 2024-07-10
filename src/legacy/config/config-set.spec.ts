@@ -97,7 +97,6 @@ describe('parsedTsConfig', () => {
 
     expect(cs.parsedTsConfig.options).toMatchObject({
       module: ts.ModuleKind.AMD,
-      allowSyntheticDefaultImports: true,
       esModuleInterop: false,
     })
     expect(target.lines.warn.join()).toEqual(expect.stringContaining(Errors.ConfigNoModuleInterop))
@@ -839,7 +838,6 @@ describe('_resolveTsConfig', () => {
         expect(readConfig.mock.calls[0][0]).toBe(tscfgPathStub)
         expect(parseConfig.mock.calls[0][2]).toBe('/root')
         expect(parseConfig.mock.calls[0][4]).toBe(tscfgPathStub)
-        expect(conf.options.allowSyntheticDefaultImports).toEqual(true)
         expect(conf.errors).toMatchSnapshot()
       })
 
