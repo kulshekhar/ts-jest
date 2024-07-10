@@ -176,10 +176,10 @@ export class TsCompiler implements TsCompilerInstance {
   }
 
   getCompiledOutput(fileContent: string, fileName: string, options: TsJestCompileOptions): CompiledOutput {
-    const moduleKind = this._initialCompilerOptions.module
-    const currentModuleKind = this._compilerOptions.module
     const isEsmMode = this.configSet.useESM && options.supportsStaticESM
     this._compilerOptions = this.fixupCompilerOptionsForModuleKind(this._initialCompilerOptions, isEsmMode)
+    const moduleKind = this._initialCompilerOptions.module
+    const currentModuleKind = this._compilerOptions.module
     if (this._languageService) {
       this._logger.debug({ fileName }, 'getCompiledOutput(): compiling using language service')
 
