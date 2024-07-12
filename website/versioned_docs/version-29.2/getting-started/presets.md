@@ -3,21 +3,739 @@ id: presets
 title: Presets
 ---
 
-### The presets
+In Jest, **presets** are pre-defined configurations that help streamline and standardize the process of setting up testing environments.
+They allow developers to quickly configure Jest with specific transformers, file extensions, and other options.
+
+`ts-jest` provides very opinionated presets and based on what we found to be useful.
 
 :::important
 
-Starting from **v28.0.0**, `ts-jest` will gradually opt in adoption of `esbuild`/`swc` more to improve the performance. To make the transition smoothly, we introduce `legacy` presets as a fallback when the new codes don't work yet.
+The current best practice for using presets is to call one of the utility functions below to create (and optionally extend) presets. Legacy presets are listed at the bottom of the page.
 
 :::
 
-:::caution
+## Functions
 
-The list of `preset` below is now deprecated in favor of util functions. If one is using `preset` in Jest config, please run `npx ts-jest config:migrate` or look into [Advanced](#advanced) section below for alternative solutions.
+import TOCInline from '@theme/TOCInline';
+
+<TOCInline toc={toc.slice(1)} />
+
+---
+
+### `createDefaultPreset(options)`
+
+Create a configuration to process TypeScript files (`.ts`/`.tsx`).
+
+#### Parameters
+
+- `options` (**OPTIONAL**)
+  - `tsconfig`: see more at [tsconfig options page](./options/tsconfig.md)
+  - `isolatedModules`: see more at [isolatedModules options page](./options/isolatedModules.md)
+  - `compiler`: see more at [compiler options page](./options/compiler.md)
+  - `astTransformers`: see more at [astTransformers options page](./options/astTransformers.md)
+  - `diagnostics`: see more at [diagnostics options page](./options/diagnostics.md)
+  - `stringifyContentPathRegex`: see more at [stringifyContentPathRegex options page](./options/stringifyContentPathRegex.md)
+
+#### Returns
+
+An object contains Jest's `transform` property:
+
+```ts
+interface TsJestTransformerOptions {
+  tsconfig?: boolean | string | RawCompilerOptions
+  isolatedModules?: boolean
+  astTransformers?: ConfigCustomTransformer
+  diagnostics?:
+    | boolean
+    | {
+        pretty?: boolean
+        ignoreCodes?: number | string | Array<number | string>
+        exclude?: string[]
+        warnOnly?: boolean
+      }
+  stringifyContentPathRegex?: string | RegExp
+}
+
+export type DefaultPreset = {
+  transform: {
+    '^.+.tsx?$': ['ts-jest', TsJestTransformerOptions]
+  }
+}
+```
+
+#### Example:
+
+```ts
+// jest.config.ts
+import { createDefaultPreset, type JestConfigWithTsJest } from 'ts-jest'
+
+const presetConfig = createDefaultPreset({
+  //...options
+})
+
+const jestConfig: JestConfigWithTsJest = {
+  ...presetConfig,
+}
+
+export default jestConfig
+```
+
+### `createDefaultLegacyPreset(options)`
+
+Create a **LEGACY** configuration to process TypeScript files (`.ts`, `.tsx`).
+
+#### Parameters
+
+- `options` (**OPTIONAL**)
+  - `tsconfig`: see more at [tsconfig options page](./options/tsconfig.md)
+  - `isolatedModules`: see more at [isolatedModules options page](./options/isolatedModules.md)
+  - `compiler`: see more at [compiler options page](./options/compiler.md)
+  - `astTransformers`: see more at [astTransformers options page](./options/astTransformers.md)
+  - `diagnostics`: see more at [diagnostics options page](./options/diagnostics.md)
+  - `stringifyContentPathRegex`: see more at [stringifyContentPathRegex options page](./options/stringifyContentPathRegex.md)
+
+#### Returns
+
+An object contains Jest's `transform` property:
+
+```ts
+interface TsJestTransformerOptions {
+  tsconfig?: boolean | string | RawCompilerOptions
+  isolatedModules?: boolean
+  astTransformers?: ConfigCustomTransformer
+  diagnostics?:
+    | boolean
+    | {
+        pretty?: boolean
+        ignoreCodes?: number | string | Array<number | string>
+        exclude?: string[]
+        warnOnly?: boolean
+      }
+  stringifyContentPathRegex?: string | RegExp
+}
+
+export type DefaultPreset = {
+  transform: {
+    '^.+.tsx?$': ['ts-jest/legacy', TsJestTransformerOptions]
+  }
+}
+```
+
+#### Example:
+
+```ts
+// jest.config.ts
+import { createDefaultLegacyPreset, type JestConfigWithTsJest } from 'ts-jest'
+
+const presetConfig = createDefaultPreset({
+  //...optionsa
+})
+
+const jestConfig: JestConfigWithTsJest = {
+  ...presetConfig,
+}
+
+export default jestConfig
+```
+
+### `createDefaultEsmPreset(options)`
+
+Create an ESM configuration to process TypeScript files (`.ts`/`.mts`/`.tsx`/`.mtsx`).
+
+#### Parameters
+
+- `options` (**OPTIONAL**)
+  - `tsconfig`: see more at [tsconfig options page](./options/tsconfig.md)
+  - `isolatedModules`: see more at [isolatedModules options page](./options/isolatedModules.md)
+  - `compiler`: see more at [compiler options page](./options/compiler.md)
+  - `astTransformers`: see more at [astTransformers options page](./options/astTransformers.md)
+  - `diagnostics`: see more at [diagnostics options page](./options/diagnostics.md)
+  - `stringifyContentPathRegex`: see more at [stringifyContentPathRegex options page](./options/stringifyContentPathRegex.md)
+
+#### Returns
+
+An object contains Jest's `transform` property:
+
+```ts
+interface TsJestTransformerOptions {
+  tsconfig?: boolean | string | RawCompilerOptions
+  isolatedModules?: boolean
+  astTransformers?: ConfigCustomTransformer
+  diagnostics?:
+    | boolean
+    | {
+        pretty?: boolean
+        ignoreCodes?: number | string | Array<number | string>
+        exclude?: string[]
+        warnOnly?: boolean
+      }
+  stringifyContentPathRegex?: string | RegExp
+}
+
+export type DefaultEsmPreset = {
+  extensionsToTreatAsEsm: string[]
+  transform: {
+    '^.+\\.m?tsx?$': ['ts-jest', TsJestTransformerOptions]
+  }
+}
+```
+
+#### Example:
+
+```ts
+// jest.config.mts
+import { createDefaultEsmPreset, type JestConfigWithTsJest } from 'ts-jest'
+
+const presetConfig = createDefaultEsmPreset({
+  //...options
+})
+
+const jestConfig: JestConfigWithTsJest = {
+  ...presetConfig,
+}
+
+export default jestConfig
+```
+
+### `createDefaultLegacyEsmPreset(options)`
+
+Create a **LEGACY** ESM configuration to process TypeScript files (`.ts`/`.mts`/`.tsx`/`.mtsx`).
+
+#### Parameters
+
+- `options` (**OPTIONAL**)
+  - `tsconfig`: see more at [tsconfig options page](./options/tsconfig.md)
+  - `isolatedModules`: see more at [isolatedModules options page](./options/isolatedModules.md)
+  - `compiler`: see more at [compiler options page](./options/compiler.md)
+  - `astTransformers`: see more at [astTransformers options page](./options/astTransformers.md)
+  - `diagnostics`: see more at [diagnostics options page](./options/diagnostics.md)
+  - `stringifyContentPathRegex`: see more at [stringifyContentPathRegex options page](./options/stringifyContentPathRegex.md)
+
+#### Returns
+
+An object contains Jest's `transform` property:
+
+```ts
+interface TsJestTransformerOptions {
+  tsconfig?: boolean | string | RawCompilerOptions
+  isolatedModules?: boolean
+  astTransformers?: ConfigCustomTransformer
+  diagnostics?:
+    | boolean
+    | {
+        pretty?: boolean
+        ignoreCodes?: number | string | Array<number | string>
+        exclude?: string[]
+        warnOnly?: boolean
+      }
+  stringifyContentPathRegex?: string | RegExp
+}
+
+export type DefaultEsmPreset = {
+  extensionsToTreatAsEsm: string[]
+  transform: {
+    '^.+\\.m?tsx?$': ['ts-jest/legacy', TsJestTransformerOptions]
+  }
+}
+```
+
+#### Example:
+
+```ts
+// jest.config.mts
+import { createDefaultLegacyEsmPreset, type JestConfigWithTsJest } from 'ts-jest'
+
+const presetConfig = createDefaultLegacyEsmPreset({
+  //...options
+})
+
+const jestConfig: JestConfigWithTsJest = {
+  ...presetConfig,
+}
+
+export default jestConfig
+```
+
+### `createJsWithTsPreset(options)`
+
+Create a configuration to process JavaScript/TypeScript files (`.js`/`.jsx`/`.ts`/`.tsx`).
+
+#### Parameters
+
+- `options` (**OPTIONAL**)
+  - `tsconfig`: see more at [tsconfig options page](./options/tsconfig.md)
+  - `isolatedModules`: see more at [isolatedModules options page](./options/isolatedModules.md)
+  - `compiler`: see more at [compiler options page](./options/compiler.md)
+  - `astTransformers`: see more at [astTransformers options page](./options/astTransformers.md)
+  - `diagnostics`: see more at [diagnostics options page](./options/diagnostics.md)
+  - `stringifyContentPathRegex`: see more at [stringifyContentPathRegex options page](./options/stringifyContentPathRegex.md)
+
+#### Returns
+
+An object contains Jest's `transform` property:
+
+```ts
+interface TsJestTransformerOptions {
+  tsconfig?: boolean | string | RawCompilerOptions
+  isolatedModules?: boolean
+  astTransformers?: ConfigCustomTransformer
+  diagnostics?:
+    | boolean
+    | {
+        pretty?: boolean
+        ignoreCodes?: number | string | Array<number | string>
+        exclude?: string[]
+        warnOnly?: boolean
+      }
+  stringifyContentPathRegex?: string | RegExp
+}
+
+export type JsWithTsPreset = {
+  transform: {
+    '^.+.[tj]sx?$': ['ts-jest', TsJestTransformerOptions]
+  }
+}
+```
+
+#### Example:
+
+```ts
+// jest.config.ts
+import { createJsWithTsPreset, type JestConfigWithTsJest } from 'ts-jest'
+
+const presetConfig = createJsWithTsPreset({
+  //...options
+})
+
+const jestConfig: JestConfigWithTsJest = {
+  ...presetConfig,
+}
+
+export default jestConfig
+```
+
+### `createJsWithTsLegacyPreset(options)`
+
+Create a **LEGACY** configuration to process JavaScript/TypeScript files (`.js`/`.jsx`/`.ts`/`.tsx`).
+
+#### Parameters
+
+- `options` (**OPTIONAL**)
+  - `tsconfig`: see more at [tsconfig options page](./options/tsconfig.md)
+  - `isolatedModules`: see more at [isolatedModules options page](./options/isolatedModules.md)
+  - `compiler`: see more at [compiler options page](./options/compiler.md)
+  - `astTransformers`: see more at [astTransformers options page](./options/astTransformers.md)
+  - `diagnostics`: see more at [diagnostics options page](./options/diagnostics.md)
+  - `stringifyContentPathRegex`: see more at [stringifyContentPathRegex options page](./options/stringifyContentPathRegex.md)
+
+#### Returns
+
+An object contains Jest's `transform` property:
+
+```ts
+interface TsJestTransformerOptions {
+  tsconfig?: boolean | string | RawCompilerOptions
+  isolatedModules?: boolean
+  astTransformers?: ConfigCustomTransformer
+  diagnostics?:
+    | boolean
+    | {
+        pretty?: boolean
+        ignoreCodes?: number | string | Array<number | string>
+        exclude?: string[]
+        warnOnly?: boolean
+      }
+  stringifyContentPathRegex?: string | RegExp
+}
+
+export type JsWithTsPreset = {
+  transform: {
+    '^.+.[tj]sx?$': ['ts-jest/legacy', TsJestTransformerOptions]
+  }
+}
+```
+
+#### Example:
+
+```ts
+// jest.config.ts
+import { createJsWithTsLegacyPreset, type JestConfigWithTsJest } from 'ts-jest'
+
+const presetConfig = createJsWithTsLegacyPreset({
+  //...options
+})
+
+const jestConfig: JestConfigWithTsJest = {
+  ...presetConfig,
+}
+
+export default jestConfig
+```
+
+### `createJsWithTsEsmPreset(options)`
+
+Create a ESM configuration to process JavaScript/TypeScript files (`.js`/`.mjs`/`.jsx`/`.mjsx`/`.ts`/`.mts`/`.tsx`/`.mtsx`).
+
+#### Parameters
+
+- `options` (**OPTIONAL**)
+  - `tsconfig`: see more at [tsconfig options page](./options/tsconfig.md)
+  - `isolatedModules`: see more at [isolatedModules options page](./options/isolatedModules.md)
+  - `compiler`: see more at [compiler options page](./options/compiler.md)
+  - `astTransformers`: see more at [astTransformers options page](./options/astTransformers.md)
+  - `diagnostics`: see more at [diagnostics options page](./options/diagnostics.md)
+  - `stringifyContentPathRegex`: see more at [stringifyContentPathRegex options page](./options/stringifyContentPathRegex.md)
+
+#### Returns
+
+An object contains Jest's `transform` property:
+
+```ts
+interface TsJestTransformerOptions {
+  tsconfig?: boolean | string | RawCompilerOptions
+  isolatedModules?: boolean
+  astTransformers?: ConfigCustomTransformer
+  diagnostics?:
+    | boolean
+    | {
+        pretty?: boolean
+        ignoreCodes?: number | string | Array<number | string>
+        exclude?: string[]
+        warnOnly?: boolean
+      }
+  stringifyContentPathRegex?: string | RegExp
+}
+
+export type JsWithTsPreset = {
+  transform: {
+    '^.+\\.m?[tj]sx?$': ['ts-jest', TsJestTransformerOptions]
+  }
+}
+```
+
+#### Example:
+
+```ts
+// jest.config.mts
+import { createJsWithTsEsmPreset, type JestConfigWithTsJest } from 'ts-jest'
+
+const presetConfig = createJsWithTsEsmPreset({
+  //...options
+})
+
+const jestConfig: JestConfigWithTsJest = {
+  ...presetConfig,
+}
+
+export default jestConfig
+```
+
+### `createJsWithTsEsmLegacyPreset(options)`
+
+Create a **LEGACY** ESM configuration to process JavaScript/TypeScript files (`.js`/`.mjs`/`.jsx`/`.mjsx`/`.ts`/`.mts`/`.tsx`/`.mtsx`).
+
+#### Parameters
+
+- `options` (**OPTIONAL**)
+  - `tsconfig`: see more at [tsconfig options page](./options/tsconfig.md)
+  - `isolatedModules`: see more at [isolatedModules options page](./options/isolatedModules.md)
+  - `compiler`: see more at [compiler options page](./options/compiler.md)
+  - `astTransformers`: see more at [astTransformers options page](./options/astTransformers.md)
+  - `diagnostics`: see more at [diagnostics options page](./options/diagnostics.md)
+  - `stringifyContentPathRegex`: see more at [stringifyContentPathRegex options page](./options/stringifyContentPathRegex.md)
+
+#### Returns
+
+An object contains Jest's `transform` property:
+
+```ts
+interface TsJestTransformerOptions {
+  tsconfig?: boolean | string | RawCompilerOptions
+  isolatedModules?: boolean
+  astTransformers?: ConfigCustomTransformer
+  diagnostics?:
+    | boolean
+    | {
+        pretty?: boolean
+        ignoreCodes?: number | string | Array<number | string>
+        exclude?: string[]
+        warnOnly?: boolean
+      }
+  stringifyContentPathRegex?: string | RegExp
+}
+
+export type JsWithTsPreset = {
+  transform: {
+    '^.+\\.m?[tj]sx?$': ['ts-jest/legacy', TsJestTransformerOptions]
+  }
+}
+```
+
+#### Example:
+
+```ts
+// jest.config.mts
+import { createJsWithTsEsmLegacyPreset, type JestConfigWithTsJest } from 'ts-jest'
+
+const presetConfig = createJsWithTsEsmLegacyPreset({
+  //...options
+})
+
+const jestConfig: JestConfigWithTsJest = {
+  ...presetConfig,
+}
+
+export default jestConfig
+```
+
+### `createJsWithBabelPreset(options)`
+
+Create a configuration to process JavaScript/TypeScript files (`.js`/`.jsx`/`.ts`/`.tsx`) which uses `babel-jest` to perform additional transformation.
+
+#### Parameters
+
+- `options` (**OPTIONAL**):
+  - `tsconfig`: see more at [tsconfig options page](./options/tsconfig.md)
+  - `isolatedModules`: see more at [isolatedModules options page](./options/isolatedModules.md)
+  - `compiler`: see more at [compiler options page](./options/compiler.md)
+  - `astTransformers`: see more at [astTransformers options page](./options/astTransformers.md)
+  - `diagnostics`: see more at [diagnostics options page](./options/diagnostics.md)
+  - `babelConfig`: see more at [babelConfig options page](./options/babelConfig.md)
+  - `stringifyContentPathRegex`: see more at [stringifyContentPathRegex options page](./options/stringifyContentPathRegex.md)
+
+#### Returns
+
+An object contains Jest's `transform` property:
+
+```ts
+interface TsJestTransformerOptions {
+  tsconfig?: boolean | string | RawCompilerOptions
+  isolatedModules?: boolean
+  astTransformers?: ConfigCustomTransformer
+  diagnostics?:
+    | boolean
+    | {
+        pretty?: boolean
+        ignoreCodes?: number | string | Array<number | string>
+        exclude?: string[]
+        warnOnly?: boolean
+      }
+  babelConfig?: boolean | string | BabelConfig
+  stringifyContentPathRegex?: string | RegExp
+}
+
+export type JsWithBabelPreset = {
+  transform: {
+    '^.+.[tj]sx?$': ['ts-jest', TsJestTransformerOptions]
+  }
+}
+```
+
+#### Example:
+
+```ts
+// jest.config.ts
+import { createJsWithBabelPreset, type JestConfigWithTsJest } from 'ts-jest'
+
+const presetConfig = createJsWithBabelPreset({
+  //...options
+})
+
+const jestConfig: JestConfigWithTsJest = {
+  ...presetConfig,
+}
+
+export default jestConfig
+```
+
+### `createJsWithBabelLegacyPreset(options)`
+
+Create a **LEGACY** configuration to process JavaScript/TypeScript files (`.js`/`.jsx`/`.ts`/`.tsx`) which uses `babel-jest` to perform additional transformation.
+
+#### Parameters
+
+- `options` (**OPTIONAL**):
+  - `tsconfig`: see more at [tsconfig options page](./options/tsconfig.md)
+  - `isolatedModules`: see more at [isolatedModules options page](./options/isolatedModules.md)
+  - `compiler`: see more at [compiler options page](./options/compiler.md)
+  - `astTransformers`: see more at [astTransformers options page](./options/astTransformers.md)
+  - `diagnostics`: see more at [diagnostics options page](./options/diagnostics.md)
+  - `babelConfig`: see more at [babelConfig options page](./options/babelConfig.md)
+  - `stringifyContentPathRegex`: see more at [stringifyContentPathRegex options page](./options/stringifyContentPathRegex.md)
+
+#### Returns
+
+An object contains Jest's `transform` property:
+
+```ts
+interface TsJestTransformerOptions {
+  tsconfig?: boolean | string | RawCompilerOptions
+  isolatedModules?: boolean
+  astTransformers?: ConfigCustomTransformer
+  diagnostics?:
+    | boolean
+    | {
+        pretty?: boolean
+        ignoreCodes?: number | string | Array<number | string>
+        exclude?: string[]
+        warnOnly?: boolean
+      }
+  babelConfig?: boolean | string | BabelConfig
+  stringifyContentPathRegex?: string | RegExp
+}
+
+export type JsWithBabelPreset = {
+  transform: {
+    '^.+.[tj]sx?$': ['ts-jest/legacy', TsJestTransformerOptions]
+  }
+}
+```
+
+#### Example:
+
+```ts
+// jest.config.ts
+import { createJsWithBabelLegacyPreset, type JestConfigWithTsJest } from 'ts-jest'
+
+const presetConfig = createJsWithBabelLegacyPreset({
+  //...options
+})
+
+const jestConfig: JestConfigWithTsJest = {
+  ...presetConfig,
+}
+
+export default jestConfig
+```
+
+### `createJsWithBabelEsmPreset(options)`
+
+Create a ESM configuration to process JavaScript/TypeScript files (`.js`/`.mjs`/`.jsx`/`.mjsx`/`.ts`/`.mts`/`.tsx`/`.mtsx`) which uses `babel-jest` to perform additional transformation.
+
+#### Parameters
+
+- `options` (**OPTIONAL**):
+  - `tsconfig`: see more at [tsconfig options page](./options/tsconfig.md)
+  - `isolatedModules`: see more at [isolatedModules options page](./options/isolatedModules.md)
+  - `compiler`: see more at [compiler options page](./options/compiler.md)
+  - `astTransformers`: see more at [astTransformers options page](./options/astTransformers.md)
+  - `diagnostics`: see more at [diagnostics options page](./options/diagnostics.md)
+  - `babelConfig`: see more at [babelConfig options page](./options/babelConfig.md)
+  - `stringifyContentPathRegex`: see more at [stringifyContentPathRegex options page](./options/stringifyContentPathRegex.md)
+
+#### Returns
+
+An object contains Jest's `transform` property:
+
+```ts
+interface TsJestTransformerOptions {
+  tsconfig?: boolean | string | RawCompilerOptions
+  isolatedModules?: boolean
+  astTransformers?: ConfigCustomTransformer
+  diagnostics?:
+    | boolean
+    | {
+        pretty?: boolean
+        ignoreCodes?: number | string | Array<number | string>
+        exclude?: string[]
+        warnOnly?: boolean
+      }
+  babelConfig?: boolean | string | BabelConfig
+  stringifyContentPathRegex?: string | RegExp
+}
+
+export type JsWithBabelPreset = {
+  transform: {
+    '^.+.[tj]sx?$': ['ts-jest', TsJestTransformerOptions]
+  }
+}
+```
+
+#### Example:
+
+```ts
+// jest.config.mts
+import { createJsWithBabelEsmPreset, type JestConfigWithTsJest } from 'ts-jest'
+
+const presetConfig = createJsWithBabelEsmPreset({
+  //...options
+})
+
+const jestConfig: JestConfigWithTsJest = {
+  ...presetConfig,
+}
+
+export default jestConfig
+```
+
+### `createJsWithBabelEsmLegacyPreset(options)`
+
+Create a **LEGACY** ESM configuration to process JavaScript/TypeScript files (`.js`/`.mjs`/`.jsx`/`.mjsx`/`.ts`/`.mts`/`.tsx`/`.mtsx`) which uses `babel-jest` to perform additional transformation.
+
+#### Parameters
+
+- `options` (**OPTIONAL**):
+  - `tsconfig`: see more at [tsconfig options page](./options/tsconfig.md)
+  - `isolatedModules`: see more at [isolatedModules options page](./options/isolatedModules.md)
+  - `compiler`: see more at [compiler options page](./options/compiler.md)
+  - `astTransformers`: see more at [astTransformers options page](./options/astTransformers.md)
+  - `diagnostics`: see more at [diagnostics options page](./options/diagnostics.md)
+  - `babelConfig`: see more at [babelConfig options page](./options/babelConfig.md)
+  - `stringifyContentPathRegex`: see more at [stringifyContentPathRegex options page](./options/stringifyContentPathRegex.md)
+
+#### Returns
+
+An object contains Jest's `transform` property:
+
+```ts
+interface TsJestTransformerOptions {
+  tsconfig?: boolean | string | RawCompilerOptions
+  isolatedModules?: boolean
+  astTransformers?: ConfigCustomTransformer
+  diagnostics?:
+    | boolean
+    | {
+        pretty?: boolean
+        ignoreCodes?: number | string | Array<number | string>
+        exclude?: string[]
+        warnOnly?: boolean
+      }
+  babelConfig?: boolean | string | BabelConfig
+  stringifyContentPathRegex?: string | RegExp
+}
+
+export type JsWithBabelPreset = {
+  transform: {
+    '^.+.[tj]sx?$': ['ts-jest/legacy', TsJestTransformerOptions]
+  }
+}
+```
+
+#### Example:
+
+```ts
+// jest.config.mts
+import { createJsWithBabelEsmLegacyPreset, type JestConfigWithTsJest } from 'ts-jest'
+
+const presetConfig = createJsWithBabelEsmLegacyPreset({
+  //...options
+})
+
+const jestConfig: JestConfigWithTsJest = {
+  ...presetConfig,
+}
+
+export default jestConfig
+```
+
+### Legacy presets
+
+:::warning
+
+`ts-jest` **DON'T RECOMMEND** to use legacy presets because this approach is not flexible to configure Jest configuration.
+These legacy presets will be removed in the next major release and users are **HIGHLY RECOMMENDED** to migrate to use the above utility functions.
 
 :::
-
-`ts-jest` comes with several presets, covering most of the project's base configuration:
 
 | Preset name                                                           | Description                                                                                                                                                                                         |
 | --------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -34,87 +752,27 @@ The list of `preset` below is now deprecated in favor of util functions. If one 
 | `ts-jest/presets/js-with-babel-esm`                                   | TypeScript files (`.ts`, `.tsx`) will be transformed by `ts-jest` to **ESM** syntax, and JavaScript files (`.js`, `jsx`, `.mjs`) will be transformed by `babel-jest`.                               |
 | `ts-jest/presets/js-with-babel-esm-legacy` (**LEGACY**)               | TypeScript files (`.ts`, `.tsx`) will be transformed by `ts-jest` to **ESM** syntax, and JavaScript files (`.js`, `jsx`, `.mjs`) will be transformed by `babel-jest`.                               |
 
-### Basic usage
+#### Example
 
-In most cases, simply setting the `preset` key to the desired preset name in your Jest config should be enough to start
-using TypeScript with Jest (assuming you added `ts-jest` to your `devDependencies` of course):
-
-```js tab
-// jest.config.js
-const { createDefaultPreset } = require('ts-jest')
-
-const defaultPreset = createDefaultPreset()
-
-/** @type {import('ts-jest').JestConfigWithTsJest} */
-module.exports = {
-  // [...]
-  // Replace `ts-jest` with the preset you want to use
-  // from the above list
-  ...defaultPreset,
-}
-```
-
-```ts tab
+```ts tab={"label": "TypeScript CJS"}
 // jest.config.ts
-import { type JestConfigWithTsJest, createDefaultPreset } from 'ts-jest'
-
-const defaultPreset = createDefaultPreset()
+import type { JestConfigWithTsJest } from 'ts-jest'
 
 const jestConfig: JestConfigWithTsJest = {
-  // [...]
-  // Replace `ts-jest` with the preset you want to use
-  // from the above list
-  ...defaultPreset,
+  // Replace `<preset_name>` with the one of the preset names from the table above
+  preset: '<preset_name>',
 }
 
 export default jestConfig
 ```
 
-**Note:** presets use `testMatch`, like Jest does in its defaults. If you want to use `testRegex` instead in your configuration, you MUST set `testMatch` to `null` or Jest will bail.
-
-### Advanced
-
-There are several util functions to create and extend the existing presets:
-
-- `createDefaultPreset`: for default preset
-- `createDefaultLegacyPreset`: for default preset in legacy mode
-- `createDefaultEsmPreset`: for default ESM preset
-- `createDefaultEsmLegacyPreset`: for default ESM preset in legacy mode
-- `createJsWithTsPreset`: for `js-with-ts` preset
-- `createJsWithTsLegacyPreset`: for `js-with-ts` preset in legacy mode
-- `createJsWithTsEsmPreset`: for `js-with-ts` ESM preset
-- `createJsWithTsEsmLegacyPreset`: for `js-with-ts` ESM preset in legacy mode
-- `createJsWithBabelPreset`: for `js-with-babel` preset
-- `createJsWithBabelLegacyPreset`: for `js-with-babel` preset in legacy mode
-- `createJsWithBabelEsmPreset`: for `js-with-babel` ESM preset
-- `createJsWithBabelEsmLegacyPreset`: for `js-with-babel` ESM preset in legacy mode
-
-Example:
-
-```js tab
-// jest.config.js
-const { createDefaultPreset } = require('ts-jest')
-
-/** @type {import('ts-jest').JestConfigWithTsJest} */
-module.exports = {
-  // [...]
-  transform: {
-    ...createDefaultPreset().transform,
-    // [...]
-  },
-}
-```
-
-```ts tab
-// jest.config.ts
-import { createDefaultPreset, type JestConfigWithTsJest } from 'ts-jest'
+```ts tab={"label": "TypeScript ESM"}
+// jest.config.mts
+import type { JestConfigWithTsJest } from 'ts-jest'
 
 const jestConfig: JestConfigWithTsJest = {
-  // [...]
-  transform: {
-    ...createDefaultPreset().transform,
-    // [...]
-  },
+  // Replace `<preset_name>` with the one of the preset names from the table above
+  preset: '<preset_name>',
 }
 
 export default jestConfig
