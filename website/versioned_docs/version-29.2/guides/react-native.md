@@ -50,40 +50,33 @@ In the same way that you moved Babel config, move Jest config from `jest` key of
 
 ```js tab
 // jest.config.js
-const { defaults: tsjPreset } = require('ts-jest/presets')
+const { createJsWithBabelPreset } = require('ts-jest')
+
+const jsWithBabelPreset = createJsWithBabelPreset({
+  tsconfig: 'tsconfig.spec.json',
+  babelConfig: true,
+})
 
 /** @type {import('ts-jest').JestConfigWithTsJest} */
 module.exports = {
   preset: 'react-native',
-  transform: {
-    '^.+\\.jsx$': 'babel-jest',
-    '^.+\\.tsx?$': [
-      'ts-jest',
-      {
-        tsconfig: 'tsconfig.spec.json',
-      },
-    ],
-  },
+  transform: jsWithBabelPreset.transform,
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
 }
 ```
 
 ```ts tab
 // jest.config.ts
-import { defaults as tsjPreset } from 'ts-jest/presets'
-import type { JestConfigWithTsJest } from 'ts-jest'
+import { createJsWithBabelPreset, JestConfigWithTsJest } from 'ts-jest'
+
+const jsWithBabelPreset = createJsWithBabelPreset({
+  tsconfig: 'tsconfig.spec.json',
+  babelConfig: true,
+})
 
 const jestConfig: JestConfigWithTsJest = {
   preset: 'react-native',
-  transform: {
-    '^.+\\.jsx$': 'babel-jest',
-    '^.+\\.tsx?$': [
-      'ts-jest',
-      {
-        tsconfig: 'tsconfig.spec.json',
-      },
-    ],
-  },
+  transform: jsWithBabelPreset.transform,
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
 }
 

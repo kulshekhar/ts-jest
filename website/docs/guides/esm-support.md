@@ -104,72 +104,35 @@ Starting from **v28.0.0**, `ts-jest` will gradually switch to `esbuild`/`swc` to
 
 ```js tab
 // jest.config.js
+const { createDefaultEsmPreset } = require('ts-jest')
+
+const defaultEsmPreset = createDefaultEsmPreset()
+
 /** @type {import('ts-jest').JestConfigWithTsJest} */
 module.exports = {
   // [...]
-  preset: 'ts-jest/presets/default-esm', // or other ESM presets
+  ...defaultEsmPreset,
   moduleNameMapper: {
     '^(\\.{1,2}/.*)\\.js$': '$1',
-  },
-  transform: {
-    // '^.+\\.[tj]sx?$' to process ts,js,tsx,jsx with `ts-jest`
-    // '^.+\\.m?[tj]sx?$' to process ts,js,tsx,jsx,mts,mjs,mtsx,mjsx with `ts-jest`
-    '^.+\\.tsx?$': [
-      'ts-jest',
-      {
-        useESM: true,
-      },
-    ],
   },
 }
 ```
 
 ```ts tab
 // jest.config.ts
-import type { JestConfigWithTsJest } from 'ts-jest'
+import { createDefaultEsmPreset, type JestConfigWithTsJest } from 'ts-jest'
+
+const defaultEsmPreset = createDefaultEsmPreset()
 
 const jestConfig: JestConfigWithTsJest = {
   // [...]
-  preset: 'ts-jest/presets/default-esm', // or other ESM presets
+  ...defaultEsmPreset,
   moduleNameMapper: {
     '^(\\.{1,2}/.*)\\.js$': '$1',
-  },
-  transform: {
-    // '^.+\\.[tj]sx?$' to process ts,js,tsx,jsx with `ts-jest`
-    // '^.+\\.m?[tj]sx?$' to process ts,js,tsx,jsx,mts,mjs,mtsx,mjsx with `ts-jest`
-    '^.+\\.tsx?$': [
-      'ts-jest',
-      {
-        useESM: true,
-      },
-    ],
   },
 }
 
 export default jestConfig
-```
-
-```JSON tab
-// package.json
-{
-  // [...]
-  "jest": {
-    "preset": "ts-jest/presets/default-esm", // or other ESM presets,
-    "moduleNameMapper": {
-      "^(\\.{1,2}/.*)\\.js$": "$1"
-    },
-    "transform": {
-      // '^.+\\.[tj]sx?$' to process ts,js,tsx,jsx with `ts-jest`
-      // '^.+\\.m?[tj]sx?$' to process ts,js,tsx,jsx,mts,mjs,mtsx,mjsx with `ts-jest`
-      "^.+\\.tsx?$": [
-        "ts-jest",
-        {
-          "useESM": true
-        }
-      ]
-    }
-  }
-}
 ```
 
 #### Support `.mts` extension
@@ -184,9 +147,8 @@ To work with `.mts` extension, besides the requirement to run Jest and `ts-jest`
 // tsconfig.spec.json
 {
   "compilerOptions": {
-    "module": "Node16", // or "NodeNext"
+    "module": "ESNext", // or ES2015/ES2020/ES2022
     "target": "ESNext",
-    "moduleResolution": "Node16", // or "NodeNext"
     "esModuleInterop": true
   }
 }
