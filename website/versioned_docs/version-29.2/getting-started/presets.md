@@ -41,40 +41,33 @@ using TypeScript with Jest (assuming you added `ts-jest` to your `devDependencie
 
 ```js tab
 // jest.config.js
+const { createDefaultPreset } = require('ts-jest')
+
+const defaultPreset = createDefaultPreset()
+
 /** @type {import('ts-jest').JestConfigWithTsJest} */
 module.exports = {
   // [...]
   // Replace `ts-jest` with the preset you want to use
   // from the above list
-  preset: 'ts-jest',
+  ...defaultPreset,
 }
 ```
 
 ```ts tab
 // jest.config.ts
-import type { JestConfigWithTsJest } from 'ts-jest'
+import { type JestConfigWithTsJest, createDefaultPreset } from 'ts-jest'
+
+const defaultPreset = createDefaultPreset()
 
 const jestConfig: JestConfigWithTsJest = {
   // [...]
   // Replace `ts-jest` with the preset you want to use
   // from the above list
-  preset: 'ts-jest',
+  ...defaultPreset,
 }
 
 export default jestConfig
-```
-
-```JSON tab
-// package.json
-
-{
-  // [...]
-  "jest": {
-    // Replace `ts-jest` with the preset you want to use
-    // from the above list
-    "preset": "ts-jest"
-  }
-}
 ```
 
 **Note:** presets use `testMatch`, like Jest does in its defaults. If you want to use `testRegex` instead in your configuration, you MUST set `testMatch` to `null` or Jest will bail.

@@ -16,57 +16,22 @@ or through a `jest.config.js`, or `jest.config.ts` file.
 
 ```js tab
 // jest.config.js
+const { createDefaultPreset } = require('ts-jest')
+
 /** @type {import('ts-jest').JestConfigWithTsJest} */
 module.exports = {
   // [...]
-  transform: {
-    // '^.+\\.[tj]sx?$' to process ts,js,tsx,jsx with `ts-jest`
-    // '^.+\\.m?[tj]sx?$' to process ts,js,tsx,jsx,mts,mjs,mtsx,mjsx with `ts-jest`
-    '^.+\\.tsx?$': [
-      'ts-jest',
-      {
-        // ts-jest configuration goes here
-      },
-    ],
-  },
+  ...createDefaultPreset(),
 }
 ```
 
 ```ts tab
 // jest.config.ts
-import type { JestConfigWithTsJest } from 'ts-jest'
+import { createDefaultPreset, JestConfigWithTsJest } from 'ts-jest'
 
 const jestConfig: JestConfigWithTsJest = {
   // [...]
-  transform: {
-    // '^.+\\.[tj]sx?$' to process ts,js,tsx,jsx with `ts-jest`
-    // '^.+\\.m?[tj]sx?$' to process ts,js,tsx,jsx,mts,mjs,mtsx,mjsx with `ts-jest`
-    '^.+\\.tsx?$': [
-      'ts-jest',
-      {
-        // ts-jest configuration goes here
-      },
-    ],
-  },
-}
-```
-
-```JSON tab
-// package.json
-{
-  // [...]
-  "jest": {
-    "transform": {
-      // '^.+\\.[tj]sx?$' to process ts,js,tsx,jsx with `ts-jest`
-      // '^.+\\.m?[tj]sx?$' to process ts,js,tsx,jsx,mts,mjs,mtsx,mjsx with `ts-jest`
-      "^.+\\.tsx?$": [
-        "ts-jest",
-        {
-          // ts-jest configuration goes here
-        }
-      ]
-    }
-  }
+  ...createDefaultPreset(),
 }
 ```
 
