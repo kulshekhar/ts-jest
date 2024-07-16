@@ -9,7 +9,7 @@
     "tsc": "tsc --noEmit -p tsconfig-esm.json"
   },
   "devDependencies": {
-    "@babel/core": "^7.24.8",
+    "@babel/core": "^7.24.9",
     "@babel/preset-env": "^7.24.8",
     "@types/jest": "^29.5.12",
     "babel-jest": "^29.7.0",
