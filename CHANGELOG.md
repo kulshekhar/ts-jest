@@ -1,3 +1,17 @@
+### [29.2.3](https://github.com/kulshekhar/ts-jest/compare/v29.2.2...v29.2.3) (2024-07-18)
+
+
+### Security Fixes
+
+* build(deps): Update dependency ejs to ^3.1.10 ([de94a56](https://github.com/kulshekhar/ts-jest/commit/de94a56))
+
+
+### Code Refactoring
+
+* refactor(presets): maintain preset codes inside `src` ([8474fc2](https://github.com/kulshekhar/ts-jest/commit/8474fc2))
+
+
+
 ### [29.2.2](https://github.com/kulshekhar/ts-jest/compare/v29.2.1...v29.2.2) (2024-07-10)
 
 
