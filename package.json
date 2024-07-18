@@ -52,7 +52,7 @@
   "homepage": "https://kulshekhar.github.io/ts-jest",
   "dependencies": {
     "bs-logger": "0.x",
-    "ejs": "^3.0.0",
+    "ejs": "^3.1.10",
     "fast-json-stable-stringify": "2.x",
     "jest-util": "^29.0.0",
     "json5": "^2.2.3",
