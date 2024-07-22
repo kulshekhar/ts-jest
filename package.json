@@ -136,7 +136,7 @@
     "json-schema-to-typescript": "^13.1.2",
     "lint-staged": "latest",
     "prettier": "^2.8.8",
-    "typescript": "~5.5.3"
+    "typescript": "~5.5.4"
   },
   "lint-staged": {
     "*.{ts,tsx,js,jsx}": [
