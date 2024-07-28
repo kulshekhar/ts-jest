@@ -1,10 +1,10 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "module": "CommonJS",
-    "moduleResolution": "Node10",
+    "module": "Node16",
+    "moduleResolution": "Node16",
     "target": "ESNext",
-    "skipLibCheck": true,
-    "types": ["jest"]
+    "types": ["jest"],
+    "isolatedModules": false
   }
 }

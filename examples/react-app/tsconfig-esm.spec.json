@@ -2,6 +2,7 @@
   "extends": "./tsconfig.spec.json",
   "compilerOptions": {
     "module": "ESNext",
+    "moduleResolution": "Node",
     "esModuleInterop": true
   }
 }

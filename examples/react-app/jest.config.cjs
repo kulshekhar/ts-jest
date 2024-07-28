@@ -6,6 +6,7 @@ const defaultPreset = createDefaultPreset({
 
 /** @type {import('ts-jest').JestConfigWithTsJest} */
 module.exports = {
+  displayName: 'react-app',
   setupFilesAfterEnv: ['<rootDir>/src/setupTests.ts'],
   testEnvironment: 'jsdom',
   transform: {
