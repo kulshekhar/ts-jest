@@ -1,8 +1,9 @@
 {
+  "extends": "@tsconfig/strictest/tsconfig.json",
   "compilerOptions": {
     "module": "CommonJS",
     "target": "ESNext",
-    "skipLibCheck": true,
-    "types": ["jest"]
+    "types": ["jest"],
+    "isolatedModules": false
   }
 }

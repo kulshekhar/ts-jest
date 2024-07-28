@@ -1,9 +1,10 @@
 {
+  "extends": "@tsconfig/strictest/tsconfig.json",
   "compilerOptions": {
     "module": "Node16",
     "target": "ESNext",
     "allowJs": true,
     "types": ["jest"],
-    "skipLibCheck": true
+    "isolatedModules": false
   }
 }

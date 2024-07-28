@@ -1,19 +1,10 @@
 {
+  "extends": "@tsconfig/strictest/tsconfig.json",
   "compilerOptions": {
-    "baseUrl": "./",
-    "forceConsistentCasingInFileNames": true,
-    "strict": true,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
-    "sourceMap": true,
-    "declaration": false,
-    "downlevelIteration": true,
-    "experimentalDecorators": true,
-    "importHelpers": true,
-    "skipLibCheck": true,
     "target": "ESNext",
     "module": "Node16",
     "lib": ["ESNext", "dom"],
-    "types": ["jest"]
+    "types": ["jest"],
+    "isolatedModules": false
   }
 }
