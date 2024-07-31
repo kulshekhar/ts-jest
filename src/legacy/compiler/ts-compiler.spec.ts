@@ -200,7 +200,7 @@ describe('TsCompiler', () => {
           useESM: true,
           supportsStaticESM: true,
           moduleValue: 'NodeNext',
-          expectedModule: ts.ModuleKind.NodeNext,
+          expectedModule: ts.ModuleKind.ESNext,
           expectedEsModuleInterop: true,
         },
         {
@@ -252,6 +252,7 @@ describe('TsCompiler', () => {
 
           expect(usedCompilerOptions.module).toBe(expectedModule)
           expect(usedCompilerOptions.esModuleInterop).toBe(expectedEsModuleInterop)
+          expect(usedCompilerOptions.moduleResolution).toBe(ts.ModuleResolutionKind.Node10)
           expect(output).toEqual({
             code: updateOutput(jsOutput, fileName, sourceMap),
             diagnostics: [],

@@ -147,31 +147,27 @@ export class TsCompiler implements TsCompilerInstance {
   }
 
   private fixupCompilerOptionsForModuleKind(compilerOptions: CompilerOptions, isEsm: boolean): CompilerOptions {
+    const moduleResolution = this._ts.ModuleResolutionKind.Node10
     if (!isEsm) {
-      const moduleKind = compilerOptions.module ?? this._ts.ModuleKind.CommonJS
-      const moduleKindValue = [
-        this._ts.ModuleKind.CommonJS,
-        this._ts.ModuleKind.Node16,
-        this._ts.ModuleKind.NodeNext,
-      ].includes(moduleKind)
-        ? moduleKind
-        : this._ts.ModuleKind.CommonJS
-
       return {
         ...compilerOptions,
-        module: moduleKindValue,
+        module: this._ts.ModuleKind.CommonJS,
+        moduleResolution,
       }
     }
 
-    const moduleKind = compilerOptions.module ?? this._ts.ModuleKind.ESNext
-    const esModuleInterop = [this._ts.ModuleKind.Node16, this._ts.ModuleKind.NodeNext].includes(moduleKind)
-      ? true
-      : compilerOptions.esModuleInterop
+    let moduleKind = compilerOptions.module ?? this._ts.ModuleKind.ESNext
+    let esModuleInterop = compilerOptions.esModuleInterop
+    if ([this._ts.ModuleKind.Node16, this._ts.ModuleKind.NodeNext].includes(moduleKind)) {
+      esModuleInterop = true
+      moduleKind = this._ts.ModuleKind.ESNext
+    }
 
     return {
       ...compilerOptions,
       module: moduleKind,
-      esModuleInterop: esModuleInterop ?? false,
+      esModuleInterop,
+      moduleResolution,
     }
   }
 
