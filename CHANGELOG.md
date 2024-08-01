@@ -1,3 +1,12 @@
+### [29.2.4](https://github.com/kulshekhar/ts-jest/compare/v29.2.3...v29.2.4) (2024-08-01)
+
+
+### Bug Fixes
+
+* fix: revert support implementation for `Node16/NodeNext` ([70b9530](https://github.com/kulshekhar/ts-jest/commit/70b9530)), closes [#4468](https://github.com/kulshekhar/ts-jest/issues/4468) [#4473](https://github.com/kulshekhar/ts-jest/issues/4473)
+
+
+
 ### [29.2.3](https://github.com/kulshekhar/ts-jest/compare/v29.2.2...v29.2.3) (2024-07-18)
 
 
