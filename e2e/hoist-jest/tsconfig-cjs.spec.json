@@ -1,0 +1,6 @@
+{
+  "extends": [
+    "./tsconfig.json",
+    "../tsconfig-cjs.spec.json"
+  ]
+}

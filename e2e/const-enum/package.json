@@ -1,7 +1,4 @@
 {
-  "jest": {
-    "transform": {
-      "^.+.tsx?$": "<rootDir>/../../legacy.js"
-    }
-  }
+  "name": "const-enum",
+  "private": true
 }

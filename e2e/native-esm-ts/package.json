@@ -1,8 +1,0 @@
-{
-  "type": "module",
-  "devDependencies": {
-    "@jest/globals": "^29.7.0",
-    "dirname-filename-esm": "^1.1.2",
-    "i18next-fs-backend": "^2.3.2"
-  }
-}

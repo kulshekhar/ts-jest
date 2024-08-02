@@ -1,9 +1,4 @@
 {
-  "jest": {
-    "transform": {
-      "^.+\\.tsx?$": ["./foo-transformer.js", {
-        "isolatedModules": true
-      }]
-    }
-  }
+  "name": "extend-ts-jest",
+  "private": true
 }

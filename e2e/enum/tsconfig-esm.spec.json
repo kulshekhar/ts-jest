@@ -1,0 +1,6 @@
+{
+  "extends": [
+    "../tsconfig-js.json",
+    "../tsconfig-esm.spec.json"
+  ]
+}

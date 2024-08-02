@@ -23,7 +23,7 @@ jest.mock('typescript', () => {
 
 const mockFolder = join(process.cwd(), 'src', '__mocks__')
 
-const baseTsJestConfig = { tsconfig: join(process.cwd(), 'tsconfig.spec.json') }
+const baseTsJestConfig = { tsconfig: join(process.cwd(), 'tsconfig.json') }
 
 describe('TsCompiler', () => {
   describe('getResolvedModules', () => {

@@ -1,7 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`partial successfully runs the tests inside const-enum with 'isolatedModules: true' 1`] = `
-"PASS __tests__/import-from-d-ts-has-js.spec.ts
-PASS __tests__/import-from-d-ts-no-js.spec.ts
-PASS __tests__/import-from-ts.spec.ts"
-`;
