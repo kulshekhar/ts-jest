@@ -1,7 +1,0 @@
-{
-  "jest": {
-    "transform": {
-      "^.+.tsx?$": "<rootDir>/../../legacy.js"
-    }
-  }
-}

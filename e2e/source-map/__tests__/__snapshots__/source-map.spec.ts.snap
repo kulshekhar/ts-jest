@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`source-map should display failed test with stacktrace 1`] = `
+"  ● should fail
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: false
+    Received: true
+
+      1 | it('should fail', () => {
+    > 2 |   expect(true).toBe(false)
+        |                ^
+      3 | })
+      4 |
+
+      at Object.toBe (error.test-error.js:2:16)
+"
+`;

@@ -1,12 +1,4 @@
 {
-  "jest": {
-    "transform": {
-      "^.+.[tj]sx?$": ["<rootDir>/../../legacy.js", {
-        "isolatedModules": true,
-        "tsconfig": {
-          "allowJs": true
-        }
-      }]
-    }
-  }
+  "name": "presets",
+  "private": true
 }

@@ -42,5 +42,9 @@ jobs:
           github-token: ${{ secrets.github_token }}
           flag-name: run-${{ matrix.node-version }}
           parallel: true
+      - name: Run e2e tests
+        run: |
+          npm run test-e2e-cjs
+          npm run test-e2e-esm
       - name: Run tests in example projects
         run: npm run test-examples

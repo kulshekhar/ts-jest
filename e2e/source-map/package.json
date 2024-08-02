@@ -1,8 +1,4 @@
 {
-  "jest": {
-    "projects": [
-      "disabled",
-      "enabled"
-    ]
-  }
+  "name": "source-map",
+  "private": true
 }

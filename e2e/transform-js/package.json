@@ -1,11 +1,4 @@
 {
-  "dependencies": {
-    "@babel/preset-env": "^7.25.3"
-  },
-  "jest": {
-    "projects": [
-      "no-type-check",
-      "type-check"
-    ]
-  }
+  "name": "transform-js",
+  "private": true
 }

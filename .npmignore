@@ -11,25 +11,27 @@ website
 # Developement scripts
 scripts
 
+# .config file
+*.config.js
+*.config.cjs
+*.config.mjs
+*.config.ts
+*.config.cts
+*.config.mts
+
 # CI
 .github
 
 # Eslint
 .eslintignore
 .eslintrc.js
-commitlint.config.js
 .prettierignore
 .prettierrc
-
-# Internal jest config
-jest.config.js
-jest-base.js
 
 # Tsconfig
 tsconfig.build.json
 tsconfig.eslint.json
 tsconfig.json
-tsconfig.spec.json
 
 # Logs
 logs

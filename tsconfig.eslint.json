@@ -1,4 +1,4 @@
 {
   "extends": "./tsconfig.json",
-  "include": ["src", "examples", "website", "scripts", "presets", "utils", "e2e"]
+  "include": ["src", "examples", "website", "scripts", "presets", "utils", "e2e", "*.config.ts"]
 }

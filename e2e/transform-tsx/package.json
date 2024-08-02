@@ -1,15 +1,4 @@
 {
-  "dependencies": {
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1"
-  },
-  "jest": {
-    "testEnvironment": "jsdom",
-    "transform": {
-      "^.+.tsx?$": "<rootDir>/../../legacy.js"
-    }
-  },
-  "devDependencies": {
-    "jest-environment-jsdom": "^29.7.0"
-  }
+  "name": "transform-tsx",
+  "private": true
 }
