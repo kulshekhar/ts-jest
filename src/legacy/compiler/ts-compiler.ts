@@ -147,7 +147,7 @@ export class TsCompiler implements TsCompilerInstance {
   }
 
   private fixupCompilerOptionsForModuleKind(compilerOptions: CompilerOptions, isEsm: boolean): CompilerOptions {
-    const moduleResolution = this._ts.ModuleResolutionKind.Node10
+    const moduleResolution = this._ts.ModuleResolutionKind.Node10 ?? this._ts.ModuleResolutionKind.NodeJs
     if (!isEsm) {
       return {
         ...compilerOptions,
