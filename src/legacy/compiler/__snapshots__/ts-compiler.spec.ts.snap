@@ -20,7 +20,7 @@ exports[`TsCompiler getCompiledOutput isolatedModules true should transpile code
 {
   "allowSyntheticDefaultImports": undefined,
   "esModuleInterop": true,
-  "module": 1,
+  "module": 99,
 }
 `;
 
