@@ -11,12 +11,12 @@
     "noImplicitReturns": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
-    "moduleResolution": "node",
     "resolveJsonModule": true,
     "checkJs": false,
-    "target": "es2015",
-    "module": "ESNext",
-    "lib": ["esnext"],
+    "target": "ESNext",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "lib": ["ESNext"],
     "types": ["node", "./globals"]
   }
 }

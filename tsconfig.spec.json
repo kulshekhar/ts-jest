@@ -1,7 +1,6 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "module": "CommonJS",
     "target": "ES2015",
   },
   "includes": ["src/**/*.spec.ts"],

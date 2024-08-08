@@ -79,7 +79,7 @@ describe('parsedTsConfig', () => {
     })
 
     expect(cs.parsedTsConfig.options).toMatchObject({
-      module: ts.ModuleKind.CommonJS,
+      module: ts.ModuleKind.NodeNext,
       skipLibCheck: true,
     })
   })
