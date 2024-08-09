@@ -26,7 +26,7 @@ test('should have correct import.meta', () => {
     jest: expect.anything(),
     url: expect.any(String),
   })
-  // @ts-expect-error `jest` exists in import.meta in Jest 28
+
   expect(import.meta.jest).toBe(jestObject)
   expect(import.meta.url.endsWith('/e2e/native-esm-js/__tests__/native-esm.spec.ts')).toBe(true)
 })

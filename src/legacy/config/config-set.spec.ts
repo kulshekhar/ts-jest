@@ -619,7 +619,7 @@ describe('raiseDiagnostics', () => {
         logger,
         tsJestConfig: { diagnostics: { exclude: ['/bar/'], pretty: false } },
       })
-      cs.compilerModule.formatDiagnostics = jest.fn<() => string>().mockReturnValueOnce('warning TS9999: foo')
+      cs.compilerModule.formatDiagnostics = jest.fn().mockReturnValueOnce('warning TS9999: foo')
       logger.target.clear()
 
       expect(() =>
@@ -648,7 +648,7 @@ describe('raiseDiagnostics', () => {
         logger,
         tsJestConfig: { diagnostics: { exclude: ['/foo/'], pretty: false, ignoreCodes: [1111] } },
       })
-      cs.compilerModule.formatDiagnostics = jest.fn<() => string>().mockReturnValueOnce('warning TS9999: foo')
+      cs.compilerModule.formatDiagnostics = jest.fn().mockReturnValueOnce('warning TS9999: foo')
       logger.target.clear()
 
       expect(() => cs.raiseDiagnostics([makeDiagnostic()])).toThrowErrorMatchingInlineSnapshot(`"warning TS9999: foo"`)

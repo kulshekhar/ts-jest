@@ -2,6 +2,5 @@
   "compilerOptions": {
     "module": "CommonJS",
     "jsx": "react"
-  },
-  "files": ["../../globals.d.ts"]
+  }
 }

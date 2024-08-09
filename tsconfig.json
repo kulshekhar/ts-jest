@@ -16,7 +16,6 @@
     "target": "ESNext",
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
-    "lib": ["ESNext"],
-    "types": ["node", "./globals"]
+    "lib": ["ESNext"]
   }
 }
