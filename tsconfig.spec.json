@@ -1,7 +1,7 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "target": "ES2015",
+    "target": "ES2015"
   },
   "includes": ["src/**/*.spec.ts"],
   "exclude": ["e2e", "examples", "website"]

@@ -146,7 +146,7 @@ describe('TsCompiler', () => {
           tsJestConfig: { ...baseTsJestConfig, isolatedModules: true, useESM: false },
         })
         compiler.configSet.raiseDiagnostics = jest.fn()
-        compiler.configSet.shouldReportDiagnostics = jest.fn<(f: string) => boolean>().mockReturnValue(shouldReport)
+        compiler.configSet.shouldReportDiagnostics = jest.fn().mockReturnValue(shouldReport)
         const compileOutput: TranspileOutput = {
           sourceMapText: '{}',
           outputText: 'var bar = 1',
@@ -564,7 +564,7 @@ describe('TsCompiler', () => {
           tsJestConfig: baseTsJestConfig,
         })
         compiler.configSet.raiseDiagnostics = jest.fn()
-        compiler.configSet.shouldReportDiagnostics = jest.fn<(f: string) => boolean>().mockReturnValue(shouldReport)
+        compiler.configSet.shouldReportDiagnostics = jest.fn().mockReturnValue(shouldReport)
         // @ts-expect-error testing purpose
         compiler._languageService.getEmitOutput = jest.fn().mockReturnValueOnce({
           outputFiles: [{ text: sourceMap }, { text: jsOutput }],
@@ -650,7 +650,7 @@ describe('TsCompiler', () => {
           },
         ]
         compiler.configSet.raiseDiagnostics = jest.fn()
-        compiler.configSet.shouldReportDiagnostics = jest.fn<(f: string) => boolean>().mockReturnValue(false)
+        compiler.configSet.shouldReportDiagnostics = jest.fn().mockReturnValue(false)
         // @ts-expect-error testing purpose
         compiler._languageService.getEmitOutput = jest.fn().mockReturnValueOnce({
           outputFiles: [{ text: sourceMap }, { text: jsOutput }],
@@ -691,7 +691,7 @@ describe('TsCompiler', () => {
         resolvedModuleNames: ['bar.ts'],
       })
       compiler.configSet.raiseDiagnostics = jest.fn()
-      compiler.configSet.shouldReportDiagnostics = jest.fn<(f: string) => boolean>().mockReturnValue(false)
+      compiler.configSet.shouldReportDiagnostics = jest.fn().mockReturnValue(false)
       // @ts-expect-error testing purpose
       compiler._languageService.getEmitOutput = jest.fn().mockReturnValueOnce({
         outputFiles: [{ text: sourceMap }, { text: jsOutput }],
