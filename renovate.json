@@ -47,8 +47,9 @@
     },
     {
       "matchFiles": ["package.json"],
-      "matchDepTypes": ["dependencies", "optionalDependencies"],
-      "rangeStrategy": "in-range-only"
+      "matchDepTypes": ["dependencies"],
+      "matchPackagePatterns": ["jest"],
+      "enabled": false
     },
     {
       "matchDepTypes": ["peerDependencies"],
