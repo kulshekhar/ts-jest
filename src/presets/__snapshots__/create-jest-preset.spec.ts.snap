@@ -91,7 +91,6 @@ exports[`create-jest-preset CJS presets createJsWithTsPreset should return prese
 exports[`create-jest-preset ESM presets createDefaultEsmLegacyPreset should return preset config 1`] = `
 {
   "extensionsToTreatAsEsm": [
-    ".jsx",
     ".ts",
     ".tsx",
     ".mts",
@@ -111,7 +110,6 @@ exports[`create-jest-preset ESM presets createDefaultEsmLegacyPreset should retu
 exports[`create-jest-preset ESM presets createDefaultEsmPreset should return preset config 1`] = `
 {
   "extensionsToTreatAsEsm": [
-    ".jsx",
     ".ts",
     ".tsx",
     ".mts",

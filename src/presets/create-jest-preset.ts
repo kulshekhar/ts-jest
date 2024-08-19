@@ -133,7 +133,7 @@ export function createDefaultEsmPreset(tsJestTransformOptions: DefaultEsmTransfo
   logger.debug('creating default ESM Jest preset')
 
   return {
-    extensionsToTreatAsEsm: [...JS_EXT_TO_TREAT_AS_ESM, ...TS_EXT_TO_TREAT_AS_ESM],
+    extensionsToTreatAsEsm: [...TS_EXT_TO_TREAT_AS_ESM],
     transform: {
       [ESM_TS_TRANSFORM_PATTERN]: [
         'ts-jest',
@@ -152,7 +152,7 @@ export function createDefaultEsmLegacyPreset(
   logger.debug('creating default ESM Jest preset')
 
   return {
-    extensionsToTreatAsEsm: [...JS_EXT_TO_TREAT_AS_ESM, ...TS_EXT_TO_TREAT_AS_ESM],
+    extensionsToTreatAsEsm: [...TS_EXT_TO_TREAT_AS_ESM],
     transform: {
       [ESM_TS_TRANSFORM_PATTERN]: [
         'ts-jest/legacy',
