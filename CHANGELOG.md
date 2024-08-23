@@ -1,3 +1,14 @@
+### [29.2.5](https://github.com/kulshekhar/ts-jest/compare/v29.2.4...v29.2.5) (2024-08-23)
+
+
+### Bug Fixes
+
+* build: build package with `NodeNext` module ([9b3ade5](https://github.com/kulshekhar/ts-jest/commit/9b3ade5))
+* fix: set value `ts/tsx` `extensionsToTreatAsEsm` in default esm preset ([d9ff362](https://github.com/kulshekhar/ts-jest/commit/d9ff362))
+* fix(compiler): fallback to `NodeJS` module resolution for ts 4.8 ([b7d3409](https://github.com/kulshekhar/ts-jest/commit/b7d3409)), closes [#4499](https://github.com/kulshekhar/ts-jest/issues/4499)
+
+
+
 ### [29.2.4](https://github.com/kulshekhar/ts-jest/compare/v29.2.3...v29.2.4) (2024-08-01)
 
 
