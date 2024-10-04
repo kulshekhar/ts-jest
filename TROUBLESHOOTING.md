@@ -73,3 +73,39 @@ module.exports = {
 **some-module** and **another-module** will be transformed.
 
 For more information see [here](https://stackoverflow.com/questions/63389757/jest-unit-test-syntaxerror-cannot-use-import-statement-outside-a-module) and [here](https://stackoverflow.com/questions/52035066/how-to-write-jest-transformignorepatterns).
+
+## Tests gets stuck when importing a dependency
+
+### PROBLEM
+
+Without cache, jest takes an extremely long time to process files and appears to be stuck.
+
+### SOLUTION
+
+`ts-jest` internally uses TypeScript compiler API to transform ts/js file into js file. The recommendation is to only transform what is needed.
+
+A possible cause for that issue is that you may have enabled `ts-jest` to process javascript files in addition to TypeScript files. This leads to the result that more files are loaded which can, in some cases, blow up the machine.
+
+- In your tsconfig file, check if `compilerOptions.allowJs` is unset or set to false.
+
+```javascript
+{
+    "compilerOptions": {
+        "allowJs": false,
+    }
+}
+```
+
+- In your jest configuration, check if the transform property includes only `.ts` files for ts-jest. If not, change the regular expression to exclude js files. You can also add the attribute `isolatedModules: true` for ts-jest to disable type checking for tests.
+
+```diff
+module.exports = {
+  ...
+  'transform': {
+-    '^.+\\.(t|j)s$': ['ts-jest', {}],
++    '^.+\\.ts$': ['ts-jest', { isolatedModules: true }],
+  },
+};
+```
+
+For more information see [here](https://github.com/kulshekhar/ts-jest/issues/4294)
