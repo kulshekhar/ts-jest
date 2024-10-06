@@ -17,7 +17,7 @@
     "test-examples": "node scripts/test-examples.js",
     "lint": "eslint --ext .js,.ts .",
     "lint-fix": "eslint --fix --ext .js,.ts .",
-    "lint-prettier": "prettier '**/*.{yml,yaml,md}' --write",
+    "lint-prettier": "prettier \"**/*.{yml,yaml,md}\" --write",
     "lint-prettier-ci": "prettier '**/*.{yml,yaml,md}' --check",
     "doc": "cd website && npm run start",
     "doc:build": "cd website && npm run build",
