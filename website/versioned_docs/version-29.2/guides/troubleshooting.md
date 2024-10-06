@@ -97,9 +97,9 @@ A possible cause for that issue is that you may have enabled `ts-jest` to proces
 
 ```javascript
 {
-    "compilerOptions": {
-        "allowJs": false,
-    }
+  "compilerOptions": {
+    "allowJs": false,
+  }
 }
 ```
 
