@@ -82,6 +82,7 @@ changes are being displayed accurately.
    ```sh-session
    $ cd website       # Only needed if you are not already in the website directory
    $ npm ci
+   $ npm run lint-prettier # Please format markdown files
    $ npm run start
    ```
 3. You can run a development server to check if the changes you made are being displayed accurately by running `npm run start` in the website directory.
