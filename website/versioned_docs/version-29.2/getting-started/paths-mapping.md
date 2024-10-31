@@ -109,3 +109,43 @@ With extra options as 2nd argument:
 - `prefix`: append prefix to each of mapped config in the result
 - `useESM`: when using `type: module` in `package.json`, TypeScript enforces users to have explicit `js` extension when importing
   a `ts` file. This option is to help `pathsToModuleNameMapper` to create a config to suit with this scenario.
+
+#### If using `globalSetup` or `globalSetup`
+
+Files used for [`globalSetup`](https://jestjs.io/docs/configuration#globalsetup-string) or [`globalTeardown`](https://jestjs.io/docs/configuration#globalteardown-string) are not directly processes by `jest`, so those do not use the ["moduleNameMapper"](https://jestjs.io/docs/configuration#modulenamemapper-objectstring-string--arraystring) mapping. So you have to make sure those are able to map the paths themselves.
+
+##### Global setup file with `tsconfig-paths`
+
+For those files to be able to use [`tsconfig-paths`](https://www.npmjs.com/package/tsconfig-paths), you have to import it directly
+
+```js tab
+// ./path/to/globalSetup.js
+require("tsconfig-paths/register");
+
+/**
+ * Your global setup
+ */
+
+// ./path/to/globalTeardown.js
+require("tsconfig-paths/register");
+
+/**
+ * Your global teardown
+ */
+```
+
+```ts tab
+// ./path/to/globalSetup.ts
+import "tsconfig-paths/register";
+
+/**
+ * Your global setup
+ */
+
+// ./path/to/globalTeardown.ts
+import "tsconfig-paths/register";
+
+/**
+ * Your global teardown
+ */
+```
