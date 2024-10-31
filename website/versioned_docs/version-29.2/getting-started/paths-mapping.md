@@ -120,14 +120,14 @@ For those files to be able to use [`tsconfig-paths`](https://www.npmjs.com/packa
 
 ```js tab
 // ./path/to/globalSetup.js
-require("tsconfig-paths/register");
+require('tsconfig-paths/register')
 
 /**
  * Your global setup
  */
 
 // ./path/to/globalTeardown.js
-require("tsconfig-paths/register");
+require('tsconfig-paths/register')
 
 /**
  * Your global teardown
@@ -136,14 +136,14 @@ require("tsconfig-paths/register");
 
 ```ts tab
 // ./path/to/globalSetup.ts
-import "tsconfig-paths/register";
+import 'tsconfig-paths/register'
 
 /**
  * Your global setup
  */
 
 // ./path/to/globalTeardown.ts
-import "tsconfig-paths/register";
+import 'tsconfig-paths/register'
 
 /**
  * Your global teardown
