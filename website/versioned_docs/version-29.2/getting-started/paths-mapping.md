@@ -110,7 +110,7 @@ With extra options as 2nd argument:
 - `useESM`: when using `type: module` in `package.json`, TypeScript enforces users to have explicit `js` extension when importing
   a `ts` file. This option is to help `pathsToModuleNameMapper` to create a config to suit with this scenario.
 
-#### If using `globalSetup` or `globalSetup`
+#### If using `globalSetup` or `globalTeardown`
 
 Files used for [`globalSetup`](https://jestjs.io/docs/configuration#globalsetup-string) or [`globalTeardown`](https://jestjs.io/docs/configuration#globalteardown-string) are not directly processes by `jest`, so those do not use the ["moduleNameMapper"](https://jestjs.io/docs/configuration#modulenamemapper-objectstring-string--arraystring) mapping. So you have to make sure those are able to map the paths themselves.
 
