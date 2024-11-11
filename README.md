@@ -9,7 +9,7 @@
   <a href="https://coveralls.io/github/kulshekhar/ts-jest?branch=main"><img src="https://coveralls.io/repos/github/kulshekhar/ts-jest/badge.svg?branch=main" alt="Coverage status"/> </a>
   <a href="https://actions-badge.atrox.dev/kulshekhar/ts-jest/goto?ref=main"><img alt="GitHub actions" src="https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fkulshekhar%2Fts-jest%2Fbadge%3Fref%3Dmain&style=flat-square" /> </a>
   <a href="https://github.com/kulshekhar/ts-jest/blob/main/LICENSE.md"><img src="https://img.shields.io/npm/l/ts-jest.svg?style=flat-square" alt="GitHub license"/> </a>
-  <a href="https://gurubase.io/g/ts-jest"><img src="https://img.shields.io/badge/Gurubase-Ask%20ts-jest%20Guru-006BFF?style=flat-square" alt="Gurubase"/> </a>
+  <a href="https://gurubase.io/g/ts-jest"><img src="https://img.shields.io/badge/Gurubase-Ask%20ts--jest%20Guru-006BFF?style=flat-square" alt="Gurubase"/> </a>
 </p>
 
 <img src="./icon.png" align="right" title="ts-jest Logo" width="128" height="128">
