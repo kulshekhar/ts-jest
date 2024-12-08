@@ -1,4 +1,5 @@
 import simplePlantUML from '@akebifiky/remark-simple-plantuml'
+import type * as Presets from '@docusaurus/preset-classic'
 import type { Config } from '@docusaurus/types'
 import { themes } from 'prism-react-renderer'
 
@@ -97,7 +98,7 @@ const config: Config = {
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
         },
-      },
+      } satisfies Presets.Options,
     ],
   ],
   themeConfig: {
