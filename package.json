@@ -121,7 +121,7 @@
     "eslint": "^8.57.1",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-import": "^2.31.0",
-    "eslint-plugin-jest": "^28.10.0",
+    "eslint-plugin-jest": "^28.11.0",
     "eslint-plugin-jsdoc": "^48.11.0",
     "eslint-plugin-prefer-arrow": "^1.2.3",
     "eslint-plugin-prettier": "^4.2.1",
