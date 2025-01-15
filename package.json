@@ -126,7 +126,7 @@
     "eslint-plugin-prefer-arrow": "^1.2.3",
     "eslint-plugin-prettier": "^4.2.1",
     "execa": "5.1.1",
-    "fs-extra": "^11.2.0",
+    "fs-extra": "^11.3.0",
     "glob": "^10.2.6",
     "glob-gitignore": "^1.0.15",
     "husky": "~4.3.8",
