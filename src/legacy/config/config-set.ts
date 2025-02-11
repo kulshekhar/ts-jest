@@ -594,7 +594,7 @@ export class ConfigSet {
     }
 
     // parse json, merge config extending others, ...
-    return this._parseTsconfig(config, basePath, configFileName)
+    return this._parseTsconfig(config, basePath, this.tsconfigFilePath)
   }
 
   protected _findTsconfigFile(resolvedConfigFile?: string) {
@@ -635,10 +635,10 @@ export class ConfigSet {
     return parsedConfig?.fileNames?.length ? parsedConfig.fileNames.some((path) => this.isTestFile(path)) : false
   }
 
-  protected _parseTsconfig(config: unknown, basePath: string, configFileName?: string) {
+  protected _parseTsconfig(config: unknown, basePath: string, configFileName = this.tsconfigFilePath) {
     const ts = this.compilerModule
 
-    return ts.parseJsonConfigFileContent(config, ts.sys, basePath, undefined, this.tsconfigFilePath)
+    return ts.parseJsonConfigFileContent(config, ts.sys, basePath, undefined, configFileName)
   }
 
   isTestFile(fileName: string): boolean {

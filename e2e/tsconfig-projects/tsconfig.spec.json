@@ -1,0 +1,8 @@
+{
+  "compilerOptions": {
+    "module": "Node16",
+    "typeRoots": ["../node_modules"],
+    "types": ["@types/jest", "@types/node"],
+  },
+  "include": ["src/**/*.spec.ts"]
+}
