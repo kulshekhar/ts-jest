@@ -604,10 +604,10 @@ export class ConfigSet {
       ? normalizeSlashes(resolvedConfigFile)
       : ts.findConfigFile(normalizeSlashes(this.rootDir), ts.sys.fileExists)
 
-    return this._findConfigFileInReferences(configFileName)
+    return this._findReferenceTsconfig(configFileName)
   }
 
-  protected _findConfigFileInReferences(configFileName?: string): string | undefined {
+  protected _findReferenceTsconfig(configFileName?: string): string | undefined {
     const ts = this.compilerModule
 
     if (!configFileName) return
@@ -620,7 +620,8 @@ export class ConfigSet {
         const filePath = ts.resolveProjectReferencePath(ref)
 
         if (ts.sys.fileExists(filePath)) {
-          return this._findConfigFileInReferences(ref.path)
+          const newConfigFileName = this._findReferenceTsconfig(ref.path)
+          if (newConfigFileName) return newConfigFileName
         }
       }
     }
