@@ -202,8 +202,6 @@ export class ConfigSet {
 
     this.logger.debug({ compilerModule: this.compilerModule }, 'normalized compiler module config via ts-jest option')
 
-    this._setupConfigSet(options)
-    this._resolveTsCacheDir()
     this._matchablePatterns = [...this._jestCfg.testMatch, ...this._jestCfg.testRegex].filter(
       (pattern) =>
         /**
@@ -218,6 +216,9 @@ export class ConfigSet {
     this._matchTestFilePath = globsToMatcher(
       this._matchablePatterns.filter((pattern: string | RegExp) => typeof pattern === 'string') as string[],
     )
+
+    this._setupConfigSet(options)
+    this._resolveTsCacheDir()
   }
 
   /**
