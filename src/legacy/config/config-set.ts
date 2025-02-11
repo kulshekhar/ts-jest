@@ -607,21 +607,23 @@ export class ConfigSet {
     return this._findReferenceTsconfig(configFileName)
   }
 
-  protected _findReferenceTsconfig(configFileName?: string): string | undefined {
+  protected _findReferenceTsconfig(tsconfigFileName?: string): string | undefined {
     const ts = this.compilerModule
 
-    if (!configFileName) return
+    if (!tsconfigFileName) return
 
-    const parsedConfig = this._parseTsconfig(undefined, dirname(configFileName), configFileName)
-    if (this._includesTestFilesInConfig(parsedConfig)) return configFileName
+    const rawTsconfig = ts.readConfigFile(tsconfigFileName, ts.sys.readFile).config
+    const parsedTsconfig = this._parseTsconfig(rawTsconfig, dirname(tsconfigFileName), tsconfigFileName)
 
-    if (parsedConfig.projectReferences) {
-      for (const ref of parsedConfig.projectReferences) {
+    if (this._includesTestFilesInConfig(parsedTsconfig)) return tsconfigFileName
+
+    if (parsedTsconfig.projectReferences) {
+      for (const ref of parsedTsconfig.projectReferences) {
         const filePath = ts.resolveProjectReferencePath(ref)
 
         if (ts.sys.fileExists(filePath)) {
-          const newConfigFileName = this._findReferenceTsconfig(ref.path)
-          if (newConfigFileName) return newConfigFileName
+          const newTsconfigFileName = this._findReferenceTsconfig(ref.path)
+          if (newTsconfigFileName) return newTsconfigFileName
         }
       }
     }
