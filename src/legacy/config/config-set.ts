@@ -604,7 +604,9 @@ export class ConfigSet {
       ? normalizeSlashes(resolvedConfigFile)
       : ts.findConfigFile(normalizeSlashes(this.rootDir), ts.sys.fileExists)
 
-    return this._findReferenceTsconfig(configFileName)
+    const newTsconfigFile = this._findReferenceTsconfig(configFileName)
+
+    return newTsconfigFile ?? configFileName
   }
 
   protected _findReferenceTsconfig(tsconfigFileName?: string): string | undefined {
@@ -612,8 +614,11 @@ export class ConfigSet {
 
     if (!tsconfigFileName) return
 
-    const rawTsconfig = ts.readConfigFile(tsconfigFileName, ts.sys.readFile).config
-    const parsedTsconfig = this._parseTsconfig(rawTsconfig, dirname(tsconfigFileName), tsconfigFileName)
+    const parsedTsconfig = this._parseTsconfig(
+      ts.readConfigFile(tsconfigFileName, ts.sys.readFile).config || {},
+      dirname(tsconfigFileName),
+      tsconfigFileName,
+    )
 
     if (this._includesTestFilesInConfig(parsedTsconfig)) return tsconfigFileName
 
