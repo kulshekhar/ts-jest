@@ -170,11 +170,3 @@ exports[`customTransformers should show warning log when missing version and nam
   "[level:40] The AST transformer {{file}} must have an \`export const name = <your_transformer_name>",
 ]
 `;
-
-exports[`isTestFile should return a boolean value whether the file matches test pattern 1`] = `true`;
-
-exports[`isTestFile should return a boolean value whether the file matches test pattern 2`] = `true`;
-
-exports[`isTestFile should return a boolean value whether the file matches test pattern 3`] = `true`;
-
-exports[`isTestFile should return a boolean value whether the file matches test pattern 4`] = `true`;

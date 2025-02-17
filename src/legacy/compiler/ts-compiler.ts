@@ -283,7 +283,7 @@ export class TsCompiler implements TsCompilerInstance {
   private _createLanguageService(): void {
     // Initialize memory cache for typescript compiler
     this._parsedTsConfig.fileNames
-      .filter((fileName) => TS_TSX_REGEX.test(fileName) && !this.configSet.isTestFile(fileName))
+      .filter((fileName) => TS_TSX_REGEX.test(fileName))
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       .forEach((fileName) => this._fileVersionCache!.set(fileName, 0))
     /* istanbul ignore next */

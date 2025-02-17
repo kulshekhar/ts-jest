@@ -493,37 +493,6 @@ describe('tsJestDigest', () => {
   })
 }) // tsJestDigest
 
-describe('isTestFile', () => {
-  it.each([
-    {
-      jestConfig: {
-        testRegex: [{}],
-        testMatch: [],
-      } as any, // eslint-disable-line @typescript-eslint/no-explicit-any
-    },
-    {
-      jestConfig: {
-        testMatch: [],
-        testRegex: [/.*\.(spec|test)\.[jt]sx?$/],
-      } as any, // eslint-disable-line @typescript-eslint/no-explicit-any
-    },
-    {
-      jestConfig: {
-        testMatch: ['**/?(*.)+(spec|test).[tj]s?(x)'],
-        testRegex: [],
-      } as any, // eslint-disable-line @typescript-eslint/no-explicit-any
-    },
-    {
-      jestConfig: {
-        testMatch: ['**/?(*.)+(spec|test).[tj]s?(x)'],
-        testRegex: ['**/?(*.)+(foo|bar).[tj]s?(x)'],
-      } as any, // eslint-disable-line @typescript-eslint/no-explicit-any
-    },
-  ])('should return a boolean value whether the file matches test pattern', (config) => {
-    expect(createConfigSet(config).isTestFile('foo.spec.ts')).toMatchSnapshot()
-  })
-}) // isTestFile
-
 describe('shouldStringifyContent', () => {
   it('should return correct value is defined', () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
