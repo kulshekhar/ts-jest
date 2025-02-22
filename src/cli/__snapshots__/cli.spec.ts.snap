@@ -25,7 +25,7 @@ exports[`config init should create a jest config file with cli options for confi
 module.exports = {
   testEnvironment: "jsdom",
   transform: {
-    "^.+.jsx?$": "babel-jest",
+    "^.+\\.jsx?$": "babel-jest",
   },
 };"
 `;
@@ -35,7 +35,7 @@ exports[`config init should create a jest config file with cli options for confi
 export default {
   testEnvironment: "jsdom",
   transform: {
-    "^.+.jsx?$": "babel-jest",
+    "^.+\\.jsx?$": "babel-jest",
   },
 };"
 `;
@@ -81,7 +81,7 @@ exports[`config init should update package.json for config type js-with-babel-fu
   "version": "0.0.0-mock.0",
   "jest": {
     "transform": {
-      "^.+.jsx?$": "babel-jest",
+      "^.+\\\\.jsx?$": "babel-jest",
       "^.+\\\\.tsx?$": [
         "ts-jest",
         {
@@ -113,7 +113,7 @@ exports[`config init should update package.json for config type js-with-ts-full-
 exports[`config migrate should generate transform config with existing transform options for js-with-babel 1`] = `
 "module.exports = {
   transform: {
-    '^.+.jsx?$': 'babel-jest',
+    '^.+\\\\.jsx?$': 'babel-jest',
     '^.+\\\\.tsx?$': [
       'ts-jest',
       {},
