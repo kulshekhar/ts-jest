@@ -133,7 +133,7 @@ export class Importer {
     // try to load any of the alternative after trying main one
     const res = this.tryThese(moduleName, ...alternatives)
     // if we could load one, return it
-    if (res && res.exists) {
+    if (res?.exists) {
       if (!res.error) return res.exports
       // it could not load because of a failure while importing, but it exists
       throw new Error(interpolate(Errors.LoadingModuleFailed, { module: res.given, error: res.error.message }))
@@ -188,7 +188,7 @@ function requireWrapper(moduleName: string): RequireResult {
   const result: RequireResult = { exists, path, given: moduleName }
   try {
     result.exports = requireModule(path)
-  } catch (error) {
+  } catch {
     try {
       result.exports = requireModule(moduleName)
     } catch (error) {
@@ -199,6 +199,7 @@ function requireWrapper(moduleName: string): RequireResult {
   return result
 }
 
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 let requireModule = (mod: string) => require(mod)
 let resolveModule = (mod: string) => require.resolve(mod, { paths: [process.cwd(), __dirname] })
 
