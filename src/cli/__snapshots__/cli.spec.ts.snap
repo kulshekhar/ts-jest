@@ -45,7 +45,7 @@ exports[`config init should create a jest config file with cli options for confi
 module.exports = {
   testEnvironment: "jsdom",
   transform: {
-    "^.+.[tj]sx?$": ["ts-jest",{tsconfig:"tsconfig.test.json"}],
+    "^.+\\.[tj]sx?$": ["ts-jest",{tsconfig:"tsconfig.test.json"}],
   },
 };"
 `;
@@ -55,7 +55,7 @@ exports[`config init should create a jest config file with cli options for confi
 export default {
   testEnvironment: "jsdom",
   transform: {
-    "^.+.[tj]sx?$": ["ts-jest",{tsconfig:"tsconfig.test.json"}],
+    "^.+\\.[tj]sx?$": ["ts-jest",{tsconfig:"tsconfig.test.json"}],
   },
 };"
 `;
@@ -99,7 +99,7 @@ exports[`config init should update package.json for config type js-with-ts-full-
   "version": "0.0.0-mock.0",
   "jest": {
     "transform": {
-      "^.+.[tj]sx?$": [
+      "^.+\\\\.[tj]sx?$": [
         "ts-jest",
         {
           "tsconfig": "tsconfig.test.json"
@@ -126,7 +126,7 @@ exports[`config migrate should generate transform config with existing transform
 exports[`config migrate should generate transform config with existing transform options for js-with-ts 1`] = `
 "module.exports = {
   transform: {
-    '^.+.[tj]sx?$': [
+    '^.+\\\\.[tj]sx?$': [
       'ts-jest',
       {},
     ],

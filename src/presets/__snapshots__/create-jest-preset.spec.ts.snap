@@ -63,7 +63,7 @@ exports[`create-jest-preset CJS presets createJsWithBabelPreset should return pr
 exports[`create-jest-preset CJS presets createJsWithTsLegacyPreset should return preset config 1`] = `
 {
   "transform": {
-    "^.+.[tj]sx?$": [
+    "^.+\\.[tj]sx?$": [
       "ts-jest/legacy",
       {
         "isolatedModules": true,
@@ -77,7 +77,7 @@ exports[`create-jest-preset CJS presets createJsWithTsLegacyPreset should return
 exports[`create-jest-preset CJS presets createJsWithTsPreset should return preset config 1`] = `
 {
   "transform": {
-    "^.+.[tj]sx?$": [
+    "^.+\\.[tj]sx?$": [
       "ts-jest",
       {
         "isolatedModules": true,
