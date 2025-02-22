@@ -3,7 +3,7 @@
 exports[`create-jest-preset CJS presets createDefaultLegacyPreset should return preset config 1`] = `
 {
   "transform": {
-    "^.+.tsx?$": [
+    "^.+\\.tsx?$": [
       "ts-jest",
       {
         "tsconfig": "tsconfig.spec.json",
@@ -16,7 +16,7 @@ exports[`create-jest-preset CJS presets createDefaultLegacyPreset should return 
 exports[`create-jest-preset CJS presets createDefaultPreset should return preset config 1`] = `
 {
   "transform": {
-    "^.+.tsx?$": [
+    "^.+\\.tsx?$": [
       "ts-jest",
       {
         "tsconfig": "tsconfig.spec.json",
@@ -30,7 +30,7 @@ exports[`create-jest-preset CJS presets createJsWithBabelLegacyPreset should ret
 {
   "transform": {
     "^.+.jsx?$": "babel-jest",
-    "^.+.tsx?$": [
+    "^.+\\.tsx?$": [
       "ts-jest/legacy",
       {
         "babelConfig": {
@@ -47,7 +47,7 @@ exports[`create-jest-preset CJS presets createJsWithBabelPreset should return pr
 {
   "transform": {
     "^.+.jsx?$": "babel-jest",
-    "^.+.tsx?$": [
+    "^.+\\.tsx?$": [
       "ts-jest",
       {
         "babelConfig": {
