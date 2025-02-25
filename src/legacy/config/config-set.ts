@@ -161,10 +161,6 @@ export class ConfigSet {
   /**
    * @internal
    */
-  private readonly _matchTestFilePath: (filePath: string) => boolean
-  /**
-   * @internal
-   */
   private _shouldIgnoreDiagnosticsForFile!: (filePath: string) => boolean
   /**
    * @internal
@@ -216,9 +212,6 @@ export class ConfigSet {
     if (!this._matchablePatterns.length) {
       this._matchablePatterns.push(...DEFAULT_JEST_TEST_MATCH)
     }
-    this._matchTestFilePath = globsToMatcher(
-      this._matchablePatterns.filter((pattern: string | RegExp) => typeof pattern === 'string') as string[],
-    )
   }
 
   /**
@@ -581,12 +574,6 @@ export class ConfigSet {
 
     // parse json, merge config extending others, ...
     return ts.parseJsonConfigFileContent(config, ts.sys, basePath, undefined, configFileName)
-  }
-
-  isTestFile(fileName: string): boolean {
-    return this._matchablePatterns.some((pattern) =>
-      typeof pattern === 'string' ? this._matchTestFilePath(fileName) : pattern.test(fileName),
-    )
   }
 
   shouldStringifyContent(filePath: string): boolean {
