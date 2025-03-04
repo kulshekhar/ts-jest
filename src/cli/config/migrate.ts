@@ -73,6 +73,7 @@ export const run: CliCommand = async (args: CliCommandArgs /* , logger: Logger*/
   if (!/\.(js|json)$/.test(name)) {
     throw new TypeError(`Configuration file ${file} must be a JavaScript or JSON file.`)
   }
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   let actualConfig: Config.InitialOptions = require(filePath)
   if (isPackage) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

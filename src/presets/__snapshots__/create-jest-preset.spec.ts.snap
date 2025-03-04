@@ -3,7 +3,7 @@
 exports[`create-jest-preset CJS presets createDefaultLegacyPreset should return preset config 1`] = `
 {
   "transform": {
-    "^.+.tsx?$": [
+    "^.+\\.tsx?$": [
       "ts-jest",
       {
         "tsconfig": "tsconfig.spec.json",
@@ -16,7 +16,7 @@ exports[`create-jest-preset CJS presets createDefaultLegacyPreset should return 
 exports[`create-jest-preset CJS presets createDefaultPreset should return preset config 1`] = `
 {
   "transform": {
-    "^.+.tsx?$": [
+    "^.+\\.tsx?$": [
       "ts-jest",
       {
         "tsconfig": "tsconfig.spec.json",
@@ -29,8 +29,8 @@ exports[`create-jest-preset CJS presets createDefaultPreset should return preset
 exports[`create-jest-preset CJS presets createJsWithBabelLegacyPreset should return preset config 1`] = `
 {
   "transform": {
-    "^.+.jsx?$": "babel-jest",
-    "^.+.tsx?$": [
+    "^.+\\.jsx?$": "babel-jest",
+    "^.+\\.tsx?$": [
       "ts-jest/legacy",
       {
         "babelConfig": {
@@ -46,8 +46,8 @@ exports[`create-jest-preset CJS presets createJsWithBabelLegacyPreset should ret
 exports[`create-jest-preset CJS presets createJsWithBabelPreset should return preset config 1`] = `
 {
   "transform": {
-    "^.+.jsx?$": "babel-jest",
-    "^.+.tsx?$": [
+    "^.+\\.jsx?$": "babel-jest",
+    "^.+\\.tsx?$": [
       "ts-jest",
       {
         "babelConfig": {
@@ -63,7 +63,7 @@ exports[`create-jest-preset CJS presets createJsWithBabelPreset should return pr
 exports[`create-jest-preset CJS presets createJsWithTsLegacyPreset should return preset config 1`] = `
 {
   "transform": {
-    "^.+.[tj]sx?$": [
+    "^.+\\.[tj]sx?$": [
       "ts-jest/legacy",
       {
         "isolatedModules": true,
@@ -77,7 +77,7 @@ exports[`create-jest-preset CJS presets createJsWithTsLegacyPreset should return
 exports[`create-jest-preset CJS presets createJsWithTsPreset should return preset config 1`] = `
 {
   "transform": {
-    "^.+.[tj]sx?$": [
+    "^.+\\.[tj]sx?$": [
       "ts-jest",
       {
         "isolatedModules": true,

@@ -108,6 +108,7 @@ const requireFromString = (code: string, fileName: string) => {
   // @ts-expect-error `_compile` is not exposed in typing
   m._compile(code, fileName)
   const exports = m.exports
+  // eslint-disable-next-line @typescript-eslint/no-unused-expressions
   parent && parent.children && parent.children.splice(parent.children.indexOf(m), 1)
 
   return exports
@@ -254,6 +255,7 @@ export class ConfigSet {
         if (babelFileExtName === '.js' || babelFileExtName === '.cjs') {
           this.babelConfig = {
             ...baseBabelCfg,
+            // eslint-disable-next-line @typescript-eslint/no-require-imports
             ...require(babelCfgPath),
           }
         } else {
@@ -286,6 +288,7 @@ export class ConfigSet {
     if (typeof diagnosticsOpt === 'object') {
       const { ignoreCodes } = diagnosticsOpt
       if (ignoreCodes) {
+        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
         Array.isArray(ignoreCodes) ? ignoreList.push(...ignoreCodes) : ignoreList.push(ignoreCodes)
       }
       this._diagnostics = {
@@ -353,6 +356,7 @@ export class ConfigSet {
             }).code
           transformerFunc = requireFromString(compiledTransformer, transformerPath.replace('.ts', '.js'))
         } else {
+          // eslint-disable-next-line @typescript-eslint/no-require-imports
           transformerFunc = require(transformerPath)
         }
         if (!transformerFunc.version) {
@@ -637,7 +641,7 @@ export class ConfigSet {
     return this._stringifyContentRegExp ? this._stringifyContentRegExp.test(filePath) : false
   }
 
-  raiseDiagnostics(diagnostics: ts.Diagnostic[], filePath?: string, logger?: Logger): void {
+  raiseDiagnostics(diagnostics: ts.Diagnostic[], filePath?: string, logger = this.logger): void {
     const { ignoreCodes } = this._diagnostics
     const { DiagnosticCategory } = this.compilerModule
     const filteredDiagnostics =
@@ -657,8 +661,7 @@ export class ConfigSet {
     if (this._diagnostics.throws && filteredDiagnostics.some((d) => importantCategories.includes(d.category))) {
       throw error
     }
-    /* istanbul ignore next (already covered) */
-    logger ? logger.warn({ error }, error.message) : this.logger.warn({ error }, error.message)
+    logger.warn({ error }, error.message)
   }
 
   shouldReportDiagnostics(filePath: string): boolean {
@@ -701,7 +704,7 @@ export class ConfigSet {
         try {
           path = require.resolve(path)
           nodeResolved = true
-        } catch (_) {}
+        } catch {}
       }
       if (!nodeResolved) {
         path = resolve(this.cwd, path)
@@ -711,7 +714,7 @@ export class ConfigSet {
       try {
         path = require.resolve(path)
         nodeResolved = true
-      } catch (_) {}
+      } catch {}
     }
     if (throwIfMissing && !existsSync(path)) {
       throw new Error(interpolate(Errors.FileNotFound, { inputPath, resolvedPath: path }))

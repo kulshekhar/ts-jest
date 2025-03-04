@@ -33,7 +33,6 @@ module.exports = {
             default: 'array-simple',
           },
         ],
-        '@typescript-eslint/comma-spacing': 'error',
         '@typescript-eslint/no-redeclare': 'error',
         '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
         '@typescript-eslint/no-var-requires': 'off',

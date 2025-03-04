@@ -348,7 +348,7 @@ describe('babelJestTransformer', () => {
   )
 
   it('should return babelJestTransformer with loaded config object', () => {
-    /* eslint-disable-next-line jest/no-mocks-import */
+    // eslint-disable-next-line jest/no-mocks-import,@typescript-eslint/no-require-imports
     const babelConfig = require('../../__mocks__/babel-foo.config')
     const cs = createConfigSet({
       jestConfig: {
@@ -723,6 +723,7 @@ describe('resolvePath', () => {
     const cs = createConfigSet({ jestConfig: { rootDir: '/root', cwd: '/cwd' } as any, resolve: null })
     const doResolve = (path: string) => cs.resolvePath(path, { throwIfMissing: false, nodeResolve: true })
     expect(doResolve('json5')).toBe(
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
       resolve(__dirname, '../../../node_modules/json5', require('json5/package.json').main),
     )
     expect(doResolve('./bar.js')).toBe(resolve('/cwd/bar.js'))

@@ -116,7 +116,7 @@ interface TsJestTransformerOptions {
 
 export type DefaultPreset = {
   transform: {
-    '^.+.tsx?$': ['ts-jest/legacy', TsJestTransformerOptions]
+    '^.+\\.tsx?$': ['ts-jest/legacy', TsJestTransformerOptions]
   }
 }
 ```
@@ -292,7 +292,7 @@ interface TsJestTransformerOptions {
 
 export type JsWithTsPreset = {
   transform: {
-    '^.+.[tj]sx?$': ['ts-jest', TsJestTransformerOptions]
+    '^.+\\.[tj]sx?$': ['ts-jest', TsJestTransformerOptions]
   }
 }
 ```
@@ -350,7 +350,7 @@ interface TsJestTransformerOptions {
 
 export type JsWithTsPreset = {
   transform: {
-    '^.+.[tj]sx?$': ['ts-jest/legacy', TsJestTransformerOptions]
+    '^.+\\.[tj]sx?$': ['ts-jest/legacy', TsJestTransformerOptions]
   }
 }
 ```
@@ -526,7 +526,7 @@ interface TsJestTransformerOptions {
 
 export type JsWithBabelPreset = {
   transform: {
-    '^.+.[tj]sx?$': ['ts-jest', TsJestTransformerOptions]
+    '^.+\\.[tj]sx?$': ['ts-jest', TsJestTransformerOptions]
   }
 }
 ```
@@ -586,7 +586,7 @@ interface TsJestTransformerOptions {
 
 export type JsWithBabelPreset = {
   transform: {
-    '^.+.[tj]sx?$': ['ts-jest/legacy', TsJestTransformerOptions]
+    '^.+\\.[tj]sx?$': ['ts-jest/legacy', TsJestTransformerOptions]
   }
 }
 ```
@@ -646,7 +646,7 @@ interface TsJestTransformerOptions {
 
 export type JsWithBabelPreset = {
   transform: {
-    '^.+.[tj]sx?$': ['ts-jest', TsJestTransformerOptions]
+    '^.+\\.[tj]sx?$': ['ts-jest', TsJestTransformerOptions]
   }
 }
 ```
@@ -706,7 +706,7 @@ interface TsJestTransformerOptions {
 
 export type JsWithBabelPreset = {
   transform: {
-    '^.+.[tj]sx?$': ['ts-jest/legacy', TsJestTransformerOptions]
+    '^.+\\.[tj]sx?$': ['ts-jest/legacy', TsJestTransformerOptions]
   }
 }
 ```

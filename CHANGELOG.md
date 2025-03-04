@@ -1,3 +1,14 @@
+### [29.2.6](https://github.com/kulshekhar/ts-jest/compare/v29.2.5...v29.2.6) (2025-02-22)
+
+
+### Bug Fixes
+
+* fix: escape dot for `JS_TRANSFORM_PATTERN` regex ([8c91c60](https://github.com/kulshekhar/ts-jest/commit/8c91c60))
+* fix: escape dot for `TS_JS_TRANSFORM_PATTERN` regex ([3eea850](https://github.com/kulshekhar/ts-jest/commit/3eea850))
+* fix: escape dot for `TS_TRANSFORM_PATTERN` regex ([80d3e4d](https://github.com/kulshekhar/ts-jest/commit/80d3e4d)), closes [#4579](https://github.com/kulshekhar/ts-jest/issues/4579)
+
+
+
 ### [29.2.5](https://github.com/kulshekhar/ts-jest/compare/v29.2.4...v29.2.5) (2024-08-23)
 
 
