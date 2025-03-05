@@ -627,7 +627,7 @@ export class ConfigSet {
         const filePath = ts.resolveProjectReferencePath(ref)
 
         if (ts.sys.fileExists(filePath)) {
-          const newTsconfigFileName = this._findReferenceTsconfig(ref.path)
+          const newTsconfigFileName = this._findReferenceTsconfig(ts.resolveProjectReferencePath(ref))
           if (newTsconfigFileName) return newTsconfigFileName
         }
       }
