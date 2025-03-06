@@ -5,6 +5,6 @@ module.exports = {
   displayName: 'js-with-babel',
   ...createJsWithBabelPreset({
     babelConfig: true,
-    isolatedModules: true,
+    tsconfig: 'tsconfig-isolated.json',
   })
 }

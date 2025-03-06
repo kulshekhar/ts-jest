@@ -4,6 +4,6 @@ const { createJsWithTsPreset } = require('ts-jest')
 module.exports = {
   displayName: 'js-with-ts',
   ...createJsWithTsPreset({
-    isolatedModules: true,
+    tsconfig: 'tsconfig-isolated.json',
   })
 }

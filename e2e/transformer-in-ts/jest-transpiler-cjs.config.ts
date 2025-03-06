@@ -6,7 +6,7 @@ export default {
     [TS_TRANSFORM_PATTERN]: [
       'ts-jest',
       {
-        tsconfig: '<rootDir>/../tsconfig-cjs.spec.json',
+        tsconfig: '<rootDir>/tsconfig-cjs-transpiler.spec.json',
         astTransformers: {
           before: [
             {
@@ -14,7 +14,6 @@ export default {
             },
           ],
         },
-        isolatedModules: true,
       },
     ],
   },

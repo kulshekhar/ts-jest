@@ -4,7 +4,7 @@ import { createDefaultPreset } from 'ts-jest'
 const jestConfig = {
   displayName: 'type-module',
   ...createDefaultPreset({
-    isolatedModules: true,
+    tsconfig: 'tsconfig-isolated.json',
   }),
 }
 

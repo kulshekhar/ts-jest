@@ -44,6 +44,8 @@ export const enum Deprecations {
     "    <transform_regex>: ['ts-jest', { /* ts-jest config goes here in Jest */ }],\n" +
     '},\n' +
     'See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/presets#advanced',
+  IsolatedModulesWithTsconfigPath = '"isolatedModules" is deprecated and will be removed in v30.0.0. Please remove "isolatedModules" from your "ts-jest" transform options and enable "isolatedModules: true" in {{tsconfigFilePath}} instead.',
+  IsolatedModulesWithoutTsconfigPath = '"isolatedModules" is deprecated and will be removed in v30.0.0. Please remove "isolatedModules" from your "ts-jest" transform options and enable "isolatedModules: true" in a tsconfig file instead.',
 }
 
 /**

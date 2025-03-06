@@ -2,8 +2,7 @@ const baseCfg = require('./jest.config.cjs')
 const { createDefaultPreset } = require('ts-jest')
 
 const defaultPreset = createDefaultPreset({
-  tsconfig: 'tsconfig.spec.json',
-  isolatedModules: true,
+  tsconfig: 'tsconfig-isolated.spec.json',
 })
 
 /** @type {import('ts-jest').JestConfigWithTsJest} */

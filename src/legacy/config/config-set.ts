@@ -26,6 +26,7 @@ import type {
   BabelConfig,
   BabelJestTransformer,
   TsJestAstTransformer,
+  TsJestTransformerOptions,
   TsJestTransformOptions,
   TTypeScript,
 } from '../../types'
@@ -33,7 +34,7 @@ import { TsCompilerInstance } from '../../types'
 import { rootLogger, stringify } from '../../utils'
 import { backportJestConfig } from '../../utils/backports'
 import { importer } from '../../utils/importer'
-import { Errors, ImportReasons, interpolate } from '../../utils/messages'
+import { Deprecations, Errors, ImportReasons, interpolate } from '../../utils/messages'
 import { normalizeSlashes } from '../../utils/normalize-slashes'
 import { sha1 } from '../../utils/sha1'
 import { TSError } from '../../utils/ts-error'
@@ -187,6 +188,11 @@ export class ConfigSet {
     tsBuildInfoFile: undefined,
   }
 
+  /**
+   * @internal
+   */
+  private tsconfigFilePath: string | undefined
+
   constructor(jestConfig: TsJestTransformOptions['config'] | undefined, readonly parentLogger?: Logger) {
     this.logger = this.parentLogger
       ? this.parentLogger.child({ [LogContexts.namespace]: 'config' })
@@ -195,16 +201,13 @@ export class ConfigSet {
     this.cwd = normalize(this._jestCfg.cwd ?? process.cwd())
     this.rootDir = normalize(this._jestCfg.rootDir ?? this.cwd)
     const tsJestCfg = this._jestCfg.globals && this._jestCfg.globals['ts-jest']
-    const options = tsJestCfg ?? Object.create(null)
+    const options: TsJestTransformerOptions = tsJestCfg ?? Object.create(null)
     // compiler module
     this.compilerModule = importer.typescript(ImportReasons.TsJest, options.compiler ?? 'typescript')
-    // isolatedModules
-    this.isolatedModules = options.isolatedModules ?? false
 
     this.logger.debug({ compilerModule: this.compilerModule }, 'normalized compiler module config via ts-jest option')
 
     this._setupConfigSet(options)
-    this._resolveTsCacheDir()
     this._matchablePatterns = [...this._jestCfg.testMatch, ...this._jestCfg.testRegex].filter(
       (pattern) =>
         /**
@@ -216,9 +219,22 @@ export class ConfigSet {
     if (!this._matchablePatterns.length) {
       this._matchablePatterns.push(...DEFAULT_JEST_TEST_MATCH)
     }
-    this._matchTestFilePath = globsToMatcher(
-      this._matchablePatterns.filter((pattern: string | RegExp) => typeof pattern === 'string') as string[],
-    )
+    this._matchTestFilePath = globsToMatcher(this._matchablePatterns.filter((pattern) => typeof pattern === 'string'))
+    // isolatedModules
+    if (options.isolatedModules) {
+      this.parsedTsConfig.options.isolatedModules = true
+      if (this.tsconfigFilePath) {
+        this.logger.warn(
+          interpolate(Deprecations.IsolatedModulesWithTsconfigPath, {
+            tsconfigFilePath: this.tsconfigFilePath,
+          }),
+        )
+      } else {
+        this.logger.warn(Deprecations.IsolatedModulesWithoutTsconfigPath)
+      }
+    }
+    this.isolatedModules = this.parsedTsConfig.options.isolatedModules ?? false
+    this._resolveTsCacheDir()
   }
 
   /**
@@ -558,20 +574,20 @@ export class ConfigSet {
     let basePath = normalizeSlashes(this.rootDir)
     const ts = this.compilerModule
     // Read project configuration when available.
-    const configFileName: string | undefined = resolvedConfigFile
+    this.tsconfigFilePath = resolvedConfigFile
       ? normalizeSlashes(resolvedConfigFile)
       : ts.findConfigFile(normalizeSlashes(this.rootDir), ts.sys.fileExists)
-    if (configFileName) {
-      this.logger.debug({ tsConfigFileName: configFileName }, 'readTsConfig(): reading', configFileName)
+    if (this.tsconfigFilePath) {
+      this.logger.debug({ tsConfigFileName: this.tsconfigFilePath }, 'readTsConfig(): reading', this.tsconfigFilePath)
 
-      const result = ts.readConfigFile(configFileName, ts.sys.readFile)
+      const result = ts.readConfigFile(this.tsconfigFilePath, ts.sys.readFile)
       // Return diagnostics.
       if (result.error) {
         return { errors: [result.error], fileNames: [], options: {} }
       }
 
       config = result.config
-      basePath = normalizeSlashes(dirname(configFileName))
+      basePath = normalizeSlashes(dirname(this.tsconfigFilePath))
     }
     // Override default configuration options `ts-jest` requires.
     config.compilerOptions = {
@@ -580,7 +596,7 @@ export class ConfigSet {
     }
 
     // parse json, merge config extending others, ...
-    return ts.parseJsonConfigFileContent(config, ts.sys, basePath, undefined, configFileName)
+    return ts.parseJsonConfigFileContent(config, ts.sys, basePath, undefined, this.tsconfigFilePath)
   }
 
   isTestFile(fileName: string): boolean {
