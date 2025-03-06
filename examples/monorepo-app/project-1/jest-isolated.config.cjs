@@ -4,6 +4,6 @@ const { createDefaultPreset } = require('ts-jest');
 module.exports = {
   displayName: 'project-1',
   ...createDefaultPreset({
-    isolatedModules: true,
+    tsconfig: 'project-1/tsconfig-isolated.json',
   })
 }

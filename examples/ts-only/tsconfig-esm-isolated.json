@@ -1,0 +1,6 @@
+{
+  "extends": "./tsconfig-esm.json",
+  "compilerOptions": {
+    "isolatedModules": true
+  }
+}

@@ -4,7 +4,6 @@ import { createJsWithTsPreset } from 'ts-jest'
 export default {
   displayName: 'js-with-ts',
   ...createJsWithTsPreset({
-    tsconfig: 'tsconfig-esm.json',
-    isolatedModules: true,
+    tsconfig: 'tsconfig-esm-isolated.json',
   })
 }

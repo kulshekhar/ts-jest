@@ -2,6 +2,12 @@
 title: Isolated Modules option
 ---
 
+:::warning DEPRECATED
+
+This page is now **DEPRECATED** and will be removed in the next major release.
+
+:::
+
 By default `ts-jest` uses TypeScript compiler in the context of a project (yours), with full type-checking and features.
 But it can also be used to compile each file separately, what TypeScript calls an 'isolated module'.
 That's what the `isolatedModules` option (which defaults to `false`) does.

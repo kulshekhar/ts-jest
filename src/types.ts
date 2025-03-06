@@ -72,7 +72,9 @@ export interface TsJestGlobalOptions {
   tsconfig?: boolean | string | RawCompilerOptions
 
   /**
-   * Compiles files as isolated modules (disables some features and type-checking)
+   * @deprecated use `isolatedModules` in `tsconfig` instead
+   *
+   * Compiles files as isolated modules (disables some features)
    *
    * @default undefined (disabled)
    */
