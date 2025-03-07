@@ -1,11 +1,8 @@
-import type { TBabelCore, TBabelJest, TTypeScript, TEsBuild } from '../types'
+import type { TBabelCore, TBabelJest, TEsBuild, TTypeScript } from '../types'
 
 import { rootLogger } from './logger'
 import { Memoize } from './memoize'
 import { Errors, Helps, ImportReasons, interpolate } from './messages'
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type ModulePatcher<T = any> = (module: T) => T
 
 const logger = rootLogger.child({ namespace: 'Importer' })
 
@@ -26,13 +23,8 @@ export class Importer {
   static get instance(): Importer {
     logger.debug('creating Importer singleton')
 
-    // here we can define patches to apply to modules.
-    // it could be fixes that are not deployed, or
-    // abstractions so that multiple versions work the same
     return new Importer()
   }
-
-  constructor(protected _patches: { [moduleName: string]: ModulePatcher[] } = {}) {}
 
   babelJest(why: ImportReasons): TBabelJest {
     return this._import(why, 'babel-jest')
@@ -66,13 +58,10 @@ export class Importer {
       if (req.exists) {
         // module exists
         loaded = req as RequireResult<true>
-        if (loaded.error) {
-          // require-ing it failed
-          logger.error({ requireResult: contextReq }, `failed loading module '${name}'`, loaded.error.message)
+        if (req.error) {
+          logger.error({ requireResult: contextReq }, `failed loading module '${name}'`, req.error.message)
         } else {
-          // it has been loaded, let's patch it
           logger.debug({ requireResult: contextReq }, 'loaded module', name)
-          loaded.exports = this._patch(name, loaded.exports)
         }
         break
       } else {
@@ -97,17 +86,6 @@ export class Importer {
     if (!result.error) return result.exports as T
     if (allowLoadError) return missingResult
     throw result.error
-  }
-
-  @Memoize((name) => name)
-  protected _patch<T>(name: string, unpatched: T): T {
-    if (name in this._patches) {
-      logger.debug('patching', name)
-
-      return this._patches[name].reduce((mod, patcher) => patcher(mod), unpatched)
-    }
-
-    return unpatched
   }
 
   protected _import<T>(
