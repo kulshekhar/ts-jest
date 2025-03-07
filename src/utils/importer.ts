@@ -1,10 +1,8 @@
-import type { TBabelCore, TBabelJest, TTypeScript } from '../types'
-import type { TEsBuild } from '../types'
+import type { TBabelCore, TBabelJest, TTypeScript, TEsBuild } from '../types'
 
 import { rootLogger } from './logger'
 import { Memoize } from './memoize'
 import { Errors, Helps, ImportReasons, interpolate } from './messages'
-import { VersionCheckers } from './version-checkers'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type ModulePatcher<T = any> = (module: T) => T
@@ -20,13 +18,6 @@ interface ImportOptions {
   installTip?: string | Array<{ module: string; label: string }>
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const passThru = (action: () => void) => (input: any) => {
-  action()
-
-  return input
-}
-
 /**
  * @internal
  */
@@ -38,12 +29,7 @@ export class Importer {
     // here we can define patches to apply to modules.
     // it could be fixes that are not deployed, or
     // abstractions so that multiple versions work the same
-    return new Importer({
-      '@babel/core': [passThru(VersionCheckers.babelCore.warn)],
-      'babel-jest': [passThru(VersionCheckers.babelJest.warn)],
-      typescript: [passThru(VersionCheckers.typescript.warn)],
-      jest: [passThru(VersionCheckers.jest.warn)],
-    })
+    return new Importer()
   }
 
   constructor(protected _patches: { [moduleName: string]: ModulePatcher[] } = {}) {}
