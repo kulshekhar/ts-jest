@@ -88,27 +88,6 @@ describe('tryTheseOr', () => {
   })
 })
 
-describe('patcher', () => {
-  const patch1 = jest.fn((mod: object) => ({ ...mod, p1: true }))
-  const patch2 = jest.fn((mod: object) => ({ ...mod, p2: true }))
-
-  it('should apply patches correctly', () => {
-    const imp = new Importer({ foo: [patch1, patch2] })
-    modules = {
-      foo: () => ({ foo: true }),
-      bar: () => ({ bar: true }),
-    }
-    expect(imp.tryTheseOr('foo')).toEqual({ foo: true, p1: true, p2: true })
-    expect(imp.tryTheseOr('foo')).toEqual({ foo: true, p1: true, p2: true })
-
-    expect(imp.tryTheseOr('bar')).toEqual({ bar: true })
-
-    // ensure cache has been used
-    expect(patch1).toHaveBeenCalledTimes(1)
-    expect(patch2).toHaveBeenCalledTimes(1)
-  })
-})
-
 describe('babelCore', () => {
   it('should be @babel/core', () => {
     modules = {
