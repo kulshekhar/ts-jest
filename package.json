@@ -130,12 +130,6 @@
     "prettier": "^2.8.8",
     "typescript": "~5.5.4"
   },
-  "lint-staged": {
-    "*.{ts,tsx,js,jsx}": [
-      "eslint --fix",
-      "git add"
-    ]
-  },
   "engines": {
     "node": "^14.15.0 || ^16.10.0 || ^18.0.0 || >=20.0.0"
   }
