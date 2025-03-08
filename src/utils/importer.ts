@@ -76,9 +76,7 @@ export class Importer {
   }
 
   tryTheseOr<T>(moduleNames: [string, ...string[]] | string, missingResult: T, allowLoadError?: boolean): T
-  // eslint-disable-next-line no-dupe-class-members
   tryTheseOr<T>(moduleNames: [string, ...string[]] | string, missingResult?: T, allowLoadError?: boolean): T | undefined
-  // eslint-disable-next-line no-dupe-class-members
   tryTheseOr<T>(moduleNames: [string, ...string[]] | string, missingResult?: T, allowLoadError = false): T | undefined {
     const args: [string, ...string[]] = Array.isArray(moduleNames) ? moduleNames : [moduleNames]
     const result = this.tryThese(...args)
@@ -92,7 +90,6 @@ export class Importer {
     why: string,
     moduleName: string,
     { alternatives = [], installTip = moduleName }: ImportOptions = {},
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ): T {
     // try to load any of the alternative after trying main one
     const res = this.tryThese(moduleName, ...alternatives)
@@ -163,7 +160,6 @@ function requireWrapper(moduleName: string): RequireResult {
   return result
 }
 
-// eslint-disable-next-line @typescript-eslint/no-require-imports
 let requireModule = (mod: string) => require(mod)
 let resolveModule = (mod: string) => require.resolve(mod, { paths: [process.cwd(), __dirname] })
 

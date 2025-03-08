@@ -1,4 +1,3 @@
-/* eslint-disable no-redeclare */
 import stableStringify from 'fast-json-stable-stringify'
 
 const UNDEFINED = 'undefined'
@@ -30,7 +29,7 @@ export function normalize(input: string, { parse: parser = parse }: NormalizeOpt
     normalize.cache.set(input, result)
   }
 
-  return result === undefined ? input : result
+  return result ?? input
 }
 
 /**

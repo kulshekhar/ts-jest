@@ -8,7 +8,6 @@ const buildOptions = () => ({
   context: {
     [LogContexts.package]: 'ts-jest',
     [LogContexts.logLevel]: LogLevels.trace,
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
     version: require('../../package.json').version,
   },
   targets: process.env.TS_JEST_LOG ?? undefined,
