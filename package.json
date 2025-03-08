@@ -26,8 +26,7 @@
     "prepublishOnly": "npm run test",
     "preversion": "npm run test",
     "version": "npm run changelog && git add CHANGELOG.md",
-    "raw:options": "node scripts/generate-raw-compiler-options.js",
-    "update-e2e": "node scripts/update-e2e.js"
+    "raw:options": "node scripts/generate-raw-compiler-options.js"
   },
   "repository": {
     "type": "git",
