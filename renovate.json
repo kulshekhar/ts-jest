@@ -54,10 +54,6 @@
     {
       "matchDepTypes": ["peerDependencies"],
       "enabled": false
-    },
-    {
-      "matchPackagePatterns": ["@commitlint"],
-      "enabled": false
     }
   ]
 }
