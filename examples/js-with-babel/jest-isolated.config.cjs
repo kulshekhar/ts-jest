@@ -6,5 +6,5 @@ module.exports = {
   ...createJsWithBabelPreset({
     babelConfig: true,
     tsconfig: 'tsconfig-isolated.json',
-  })
+  }),
 }

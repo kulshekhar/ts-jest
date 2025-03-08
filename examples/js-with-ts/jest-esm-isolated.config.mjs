@@ -5,5 +5,5 @@ export default {
   displayName: 'js-with-ts',
   ...createJsWithTsPreset({
     tsconfig: 'tsconfig-esm-isolated.json',
-  })
+  }),
 }

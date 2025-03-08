@@ -1,8 +1,10 @@
-const { exampleAppsToRun } = require('./lib/paths')
-const execa = require('execa')
 const path = require('path')
-const logger = require('./lib/logger')
+
+const execa = require('execa')
 const glob = require('glob')
+
+const logger = require('./lib/logger')
+const { exampleAppsToRun } = require('./lib/paths')
 
 logger.log()
 logger.log(`Updating e2e dependencies' versions (this might take a while)`)

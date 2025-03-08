@@ -38,7 +38,6 @@ const definePreset = (fullName: string): TsJestPresetDescriptor => ({
           .replace(/\-([a-z])/g, (_, l) => l.toUpperCase())
   },
   get value() {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
     return require(`../../../${fullName.replace(/^ts-jest\//, '')}/jest-preset`)
   },
   jsImport(varName = 'tsjPreset') {

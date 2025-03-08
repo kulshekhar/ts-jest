@@ -1,7 +1,6 @@
 // @ts-expect-error testing purpose
 import babelFooCfg from './babel-foo.config'
-import { getFoo } from './thing1'
-import { getFooBar } from './thing1'
+import { getFoo, getFooBar } from './thing1'
 import { getBar } from './thing2'
 
 getFoo('foo')

@@ -3,7 +3,6 @@ import { valid } from 'semver'
 import { getPackageVersion } from './get-package-version'
 
 it('should get the version of a package', () => {
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
   const version = require('../../node_modules/jest/package.json').version
   // ensure the above call doesn't actually fail
   expect(valid(version)).not.toBeNull()
