@@ -1,4 +1,5 @@
-const path = require('path')
+const path = require('node:path')
+
 const camelcase = require('camelcase')
 
 // This is a custom Jest transformer turning file imports into filenames.
@@ -15,6 +16,7 @@ module.exports = {
         pascalCase: true,
       })
       const componentName = `Svg${pascalCaseFilename}`
+
       return {
         code: `const React = require('react');
       module.exports = {

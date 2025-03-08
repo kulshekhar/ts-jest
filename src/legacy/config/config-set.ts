@@ -270,7 +270,7 @@ export class ConfigSet {
         if (babelFileExtName === '.js' || babelFileExtName === '.cjs') {
           this.babelConfig = {
             ...baseBabelCfg,
-            // eslint-disable-next-line @typescript-eslint/no-require-imports
+
             ...require(babelCfgPath),
           }
         } else {
@@ -371,7 +371,6 @@ export class ConfigSet {
             }).code
           transformerFunc = requireFromString(compiledTransformer, transformerPath.replace('.ts', '.js'))
         } else {
-          // eslint-disable-next-line @typescript-eslint/no-require-imports
           transformerFunc = require(transformerPath)
         }
         if (!transformerFunc.version) {
@@ -517,6 +516,7 @@ export class ConfigSet {
     for (const key of Object.keys(forcedOptions)) {
       const val = forcedOptions[key]
       if (val === undefined) {
+        // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
         delete finalOptions[key]
       } else {
         finalOptions[key] = val
@@ -568,7 +568,7 @@ export class ConfigSet {
    */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   protected _resolveTsConfig(compilerOptions?: RawCompilerOptions, resolvedConfigFile?: string): Record<string, any>
-  // eslint-disable-next-line no-dupe-class-members
+
   protected _resolveTsConfig(compilerOptions?: RawCompilerOptions, resolvedConfigFile?: string): ts.ParsedCommandLine {
     let config = { compilerOptions: Object.create(null) }
     let basePath = normalizeSlashes(this.rootDir)
@@ -672,7 +672,9 @@ export class ConfigSet {
         try {
           path = require.resolve(path)
           nodeResolved = true
-        } catch {}
+        } catch {
+          this.logger.debug({ path }, 'failed to resolve path', path)
+        }
       }
       if (!nodeResolved) {
         path = resolve(this.cwd, path)
@@ -682,7 +684,9 @@ export class ConfigSet {
       try {
         path = require.resolve(path)
         nodeResolved = true
-      } catch {}
+      } catch {
+        this.logger.debug({ path }, 'failed to resolve path', path)
+      }
     }
     if (throwIfMissing && !existsSync(path)) {
       throw new Error(interpolate(Errors.FileNotFound, { inputPath, resolvedPath: path }))

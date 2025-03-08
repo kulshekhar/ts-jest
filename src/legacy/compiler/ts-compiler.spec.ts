@@ -366,7 +366,6 @@ describe('TsCompiler', () => {
           {
             name: 'dummy-transformer',
             version: 1,
-            // eslint-disable-next-line @typescript-eslint/no-require-imports
             factory: require(transformerStub).factory,
           },
         ],
@@ -374,7 +373,6 @@ describe('TsCompiler', () => {
           {
             name: 'dummy-transformer',
             version: 1,
-            // eslint-disable-next-line @typescript-eslint/no-require-imports
             factory: require(transformerStub).factory,
           },
         ],
@@ -382,7 +380,6 @@ describe('TsCompiler', () => {
           {
             name: 'dummy-transformer',
             version: 1,
-            // eslint-disable-next-line @typescript-eslint/no-require-imports
             factory: require(transformerStub).factory,
           },
         ],

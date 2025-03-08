@@ -31,7 +31,7 @@ interface CachedConfigSet {
 
 interface TsJestHooksMap {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  afterProcess?(args: any[], result: TransformedSource): TransformedSource | void
+  afterProcess?(args: any[], result: TransformedSource): TransformedSource
 }
 
 /**
@@ -138,7 +138,6 @@ export class TsJestTransformer implements SyncTransformer<TsJestTransformerOptio
     return configSet
   }
 
-  // eslint-disable-next-line class-methods-use-this
   protected _createConfigSet(config: TsJestTransformOptions['config'] | undefined): ConfigSet {
     return new ConfigSet(config)
   }

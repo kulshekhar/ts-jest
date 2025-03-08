@@ -1,5 +1,7 @@
-const { sync: spawnSync } = require("execa");
 const path = require('path')
+
+const { sync: spawnSync } = require('execa')
+
 const { createBundle } = require('./scripts/lib/bundle')
 
 console.log('Install dependencies for all e2e test suites')

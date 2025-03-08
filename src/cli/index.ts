@@ -54,7 +54,6 @@ async function cli(args: string[]): Promise<void> {
 
   if (!VALID_COMMANDS.includes(command)) command = 'help'
 
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
   const { run, help }: { run: CliCommand; help: CliCommand } = require(`./${command.replace(/:/g, '/')}`)
 
   const cmd = isHelp && command !== 'help' ? help : run

@@ -1,5 +1,6 @@
-const { computePackageDigest } = require('./lib/bundle')
 const execa = require('execa')
+
+const { computePackageDigest } = require('./lib/bundle')
 const { generatedPath, rawCompilerOptionsFileName } = require('./lib/paths')
 
 try {
@@ -9,7 +10,7 @@ try {
       `Tsconfig options have changed. Please check the modified generated ${generatedPath} and commit the change`
     )
   }
-} catch (e) {
+} catch {
   console.log('git command is not available. Skip checking generated types')
 }
 computePackageDigest()

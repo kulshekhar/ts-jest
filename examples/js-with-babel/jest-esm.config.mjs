@@ -5,6 +5,6 @@ export default {
   displayName: 'js-with-babel',
   ...createJsWithBabelEsmPreset({
     babelConfig: true,
-    tsconfig: 'tsconfig-esm.json'
-  })
+    tsconfig: 'tsconfig-esm.json',
+  }),
 }
