@@ -1,7 +1,7 @@
 const { createDefaultPreset } = require('ts-jest')
 
 const defaultPreset = createDefaultPreset({
-  tsconfig: 'tsconfig.spec.json'
+  tsconfig: 'tsconfig.spec.json',
 })
 
 /** @type {import('ts-jest').JestConfigWithTsJest} */

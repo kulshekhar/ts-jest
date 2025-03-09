@@ -5,5 +5,5 @@ export default {
   displayName: 'project-1',
   ...createDefaultEsmPreset({
     tsconfig: 'project-1/tsconfig-esm.json',
-  })
+  }),
 }

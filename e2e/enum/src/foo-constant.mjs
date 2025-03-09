@@ -1,3 +1,4 @@
+/* eslint-disable */
 export var FooEnum;
 (function (FooEnum) {
   FooEnum["two"] = "TWO";

@@ -2,8 +2,8 @@ const path = require('path')
 
 const execa = require('execa')
 
-const logger = require('./lib/logger')
 const { createBundle } = require('./lib/bundle')
+const logger = require('./lib/logger')
 
 const bundle = createBundle()
 

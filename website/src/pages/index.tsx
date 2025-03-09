@@ -23,7 +23,6 @@ const features = [
   },
 ]
 
-// eslint-disable-next-line no-unused-vars
 function Feature({ imageUrl, title, description }) {
   const imgUrl = useBaseUrl(imageUrl)
 

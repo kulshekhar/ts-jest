@@ -6,6 +6,9 @@ on:
       os:
         required: true
         type: string
+      node-version:
+        required: true
+        type: string
 
 permissions: # added using https://github.com/step-security/secure-workflows
   contents: read
@@ -13,38 +16,43 @@ permissions: # added using https://github.com/step-security/secure-workflows
 jobs:
   test:
     permissions:
-      checks: write # for coverallsapp/github-action to create new checks
-      contents: read # for actions/checkout to fetch code
-    strategy:
-      fail-fast: false
-      matrix:
-        node-version: [16.x, 18.x, 20.x]
-    name: Node v${{ matrix.node-version }} on ${{ inputs.os }}
+      checks: write
+      contents: read
+    name: Run tests on Node v${{ inputs.node-version }} on ${{ inputs.os }}
     runs-on: ${{ inputs.os }}
 
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v4
+      - name: Checkout 🛎️
+        uses: actions/checkout@v4
         with:
-          node-version: ${{ matrix.node-version }}
-          cache: npm
-      - name: Install and build
-        run: npm ci
-      - name: Run tests with coverage
-        run: npm run test -- --coverage && cat ./coverage/lcov.info
+          fetch-depth: 20
+          fetch-tags: false
+
+      - name: Setup workspace ⚙️
+        uses: ./.github/actions/setup-workspace
+        with:
+          os: ${{ inputs.os }}
+          node-version: ${{ inputs.node-version }}
+
+      - name: Build 🔧
+        run: npm run build
+
+      - name: Run tests with coverage 🧪
+        run: npm run test -- --coverage
         env:
           CI: true
           DISABLE_MOCKED_WARNING: true
-      - name: Coveralls parallel
-        uses: coverallsapp/github-action@master
+
+      - name: Collect coverage report for ${{ matrix.node-version }} 📊
+        uses: coverallsapp/github-action@v2
         with:
-          github-token: ${{ secrets.github_token }}
           flag-name: run-${{ matrix.node-version }}
           parallel: true
-      - name: Run e2e tests
+
+      - name: Run e2e tests 🧪
         run: |
           npm run test-e2e-cjs
           npm run test-e2e-esm
-      - name: Run tests in example projects
+
+      - name: Run tests in example projects 🧪
         run: npm run test-examples

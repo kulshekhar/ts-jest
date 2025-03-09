@@ -6,5 +6,5 @@ export default {
   ...createJsWithBabelEsmPreset({
     babelConfig: true,
     tsconfig: 'tsconfig-esm-isolated.json',
-  })
+  }),
 }

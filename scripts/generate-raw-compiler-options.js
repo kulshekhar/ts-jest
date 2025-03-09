@@ -1,11 +1,10 @@
 const fs = require('fs')
 
-const { compile } = require('json-schema-to-typescript')
 const execa = require('execa')
+const { compile } = require('json-schema-to-typescript')
 
 const { generatedPath, rawCompilerOptionsFileName } = require('./lib/paths')
 
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 const generateRawTsCompilerOptions = async () => {
   const response = await fetch('https://json.schemastore.org/tsconfig')
   const tsconfigSchema = await response.json()
