@@ -6,20 +6,27 @@ on:
       os:
         required: true
         type: string
+      node-version:
+        required: true
+        type: string
 
 permissions: # added using https://github.com/step-security/secure-workflows
   contents: read
 
 jobs:
   prepare-npm-cache:
-    name: Prepare npm cache for ${{ inputs.os }}
+    name: Prepare npm cache for Node v${{ inputs.node-version }} on ${{ inputs.os }}
     runs-on: ${{ inputs.os }}
 
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
-      - uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v4
+      - name: Checkout 🛎️
+        uses: actions/checkout@v4
         with:
-          node-version: lts/*
-          cache: npm
-      - name: Validate cache
-        run: npm ci
+          fetch-depth: 20
+          fetch-tags: false
+
+      - name: Setup workspace ⚙️
+        uses: ./.github/actions/setup-workspace
+        with:
+          os: ${{ inputs.os }}
+          node-version: ${{ inputs.node-version }}

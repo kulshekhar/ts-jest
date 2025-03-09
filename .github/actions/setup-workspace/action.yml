@@ -1,0 +1,35 @@
+name: Setup workspace
+
+inputs:
+  os:
+    required: true
+    type: string
+  node-version:
+    required: true
+    type: string
+
+permissions: # added using https://github.com/step-security/secure-workflows
+  contents: read
+
+runs:
+  using: composite
+  steps:
+    - name: Restore cached node modules ♻️
+      id: cache-npm
+      uses: actions/cache@v4
+      with:
+        path: '**/node_modules'
+        key: ${{ inputs.os }}-${{ inputs.node }}-build-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ inputs.os }}-${{ inputs.node }}-build
+
+    - name: Setup Node version ⚙️
+      uses: actions/setup-node@v4
+      if: ${{ steps.cache-npm.outputs.cache-hit != 'true' }}
+      with:
+        node-version: ${{ inputs.node }}
+
+    - name: Install and build 🔧
+      if: ${{ steps.cache-npm.outputs.cache-hit != 'true' }}
+      run: npm ci
+      shell: bash
