@@ -3,6 +3,7 @@
 exports[`TsCompiler getCompiledOutput isolatedModules true should transpile code with config {"babelConfig": false, "supportsStaticESM": false, "useESM": true} 1`] = `
 {
   "allowSyntheticDefaultImports": undefined,
+  "customConditions": undefined,
   "esModuleInterop": true,
   "module": 1,
 }
@@ -11,6 +12,7 @@ exports[`TsCompiler getCompiledOutput isolatedModules true should transpile code
 exports[`TsCompiler getCompiledOutput isolatedModules true should transpile code with config {"babelConfig": false, "supportsStaticESM": true, "useESM": false} 1`] = `
 {
   "allowSyntheticDefaultImports": undefined,
+  "customConditions": undefined,
   "esModuleInterop": true,
   "module": 1,
 }
@@ -19,6 +21,7 @@ exports[`TsCompiler getCompiledOutput isolatedModules true should transpile code
 exports[`TsCompiler getCompiledOutput isolatedModules true should transpile code with config {"babelConfig": false, "supportsStaticESM": true, "useESM": true} 1`] = `
 {
   "allowSyntheticDefaultImports": undefined,
+  "customConditions": undefined,
   "esModuleInterop": true,
   "module": 99,
 }
@@ -27,6 +30,7 @@ exports[`TsCompiler getCompiledOutput isolatedModules true should transpile code
 exports[`TsCompiler getCompiledOutput isolatedModules true should transpile code with config {"babelConfig": true, "supportsStaticESM": false, "useESM": true} 1`] = `
 {
   "allowSyntheticDefaultImports": undefined,
+  "customConditions": undefined,
   "esModuleInterop": true,
   "module": 1,
 }

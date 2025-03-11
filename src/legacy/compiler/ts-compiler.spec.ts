@@ -41,7 +41,9 @@ describe('TsCompiler', () => {
       const compiler = makeCompiler({
         tsJestConfig: {
           ...baseTsJestConfig,
-          isolatedModules: true,
+          tsconfig: {
+            isolatedModules: true,
+          },
         },
       })
 
@@ -111,7 +113,15 @@ describe('TsCompiler', () => {
         },
       ])('should transpile code with config %p', ({ useESM, babelConfig, supportsStaticESM }) => {
         const compiler = makeCompiler({
-          tsJestConfig: { ...baseTsJestConfig, isolatedModules: true, useESM, babelConfig },
+          tsJestConfig: {
+            ...baseTsJestConfig,
+            useESM,
+            babelConfig,
+            tsconfig: {
+              isolatedModules: true,
+              customConditions: ['my-condition'],
+            },
+          },
         })
         const transformersStub = {
           before: [],
@@ -138,12 +148,19 @@ describe('TsCompiler', () => {
           module: usedCompilerOptions.module,
           esModuleInterop: usedCompilerOptions.esModuleInterop,
           allowSyntheticDefaultImports: usedCompilerOptions.allowSyntheticDefaultImports,
+          customConditions: usedCompilerOptions.customConditions,
         }).toMatchSnapshot()
       })
 
       test.each([true, false])('should report diagnostics if shouldReportDiagnostics is %p', (shouldReport) => {
         const compiler = makeCompiler({
-          tsJestConfig: { ...baseTsJestConfig, isolatedModules: true, useESM: false },
+          tsJestConfig: {
+            ...baseTsJestConfig,
+            useESM: false,
+            tsconfig: {
+              isolatedModules: true,
+            },
+          },
         })
         compiler.configSet.raiseDiagnostics = jest.fn()
         compiler.configSet.shouldReportDiagnostics = jest.fn().mockReturnValue(shouldReport)
@@ -227,6 +244,7 @@ describe('TsCompiler', () => {
               tsconfig: {
                 module: moduleValue as unknown as RawCompilerOptions['module'],
                 esModuleInterop: false,
+                customConditions: ['my-condition'],
               },
             },
           })
@@ -253,6 +271,7 @@ describe('TsCompiler', () => {
           expect(usedCompilerOptions.module).toBe(expectedModule)
           expect(usedCompilerOptions.esModuleInterop).toBe(expectedEsModuleInterop)
           expect(usedCompilerOptions.moduleResolution).toBe(ts.ModuleResolutionKind.Node10)
+          expect(usedCompilerOptions.customConditions).toBeUndefined()
           expect(output).toEqual({
             code: updateOutput(jsOutput, fileName, sourceMap),
             diagnostics: [],
@@ -355,7 +374,13 @@ describe('TsCompiler', () => {
   describe('_makeTransformers', () => {
     test('should return the transformers object which contains before, after and afterDeclarations transformers', () => {
       const compiler = makeCompiler({
-        tsJestConfig: { ...baseTsJestConfig, isolatedModules: true, useESM: false },
+        tsJestConfig: {
+          ...baseTsJestConfig,
+          useESM: false,
+          tsconfig: {
+            isolatedModules: true,
+          },
+        },
       })
       const transformerStub = join(mockFolder, 'dummy-transformer.js')
       console.log = jest.fn()
@@ -395,7 +420,12 @@ describe('TsCompiler', () => {
     const fileName = join(mockFolder, 'thing.ts')
     const fileContent = 'const bar = 1'
     const compiler = makeCompiler({
-      tsJestConfig: { ...baseTsJestConfig, isolatedModules: true },
+      tsJestConfig: {
+        ...baseTsJestConfig,
+        tsconfig: {
+          isolatedModules: true,
+        },
+      },
     })
     const fileContentCache = new Map<string, string>()
     const fileVersionCache = new Map<string, number>()
