@@ -108,8 +108,8 @@
     "@types/semver": "^7.5.8",
     "@types/yargs": "^17.0.33",
     "@types/yargs-parser": "21.0.3",
-    "@typescript-eslint/eslint-plugin": "^8.26.0",
-    "@typescript-eslint/parser": "^8.26.0",
+    "@typescript-eslint/eslint-plugin": "^8.26.1",
+    "@typescript-eslint/parser": "^8.26.1",
     "babel-jest": "^29.7.0",
     "conventional-changelog-cli": "^5.0.0",
     "esbuild": "~0.25.1",
@@ -117,7 +117,7 @@
     "eslint-config-prettier": "^10.1.1",
     "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-jest": "^28.11.0",
-    "eslint-plugin-jsdoc": "^50.6.3",
+    "eslint-plugin-jsdoc": "^50.6.6",
     "eslint-plugin-prettier": "^4.2.1",
     "execa": "5.1.1",
     "fs-extra": "^11.3.0",
@@ -132,7 +132,7 @@
     "prettier": "^2.8.8",
     "rimraf": "^5.0.10",
     "typescript": "~5.5.4",
-    "typescript-eslint": "^8.26.0"
+    "typescript-eslint": "^8.26.1"
   },
   "engines": {
     "node": "^14.15.0 || ^16.10.0 || ^18.0.0 || >=20.0.0"
