@@ -153,6 +153,10 @@ export class TsCompiler implements TsCompilerInstance {
         ...compilerOptions,
         module: this._ts.ModuleKind.CommonJS,
         moduleResolution,
+        /**
+         * This option is only supported in `Node16`/`NodeNext` and `Bundler` module, see https://www.typescriptlang.org/tsconfig/#customConditions
+         */
+        customConditions: undefined,
       }
     }
 
@@ -168,6 +172,10 @@ export class TsCompiler implements TsCompilerInstance {
       module: moduleKind,
       esModuleInterop,
       moduleResolution,
+      /**
+       * This option is only supported in `Node16`/`NodeNext` and `Bundler` module, see https://www.typescriptlang.org/tsconfig/#customConditions
+       */
+      customConditions: undefined,
     }
   }
 

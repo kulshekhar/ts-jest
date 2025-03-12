@@ -1,6 +1,7 @@
-let num = 0;
+let num = 0
 
 export default function inc() {
-  num++;
-  return num;
+  num++
+
+  return num
 }

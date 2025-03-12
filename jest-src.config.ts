@@ -30,8 +30,8 @@ const config: JestConfigWithTsJest = {
       {
         tsconfig: {
           target: 'ES2015',
+          isolatedModules: true,
         },
-        isolatedModules: true,
       },
     ],
   },

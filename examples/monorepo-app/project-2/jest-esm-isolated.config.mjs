@@ -4,7 +4,6 @@ import { createDefaultEsmPreset } from 'ts-jest'
 export default {
   displayName: 'project-2',
   ...createDefaultEsmPreset({
-    tsconfig: 'project-2/tsconfig-esm.json',
-    isolatedModules: true,
-  })
+    tsconfig: 'project-2/tsconfig-esm-isolated.json',
+  }),
 }

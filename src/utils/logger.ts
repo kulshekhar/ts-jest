@@ -10,7 +10,7 @@ const buildOptions = () => ({
     [LogContexts.logLevel]: LogLevels.trace,
     version: require('../../package.json').version,
   },
-  targets: process.env.TS_JEST_LOG || undefined,
+  targets: process.env.TS_JEST_LOG ?? undefined,
 })
 
 export let rootLogger = createLogger(buildOptions())

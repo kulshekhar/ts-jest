@@ -16,7 +16,6 @@ import { stringify, JsonableValue, rootLogger } from '../utils'
 import { importer } from '../utils/importer'
 import { Deprecations, Errors, interpolate } from '../utils/messages'
 import { sha1 } from '../utils/sha1'
-import { VersionCheckers } from '../utils/version-checkers'
 
 import { TsJestCompiler } from './compiler'
 import { ConfigSet } from './config/config-set'
@@ -32,7 +31,7 @@ interface CachedConfigSet {
 
 interface TsJestHooksMap {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  afterProcess?(args: any[], result: TransformedSource): TransformedSource | void
+  afterProcess?(args: any[], result: TransformedSource): TransformedSource
 }
 
 /**
@@ -55,7 +54,6 @@ export class TsJestTransformer implements SyncTransformer<TsJestTransformerOptio
 
   constructor(private readonly transformerOptions?: TsJestTransformerOptions) {
     this._logger = rootLogger.child({ namespace: 'ts-jest-transformer' })
-    VersionCheckers.jest.warn()
     /**
      * For some unknown reasons, `this` is undefined in `getCacheKey` and `process`
      * when running Jest in ESM mode
@@ -140,7 +138,6 @@ export class TsJestTransformer implements SyncTransformer<TsJestTransformerOptio
     return configSet
   }
 
-  // eslint-disable-next-line class-methods-use-this
   protected _createConfigSet(config: TsJestTransformOptions['config'] | undefined): ConfigSet {
     return new ConfigSet(config)
   }

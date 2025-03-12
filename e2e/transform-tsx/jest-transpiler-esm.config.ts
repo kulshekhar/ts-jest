@@ -8,8 +8,7 @@ export default {
     [TS_TRANSFORM_PATTERN]: [
       'ts-jest',
       {
-        tsconfig: '<rootDir>/tsconfig-esm.spec.json',
-        isolatedModules: true,
+        tsconfig: '<rootDir>/tsconfig-esm-transpiler.spec.json',
         useESM: true,
       },
     ],

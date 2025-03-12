@@ -1,6 +1,9 @@
 import simplePlantUML from '@akebifiky/remark-simple-plantuml'
 import type * as Presets from '@docusaurus/preset-classic'
+// eslint-disable-next-line import/default
+import npm2yarnPlugin from '@docusaurus/remark-plugin-npm2yarn'
 import type { Config } from '@docusaurus/types'
+import tabBlocksPlugin from 'docusaurus-remark-plugin-tab-blocks'
 import { themes } from 'prism-react-renderer'
 
 const config: Config = {
@@ -89,11 +92,7 @@ const config: Config = {
           showLastUpdateTime: true,
           sidebarPath: './sidebars.js',
           editUrl: 'https://github.com/kulshekhar/ts-jest/edit/main/website',
-          remarkPlugins: [
-            simplePlantUML,
-            [require('@docusaurus/remark-plugin-npm2yarn'), { sync: true }],
-            require('docusaurus-remark-plugin-tab-blocks'),
-          ],
+          remarkPlugins: [simplePlantUML, [npm2yarnPlugin, { sync: true }], tabBlocksPlugin],
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),

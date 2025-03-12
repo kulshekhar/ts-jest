@@ -285,7 +285,7 @@ describe('config', () => {
         ",
           "stdout": ""jest": {
           "transform": {
-            "^.+.tsx?$": [
+            "^.+\\\\.tsx?$": [
               "ts-jest",
               {
                 "tsconfig": {
@@ -330,7 +330,7 @@ describe('config', () => {
         ",
           "stdout": ""jest": {
           "transform": {
-            "^.+.[tj]sx?$": [
+            "^.+\\\\.[tj]sx?$": [
               "ts-jest",
               {
                 "tsconfig": {
@@ -386,7 +386,7 @@ describe('config', () => {
             "**/__tests__/**/*.ts?(x)"
           ],
           "transform": {
-            "^.+.tsx?$": [
+            "^.+\\\\.tsx?$": [
               "ts-jest",
               {
                 "tsconfig": {
@@ -475,7 +475,7 @@ describe('config', () => {
       expect(res.stdout).toMatchInlineSnapshot(`
         "module.exports = {
           transform: {
-            '^.+.tsx?$': [
+            '^.+\\\\.tsx?$': [
               'ts-jest',
               {},
             ],
@@ -495,7 +495,7 @@ describe('config', () => {
       expect(res.stdout).toMatchInlineSnapshot(`
         "module.exports = {
           transform: {
-            '^.+.[tj]sx?$': [
+            '^.+\\\\.[tj]sx?$': [
               'ts-jest',
               {},
             ],
@@ -556,7 +556,7 @@ describe('config', () => {
               'ts-jest',
               {},
             ],
-            '^.+.tsx?$': [
+            '^.+\\\\.tsx?$': [
               'ts-jest',
               {},
             ],
@@ -600,7 +600,7 @@ describe('config', () => {
               "ts-jest",
               {}
             ],
-            "^.+.tsx?$": [
+            "^.+\\\\.tsx?$": [
               "ts-jest",
               {}
             ]

@@ -1,13 +1,8 @@
-import type { TBabelCore, TBabelJest, TTypeScript } from '../types'
-import type { TEsBuild } from '../types'
+import type { TBabelCore, TBabelJest, TEsBuild, TTypeScript } from '../types'
 
 import { rootLogger } from './logger'
 import { Memoize } from './memoize'
 import { Errors, Helps, ImportReasons, interpolate } from './messages'
-import { VersionCheckers } from './version-checkers'
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type ModulePatcher<T = any> = (module: T) => T
 
 const logger = rootLogger.child({ namespace: 'Importer' })
 
@@ -20,13 +15,6 @@ interface ImportOptions {
   installTip?: string | Array<{ module: string; label: string }>
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const passThru = (action: () => void) => (input: any) => {
-  action()
-
-  return input
-}
-
 /**
  * @internal
  */
@@ -35,18 +23,8 @@ export class Importer {
   static get instance(): Importer {
     logger.debug('creating Importer singleton')
 
-    // here we can define patches to apply to modules.
-    // it could be fixes that are not deployed, or
-    // abstractions so that multiple versions work the same
-    return new Importer({
-      '@babel/core': [passThru(VersionCheckers.babelCore.warn)],
-      'babel-jest': [passThru(VersionCheckers.babelJest.warn)],
-      typescript: [passThru(VersionCheckers.typescript.warn)],
-      jest: [passThru(VersionCheckers.jest.warn)],
-    })
+    return new Importer()
   }
-
-  constructor(protected _patches: { [moduleName: string]: ModulePatcher[] } = {}) {}
 
   babelJest(why: ImportReasons): TBabelJest {
     return this._import(why, 'babel-jest')
@@ -80,13 +58,10 @@ export class Importer {
       if (req.exists) {
         // module exists
         loaded = req as RequireResult<true>
-        if (loaded.error) {
-          // require-ing it failed
-          logger.error({ requireResult: contextReq }, `failed loading module '${name}'`, loaded.error.message)
+        if (req.error) {
+          logger.error({ requireResult: contextReq }, `failed loading module '${name}'`, req.error.message)
         } else {
-          // it has been loaded, let's patch it
           logger.debug({ requireResult: contextReq }, 'loaded module', name)
-          loaded.exports = this._patch(name, loaded.exports)
         }
         break
       } else {
@@ -101,9 +76,7 @@ export class Importer {
   }
 
   tryTheseOr<T>(moduleNames: [string, ...string[]] | string, missingResult: T, allowLoadError?: boolean): T
-  // eslint-disable-next-line no-dupe-class-members
   tryTheseOr<T>(moduleNames: [string, ...string[]] | string, missingResult?: T, allowLoadError?: boolean): T | undefined
-  // eslint-disable-next-line no-dupe-class-members
   tryTheseOr<T>(moduleNames: [string, ...string[]] | string, missingResult?: T, allowLoadError = false): T | undefined {
     const args: [string, ...string[]] = Array.isArray(moduleNames) ? moduleNames : [moduleNames]
     const result = this.tryThese(...args)
@@ -113,27 +86,15 @@ export class Importer {
     throw result.error
   }
 
-  @Memoize((name) => name)
-  protected _patch<T>(name: string, unpatched: T): T {
-    if (name in this._patches) {
-      logger.debug('patching', name)
-
-      return this._patches[name].reduce((mod, patcher) => patcher(mod), unpatched)
-    }
-
-    return unpatched
-  }
-
   protected _import<T>(
     why: string,
     moduleName: string,
     { alternatives = [], installTip = moduleName }: ImportOptions = {},
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ): T {
     // try to load any of the alternative after trying main one
     const res = this.tryThese(moduleName, ...alternatives)
     // if we could load one, return it
-    if (res && res.exists) {
+    if (res?.exists) {
       if (!res.error) return res.exports
       // it could not load because of a failure while importing, but it exists
       throw new Error(interpolate(Errors.LoadingModuleFailed, { module: res.given, error: res.error.message }))
@@ -188,7 +149,7 @@ function requireWrapper(moduleName: string): RequireResult {
   const result: RequireResult = { exists, path, given: moduleName }
   try {
     result.exports = requireModule(path)
-  } catch (error) {
+  } catch {
     try {
       result.exports = requireModule(moduleName)
     } catch (error) {

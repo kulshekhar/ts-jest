@@ -1,5 +1,7 @@
-import { sync as spawnSync } from "execa"
 import path from 'node:path'
+
+import { sync as spawnSync } from 'execa'
+
 import { createBundle } from './scripts/lib/bundle.js'
 
 console.log('Install dependencies for all e2e test suites')

@@ -4,8 +4,7 @@ import { createDefaultEsmPreset } from 'ts-jest'
 const jestConfig = {
   displayName: 'type-module',
   ...createDefaultEsmPreset({
-    tsconfig: 'tsconfig-esm.json',
-    isolatedModules: true,
+    tsconfig: 'tsconfig-esm-isolated.json',
   }),
 }
 

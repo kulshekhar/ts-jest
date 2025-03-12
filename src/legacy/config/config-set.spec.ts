@@ -11,7 +11,7 @@ import type { AstTransformerDesc, TsJestTransformerOptions } from '../../types'
 import { stringify } from '../../utils'
 import * as _backports from '../../utils/backports'
 import { getPackageVersion } from '../../utils/get-package-version'
-import { Errors } from '../../utils/messages'
+import { Deprecations, Errors, interpolate } from '../../utils/messages'
 import { normalizeSlashes } from '../../utils/normalize-slashes'
 import { sha1 } from '../../utils/sha1'
 
@@ -348,7 +348,7 @@ describe('babelJestTransformer', () => {
   )
 
   it('should return babelJestTransformer with loaded config object', () => {
-    /* eslint-disable-next-line jest/no-mocks-import */
+    // eslint-disable-next-line jest/no-mocks-import
     const babelConfig = require('../../__mocks__/babel-foo.config')
     const cs = createConfigSet({
       jestConfig: {
@@ -775,7 +775,6 @@ describe('_resolveTsConfig', () => {
 
     it('should use given tsconfig path', () => {
       jest.spyOn(ConfigSet.prototype, 'resolvePath').mockReturnValueOnce('/foo/tsconfig.bar.json')
-      // eslint-disable-next-line @typescript-eslint/no-empty-function
       jest.spyOn(ConfigSet.prototype, 'raiseDiagnostics').mockImplementationOnce(() => {})
 
       cs = createConfigSet({
@@ -1091,3 +1090,53 @@ describe('diagnostics', () => {
     expect(createConfigSet({ tsJestConfig: { diagnostics: { ignoreCodes } } })).toBeDefined()
   })
 }) // diagnostics
+
+describe('isolatedModules', () => {
+  const spyFindTsConfigFile = jest.spyOn(ts, 'findConfigFile')
+
+  it('should show warning log when isolatedModules: true is used in transformer options when a tsconfig file path for tests exists', () => {
+    spyFindTsConfigFile.mockReturnValueOnce('foo/tsconfig.json')
+    const logger = testing.createLoggerMock()
+    createConfigSet({
+      logger,
+      jestConfig: {
+        rootDir: 'src',
+        cwd: 'src',
+      } as any, // eslint-disable-line @typescript-eslint/no-explicit-any
+      tsJestConfig: {
+        isolatedModules: true,
+      },
+      resolve: null,
+    })
+
+    expect(logger.target.filteredLines(LogLevels.warn)).toEqual(
+      expect.arrayContaining([
+        expect.stringContaining(
+          interpolate(Deprecations.IsolatedModulesWithTsconfigPath, {
+            tsconfigFilePath: 'foo/tsconfig.json',
+          }),
+        ),
+      ]),
+    )
+  })
+
+  it('should show warning log when isolatedModules: true is used in transformer options when a tsconfig file path does not exist', () => {
+    spyFindTsConfigFile.mockReturnValueOnce(undefined)
+    const logger = testing.createLoggerMock()
+    createConfigSet({
+      logger,
+      jestConfig: {
+        rootDir: 'src',
+        cwd: 'src',
+      } as any, // eslint-disable-line @typescript-eslint/no-explicit-any
+      tsJestConfig: {
+        isolatedModules: true,
+      },
+      resolve: null,
+    })
+
+    expect(logger.target.filteredLines(LogLevels.warn)).toEqual(
+      expect.arrayContaining([expect.stringContaining(Deprecations.IsolatedModulesWithoutTsconfigPath)]),
+    )
+  })
+})

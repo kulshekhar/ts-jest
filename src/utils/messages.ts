@@ -7,8 +7,6 @@ export const enum Errors {
   UnableToLoadAnyModule = 'Unable to load any of these modules: {{module}}. {{reason}}. To fix it:\n{{fix}}',
   UnableToRequireDefinitionFile = 'Unable to require `.d.ts` file for file: {{file}}.\nThis is usually the result of a faulty configuration or import. Make sure there is a `.js`, `.json` or another executable extension available alongside `{{file}}`.',
   FileNotFound = 'File not found: {{inputPath}} (resolved as: {{resolvedPath}})',
-  UntestedDependencyVersion = "Version {{actualVersion}} of {{module}} installed has not been tested with ts-jest. If you're experiencing issues, consider using a supported version ({{expectedVersion}}). Please do not report issues in ts-jest if you are using unsupported versions.",
-  MissingDependency = "Module {{module}} is not installed. If you're experiencing issues, consider installing a supported version ({{expectedVersion}}).",
   UnableToCompileTypeScript = '{{diagnostics}}',
   NotMappingMultiStarPath = 'Not mapping "{{path}}" because it has more than one star (`*`).',
   NotMappingPathWithEmptyMap = 'Not mapping "{{path}}" because it has no target.',
@@ -39,11 +37,14 @@ export const enum Deprecations {
   ConfigOption = '"[jest-config].{{oldPath}}" is deprecated, use "[jest-config].{{newPath}}" instead.',
   ConfigOptionWithNote = '"[jest-config].{{oldPath}}" is deprecated, use "[jest-config].{{newPath}}" instead.\n    ↳ {{note}}',
   ConfigOptionUseBabelRcNote = 'See `babel-jest` related issue: https://github.com/facebook/jest/issues/3845',
+  // eslint-disable-next-line @typescript-eslint/prefer-literal-enum-member
   GlobalsTsJestConfigOption = 'Define `ts-jest` config under `globals` is deprecated. Please do\n' +
     'transform: {\n' +
     "    <transform_regex>: ['ts-jest', { /* ts-jest config goes here in Jest */ }],\n" +
     '},\n' +
     'See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/presets#advanced',
+  IsolatedModulesWithTsconfigPath = '"isolatedModules" is deprecated and will be removed in v30.0.0. Please remove "isolatedModules" from your "ts-jest" transform options and enable "isolatedModules: true" in {{tsconfigFilePath}} instead.',
+  IsolatedModulesWithoutTsconfigPath = '"isolatedModules" is deprecated and will be removed in v30.0.0. Please remove "isolatedModules" from your "ts-jest" transform options and enable "isolatedModules: true" in a tsconfig file instead.',
 }
 
 /**

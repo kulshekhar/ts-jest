@@ -103,14 +103,14 @@ A possible cause for that issue is that you may have enabled `ts-jest` to proces
 }
 ```
 
-- In your jest configuration, check if the transform property includes only `.ts` files for ts-jest. If not, change the regular expression to exclude js files. You can also add the attribute `isolatedModules: true` for ts-jest to disable type checking for tests.
+- In your jest configuration, check if the transform property includes only `.ts` files for ts-jest. If not, change the regular expression to exclude js files. You can also enable `isolatedModules: true` in tsconfig for `ts-jest` to use transpilation mode (similarly to other transpilers like `Babel`/`SWC`/`Esbuild`) for tests.
 
 ```diff
 module.exports = {
   ...
   'transform': {
 -    '^.+\\.(t|j)s$': ['ts-jest', {}],
-+    '^.+\\.ts$': ['ts-jest', { isolatedModules: true }],
++    '^.+\\.ts$': 'ts-jest',
   },
 };
 ```

@@ -1,4 +1,5 @@
-import jsonImportAssertion from '../src/foo.json' assert { type: 'json' }
+// eslint-disable-next-line prettier/prettier
+import jsonImportAssertion from '../src/foo.json' with { type: 'json' }
 
 const topLevelAwait = await import('../src/foo.json')
 
