@@ -1,3 +1,9 @@
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import type { TsConfigJson } from 'type-fest'
+
+/**
+ * @deprecated This interface will be replaced with {@link TsConfigJson.CompilerOptions} in the next major release.
+ */
 export interface RawCompilerOptions {
   /**
    * Enable importing files with any extension, provided a declaration file is present.

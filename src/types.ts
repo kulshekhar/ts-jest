@@ -4,6 +4,7 @@ import type * as babelJest from 'babel-jest'
 import type * as _babel from 'babel__core'
 import type * as _ts from 'typescript'
 
+import type { TsConfigCompilerOptionsJson } from './config/types'
 import {
   ESM_JS_TRANSFORM_PATTERN,
   ESM_TS_JS_TRANSFORM_PATTERN,
@@ -57,7 +58,7 @@ export interface ConfigCustomTransformer {
 }
 
 /**
- * @deprecated use `TsJestTransformerOptions` instead
+ * @deprecated use {@link TsJestTransformerOptions} instead
  */
 export interface TsJestGlobalOptions {
   /**
@@ -67,23 +68,27 @@ export interface TsJestGlobalOptions {
    * - `path/to/tsconfig.json`: path to a specific tsconfig file (<rootDir> can be used)
    * - `{...}`: an object with inline compiler options
    *
-   * @default undefined uses the default tsconfig file
+   * @default `undefined` (the default config file will be used if it exists)
+   *
+   * @remarks
+   *
+   * {@link RawCompilerOptions} will be replaced with {@link TsConfigCompilerOptionsJson} in the next major release
    */
-  tsconfig?: boolean | string | RawCompilerOptions
+  tsconfig?: boolean | string | RawCompilerOptions | TsConfigCompilerOptionsJson
 
   /**
-   * @deprecated use `isolatedModules` in `tsconfig` instead
+   * @deprecated use {@link TsConfigCompilerOptionsJson.isolatedModules} instead
    *
    * Compiles files as isolated modules (disables some features)
    *
-   * @default undefined (disabled)
+   * @default `undefined` (disables transpiling files with {@link _ts.transpileModule})
    */
   isolatedModules?: boolean
 
   /**
    * Compiler to use
    *
-   * @default 'typescript'
+   * @default `typescript`
    */
   compiler?: 'typescript' | 'ttypescript' | string
 
@@ -98,7 +103,7 @@ export interface TsJestGlobalOptions {
    * - `false`: hide diagnostics of all files (kind of useless)
    * - `{...}`: an inline object with fine grained settings
    *
-   * @default undefined shows all diagnostics
+   * @default `undefined`
    */
   diagnostics?:
     | boolean
@@ -106,7 +111,7 @@ export interface TsJestGlobalOptions {
         /**
          * Enables colorful and pretty output of errors
          *
-         * @default undefined (enabled)
+         * @default `undefined` (enables formatting errors)
          */
         pretty?: boolean
         /**
@@ -114,7 +119,7 @@ export interface TsJestGlobalOptions {
          * [here](https://github.com/Microsoft/TypeScript/blob/master/src/compiler/diagnosticMessages.json).
          *
          * @see https://github.com/Microsoft/TypeScript/blob/master/src/compiler/diagnosticMessages.json
-         * @default [6059,18002,18003]
+         * @default `[6059,18002,18003]`
          */
         ignoreCodes?: number | string | Array<number | string>
         /**
@@ -124,7 +129,7 @@ export interface TsJestGlobalOptions {
         /**
          * Logs TypeScript errors to stderr instead of throwing exceptions
          *
-         * @default undefined (disabled)
+         * @default `undefined` (TypeScript errors will be thrown as exceptions)
          */
         warnOnly?: boolean
       }
@@ -136,7 +141,7 @@ export interface TsJestGlobalOptions {
    * - `path/to/.babelrc`: path to a babelrc file (<rootDir> can be used)
    * - `{...}`: an object with inline babel options
    *
-   * @default undefined does NOT use babel
+   * @default `undefined` (not using `Babel`)
    */
   babelConfig?: boolean | string | BabelConfig
 
