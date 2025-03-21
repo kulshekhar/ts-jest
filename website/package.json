@@ -9,7 +9,8 @@
     "swizzle": "docusaurus swizzle",
     "deploy": "GIT_USER=kulshekhar USE_SSH=true docusaurus deploy",
     "serve": "docusaurus serve",
-    "clear": "docusaurus clear"
+    "clear": "docusaurus clear",
+    "version": "docusaurus docs:version"
   },
   "dependencies": {
     "@akebifiky/remark-simple-plantuml": "^1.0.2",
