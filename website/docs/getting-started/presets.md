@@ -41,8 +41,10 @@ Create a configuration to process TypeScript files (`.ts`/`.tsx`).
 An object contains Jest's `transform` property:
 
 ```ts
+import type { TsConfigJson } from 'type-fest'
+
 interface TsJestTransformerOptions {
-  tsconfig?: boolean | string | RawCompilerOptions
+  tsconfig?: boolean | string | TsConfigJson.CompilerOptions
   isolatedModules?: boolean
   astTransformers?: ConfigCustomTransformer
   diagnostics?:
@@ -99,8 +101,10 @@ Create a **LEGACY** configuration to process TypeScript files (`.ts`, `.tsx`).
 An object contains Jest's `transform` property:
 
 ```ts
+import type { TsConfigJson } from 'type-fest'
+
 interface TsJestTransformerOptions {
-  tsconfig?: boolean | string | RawCompilerOptions
+  tsconfig?: boolean | string | TsConfigJson.CompilerOptions
   isolatedModules?: boolean
   astTransformers?: ConfigCustomTransformer
   diagnostics?:
@@ -216,8 +220,10 @@ Create a **LEGACY** ESM configuration to process TypeScript files (`.ts`/`.mts`/
 An object contains Jest's `transform` property:
 
 ```ts
+import type { TsConfigJson } from 'type-fest'
+
 interface TsJestTransformerOptions {
-  tsconfig?: boolean | string | RawCompilerOptions
+  tsconfig?: boolean | string | TsConfigJson.CompilerOptions
   isolatedModules?: boolean
   astTransformers?: ConfigCustomTransformer
   diagnostics?:
@@ -275,8 +281,10 @@ Create a configuration to process JavaScript/TypeScript files (`.js`/`.jsx`/`.ts
 An object contains Jest's `transform` property:
 
 ```ts
+import type { TsConfigJson } from 'type-fest'
+
 interface TsJestTransformerOptions {
-  tsconfig?: boolean | string | RawCompilerOptions
+  tsconfig?: boolean | string | TsConfigJson.CompilerOptions
   isolatedModules?: boolean
   astTransformers?: ConfigCustomTransformer
   diagnostics?:
@@ -391,8 +399,10 @@ Create a ESM configuration to process JavaScript/TypeScript files (`.js`/`.mjs`/
 An object contains Jest's `transform` property:
 
 ```ts
+import type { TsConfigJson } from 'type-fest'
+
 interface TsJestTransformerOptions {
-  tsconfig?: boolean | string | RawCompilerOptions
+  tsconfig?: boolean | string | TsConfigJson.CompilerOptions
   isolatedModules?: boolean
   astTransformers?: ConfigCustomTransformer
   diagnostics?:
@@ -508,8 +518,10 @@ Create a configuration to process JavaScript/TypeScript files (`.js`/`.jsx`/`.ts
 An object contains Jest's `transform` property:
 
 ```ts
+import type { TsConfigJson } from 'type-fest'
+
 interface TsJestTransformerOptions {
-  tsconfig?: boolean | string | RawCompilerOptions
+  tsconfig?: boolean | string | TsConfigJson.CompilerOptions
   isolatedModules?: boolean
   astTransformers?: ConfigCustomTransformer
   diagnostics?:
@@ -628,8 +640,10 @@ Create a ESM configuration to process JavaScript/TypeScript files (`.js`/`.mjs`/
 An object contains Jest's `transform` property:
 
 ```ts
+import type { TsConfigJson } from 'type-fest'
+
 interface TsJestTransformerOptions {
-  tsconfig?: boolean | string | RawCompilerOptions
+  tsconfig?: boolean | string | TsConfigJson.CompilerOptions
   isolatedModules?: boolean
   astTransformers?: ConfigCustomTransformer
   diagnostics?:
