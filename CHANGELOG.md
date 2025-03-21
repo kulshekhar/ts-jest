@@ -1,4 +1,32 @@
-### [29.2.6](https://github.com/kulshekhar/ts-jest/compare/v29.2.5...v29.2.6) (2025-02-22)
+## [29.3.0](https://github.com/kulshekhar/ts-jest/compare/v29.2.6...v29.3.0) (2025-03-21)
+
+
+### Features
+
+* feat: support hybrid `module` values for `isolatedModules: true` ([f372121](https://github.com/kulshekhar/ts-jest/commit/f372121))
+
+
+### Bug Fixes
+
+* fix: set `customConditions` to `undefined` in `TsCompiler` ([b091d70](https://github.com/kulshekhar/ts-jest/commit/b091d70)), closes [#4620](https://github.com/kulshekhar/ts-jest/issues/4620)
+
+
+### Code Refactoring
+
+* refactor: remove manual version checker ([89458fc](https://github.com/kulshekhar/ts-jest/commit/89458fc))
+* refactor: remove patching deps based on version checker ([bac4c43](https://github.com/kulshekhar/ts-jest/commit/bac4c43))
+* refactor: deprecate `RawCompilerOptions` interface ([2b1b6cd](https://github.com/kulshekhar/ts-jest/commit/2b1b6cd))
+* refactor: deprecate transform option `isolatedModules` ([7dfef71](https://github.com/kulshekhar/ts-jest/commit/7dfef71))
+
+
+## DEPRECATIONS
+
+* `RawCompilerOptions` is deprecated in favor of `TsConfigJson.CompilerOptions` from `type-fest`
+* `isolatedModules` transform option is deprecated in favor of https://www.typescriptlang.org/tsconfig/#isolatedModules
+
+
+
+## [29.2.6](https://github.com/kulshekhar/ts-jest/compare/v29.2.5...v29.2.6) (2025-02-22)
 
 
 ### Bug Fixes
@@ -9,7 +37,7 @@
 
 
 
-### [29.2.5](https://github.com/kulshekhar/ts-jest/compare/v29.2.4...v29.2.5) (2024-08-23)
+## [29.2.5](https://github.com/kulshekhar/ts-jest/compare/v29.2.4...v29.2.5) (2024-08-23)
 
 
 ### Bug Fixes
@@ -20,7 +48,7 @@
 
 
 
-### [29.2.4](https://github.com/kulshekhar/ts-jest/compare/v29.2.3...v29.2.4) (2024-08-01)
+## [29.2.4](https://github.com/kulshekhar/ts-jest/compare/v29.2.3...v29.2.4) (2024-08-01)
 
 
 ### Bug Fixes
@@ -29,7 +57,7 @@
 
 
 
-### [29.2.3](https://github.com/kulshekhar/ts-jest/compare/v29.2.2...v29.2.3) (2024-07-18)
+## [29.2.3](https://github.com/kulshekhar/ts-jest/compare/v29.2.2...v29.2.3) (2024-07-18)
 
 
 ### Security Fixes
@@ -52,7 +80,7 @@
 
 
 
-### [29.2.1](https://github.com/kulshekhar/ts-jest/compare/v29.2.0...v29.2.1) (2024-07-10)
+## [29.2.1](https://github.com/kulshekhar/ts-jest/compare/v29.2.0...v29.2.1) (2024-07-10)
 
 
 ### Bug Fixes
@@ -94,7 +122,7 @@
 
 
 
-### [29.1.5](https://github.com/kulshekhar/ts-jest/compare/v29.1.4...v29.1.5) (2024-06-16)
+## [29.1.5](https://github.com/kulshekhar/ts-jest/compare/v29.1.4...v29.1.5) (2024-06-16)
 
 
 ### Bug Fixes
@@ -103,7 +131,7 @@
 
 
 
-### [29.1.4](https://github.com/kulshekhar/ts-jest/compare/v29.1.3...v29.1.4) (2024-05-28)
+## [29.1.4](https://github.com/kulshekhar/ts-jest/compare/v29.1.3...v29.1.4) (2024-05-28)
 
 
 ### Bug Fixes
@@ -117,7 +145,7 @@
 
 
 
-### [29.1.3](https://github.com/kulshekhar/ts-jest/compare/v29.1.2...v29.1.3) (2024-05-21)
+## [29.1.3](https://github.com/kulshekhar/ts-jest/compare/v29.1.2...v29.1.3) (2024-05-21)
 
 
 ### Bug Fixes
@@ -132,7 +160,7 @@
 
 
 
-### [29.1.2](https://github.com/kulshekhar/ts-jest/compare/v29.1.1...v29.1.2) (2024-01-22)
+## [29.1.2](https://github.com/kulshekhar/ts-jest/compare/v29.1.1...v29.1.2) (2024-01-22)
 
 
 ### Bug Fixes
@@ -170,7 +198,7 @@
 
 
 
-### [29.0.4](https://github.com/kulshekhar/ts-jest/compare/v29.0.3...v29.0.4) (2023-01-10)
+## [29.0.4](https://github.com/kulshekhar/ts-jest/compare/v29.0.3...v29.0.4) (2023-01-10)
 
 
 ### Bug Fixes
@@ -180,7 +208,7 @@
 
 
 
-### [29.0.3](https://github.com/kulshekhar/ts-jest/compare/v29.0.2...v29.0.3) (2022-09-28)
+## [29.0.3](https://github.com/kulshekhar/ts-jest/compare/v29.0.2...v29.0.3) (2022-09-28)
 
 
 ### Bug Fixes
@@ -195,7 +223,7 @@
 
 
 
-### [29.0.2](https://github.com/kulshekhar/ts-jest/compare/v29.0.1...v29.0.2) (2022-09-23)
+## [29.0.2](https://github.com/kulshekhar/ts-jest/compare/v29.0.1...v29.0.2) (2022-09-23)
 
 
 ### Bug Fixes
@@ -205,7 +233,7 @@
 
 
 
-### [29.0.1](https://github.com/kulshekhar/ts-jest/compare/v29.0.0...v29.0.1) (2022-09-13)
+## [29.0.1](https://github.com/kulshekhar/ts-jest/compare/v29.0.0...v29.0.1) (2022-09-13)
 
 
 ### Bug Fixes
