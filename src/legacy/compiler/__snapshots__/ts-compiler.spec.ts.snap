@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`TsCompiler getCompiledOutput isolatedModules true should transpile code with config {"babelConfig": false, "supportsStaticESM": false, "useESM": true} 1`] = `
+exports[`TsCompiler getCompiledOutput isolatedModules true should transpile code with config {"babelConfig": false, "module": "CommonJS", "supportsStaticESM": false, "useESM": true} 1`] = `
 {
   "allowSyntheticDefaultImports": undefined,
   "customConditions": undefined,
@@ -9,7 +9,7 @@ exports[`TsCompiler getCompiledOutput isolatedModules true should transpile code
 }
 `;
 
-exports[`TsCompiler getCompiledOutput isolatedModules true should transpile code with config {"babelConfig": false, "supportsStaticESM": true, "useESM": false} 1`] = `
+exports[`TsCompiler getCompiledOutput isolatedModules true should transpile code with config {"babelConfig": false, "module": "CommonJS", "supportsStaticESM": true, "useESM": false} 1`] = `
 {
   "allowSyntheticDefaultImports": undefined,
   "customConditions": undefined,
@@ -18,7 +18,7 @@ exports[`TsCompiler getCompiledOutput isolatedModules true should transpile code
 }
 `;
 
-exports[`TsCompiler getCompiledOutput isolatedModules true should transpile code with config {"babelConfig": false, "supportsStaticESM": true, "useESM": true} 1`] = `
+exports[`TsCompiler getCompiledOutput isolatedModules true should transpile code with config {"babelConfig": false, "module": "ESNext", "supportsStaticESM": true, "useESM": true} 1`] = `
 {
   "allowSyntheticDefaultImports": undefined,
   "customConditions": undefined,
@@ -27,7 +27,7 @@ exports[`TsCompiler getCompiledOutput isolatedModules true should transpile code
 }
 `;
 
-exports[`TsCompiler getCompiledOutput isolatedModules true should transpile code with config {"babelConfig": true, "supportsStaticESM": false, "useESM": true} 1`] = `
+exports[`TsCompiler getCompiledOutput isolatedModules true should transpile code with config {"babelConfig": true, "module": "CommonJS", "supportsStaticESM": false, "useESM": true} 1`] = `
 {
   "allowSyntheticDefaultImports": undefined,
   "customConditions": undefined,

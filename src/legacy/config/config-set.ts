@@ -35,7 +35,7 @@ import { TsCompilerInstance } from '../../types'
 import { rootLogger, stringify } from '../../utils'
 import { backportJestConfig } from '../../utils/backports'
 import { importer } from '../../utils/importer'
-import { Deprecations, Errors, ImportReasons, interpolate } from '../../utils/messages'
+import { Deprecations, Errors, ImportReasons, interpolate, TsJestDiagnosticCodes } from '../../utils/messages'
 import { normalizeSlashes } from '../../utils/normalize-slashes'
 import { sha1 } from '../../utils/sha1'
 import { TSError } from '../../utils/ts-error'
@@ -65,16 +65,6 @@ export const IGNORE_DIAGNOSTIC_CODES = [
  * @internal
  */
 export const TS_JEST_OUT_DIR = '$$ts-jest$$'
-
-/**
- * @internal
- */
-// WARNING: DO NOT CHANGE THE ORDER OF CODE NAMES!
-// ONLY APPEND IF YOU NEED TO ADD SOME
-const enum DiagnosticCodes {
-  TsJest = 151000,
-  ConfigModuleOption,
-}
 
 const normalizeRegex = (pattern: string | RegExp | undefined): string | undefined =>
   pattern ? (typeof pattern === 'string' ? pattern : pattern.source) : undefined
@@ -500,7 +490,7 @@ export class ConfigSet {
       !(finalOptions.esModuleInterop || finalOptions.allowSyntheticDefaultImports)
     ) {
       result.errors.push({
-        code: DiagnosticCodes.ConfigModuleOption,
+        code: TsJestDiagnosticCodes.ConfigModuleOption,
         messageText: Errors.ConfigNoModuleInterop,
         category: this.compilerModule.DiagnosticCategory.Message,
         file: undefined,
