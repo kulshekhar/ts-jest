@@ -2,7 +2,7 @@ import { basename, normalize } from 'path'
 
 import { LogContexts, Logger, LogLevels } from 'bs-logger'
 import memoize from 'lodash.memoize'
-import type {
+import ts, {
   Bundle,
   CompilerOptions,
   CustomTransformerFactory,
@@ -23,6 +23,8 @@ import type {
 } from 'typescript'
 
 import { LINE_FEED, TS_TSX_REGEX } from '../../constants'
+// import { tsTranspileModule } from '../../transpilers/typescript/transpile-module'
+import { tsTranspileModule } from '../../transpilers/typescript/transpile-module'
 import type {
   StringMap,
   TsCompilerInstance,
@@ -32,10 +34,34 @@ import type {
 } from '../../types'
 import { CompiledOutput } from '../../types'
 import { rootLogger } from '../../utils'
-import { Errors, interpolate } from '../../utils/messages'
+import { Errors, Helps, interpolate } from '../../utils/messages'
 import type { ConfigSet } from '../config/config-set'
 
 import { updateOutput } from './compiler-utils'
+
+const isModernNodeResolution = (module: ts.ModuleKind | undefined): boolean => {
+  return module ? [ts.ModuleKind.Node16, /* ModuleKind.Node18 */ 101, ts.ModuleKind.NodeNext].includes(module) : false
+}
+
+const shouldUseNativeTsTranspile = (compilerOptions: ts.CompilerOptions | undefined): boolean => {
+  if (!compilerOptions) {
+    return true
+  }
+
+  const { module } = compilerOptions
+
+  return !isModernNodeResolution(module)
+}
+
+const assertCompilerOptionsWithJestTransformMode = (
+  compilerOptions: ts.CompilerOptions,
+  isEsmMode: boolean,
+  logger: Logger,
+): void => {
+  if (isEsmMode && compilerOptions.module === ts.ModuleKind.CommonJS) {
+    logger.error(Errors.InvalidModuleKindForEsm)
+  }
+}
 
 export class TsCompiler implements TsCompilerInstance {
   protected readonly _logger: Logger
@@ -162,7 +188,7 @@ export class TsCompiler implements TsCompilerInstance {
 
     let moduleKind = compilerOptions.module ?? this._ts.ModuleKind.ESNext
     let esModuleInterop = compilerOptions.esModuleInterop
-    if ([this._ts.ModuleKind.Node16, this._ts.ModuleKind.NodeNext].includes(moduleKind)) {
+    if (isModernNodeResolution(moduleKind)) {
       esModuleInterop = true
       moduleKind = this._ts.ModuleKind.ESNext
     }
@@ -182,6 +208,10 @@ export class TsCompiler implements TsCompilerInstance {
   getCompiledOutput(fileContent: string, fileName: string, options: TsJestCompileOptions): CompiledOutput {
     const isEsmMode = this.configSet.useESM && options.supportsStaticESM
     this._compilerOptions = this.fixupCompilerOptionsForModuleKind(this._initialCompilerOptions, isEsmMode)
+    if (!this._initialCompilerOptions.isolatedModules && isModernNodeResolution(this._initialCompilerOptions.module)) {
+      this._logger.warn(Helps.UsingModernNodeResolution)
+    }
+
     const moduleKind = this._initialCompilerOptions.module
     const currentModuleKind = this._compilerOptions.module
     if (this._languageService) {
@@ -251,7 +281,9 @@ export class TsCompiler implements TsCompilerInstance {
     } else {
       this._logger.debug({ fileName }, 'getCompiledOutput(): compiling as isolated module')
 
-      const result: TranspileOutput = this._transpileOutput(fileContent, fileName)
+      assertCompilerOptionsWithJestTransformMode(this._initialCompilerOptions, isEsmMode, this._logger)
+
+      const result = this._transpileOutput(fileContent, fileName)
       if (result.diagnostics && this.configSet.shouldReportDiagnostics(fileName)) {
         this.configSet.raiseDiagnostics(result.diagnostics, fileName, this._logger)
       }
@@ -263,11 +295,20 @@ export class TsCompiler implements TsCompilerInstance {
   }
 
   protected _transpileOutput(fileContent: string, fileName: string): TranspileOutput {
-    return this._ts.transpileModule(fileContent, {
+    if (shouldUseNativeTsTranspile(this._initialCompilerOptions)) {
+      return this._ts.transpileModule(fileContent, {
+        fileName,
+        transformers: this._makeTransformers(this.configSet.resolvedTransformers),
+        compilerOptions: this._compilerOptions,
+        reportDiagnostics: this.configSet.shouldReportDiagnostics(fileName),
+      })
+    }
+
+    return tsTranspileModule(fileContent, {
       fileName,
       transformers: this._makeTransformers(this.configSet.resolvedTransformers),
-      compilerOptions: this._compilerOptions,
-      reportDiagnostics: this.configSet.shouldReportDiagnostics(fileName),
+      compilerOptions: this._initialCompilerOptions,
+      reportDiagnostics: fileName ? this.configSet.shouldReportDiagnostics(fileName) : false,
     })
   }
 

@@ -1,11 +1,13 @@
 import { readFileSync } from 'fs'
 import { basename, join, normalize } from 'path'
 
+import type { TsConfigJson } from 'type-fest'
 import type { CompilerOptions, EmitOutput, transpileModule, TranspileOutput } from 'typescript'
-import * as ts from 'typescript'
+import ts from 'typescript'
 
 import { createConfigSet, makeCompiler } from '../../__helpers__/fakers'
 import type { RawCompilerOptions } from '../../raw-compiler-options'
+import { tsTranspileModule } from '../../transpilers/typescript/transpile-module'
 import type { DepGraphInfo } from '../../types'
 import { Errors, interpolate } from '../../utils/messages'
 
@@ -18,8 +20,16 @@ jest.mock('typescript', () => {
   return {
     __esModule: true,
     ...actualModule,
+    default: actualModule,
   }
 })
+jest.mock('../../transpilers/typescript/transpile-module', () => {
+  return {
+    tsTranspileModule: jest.fn(),
+  }
+})
+
+const mockTsTranspileModule = jest.mocked(tsTranspileModule)
 
 const mockFolder = join(process.cwd(), 'src', '__mocks__')
 
@@ -95,23 +105,27 @@ describe('TsCompiler', () => {
           useESM: true,
           babelConfig: true,
           supportsStaticESM: false,
+          module: 'CommonJS',
         },
         {
           useESM: true,
           babelConfig: false,
           supportsStaticESM: true,
+          module: 'ESNext',
         },
         {
           useESM: true,
           babelConfig: false,
           supportsStaticESM: false,
+          module: 'CommonJS',
         },
         {
           useESM: false,
           babelConfig: false,
           supportsStaticESM: true,
+          module: 'CommonJS',
         },
-      ])('should transpile code with config %p', ({ useESM, babelConfig, supportsStaticESM }) => {
+      ])('should transpile code with config %p', ({ useESM, babelConfig, supportsStaticESM, module }) => {
         const compiler = makeCompiler({
           tsJestConfig: {
             ...baseTsJestConfig,
@@ -120,7 +134,8 @@ describe('TsCompiler', () => {
             tsconfig: {
               isolatedModules: true,
               customConditions: ['my-condition'],
-            },
+              module,
+            } as TsConfigJson,
           },
         })
         const transformersStub = {
@@ -159,6 +174,7 @@ describe('TsCompiler', () => {
             useESM: false,
             tsconfig: {
               isolatedModules: true,
+              module: 'CommonJS',
             },
           },
         })
@@ -196,6 +212,30 @@ describe('TsCompiler', () => {
         } else {
           expect(compiler.configSet.raiseDiagnostics).not.toHaveBeenCalled()
         }
+      })
+
+      it('should use tsTranspileModule when Node16/NodeNext is used', () => {
+        const compiler = makeCompiler({
+          tsJestConfig: {
+            ...baseTsJestConfig,
+            tsconfig: {
+              isolatedModules: true,
+              module: 'Node16',
+              moduleResolution: 'Node16',
+            },
+          },
+        })
+        mockTsTranspileModule.mockReturnValueOnce({
+          outputText: '',
+        })
+
+        compiler.getCompiledOutput(fileContent, fileName, {
+          depGraphs: new Map(),
+          supportsStaticESM: true,
+          watchMode: false,
+        })
+
+        expect(mockTsTranspileModule).toHaveBeenCalled()
       })
     })
 

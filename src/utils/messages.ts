@@ -19,6 +19,7 @@ export const enum Errors {
   CannotProcessFile = "Unable to process '{{file}}', please make sure that `outDir` in your tsconfig is neither `''` or `'.'`. You can also configure Jest config option `transformIgnorePatterns` to inform `ts-jest` to transform {{file}}",
   MissingTransformerName = 'The AST transformer {{file}} must have an `export const name = <your_transformer_name>`',
   MissingTransformerVersion = 'The AST transformer {{file}} must have an `export const version = <your_transformer_version>`',
+  InvalidModuleKindForEsm = 'The current compiler option "module" value is not suitable for Jest ESM mode. Please either use ES module kinds or Node16/NodeNext module kinds with "type: module" in package.json',
 }
 
 /**
@@ -27,6 +28,7 @@ export const enum Errors {
 export const enum Helps {
   FixMissingModule = '{{label}}: `npm i -D {{module}}` (or `yarn add --dev {{module}}`)',
   MigrateConfigUsingCLI = 'Your Jest configuration is outdated. Use the CLI to help migrating it: ts-jest config:migrate <config-file>.',
+  UsingModernNodeResolution = 'Using hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json.',
 }
 
 /**
@@ -64,3 +66,8 @@ export function interpolate(msg: string, vars: Record<string, any> = {}): string
   // eslint-disable-next-line no-useless-escape
   return msg.replace(/\{\{([^\}]+)\}\}/g, (_, key) => (key in vars ? vars[key] : _))
 }
+
+export const TsJestDiagnosticCodes = {
+  Generic: 151000,
+  ConfigModuleOption: 151001,
+} as const
