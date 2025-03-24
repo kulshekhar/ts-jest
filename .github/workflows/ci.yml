@@ -87,6 +87,39 @@ jobs:
       - name: Run prettier 💅
         run: npm run lint-prettier-ci
 
+  sonar-scan:
+    permissions:
+      checks: write
+      contents: read
+    needs: [test-ubuntu, test-windows]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 20
+          fetch-tags: false
+
+      - name: Setup workspace ⚙️
+        uses: ./.github/actions/setup-workspace
+        with:
+          os: ubuntu-latest
+          node-version: 20
+
+      - name: Build 🔧
+        run: npm run build
+
+      - name: Run tests with coverage 🧪
+        run: npm run test -- --coverage
+        env:
+          CI: true
+          DISABLE_MOCKED_WARNING: true
+
+      - name: SonarCloud Scan 📊
+        uses: SonarSource/sonarqube-scan-action@v5.0.0
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
   finish:
     permissions:
       checks: write
