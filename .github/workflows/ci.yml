@@ -87,15 +87,35 @@ jobs:
       - name: Run prettier 💅
         run: npm run lint-prettier-ci
 
-  finish:
+  sonar-scan:
     permissions:
       checks: write
-    needs: [test-ubuntu, test-windows]
+      contents: read
+    needs: test-ubuntu
     runs-on: ubuntu-latest
     steps:
-      - name: Upload coverage reports to Coveralls 📊
-        uses: coverallsapp/github-action@v2
+      - name: Checkout 🛎️
+        uses: actions/checkout@v4
         with:
-          parallel-finished: true
+          fetch-depth: 0
+          fetch-tags: false
+
+      - name: Setup workspace ⚙️
+        uses: ./.github/actions/setup-workspace
+        with:
+          os: ubuntu-latest
+          node-version: 20.x
+
+      - name: Build 🔧
+        run: npm run build
+
+      - name: Collect coverage 🧪
+        run: npm run test -- --coverage
         env:
           CI: true
+          DISABLE_MOCKED_WARNING: true
+
+      - name: SonarCloud Scan 📊
+        uses: SonarSource/sonarqube-scan-action@v5.0.0
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

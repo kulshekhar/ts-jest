@@ -37,17 +37,11 @@ jobs:
       - name: Build 🔧
         run: npm run build
 
-      - name: Run tests with coverage 🧪
-        run: npm run test -- --coverage
+      - name: Run tests 🧪
+        run: npm run test
         env:
           CI: true
           DISABLE_MOCKED_WARNING: true
-
-      - name: Collect coverage report for ${{ matrix.node-version }} 📊
-        uses: coverallsapp/github-action@v2
-        with:
-          flag-name: run-${{ matrix.node-version }}
-          parallel: true
 
       - name: Run e2e tests 🧪
         run: |
