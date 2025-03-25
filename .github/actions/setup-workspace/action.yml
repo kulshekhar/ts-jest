@@ -20,8 +20,6 @@ runs:
       with:
         path: '**/node_modules'
         key: ${{ inputs.os }}-${{ inputs.node }}-build-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: |
-          ${{ inputs.os }}-${{ inputs.node }}-build
 
     - name: Setup Node version ⚙️
       uses: actions/setup-node@v4
