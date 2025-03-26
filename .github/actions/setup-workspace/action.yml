@@ -31,5 +31,5 @@ runs:
 
     - name: Install and build 🔧
       if: ${{ steps.cache-npm.outputs.cache-hit != 'true' }}
-      run: npm ci --prefer-offline --no-audit
+      run: npm ci --prefer-offline
       shell: bash
