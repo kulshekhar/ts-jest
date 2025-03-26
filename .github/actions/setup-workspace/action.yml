@@ -25,9 +25,11 @@ runs:
       uses: actions/setup-node@v4
       if: ${{ steps.cache-npm.outputs.cache-hit != 'true' }}
       with:
+        cache: npm
+        cache-dependency-path: '**/package-lock.json'
         node-version: ${{ inputs.node }}
 
     - name: Install and build 🔧
       if: ${{ steps.cache-npm.outputs.cache-hit != 'true' }}
-      run: npm ci
+      run: npm ci --prefer-offline --no-audit
       shell: bash
