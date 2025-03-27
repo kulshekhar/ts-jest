@@ -23,35 +23,20 @@ import ts, {
 } from 'typescript'
 
 import { LINE_FEED, TS_TSX_REGEX } from '../../constants'
-// import { tsTranspileModule } from '../../transpilers/typescript/transpile-module'
-import { tsTranspileModule } from '../../transpilers/typescript/transpile-module'
+import { isModernNodeModuleKind, tsTranspileModule } from '../../transpilers/typescript/transpile-module'
 import type {
   StringMap,
   TsCompilerInstance,
   TsJestAstTransformer,
   TsJestCompileOptions,
   TTypeScript,
+  CompiledOutput,
 } from '../../types'
-import { CompiledOutput } from '../../types'
 import { rootLogger } from '../../utils'
 import { Errors, Helps, interpolate } from '../../utils/messages'
 import type { ConfigSet } from '../config/config-set'
 
 import { updateOutput } from './compiler-utils'
-
-const isModernNodeResolution = (module: ts.ModuleKind | undefined): boolean => {
-  return module ? [ts.ModuleKind.Node16, /* ModuleKind.Node18 */ 101, ts.ModuleKind.NodeNext].includes(module) : false
-}
-
-const shouldUseNativeTsTranspile = (compilerOptions: ts.CompilerOptions | undefined): boolean => {
-  if (!compilerOptions) {
-    return true
-  }
-
-  const { module } = compilerOptions
-
-  return !isModernNodeResolution(module)
-}
 
 const assertCompilerOptionsWithJestTransformMode = (
   compilerOptions: ts.CompilerOptions,
@@ -188,7 +173,7 @@ export class TsCompiler implements TsCompilerInstance {
 
     let moduleKind = compilerOptions.module ?? this._ts.ModuleKind.ESNext
     let esModuleInterop = compilerOptions.esModuleInterop
-    if (isModernNodeResolution(moduleKind)) {
+    if (isModernNodeModuleKind(moduleKind)) {
       esModuleInterop = true
       moduleKind = this._ts.ModuleKind.ESNext
     }
@@ -208,7 +193,7 @@ export class TsCompiler implements TsCompilerInstance {
   getCompiledOutput(fileContent: string, fileName: string, options: TsJestCompileOptions): CompiledOutput {
     const isEsmMode = this.configSet.useESM && options.supportsStaticESM
     this._compilerOptions = this.fixupCompilerOptionsForModuleKind(this._initialCompilerOptions, isEsmMode)
-    if (!this._initialCompilerOptions.isolatedModules && isModernNodeResolution(this._initialCompilerOptions.module)) {
+    if (!this._initialCompilerOptions.isolatedModules && isModernNodeModuleKind(this._initialCompilerOptions.module)) {
       this._logger.warn(Helps.UsingModernNodeResolution)
     }
 
@@ -295,7 +280,12 @@ export class TsCompiler implements TsCompilerInstance {
   }
 
   protected _transpileOutput(fileContent: string, fileName: string): TranspileOutput {
-    if (shouldUseNativeTsTranspile(this._initialCompilerOptions)) {
+    /**
+     * @deprecated
+     *
+     * This code path should be removed in the next major version to benefit from checking on compiler options
+     */
+    if (!isModernNodeModuleKind(this._initialCompilerOptions.module)) {
       return this._ts.transpileModule(fileContent, {
         fileName,
         transformers: this._makeTransformers(this.configSet.resolvedTransformers),
@@ -306,7 +296,11 @@ export class TsCompiler implements TsCompilerInstance {
 
     return tsTranspileModule(fileContent, {
       fileName,
-      transformers: this._makeTransformers(this.configSet.resolvedTransformers),
+      transformers: (program) => {
+        this.program = program
+
+        return this._makeTransformers(this.configSet.resolvedTransformers)
+      },
       compilerOptions: this._initialCompilerOptions,
       reportDiagnostics: fileName ? this.configSet.shouldReportDiagnostics(fileName) : false,
     })

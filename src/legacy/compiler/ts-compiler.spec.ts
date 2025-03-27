@@ -24,7 +24,10 @@ jest.mock('typescript', () => {
   }
 })
 jest.mock('../../transpilers/typescript/transpile-module', () => {
+  const actualModule = jest.requireActual('../../transpilers/typescript/transpile-module')
+
   return {
+    ...actualModule,
     tsTranspileModule: jest.fn(),
   }
 })

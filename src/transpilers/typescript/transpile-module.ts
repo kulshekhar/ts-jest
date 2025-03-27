@@ -39,7 +39,22 @@ function getNewLineCharacter(options: ts.CompilerOptions): string {
   }
 }
 
-type ExtendedTsTranspileModuleFn = (input: string, transpileOptions: ts.TranspileOptions) => ts.TranspileOutput
+type ExtendedTranspileOptions = Omit<ts.TranspileOptions, 'transformers'> & {
+  transformers?: (program: ts.Program) => ts.CustomTransformers
+}
+
+type ExtendedTsTranspileModuleFn = (
+  fileContent: string,
+  transpileOptions: ExtendedTranspileOptions,
+) => ts.TranspileOutput
+
+export const isModernNodeModuleKind = (module: ts.ModuleKind | undefined): boolean => {
+  return module ? [ts.ModuleKind.Node16, /* ModuleKind.Node18 */ 101, ts.ModuleKind.NodeNext].includes(module) : false
+}
+
+const shouldCheckProjectPkgJsonContent = (fileName: string, moduleKind: ts.ModuleKind | undefined): boolean => {
+  return fileName.endsWith('package.json') && isModernNodeModuleKind(moduleKind)
+}
 
 /**
  * Copy source code of {@link ts.transpileModule} from {@link https://github.com/microsoft/TypeScript/blob/main/src/services/transpile.ts}
@@ -113,10 +128,18 @@ const transpileWorker: ExtendedTsTranspileModuleFn = (input, transpileOptions) =
     getCurrentDirectory: () => '',
     getNewLine: () => newLine,
     fileExists: (fileName) => {
-      return fileName.endsWith('package.json') ? ts.sys.fileExists(fileName) : fileName === inputFileName
+      if (shouldCheckProjectPkgJsonContent(fileName, options.module)) {
+        return ts.sys.fileExists(fileName)
+      }
+
+      return fileName === inputFileName
     },
     readFile: (fileName) => {
-      return fileName.endsWith('package.json') ? ts.sys.readFile(fileName) : ''
+      if (shouldCheckProjectPkgJsonContent(fileName, options.module)) {
+        return ts.sys.readFile(fileName)
+      }
+
+      return ''
     },
     directoryExists: () => true,
     getDirectories: () => [],
@@ -161,7 +184,7 @@ const transpileWorker: ExtendedTsTranspileModuleFn = (input, transpileOptions) =
     /*writeFile*/ undefined,
     /*cancellationToken*/ undefined,
     /*emitOnlyDtsFiles*/ undefined,
-    transpileOptions.transformers,
+    transpileOptions.transformers?.(program),
   )
 
   diagnostics.push(...result.diagnostics)

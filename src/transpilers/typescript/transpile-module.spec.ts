@@ -53,10 +53,10 @@ function omitLeadingWhitespace(text: string): string {
 
 describe('transpileModules', () => {
   describe('with modern Node resolution', () => {
-    const esmModernNodeFilePath = path.join(workspaceRoot, 'esm-node-modern', 'foo.ts')
-    const mtsFilePath = path.join(workspaceRoot, 'esm-node-modern', 'foo.mts')
-    const cjsModernNodeFilePath = path.join(workspaceRoot, 'cjs-node-modern', 'foo.ts')
-    const ctsFilePath = path.join(workspaceRoot, 'esm-node-modern', 'foo.cts')
+    const tsFilePathInEsmModernNode = path.join(workspaceRoot, 'esm-node-modern', 'foo.ts')
+    const mtsFilePath = path.join(workspaceRoot, 'foo.mts')
+    const tsFilePathInCjsModernNode = path.join(workspaceRoot, 'cjs-node-modern', 'foo.ts')
+    const ctsFilePath = path.join(workspaceRoot, 'foo.cts')
     vol.fromJSON(
       {
         './esm-node-modern/package.json': JSON.stringify({
@@ -68,7 +68,7 @@ describe('transpileModules', () => {
 
           console.log(foo);
         `,
-        './esm-node-modern/foo.mts': `
+        './foo.mts': `
           import { foo } from 'foo';
 
           console.log(foo);
@@ -82,7 +82,7 @@ describe('transpileModules', () => {
 
           console.log(foo);
         `,
-        './esm-node-modern/foo.cts': `
+        './foo.cts': `
           import { foo } from 'foo';
 
           console.log(foo);
@@ -94,20 +94,17 @@ describe('transpileModules', () => {
     it.each([
       {
         module: ts.ModuleKind.Node16,
-        moduleResolution: ts.ModuleResolutionKind.Node16,
       },
       {
         module: ts.ModuleKind.NodeNext,
-        moduleResolution: ts.ModuleResolutionKind.NodeNext,
       },
-    ])('should emit CJS code with "type: commonjs" in package.json', ({ module, moduleResolution }) => {
-      const result = tsTranspileModule(vol.readFileSync(cjsModernNodeFilePath, 'utf-8').toString(), {
-        fileName: cjsModernNodeFilePath,
+    ])('should emit CJS code with "type: commonjs" in package.json', ({ module }) => {
+      const result = tsTranspileModule(vol.readFileSync(tsFilePathInCjsModernNode, 'utf-8').toString(), {
+        fileName: tsFilePathInCjsModernNode,
         compilerOptions: {
           module,
           target: ts.ScriptTarget.ESNext,
           verbatimModuleSyntax: true,
-          moduleResolution,
         },
       })
 
@@ -119,19 +116,16 @@ describe('transpileModules', () => {
     it.each([
       {
         module: ts.ModuleKind.Node16,
-        moduleResolution: ts.ModuleResolutionKind.Node16,
       },
       {
         module: ts.ModuleKind.NodeNext,
-        moduleResolution: ts.ModuleResolutionKind.NodeNext,
       },
-    ])('should emit ESM code with "type: module" in package.json', ({ module, moduleResolution }) => {
-      const result = tsTranspileModule(vol.readFileSync(esmModernNodeFilePath, 'utf-8').toString(), {
-        fileName: esmModernNodeFilePath,
+    ])('should emit ESM code with "type: module" in package.json', ({ module }) => {
+      const result = tsTranspileModule(vol.readFileSync(tsFilePathInEsmModernNode, 'utf-8').toString(), {
+        fileName: tsFilePathInEsmModernNode,
         compilerOptions: {
           module,
           target: ts.ScriptTarget.ESNext,
-          moduleResolution,
         },
       })
 
@@ -140,30 +134,78 @@ describe('transpileModules', () => {
       `)
     })
 
-    it('should emit ESM code with .mts extension', () => {
+    it.each([
+      {
+        module: ts.ModuleKind.CommonJS,
+        expectedResult: dedent`
+          const foo_1 = require("foo");
+        `,
+      },
+      {
+        module: ts.ModuleKind.Node16,
+        expectedResult: dedent`
+          import { foo } from 'foo';
+        `,
+      },
+      {
+        module: ts.ModuleKind.ES2020,
+        expectedResult: dedent`
+          import { foo } from 'foo';
+        `,
+      },
+      {
+        module: undefined,
+        expectedResult: dedent`
+          import { foo } from 'foo';
+        `,
+      },
+    ])('should emit code with ".mts" extension respecting module option', ({ module, expectedResult }) => {
       const result = tsTranspileModule(vol.readFileSync(mtsFilePath, 'utf-8').toString(), {
         fileName: mtsFilePath,
         compilerOptions: {
+          module,
           target: ts.ScriptTarget.ESNext,
         },
       })
 
-      expect(omitLeadingWhitespace(result.outputText)).toContain(dedent`
-        import { foo } from 'foo';
-      `)
+      expect(omitLeadingWhitespace(result.outputText)).toContain(expectedResult)
     })
 
-    it('should emit CJS code with .cts extension', () => {
+    it.each([
+      {
+        module: ts.ModuleKind.CommonJS,
+        expectedResult: dedent`
+          const foo_1 = require("foo");
+        `,
+      },
+      {
+        module: ts.ModuleKind.Node16,
+        expectedResult: dedent`
+          const foo_1 = require("foo");
+        `,
+      },
+      {
+        module: ts.ModuleKind.ES2020,
+        expectedResult: dedent`
+          import { foo } from 'foo';
+        `,
+      },
+      {
+        module: undefined,
+        expectedResult: dedent`
+          import { foo } from 'foo';
+        `,
+      },
+    ])('should emit code with ".cts" extension respecting module option', ({ module, expectedResult }) => {
       const result = tsTranspileModule(vol.readFileSync(ctsFilePath, 'utf-8').toString(), {
         fileName: ctsFilePath,
         compilerOptions: {
+          module,
           target: ts.ScriptTarget.ESNext,
         },
       })
 
-      expect(omitLeadingWhitespace(result.outputText)).toContain(dedent`
-        import { foo } from 'foo';
-      `)
+      expect(omitLeadingWhitespace(result.outputText)).toContain(expectedResult)
     })
   })
 
