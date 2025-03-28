@@ -1,10 +1,10 @@
 ---
-title: Isolated Modules option
+title: isolatedModules option
 ---
 
 :::warning DEPRECATED
 
-This page is now **DEPRECATED** and will be removed in the next major release.
+This page is now **DEPRECATED** and will be removed together with the config option `isolatedModules` in the next major release. Please use `isolatedModules` option in `tsconfig.json` instead.
 
 :::
 
