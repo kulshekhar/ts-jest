@@ -2,7 +2,7 @@
   "extends": "@tsconfig/strictest/tsconfig.json",
   "compilerOptions": {
     "target": "ESNext",
-    "module": "Node16",
+    "module": "CommonJS",
     "lib": ["ESNext", "dom"],
     "types": ["jest"],
     "isolatedModules": false

@@ -56,7 +56,7 @@ describe('transpileModules', () => {
     const esmModernNodeFilePath = path.join(workspaceRoot, 'esm-node-modern', 'foo.ts')
     const mtsFilePath = path.join(workspaceRoot, 'esm-node-modern', 'foo.mts')
     const cjsModernNodeFilePath = path.join(workspaceRoot, 'cjs-node-modern', 'foo.ts')
-    const ctsFilePath = path.join(workspaceRoot, 'esm-node-modern', 'foo.cts')
+    const ctsFilePath = path.join(workspaceRoot, 'cjs-node-modern', 'foo.cts')
     vol.fromJSON(
       {
         './esm-node-modern/package.json': JSON.stringify({
@@ -82,7 +82,7 @@ describe('transpileModules', () => {
 
           console.log(foo);
         `,
-        './esm-node-modern/foo.cts': `
+        './cjs-node-modern/foo.cts': `
           import { foo } from 'foo';
 
           console.log(foo);
@@ -162,7 +162,7 @@ describe('transpileModules', () => {
       })
 
       expect(omitLeadingWhitespace(result.outputText)).toContain(dedent`
-        import { foo } from 'foo';
+        const foo_1 = require("foo");
       `)
     })
   })
