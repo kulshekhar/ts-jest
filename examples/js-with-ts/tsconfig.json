@@ -1,7 +1,7 @@
 {
   "extends": "@tsconfig/strictest/tsconfig.json",
   "compilerOptions": {
-    "module": "Node16",
+    "module": "CommonJS",
     "target": "ESNext",
     "allowJs": true,
     "types": ["jest"],
