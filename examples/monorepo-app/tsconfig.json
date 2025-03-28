@@ -1,0 +1,22 @@
+{
+  "extends": "@tsconfig/strictest/tsconfig.json",
+  "compilerOptions": {
+    "rootDir": ".",
+    "target": "ESNext",
+    "module": "Node16",
+    "lib": ["ESNext", "dom"],
+    "isolatedModules": false
+  },
+  "include": [],
+  "references": [
+    {
+      "path": "./project-1/tsconfig.json"
+    },
+    {
+      "path": "./project-2/tsconfig.json"
+    },
+    {
+      "path": "./shared/tsconfig.json"
+    }
+  ]
+}

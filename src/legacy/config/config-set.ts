@@ -570,9 +570,7 @@ export class ConfigSet {
     let basePath = normalizeSlashes(this.rootDir)
     const ts = this.compilerModule
     // Read project configuration when available.
-    this.tsconfigFilePath = resolvedConfigFile
-      ? normalizeSlashes(resolvedConfigFile)
-      : ts.findConfigFile(normalizeSlashes(this.rootDir), ts.sys.fileExists)
+    this.tsconfigFilePath = this._findTsconfigFile(resolvedConfigFile)
     if (this.tsconfigFilePath) {
       this.logger.debug({ tsConfigFileName: this.tsconfigFilePath }, 'readTsConfig(): reading', this.tsconfigFilePath)
 
@@ -592,7 +590,56 @@ export class ConfigSet {
     }
 
     // parse json, merge config extending others, ...
-    return ts.parseJsonConfigFileContent(config, ts.sys, basePath, undefined, this.tsconfigFilePath)
+    return this._parseTsconfig(config, basePath, this.tsconfigFilePath)
+  }
+
+  protected _findTsconfigFile(resolvedConfigFile?: string) {
+    const ts = this.compilerModule
+
+    const configFileName: string | undefined = resolvedConfigFile
+      ? normalizeSlashes(resolvedConfigFile)
+      : ts.findConfigFile(normalizeSlashes(this.rootDir), ts.sys.fileExists)
+
+    const newTsconfigFile = this._findReferenceTsconfig(configFileName)
+
+    return newTsconfigFile ?? configFileName
+  }
+
+  protected _findReferenceTsconfig(tsconfigFileName?: string): string | undefined {
+    const ts = this.compilerModule
+
+    if (!tsconfigFileName) return
+
+    const parsedTsconfig = this._parseTsconfig(
+      ts.readConfigFile(tsconfigFileName, ts.sys.readFile).config || {},
+      dirname(tsconfigFileName),
+      tsconfigFileName,
+    )
+
+    if (this._includesTestFilesInConfig(parsedTsconfig)) return tsconfigFileName
+
+    if (parsedTsconfig.projectReferences) {
+      for (const ref of parsedTsconfig.projectReferences) {
+        const filePath = ts.resolveProjectReferencePath(ref)
+
+        if (ts.sys.fileExists(filePath)) {
+          const newTsconfigFileName = this._findReferenceTsconfig(ts.resolveProjectReferencePath(ref))
+          if (newTsconfigFileName) return newTsconfigFileName
+        }
+      }
+    }
+
+    return
+  }
+
+  protected _includesTestFilesInConfig(parsedConfig?: ts.ParsedCommandLine) {
+    return parsedConfig?.fileNames?.length ? parsedConfig.fileNames.some((path) => this.isTestFile(path)) : false
+  }
+
+  protected _parseTsconfig(config: unknown, basePath: string, configFileName = this.tsconfigFilePath) {
+    const ts = this.compilerModule
+
+    return ts.parseJsonConfigFileContent(config, ts.sys, basePath, undefined, configFileName)
   }
 
   isTestFile(fileName: string): boolean {
