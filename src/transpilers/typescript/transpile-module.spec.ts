@@ -193,17 +193,20 @@ describe('transpileModules', () => {
           console.log(loadFooAsync());
         `,
       },
-    ])('should emit code with ".mts" extension respecting module option', ({ module, expectedResult }) => {
-      const result = tsTranspileModule(vol.readFileSync(mtsFilePath, 'utf-8').toString(), {
-        fileName: mtsFilePath,
-        compilerOptions: {
-          module,
-          target: ts.ScriptTarget.ESNext,
-        },
-      })
+    ])(
+      'should always emit ESM code with ".mts" extension regardless module option value',
+      ({ module, expectedResult }) => {
+        const result = tsTranspileModule(vol.readFileSync(mtsFilePath, 'utf-8').toString(), {
+          fileName: mtsFilePath,
+          compilerOptions: {
+            module,
+            target: ts.ScriptTarget.ESNext,
+          },
+        })
 
-      expect(omitLeadingWhitespace(result.outputText)).toContain(expectedResult)
-    })
+        expect(omitLeadingWhitespace(result.outputText)).toContain(expectedResult)
+      },
+    )
 
     it.each([
       {
@@ -221,10 +224,10 @@ describe('transpileModules', () => {
       {
         module: ts.ModuleKind.ES2020,
         expectedResult: dedent`
-          import { foo } from 'foo';
-          console.log(foo);
+          const foo_1 = require("foo");
+          console.log(foo_1.foo);
           const loadFooAsync = async () => {
-            const fooDefault = await import('foo');
+            const fooDefault = await Promise.resolve().then(() => require('foo'));
             console.log(fooDefault);
           };
           console.log(loadFooAsync());
@@ -233,26 +236,29 @@ describe('transpileModules', () => {
       {
         module: undefined,
         expectedResult: dedent`
-          import { foo } from 'foo';
-          console.log(foo);
+          const foo_1 = require("foo");
+          console.log(foo_1.foo);
           const loadFooAsync = async () => {
-            const fooDefault = await import('foo');
+            const fooDefault = await Promise.resolve().then(() => require('foo'));
             console.log(fooDefault);
           };
           console.log(loadFooAsync());
         `,
       },
-    ])('should emit code with ".cts" extension respecting module option', ({ module, expectedResult }) => {
-      const result = tsTranspileModule(vol.readFileSync(ctsFilePath, 'utf-8').toString(), {
-        fileName: ctsFilePath,
-        compilerOptions: {
-          module,
-          target: ts.ScriptTarget.ESNext,
-        },
-      })
+    ])(
+      'should always emit CJS code with ".cts" extension regardless module option value',
+      ({ module, expectedResult }) => {
+        const result = tsTranspileModule(vol.readFileSync(ctsFilePath, 'utf-8').toString(), {
+          fileName: ctsFilePath,
+          compilerOptions: {
+            module,
+            target: ts.ScriptTarget.ESNext,
+          },
+        })
 
-      expect(omitLeadingWhitespace(result.outputText)).toContain(expectedResult)
-    })
+        expect(omitLeadingWhitespace(result.outputText)).toContain(expectedResult)
+      },
+    )
   })
 
   describe('with classic CommonJS module and ES module kind', () => {

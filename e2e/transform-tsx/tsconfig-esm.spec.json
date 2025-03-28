@@ -1,6 +1,0 @@
-{
-  "extends": [
-    "./tsconfig.json",
-    "../tsconfig-esm.spec.json"
-  ]
-}
