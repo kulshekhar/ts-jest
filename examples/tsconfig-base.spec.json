@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "lib": ["ESNext"],
+    "strict": true,
+    "skipLibCheck": true,
+    "types": ["jest"]
+  }
+}

@@ -5,10 +5,10 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "test": "jest -c=jest.config.cjs --no-cache",
-    "test-isolated": "jest -c=jest-isolated.config.cjs --no-cache",
-    "test-esm": "cross-env NODE_OPTIONS=\"$NODE_OPTIONS --experimental-vm-modules\" npx jest -c=jest-esm.config.mjs --no-cache",
-    "test-esm-isolated": "cross-env NODE_OPTIONS=\"$NODE_OPTIONS --experimental-vm-modules\" npx jest -c=jest-esm-isolated.config.mjs --no-cache",
+    "test": "jest -c=jest.config.ts --no-cache",
+    "test-isolated": "jest -c=jest-isolated.config.ts --no-cache",
+    "test-esm": "cross-env NODE_OPTIONS=\"$NODE_OPTIONS --experimental-vm-modules\" npx jest -c=jest-esm.config.ts --no-cache",
+    "test-esm-isolated": "cross-env NODE_OPTIONS=\"$NODE_OPTIONS --experimental-vm-modules\" npx jest -c=jest-esm-isolated.config.ts --no-cache",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -19,7 +19,6 @@
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.2.0",
-    "@tsconfig/strictest": "^2.0.5",
     "@types/jest": "^29.5.14",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.5",

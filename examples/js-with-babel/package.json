@@ -3,15 +3,14 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "test": "jest -c=jest.config.cjs --no-cache",
-    "test-isolated": "jest -c=jest-isolated.config.cjs --no-cache",
-    "test-esm": "cross-env NODE_OPTIONS=\"$NODE_OPTIONS --experimental-vm-modules\" npx jest -c=jest-esm.config.mjs --no-cache",
-    "test-esm-isolated": "cross-env NODE_OPTIONS=\"$NODE_OPTIONS --experimental-vm-modules\" npx jest -c=jest-esm-isolated.config.mjs --no-cache"
+    "test": "jest -c=jest.config.ts --no-cache",
+    "test-isolated": "jest -c=jest-isolated.config.ts --no-cache",
+    "test-esm": "cross-env NODE_OPTIONS=\"$NODE_OPTIONS --experimental-vm-modules\" npx jest -c=jest-esm.config.ts --no-cache",
+    "test-esm-isolated": "cross-env NODE_OPTIONS=\"$NODE_OPTIONS --experimental-vm-modules\" npx jest -c=jest-esm-isolated.config.ts --no-cache"
   },
   "devDependencies": {
     "@babel/core": "^7.26.10",
     "@babel/preset-env": "^7.26.9",
-    "@tsconfig/strictest": "^2.0.5",
     "@types/jest": "^29.5.14",
     "babel-jest": "^29.7.0",
     "cross-env": "^7.0.3",
