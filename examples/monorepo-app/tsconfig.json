@@ -1,0 +1,15 @@
+{
+  "files": [],
+  "include": [],
+  "references": [
+    {
+      "path": "./type-module/tsconfig.json"
+    },
+    {
+      "path": "./type-commonjs/tsconfig.json"
+    },
+    {
+      "path": "./shared/tsconfig.json"
+    }
+  ]
+}

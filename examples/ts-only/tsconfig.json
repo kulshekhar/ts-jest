@@ -1,9 +1,7 @@
 {
-  "extends": "@tsconfig/strictest/tsconfig.json",
+  "extends": "../tsconfig-base.spec.json",
   "compilerOptions": {
-    "module": "Node16",
-    "target": "ESNext",
-    "types": ["jest"],
+    "module": "CommonJS",
     "isolatedModules": false
   }
 }

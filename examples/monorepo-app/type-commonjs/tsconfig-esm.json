@@ -1,5 +1,5 @@
 {
-  "extends": "./tsconfig.spec.json",
+  "extends": "../tsconfig.base.json",
   "compilerOptions": {
     "module": "ESNext",
     "esModuleInterop": true
