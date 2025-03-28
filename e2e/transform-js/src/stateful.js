@@ -1,6 +1,6 @@
 let num = 0
 
-module.exports = function inc() {
+export function inc() {
   num++
 
   return num
