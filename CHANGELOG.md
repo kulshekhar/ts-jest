@@ -1,3 +1,13 @@
+## [29.3.1](https://github.com/kulshekhar/ts-jest/compare/v29.3.0...v29.3.1) (2025-03-31)
+
+
+### Bug Fixes
+
+* fix: allow `isolatedModules` mode to have `ts.Program` under `Node16/Next` ([25157eb](https://github.com/kulshekhar/ts-jest/commit/25157eb))
+* fix: improve message for `isolatedModules` of `ts-jest` config ([547eb6f](https://github.com/kulshekhar/ts-jest/commit/547eb6f))
+
+
+
 ## [29.3.0](https://github.com/kulshekhar/ts-jest/compare/v29.2.6...v29.3.0) (2025-03-21)
 
 
