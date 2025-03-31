@@ -14,25 +14,16 @@ If you are using custom `transform` config, please remove `preset` from your Jes
 All `ts-jest` specific options can be defined in Jest `transform` config object in the `package.json` file of your project,
 or through a `jest.config.js`, or `jest.config.ts` file.
 
-```js tab
-// jest.config.js
-const { createDefaultPreset } = require('ts-jest')
+```ts title="jest.config.ts"
+import type { Config } from 'jest'
+import { createDefaultPreset } from 'ts-jest'
 
-/** @type {import('ts-jest').JestConfigWithTsJest} */
-module.exports = {
+const config: Config = {
   // [...]
   ...createDefaultPreset(),
 }
-```
 
-```ts tab
-// jest.config.ts
-import { createDefaultPreset, JestConfigWithTsJest } from 'ts-jest'
-
-const jestConfig: JestConfigWithTsJest = {
-  // [...]
-  ...createDefaultPreset(),
-}
+export default config
 ```
 
 :::important

@@ -11,29 +11,10 @@ If you use a custom compiler, such as `ttypescript`, make sure its API is the sa
 
 ### Example
 
-```js tab
-// jest.config.js
-/** @type {import('ts-jest').JestConfigWithTsJest} */
-module.exports = {
-  // [...]
-  transform: {
-    // '^.+\\.[tj]sx?$' to process ts,js,tsx,jsx with `ts-jest`
-    // '^.+\\.m?[tj]sx?$' to process ts,js,tsx,jsx,mts,mjs,mtsx,mjsx with `ts-jest`
-    '^.+\\.tsx?$': [
-      'ts-jest',
-      {
-        compiler: 'ttypescript',
-      },
-    ],
-  },
-}
-```
+```ts title="jest.config.ts"
+import type { Config } from 'jest'
 
-```ts tab
-// jest.config.ts
-import type { JestConfigWithTsJest } from 'ts-jest'
-
-const jestConfig: JestConfigWithTsJest = {
+const jestConfig: Config = {
   // [...]
   transform: {
     // '^.+\\.[tj]sx?$' to process ts,js,tsx,jsx with `ts-jest`
@@ -48,23 +29,4 @@ const jestConfig: JestConfigWithTsJest = {
 }
 
 export default jestConfig
-```
-
-```JSON tab
-// package.json
-{
-  // [...]
-  "jest": {
-    "transform": {
-      // '^.+\\.[tj]sx?$' to process ts,js,tsx,jsx with `ts-jest`
-      // '^.+\\.m?[tj]sx?$' to process ts,js,tsx,jsx,mts,mjs,mtsx,mjsx with `ts-jest`
-      "^.+\\.tsx?$": [
-        "ts-jest",
-        {
-          "compiler": "ttypescript"
-        }
-      ]
-    }
-  }
-}
 ```

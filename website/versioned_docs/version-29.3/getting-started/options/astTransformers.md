@@ -16,8 +16,7 @@ The option is `astTransformers` and it allows ones to specify which 3 types of T
 
 #### Basic Transformers
 
-```ts
-// jest.config.ts
+```ts title="jest.config.ts"
 import type { Config } from 'jest'
 
 const jestConfig: Config = {
@@ -47,8 +46,7 @@ The `options` config option will be serialized by [`jest-worker`](https://github
 
 :::
 
-```ts
-// jest.config.ts
+```ts title="jest.config.ts"
 import type { Config } from 'jest'
 
 const jestConfig: Config = {

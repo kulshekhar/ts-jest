@@ -17,32 +17,44 @@ Cannot find module "" from ""
 
 - Check if `rootDir` is referenced correctly. If not add this on your existing jest configuration.
 
-```javascript
-module.exports = {
-  ...
-   roots: ["<rootDir>"]
+```ts title="jest.config.ts"
+import type { Config } from 'jest'
+
+const config: Config = {
+  //...
+  roots: ['<rootDir>'],
 }
+
+export default config
 ```
 
 - Check if module directories are included on your jest configuration. If not add this on your existing jest configuration.
 
-```javascript
-module.exports = {
-  ...
-  moduleDirectories: ["node_modules","<module-directory>"],
-  modulePaths: ["<path-of-module>"],
+```ts title="jest.config.ts"
+import type { Config } from 'jest'
+
+const config: Config = {
+  //...
+  moduleDirectories: ['node_modules', '<module-directory>'],
+  modulePaths: ['<path-of-module>'],
 }
+
+export default config
 ```
 
 - Check if module name is properly mapped and can be referenced by jest. If not, you can define moduleNameMapper for your jest configuration.
 
-```javascript
-module.exports = {
-  ...
+```ts title="jest.config.ts"
+import type { Config } from 'jest'
+
+const config: Config = {
+  //...
   moduleNameMapper: {
-    "<import-path>": "<rootDir>/<real-physical-path>",
+    '<import-path>': '<rootDir>/<real-physical-path>',
   },
 }
+
+export default config
 ```
 
 - Check github folder names if its identical to you local folder names. Sometimes github never updates your folder names even if you rename it locally. If this happens rename your folders via github or use this command `git mv <source> <destination>` and commit changes.
@@ -70,11 +82,15 @@ In this case **some-module** is the problem and needs to be transformed.
 By adding the following line to the configuration file it will tell Jest which modules
 shouldnt be ignored during the transformation step:
 
-```javascript
-module.exports = {
-  ...
-  transformIgnorePatterns: ["node_modules/(?!(some-module|another-module))"]
-};
+```ts title="jest.config.ts"
+import type { Config } from 'jest'
+
+const config: Config = {
+  //...
+  transformIgnorePatterns: ['node_modules/(?!(some-module|another-module))'],
+}
+
+export default config
 ```
 
 **some-module** and **another-module** will be transformed.
@@ -95,10 +111,10 @@ A possible cause for that issue is that you may have enabled `ts-jest` to proces
 
 - In your tsconfig file, check if `compilerOptions.allowJs` is unset or set to false.
 
-```javascript
+```json title="tsconfig.json"
 {
   "compilerOptions": {
-    "allowJs": false,
+    "allowJs": false
   }
 }
 ```

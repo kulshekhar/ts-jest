@@ -13,8 +13,7 @@ If you use ["baseUrl" and "paths" options](https://www.typescriptlang.org/docs/h
 
 With the below config in your `tsconfig`:
 
-```json
-// tsconfig.json
+```json title="tsconfig.json"
 {
   "compilerOptions": {
     "baseUrl": ".",
@@ -28,23 +27,10 @@ With the below config in your `tsconfig`:
 
 #### Jest config (without helper)
 
-```js tab
-// jest.config.js
-/** @type {import('ts-jest').JestConfigWithTsJest} */
-module.exports = {
-  // [...]
-  moduleNameMapper: {
-    '^@App/(.*)$': '<rootDir>/src/$1',
-    '^lib/(.*)$': '<rootDir>/common/$1',
-  },
-}
-```
+```ts title="jest.config.ts"
+import type { Config } from 'jest'
 
-```ts tab
-// jest.config.ts
-import type { JestConfigWithTsJest } from 'ts-jest'
-
-const jestConfig: JestConfigWithTsJest = {
+const jestConfig: Config = {
   // [...]
   moduleNameMapper: {
     '^@App/(.*)$': '<rootDir>/src/$1',
@@ -55,46 +41,16 @@ const jestConfig: JestConfigWithTsJest = {
 export default jestConfig
 ```
 
-```JSON tab
-// package.json
-{
-  // [...]
-  "jest": {
-    "moduleNameMapper": {
-      "^@App/(.*)$": "<rootDir>/src/$1",
-      "^lib/(.*)$": "<rootDir>/common/$1"
-    }
-  }
-}
-```
-
 #### Jest config (with helper)
 
-```js tab
-// jest.config.js
-const { pathsToModuleNameMapper } = require('ts-jest')
-// In the following statement, replace `./tsconfig` with the path to your `tsconfig` file
-// which contains the path mapping (ie the `compilerOptions.paths` option):
-const { compilerOptions } = require('./tsconfig')
-
-/** @type {import('ts-jest').JestConfigWithTsJest} */
-module.exports = {
-  // [...]
-  roots: ['<rootDir>'],
-  modulePaths: [compilerOptions.baseUrl], // <-- This will be set to 'baseUrl' value
-  moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths /*, { prefix: '<rootDir>/' } */),
-}
-```
-
-```ts tab
-// jest.config.ts
+```ts title="jest.config.ts"
 import { pathsToModuleNameMapper } from 'ts-jest'
 // In the following statement, replace `./tsconfig` with the path to your `tsconfig` file
 // which contains the path mapping (ie the `compilerOptions.paths` option):
 import { compilerOptions } from './tsconfig'
-import type { JestConfigWithTsJest } from 'ts-jest'
+import type { Config } from 'jest'
 
-const jestConfig: JestConfigWithTsJest = {
+const jestConfig: Config = {
   // [...]
   roots: ['<rootDir>'],
   modulePaths: [compilerOptions.baseUrl], // <-- This will be set to 'baseUrl' value
@@ -118,24 +74,7 @@ Files used for [`globalSetup`](https://jestjs.io/docs/configuration#globalsetup-
 
 For those files to be able to use [`tsconfig-paths`](https://www.npmjs.com/package/tsconfig-paths), you have to import it directly
 
-```js tab
-// ./path/to/globalSetup.js
-require('tsconfig-paths/register')
-
-/**
- * Your global setup
- */
-
-// ./path/to/globalTeardown.js
-require('tsconfig-paths/register')
-
-/**
- * Your global teardown
- */
-```
-
-```ts tab
-// ./path/to/globalSetup.ts
+```ts title="global-setup.ts"
 import 'tsconfig-paths/register'
 
 /**

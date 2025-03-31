@@ -31,29 +31,10 @@ The `diagnostics` option's value can also accept an object for more advanced con
 
 #### Disabling diagnostics
 
-```js tab
-// jest.config.js
-/** @type {import('ts-jest').JestConfigWithTsJest} */
-module.exports = {
-  // [...]
-  transform: {
-    // '^.+\\.[tj]sx?$' to process ts,js,tsx,jsx with `ts-jest`
-    // '^.+\\.m?[tj]sx?$' to process ts,js,tsx,jsx,mts,mjs,mtsx,mjsx with `ts-jest`
-    '^.+\\.tsx?$': [
-      'ts-jest',
-      {
-        diagnostics: false,
-      },
-    ],
-  },
-}
-```
+```ts title="jest.config.ts"
+import type { Config } from 'jest'
 
-```ts tab
-// jest.config.ts
-import type { JestConfigWithTsJest } from 'ts-jest'
-
-const jestConfig: JestConfigWithTsJest = {
+const jestConfig: Config = {
   // [...]
   transform: {
     // '^.+\\.[tj]sx?$' to process ts,js,tsx,jsx with `ts-jest`
@@ -68,25 +49,6 @@ const jestConfig: JestConfigWithTsJest = {
 }
 
 export default jestConfig
-```
-
-```JSON tab
-// package.json
-{
-  // [...]
-  "jest": {
-    "transform": {
-      // '^.+\\.[tj]sx?$' to process ts,js,tsx,jsx with `ts-jest`
-      // '^.+\\.m?[tj]sx?$' to process ts,js,tsx,jsx,mts,mjs,mtsx,mjsx with `ts-jest`
-      "^.+\\.tsx?$": [
-        "ts-jest",
-        {
-          "diagnostics": false
-        }
-      ]
-    }
-  }
-}
 ```
 
 #### Advanced options
@@ -95,31 +57,10 @@ export default jestConfig
 
 Assuming all your test files ends with `.spec.ts` or `.test.ts`, using the following config will enable error reporting only for those files:
 
-```js tab
-// jest.config.js
-/** @type {import('ts-jest').JestConfigWithTsJest} */
-module.exports = {
-  // [...]
-  transform: {
-    // '^.+\\.[tj]sx?$' to process ts,js,tsx,jsx with `ts-jest`
-    // '^.+\\.m?[tj]sx?$' to process ts,js,tsx,jsx,mts,mjs,mtsx,mjsx with `ts-jest`
-    '^.+\\.tsx?$': [
-      'ts-jest',
-      {
-        diagnostics: {
-          exclude: ['!**/*.(spec|test).ts'],
-        },
-      },
-    ],
-  },
-}
-```
+```ts title="jest.config.ts"
+import type { Config } from 'jest'
 
-```ts tab
-// jest.config.ts
-import type { JestConfigWithTsJest } from 'ts-jest'
-
-const jestConfig: JestConfigWithTsJest = {
+const jestConfig: Config = {
   // [...]
   transform: {
     // '^.+\\.[tj]sx?$' to process ts,js,tsx,jsx with `ts-jest`
@@ -136,58 +77,16 @@ const jestConfig: JestConfigWithTsJest = {
 }
 
 export default jestConfig
-```
-
-```JSON tab
-// package.json
-{
-  // [...]
-  "jest": {
-    "transform": {
-      // '^.+\\.[tj]sx?$' to process ts,js,tsx,jsx with `ts-jest`
-      // '^.+\\.m?[tj]sx?$' to process ts,js,tsx,jsx,mts,mjs,mtsx,mjsx with `ts-jest`
-      "^.+\\.tsx?$": [
-        "ts-jest",
-        {
-          "diagnostics": {
-            "exclude": ["!**/*.(spec|test).ts"]
-          }
-        }
-      ]
-    }
-  }
-}
 ```
 
 ##### Do not fail on first error
 
 While some diagnostics are stop-blockers for the compilation, most of them are not. If you want the compilation (and so your tests) to continue when encountering those, set the `warnOnly` to `true`:
 
-```js tab
-// jest.config.js
-/** @type {import('ts-jest').JestConfigWithTsJest} */
-module.exports = {
-  // [...]
-  transform: {
-    // '^.+\\.[tj]sx?$' to process ts,js,tsx,jsx with `ts-jest`
-    // '^.+\\.m?[tj]sx?$' to process ts,js,tsx,jsx,mts,mjs,mtsx,mjsx with `ts-jest`
-    '^.+\\.tsx?$': [
-      'ts-jest',
-      {
-        diagnostics: {
-          warnOnly: true,
-        },
-      },
-    ],
-  },
-}
-```
+```ts title="jest.config.ts"
+import type { Config } from 'jest'
 
-```ts tab
-// jest.config.ts
-import type { JestConfigWithTsJest } from 'ts-jest'
-
-const jestConfig: JestConfigWithTsJest = {
+const jestConfig: Config = {
   // [...]
   transform: {
     // '^.+\\.[tj]sx?$' to process ts,js,tsx,jsx with `ts-jest`
@@ -204,27 +103,6 @@ const jestConfig: JestConfigWithTsJest = {
 }
 
 export default jestConfig
-```
-
-```JSON tab
-// package.json
-{
-  // [...]
-  "jest": {
-    "transform": {
-      // '^.+\\.[tj]sx?$' to process ts,js,tsx,jsx with `ts-jest`
-      // '^.+\\.m?[tj]sx?$' to process ts,js,tsx,jsx,mts,mjs,mtsx,mjsx with `ts-jest`
-      "^.+\\.tsx?$": [
-        "ts-jest",
-        {
-          "diagnostics": {
-            "warnOnly": true
-          }
-        }
-      ]
-    }
-  }
-}
 ```
 
 ##### Ignoring some error codes
@@ -236,31 +114,10 @@ All TypeScript error codes can be found [there](https://github.com/Microsoft/Typ
 3. A `string` with a list of the above (example: `"1009, TS2571, 4072"`)
 4. An `array` of one or more from `1` or `3` (example: `[1009, "TS2571", "6031"]`)
 
-```js tab
-// jest.config.js
-/** @type {import('ts-jest').JestConfigWithTsJest} */
-module.exports = {
-  // [...]
-  transform: {
-    // '^.+\\.[tj]sx?$' to process ts,js,tsx,jsx with `ts-jest`
-    // '^.+\\.m?[tj]sx?$' to process ts,js,tsx,jsx,mts,mjs,mtsx,mjsx with `ts-jest`
-    '^.+\\.tsx?$': [
-      'ts-jest',
-      {
-        diagnostics: {
-          ignoreCodes: [2571, 6031, 18003],
-        },
-      },
-    ],
-  },
-}
-```
+```ts title="jest.config.ts"
+import type { Config } from 'jest'
 
-```ts tab
-// jest.config.ts
-import type { JestConfigWithTsJest } from 'ts-jest'
-
-const jestConfig: JestConfigWithTsJest = {
+const jestConfig: Config = {
   // [...]
   transform: {
     // '^.+\\.[tj]sx?$' to process ts,js,tsx,jsx with `ts-jest`
@@ -277,25 +134,4 @@ const jestConfig: JestConfigWithTsJest = {
 }
 
 export default jestConfig
-```
-
-```JSON tab
-// package.json
-{
-  // [...]
-  "jest": {
-    "transform": {
-      // '^.+\\.[tj]sx?$' to process ts,js,tsx,jsx with `ts-jest`
-      // '^.+\\.m?[tj]sx?$' to process ts,js,tsx,jsx,mts,mjs,mtsx,mjsx with `ts-jest`
-      "^.+\\.tsx?$": [
-        "ts-jest",
-        {
-          "diagnostics": {
-            "ignoreCodes": [2571, 6031, 18003]
-          }
-        }
-      ]
-    }
-  }
-}
 ```

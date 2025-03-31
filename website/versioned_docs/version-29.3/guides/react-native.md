@@ -11,19 +11,10 @@ After that, some little modifications will be required as follows:
 
 If you didn't yet, move any Babel config from `.babelrc` to `babel.config.js`. It should at least contain:
 
-```js tab
-// jest.config.js
-/** @type {import('ts-jest').JestConfigWithTsJest} */
-module.exports = {
-  presets: ['module:metro-react-native-babel-preset'],
-}
-```
+```ts title="jest.config.ts"
+import type { Config } from 'ts-jest'
 
-```ts tab
-// jest.config.ts
-import type { JestConfigWithTsJest } from 'ts-jest'
-
-const jestConfig: JestConfigWithTsJest = {
+const jestConfig: Config = {
   presets: ['module:metro-react-native-babel-preset'],
 }
 
@@ -34,8 +25,7 @@ export default jestConfig
 
 Create a new `tsconfig.spec.json` at the root of your project with the following content
 
-```json
-// tsconfig.spec.json
+```json title="tsconfig.spec.json"
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
@@ -48,33 +38,16 @@ Create a new `tsconfig.spec.json` at the root of your project with the following
 
 In the same way that you moved Babel config, move Jest config from `jest` key of `package.json` to `jest.config.js`. It should look like this:
 
-```js tab
-// jest.config.js
-const { createJsWithBabelPreset } = require('ts-jest')
+```ts title="jest.config.ts"
+import type { Config } from 'jest'
+import { createJsWithBabelPreset } from 'ts-jest'
 
 const jsWithBabelPreset = createJsWithBabelPreset({
   tsconfig: 'tsconfig.spec.json',
   babelConfig: true,
 })
 
-/** @type {import('ts-jest').JestConfigWithTsJest} */
-module.exports = {
-  preset: 'react-native',
-  transform: jsWithBabelPreset.transform,
-  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
-}
-```
-
-```ts tab
-// jest.config.ts
-import { createJsWithBabelPreset, JestConfigWithTsJest } from 'ts-jest'
-
-const jsWithBabelPreset = createJsWithBabelPreset({
-  tsconfig: 'tsconfig.spec.json',
-  babelConfig: true,
-})
-
-const jestConfig: JestConfigWithTsJest = {
+const jestConfig: Config = {
   preset: 'react-native',
   transform: jsWithBabelPreset.transform,
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],

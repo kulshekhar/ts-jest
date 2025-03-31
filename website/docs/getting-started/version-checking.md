@@ -3,6 +3,12 @@ id: version-checking
 title: Version checking
 ---
 
+:::warning DEPRECATED
+
+The version checking is **DEPRECATED** in favor of native `peerDependencies` checking mechanism in `package.json`. This page will be removed in the next major version.
+
+:::
+
 By default, `ts-jest` supports a range of versions for `jest`/`typescript`. One uses incompatible versions will receive a warning
 message while running tests. This warning message can be opt-out by setting environment variable `TS_JEST_DISABLE_VER_CHECKER`:
 
