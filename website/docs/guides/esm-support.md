@@ -27,7 +27,12 @@ Check [ESM Jest documentation](https://jestjs.io/docs/en/ecmascript-modules).
 
 :::info
 
-Jest runtime hasn't taken into account of `type: "module"` field in `package.json` yet to run as ESM mode.
+Jest runtime currently has a few issues related to support ESM:
+
+- Not taking into account of `type: "module"` field in `package.json` yet to run as ESM mode.
+- Mocking ES modules are not supported yet, track progress here https://github.com/jestjs/jest/pull/10976
+
+Overall progress and discussion can be found at https://github.com/jestjs/jest/issues/9430
 
 :::
 

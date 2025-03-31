@@ -3,54 +3,99 @@ id: esm-support
 title: ESM Support
 ---
 
-## References
+:::important
+
+`ts-jest` will take into account of the following things when working with ESM:
+
+- [Jest Runtime](https://jestjs.io/docs/en/ecmascript-modules)
+- Check `type: "module"` in `package.json` **ONLY WHEN** `module` in `tsconfig` has hybrid value: either `Node16`/`Node18`/`NodeNext`
+- When `module` in `tsconfig` isn't set to a hybrid value, `module` **MUST HAVE** one of the ES values, e.g. `ES2015`, `ES2020` etc...
+
+:::
+
+# References
 
 import TOCInline from '@theme/TOCInline';
 
-<TOCInline toc={toc.slice(1)} />
+<TOCInline toc={toc.slice(0)} />
 
 ---
 
-### Configuration
+## Configure Jest runtime
 
-To use `ts-jest` with ESM support:
+Check [ESM Jest documentation](https://jestjs.io/docs/en/ecmascript-modules).
 
-- Check [ESM Jest documentation](https://jestjs.io/docs/en/ecmascript-modules).
-- Ensure that `tsconfig` has `module` with value for ESM, e.g. `ES2022`/`ESNext` etc...
+:::info
 
-#### Example:
+Jest runtime currently has a few issues related to support ESM:
+
+- Not taking into account of `type: "module"` field in `package.json` yet to run as ESM mode.
+- Mocking ES modules are not supported yet, track progress here https://github.com/jestjs/jest/pull/10976
+
+Overall progress and discussion can be found at https://github.com/jestjs/jest/issues/9430
+
+:::
+
+## Configure `tsconfig`
+
+### Using ES module values
 
 ```json
 // tsconfig.spec.json
 {
   "compilerOptions": {
-    "module": "ESNext", // or ES2022
+    "module": "ESNext", // or any values starting with "es" or "ES"
     "target": "ESNext",
     "esModuleInterop": true
   }
 }
 ```
 
-- Configure your Jest configuration use one of the [utility functions](../getting-started/presets.md)
+### Using hybrid module values
 
-#### Example:
+:::important
+
+Hybrid module values requires `type` field in `package.json` to be set explicitly to:
+
+- `commonjs` for `CommonJS` code
+- `module` for `ESM` code
+
+:::
+
+```json
+// tsconfig.spec.json
+{
+  "compilerOptions": {
+    "module": "Node16", // or Node18/NodeNext
+    "target": "ESNext",
+    "esModuleInterop": true
+  }
+}
+```
+
+## Configure Jest config
+
+Configure your Jest configuration to use one of the [utility functions](../getting-started/presets.md)
+
+### Example
 
 ```ts
-// jest.config.mts
-import { createDefaultEsmPreset, type JestConfigWithTsJest } from 'ts-jest'
+// jest.config.ts
+import type { Config } from 'jest'
+import { createDefaultEsmPreset } from 'ts-jest'
 
 const presetConfig = createDefaultEsmPreset({
   //...options
 })
 
-const jestConfig: JestConfigWithTsJest = {
+const jestConfig: Config = {
   ...presetConfig,
 }
 
 export default jestConfig
 ```
 
-### Resolve `.mjs/.mts` extensions
+## Resolve `.mjs/.mts` extensions
 
 To work with `.mts` extension, besides the requirement to run Jest and `ts-jest` in ESM mode, there are a few extra requirements to be met:
 
