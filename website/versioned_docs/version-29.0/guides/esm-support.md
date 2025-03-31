@@ -3,191 +3,150 @@ id: esm-support
 title: ESM Support
 ---
 
-To use `ts-jest` with ESM support:
-
-- Check [ESM Jest documentation](https://jestjs.io/docs/en/ecmascript-modules).
-- Enable [useESM](../getting-started/options/useESM) `true` for `ts-jest` config.
-- Include `.ts` in [extensionsToTreatAsEsm](https://jestjs.io/docs/en/next/configuration#extensionstotreatasesm-arraystring) Jest config option.
-- Ensure that `tsconfig` has `module` with value for ESM, e.g. `ES2015` or `ES2020` etc...
-
-### ESM presets
-
-There are also [3 presets](../getting-started/presets.md) to work with ESM.
-
-:::caution
-
-If you are using custom `transform` config, please remove `preset` from your Jest config to avoid issues that Jest doesn't transform files correctly.
-
-:::
-
-### Examples
-
-#### Manual configuration
-
-```js tab
-// jest.config.js
-/** @type {import('ts-jest').JestConfigWithTsJest} */
-module.exports = {
-  // [...]
-  extensionsToTreatAsEsm: ['.ts'],
-  moduleNameMapper: {
-    '^(\\.{1,2}/.*)\\.js$': '$1',
-  },
-  transform: {
-    // '^.+\\.[tj]sx?$' to process ts,js,tsx,jsx with `ts-jest`
-    // '^.+\\.m?[tj]sx?$' to process ts,js,tsx,jsx,mts,mjs,mtsx,mjsx with `ts-jest`
-    '^.+\\.tsx?$': [
-      'ts-jest',
-      {
-        useESM: true,
-      },
-    ],
-  },
-}
-```
-
-```ts tab
-// jest.config.ts
-import type { JestConfigWithTsJest } from 'ts-jest'
-
-const jestConfig: JestConfigWithTsJest = {
-  // [...]
-  extensionsToTreatAsEsm: ['.ts'],
-  moduleNameMapper: {
-    '^(\\.{1,2}/.*)\\.js$': '$1',
-  },
-  transform: {
-    // '^.+\\.[tj]sx?$' to process ts,js,tsx,jsx with `ts-jest`
-    // '^.+\\.m?[tj]sx?$' to process ts,js,tsx,jsx,mts,mjs,mtsx,mjsx with `ts-jest`
-    '^.+\\.tsx?$': [
-      'ts-jest',
-      {
-        useESM: true,
-      },
-    ],
-  },
-}
-
-export default jestConfig
-```
-
-```JSON tab
-// package.json
-{
-  // [...]
-  "jest": {
-    "extensionsToTreatAsEsm": [".ts"],
-    "moduleNameMapper": {
-      "^(\\.{1,2}/.*)\\.js$": "$1"
-    },
-    "transform": {
-      // '^.+\\.[tj]sx?$' to process ts,js,tsx,jsx with `ts-jest`
-      // '^.+\\.m?[tj]sx?$' to process ts,js,tsx,jsx,mts,mjs,mtsx,mjsx with `ts-jest`
-      "^.+\\.tsx?$": [
-        "ts-jest",
-        {
-          "useESM": true
-        }
-      ]
-    }
-  }
-}
-```
-
-#### Use ESM presets
-
 :::important
 
-Starting from **v28.0.0**, `ts-jest` will gradually switch to `esbuild`/`swc` to transform `ts` to `js`. To make the transition smoothly, we introduce `legacy` presets as a fallback when the new codes don't work yet.
+`ts-jest` will take into account of the following things when working with ESM:
+
+- [Jest Runtime](https://jestjs.io/docs/en/ecmascript-modules)
+- Check `type: "module"` in `package.json` **ONLY WHEN** `module` in `tsconfig` has hybrid value: either `Node16`/`Node18`/`NodeNext`
+- When `module` in `tsconfig` isn't set to a hybrid value, `module` **MUST HAVE** one of the ES values, e.g. `ES2015`, `ES2020` etc...
 
 :::
 
-```js tab
-// jest.config.js
-/** @type {import('ts-jest').JestConfigWithTsJest} */
-module.exports = {
-  // [...]
-  preset: 'ts-jest/presets/default-esm', // or other ESM presets
-  moduleNameMapper: {
-    '^(\\.{1,2}/.*)\\.js$': '$1',
-  },
-  transform: {
-    // '^.+\\.[tj]sx?$' to process ts,js,tsx,jsx with `ts-jest`
-    // '^.+\\.m?[tj]sx?$' to process ts,js,tsx,jsx,mts,mjs,mtsx,mjsx with `ts-jest`
-    '^.+\\.tsx?$': [
-      'ts-jest',
-      {
-        useESM: true,
-      },
-    ],
-  },
-}
-```
+# References
 
-```ts tab
-// jest.config.ts
-import type { JestConfigWithTsJest } from 'ts-jest'
+import TOCInline from '@theme/TOCInline';
 
-const jestConfig: JestConfigWithTsJest = {
-  // [...]
-  preset: 'ts-jest/presets/default-esm', // or other ESM presets
-  moduleNameMapper: {
-    '^(\\.{1,2}/.*)\\.js$': '$1',
-  },
-  transform: {
-    // '^.+\\.[tj]sx?$' to process ts,js,tsx,jsx with `ts-jest`
-    // '^.+\\.m?[tj]sx?$' to process ts,js,tsx,jsx,mts,mjs,mtsx,mjsx with `ts-jest`
-    '^.+\\.tsx?$': [
-      'ts-jest',
-      {
-        useESM: true,
-      },
-    ],
-  },
-}
+<TOCInline toc={toc.slice(0)} />
 
-export default jestConfig
-```
+---
 
-```JSON tab
-// package.json
-{
-  // [...]
-  "jest": {
-    "preset": "ts-jest/presets/default-esm", // or other ESM presets,
-    "moduleNameMapper": {
-      "^(\\.{1,2}/.*)\\.js$": "$1"
-    },
-    "transform": {
-      // '^.+\\.[tj]sx?$' to process ts,js,tsx,jsx with `ts-jest`
-      // '^.+\\.m?[tj]sx?$' to process ts,js,tsx,jsx,mts,mjs,mtsx,mjsx with `ts-jest`
-      "^.+\\.tsx?$": [
-        "ts-jest",
-        {
-          "useESM": true
-        }
-      ]
-    }
-  }
-}
-```
+## Configure Jest runtime
 
-#### Support `.mts` extension
+Check [ESM Jest documentation](https://jestjs.io/docs/en/ecmascript-modules).
 
-To work with `.mts` extension, besides the requirement to run Jest and `ts-jest` in ESM mode, there are a few extra requirements to be met:
+:::info
 
-- `package.json` should contain `"type": "module"`
-- A custom Jest resolver to resolve `.mjs` extension, see our simple one at https://github.com/kulshekhar/ts-jest/blob/main/e2e/native-esm-ts/mjs-resolver.ts
-- `tsconfig.json` should at least contain these following options
+Jest runtime currently has a few issues related to support ESM:
+
+- Not taking into account of `type: "module"` field in `package.json` yet to run as ESM mode.
+- Mocking ES modules are not supported yet, track progress here https://github.com/jestjs/jest/pull/10976
+
+Overall progress and discussion can be found at https://github.com/jestjs/jest/issues/9430
+
+:::
+
+## Configure `tsconfig`
+
+### Using ES module values
 
 ```json
 // tsconfig.spec.json
 {
   "compilerOptions": {
-    "module": "Node16", // or "NodeNext"
+    "module": "ESNext", // or any values starting with "es" or "ES"
     "target": "ESNext",
-    "moduleResolution": "Node16", // or "NodeNext"
     "esModuleInterop": true
   }
 }
+```
+
+### Using hybrid module values
+
+:::important
+
+Hybrid module values requires `type` field in `package.json` to be set explicitly to:
+
+- `commonjs` for `CommonJS` code
+- `module` for `ESM` code
+
+:::
+
+```json
+// tsconfig.spec.json
+{
+  "compilerOptions": {
+    "module": "Node16", // or Node18/NodeNext
+    "target": "ESNext",
+    "esModuleInterop": true
+  }
+}
+```
+
+## Configure Jest config
+
+Configure your Jest configuration to use one of the [utility functions](../getting-started/presets.md)
+
+### Example
+
+```ts
+// jest.config.ts
+import type { Config } from 'jest'
+
+const jestConfig: Config = {
+  // [...]
+  preset: 'ts-jest/presets/default-esm', // or other ESM presets
+  moduleNameMapper: {
+    '^(\\.{1,2}/.*)\\.js$': '$1',
+  },
+  transform: {
+    // '^.+\\.[tj]sx?$' to process ts,js,tsx,jsx with `ts-jest`
+    // '^.+\\.m?[tj]sx?$' to process ts,js,tsx,jsx,mts,mjs,mtsx,mjsx with `ts-jest`
+    '^.+\\.tsx?$': [
+      'ts-jest',
+      {
+        useESM: true,
+      },
+    ],
+  },
+}
+
+export default jestConfig
+```
+
+## Resolve `.mjs/.mts` extensions
+
+To work with `.mts` extension, besides the requirement to run Jest and `ts-jest` in ESM mode, there are a few extra requirements to be met:
+
+- `package.json` should contain `"type": "module"`
+- A custom Jest resolver to resolve `.mjs` extension, for example:
+
+```ts tab={"label": "TypeScript CJS"}
+import type { SyncResolver } from 'jest-resolve'
+
+const mjsResolver: SyncResolver = (path, options) => {
+  const mjsExtRegex = /\.mjs$/i
+  const resolver = options.defaultResolver
+  if (mjsExtRegex.test(path)) {
+    try {
+      return resolver(path.replace(mjsExtRegex, '.mts'), options)
+    } catch {
+      // use default resolver
+    }
+  }
+
+  return resolver(path, options)
+}
+
+export = mjsResolver
+```
+
+```ts tab={"label": "TypeScript ESM"}
+import type { SyncResolver } from 'jest-resolve'
+
+const mjsResolver: SyncResolver = (path, options) => {
+  const mjsExtRegex = /\.mjs$/i
+  const resolver = options.defaultResolver
+  if (mjsExtRegex.test(path)) {
+    try {
+      return resolver(path.replace(mjsExtRegex, '.mts'), options)
+    } catch {
+      // use default resolver
+    }
+  }
+
+  return resolver(path, options)
+}
+
+export default mjsResolver
 ```
