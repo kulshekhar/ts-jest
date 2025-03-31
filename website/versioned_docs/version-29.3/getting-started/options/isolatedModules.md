@@ -18,29 +18,10 @@ Here is how to disable type-checking and compile each file as an isolated module
 
 ### Example
 
-```js tab
-// jest.config.js
-/** @type {import('ts-jest').JestConfigWithTsJest} */
-module.exports = {
-  // [...]
-  transform: {
-    // '^.+\\.[tj]sx?$' to process ts,js,tsx,jsx with `ts-jest`
-    // '^.+\\.m?[tj]sx?$' to process ts,js,tsx,jsx,mts,mjs,mtsx,mjsx with `ts-jest`
-    '^.+\\.tsx?$': [
-      'ts-jest',
-      {
-        isolatedModules: true,
-      },
-    ],
-  },
-}
-```
+```ts title="jest.config.ts"
+import type { Config } from 'jest'
 
-```ts tab
-// jest.config.ts
-import type { JestConfigWithTsJest } from 'ts-jest'
-
-const jestConfig: JestConfigWithTsJest = {
+const jestConfig: Config = {
   // [...]
   transform: {
     // '^.+\\.[tj]sx?$' to process js/ts with `ts-jest`
@@ -57,25 +38,6 @@ const jestConfig: JestConfigWithTsJest = {
 export default jestConfig
 ```
 
-```JSON tab
-// package.json
-{
-  // [...]
-  "jest": {
-    "transform": {
-    // '^.+\\.[tj]sx?$' to process js/ts with `ts-jest`
-      // '^.+\\.m?[tj]sx?$' to process js/ts/mjs/mts with `ts-jest`
-      "^.+\\.tsx?$": [
-        "ts-jest",
-        {
-          "isolatedModules": true
-        }
-      ]
-    }
-  }
-}
-```
-
 ## Performance
 
 Using `isolatedModules: false` comes with a cost of performance comparing to `isolatedModules: true`. There is a way
@@ -84,8 +46,7 @@ The least amount of files which are provided in `include`, the more performance 
 
 ### Example
 
-```json
-// tsconfig.json
+```json title="tsconfig.json"
 {
   // ...other configs
   "include": ["my-typings/*", "my-global-modules/*"]

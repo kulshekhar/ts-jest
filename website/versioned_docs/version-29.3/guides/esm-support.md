@@ -13,7 +13,7 @@ title: ESM Support
 
 :::
 
-# References
+One can configure `ts-jest` to work with Jest in ESM mode by following the steps below.
 
 import TOCInline from '@theme/TOCInline';
 
@@ -38,10 +38,11 @@ Overall progress and discussion can be found at https://github.com/jestjs/jest/i
 
 ## Configure `tsconfig`
 
+One can choose either of the following options for `tsconfig`:
+
 ### Using ES module values
 
-```json
-// tsconfig.spec.json
+```json title="tsconfig.spec.json"
 {
   "compilerOptions": {
     "module": "ESNext", // or any values starting with "es" or "ES"
@@ -60,10 +61,11 @@ Hybrid module values requires `type` field in `package.json` to be set explicitl
 - `commonjs` for `CommonJS` code
 - `module` for `ESM` code
 
+See official TypeScript documentation at https://www.typescriptlang.org/docs/handbook/modules/reference.html#node16-node18-nodenext
+
 :::
 
-```json
-// tsconfig.spec.json
+```json title="tsconfig.spec.json"
 {
   "compilerOptions": {
     "module": "Node16", // or Node18/NodeNext
@@ -77,10 +79,9 @@ Hybrid module values requires `type` field in `package.json` to be set explicitl
 
 Configure your Jest configuration to use one of the [utility functions](../getting-started/presets.md)
 
-### Example
+For example:
 
-```ts
-// jest.config.ts
+```ts title="jest.config.ts"
 import type { Config } from 'jest'
 import { createDefaultEsmPreset } from 'ts-jest'
 
@@ -102,27 +103,7 @@ To work with `.mts` extension, besides the requirement to run Jest and `ts-jest`
 - `package.json` should contain `"type": "module"`
 - A custom Jest resolver to resolve `.mjs` extension, for example:
 
-```ts tab={"label": "TypeScript CJS"}
-import type { SyncResolver } from 'jest-resolve'
-
-const mjsResolver: SyncResolver = (path, options) => {
-  const mjsExtRegex = /\.mjs$/i
-  const resolver = options.defaultResolver
-  if (mjsExtRegex.test(path)) {
-    try {
-      return resolver(path.replace(mjsExtRegex, '.mts'), options)
-    } catch {
-      // use default resolver
-    }
-  }
-
-  return resolver(path, options)
-}
-
-export = mjsResolver
-```
-
-```ts tab={"label": "TypeScript ESM"}
+```ts title="custom-resolver.ts"
 import type { SyncResolver } from 'jest-resolve'
 
 const mjsResolver: SyncResolver = (path, options) => {
@@ -140,4 +121,15 @@ const mjsResolver: SyncResolver = (path, options) => {
 }
 
 export default mjsResolver
+```
+
+and then add this to Jest config:
+
+```ts title="jest.config.ts"
+import type { Config } from 'jest'
+
+const config: Config = {
+  //...other options
+  resolver: '<rootDir>/path/to/custom-resolver.ts',
+}
 ```
