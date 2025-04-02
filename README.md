@@ -67,7 +67,7 @@ See also the list of [contributors](https://github.com/kulshekhar/ts-jest/contri
 
 ## Supporters
 
-- [JetBrains](https://www.jetbrains.com/?from=ts-jest) has been kind enough to support ts-jest with an [open source license](https://www.jetbrains.com/community/opensource/?from=ts-jest).
+- [JetBrains](https://www.jetbrains.com/?from=ts-jest) has been kind enough to support ts-jest with a [license for open source] (https://www.jetbrains.com/community/opensource/?from=ts-jest).
 
 ## License
 
