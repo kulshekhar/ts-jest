@@ -19,6 +19,12 @@ Tip: If you get an error with the following `npm` commands such as `npx: command
 
 ### Jest config file
 
+:::tip
+
+For ESM configuration, please see more in details with [ESM guide](../guides/esm-support).
+
+:::
+
 #### Creating
 
 By default, Jest can run without any config files, but it will not compile `.ts` files.

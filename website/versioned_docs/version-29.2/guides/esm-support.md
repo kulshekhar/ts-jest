@@ -5,15 +5,22 @@ title: ESM Support
 
 :::important
 
-`ts-jest` will take into account of the following things when working with ESM:
+Jest will take into account of the following things when working with ESM:
 
-- [Jest Runtime](https://jestjs.io/docs/en/ecmascript-modules)
-- Check `type: "module"` in `package.json` **ONLY WHEN** `module` in `tsconfig` has hybrid value: either `Node16`/`Node18`/`NodeNext`
-- When `module` in `tsconfig` isn't set to a hybrid value, `module` **MUST HAVE** one of the ES values, e.g. `ES2015`, `ES2020` etc...
+- [ESM runtime](https://jestjs.io/docs/en/ecmascript-modules)
+- The value of `module` option in tsconfig file is either:
+  - `Node16/Node18/NodeNext`: this **MUST** go together with `type: "module"` in `package.json`.
+  - Otherwise, the value **MUST BE** one of the ES values, e.g. `ES2015`, `ES2020` etc...
 
 :::
 
-# References
+One can configure `ts-jest` to work with Jest in ESM mode by following the steps below.
+
+:::tip
+
+We have [**EXAMPLE APPS**](https://github.com/kulshekhar/ts-jest/tree/main/examples) which contains some projects which have basic setup to work with ESM (next to CJS config).
+
+:::
 
 import TOCInline from '@theme/TOCInline';
 
@@ -23,9 +30,7 @@ import TOCInline from '@theme/TOCInline';
 
 ## Configure Jest runtime
 
-Check [ESM Jest documentation](https://jestjs.io/docs/en/ecmascript-modules).
-
-:::info
+:::warning
 
 Jest runtime currently has a few issues related to support ESM:
 
@@ -36,15 +41,62 @@ Overall progress and discussion can be found at https://github.com/jestjs/jest/i
 
 :::
 
+:::info
+
+If one is using Jest config in TypeScript, one should install `ts-node` as a dev dependency.
+
+```bash npm2yarn
+
+npm install -D ts-node
+
+```
+
+:::
+
+Execute Jest with with `--experimental-vm-modules` flag for `NodeJs`
+
+```bash
+
+node --experimental-vm-modules node_modules/jest/bin/jest.js
+
+```
+
+:::tip
+
+Alternative way for `Yarn` users:
+
+```bash
+
+yarn node --experimental-vm-modules $(yarn bin jest)
+
+```
+
+This command will also work if you use `Yarn Plug'n'Play.`
+
+:::
+
 ## Configure `tsconfig`
+
+One can choose **EITHER ONE** of the following options for `tsconfig`:
 
 ### Using ES module values
 
-```json
-// tsconfig.spec.json
+:::tip
+
+See more details about [ES module values](https://www.typescriptlang.org/docs/handbook/modules/reference.html#es2015-es2020-es2022-esnext)
+
+:::
+
+:::important
+
+`ts-jest` recommends to use `ES2022` or `ESNext` when using `ES` module values to achieve full support for all recent ESM features.
+
+:::
+
+```json title="tsconfig.spec.json"
 {
   "compilerOptions": {
-    "module": "ESNext", // or any values starting with "es" or "ES"
+    "module": "ES2022", // or `ESNext`
     "target": "ESNext",
     "esModuleInterop": true
   }
@@ -53,34 +105,51 @@ Overall progress and discussion can be found at https://github.com/jestjs/jest/i
 
 ### Using hybrid module values
 
-:::important
+:::tip
 
-Hybrid module values requires `type` field in `package.json` to be set explicitly to:
-
-- `commonjs` for `CommonJS` code
-- `module` for `ESM` code
+See more details about [hybrid module](https://www.typescriptlang.org/docs/handbook/modules/reference.html#node16-node18-nodenext)
 
 :::
 
-```json
-// tsconfig.spec.json
+:::important
+
+Currently, the code transpiler **ONLY** supports hybrid values with `isolatedModules: true`
+
+:::
+
+```json title="tsconfig.spec.json"
 {
   "compilerOptions": {
     "module": "Node16", // or Node18/NodeNext
     "target": "ESNext",
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "isolatedModules": true
   }
 }
 ```
 
 ## Configure Jest config
 
-Configure your Jest configuration to use one of the [utility functions](../getting-started/presets.md)
+:::tip
 
-### Example
+Jest will attempt to load **ESM** files from `node_modules` with default `jest-resolve` which usually works for most of the cases.
+However, there are cases like Angular libraries **ESM** built files or **ESM** files which are outside `node_modules` might not be loaded
+correctly.
 
-```ts
-// jest.config.ts
+To fix that, one can use `moduleNameMapper` in jest config to instruct Jest to load the correct **ESM** files or create a
+custom Jest [resolver](https://jestjs.io/docs/configuration#resolver-string).
+
+:::
+
+### Using ESM presets
+
+:::tip
+
+See available ESM preset creator functions [**HERE**](../getting-started/presets.md)
+
+:::
+
+```ts title="jest.config.ts"
 import type { Config } from 'jest'
 import { createDefaultEsmPreset } from 'ts-jest'
 
@@ -88,11 +157,29 @@ const presetConfig = createDefaultEsmPreset({
   //...options
 })
 
-const jestConfig: Config = {
+export default {
   ...presetConfig,
-}
+} satisfies Config
+```
 
-export default jestConfig
+### NOT using ESM presets
+
+```ts title="jest.config.ts"
+import type { Config } from 'jest'
+import { TS_EXT_TO_TREAT_AS_ESM, ESM_TS_TRANSFORM_PATTERN } from 'ts-jest'
+
+export default {
+  extensionsToTreatAsEsm: [...TS_EXT_TO_TREAT_AS_ESM],
+  transform: {
+    [ESM_TS_TRANSFORM_PATTERN]: [
+      'ts-jest',
+      {
+        //...other `ts-jest` options
+        useESM: true,
+      },
+    ],
+  },
+} satisfies Config
 ```
 
 ## Resolve `.mjs/.mts` extensions
@@ -102,27 +189,7 @@ To work with `.mts` extension, besides the requirement to run Jest and `ts-jest`
 - `package.json` should contain `"type": "module"`
 - A custom Jest resolver to resolve `.mjs` extension, for example:
 
-```ts tab={"label": "TypeScript CJS"}
-import type { SyncResolver } from 'jest-resolve'
-
-const mjsResolver: SyncResolver = (path, options) => {
-  const mjsExtRegex = /\.mjs$/i
-  const resolver = options.defaultResolver
-  if (mjsExtRegex.test(path)) {
-    try {
-      return resolver(path.replace(mjsExtRegex, '.mts'), options)
-    } catch {
-      // use default resolver
-    }
-  }
-
-  return resolver(path, options)
-}
-
-export = mjsResolver
-```
-
-```ts tab={"label": "TypeScript ESM"}
+```ts title="custom-resolver.ts"
 import type { SyncResolver } from 'jest-resolve'
 
 const mjsResolver: SyncResolver = (path, options) => {
@@ -140,4 +207,15 @@ const mjsResolver: SyncResolver = (path, options) => {
 }
 
 export default mjsResolver
+```
+
+and then add this to Jest config:
+
+```ts title="jest.config.ts"
+import type { Config } from 'jest'
+
+const config: Config = {
+  //...other options
+  resolver: '<rootDir>/path/to/custom-resolver.ts',
+}
 ```
