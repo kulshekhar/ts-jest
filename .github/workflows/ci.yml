@@ -119,6 +119,6 @@ jobs:
           DISABLE_MOCKED_WARNING: true
 
       - name: SonarCloud Scan 📊
-        uses: SonarSource/sonarqube-scan-action@v5.0.0
+        uses: SonarSource/sonarqube-scan-action@aa494459d7c39c106cc77b166de8b4250a32bb97 # v5.1.0
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
