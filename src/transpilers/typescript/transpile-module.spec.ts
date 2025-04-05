@@ -138,7 +138,7 @@ describe('transpileModules', () => {
       {
         module: ts.ModuleKind.CommonJS,
         expectedResult: dedent`
-          const foo_1 = require("foo");
+          import { foo } from 'foo';
         `,
       },
       {
@@ -159,17 +159,20 @@ describe('transpileModules', () => {
           import { foo } from 'foo';
         `,
       },
-    ])('should emit code with ".mts" extension respecting module option', ({ module, expectedResult }) => {
-      const result = tsTranspileModule(vol.readFileSync(mtsFilePath, 'utf-8').toString(), {
-        fileName: mtsFilePath,
-        compilerOptions: {
-          module,
-          target: ts.ScriptTarget.ESNext,
-        },
-      })
+    ])(
+      'should always emit ESM code with ".mts" extension regardless module option value',
+      ({ module, expectedResult }) => {
+        const result = tsTranspileModule(vol.readFileSync(mtsFilePath, 'utf-8').toString(), {
+          fileName: mtsFilePath,
+          compilerOptions: {
+            module,
+            target: ts.ScriptTarget.ESNext,
+          },
+        })
 
-      expect(omitLeadingWhitespace(result.outputText)).toContain(expectedResult)
-    })
+        expect(omitLeadingWhitespace(result.outputText)).toContain(expectedResult)
+      },
+    )
 
     it.each([
       {
@@ -187,26 +190,29 @@ describe('transpileModules', () => {
       {
         module: ts.ModuleKind.ES2020,
         expectedResult: dedent`
-          import { foo } from 'foo';
+          const foo_1 = require("foo");
         `,
       },
       {
         module: undefined,
         expectedResult: dedent`
-          import { foo } from 'foo';
+          const foo_1 = require("foo");
         `,
       },
-    ])('should emit code with ".cts" extension respecting module option', ({ module, expectedResult }) => {
-      const result = tsTranspileModule(vol.readFileSync(ctsFilePath, 'utf-8').toString(), {
-        fileName: ctsFilePath,
-        compilerOptions: {
-          module,
-          target: ts.ScriptTarget.ESNext,
-        },
-      })
+    ])(
+      'should always emit CJS code with ".cts" extension regardless module option value',
+      ({ module, expectedResult }) => {
+        const result = tsTranspileModule(vol.readFileSync(ctsFilePath, 'utf-8').toString(), {
+          fileName: ctsFilePath,
+          compilerOptions: {
+            module,
+            target: ts.ScriptTarget.ESNext,
+          },
+        })
 
-      expect(omitLeadingWhitespace(result.outputText)).toContain(expectedResult)
-    })
+        expect(omitLeadingWhitespace(result.outputText)).toContain(expectedResult)
+      },
+    )
   })
 
   describe('with classic CommonJS module and ES module kind', () => {
