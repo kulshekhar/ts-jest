@@ -1,8 +1,10 @@
-const path = require('path')
+import path from 'node:path'
 
-const { sync: spawnSync } = require('execa')
+import { sync as spawnSync } from 'execa'
+import type { Config } from 'jest'
 
-const { createBundle } = require('./scripts/lib/bundle')
+// @ts-expect-error not a ts file
+import { createBundle } from './scripts/lib/bundle'
 
 console.log('Install dependencies for all e2e test suites')
 
@@ -17,7 +19,6 @@ spawnSync('npm', ['install', '--no-package-lock', '--no-shrinkwrap', '--no-save'
   cwd: e2eFolderPath,
 })
 
-/** @type {import('jest').Config} */
-module.exports = {
-  projects: ['e2e/**/jest-transpiler-cjs.config.ts', 'e2e/**/jest-compiler-cjs.config.ts'],
-}
+export default {
+  projects: ['e2e/**/jest-transpiler-esm.config.ts', 'e2e/**/jest-compiler-esm.config.ts'],
+} satisfies Config
