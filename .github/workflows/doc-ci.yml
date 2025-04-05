@@ -1,4 +1,4 @@
-name: doc-generator
+name: Documentation
 
 on:
   push:
@@ -7,16 +7,21 @@ on:
   pull_request:
     branches:
       - '**'
+    paths:
+      - 'website/**'
+      - '.github/**'
+      - .gitignore
 
 concurrency:
-  group: doc-generator-${{ github.event.pull_request.number || github.ref }}
+  group: doc-ci-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 permissions:
   contents: read
 
 jobs:
-  checks:
+  check:
+    name: Check 🔍
     if: github.event_name != 'push'
     runs-on: ubuntu-latest
     steps:
@@ -31,7 +36,8 @@ jobs:
           npm ci
           npm run build
 
-  build-and-deploy:
+  deploy:
+    name: Deploy 🚀
     permissions:
       contents: write # for JamesIves/github-pages-deploy-action to push changes in repo
     if: github.event_name != 'pull_request'
