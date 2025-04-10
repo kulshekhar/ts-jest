@@ -17,6 +17,9 @@ const config: Config = {
   favicon: 'img/logo.svg',
   organizationName: 'kulshekhar',
   projectName: 'ts-jest',
+  future: {
+    experimental_faster: true,
+  },
   plugins: [
     [
       '@docusaurus/plugin-ideal-image',
