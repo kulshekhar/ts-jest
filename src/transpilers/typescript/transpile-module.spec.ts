@@ -57,39 +57,62 @@ describe('transpileModules', () => {
     const mtsFilePath = path.join(workspaceRoot, 'foo.mts')
     const tsFilePathInCjsModernNode = path.join(workspaceRoot, 'cjs-node-modern', 'foo.ts')
     const ctsFilePath = path.join(workspaceRoot, 'foo.cts')
-    vol.fromJSON(
-      {
-        './esm-node-modern/package.json': JSON.stringify({
-          name: 'test-package-1',
-          type: 'module',
-        } as PackageJson),
-        './esm-node-modern/foo.ts': `
+    beforeEach(() => {
+      vol.reset()
+      vol.fromJSON(
+        {
+          './esm-node-modern/package.json': JSON.stringify({
+            name: 'test-package-1',
+            type: 'module',
+          } as PackageJson),
+          './esm-node-modern/foo.ts': `
           import { foo } from 'foo';
 
           console.log(foo);
+          const loadFooAsync = async () => {
+             const fooDefault = await import('foo');
+             console.log(fooDefault);
+          }
+          console.log(loadFooAsync());
         `,
-        './foo.mts': `
+          './foo.mts': `
           import { foo } from 'foo';
 
           console.log(foo);
+          const loadFooAsync = async () => {
+             const fooDefault = await import('foo');
+             console.log(fooDefault);
+          }
+          console.log(loadFooAsync());
         `,
-        './cjs-node-modern/package.json': JSON.stringify({
-          name: 'test-package-1',
-          type: 'commonjs',
-        } as PackageJson),
-        './cjs-node-modern/foo.ts': `
+          './cjs-node-modern/package.json': JSON.stringify({
+            name: 'test-package-1',
+            type: 'commonjs',
+          } as PackageJson),
+          './cjs-node-modern/foo.ts': `
           import { foo } from 'foo';
 
           console.log(foo);
+          const loadFooAsync = async () => {
+             const fooDefault = await import('foo');
+             console.log(fooDefault);
+          }
+          console.log(loadFooAsync());
         `,
-        './foo.cts': `
+          './foo.cts': `
           import { foo } from 'foo';
 
           console.log(foo);
+          const loadFooAsync = async () => {
+             const fooDefault = await import('foo');
+             console.log(fooDefault);
+          }
+          console.log(loadFooAsync());
         `,
-      },
-      workspaceRoot,
-    )
+        },
+        workspaceRoot,
+      )
+    })
 
     it.each([
       {
@@ -110,6 +133,12 @@ describe('transpileModules', () => {
 
       expect(omitLeadingWhitespace(result.outputText)).toContain(dedent`
         const foo_1 = require("foo");
+        console.log(foo_1.foo);
+        const loadFooAsync = async () => {
+          const fooDefault = await import('foo');
+          console.log(fooDefault);
+        };
+        console.log(loadFooAsync());
       `)
     })
 
@@ -131,32 +160,50 @@ describe('transpileModules', () => {
 
       expect(omitLeadingWhitespace(result.outputText)).toContain(dedent`
         import { foo } from 'foo';
+        console.log(foo);
+        const loadFooAsync = async () => {
+          const fooDefault = await import('foo');
+          console.log(fooDefault);
+        };
+        console.log(loadFooAsync());
       `)
     })
 
     it.each([
       {
-        module: ts.ModuleKind.CommonJS,
-        expectedResult: dedent`
-          const foo_1 = require("foo");
-        `,
-      },
-      {
         module: ts.ModuleKind.Node16,
         expectedResult: dedent`
           import { foo } from 'foo';
+          console.log(foo);
+          const loadFooAsync = async () => {
+            const fooDefault = await import('foo');
+            console.log(fooDefault);
+          };
+          console.log(loadFooAsync());
         `,
       },
       {
         module: ts.ModuleKind.ES2020,
         expectedResult: dedent`
           import { foo } from 'foo';
+          console.log(foo);
+          const loadFooAsync = async () => {
+            const fooDefault = await import('foo');
+            console.log(fooDefault);
+          };
+          console.log(loadFooAsync());
         `,
       },
       {
         module: undefined,
         expectedResult: dedent`
           import { foo } from 'foo';
+          console.log(foo);
+          const loadFooAsync = async () => {
+            const fooDefault = await import('foo');
+            console.log(fooDefault);
+          };
+          console.log(loadFooAsync());
         `,
       },
     ])('should emit code with ".mts" extension respecting module option', ({ module, expectedResult }) => {
@@ -173,27 +220,39 @@ describe('transpileModules', () => {
 
     it.each([
       {
-        module: ts.ModuleKind.CommonJS,
-        expectedResult: dedent`
-          const foo_1 = require("foo");
-        `,
-      },
-      {
         module: ts.ModuleKind.Node16,
         expectedResult: dedent`
           const foo_1 = require("foo");
+          console.log(foo_1.foo);
+          const loadFooAsync = async () => {
+            const fooDefault = await import('foo');
+            console.log(fooDefault);
+          };
+          console.log(loadFooAsync());
         `,
       },
       {
         module: ts.ModuleKind.ES2020,
         expectedResult: dedent`
           import { foo } from 'foo';
+          console.log(foo);
+          const loadFooAsync = async () => {
+            const fooDefault = await import('foo');
+            console.log(fooDefault);
+          };
+          console.log(loadFooAsync());
         `,
       },
       {
         module: undefined,
         expectedResult: dedent`
           import { foo } from 'foo';
+          console.log(foo);
+          const loadFooAsync = async () => {
+            const fooDefault = await import('foo');
+            console.log(fooDefault);
+          };
+          console.log(loadFooAsync());
         `,
       },
     ])('should emit code with ".cts" extension respecting module option', ({ module, expectedResult }) => {
@@ -210,19 +269,28 @@ describe('transpileModules', () => {
   })
 
   describe('with classic CommonJS module and ES module kind', () => {
-    vol.fromJSON(
-      {
-        './foo.ts': `
+    const filePath = path.join(workspaceRoot, 'bar.ts')
+
+    beforeEach(() => {
+      vol.reset()
+      vol.fromJSON(
+        {
+          './bar.ts': `
           import { foo } from 'foo';
 
           console.log(foo);
+          const loadFooAsync = async () => {
+             const fooDefault = await import('foo');
+             console.log(fooDefault);
+          }
+          console.log(loadFooAsync());
         `,
-      },
-      workspaceRoot,
-    )
+        },
+        workspaceRoot,
+      )
+    })
 
     it('should emit CJS code with module kind set to CommonJS', () => {
-      const filePath = path.join(workspaceRoot, 'foo.ts')
       const result = tsTranspileModule(vol.readFileSync(filePath, 'utf-8').toString(), {
         fileName: filePath,
         compilerOptions: {
@@ -232,12 +300,17 @@ describe('transpileModules', () => {
       })
 
       expect(omitLeadingWhitespace(result.outputText)).toContain(dedent`
-        const foo_1 = require("foo");
+          const foo_1 = require("foo");
+          console.log(foo_1.foo);
+          const loadFooAsync = async () => {
+            const fooDefault = await Promise.resolve().then(() => require('foo'));
+            console.log(fooDefault);
+          };
+          console.log(loadFooAsync());
       `)
     })
 
     it('should emit ESM code with module kind set to one of ES module value', () => {
-      const filePath = path.join(workspaceRoot, 'foo.ts')
       const result = tsTranspileModule(vol.readFileSync(filePath, 'utf-8').toString(), {
         fileName: filePath,
         compilerOptions: {
@@ -247,23 +320,32 @@ describe('transpileModules', () => {
       })
 
       expect(omitLeadingWhitespace(result.outputText)).toContain(dedent`
-        import { foo } from 'foo';
+          import { foo } from 'foo';
+          console.log(foo);
+          const loadFooAsync = async () => {
+            const fooDefault = await import('foo');
+            console.log(fooDefault);
+          };
+          console.log(loadFooAsync());
       `)
     })
   })
 
   describe('with diagnostics', () => {
     const testFilePath = path.join(workspaceRoot, 'foo.ts')
-    vol.fromJSON(
-      {
-        './foo.ts': `
+    beforeEach(() => {
+      vol.reset()
+      vol.fromJSON(
+        {
+          './foo.ts': `
         import { foo } from 'foo';
 
         console.log(foo);
       `,
-      },
-      workspaceRoot,
-    )
+        },
+        workspaceRoot,
+      )
+    })
 
     it('should return diagnostics for invalid combination of compiler options', () => {
       const result = tsTranspileModule(vol.readFileSync(testFilePath, 'utf-8').toString(), {
