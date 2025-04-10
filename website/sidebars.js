@@ -23,6 +23,7 @@ module.exports = {
       collapsed: false,
       items: [
         'guides/esm-support',
+        'guides/hybrid-node-module',
         'guides/mock-es6-class',
         'guides/react-native',
         'guides/troubleshooting',
