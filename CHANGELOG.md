@@ -1,3 +1,12 @@
+## [29.3.2](https://github.com/kulshekhar/ts-jest/compare/v29.3.1...v29.3.2) (2025-04-12)
+
+
+### Bug Fixes
+
+* fix: transpile `js` files from `node_modules` whenever Jest asks ([968370e](https://github.com/kulshekhar/ts-jest/commit/968370e)), closes [#4637](https://github.com/kulshekhar/ts-jest/issues/4637)
+
+
+
 ## [29.3.1](https://github.com/kulshekhar/ts-jest/compare/v29.3.0...v29.3.1) (2025-03-31)
 
 
