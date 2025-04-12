@@ -3,8 +3,11 @@ import path from 'path'
 
 import { LogLevels } from 'bs-logger'
 import { removeSync } from 'fs-extra'
+import ts from 'typescript'
 
+import { dedent, omitLeadingWhitespace } from '../__helpers__/dedent-string'
 import { logTargetMock } from '../__helpers__/mocks'
+import type { TsJestTransformOptions } from '../types'
 import { importer } from '../utils/importer'
 
 import { TsJestCompiler } from './compiler'
@@ -14,7 +17,7 @@ const SOURCE_MAPPING_PREFIX = 'sourceMappingURL='
 
 const logTarget = logTargetMock()
 const cacheDir = path.join(process.cwd(), 'tmp')
-const baseTransformOptions = {
+const baseTransformOptions: TsJestTransformOptions = {
   config: {
     testMatch: [],
     testRegex: [],
@@ -298,34 +301,6 @@ describe('TsJestTransformer', () => {
       })
     })
 
-    test('should process js file with allowJs false and show warning log', () => {
-      const fileContent = 'const foo = 1'
-      const filePath = 'foo.js'
-      const transformOptions = {
-        ...baseTransformOptions,
-        config: {
-          ...baseTransformOptions.config,
-          globals: {
-            'ts-jest': { tsconfig: { allowJs: false } },
-          },
-        },
-      }
-      tr.getCacheKey(fileContent, filePath, transformOptions)
-      logTarget.clear()
-
-      const result = tr.process(fileContent, filePath, transformOptions)
-
-      expect(result).toEqual({
-        code: fileContent,
-      })
-      expect(logTarget.lines[1].substring(0)).toMatchInlineSnapshot(`
-        "[level:40] Got a \`.js\` file to compile while \`allowJs\` option is not set to \`true\` (file: foo.js). To fix this:
-          - if you want TypeScript to process JS files, set \`allowJs\` to \`true\` in your TypeScript config (usually tsconfig.json)
-          - if you do not want TypeScript to process your \`.js\` files, in your Jest config change the \`transform\` key which value is \`ts-jest\` so that it does not match \`.js\` files anymore
-        "
-      `)
-    })
-
     test('should allow detection of ts-jest', () => {
       expect(process.env.TS_JEST).toBe('1')
     })
@@ -431,6 +406,81 @@ describe('TsJestTransformer', () => {
       expect(tr.process(fileContent, filePath, baseTransformOptions)).toEqual('foo')
 
       delete process.env.TS_JEST_HOOKS
+    })
+
+    it.each([
+      {
+        filePath: 'my-project/node_modules/foo.js',
+        fileContent: `
+          function foo() {
+            return 1
+          }
+
+          export default foo;
+        `,
+      },
+      {
+        filePath: 'my-project/node_modules/foo.mjs',
+        fileContent: `
+          function foo() {
+            return 1
+          }
+
+          export default foo;
+        `,
+      },
+    ])('should transpile js file from node_modules for CJS', ({ filePath, fileContent }) => {
+      const result = tr.process(fileContent, filePath, baseTransformOptions)
+
+      expect(omitLeadingWhitespace(result.code)).toContain(dedent`
+        exports.default = foo;
+      `)
+    })
+
+    it('should transpile js file from node_modules for ESM', () => {
+      const result = tr.process(
+        `
+          function foo() {
+            return 1
+          }
+
+          module.exports = foo;
+        `,
+        'my-project/node_modules/foo.js',
+        {
+          ...baseTransformOptions,
+          supportsStaticESM: true,
+          transformerConfig: {
+            useESM: true,
+            tsconfig: {
+              module: 'ESNext',
+              target: 'ESNext',
+            },
+          },
+        },
+      )
+
+      const transpileResult = ts.transpileModule(
+        `
+          function foo() {
+            return 1
+          }
+
+          module.exports = foo;
+        `,
+        {
+          compilerOptions: {
+            module: ts.ModuleKind.ESNext, // Transpile to ESM
+            target: ts.ScriptTarget.ESNext,
+          },
+        },
+      )
+
+      console.log(transpileResult.outputText)
+
+      expect(omitLeadingWhitespace(result.code)).toContain(dedent`
+        module.exports = foo;
+      `)
     })
   })
 

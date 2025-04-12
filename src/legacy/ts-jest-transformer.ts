@@ -3,6 +3,7 @@ import path from 'path'
 
 import type { SyncTransformer, TransformedSource } from '@jest/transform'
 import type { Logger } from 'bs-logger'
+import ts from 'typescript'
 
 import { DECLARATION_TYPE_EXT, JS_JSX_REGEX, TS_TSX_REGEX } from '../constants'
 import type {
@@ -18,6 +19,7 @@ import { Deprecations, Errors, interpolate } from '../utils/messages'
 import { sha1 } from '../utils/sha1'
 
 import { TsJestCompiler } from './compiler'
+import { updateOutput } from './compiler/compiler-utils'
 import { ConfigSet } from './config/config-set'
 
 interface CachedConfigSet {
@@ -32,6 +34,10 @@ interface CachedConfigSet {
 interface TsJestHooksMap {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   afterProcess?(args: any[], result: TransformedSource): TransformedSource
+}
+
+const isNodeModule = (filePath: string) => {
+  return path.normalize(filePath).split(path.sep).includes('node_modules')
 }
 
 /**
@@ -146,9 +152,6 @@ export class TsJestTransformer implements SyncTransformer<TsJestTransformerOptio
     this._compiler = new TsJestCompiler(configSet, cacheFS)
   }
 
-  /**
-   * @public
-   */
   process(sourceText: string, sourcePath: string, transformOptions: TsJestTransformOptions): TransformedSource {
     this._logger.debug({ fileName: sourcePath, transformOptions }, 'processing', sourcePath)
 
@@ -226,20 +229,29 @@ export class TsJestTransformer implements SyncTransformer<TsJestTransformerOptio
       result = {
         code: '',
       }
-    } else if (!configs.parsedTsConfig.options.allowJs && isJsFile) {
-      // we've got a '.js' but the compiler option `allowJs` is not set or set to false
-      this._logger.warn({ fileName: sourcePath }, interpolate(Errors.GotJsFileButAllowJsFalse, { path: sourcePath }))
-
-      result = {
-        code: sourceText,
-      }
     } else if (isJsFile || isTsFile) {
-      // transpile TS code (source maps are included)
-      result = this._compiler.getCompiledOutput(sourceText, sourcePath, {
-        depGraphs: this._depGraphs,
-        supportsStaticESM: transformOptions.supportsStaticESM,
-        watchMode: this._watchMode,
-      })
+      if (isJsFile && isNodeModule(sourcePath)) {
+        const transpiledResult = ts.transpileModule(sourceText, {
+          compilerOptions: {
+            ...configs.parsedTsConfig.options,
+            module:
+              transformOptions.supportsStaticESM && transformOptions.transformerConfig.useESM
+                ? ts.ModuleKind.ESNext
+                : ts.ModuleKind.CommonJS,
+          },
+          fileName: sourcePath,
+        })
+        result = {
+          code: updateOutput(transpiledResult.outputText, sourcePath, transpiledResult.sourceMapText),
+        }
+      } else {
+        // transpile TS code (source maps are included)
+        result = this._compiler.getCompiledOutput(sourceText, sourcePath, {
+          depGraphs: this._depGraphs,
+          supportsStaticESM: transformOptions.supportsStaticESM,
+          watchMode: this._watchMode,
+        })
+      }
     } else {
       // we should not get called for files with other extension than js[x], ts[x] and d.ts,
       // TypeScript will bail if we try to compile, and if it was to call babel, users can
