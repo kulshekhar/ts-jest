@@ -146,9 +146,6 @@ export class TsJestTransformer implements SyncTransformer<TsJestTransformerOptio
     this._compiler = new TsJestCompiler(configSet, cacheFS)
   }
 
-  /**
-   * @public
-   */
   process(sourceText: string, sourcePath: string, transformOptions: TsJestTransformOptions): TransformedSource {
     this._logger.debug({ fileName: sourcePath, transformOptions }, 'processing', sourcePath)
 
@@ -225,13 +222,6 @@ export class TsJestTransformer implements SyncTransformer<TsJestTransformerOptio
       // do not try to compile declaration files
       result = {
         code: '',
-      }
-    } else if (!configs.parsedTsConfig.options.allowJs && isJsFile) {
-      // we've got a '.js' but the compiler option `allowJs` is not set or set to false
-      this._logger.warn({ fileName: sourcePath }, interpolate(Errors.GotJsFileButAllowJsFalse, { path: sourcePath }))
-
-      result = {
-        code: sourceText,
       }
     } else if (isJsFile || isTsFile) {
       // transpile TS code (source maps are included)

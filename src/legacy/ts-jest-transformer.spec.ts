@@ -298,34 +298,6 @@ describe('TsJestTransformer', () => {
       })
     })
 
-    test('should process js file with allowJs false and show warning log', () => {
-      const fileContent = 'const foo = 1'
-      const filePath = 'foo.js'
-      const transformOptions = {
-        ...baseTransformOptions,
-        config: {
-          ...baseTransformOptions.config,
-          globals: {
-            'ts-jest': { tsconfig: { allowJs: false } },
-          },
-        },
-      }
-      tr.getCacheKey(fileContent, filePath, transformOptions)
-      logTarget.clear()
-
-      const result = tr.process(fileContent, filePath, transformOptions)
-
-      expect(result).toEqual({
-        code: fileContent,
-      })
-      expect(logTarget.lines[1].substring(0)).toMatchInlineSnapshot(`
-        "[level:40] Got a \`.js\` file to compile while \`allowJs\` option is not set to \`true\` (file: foo.js). To fix this:
-          - if you want TypeScript to process JS files, set \`allowJs\` to \`true\` in your TypeScript config (usually tsconfig.json)
-          - if you do not want TypeScript to process your \`.js\` files, in your Jest config change the \`transform\` key which value is \`ts-jest\` so that it does not match \`.js\` files anymore
-        "
-      `)
-    })
-
     test('should allow detection of ts-jest', () => {
       expect(process.env.TS_JEST).toBe('1')
     })

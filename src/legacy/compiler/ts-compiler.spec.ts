@@ -1,11 +1,13 @@
 import { readFileSync } from 'fs'
 import { basename, join, normalize } from 'path'
 
+import { LogLevels } from 'bs-logger'
 import type { TsConfigJson } from 'type-fest'
 import type { CompilerOptions, EmitOutput, transpileModule, TranspileOutput } from 'typescript'
 import ts from 'typescript'
 
 import { createConfigSet, makeCompiler } from '../../__helpers__/fakers'
+import { logTargetMock } from '../../__helpers__/mocks'
 import type { RawCompilerOptions } from '../../raw-compiler-options'
 import { tsTranspileModule } from '../../transpilers/typescript/transpile-module'
 import type { DepGraphInfo } from '../../types'
@@ -37,6 +39,8 @@ const mockTsTranspileModule = jest.mocked(tsTranspileModule)
 const mockFolder = join(process.cwd(), 'src', '__mocks__')
 
 const baseTsJestConfig = { tsconfig: join(process.cwd(), 'tsconfig.json') }
+
+const logTarget = logTargetMock()
 
 describe('TsCompiler', () => {
   describe('getResolvedModules', () => {
@@ -247,6 +251,33 @@ describe('TsCompiler', () => {
       const fileContent = 'const bar = 1'
       const jsOutput = 'var bar = 1'
       const sourceMap = '{}'
+
+      test('should return the original js content for js file with allowJs false and show warning log', () => {
+        const configSet = createConfigSet({
+          tsJestConfig: {
+            ...baseTsJestConfig,
+            tsconfig: {
+              allowJs: false,
+            },
+          },
+        })
+        const compiler = new TsCompiler(configSet, new Map())
+
+        expect(
+          compiler.getCompiledOutput('const foo = 1', 'foo.js', {
+            supportsStaticESM: false,
+            depGraphs: new Map(),
+            watchMode: false,
+          }),
+        ).toEqual({
+          code: 'const foo = 1',
+        })
+        expect(logTarget.filteredLines(LogLevels.warn)).toEqual(
+          expect.arrayContaining([
+            expect.stringContaining(interpolate(Errors.GotJsFileButAllowJsFalse, { path: 'foo.js' })),
+          ]),
+        )
+      })
 
       test.each([
         {

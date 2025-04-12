@@ -22,7 +22,7 @@ import ts, {
   TranspileOutput,
 } from 'typescript'
 
-import { LINE_FEED, TS_TSX_REGEX } from '../../constants'
+import { JS_JSX_REGEX, LINE_FEED, TS_TSX_REGEX } from '../../constants'
 import { isModernNodeModuleKind, tsTranspileModule } from '../../transpilers/typescript/transpile-module'
 import type {
   StringMap,
@@ -200,6 +200,14 @@ export class TsCompiler implements TsCompilerInstance {
     const moduleKind = this._initialCompilerOptions.module
     const currentModuleKind = this._compilerOptions.module
     if (this._languageService) {
+      if (JS_JSX_REGEX.test(fileName) && !this._compilerOptions.allowJs) {
+        this._logger.warn({ fileName: fileName }, interpolate(Errors.GotJsFileButAllowJsFalse, { path: fileName }))
+
+        return {
+          code: fileContent,
+        }
+      }
+
       this._logger.debug({ fileName }, 'getCompiledOutput(): compiling using language service')
 
       // Must set memory cache before attempting to compile
