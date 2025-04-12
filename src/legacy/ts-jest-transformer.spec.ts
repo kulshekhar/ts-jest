@@ -3,8 +3,11 @@ import path from 'path'
 
 import { LogLevels } from 'bs-logger'
 import { removeSync } from 'fs-extra'
+import ts from 'typescript'
 
+import { dedent, omitLeadingWhitespace } from '../__helpers__/dedent-string'
 import { logTargetMock } from '../__helpers__/mocks'
+import type { TsJestTransformOptions } from '../types'
 import { importer } from '../utils/importer'
 
 import { TsJestCompiler } from './compiler'
@@ -14,7 +17,7 @@ const SOURCE_MAPPING_PREFIX = 'sourceMappingURL='
 
 const logTarget = logTargetMock()
 const cacheDir = path.join(process.cwd(), 'tmp')
-const baseTransformOptions = {
+const baseTransformOptions: TsJestTransformOptions = {
   config: {
     testMatch: [],
     testRegex: [],
@@ -403,6 +406,81 @@ describe('TsJestTransformer', () => {
       expect(tr.process(fileContent, filePath, baseTransformOptions)).toEqual('foo')
 
       delete process.env.TS_JEST_HOOKS
+    })
+
+    it.each([
+      {
+        filePath: 'my-project/node_modules/foo.js',
+        fileContent: `
+          function foo() {
+            return 1
+          }
+
+          export default foo;
+        `,
+      },
+      {
+        filePath: 'my-project/node_modules/foo.mjs',
+        fileContent: `
+          function foo() {
+            return 1
+          }
+
+          export default foo;
+        `,
+      },
+    ])('should transpile js file from node_modules for CJS', ({ filePath, fileContent }) => {
+      const result = tr.process(fileContent, filePath, baseTransformOptions)
+
+      expect(omitLeadingWhitespace(result.code)).toContain(dedent`
+        exports.default = foo;
+      `)
+    })
+
+    it('should transpile js file from node_modules for ESM', () => {
+      const result = tr.process(
+        `
+          function foo() {
+            return 1
+          }
+
+          module.exports = foo;
+        `,
+        'my-project/node_modules/foo.js',
+        {
+          ...baseTransformOptions,
+          supportsStaticESM: true,
+          transformerConfig: {
+            useESM: true,
+            tsconfig: {
+              module: 'ESNext',
+              target: 'ESNext',
+            },
+          },
+        },
+      )
+
+      const transpileResult = ts.transpileModule(
+        `
+          function foo() {
+            return 1
+          }
+
+          module.exports = foo;
+        `,
+        {
+          compilerOptions: {
+            module: ts.ModuleKind.ESNext, // Transpile to ESM
+            target: ts.ScriptTarget.ESNext,
+          },
+        },
+      )
+
+      console.log(transpileResult.outputText)
+
+      expect(omitLeadingWhitespace(result.code)).toContain(dedent`
+        module.exports = foo;
+      `)
     })
   })
 

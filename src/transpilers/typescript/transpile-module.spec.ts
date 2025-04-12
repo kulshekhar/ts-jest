@@ -4,6 +4,7 @@ import { vol } from 'memfs'
 import type { PackageJson } from 'type-fest'
 import ts from 'typescript'
 
+import { dedent, omitLeadingWhitespace } from '../../__helpers__/dedent-string'
 import { workspaceRoot } from '../../__helpers__/workspace-root'
 
 import { tsTranspileModule } from './transpile-module'
@@ -36,20 +37,6 @@ jest.mock('node:fs', () => {
     },
   }
 })
-
-function dedent(strings: TemplateStringsArray, ...values: unknown[]) {
-  let joinedString = ''
-  for (let i = 0; i < values.length; i++) {
-    joinedString += `${strings[i]}${values[i]}`
-  }
-  joinedString += strings[strings.length - 1]
-
-  return omitLeadingWhitespace(joinedString)
-}
-
-function omitLeadingWhitespace(text: string): string {
-  return text.replace(/^\s+/gm, '')
-}
 
 describe('transpileModules', () => {
   describe('with modern Node resolution', () => {
@@ -300,13 +287,13 @@ describe('transpileModules', () => {
       })
 
       expect(omitLeadingWhitespace(result.outputText)).toContain(dedent`
-          const foo_1 = require("foo");
-          console.log(foo_1.foo);
-          const loadFooAsync = async () => {
-            const fooDefault = await Promise.resolve().then(() => require('foo'));
-            console.log(fooDefault);
-          };
-          console.log(loadFooAsync());
+        const foo_1 = require("foo");
+        console.log(foo_1.foo);
+        const loadFooAsync = async () => {
+          const fooDefault = await Promise.resolve().then(() => require('foo'));
+          console.log(fooDefault);
+        };
+        console.log(loadFooAsync());
       `)
     })
 
@@ -320,13 +307,13 @@ describe('transpileModules', () => {
       })
 
       expect(omitLeadingWhitespace(result.outputText)).toContain(dedent`
-          import { foo } from 'foo';
-          console.log(foo);
-          const loadFooAsync = async () => {
-            const fooDefault = await import('foo');
-            console.log(fooDefault);
-          };
-          console.log(loadFooAsync());
+        import { foo } from 'foo';
+        console.log(foo);
+        const loadFooAsync = async () => {
+          const fooDefault = await import('foo');
+          console.log(fooDefault);
+        };
+        console.log(loadFooAsync());
       `)
     })
   })
@@ -338,10 +325,10 @@ describe('transpileModules', () => {
       vol.fromJSON(
         {
           './foo.ts': `
-        import { foo } from 'foo';
+          import { foo } from 'foo';
 
-        console.log(foo);
-      `,
+          console.log(foo);
+        `,
         },
         workspaceRoot,
       )
