@@ -1,7 +1,8 @@
 {
-  "extends": "./tsconfig.json",
+  "extends": "./tsconfig.base.json",
   "compilerOptions": {
     "target": "ES5",
+    "module": "NodeNext",
     "declaration": true,
     "stripInternal": true,
     "outDir": "dist"
