@@ -22,7 +22,7 @@
     "@types/jest": "^29.5.14",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.6",
-    "@vitejs/plugin-react-swc": "^3.8.1",
+    "@vitejs/plugin-react-swc": "^3.9.0",
     "camelcase": "^6.3.0",
     "cross-env": "^7.0.3",
     "eslint-plugin-prettier": "^5.2.6",
