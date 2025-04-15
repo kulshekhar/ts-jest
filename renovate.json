@@ -1,10 +1,11 @@
 {
   "extends": [
     "group:babelMonorepo",
+    "group:commitlintMonorepo",
     "group:docusaurusMonorepo",
     ":prHourlyLimit2",
-    "workarounds:all",
-    "helpers:pinGitHubActionDigests"
+    "helpers:pinGitHubActionDigests",
+    "workarounds:all"
   ],
   "timezone": "UTC",
   "rangeStrategy": "bump",
@@ -16,8 +17,7 @@
     "@mdx-js/react",
     "@types/react",
     "execa",
-    "chalk",
-    "husky"
+    "chalk"
   ],
   "packageRules": [
     {
