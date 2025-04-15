@@ -18,6 +18,7 @@ scripts
 *.config.ts
 *.config.cts
 *.config.mts
+*.properties
 
 # CI
 .github
