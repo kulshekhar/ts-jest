@@ -3,7 +3,6 @@ import path from 'path'
 
 import { LogLevels } from 'bs-logger'
 import { removeSync } from 'fs-extra'
-import ts from 'typescript'
 
 import { dedent, omitLeadingWhitespace } from '../__helpers__/dedent-string'
 import { logTargetMock } from '../__helpers__/mocks'
@@ -459,24 +458,6 @@ describe('TsJestTransformer', () => {
           },
         },
       )
-
-      const transpileResult = ts.transpileModule(
-        `
-          function foo() {
-            return 1
-          }
-
-          module.exports = foo;
-        `,
-        {
-          compilerOptions: {
-            module: ts.ModuleKind.ESNext, // Transpile to ESM
-            target: ts.ScriptTarget.ESNext,
-          },
-        },
-      )
-
-      console.log(transpileResult.outputText)
 
       expect(omitLeadingWhitespace(result.code)).toContain(dedent`
         module.exports = foo;
