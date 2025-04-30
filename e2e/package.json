@@ -5,7 +5,7 @@
     "@formatjs/ts-transformer": "^3.13.34",
     "@testing-library/react": "^14.3.1",
     "@types/react": "^18.3.3",
-    "@types/react-dom": "^18.3.6",
+    "@types/react-dom": "^18.3.7",
     "esbuild": "~0.25.3",
     "jest-environment-jsdom": "^29.7.0",
     "react": "^18.3.1",
