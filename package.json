@@ -105,7 +105,7 @@
     "@types/lodash.memoize": "^4.1.9",
     "@types/lodash.set": "^4.3.9",
     "@types/micromatch": "^4.0.9",
-    "@types/node": "20.17.45",
+    "@types/node": "20.17.46",
     "@types/semver": "^7.7.0",
     "@types/yargs": "^17.0.33",
     "@types/yargs-parser": "21.0.3",
