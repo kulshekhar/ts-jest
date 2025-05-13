@@ -1,61 +1,93 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`config init should create a jest config file with cli options for config type default 1`] = `
-"/** @type {import('ts-jest').JestConfigWithTsJest} **/
+"const { createDefaultPreset } = require("ts-jest/presets")
+
+const tsJestTransformCfg = createDefaultPreset().transform
+
+/** @type {import("jest").Config} **/
 module.exports = {
   testEnvironment: "node",
   transform: {
-    "^.+\\.tsx?$": ["ts-jest",{}],
+    ...tsJestTransformCfg,
   },
 };"
 `;
 
 exports[`config init should create a jest config file with cli options for config type default and type "module" package.json 1`] = `
-"/** @type {import('ts-jest').JestConfigWithTsJest} **/
+"const { createDefaultPreset } = require("ts-jest/presets")
+
+const tsJestTransformCfg = createDefaultPreset().transform
+
+/** @type {import("jest").Config} **/
 export default {
   testEnvironment: "node",
   transform: {
-    "^.+\\.tsx?$": ["ts-jest",{}],
+    ...tsJestTransformCfg,
   },
 };"
 `;
 
 exports[`config init should create a jest config file with cli options for config type js-with-babel-full-options 1`] = `
-"/** @type {import('ts-jest').JestConfigWithTsJest} **/
+"const { createJsWithBabelPreset } = require("ts-jest/presets")
+
+const tsJestTransformCfg = createJsWithBabelPreset({
+  "tsconfig": "tsconfig.test.json"
+}).transform
+
+/** @type {import("jest").Config} **/
 module.exports = {
   testEnvironment: "jsdom",
   transform: {
-    "^.+\\.jsx?$": "babel-jest",
+    ...tsJestTransformCfg,
   },
 };"
 `;
 
 exports[`config init should create a jest config file with cli options for config type js-with-babel-full-options and type "module" package.json 1`] = `
-"/** @type {import('ts-jest').JestConfigWithTsJest} **/
+"const { createJsWithBabelPreset } = require("ts-jest/presets")
+
+const tsJestTransformCfg = createJsWithBabelPreset({
+  "tsconfig": "tsconfig.test.json"
+}).transform
+
+/** @type {import("jest").Config} **/
 export default {
   testEnvironment: "jsdom",
   transform: {
-    "^.+\\.jsx?$": "babel-jest",
+    ...tsJestTransformCfg,
   },
 };"
 `;
 
 exports[`config init should create a jest config file with cli options for config type js-with-ts-full-options 1`] = `
-"/** @type {import('ts-jest').JestConfigWithTsJest} **/
+"const { createJsWithTsPreset } = require("ts-jest/presets")
+
+const tsJestTransformCfg = createJsWithTsPreset({
+  "tsconfig": "tsconfig.test.json"
+}).transform
+
+/** @type {import("jest").Config} **/
 module.exports = {
   testEnvironment: "jsdom",
   transform: {
-    "^.+\\.[tj]sx?$": ["ts-jest",{tsconfig:"tsconfig.test.json"}],
+    ...tsJestTransformCfg,
   },
 };"
 `;
 
 exports[`config init should create a jest config file with cli options for config type js-with-ts-full-options and type "module" package.json 1`] = `
-"/** @type {import('ts-jest').JestConfigWithTsJest} **/
+"const { createJsWithTsPreset } = require("ts-jest/presets")
+
+const tsJestTransformCfg = createJsWithTsPreset({
+  "tsconfig": "tsconfig.test.json"
+}).transform
+
+/** @type {import("jest").Config} **/
 export default {
   testEnvironment: "jsdom",
   transform: {
-    "^.+\\.[tj]sx?$": ["ts-jest",{tsconfig:"tsconfig.test.json"}],
+    ...tsJestTransformCfg,
   },
 };"
 `;
