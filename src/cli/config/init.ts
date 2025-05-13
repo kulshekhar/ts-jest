@@ -11,9 +11,20 @@ import ejs from 'ejs'
 import { stringify as stringifyJson5 } from 'json5'
 
 import type { CliCommand, CliCommandArgs } from '..'
-import { JEST_CONFIG_EJS_TEMPLATE } from '../../constants'
 import { createDefaultPreset, createJsWithTsPreset, createJsWithBabelPreset } from '../../presets/create-jest-preset'
 import type { DefaultPreset, JsWithBabelPreset, JsWithTsPreset, TsJestTransformerOptions } from '../../types'
+
+const JEST_CONFIG_EJS_TEMPLATE = `const { <%= presetCreatorFn %> } = require("ts-jest/presets")
+
+const tsJestTransformCfg = <%= presetCreatorFn %>(<%- transformOpts %>).transform
+
+/** @type {import("jest").Config} **/
+<%= exportKind %> {
+  testEnvironment: "<%= testEnvironment %>",
+  transform: {
+    ...tsJestTransformCfg,
+  },
+};`
 
 const ensureOnlyUsingDoubleQuotes = (str: string): string => {
   return str
@@ -62,16 +73,18 @@ export const run: CliCommand = async (args: CliCommandArgs /* , logger: Logger *
   }
 
   let body: string
-  const resolvedTsconfigOption = tsconfig ? { tsconfig: `${stringifyJson5(tsconfig)}` } : undefined
+  const transformOpts: TsJestTransformerOptions | undefined = tsconfig
+    ? { tsconfig: `${stringifyJson5(tsconfig)}` }
+    : undefined
   let transformConfig: DefaultPreset | JsWithTsPreset | JsWithBabelPreset
-  if (jsFilesProcessor === 'babel' || shouldPostProcessWithBabel) {
-    transformConfig = createJsWithBabelPreset(resolvedTsconfigOption)
-  } else if (jsFilesProcessor === 'ts') {
-    transformConfig = createJsWithTsPreset(resolvedTsconfigOption)
-  } else {
-    transformConfig = createDefaultPreset(resolvedTsconfigOption)
-  }
   if (isPackageJsonConfig) {
+    if (jsFilesProcessor === 'babel' || shouldPostProcessWithBabel) {
+      transformConfig = createJsWithBabelPreset(transformOpts)
+    } else if (jsFilesProcessor === 'ts') {
+      transformConfig = createJsWithTsPreset(transformOpts)
+    } else {
+      transformConfig = createDefaultPreset(transformOpts)
+    }
     body = ensureOnlyUsingDoubleQuotes(
       JSON.stringify(
         {
@@ -83,12 +96,19 @@ export const run: CliCommand = async (args: CliCommandArgs /* , logger: Logger *
       ),
     )
   } else {
-    const [transformPattern, transformValue] = Object.entries(transformConfig.transform)[0]
+    let presetCreatorFn: string
+    if (jsFilesProcessor === 'babel' || shouldPostProcessWithBabel) {
+      presetCreatorFn = 'createJsWithBabelPreset'
+    } else if (jsFilesProcessor === 'ts') {
+      presetCreatorFn = 'createJsWithTsPreset'
+    } else {
+      presetCreatorFn = 'createDefaultPreset'
+    }
     body = ejs.render(JEST_CONFIG_EJS_TEMPLATE, {
       exportKind: pkgJsonContent.type === 'module' ? 'export default' : 'module.exports =',
       testEnvironment: jsdom ? 'jsdom' : 'node',
-      transformPattern,
-      transformValue: ensureOnlyUsingDoubleQuotes(stringifyJson5(transformValue)),
+      presetCreatorFn,
+      transformOpts: transformOpts ? ensureOnlyUsingDoubleQuotes(JSON.stringify(transformOpts, null, 2)) : undefined,
     })
   }
 

@@ -17,13 +17,3 @@ export const JS_EXT_TO_TREAT_AS_ESM = ['.jsx']
  * See https://jestjs.io/docs/en/configuration#testmatch-arraystring
  */
 export const DEFAULT_JEST_TEST_MATCH = ['**/__tests__/**/*.[jt]s?(x)', '**/?(*.)+(spec|test).[jt]s?(x)']
-/**
- * @internal
- */
-export const JEST_CONFIG_EJS_TEMPLATE = `/** @type {import('ts-jest').JestConfigWithTsJest} **/
-<%= exportKind %> {
-  testEnvironment: "<%= testEnvironment %>",
-  transform: {
-    "<%= transformPattern %>": <%- transformValue %>,
-  },
-};`
