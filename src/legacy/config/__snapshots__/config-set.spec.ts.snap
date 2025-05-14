@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`_resolveTsConfig resolve configFileName normally module in tsConfig is not the same as forced module and allowSyntheticDefaultImports is false in tsConfig should use correct paths when searching 1`] = `
+exports[`config-set _resolveTsConfig resolve configFileName normally module in tsConfig is not the same as forced module and allowSyntheticDefaultImports is false in tsConfig should use correct paths when searching 1`] = `
 [
   {
     "category": 3,
@@ -13,7 +13,7 @@ exports[`_resolveTsConfig resolve configFileName normally module in tsConfig is 
 ]
 `;
 
-exports[`_resolveTsConfig resolve configFileName normally module in tsConfig is not the same as forced module and allowSyntheticDefaultImports is false in tsConfig should use given tsconfig path 1`] = `
+exports[`config-set _resolveTsConfig resolve configFileName normally module in tsConfig is not the same as forced module and allowSyntheticDefaultImports is false in tsConfig should use given tsconfig path 1`] = `
 [
   {
     "category": 3,
@@ -26,7 +26,7 @@ exports[`_resolveTsConfig resolve configFileName normally module in tsConfig is 
 ]
 `;
 
-exports[`_resolveTsConfig resolve configFileName normally module in tsConfig is not the same as forced module and esModuleInterop is not in tsConfig should use correct paths when searching 1`] = `
+exports[`config-set _resolveTsConfig resolve configFileName normally module in tsConfig is not the same as forced module and esModuleInterop is not in tsConfig should use correct paths when searching 1`] = `
 [
   {
     "category": 3,
@@ -39,7 +39,7 @@ exports[`_resolveTsConfig resolve configFileName normally module in tsConfig is 
 ]
 `;
 
-exports[`_resolveTsConfig resolve configFileName normally module in tsConfig is not the same as forced module and esModuleInterop is not in tsConfig should use given tsconfig path 1`] = `
+exports[`config-set _resolveTsConfig resolve configFileName normally module in tsConfig is not the same as forced module and esModuleInterop is not in tsConfig should use given tsconfig path 1`] = `
 [
   {
     "category": 3,
@@ -52,7 +52,7 @@ exports[`_resolveTsConfig resolve configFileName normally module in tsConfig is 
 ]
 `;
 
-exports[`customTransformers should return an object containing all resolved transformers 1`] = `
+exports[`config-set customTransformers should return an object containing all resolved transformers 1`] = `
 {
   "after": [],
   "afterDeclarations": [],
@@ -66,7 +66,7 @@ exports[`customTransformers should return an object containing all resolved tran
 }
 `;
 
-exports[`customTransformers should return an object containing all resolved transformers 2`] = `
+exports[`config-set customTransformers should return an object containing all resolved transformers 2`] = `
 {
   "after": [],
   "afterDeclarations": [],
@@ -85,7 +85,7 @@ exports[`customTransformers should return an object containing all resolved tran
 }
 `;
 
-exports[`customTransformers should return an object containing all resolved transformers 3`] = `
+exports[`config-set customTransformers should return an object containing all resolved transformers 3`] = `
 {
   "after": [],
   "afterDeclarations": [],
@@ -104,7 +104,7 @@ exports[`customTransformers should return an object containing all resolved tran
 }
 `;
 
-exports[`customTransformers should return an object containing all resolved transformers 4`] = `
+exports[`config-set customTransformers should return an object containing all resolved transformers 4`] = `
 {
   "after": [
     {
@@ -124,7 +124,7 @@ exports[`customTransformers should return an object containing all resolved tran
 }
 `;
 
-exports[`customTransformers should return an object containing all resolved transformers 5`] = `
+exports[`config-set customTransformers should return an object containing all resolved transformers 5`] = `
 {
   "after": [],
   "afterDeclarations": [
@@ -144,7 +144,7 @@ exports[`customTransformers should return an object containing all resolved tran
 }
 `;
 
-exports[`customTransformers should return an object containing all resolved transformers 6`] = `
+exports[`config-set customTransformers should return an object containing all resolved transformers 6`] = `
 {
   "after": [],
   "afterDeclarations": [],
@@ -164,17 +164,17 @@ exports[`customTransformers should return an object containing all resolved tran
 }
 `;
 
-exports[`customTransformers should show warning log when missing version and name 1`] = `
+exports[`config-set customTransformers should show warning log when missing version and name 1`] = `
 [
   "[level:40] The AST transformer {{file}} must have an \`export const version = <your_transformer_version>",
   "[level:40] The AST transformer {{file}} must have an \`export const name = <your_transformer_name>",
 ]
 `;
 
-exports[`isTestFile should return a boolean value whether the file matches test pattern 1`] = `true`;
+exports[`config-set isTestFile should return a boolean value whether the file matches test pattern 1`] = `true`;
 
-exports[`isTestFile should return a boolean value whether the file matches test pattern 2`] = `true`;
+exports[`config-set isTestFile should return a boolean value whether the file matches test pattern 2`] = `true`;
 
-exports[`isTestFile should return a boolean value whether the file matches test pattern 3`] = `true`;
+exports[`config-set isTestFile should return a boolean value whether the file matches test pattern 3`] = `true`;
 
-exports[`isTestFile should return a boolean value whether the file matches test pattern 4`] = `true`;
+exports[`config-set isTestFile should return a boolean value whether the file matches test pattern 4`] = `true`;

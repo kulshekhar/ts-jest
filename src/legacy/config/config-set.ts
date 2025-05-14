@@ -163,8 +163,8 @@ export class ConfigSet {
    */
   private readonly _overriddenCompilerOptions: Partial<ts.CompilerOptions> = {
     inlineSourceMap: false,
-    // we don't want to create declaration files
-    declaration: false,
+    declaration: false, // we don't want to create declaration files
+    isolatedDeclarations: false, // we don't want to create declaration files
     noEmit: false, // set to true will make compiler API not emit any compiled results.
     // else istanbul related will be dropped
     removeComments: false,
