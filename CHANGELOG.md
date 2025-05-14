@@ -1,3 +1,13 @@
+## [29.3.3](https://github.com/kulshekhar/ts-jest/compare/v29.3.2...v29.3.3) (2025-05-14)
+
+
+### Bug Fixes
+
+* fix(cli): init config with preset creator functions ([cdd3039](https://github.com/kulshekhar/ts-jest/commit/cdd3039)), closes [#4840](https://github.com/kulshekhar/ts-jest/issues/4840)
+* fix(config): disable `isolatedDeclarations` ([5d6b35f](https://github.com/kulshekhar/ts-jest/commit/5d6b35f)), closes [#4847](https://github.com/kulshekhar/ts-jest/issues/4847)
+
+
+
 ## [29.3.2](https://github.com/kulshekhar/ts-jest/compare/v29.3.1...v29.3.2) (2025-04-12)
 
 
