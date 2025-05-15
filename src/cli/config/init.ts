@@ -14,9 +14,9 @@ import type { CliCommand, CliCommandArgs } from '..'
 import { createDefaultPreset, createJsWithTsPreset, createJsWithBabelPreset } from '../../presets/create-jest-preset'
 import type { DefaultPreset, JsWithBabelPreset, JsWithTsPreset, TsJestTransformerOptions } from '../../types'
 
-const JEST_CONFIG_EJS_TEMPLATE = `const { <%= presetCreatorFn %> } = require("ts-jest/presets")
+const JEST_CONFIG_EJS_TEMPLATE = `const { <%= presetCreatorFn %> } = require("ts-jest");
 
-const tsJestTransformCfg = <%= presetCreatorFn %>(<%- transformOpts %>).transform
+const tsJestTransformCfg = <%= presetCreatorFn %>(<%- transformOpts %>).transform;
 
 /** @type {import("jest").Config} **/
 <%= exportKind %> {
@@ -45,8 +45,7 @@ export const run: CliCommand = async (args: CliCommandArgs /* , logger: Logger *
   const isJestConfigFileExisted = existsSync(filePath)
   const pkgFile = isPackageJsonConfig ? filePath : join(process.cwd(), 'package.json')
   const isPackageJsonExisted = isPackageJsonConfig || existsSync(pkgFile)
-  const tsconfig =
-    askedTsconfig === 'tsconfig.json' ? undefined : (askedTsconfig as TsJestTransformerOptions['tsconfig'])
+  const tsconfig = askedTsconfig === 'tsconfig.json' ? undefined : askedTsconfig
   const pkgJsonContent = isPackageJsonExisted ? JSON.parse(readFileSync(pkgFile, 'utf8')) : {}
   if (shouldPostProcessWithBabel) {
     console.warn(
