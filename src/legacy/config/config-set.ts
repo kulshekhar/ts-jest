@@ -177,6 +177,7 @@ export class ConfigSet {
     emitDeclarationOnly: undefined,
     sourceRoot: undefined,
     tsBuildInfoFile: undefined,
+    rewriteRelativeImportExtensions: false,
   }
 
   /**
