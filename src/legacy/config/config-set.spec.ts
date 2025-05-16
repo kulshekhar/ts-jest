@@ -85,6 +85,7 @@ describe('config-set', () => {
             emitDeclarationOnly: true,
             sourceRoot: 'foo',
             tsBuildInfoFile: 'foo.info',
+            rewriteRelativeImportExtensions: true,
           },
         }).options,
       ).toMatchObject({
@@ -93,6 +94,7 @@ describe('config-set', () => {
         isolatedDeclarations: false,
         noEmit: false,
         removeComments: false,
+        rewriteRelativeImportExtensions: false,
       })
     })
 
