@@ -1,6 +1,6 @@
 {
   "name": "ts-jest",
-  "version": "29.3.3",
+  "version": "29.3.4",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "type": "commonjs",
