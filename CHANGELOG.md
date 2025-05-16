@@ -1,3 +1,14 @@
+## [29.3.4](https://github.com/kulshekhar/ts-jest/compare/v29.3.3...v29.3.4) (2025-05-16)
+
+
+### Bug Fixes
+
+* fix: fix `TsJestTransformerOptions` type ([3b11e29](https://github.com/kulshekhar/ts-jest/commit/3b11e29)), closes [#4247](https://github.com/kulshekhar/ts-jest/issues/4247)
+* fix(cli): fix wrong path for preset creator fns ([249eb2c](https://github.com/kulshekhar/ts-jest/commit/249eb2c))
+* fix(config): disable `rewriteRelativeImportExtensions` always ([9b1f472](https://github.com/kulshekhar/ts-jest/commit/9b1f472)), closes [#4855](https://github.com/kulshekhar/ts-jest/issues/4855)
+
+
+
 ## [29.3.3](https://github.com/kulshekhar/ts-jest/compare/v29.3.2...v29.3.3) (2025-05-14)
 
 
