@@ -60,7 +60,7 @@ export interface ConfigCustomTransformer {
 /**
  * @deprecated use {@link TsJestTransformerOptions} instead
  */
-export interface TsJestGlobalOptions {
+export type TsJestGlobalOptions = Config.TransformerConfig[1] & {
   /**
    * Compiler options. It can be:
    * - `true` (or `undefined`, it's the default): use default tsconfig file
