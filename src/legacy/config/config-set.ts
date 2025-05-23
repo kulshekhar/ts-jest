@@ -46,6 +46,7 @@ interface TsJestDiagnosticsCfg {
   exclude: string[]
   throws: boolean
   warnOnly?: boolean
+  originalValue: TsJestTransformerOptions['diagnostics']
 }
 
 /**
@@ -303,6 +304,7 @@ export class ConfigSet {
         exclude: diagnosticsOpt.exclude ?? [],
         ignoreCodes: toDiagnosticCodeList(ignoreList),
         throws: !diagnosticsOpt.warnOnly,
+        originalValue: options.diagnostics,
       }
     } else {
       this._diagnostics = {
@@ -310,6 +312,7 @@ export class ConfigSet {
         exclude: [],
         pretty: true,
         throws: diagnosticsOpt,
+        originalValue: options.diagnostics,
       }
     }
     if (diagnosticsOpt) {
@@ -692,5 +695,9 @@ export class ConfigSet {
     this.logger.debug({ fromPath: inputPath, toPath: path }, 'resolved path from', inputPath, 'to', path)
 
     return path
+  }
+
+  getDiagnostics() {
+    return this._diagnostics
   }
 }

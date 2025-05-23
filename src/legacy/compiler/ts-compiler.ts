@@ -99,7 +99,7 @@ export class TsCompiler implements TsCompilerInstance {
     this._initialCompilerOptions = { ...this._parsedTsConfig.options }
     this._compilerOptions = { ...this._initialCompilerOptions }
     this._runtimeCacheFS = runtimeCacheFS
-    if (!this.configSet.isolatedModules) {
+    if (!this.configSet.isolatedModules || this.configSet.getDiagnostics().originalValue === true) {
       this._fileContentCache = new Map<string, string>()
       this._fileVersionCache = new Map<string, number>()
       this._cachedReadFile = this._logger.wrap(
