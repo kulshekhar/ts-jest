@@ -9,7 +9,7 @@
     "test-esm-isolated": "cross-env NODE_OPTIONS=\"$NODE_OPTIONS --experimental-vm-modules\" npx jest -c=jest-esm-isolated.config.ts --no-cache"
   },
   "devDependencies": {
-    "@babel/core": "^7.27.1",
+    "@babel/core": "^7.27.3",
     "@babel/preset-env": "^7.27.2",
     "@types/jest": "^29.5.14",
     "babel-jest": "^29.7.0",
