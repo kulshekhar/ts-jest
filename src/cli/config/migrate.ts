@@ -117,7 +117,7 @@ export const run: CliCommand = async (args: CliCommandArgs /* , logger: Logger*/
     }
   }
 
-  const globalsTsJestConfig = migratedConfig.globals?.['ts-jest']
+  const globalsTsJestConfig = migratedConfig.globals?.['ts-jest'] as TsJestTransformerOptions | undefined
   migratedConfig.transform = migrateGlobalConfigToTransformConfig(migratedConfig.transform, globalsTsJestConfig)
   migratedConfig.transform = migratePresetToTransformConfig(migratedConfig.transform, preset, globalsTsJestConfig)
 
