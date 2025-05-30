@@ -25,7 +25,7 @@
     "@vitejs/plugin-react-swc": "^3.10.0",
     "camelcase": "^6.3.0",
     "cross-env": "^7.0.3",
-    "eslint-plugin-prettier": "^5.4.0",
+    "eslint-plugin-prettier": "^5.4.1",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
     "ts-jest": "^29.3.4",
