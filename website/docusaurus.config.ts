@@ -19,6 +19,7 @@ const config: Config = {
   projectName: 'ts-jest',
   future: {
     experimental_faster: true,
+    v4: true,
   },
   plugins: [
     [
