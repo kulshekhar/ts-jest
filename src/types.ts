@@ -192,15 +192,15 @@ export type TsJestTransformerOptions = TsJestGlobalOptions
 export type TsJestTransformOptions = TransformOptions<TsJestTransformerOptions>
 
 export interface JestConfigWithTsJest extends Omit<Config.InitialOptions, 'transform'> {
-  transform?: {
-    [regex: string]:
-      | 'ts-jest'
-      | 'ts-jest/legacy'
-      | ['ts-jest', TsJestTransformerOptions]
-      | ['ts-jest/legacy', TsJestTransformerOptions]
-      | string
-      | Config.TransformerConfig
-  }
+  transform?:
+    | {
+        [regex: string]:
+          | 'ts-jest'
+          | 'ts-jest/legacy'
+          | ['ts-jest', TsJestTransformerOptions]
+          | ['ts-jest/legacy', TsJestTransformerOptions]
+      }
+    | Config.InitialOptions['transform']
 }
 
 export type StringMap = Map<string, string>
