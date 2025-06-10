@@ -117,7 +117,7 @@
     "eslint": "^9.28.0",
     "eslint-config-prettier": "^10.1.5",
     "eslint-plugin-import": "^2.31.0",
-    "eslint-plugin-jest": "^28.13.0",
+    "eslint-plugin-jest": "^28.13.3",
     "eslint-plugin-jsdoc": "^50.7.1",
     "eslint-plugin-prettier": "^4.2.1",
     "execa": "5.1.1",
