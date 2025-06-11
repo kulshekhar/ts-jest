@@ -1,3 +1,12 @@
+## [29.4.0](https://github.com/kulshekhar/ts-jest/compare/v29.3.4...v29.4.0) (2025-06-11)
+
+
+### Features
+
+* feat: support Jest 30 ([84e093e](https://github.com/kulshekhar/ts-jest/commit/84e093e))
+
+
+
 ## [29.3.4](https://github.com/kulshekhar/ts-jest/compare/v29.3.3...v29.3.4) (2025-05-16)
 
 
