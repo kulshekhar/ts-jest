@@ -2,7 +2,7 @@
   "name": "e2e",
   "private": true,
   "devDependencies": {
-    "@formatjs/ts-transformer": "^3.13.34",
+    "@formatjs/ts-transformer": "^3.14.0",
     "@types/react": "^18.3.3",
     "esbuild": "~0.25.5",
     "jest-environment-jsdom": "^30.0.0",
