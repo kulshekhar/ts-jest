@@ -119,7 +119,7 @@
     "esbuild": "~0.25.5",
     "eslint": "^9.29.0",
     "eslint-config-prettier": "^10.1.5",
-    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-jest": "^28.14.0",
     "eslint-plugin-jsdoc": "^50.8.0",
     "eslint-plugin-prettier": "^4.2.1",
