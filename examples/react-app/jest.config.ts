@@ -3,6 +3,9 @@ import { createDefaultPreset } from 'ts-jest'
 
 const defaultPreset = createDefaultPreset({
   tsconfig: 'tsconfig.spec.json',
+  astTransformers: {
+    before: ['hello-transformer.ts'],
+  },
 })
 
 export default {
