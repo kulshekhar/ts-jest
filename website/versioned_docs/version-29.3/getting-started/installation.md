@@ -42,7 +42,7 @@ yarn ts-jest config:init
 
 This will create a basic Jest configuration file which will inform Jest about how to handle `.ts` files correctly.
 
-You can also use the `jest --init` command (prefixed with either `npx` or `yarn` depending on what you're using) to have more options related to Jest.
+You can also use the `create-jest` command (prefixed with either `npx` or `yarn` depending on what you're using) to have more options related to Jest.
 However, answer `no` to the Jest question about whether or not to enable TypeScript. Instead, add the line: `preset: "ts-jest"` to the `jest.config.js` file afterwards.
 
 #### Customizing
