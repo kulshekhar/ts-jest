@@ -129,7 +129,7 @@ export type DefaultPreset = {
 ```ts title="jest.config.ts"
 import { createDefaultLegacyPreset, type JestConfigWithTsJest } from 'ts-jest'
 
-const presetConfig = createDefaultPreset({
+const presetConfig = createDefaultLegacyPreset({
   //...optionsa
 })
 

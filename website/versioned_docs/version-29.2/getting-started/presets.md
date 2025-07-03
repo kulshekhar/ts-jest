@@ -65,8 +65,7 @@ export type DefaultPreset = {
 
 #### Example:
 
-```ts
-// jest.config.ts
+```ts title="jest.config.ts"
 import { createDefaultPreset, type JestConfigWithTsJest } from 'ts-jest'
 
 const presetConfig = createDefaultPreset({
@@ -123,11 +122,10 @@ export type DefaultPreset = {
 
 #### Example:
 
-```ts
-// jest.config.ts
+```ts title="jest.config.ts"
 import { createDefaultLegacyPreset, type JestConfigWithTsJest } from 'ts-jest'
 
-const presetConfig = createDefaultPreset({
+const presetConfig = createDefaultLegacyPreset({
   //...optionsa
 })
 
@@ -182,8 +180,7 @@ export type DefaultEsmPreset = {
 
 #### Example:
 
-```ts
-// jest.config.mts
+```ts title="jest.config.ts"
 import { createDefaultEsmPreset, type JestConfigWithTsJest } from 'ts-jest'
 
 const presetConfig = createDefaultEsmPreset({
@@ -241,8 +238,7 @@ export type DefaultEsmPreset = {
 
 #### Example:
 
-```ts
-// jest.config.mts
+```ts title="jest.config.ts"
 import { createDefaultLegacyEsmPreset, type JestConfigWithTsJest } from 'ts-jest'
 
 const presetConfig = createDefaultLegacyEsmPreset({
@@ -299,8 +295,7 @@ export type JsWithTsPreset = {
 
 #### Example:
 
-```ts
-// jest.config.ts
+```ts title="jest.config.ts"
 import { createJsWithTsPreset, type JestConfigWithTsJest } from 'ts-jest'
 
 const presetConfig = createJsWithTsPreset({
@@ -357,8 +352,7 @@ export type JsWithTsPreset = {
 
 #### Example:
 
-```ts
-// jest.config.ts
+```ts title="jest.config.ts"
 import { createJsWithTsLegacyPreset, type JestConfigWithTsJest } from 'ts-jest'
 
 const presetConfig = createJsWithTsLegacyPreset({
@@ -415,8 +409,7 @@ export type JsWithTsPreset = {
 
 #### Example:
 
-```ts
-// jest.config.mts
+```ts title="jest.config.ts"
 import { createJsWithTsEsmPreset, type JestConfigWithTsJest } from 'ts-jest'
 
 const presetConfig = createJsWithTsEsmPreset({
@@ -473,8 +466,7 @@ export type JsWithTsPreset = {
 
 #### Example:
 
-```ts
-// jest.config.mts
+```ts title="jest.config.ts"
 import { createJsWithTsEsmLegacyPreset, type JestConfigWithTsJest } from 'ts-jest'
 
 const presetConfig = createJsWithTsEsmLegacyPreset({
@@ -533,8 +525,7 @@ export type JsWithBabelPreset = {
 
 #### Example:
 
-```ts
-// jest.config.ts
+```ts title="jest.config.ts"
 import { createJsWithBabelPreset, type JestConfigWithTsJest } from 'ts-jest'
 
 const presetConfig = createJsWithBabelPreset({
@@ -593,8 +584,7 @@ export type JsWithBabelPreset = {
 
 #### Example:
 
-```ts
-// jest.config.ts
+```ts title="jest.config.ts"
 import { createJsWithBabelLegacyPreset, type JestConfigWithTsJest } from 'ts-jest'
 
 const presetConfig = createJsWithBabelLegacyPreset({
@@ -653,8 +643,7 @@ export type JsWithBabelPreset = {
 
 #### Example:
 
-```ts
-// jest.config.mts
+```ts title="jest.config.ts"
 import { createJsWithBabelEsmPreset, type JestConfigWithTsJest } from 'ts-jest'
 
 const presetConfig = createJsWithBabelEsmPreset({
@@ -713,8 +702,7 @@ export type JsWithBabelPreset = {
 
 #### Example:
 
-```ts
-// jest.config.mts
+```ts title="jest.config.ts"
 import { createJsWithBabelEsmLegacyPreset, type JestConfigWithTsJest } from 'ts-jest'
 
 const presetConfig = createJsWithBabelEsmLegacyPreset({
@@ -754,20 +742,7 @@ These legacy presets will be removed in the next major release and users are **H
 
 #### Example
 
-```ts tab={"label": "TypeScript CJS"}
-// jest.config.ts
-import type { JestConfigWithTsJest } from 'ts-jest'
-
-const jestConfig: JestConfigWithTsJest = {
-  // Replace `<preset_name>` with the one of the preset names from the table above
-  preset: '<preset_name>',
-}
-
-export default jestConfig
-```
-
-```ts tab={"label": "TypeScript ESM"}
-// jest.config.mts
+```ts title="jest.config.ts"
 import type { JestConfigWithTsJest } from 'ts-jest'
 
 const jestConfig: JestConfigWithTsJest = {
