@@ -11,14 +11,10 @@ After that, some little modifications will be required as follows:
 
 If you didn't yet, move any Babel config from `.babelrc` to `babel.config.js`. It should at least contain:
 
-```ts title="jest.config.ts"
-import type { Config } from 'ts-jest'
-
-const jestConfig: Config = {
+```js title="babel.config.js"
+module.exports = {
   presets: ['module:metro-react-native-babel-preset'],
 }
-
-export default jestConfig
 ```
 
 ### TypeScript Configuration
