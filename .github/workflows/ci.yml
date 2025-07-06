@@ -24,7 +24,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node-version: [18.x, 20.x]
+        node-version: [18, 20, 22]
     with:
       os: ubuntu-latest
       node-version: ${{ matrix.node-version }}
@@ -34,7 +34,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node-version: [18.x, 20.x]
+        node-version: [18, 20, 22]
     with:
       os: windows-latest
       node-version: ${{ matrix.node-version }}
@@ -48,7 +48,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node-version: [18.x, 20.x]
+        node-version: [18, 20, 22]
     with:
       os: ubuntu-latest
       node-version: ${{ matrix.node-version }}
@@ -62,7 +62,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node-version: [18.x, 20.x]
+        node-version: [18, 20, 22]
     with:
       os: windows-latest
       node-version: ${{ matrix.node-version }}
@@ -82,7 +82,7 @@ jobs:
         uses: ./.github/actions/setup-workspace
         with:
           os: ubuntu-latest
-          node-version: 20.x
+          node-version: 22
 
       - name: Run lint 🔍
         run: npm run lint
@@ -107,7 +107,7 @@ jobs:
         uses: ./.github/actions/setup-workspace
         with:
           os: ubuntu-latest
-          node-version: 20.x
+          node-version: 22
 
       - name: Build 🔧
         run: npm run build
