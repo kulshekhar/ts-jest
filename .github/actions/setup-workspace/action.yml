@@ -19,7 +19,7 @@ runs:
       uses: actions/cache@v4
       with:
         path: '**/node_modules'
-        key: ${{ inputs.os }}-${{ inputs.node }}-build-${{ hashFiles('**/package-lock.json') }}
+        key: ${{ inputs.os }}-${{ inputs.node-version }}-build-${{ hashFiles('**/package-lock.json') }}
 
     - name: Setup Node version ⚙️
       uses: actions/setup-node@v4
@@ -27,7 +27,7 @@ runs:
       with:
         cache: npm
         cache-dependency-path: '**/package-lock.json'
-        node-version: ${{ inputs.node }}
+        node-version: ${{ inputs.node-version }}
 
     - name: Install and build 🔧
       if: ${{ steps.cache-npm.outputs.cache-hit != 'true' }}
