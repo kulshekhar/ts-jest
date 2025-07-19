@@ -21,7 +21,7 @@ Tip: If you get an error with the following `npm` commands such as `npx: command
 
 :::tip
 
-For ESM configuration, please see more in details with [ESM guide](../guides/esm-support).
+For ESM configuration, please see more in details with [ESM guide](../../guides/esm-support).
 
 :::
 
