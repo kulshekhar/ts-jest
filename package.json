@@ -116,7 +116,7 @@
     "@typescript-eslint/parser": "^8.37.0",
     "babel-jest": "^30.0.4",
     "conventional-changelog-cli": "^5.0.0",
-    "esbuild": "~0.25.7",
+    "esbuild": "~0.25.8",
     "eslint": "^9.31.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-import": "^2.32.0",
