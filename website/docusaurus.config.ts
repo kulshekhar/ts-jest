@@ -17,6 +17,7 @@ const config: Config = {
   favicon: 'img/logo.svg',
   organizationName: 'kulshekhar',
   projectName: 'ts-jest',
+  trailingSlash: false,
   future: {
     experimental_faster: true,
     v4: true,
