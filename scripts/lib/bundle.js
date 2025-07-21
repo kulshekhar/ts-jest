@@ -2,8 +2,8 @@ const { createHash } = require('crypto')
 const { join, resolve } = require('path')
 
 const execa = require('execa')
+const glob = require('fast-glob')
 const { readFileSync, statSync, writeFileSync, existsSync } = require('fs-extra')
-const { sync: globIgnore } = require('glob-gitignore')
 
 const logger = require('./logger')
 const { rootDir, pkgDigestFile } = require('./paths')
@@ -22,12 +22,19 @@ function readPackageDigest() {
 }
 
 function computePackageDigest(noWriteFile = false) {
-  const files = globIgnore(join(rootDir, '**'), {
+  const npmIgnoreFile = join(rootDir, '.npmignore')
+  const ignorePatterns = existsSync(npmIgnoreFile)
+    ? readFileSync(npmIgnoreFile)
+        .toString('utf8')
+        .split(/\n/g)
+        .filter((l) => l && !/^(\s*#.+|\s*)$/.test(l))
+    : []
+  const files = glob.sync('**', {
+    cwd: rootDir,
     absolute: true,
-    ignore: readFileSync(join(rootDir, '.npmignore'))
-      .toString('utf8')
-      .split(/\n/g)
-      .filter((l) => l && !/^(\s*#.+|\s*)$/.test(l)),
+    ignore: ignorePatterns,
+    nodir: true,
+    dot: true,
   })
   const hash = createHash('sha1')
   files.sort().forEach((file) => {
