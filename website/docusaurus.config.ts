@@ -10,7 +10,7 @@ const config: Config = {
   title: 'ts-jest',
   tagline: 'A Jest transformer with source map support that lets you use Jest to test projects written in TypeScript.',
   url: 'https://kulshekhar.github.io',
-  baseUrl: '/ts-jest/',
+  baseUrl: process.env.BASE_URL || '/ts-jest/',
   baseUrlIssueBanner: true,
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',

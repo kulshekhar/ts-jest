@@ -1,0 +1,36 @@
+name: PR docs check 🔍
+
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - closed
+    paths:
+      - '.github/**/*'
+      - 'website/**/*'
+
+concurrency:
+  group: preview-doc-pr-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  deploy-preview:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout️ 🛎
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+        with:
+          fetch-depth: 20
+          fetch-tags: false
+
+      - name: Setup docs workspace ⚙️
+        uses: ./.github/actions/setup-docspace
+        with:
+          baseURL: '/ts-jest/pr-preview/pr-${{ github.event.pull_request.number }}/'
+
+      - name: Deploy preview 🚀
+        uses: rossjrw/pr-preview-action@v1
+        with:
+          source-dir: ./website/build
