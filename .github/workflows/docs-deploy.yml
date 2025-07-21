@@ -1,0 +1,41 @@
+name: Deploy docs 🚀
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/**/*'
+      - 'website/**/*'
+
+concurrency:
+  group: doc-ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    permissions:
+      contents: write # for JamesIves/github-pages-deploy-action to push changes in repo
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout️ 🛎
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+        with:
+          fetch-depth: 20
+          fetch-tags: false
+
+      - name: Setup docs workspace ⚙️
+        uses: ./.github/actions/setup-docspace
+
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@6c2d9db40f9296374acc17b90404b6e8864128c8 # v4.7.3
+        with:
+          branch: gh-pages # The branch the action should deploy to.
+          folder: website/build # The folder the action should deploy.
+          clean: true # Automatically remove deleted files from the deploy branch
+          clean-exclude: pr-preview/
+          force: false # Rebase new deployments instead of force-pushing them to allow PR previews to stay

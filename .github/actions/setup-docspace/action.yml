@@ -1,0 +1,27 @@
+name: Setup documentation workspace ⚙️
+
+inputs:
+  baseURL:
+    required: false
+    type: string
+    default: '/ts-jest/'
+
+runs:
+  using: composite
+  steps:
+    - name: Setup Node version ⚙️
+      uses: ./.github/actions/setup-node
+      with:
+        cache-dependency-path: 'website/package-lock.json'
+
+    - name: Install 🔧
+      run: npm ci
+      shell: bash
+      working-directory: website
+
+    - name: Build 🔧
+      run: npm run build
+      shell: bash
+      env:
+        BASE_URL: ${{ inputs.baseURL }}
+      working-directory: website

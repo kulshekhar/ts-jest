@@ -1,0 +1,20 @@
+name: Setup Node.js environment 🌐
+
+inputs:
+  cache-dependency-path:
+    required: true
+    type: string
+  node-version:
+    required: false
+    type: string
+    default: '22'
+
+runs:
+  using: composite
+  steps:
+    - name: Setup Node version ⚙️
+      uses: actions/setup-node@v4
+      with:
+        cache: npm
+        cache-dependency-path: ${{ inputs.cache-dependency-path }}
+        node-version: ${{ inputs.node-version }}
