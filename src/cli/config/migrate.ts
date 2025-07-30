@@ -109,8 +109,13 @@ export const run: CliCommand = async (args: CliCommandArgs /* , logger: Logger*/
     delete migratedConfig.testMatch
   }
   // check the testMatch
-  else if (migratedConfig.testMatch?.length && preset) {
-    const presetValue = dedupSort(preset.value.testMatch ?? []).join('::')
+  else if (
+    migratedConfig.testMatch?.length &&
+    preset &&
+    Array.isArray(preset.value.testMatch) &&
+    Array.isArray(migratedConfig.testMatch)
+  ) {
+    const presetValue = dedupSort(preset.value.testMatch).join('::')
     const migratedValue = dedupSort(migratedConfig.testMatch).join('::')
     if (presetValue === migratedValue) {
       delete migratedConfig.testMatch
@@ -157,7 +162,7 @@ function cleanupConfig(config: Config.InitialOptions): void {
     config.moduleFileExtensions = dedupSort(config.moduleFileExtensions)
     if (!config.moduleFileExtensions.length) delete config.moduleFileExtensions
   }
-  if (config.testMatch) {
+  if (config.testMatch && Array.isArray(config.testMatch)) {
     config.testMatch = dedupSort(config.testMatch)
     if (!config.testMatch.length) delete config.testMatch
   }
