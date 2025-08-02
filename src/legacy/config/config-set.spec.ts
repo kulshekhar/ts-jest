@@ -797,10 +797,22 @@ describe('config-set', () => {
   }) // resolvePath
 
   describe('_resolveTsConfig', () => {
-    const findConfig = jest.spyOn(ts, 'findConfigFile')
-    const readConfig = jest.spyOn(ts, 'readConfigFile')
-    const parseConfig = jest.spyOn(ts, 'parseJsonConfigFileContent')
+    let findConfig: jest.SpyInstance
+    let readConfig: jest.SpyInstance
+    let parseConfig: jest.SpyInstance
     let cs!: ConfigSet
+
+    beforeEach(() => {
+      findConfig = jest.spyOn(ts, 'findConfigFile')
+      readConfig = jest.spyOn(ts, 'readConfigFile')
+      parseConfig = jest.spyOn(ts, 'parseJsonConfigFileContent')
+    })
+
+    afterEach(() => {
+      findConfig.mockRestore()
+      readConfig.mockRestore()
+      parseConfig.mockRestore()
+    })
 
     describe('cannot resolve configFileName', () => {
       beforeEach(() => {
@@ -812,15 +824,8 @@ describe('config-set', () => {
         })
       })
 
-      afterEach(() => {
-        findConfig.mockClear()
-        readConfig.mockClear()
-        parseConfig.mockClear()
-      })
-
       it('should use correct paths when searching', () => {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        cs = createConfigSet({ jestConfig: { rootDir: '/root', cwd: '/cwd' } as any })
+        const cs = createConfigSet({ jestConfig: { rootDir: '/root', cwd: '/cwd' } })
 
         const conf = cs.parsedTsConfig
         expect(conf.options.configFilePath).toBeUndefined()
@@ -855,11 +860,6 @@ describe('config-set', () => {
         readConfig.mockImplementation((p) => ({ config: { path: p, compilerOptions: {} } }))
       })
 
-      afterEach(() => {
-        findConfig.mockClear()
-        readConfig.mockClear()
-      })
-
       describe('module in tsConfig is not the same as forced module and esModuleInterop is not in tsConfig', () => {
         beforeEach(() => {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -871,10 +871,6 @@ describe('config-set', () => {
             fileNames: [],
             errors: [],
           }))
-        })
-
-        afterEach(() => {
-          parseConfig.mockClear()
         })
 
         it('should use correct paths when searching', () => {
@@ -931,10 +927,6 @@ describe('config-set', () => {
             fileNames: [],
             errors: [],
           }))
-        })
-
-        afterEach(() => {
-          parseConfig.mockClear()
         })
 
         it('should use correct paths when searching', () => {
@@ -995,10 +987,6 @@ describe('config-set', () => {
           }))
         })
 
-        afterEach(() => {
-          parseConfig.mockClear()
-        })
-
         it('should use correct paths when searching', () => {
           const tscfgPathStub = '/root/tsconfig.json'
           jest.spyOn(ConfigSet.prototype, 'resolvePath').mockReturnValueOnce('')
@@ -1056,10 +1044,6 @@ describe('config-set', () => {
             fileNames: [],
             errors: [],
           }))
-        })
-
-        afterEach(() => {
-          parseConfig.mockClear()
         })
 
         it('should use correct paths when searching', () => {
@@ -1145,13 +1129,63 @@ describe('config-set', () => {
     ])('should handle various kinds of ignoreCodes', (ignoreCodes) => {
       expect(createConfigSet({ tsJestConfig: { diagnostics: { ignoreCodes } } })).toBeDefined()
     })
+
+    describe('diagnostics & tsConfig isolatedModules interactions', () => {
+      describe.each([
+        {
+          diagnostics: undefined,
+          isolatedModules: true,
+          expectDiagnosticToBeIgnored: true,
+        },
+        {
+          diagnostics: undefined,
+          isolatedModules: false,
+          expectDiagnosticToBeIgnored: false,
+        },
+        {
+          diagnostics: true,
+          isolatedModules: true,
+          expectDiagnosticToBeIgnored: false,
+        },
+        {
+          diagnostics: true,
+          isolatedModules: false,
+          expectDiagnosticToBeIgnored: false,
+        },
+      ])(
+        'diagnostic === $diagnostics and isolatedModules === $isolatedModules',
+        ({ diagnostics, isolatedModules, expectDiagnosticToBeIgnored }) => {
+          it('enables/disables diagnostic as expected', () => {
+            const cs = createConfigSet({
+              tsJestConfig: {
+                diagnostics,
+                tsconfig: {
+                  isolatedModules,
+                },
+              },
+            })
+
+            // @ts-expect-error intentionally testing private method
+            expect(cs._shouldIgnoreDiagnosticsForFile('file-path')).toBe(expectDiagnosticToBeIgnored)
+          })
+        },
+      )
+    })
   }) // diagnostics
 
   describe('isolatedModules', () => {
-    const spyFindTsConfigFile = jest.spyOn(ts, 'findConfigFile')
+    let spyFindTsConfigFile: jest.SpyInstance
+
+    beforeEach(() => {
+      spyFindTsConfigFile = jest.spyOn(ts, 'findConfigFile')
+    })
+
+    afterEach(() => {
+      spyFindTsConfigFile.mockRestore()
+    })
 
     it('should show warning log when isolatedModules: true is used in transformer options when a tsconfig file path for tests exists', () => {
-      spyFindTsConfigFile.mockReturnValueOnce('foo/tsconfig.json')
+      spyFindTsConfigFile.mockReturnValue('tsconfig.json')
       const logger = testing.createLoggerMock()
       createConfigSet({
         logger,
@@ -1169,7 +1203,7 @@ describe('config-set', () => {
         expect.arrayContaining([
           expect.stringContaining(
             interpolate(Deprecations.IsolatedModulesWithTsconfigPath, {
-              tsconfigFilePath: 'foo/tsconfig.json',
+              tsconfigFilePath: 'tsconfig.json',
             }),
           ),
         ]),
@@ -1177,7 +1211,7 @@ describe('config-set', () => {
     })
 
     it('should show warning log when isolatedModules: true is used in transformer options when a tsconfig file path does not exist', () => {
-      spyFindTsConfigFile.mockReturnValueOnce(undefined)
+      spyFindTsConfigFile.mockReturnValue(undefined)
       const logger = testing.createLoggerMock()
       createConfigSet({
         logger,
