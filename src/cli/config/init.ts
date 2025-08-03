@@ -7,20 +7,20 @@
 import { existsSync, readFileSync, writeFileSync } from 'fs'
 import { basename, join } from 'path'
 
-import ejs from 'ejs'
+import handlebars from 'handlebars'
 import { stringify as stringifyJson5 } from 'json5'
 
 import type { CliCommand, CliCommandArgs } from '..'
 import { createDefaultPreset, createJsWithTsPreset, createJsWithBabelPreset } from '../../presets/create-jest-preset'
 import type { DefaultPreset, JsWithBabelPreset, JsWithTsPreset, TsJestTransformerOptions } from '../../types'
 
-const JEST_CONFIG_EJS_TEMPLATE = `const { <%= presetCreatorFn %> } = require("ts-jest");
+const JEST_CONFIG_TEMPLATE = `const { {{ presetCreatorFn }} } = require("ts-jest");
 
-const tsJestTransformCfg = <%= presetCreatorFn %>(<%- transformOpts %>).transform;
+const tsJestTransformCfg = {{ presetCreatorFn }}({{{ transformOpts }}}).transform;
 
 /** @type {import("jest").Config} **/
-<%= exportKind %> {
-  testEnvironment: "<%= testEnvironment %>",
+{{{ exportKind }}} {
+  testEnvironment: "{{ testEnvironment }}",
   transform: {
     ...tsJestTransformCfg,
   },
@@ -103,7 +103,8 @@ export const run: CliCommand = async (args: CliCommandArgs /* , logger: Logger *
     } else {
       presetCreatorFn = 'createDefaultPreset'
     }
-    body = ejs.render(JEST_CONFIG_EJS_TEMPLATE, {
+    const template = handlebars.compile(JEST_CONFIG_TEMPLATE)
+    body = template({
       exportKind: pkgJsonContent.type === 'module' ? 'export default' : 'module.exports =',
       testEnvironment: jsdom ? 'jsdom' : 'node',
       presetCreatorFn,
