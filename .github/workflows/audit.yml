@@ -1,0 +1,66 @@
+name: Audit Codes 🔍
+
+on:
+  push:
+    branches:
+      - main
+      - next
+  pull_request:
+    branches:
+      - '**'
+    paths-ignore:
+      - '**/*.md'
+      - '**/*.txt'
+      - '**/*.spec.ts'
+
+jobs:
+  codeql-scan:
+    name: Scan Vulnerabilities with CodeQL (${{ matrix.language }}) 🛡️
+    runs-on: ubuntu-latest
+    permissions:
+      # required for all workflows
+      security-events: write
+      # required to fetch internal or private CodeQL packs
+      packages: read
+      # only required for workflows in private repositories
+      actions: read
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [actions, javascript-typescript]
+
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+        with:
+          fetch-depth: 20
+          fetch-tags: false
+
+      - name: Initialize CodeQL ⚙️
+        uses: github/codeql-action/init@51f77329afa6477de8c49fc9c7046c15b9a4e79d # v3
+        with:
+          languages: ${{ matrix.language }}
+
+      - name: Perform CodeQL Analysis 🔍
+        uses: github/codeql-action/analyze@51f77329afa6477de8c49fc9c7046c15b9a4e79d # v3
+        with:
+          category: '/language:${{ matrix.language }}'
+
+  osv-scan:
+    name: Scan Vulnerabilities with OSV 🛡️
+    uses: 'google/osv-scanner-action/.github/workflows/osv-scanner-reusable-pr.yml@b00f71e051ddddc6e46a193c31c8c0bf283bf9e6' # v2.1.0
+    permissions:
+      # Required to upload SARIF file to CodeQL. See: https://github.com/github/codeql-action/issues/2117
+      actions: read
+      # Require writing security events to upload SARIF file to security tab
+      security-events: write
+      # Only need to read contents
+      contents: read
+    with:
+      # Start the scan from the root of the repository and scan subdirectories recursively.
+      scan-args: |-
+        --lockfile=package-lock.json
+        --lockfile=website/package-lock.json
+        -r
+        ./
