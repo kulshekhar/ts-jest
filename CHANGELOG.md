@@ -1,3 +1,12 @@
+## [29.4.1](https://github.com/kulshekhar/ts-jest/compare/v29.4.0...v29.4.1) (2025-08-03)
+
+
+## Bug Fixes
+
+* fix: replace `ejs` with `handlebars` due to security issues ([899c9b7](https://github.com/kulshekhar/ts-jest/commit/899c9b7)), closes [#4969](https://github.com/kulshekhar/ts-jest/issues/4969)
+
+
+
 ## [29.4.0](https://github.com/kulshekhar/ts-jest/compare/v29.3.4...v29.4.0) (2025-06-11)
 
 
