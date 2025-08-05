@@ -15,6 +15,6 @@
     "lodash-es": "^4.17.21",
     "jest": "^29.7.0",
     "ts-jest": "^29.4.1",
-    "typescript": "~5.8.3"
+    "typescript": "~5.9.2"
   }
 }
