@@ -101,7 +101,6 @@
     "@jest/types": "^30.0.5",
     "@types/babel__core": "^7.20.5",
     "@types/fs-extra": "^11.0.4",
-    "@types/handlebars": "^4.1.0",
     "@types/jest": "^29.5.14",
     "@types/js-yaml": "^4.0.9",
     "@types/lodash.camelcase": "^4.3.9",
