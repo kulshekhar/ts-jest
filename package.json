@@ -134,7 +134,7 @@
     "prettier": "^2.8.8",
     "rimraf": "^5.0.10",
     "ts-node": "^10.9.2",
-    "typescript": "~5.8.3",
+    "typescript": "~5.9.2",
     "typescript-eslint": "^8.39.0"
   },
   "engines": {
