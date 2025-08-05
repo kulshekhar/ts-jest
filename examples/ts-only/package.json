@@ -9,9 +9,9 @@
     "test-esm-isolated": "cross-env NODE_OPTIONS=\"$NODE_OPTIONS --experimental-vm-modules\" npx jest -c=jest-esm-isolated.config.ts --no-cache"
   },
   "devDependencies": {
-    "@types/jest": "^29.5.14",
+    "@types/jest": "^30.0.0",
     "cross-env": "^7.0.3",
-    "jest": "^29.7.0",
+    "jest": "^30.0.5",
     "ts-jest": "^29.4.1",
     "typescript": "~5.9.2"
   }
