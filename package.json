@@ -124,7 +124,7 @@
     "eslint-plugin-prettier": "^4.2.5",
     "execa": "5.1.1",
     "fast-glob": "^3.3.3",
-    "fs-extra": "^11.3.0",
+    "fs-extra": "^11.3.1",
     "globals": "^16.3.0",
     "husky": "^9.1.7",
     "jest": "^30.0.5",
