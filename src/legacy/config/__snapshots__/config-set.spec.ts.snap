@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`config-set _resolveTsConfig resolve configFileName normally module in tsConfig is not the same as forced module and allowSyntheticDefaultImports is false in tsConfig should use correct paths when searching 1`] = `
 [
