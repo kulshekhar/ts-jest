@@ -63,7 +63,7 @@ const shouldCheckProjectPkgJsonContent = (fileName: string, moduleKind: ts.Modul
  * - Allow using custom AST transformers with the internal created {@link Program}
  */
 const transpileWorker: ExtendedTsTranspileModuleFn = (input, transpileOptions) => {
-  if (barebonesLibSourceFile == null) {
+  if (!barebonesLibSourceFile) {
     barebonesLibSourceFile = ts.createSourceFile(barebonesLibName, barebonesLibContent, {
       languageVersion: ts.ScriptTarget.Latest,
     })
