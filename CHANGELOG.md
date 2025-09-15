@@ -1,3 +1,12 @@
+## [29.4.2](https://github.com/kulshekhar/ts-jest/compare/v29.4.1...v29.4.2) (2025-09-15)
+
+
+## Bug Fixes
+
+* fix: node 14 compatibility ([aa0d563](https://github.com/kulshekhar/ts-jest/commit/aa0d563)), fixes [#5038](https://github.com/kulshekhar/ts-jest/issues/5038)
+
+
+
 ## [29.4.1](https://github.com/kulshekhar/ts-jest/compare/v29.4.0...v29.4.1) (2025-08-03)
 
 
