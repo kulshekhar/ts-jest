@@ -1,20 +1,14 @@
 ---
-title: isolatedModules option
+title: transpilation option
 ---
 
-:::warning DEPRECATED
+By default `ts-jest` uses TypeScript Compiler API aka full `Program` in the context of a project (yours), with full type-checking and features.
+But it can also be used to compile each file separately, which is usually named as `transpilation` like other tools `Babel`, `swc`, `esbuild` etc.
+That's what the `transpilation` option (which defaults to `false`) does.
 
-This page is now **DEPRECATED** and will be removed together with the config option `isolatedModules` in the next major release. Please use `isolatedModules` option in `tsconfig.json` instead.
+You'll lose type-checking ability and all [TypeScript limitations](https://www.typescriptlang.org/tsconfig/#isolatedModules) are applied in trading off for faster test running.
 
-:::
-
-By default `ts-jest` uses TypeScript compiler in the context of a project (yours), with full type-checking and features.
-But it can also be used to compile each file separately, what TypeScript calls an 'isolated module'.
-That's what the `isolatedModules` option (which defaults to `false`) does.
-
-You'll lose type-checking ability and some features such as `const enum`, but in the case you plan on using Jest with the cache disabled (`jest --no-cache`), your tests will then run much faster.
-
-Here is how to disable type-checking and compile each file as an isolated module:
+Here is the example how to use the option
 
 ### Example
 
@@ -29,7 +23,7 @@ const jestConfig: Config = {
     '^.+\\.tsx?$': [
       'ts-jest',
       {
-        isolatedModules: true,
+        transpilation: true,
       },
     ],
   },
@@ -40,7 +34,7 @@ export default jestConfig
 
 ## Performance
 
-Using `isolatedModules: false` comes with a cost of performance comparing to `isolatedModules: true`. There is a way
+Using `transpilation: false` comes with a cost of performance comparing to `transpilation: true`. There is a way
 to improve the performance when using this mode by changing the value of `include` in `tsconfig` which is used by `ts-jest`.
 The least amount of files which are provided in `include`, the more performance the test run can gain.
 
