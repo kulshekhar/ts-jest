@@ -28,7 +28,7 @@ export const enum Errors {
 export const enum Helps {
   FixMissingModule = '{{label}}: `npm i -D {{module}}` (or `yarn add --dev {{module}}`)',
   MigrateConfigUsingCLI = 'Your Jest configuration is outdated. Use the CLI to help migrating it: ts-jest config:migrate <config-file>.',
-  UsingModernNodeResolution = 'Using hybrid module kind (Node16/18/Next) is only supported in "transpilation: true". Please set "transpilation: true" in for `ts-jest` config in your Jest config file.',
+  UsingModernNodeResolution = 'Using hybrid module kind (Node16/18/Next) is only supported in "transpilation: true". Please set "transpilation: true" in for `ts-jest` config in your Jest config file, see https://kulshekhar.github.io/ts-jest/docs/getting-started/options/transpilation',
 }
 
 /**
@@ -46,7 +46,7 @@ export const enum Deprecations {
     '},\n' +
     'See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/presets#advanced',
   ReplaceIsolatedModulesWithTranspilation = `
-    The "ts-jest" config option "isolatedModules" is deprecated and will be removed in v30.0.0. Please use "transpilation: true" instead, see https://kulshekhar.github.io/ts-jest/docs/options/transpilation
+    The "ts-jest" config option "isolatedModules" is deprecated and will be removed in v30.0.0. Please use "transpilation: true" instead, see https://kulshekhar.github.io/ts-jest/docs/getting-started/options/transpilation
   `,
 }
 
