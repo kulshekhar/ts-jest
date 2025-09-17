@@ -2,8 +2,9 @@ import type { Config } from 'jest'
 import { createDefaultEsmPreset } from 'ts-jest'
 
 export default {
-  displayName: 'type-module',
+  displayName: 'ts-only',
   ...createDefaultEsmPreset({
-    tsconfig: '<rootDir>/tsconfig-esm-isolated.json',
+    tsconfig: 'tsconfig-esm.json',
+    transpilation: true,
   }),
 } satisfies Config

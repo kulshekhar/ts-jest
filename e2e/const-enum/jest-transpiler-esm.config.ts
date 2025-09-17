@@ -7,8 +7,9 @@ export default {
     [TS_JS_TRANSFORM_PATTERN]: [
       'ts-jest',
       {
-        tsconfig: '<rootDir>/tsconfig-esm-transpiler.spec.json',
+        tsconfig: '<rootDir>/tsconfig-esm.spec.json',
         useESM: true,
+        transpilation: true,
       },
     ],
   },

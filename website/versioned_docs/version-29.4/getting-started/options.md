@@ -41,7 +41,7 @@ All options have default values which should fit most of the projects. Click on 
 | ------------------------------------------------------------ | ------------------------------------------------------------------------------------ | ----------------------------- | -------------- |
 | [**`compiler`**][compiler]                                   | [TypeScript module to use as compiler.][compiler]                                    | `string`                      | `"typescript"` |
 | [**`tsconfig`**][tsconfig]                                   | [TypeScript compiler related configuration.][tsconfig]                               | `string`\|`object`\|`boolean` | _auto_         |
-| [**`isolatedModules`**][isolatedmodules]                     | [Disable type-checking][isolatedmodules]                                             | `boolean`                     | _disabled_     |
+| [**`transpilation`**][transpilation]                         | [Transpile code and disable type-checking][transpilation]                            | `boolean`                     | _disabled_     |
 | [**`astTransformers`**][asttransformers]                     | [Custom TypeScript AST transformers][asttransformers]                                | `object`                      | _auto_         |
 | [**`diagnostics`**][diagnostics]                             | [Diagnostics related configuration.][diagnostics]                                    | `boolean`\|`object`           | _enabled_      |
 | [**`babelConfig`**][babelconfig]                             | [Babel(Jest) related configuration.][babelconfig]                                    | `boolean`\|`string`\|`object` | _disabled_     |
@@ -50,7 +50,7 @@ All options have default values which should fit most of the projects. Click on 
 
 [compiler]: options/compiler
 [tsconfig]: options/tsconfig
-[isolatedmodules]: options/isolatedModules
+[transpilation]: options/transpilation
 [asttransformers]: options/astTransformers
 [diagnostics]: options/diagnostics
 [babelconfig]: options/babelConfig

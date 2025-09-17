@@ -193,7 +193,7 @@ export class TsCompiler implements TsCompilerInstance {
   getCompiledOutput(fileContent: string, fileName: string, options: TsJestCompileOptions): CompiledOutput {
     const isEsmMode = this.configSet.useESM && options.supportsStaticESM
     this._compilerOptions = this.fixupCompilerOptionsForModuleKind(this._initialCompilerOptions, isEsmMode)
-    if (!this._initialCompilerOptions.isolatedModules && isModernNodeModuleKind(this._initialCompilerOptions.module)) {
+    if (isModernNodeModuleKind(this._initialCompilerOptions.module) && !this.configSet.isolatedModules) {
       this._logger.warn(Helps.UsingModernNodeResolution)
     }
 

@@ -5,6 +5,6 @@ export default {
   displayName: 'js-with-babel',
   ...createJsWithBabelPreset({
     babelConfig: true,
-    tsconfig: 'tsconfig-isolated.json',
+    transpilation: true,
   }),
 } satisfies Config

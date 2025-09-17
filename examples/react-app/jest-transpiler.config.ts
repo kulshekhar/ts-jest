@@ -2,7 +2,8 @@ import type { Config } from 'jest'
 import { createDefaultPreset } from 'ts-jest'
 
 const defaultPreset = createDefaultPreset({
-  tsconfig: 'tsconfig-isolated.spec.json',
+  tsconfig: 'tsconfig.spec.json',
+  transpilation: true,
 })
 
 export default {

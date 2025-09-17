@@ -12,10 +12,10 @@
   ],
   "scripts": {
     "test": "npm run test --workspaces",
-    "test-isolated": "npm run test-isolated --workspaces",
+    "test-transpiler": "npm run test-transpiler --workspaces",
     "test-esm": "npm run test-esm --workspaces",
-    "test-esm-isolated": "npm run test-esm-isolated --workspaces",
-    "test-all": "npm-run-all test test-isolated test-esm test-esm-isolated"
+    "test-esm-transpiler": "npm run test-esm-transpiler --workspaces",
+    "test-all": "npm-run-all test test-transpiler test-esm test-esm-transpiler"
   },
   "devDependencies": {
     "npm-run-all": "^4.1.5"

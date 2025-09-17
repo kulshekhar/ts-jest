@@ -138,8 +138,8 @@ describe('TsCompiler', () => {
             ...baseTsJestConfig,
             useESM,
             babelConfig,
+            transpilation: true,
             tsconfig: {
-              isolatedModules: true,
               customConditions: ['my-condition'],
               module,
             } as TsConfigJson,
@@ -174,20 +174,31 @@ describe('TsCompiler', () => {
         }).toMatchSnapshot()
       })
 
-      test.each([true, false])('should report diagnostics if shouldReportDiagnostics is %p', (shouldReport) => {
+      test.each([
+        {
+          shouldReport: true,
+          expectedCall: 1,
+        },
+        {
+          shouldReport: false,
+          expectedCall: 0,
+        },
+      ])('should report diagnostics if shouldReportDiagnostics is %p', ({ shouldReport, expectedCall }) => {
         const compiler = makeCompiler({
           tsJestConfig: {
             ...baseTsJestConfig,
             useESM: false,
+            transpilation: true,
+            diagnostics: shouldReport,
             tsconfig: {
-              isolatedModules: true,
               module: 'CommonJS',
             },
           },
         })
         compiler.configSet.raiseDiagnostics = jest.fn()
         compiler.configSet.shouldReportDiagnostics = jest.fn().mockReturnValue(shouldReport)
-        const compileOutput: TranspileOutput = {
+        // @ts-expect-error testing purpose
+        compiler._ts.transpileModule = jest.fn().mockReturnValueOnce({
           sourceMapText: '{}',
           outputText: 'var bar = 1',
           diagnostics: [
@@ -200,33 +211,22 @@ describe('TsCompiler', () => {
               length: 1,
             },
           ],
-        }
-        // @ts-expect-error testing purpose
-        compiler._ts.transpileModule = jest.fn().mockReturnValueOnce(compileOutput)
+        })
         compiler.getCompiledOutput(fileContent, fileName, {
           depGraphs: new Map(),
           supportsStaticESM: true,
           watchMode: false,
         })
 
-        if (shouldReport) {
-          expect(compiler.configSet.raiseDiagnostics).toHaveBeenCalledWith(
-            compileOutput.diagnostics,
-            fileName,
-            // @ts-expect-error testing purpose
-            compiler._logger,
-          )
-        } else {
-          expect(compiler.configSet.raiseDiagnostics).not.toHaveBeenCalled()
-        }
+        expect(compiler.configSet.raiseDiagnostics).toHaveBeenCalledTimes(expectedCall)
       })
 
       it('should use tsTranspileModule when Node16/NodeNext is used', () => {
         const compiler = makeCompiler({
           tsJestConfig: {
             ...baseTsJestConfig,
+            transpilation: true,
             tsconfig: {
-              isolatedModules: true,
               module: 'Node16',
               moduleResolution: 'Node16',
             },

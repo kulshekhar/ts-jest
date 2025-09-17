@@ -214,18 +214,9 @@ export class ConfigSet {
     this._matchTestFilePath = globsToMatcher(this._matchablePatterns.filter((pattern) => typeof pattern === 'string'))
     // isolatedModules
     if (options.isolatedModules) {
-      this.parsedTsConfig.options.isolatedModules = true
-      if (this.tsconfigFilePath) {
-        this.logger.warn(
-          interpolate(Deprecations.IsolatedModulesWithTsconfigPath, {
-            tsconfigFilePath: this.tsconfigFilePath,
-          }),
-        )
-      } else {
-        this.logger.warn(Deprecations.IsolatedModulesWithoutTsconfigPath)
-      }
+      this.logger.warn(Deprecations.ReplaceIsolatedModulesWithTranspilation)
     }
-    this.isolatedModules = this.parsedTsConfig.options.isolatedModules ?? false
+    this.isolatedModules = options.isolatedModules ?? options.transpilation ?? false
     this._resolveTsCacheDir()
   }
 

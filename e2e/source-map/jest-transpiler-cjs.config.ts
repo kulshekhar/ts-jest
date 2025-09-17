@@ -6,7 +6,8 @@ export default {
     [TS_JS_TRANSFORM_PATTERN]: [
       'ts-jest',
       {
-        tsconfig: '<rootDir>/tsconfig-cjs-transpiler.spec.json',
+        tsconfig: '<rootDir>/../tsconfig-cjs.spec.json',
+        transpilation: true,
       },
     ],
   },

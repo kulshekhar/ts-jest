@@ -14,10 +14,10 @@ export default {
       {
         tsconfig: {
           target: 'ES2015',
-          isolatedModules: true,
           module: 'NodeNext',
           moduleResolution: 'NodeNext',
         },
+        transpilation: true,
       },
     ],
   },
