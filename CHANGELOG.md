@@ -1,3 +1,12 @@
+## [29.4.3](https://github.com/kulshekhar/ts-jest/compare/v29.4.2...v29.4.3) (2025-09-17)
+
+
+### Bug Fixes
+
+* introduce `transpilation` option to replace `isolatedModules` option ([#5044](https://github.com/kulshekhar/ts-jest/issues/5044)) ([5868761](https://github.com/kulshekhar/ts-jest/commit/58687615142d89a559ada89d12029fe29bb981f2)), closes [#5013](https://github.com/kulshekhar/ts-jest/issues/5013) [#4859](https://github.com/kulshekhar/ts-jest/issues/4859)
+
+
+
 ## [29.4.2](https://github.com/kulshekhar/ts-jest/compare/v29.4.1...v29.4.2) (2025-09-15)
 
 
