@@ -4,6 +4,6 @@ import { createDefaultPreset } from 'ts-jest'
 export default {
   displayName: 'ts-only',
   ...createDefaultPreset({
-    transpilation: true,
+    tsconfig: 'tsconfig-isolated.json',
   }),
 } satisfies Config

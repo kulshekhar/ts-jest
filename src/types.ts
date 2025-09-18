@@ -77,16 +77,13 @@ export type TsJestGlobalOptions = Config.TransformerConfig[1] & {
   tsconfig?: boolean | string | RawCompilerOptions | TsConfigCompilerOptionsJson
 
   /**
-   * @deprecated use {@link transpilation} instead
+   * @deprecated use {@link TsConfigCompilerOptionsJson.isolatedModules} instead
+   *
+   * Compiles files as isolated modules (disables some features)
+   *
+   * @default `undefined` (disables transpiling files with {@link _ts.transpileModule})
    */
   isolatedModules?: boolean
-
-  /**
-   * Compiles files using {@link _ts.transpileModule})
-   *
-   * @default `undefined` (disables)
-   */
-  transpilation?: boolean
 
   /**
    * Compiler to use
