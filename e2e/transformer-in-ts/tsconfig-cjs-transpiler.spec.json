@@ -1,0 +1,6 @@
+{
+  "extends": "../tsconfig-cjs.spec.json",
+  "compilerOptions": {
+    "isolatedModules": true
+  }
+}

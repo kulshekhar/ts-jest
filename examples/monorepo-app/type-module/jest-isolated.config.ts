@@ -2,8 +2,8 @@ import type { Config } from 'jest'
 import { createDefaultPreset } from 'ts-jest'
 
 export default {
-  displayName: 'type-commonjs',
+  displayName: 'type-module',
   ...createDefaultPreset({
-    transpilation: true,
+    tsconfig: '<rootDir>/tsconfig-isolated.json',
   }),
 } satisfies Config

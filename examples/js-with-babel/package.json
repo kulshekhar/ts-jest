@@ -4,9 +4,9 @@
   "private": true,
   "scripts": {
     "test": "jest -c=jest.config.ts --no-cache",
-    "test-transpiler": "jest -c=jest-transpiler.config.ts --no-cache",
+    "test-isolated": "jest -c=jest-isolated.config.ts --no-cache",
     "test-esm": "cross-env NODE_OPTIONS=\"$NODE_OPTIONS --experimental-vm-modules\" npx jest -c=jest-esm.config.ts --no-cache",
-    "test-esm-transpiler": "cross-env NODE_OPTIONS=\"$NODE_OPTIONS --experimental-vm-modules\" npx jest -c=jest-esm-transpiler.config.ts --no-cache"
+    "test-esm-isolated": "cross-env NODE_OPTIONS=\"$NODE_OPTIONS --experimental-vm-modules\" npx jest -c=jest-esm-isolated.config.ts --no-cache"
   },
   "devDependencies": {
     "@babel/core": "^7.28.4",

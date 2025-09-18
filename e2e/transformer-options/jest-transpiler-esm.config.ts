@@ -8,7 +8,7 @@ export default {
     [TS_TRANSFORM_PATTERN]: [
       'ts-jest',
       {
-        tsconfig: '<rootDir>/tsconfig-esm.spec.json',
+        tsconfig: '<rootDir>/tsconfig-esm-transpiler.spec.json',
         astTransformers: {
           before: [
             {
@@ -20,7 +20,6 @@ export default {
           ],
         },
         useESM: true,
-        transpilation: true,
       },
     ],
   },
