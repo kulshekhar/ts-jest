@@ -1,3 +1,12 @@
+## [29.4.4](https://github.com/kulshekhar/ts-jest/compare/v29.4.3...v29.4.4) (2025-09-19)
+
+
+### Bug Fixes
+
+* revert **29.4.3** changes ([25cb706](https://github.com/kulshekhar/ts-jest/commit/25cb7065528f7a43b6c6ee5bb33fc3f940932ccd)), closes [#5049](https://github.com/kulshekhar/ts-jest/issues/5049)
+
+
+
 ## [29.4.3](https://github.com/kulshekhar/ts-jest/compare/v29.4.2...v29.4.3) (2025-09-17)
 
 
