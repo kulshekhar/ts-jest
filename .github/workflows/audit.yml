@@ -38,12 +38,12 @@ jobs:
           fetch-tags: false
 
       - name: Initialize CodeQL ⚙️
-        uses: github/codeql-action/init@303c0aef88fc2fe5ff6d63d3b1596bfd83dfa1f9 # v3
+        uses: github/codeql-action/init@3599b3baa15b485a2e49ef411a7a4bb2452e7f93 # v3
         with:
           languages: ${{ matrix.language }}
 
       - name: Perform CodeQL Analysis 🔍
-        uses: github/codeql-action/analyze@303c0aef88fc2fe5ff6d63d3b1596bfd83dfa1f9 # v3
+        uses: github/codeql-action/analyze@3599b3baa15b485a2e49ef411a7a4bb2452e7f93 # v3
         with:
           category: '/language:${{ matrix.language }}'
 
