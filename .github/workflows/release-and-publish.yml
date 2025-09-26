@@ -80,7 +80,7 @@ jobs:
       - name: Check lock file
         # runs npm install using package-lock.json and verifies
         # if dependencies are matching with package.json or not
-        run: npm ci
+        run: npm ci --ignore-scripts
         # This will tell npm to publish your scoped package with public access
       - name: Publish with latest tag
         if: ${{ needs.setup_variables.outputs.isLatest == 'true' }}
