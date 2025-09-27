@@ -14,7 +14,7 @@ const executeTest = () => {
   logger.log('ensuring all dependencies of target project are installed')
   logger.log()
 
-  execa.sync('npm', ['ci'], { cwd: projectPath })
+  execa.sync('npm', ['ci', '--ignore-scripts'], { cwd: projectPath })
   logger.log()
 
   logger.log('installing bundled version of ts-jest')
