@@ -111,8 +111,8 @@
     "@types/semver": "^7.7.1",
     "@types/yargs": "^17.0.33",
     "@types/yargs-parser": "21.0.3",
-    "@typescript-eslint/eslint-plugin": "^8.44.1",
-    "@typescript-eslint/parser": "^8.44.1",
+    "@typescript-eslint/eslint-plugin": "^8.45.0",
+    "@typescript-eslint/parser": "^8.45.0",
     "babel-jest": "^30.2.0",
     "conventional-changelog-angular": "^8.0.0",
     "conventional-changelog-cli": "^5.0.0",
@@ -136,7 +136,7 @@
     "rimraf": "^5.0.10",
     "ts-node": "^10.9.2",
     "typescript": "~5.9.2",
-    "typescript-eslint": "^8.44.1"
+    "typescript-eslint": "^8.45.0"
   },
   "engines": {
     "node": "^14.15.0 || ^16.10.0 || ^18.0.0 || >=20.0.0"
