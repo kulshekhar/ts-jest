@@ -5,6 +5,8 @@
     "group:docusaurusMonorepo",
     ":prHourlyLimit2",
     "helpers:pinGitHubActionDigests",
+    ":semanticCommitTypeAll(build)",
+    "npm:unpublishSafe",
     "workarounds:all"
   ],
   "timezone": "UTC",
@@ -12,7 +14,7 @@
   "separateMajorMinor": true,
   "prConcurrentLimit": 2,
   "semanticCommits": "enabled",
-  "commitMessagePrefix": "build(deps):",
+  "internalChecksFilter": "strict",
   "ignoreDeps": [
     "@mdx-js/react",
     "@types/react",

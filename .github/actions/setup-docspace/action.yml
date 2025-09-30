@@ -15,7 +15,9 @@ runs:
         cache-dependency-path: 'website/package-lock.json'
 
     - name: Install 🔧
-      run: npm ci
+      run: |
+        npm ci --ignore-scripts
+        npm rebuild sharp
       shell: bash
       working-directory: website
 
