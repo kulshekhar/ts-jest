@@ -3,15 +3,14 @@ import { basename, join, normalize } from 'path'
 
 import { LogLevels } from 'bs-logger'
 import type { TsConfigJson } from 'type-fest'
-import type { CompilerOptions, EmitOutput, transpileModule, TranspileOutput } from 'typescript'
 import ts from 'typescript'
 
 import { createConfigSet, makeCompiler } from '../../__helpers__/fakers'
 import { logTargetMock } from '../../__helpers__/mocks'
-import type { RawCompilerOptions } from '../../raw-compiler-options'
+import { TsJestDiagnosticCodes } from '../../config'
 import { tsTranspileModule } from '../../transpilers/typescript/transpile-module'
-import type { DepGraphInfo } from '../../types'
-import { Errors, interpolate } from '../../utils/messages'
+import type { DepGraphInfo, TsJestTransformerOptions } from '../../types'
+import { Errors, Helps, interpolate } from '../../utils/messages'
 
 import { updateOutput } from './compiler-utils'
 import { TsCompiler } from './ts-compiler'
@@ -38,7 +37,9 @@ const mockTsTranspileModule = jest.mocked(tsTranspileModule)
 
 const mockFolder = join(process.cwd(), 'src', '__mocks__')
 
-const baseTsJestConfig = { tsconfig: join(process.cwd(), 'tsconfig.json') }
+const baseTsJestConfig: TsJestTransformerOptions = {
+  tsconfig: join(process.cwd(), 'tsconfig.json'),
+}
 
 const logTarget = logTargetMock()
 
@@ -155,7 +156,7 @@ describe('TsCompiler', () => {
           sourceMapText: '{}',
           outputText: 'var bar = 1',
           diagnostics: [],
-        } as TranspileOutput))
+        } as ts.TranspileOutput))
         // @ts-expect-error testing purpose
         compiler._makeTransformers = jest.fn().mockReturnValueOnce(transformersStub)
         compiler.getCompiledOutput(fileContent, fileName, {
@@ -164,7 +165,7 @@ describe('TsCompiler', () => {
           watchMode: false,
         })
 
-        const usedCompilerOptions = transpileMock.mock.calls[0][1].compilerOptions as CompilerOptions
+        const usedCompilerOptions = transpileMock.mock.calls[0][1].compilerOptions as ts.CompilerOptions
         expect(transpileMock).toHaveBeenCalled()
         expect({
           module: usedCompilerOptions.module,
@@ -187,7 +188,7 @@ describe('TsCompiler', () => {
         })
         compiler.configSet.raiseDiagnostics = jest.fn()
         compiler.configSet.shouldReportDiagnostics = jest.fn().mockReturnValue(shouldReport)
-        const compileOutput: TranspileOutput = {
+        const compileOutput: ts.TranspileOutput = {
           sourceMapText: '{}',
           outputText: 'var bar = 1',
           diagnostics: [
@@ -289,13 +290,6 @@ describe('TsCompiler', () => {
         },
         {
           useESM: true,
-          supportsStaticESM: true,
-          moduleValue: 'NodeNext',
-          expectedModule: ts.ModuleKind.ESNext,
-          expectedEsModuleInterop: true,
-        },
-        {
-          useESM: true,
           supportsStaticESM: false,
           moduleValue: 'ESNext',
           expectedModule: ts.ModuleKind.CommonJS,
@@ -316,7 +310,7 @@ describe('TsCompiler', () => {
               ...baseTsJestConfig,
               useESM,
               tsconfig: {
-                module: moduleValue as unknown as RawCompilerOptions['module'],
+                module: moduleValue as TsConfigJson.CompilerOptions['module'],
                 esModuleInterop: false,
                 customConditions: ['my-condition'],
               },
@@ -329,7 +323,7 @@ describe('TsCompiler', () => {
           compiler._languageService.getEmitOutput = jest.fn().mockReturnValueOnce({
             outputFiles: [{ text: sourceMap }, { text: jsOutput }],
             emitSkipped: false,
-          } as EmitOutput)
+          } as ts.EmitOutput)
           // @ts-expect-error testing purpose
           compiler.getDiagnostics = jest.fn().mockReturnValue([])
 
@@ -360,6 +354,64 @@ describe('TsCompiler', () => {
         },
       )
 
+      test('should compile codes for ESM mode and show warning with modern Node module', () => {
+        const configSet = createConfigSet({
+          tsJestConfig: {
+            ...baseTsJestConfig,
+            useESM: true,
+            tsconfig: {
+              module: 'NodeNext',
+              esModuleInterop: false,
+              customConditions: ['my-condition'],
+            },
+          },
+        })
+        const emptyFile = join(mockFolder, 'empty.ts')
+        configSet.parsedTsConfig.fileNames.push(emptyFile)
+        const compiler = new TsCompiler(configSet, new Map())
+        // @ts-expect-error testing purpose
+        compiler._languageService.getEmitOutput = jest.fn().mockReturnValueOnce({
+          outputFiles: [{ text: sourceMap }, { text: jsOutput }],
+          emitSkipped: false,
+        } as ts.EmitOutput)
+        // @ts-expect-error testing purpose
+        compiler.getDiagnostics = jest.fn().mockReturnValue([])
+
+        const output = compiler.getCompiledOutput(fileContent, fileName, {
+          depGraphs: new Map(),
+          supportsStaticESM: true,
+          watchMode: false,
+        })
+
+        // @ts-expect-error testing purpose
+        const usedCompilerOptions = compiler._compilerOptions
+
+        expect(usedCompilerOptions.module).toBe(ts.ModuleKind.ESNext)
+        expect(usedCompilerOptions.esModuleInterop).toBe(true)
+        expect(usedCompilerOptions.moduleResolution).toBe(ts.ModuleResolutionKind.Node10)
+        expect(usedCompilerOptions.customConditions).toBeUndefined()
+        expect(output).toEqual({
+          code: updateOutput(jsOutput, fileName, sourceMap),
+          diagnostics: [
+            {
+              category: ts.DiagnosticCategory.Message,
+              code: TsJestDiagnosticCodes.ModernNodeModule,
+              messageText: Helps.UsingModernNodeResolution,
+              file: undefined,
+              start: undefined,
+              length: undefined,
+            },
+          ],
+        })
+
+        // @ts-expect-error testing purpose
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        compiler._languageService!.getSemanticDiagnostics(fileName)
+
+        // @ts-expect-error testing purpose
+        expect(compiler._fileContentCache.has(emptyFile)).toBe(true)
+      })
+
       test('should show a warning message and return original file content for non ts/tsx files if emitSkipped is true', () => {
         const compiler = makeCompiler({
           tsJestConfig: { ...baseTsJestConfig },
@@ -368,7 +420,7 @@ describe('TsCompiler', () => {
         compiler._languageService.getEmitOutput = jest.fn().mockReturnValueOnce({
           outputFiles: [{ text: sourceMap }, { text: jsOutput }],
           emitSkipped: true,
-        } as EmitOutput)
+        } as ts.EmitOutput)
         // @ts-expect-error testing purpose
         compiler._logger.warn = jest.fn()
         // @ts-expect-error testing purpose
@@ -398,7 +450,7 @@ describe('TsCompiler', () => {
           compiler._languageService.getEmitOutput = jest.fn().mockReturnValueOnce({
             outputFiles: [{ text: sourceMap }, { text: jsOutput }],
             emitSkipped: true,
-          } as EmitOutput)
+          } as ts.EmitOutput)
           // @ts-expect-error testing purpose
           compiler._logger.warn = jest.fn()
           // @ts-expect-error testing purpose
@@ -418,13 +470,15 @@ describe('TsCompiler', () => {
 
       test('should throw error when there are no outputFiles', () => {
         const compiler = makeCompiler({
-          tsJestConfig: { ...baseTsJestConfig },
+          tsJestConfig: {
+            tsconfig: { module: 'CommonJS' },
+          },
         })
         // @ts-expect-error testing purpose
         compiler._languageService.getEmitOutput = jest.fn().mockReturnValueOnce({
           outputFiles: [],
           emitSkipped: false,
-        } as EmitOutput)
+        } as ts.EmitOutput)
         // @ts-expect-error testing purpose
         compiler.getDiagnostics = jest.fn().mockReturnValue([])
 
@@ -665,7 +719,9 @@ describe('TsCompiler', () => {
       'should/should not report diagnostics if shouldReportDiagnostics is %p in non-watch mode',
       (shouldReport) => {
         const compiler = makeCompiler({
-          tsJestConfig: baseTsJestConfig,
+          tsJestConfig: {
+            tsconfig: { module: 'CommonJS' },
+          },
         })
         compiler.configSet.raiseDiagnostics = jest.fn()
         compiler.configSet.shouldReportDiagnostics = jest.fn().mockReturnValue(shouldReport)
@@ -673,7 +729,7 @@ describe('TsCompiler', () => {
         compiler._languageService.getEmitOutput = jest.fn().mockReturnValueOnce({
           outputFiles: [{ text: sourceMap }, { text: jsOutput }],
           emitSkipped: false,
-        } as EmitOutput)
+        } as ts.EmitOutput)
         const diagnostics = [
           {
             category: ts.DiagnosticCategory.Error,
@@ -728,7 +784,10 @@ describe('TsCompiler', () => {
         'and processing file is used by other files',
       () => {
         const compiler = makeCompiler({
-          tsJestConfig: { ...baseTsJestConfig, useESM: false },
+          tsJestConfig: {
+            tsconfig: { module: 'CommonJS' },
+            useESM: false,
+          },
         })
         const depGraphs = new Map<string, DepGraphInfo>()
         depGraphs.set(fileName1, {
@@ -759,7 +818,7 @@ describe('TsCompiler', () => {
         compiler._languageService.getEmitOutput = jest.fn().mockReturnValueOnce({
           outputFiles: [{ text: sourceMap }, { text: jsOutput }],
           emitSkipped: false,
-        } as EmitOutput)
+        } as ts.EmitOutput)
         // @ts-expect-error testing purpose
         compiler._getFileContentFromCache = jest.fn()
         // @ts-expect-error testing purpose
@@ -787,7 +846,11 @@ describe('TsCompiler', () => {
 
     test('should not report diagnostics in watch mode when processing file is not used by other files', () => {
       const compiler = makeCompiler({
-        tsJestConfig: baseTsJestConfig,
+        tsJestConfig: {
+          tsconfig: {
+            module: 'CommonJS',
+          },
+        },
       })
       const depGraphs = new Map<string, DepGraphInfo>()
       depGraphs.set(fileName1, {
@@ -800,7 +863,7 @@ describe('TsCompiler', () => {
       compiler._languageService.getEmitOutput = jest.fn().mockReturnValueOnce({
         outputFiles: [{ text: sourceMap }, { text: jsOutput }],
         emitSkipped: false,
-      } as EmitOutput)
+      } as ts.EmitOutput)
       // @ts-expect-error testing purpose
       compiler._getFileContentFromCache = jest.fn()
       // @ts-expect-error testing purpose
@@ -820,5 +883,32 @@ describe('TsCompiler', () => {
       expect(compiler._languageService?.getSyntacticDiagnostics).not.toHaveBeenCalled()
       expect(compiler.configSet.raiseDiagnostics).not.toHaveBeenCalled()
     })
+
+    it.each(['NodeNext', 'Node16', 'Node18'] as TsConfigJson.CompilerOptions['module'][])(
+      'should not fail test when getting diagnostics about using modern Node module %s',
+      (moduleValue) => {
+        const compiler = makeCompiler({
+          tsJestConfig: {
+            tsconfig: {
+              module: moduleValue as TsConfigJson.CompilerOptions['module'],
+            },
+          },
+        })
+        const depGraphs = new Map<string, DepGraphInfo>()
+        depGraphs.set(fileName1, {
+          fileContent,
+          resolvedModuleNames: ['bar.ts'],
+        })
+        jest.spyOn(compiler.configSet, 'raiseDiagnostics')
+
+        expect(() =>
+          compiler.getCompiledOutput(fileContent, fileName, {
+            depGraphs,
+            supportsStaticESM: false,
+            watchMode: true,
+          }),
+        ).not.toThrow()
+      },
+    )
   })
 })

@@ -70,8 +70,3 @@ export function interpolate(msg: string, vars: Record<string, any> = {}): string
   // eslint-disable-next-line no-useless-escape
   return msg.replace(/\{\{([^\}]+)\}\}/g, (_, key) => (key in vars ? vars[key] : _))
 }
-
-export const TsJestDiagnosticCodes = {
-  Generic: 151000,
-  ConfigModuleOption: 151001,
-} as const
