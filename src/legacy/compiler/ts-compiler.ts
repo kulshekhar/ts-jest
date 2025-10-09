@@ -22,6 +22,7 @@ import ts, {
   TranspileOutput,
 } from 'typescript'
 
+import { TsJestDiagnosticCodes } from '../../config'
 import { JS_JSX_REGEX, LINE_FEED, TS_TSX_REGEX } from '../../constants'
 import { isModernNodeModuleKind, tsTranspileModule } from '../../transpilers/typescript/transpile-module'
 import type {
@@ -193,10 +194,6 @@ export class TsCompiler implements TsCompilerInstance {
   getCompiledOutput(fileContent: string, fileName: string, options: TsJestCompileOptions): CompiledOutput {
     const isEsmMode = this.configSet.useESM && options.supportsStaticESM
     this._compilerOptions = this.fixupCompilerOptionsForModuleKind(this._initialCompilerOptions, isEsmMode)
-    if (!this._initialCompilerOptions.isolatedModules && isModernNodeModuleKind(this._initialCompilerOptions.module)) {
-      this._logger.warn(Helps.UsingModernNodeResolution)
-    }
-
     const moduleKind = this._initialCompilerOptions.module
     const currentModuleKind = this._compilerOptions.module
     if (this._languageService) {
@@ -214,6 +211,16 @@ export class TsCompiler implements TsCompilerInstance {
       this._updateMemoryCache(fileContent, fileName, currentModuleKind === moduleKind)
       const output: EmitOutput = this._languageService.getEmitOutput(fileName)
       const diagnostics = this.getDiagnostics(fileName)
+      if (isModernNodeModuleKind(this._initialCompilerOptions.module)) {
+        diagnostics.push({
+          category: this._ts.DiagnosticCategory.Message,
+          code: TsJestDiagnosticCodes.ModernNodeModule,
+          messageText: Helps.UsingModernNodeResolution,
+          file: undefined,
+          start: undefined,
+          length: undefined,
+        })
+      }
       if (!isEsmMode && diagnostics.length) {
         this.configSet.raiseDiagnostics(diagnostics, fileName, this._logger)
         if (options.watchMode) {
