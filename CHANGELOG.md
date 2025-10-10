@@ -1,3 +1,12 @@
+## [29.4.5](https://github.com/kulshekhar/ts-jest/compare/v29.4.4...v29.4.5) (2025-10-10)
+
+
+### Bug Fixes
+
+* allow filtering modern module warning message with diagnostic code ([c290d4d](https://github.com/kulshekhar/ts-jest/commit/c290d4d7f68b47bc4f31b26f241b93ef667dcb72)), , closes [#5013](https://github.com/kulshekhar/ts-jest/issues/5013)
+
+
+
 ## [29.4.4](https://github.com/kulshekhar/ts-jest/compare/v29.4.3...v29.4.4) (2025-09-19)
 
 
@@ -12,7 +21,7 @@
 
 ### Bug Fixes
 
-* introduce `transpilation` option to replace `isolatedModules` option ([#5044](https://github.com/kulshekhar/ts-jest/issues/5044)) ([5868761](https://github.com/kulshekhar/ts-jest/commit/58687615142d89a559ada89d12029fe29bb981f2)), closes [#5013](https://github.com/kulshekhar/ts-jest/issues/5013) [#4859](https://github.com/kulshekhar/ts-jest/issues/4859)
+* introduce `transpilation` option to replace `isolatedModules` option ([#5044](https://github.com/kulshekhar/ts-jest/issues/5044)) ([5868761](https://github.com/kulshekhar/ts-jest/commit/58687615142d89a559ada89d12029fe29bb981f2))
 
 
 
