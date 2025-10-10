@@ -40,17 +40,13 @@ jobs:
     permissions:
       contents: write # for actions/create-release to create a release
     needs: [setup_variables]
-    # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the
-    # job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access
-      # it
-      - name: Checkout code
-        # https://github.com/marketplace/actions/checkout
+      - name: Checkout 🛎️
         uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4
+        with:
+          fetch-tags: false
 
         # Runs a single command using the runners shell
       - name: Create release for tag
@@ -70,23 +66,29 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # https://github.com/marketplace/actions/checkout
-      - uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4
-      # https://github.com/marketplace/actions/setup-node-js-environment
-      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+      - name: Checkout 🛎️
+        uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4
         with:
-          node-version: 22.20.0
-          registry-url: https://registry.npmjs.org/
-      - name: Check lock file
-        # runs npm install using package-lock.json and verifies
-        # if dependencies are matching with package.json or not
-        run: npm ci --ignore-scripts
+          fetch-tags: false
+
+      - name: Setup workspace ⚙️
+        uses: ./.github/actions/setup-workspace
+        with:
+          os: ubuntu-latest
+          node-version: 22
+
+      - name: Build 🔧
+        run: |
+          npm run build
+          npm run postbuild
+
         # This will tell npm to publish your scoped package with public access
       - name: Publish with latest tag
         if: ${{ needs.setup_variables.outputs.isLatest == 'true' }}
         run: npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
+
       - name: Publish with next tag
         if: ${{ needs.setup_variables.outputs.isLatest != 'true' }}
         run: npm publish --access public --tag next

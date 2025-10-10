@@ -18,3 +18,4 @@ runs:
         cache: npm
         cache-dependency-path: ${{ inputs.cache-dependency-path }}
         node-version: ${{ inputs.node-version }}
+        registry-url: https://registry.npmjs.org/
