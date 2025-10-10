@@ -17,7 +17,7 @@ import { globsToMatcher } from 'jest-util'
 import json5 from 'json5'
 import type * as ts from 'typescript'
 
-import { TsJestDiagnosticCodes, type TsConfigCompilerOptionsJson } from '../../config'
+import type { TsConfigCompilerOptionsJson } from '../../config'
 import { DEFAULT_JEST_TEST_MATCH, JS_JSX_EXTENSIONS } from '../../constants'
 import type { RawCompilerOptions } from '../../raw-compiler-options'
 import * as hoistJestTransformer from '../../transformers/hoist-jest'
@@ -32,7 +32,7 @@ import type {
   TTypeScript,
 } from '../../types'
 import { TsCompilerInstance } from '../../types'
-import { rootLogger, stringify } from '../../utils'
+import { rootLogger, stringify, TsJestDiagnosticCodes } from '../../utils'
 import { backportJestConfig } from '../../utils/backports'
 import { importer } from '../../utils/importer'
 import { Deprecations, Errors, ImportReasons, interpolate } from '../../utils/messages'

@@ -2,7 +2,7 @@ import path from 'node:path'
 
 import ts from 'typescript'
 
-import { TsJestDiagnosticCodes } from '../../config'
+import { TsJestDiagnosticCodes } from '../../utils'
 
 const barebonesLibContent = `/// <reference no-default-lib="true"/>
 interface Boolean {}
