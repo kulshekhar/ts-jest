@@ -27,7 +27,7 @@ runs:
         path: '**/node_modules'
         key: ${{ inputs.os }}-${{ inputs.node-version }}-build-${{ hashFiles('package-lock.json') }}
 
-    - name: Install and build 🔧
+    - name: Install 🔧
       if: ${{ steps.cache-npm.outputs.cache-hit != 'true' }}
       run: npm ci --ignore-scripts --prefer-offline
       shell: bash

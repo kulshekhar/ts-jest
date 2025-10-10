@@ -110,7 +110,9 @@ jobs:
           node-version: 22
 
       - name: Build 🔧
-        run: npm run build
+        run: |
+          npm run build
+          npm run postbuild
 
       - name: Collect coverage 🧪
         run: npm run test -- --coverage
