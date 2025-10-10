@@ -22,7 +22,6 @@ import ts, {
   TranspileOutput,
 } from 'typescript'
 
-import { TsJestDiagnosticCodes } from '../../config'
 import { JS_JSX_REGEX, LINE_FEED, TS_TSX_REGEX } from '../../constants'
 import { isModernNodeModuleKind, tsTranspileModule } from '../../transpilers/typescript/transpile-module'
 import type {
@@ -33,7 +32,7 @@ import type {
   TTypeScript,
   CompiledOutput,
 } from '../../types'
-import { rootLogger } from '../../utils'
+import { rootLogger, TsJestDiagnosticCodes } from '../../utils'
 import { Errors, Helps, interpolate } from '../../utils/messages'
 import type { ConfigSet } from '../config/config-set'
 

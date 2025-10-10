@@ -7,9 +7,9 @@ import ts from 'typescript'
 
 import { createConfigSet, makeCompiler } from '../../__helpers__/fakers'
 import { logTargetMock } from '../../__helpers__/mocks'
-import { TsJestDiagnosticCodes } from '../../config'
 import { tsTranspileModule } from '../../transpilers/typescript/transpile-module'
 import type { DepGraphInfo, TsJestTransformerOptions } from '../../types'
+import { TsJestDiagnosticCodes } from '../../utils'
 import { Errors, Helps, interpolate } from '../../utils/messages'
 
 import { updateOutput } from './compiler-utils'
