@@ -4,7 +4,7 @@
   "devDependencies": {
     "@formatjs/ts-transformer": "^3.14.2",
     "@types/react": "^18.3.3",
-    "esbuild": "~0.25.10",
+    "esbuild": "~0.25.11",
     "jest-environment-jsdom": "^30.2.0",
     "react": "^18.3.1",
     "react-intl": "^6.8.9",
