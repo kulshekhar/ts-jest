@@ -116,7 +116,7 @@
     "babel-jest": "^30.2.0",
     "conventional-changelog-angular": "^8.0.0",
     "conventional-changelog": "^7.1.1",
-    "esbuild": "~0.25.10",
+    "esbuild": "~0.25.11",
     "eslint": "^9.37.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-import": "^2.32.0",
