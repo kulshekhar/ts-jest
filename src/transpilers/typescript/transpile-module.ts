@@ -49,7 +49,11 @@ type ExtendedTsTranspileModuleFn = (
 ) => ts.TranspileOutput
 
 export const isModernNodeModuleKind = (module: ts.ModuleKind | undefined): boolean => {
-  return module ? [ts.ModuleKind.Node16, /* ModuleKind.Node18 */ 101, ts.ModuleKind.NodeNext].includes(module) : false
+  return module
+    ? [ts.ModuleKind.Node16, /* ModuleKind.Node18 */ 101, /* ModuleKind.Node20 */ 102, ts.ModuleKind.NodeNext].includes(
+        module,
+      )
+    : false
 }
 
 const shouldCheckProjectPkgJsonContent = (fileName: string, moduleKind: ts.ModuleKind | undefined): boolean => {

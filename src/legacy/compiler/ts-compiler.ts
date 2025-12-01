@@ -211,14 +211,16 @@ export class TsCompiler implements TsCompilerInstance {
       const output: EmitOutput = this._languageService.getEmitOutput(fileName)
       const diagnostics = this.getDiagnostics(fileName)
       if (isModernNodeModuleKind(this._initialCompilerOptions.module)) {
-        diagnostics.push({
-          category: this._ts.DiagnosticCategory.Message,
-          code: TsJestDiagnosticCodes.ModernNodeModule,
-          messageText: Helps.UsingModernNodeResolution,
-          file: undefined,
-          start: undefined,
-          length: undefined,
-        })
+        this.configSet.raiseDiagnostics([
+          {
+            category: this._ts.DiagnosticCategory.Message,
+            code: TsJestDiagnosticCodes.ModernNodeModule,
+            messageText: Helps.UsingModernNodeResolution,
+            file: undefined,
+            start: undefined,
+            length: undefined,
+          },
+        ])
       }
       if (!isEsmMode && diagnostics.length) {
         this.configSet.raiseDiagnostics(diagnostics, fileName, this._logger)
