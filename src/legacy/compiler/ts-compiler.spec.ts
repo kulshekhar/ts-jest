@@ -9,7 +9,6 @@ import { createConfigSet, makeCompiler } from '../../__helpers__/fakers'
 import { logTargetMock } from '../../__helpers__/mocks'
 import { tsTranspileModule } from '../../transpilers/typescript/transpile-module'
 import type { DepGraphInfo, TsJestTransformerOptions } from '../../types'
-import { TsJestDiagnosticCodes } from '../../utils'
 import { Errors, Helps, interpolate } from '../../utils/messages'
 
 import { updateOutput } from './compiler-utils'
@@ -392,17 +391,11 @@ describe('TsCompiler', () => {
         expect(usedCompilerOptions.customConditions).toBeUndefined()
         expect(output).toEqual({
           code: updateOutput(jsOutput, fileName, sourceMap),
-          diagnostics: [
-            {
-              category: ts.DiagnosticCategory.Message,
-              code: TsJestDiagnosticCodes.ModernNodeModule,
-              messageText: Helps.UsingModernNodeResolution,
-              file: undefined,
-              start: undefined,
-              length: undefined,
-            },
-          ],
+          diagnostics: [],
         })
+        expect(logTarget.filteredLines(LogLevels.warn)).toEqual(
+          expect.arrayContaining([expect.stringContaining(Helps.UsingModernNodeResolution)]),
+        )
 
         // @ts-expect-error testing purpose
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
