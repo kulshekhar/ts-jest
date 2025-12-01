@@ -1,3 +1,12 @@
+## [29.4.6](https://github.com/kulshekhar/ts-jest/compare/v29.4.5...v29.4.6) (2025-12-01)
+
+
+### Bug Fixes
+
+* log hybrid module as warning instead of failing tests ([#5144](https://github.com/kulshekhar/ts-jest/issues/5144)) ([528d37c](https://github.com/kulshekhar/ts-jest/commit/528d37c125a392a4a6e44a1bf399943410298390)), closes [#5130](https://github.com/kulshekhar/ts-jest/issues/5130)
+
+
+
 ## [29.4.5](https://github.com/kulshekhar/ts-jest/compare/v29.4.4...v29.4.5) (2025-10-10)
 
 
