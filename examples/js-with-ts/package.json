@@ -12,7 +12,7 @@
     "@types/lodash-es": "^4.17.12",
     "@types/jest": "^30.0.0",
     "cross-env": "^7.0.3",
-    "lodash-es": "^4.17.22",
+    "lodash-es": "^4.17.23",
     "jest": "^30.2.0",
     "ts-jest": "^29.4.6",
     "typescript": "~5.9.3"
