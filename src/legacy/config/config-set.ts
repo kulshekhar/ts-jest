@@ -248,6 +248,15 @@ export class ConfigSet {
    * @internal
    */
   private _setupConfigSet(options: TsJestTransformOptions['transformerConfig']): void {
+    // tsconfig
+    const tsconfigOpt = options.tsconfig
+    const configFilePath = typeof tsconfigOpt === 'string' ? this.resolvePath(tsconfigOpt) : undefined
+    this.parsedTsConfig = this._getAndResolveTsConfig(
+      typeof tsconfigOpt === 'object' ? tsconfigOpt : undefined,
+      configFilePath,
+    )
+    this.logger.debug({ tsconfig: this.parsedTsConfig }, 'normalized typescript config via ts-jest option')
+
     // useESM
     this.useESM = options.useESM ?? false
 
@@ -290,7 +299,19 @@ export class ConfigSet {
     }
 
     // diagnostics
-    const diagnosticsOpt = options.diagnostics ?? true
+    const diagnosticsOpt =
+      options.diagnostics !== undefined
+        ? options.diagnostics
+        : /**
+         * Ensure that diagnostics always has false value when isolatedModules: true
+         * when users don't provide the value for it in Jest config.
+         * @TODO This behavior will be switched oppositely in the next major version.
+         * https://github.com/kulshekhar/ts-jest/issues/4859
+         */
+        this.parsedTsConfig.options.isolatedModules === true
+        ? false
+        : true
+
     const ignoreList: Array<string | number> = [...IGNORE_DIAGNOSTIC_CODES]
     if (typeof diagnosticsOpt === 'object') {
       const { ignoreCodes } = diagnosticsOpt
@@ -320,19 +341,10 @@ export class ConfigSet {
       this._shouldIgnoreDiagnosticsForFile = () => true
     }
 
-    this.logger.debug({ diagnostics: this._diagnostics }, 'normalized diagnostics config via ts-jest option')
-
-    // tsconfig
-    const tsconfigOpt = options.tsconfig
-    const configFilePath = typeof tsconfigOpt === 'string' ? this.resolvePath(tsconfigOpt) : undefined
-    this.parsedTsConfig = this._getAndResolveTsConfig(
-      typeof tsconfigOpt === 'object' ? tsconfigOpt : undefined,
-      configFilePath,
-    )
     // throw errors if any matching wanted diagnostics
     this.raiseDiagnostics(this.parsedTsConfig.errors, configFilePath)
 
-    this.logger.debug({ tsconfig: this.parsedTsConfig }, 'normalized typescript config via ts-jest option')
+    this.logger.debug({ diagnostics: this._diagnostics }, 'normalized diagnostics config via ts-jest option')
 
     // transformers
     this.resolvedTransformers.before = [
