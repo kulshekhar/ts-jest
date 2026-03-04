@@ -180,6 +180,13 @@ const transpileWorker: ExtendedTsTranspileModuleFn = (input, transpileOptions) =
 
   if (transpileOptions.reportDiagnostics) {
     diagnostics.push(...program.getSyntacticDiagnostics(sourceFile))
+
+    // Explicitly perform typecheck, if required
+    const typeCheckProgram = ts.createProgram(inputs, {
+      ...transpileOptions.compilerOptions,
+      noEmit: true, // We're only type-checking
+    })
+    diagnostics.push(...ts.getPreEmitDiagnostics(typeCheckProgram))
   }
 
   diagnostics.push(...program.getOptionsDiagnostics())
