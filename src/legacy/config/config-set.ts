@@ -177,7 +177,8 @@ export class ConfigSet {
     emitDeclarationOnly: undefined,
     sourceRoot: undefined,
     tsBuildInfoFile: undefined,
-    rewriteRelativeImportExtensions: false,
+    // Keep user-defined value (see issue #5196): forcing false breaks ESM setups
+    rewriteRelativeImportExtensions: undefined,
   }
 
   /**
