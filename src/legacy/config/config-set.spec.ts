@@ -68,34 +68,34 @@ describe('config-set', () => {
       expect(compilerOptions.module).toBe(ts.ModuleKind.CommonJS)
     })
 
-    it('should override some default options', () => {
-      expect(
-        getParsedTsconfig({
-          tsconfig: {
-            inlineSourceMap: true,
-            declaration: true,
-            isolatedDeclarations: true,
-            noEmit: true,
-            removeComments: true,
-            out: 'foo',
-            outFile: 'foo.js',
-            composite: true,
-            declarationDir: 'foo',
-            declarationMap: true,
-            emitDeclarationOnly: true,
-            sourceRoot: 'foo',
-            tsBuildInfoFile: 'foo.info',
-            rewriteRelativeImportExtensions: true,
-          },
-        }).options,
-      ).toMatchObject({
+    it('should override compiler defaults but preserve rewriteRelativeImportExtensions', () => {
+      const options = getParsedTsconfig({
+        tsconfig: {
+          inlineSourceMap: true,
+          declaration: true,
+          isolatedDeclarations: true,
+          noEmit: true,
+          removeComments: true,
+          out: 'foo',
+          outFile: 'foo.js',
+          composite: true,
+          declarationDir: 'foo',
+          declarationMap: true,
+          emitDeclarationOnly: true,
+          sourceRoot: 'foo',
+          tsBuildInfoFile: 'foo.info',
+          rewriteRelativeImportExtensions: true,
+        },
+      }).options
+
+      expect(options).toMatchObject({
         inlineSourceMap: false,
         declaration: false,
         isolatedDeclarations: false,
         noEmit: false,
         removeComments: false,
-        rewriteRelativeImportExtensions: false,
       })
+      expect(options.rewriteRelativeImportExtensions).toBe(true)
     })
 
     it.each([
