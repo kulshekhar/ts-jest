@@ -95,7 +95,7 @@ describe('config-set', () => {
         noEmit: false,
         removeComments: false,
       })
-      expect(options.rewriteRelativeImportExtensions).not.toBe(false)
+      expect(options.rewriteRelativeImportExtensions).toBe(true)
     })
 
     it.each([
