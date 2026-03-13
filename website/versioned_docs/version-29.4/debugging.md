@@ -1,26 +1,26 @@
 ---
-id: debugging
-title: Debugging ts-jest
+id: 调试
+ts-is.log
 ---
 
-You can activate the debug logger by setting the environment variable `TS_JEST_LOG` before running tests.
-The output of the logger will be in **ts-jest.log** in current working directory.
+您可以通过设置环境变量来激活调试记录器`TS_JEST_LOG`在运行测试之前。
+记录器的输出将在**ts-is.log**使用哪个 Jest 配置或 TypeScript 配置等。
 
-The debug logger contains some useful information about how internal `ts-jest` works, including which files are processed,
-which Jest config or TypeScript config is used etc.
+在当前工作目录中。`ts-它是`作品，包括处理哪些文件，
+使用哪个 Jest 配置或 TypeScript 配置等。
 
-**Linux/MacOS**
+**Linux/苹果系统PowerShell 选项卡
 
 ```
-export TS_JEST_LOG=ts-jest.log
+导出 TS_JEST_LOG=ts-jest.log
 ```
 
 **Windows**
 
-```Command Prompt tab
-set TS_JEST_LOG=ts-jest.log
+```命令提示符选项卡
+设置 TS_JEST_LOG=ts-jest.log
 ```
 
-```PowerShell tab
+```PowerShell 选项卡
 $env:TS_JEST_LOG = 'ts-jest.log'
 ```
