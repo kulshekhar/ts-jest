@@ -1,4 +1,4 @@
-## 29.4.7 (2026-04-01)
+## [29.4.7](https://github.com/kulshekhar/ts-jest/compare/v29.4.6...v29.4.7) (2026-04-01)
 
 
 ### Features
