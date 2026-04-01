@@ -98,4 +98,3 @@ jobs:
       - name: Publish with next tag
         if: ${{ needs.setup_variables.outputs.isLatest != 'true' }}
         run: npm publish --access public --tag next --registry https://npmjs.org
-
