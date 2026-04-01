@@ -93,9 +93,9 @@ jobs:
         # This will tell npm to publish your scoped package with public access
       - name: Publish with latest tag
         if: ${{ needs.setup_variables.outputs.isLatest == 'true' }}
-        run: npm publish --access public --registry https://npmjs.org
+        run: npm publish --provenance --access public
 
       - name: Publish with next tag
         if: ${{ needs.setup_variables.outputs.isLatest != 'true' }}
-        run: npm publish --access public --tag next --registry https://npmjs.org
+        run: npm publish --provenance --access public --tag next
 
