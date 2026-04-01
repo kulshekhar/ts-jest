@@ -3,7 +3,7 @@
 
 ### Features
 
-* support typescript v6 ([eda517d](https://github.com/kulshekhar/ts-jest/commit/eda517d226389317d99572887d3c1aa93c81be87))
+* support TypeScript v6 ([eda517d](https://github.com/kulshekhar/ts-jest/commit/eda517d226389317d99572887d3c1aa93c81be87))
 
 ## [29.4.6](https://github.com/kulshekhar/ts-jest/compare/v29.4.5...v29.4.6) (2025-12-01)
 
