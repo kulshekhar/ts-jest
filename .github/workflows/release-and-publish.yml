@@ -63,6 +63,9 @@ jobs:
           prerelease: ${{ needs.setup_variables.outputs.isLatest != 'true' }}
 
   publish_to_npm:
+    permissions:
+      id-token: write
+      contents: read
     needs: [setup_variables, create_release]
     runs-on: ubuntu-latest
 
@@ -77,6 +80,10 @@ jobs:
         with:
           os: ubuntu-latest
           node-version: 22
+
+      # EDIT 2: Upgrade npm to the required version for Trusted Publishing
+      - name: Upgrade npm
+        run: npm install -g npm@latest
 
       - name: Build 🔧
         run: |
