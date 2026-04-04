@@ -94,7 +94,7 @@ jobs:
     permissions:
       checks: write
       contents: read
-    needs: test-ubuntu
+    needs: prepare-npm-cache-ubuntu
     runs-on: ubuntu-latest
     steps:
       - name: Checkout 🛎️
