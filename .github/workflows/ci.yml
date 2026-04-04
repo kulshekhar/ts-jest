@@ -19,32 +19,11 @@ permissions:
   contents: read
 
 jobs:
-  prepare-npm-cache-ubuntu:
-    uses: ./.github/workflows/prepare-cache.yml
-    strategy:
-      fail-fast: false
-      matrix:
-        node-version: [18, 20, 22]
-    with:
-      os: ubuntu-latest
-      node-version: ${{ matrix.node-version }}
-
-  prepare-npm-cache-windows:
-    uses: ./.github/workflows/prepare-cache.yml
-    strategy:
-      fail-fast: false
-      matrix:
-        node-version: [18, 20, 22]
-    with:
-      os: windows-latest
-      node-version: ${{ matrix.node-version }}
-
   test-ubuntu:
     permissions:
       checks: write
       contents: read
     uses: ./.github/workflows/test.yml
-    needs: prepare-npm-cache-ubuntu
     strategy:
       fail-fast: false
       matrix:
@@ -58,7 +37,6 @@ jobs:
       checks: write
       contents: read
     uses: ./.github/workflows/test.yml
-    needs: prepare-npm-cache-windows
     strategy:
       fail-fast: false
       matrix:
@@ -69,7 +47,6 @@ jobs:
 
   lint:
     runs-on: ubuntu-latest
-    needs: prepare-npm-cache-ubuntu
 
     steps:
       - name: Checkout 🛎️
@@ -94,7 +71,6 @@ jobs:
     permissions:
       checks: write
       contents: read
-    needs: prepare-npm-cache-ubuntu
     runs-on: ubuntu-latest
     steps:
       - name: Checkout 🛎️
