@@ -14,11 +14,11 @@ permissions: # added using https://github.com/step-security/secure-workflows
   contents: read
 
 jobs:
-  test:
+  unit-test:
     permissions:
       checks: write
       contents: read
-    name: Run tests on Node v${{ inputs.node-version }} on ${{ inputs.os }}
+    name: Unit tests on Node v${{ inputs.node-version }} on ${{ inputs.os }}
     runs-on: ${{ inputs.os }}
 
     steps:
@@ -45,10 +45,60 @@ jobs:
           CI: true
           DISABLE_MOCKED_WARNING: true
 
+  e2e-test:
+    permissions:
+      checks: write
+      contents: read
+    name: E2E tests on Node v${{ inputs.node-version }} on ${{ inputs.os }}
+    runs-on: ${{ inputs.os }}
+
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          fetch-depth: 20
+          fetch-tags: false
+
+      - name: Setup workspace ⚙️
+        uses: ./.github/actions/setup-workspace
+        with:
+          os: ${{ inputs.os }}
+          node-version: ${{ inputs.node-version }}
+
+      - name: Build 🔧
+        run: |
+          npm run build
+          npm run postbuild
+
       - name: Run e2e tests 🧪
         run: |
           npm run test-e2e-cjs
           npm run test-e2e-esm
+
+  example-test:
+    permissions:
+      checks: write
+      contents: read
+    name: Example tests on Node v${{ inputs.node-version }} on ${{ inputs.os }}
+    runs-on: ${{ inputs.os }}
+
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          fetch-depth: 20
+          fetch-tags: false
+
+      - name: Setup workspace ⚙️
+        uses: ./.github/actions/setup-workspace
+        with:
+          os: ${{ inputs.os }}
+          node-version: ${{ inputs.node-version }}
+
+      - name: Build 🔧
+        run: |
+          npm run build
+          npm run postbuild
 
       - name: Run tests in example projects 🧪
         run: npm run test-examples
