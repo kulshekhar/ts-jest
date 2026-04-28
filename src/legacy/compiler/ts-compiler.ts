@@ -158,7 +158,15 @@ export class TsCompiler implements TsCompilerInstance {
   }
 
   private fixupCompilerOptionsForModuleKind(compilerOptions: CompilerOptions, isEsm: boolean): CompilerOptions {
-    const moduleResolution = this._ts.ModuleResolutionKind.Node10 ?? this._ts.ModuleResolutionKind.NodeJs
+    /**
+     * Respect the user's explicit `moduleResolution` instead of always overriding to `Node10`. The
+     * historical hardcoded override silently clobbers `bundler` / `node16` / `nodenext` users
+     * (#4198) and emits TS5107 under TypeScript 6.0 because `Node10` is deprecated. Falling back to
+     * `Node10` (or its TS 4.x alias `NodeJs`) only when the user did not specify one preserves the
+     * historical default for unconfigured projects.
+     */
+    const moduleResolution =
+      compilerOptions.moduleResolution ?? this._ts.ModuleResolutionKind.Node10 ?? this._ts.ModuleResolutionKind.NodeJs
     if (!isEsm) {
       return {
         ...compilerOptions,

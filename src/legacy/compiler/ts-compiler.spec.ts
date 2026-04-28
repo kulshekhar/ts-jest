@@ -281,40 +281,105 @@ describe('TsCompiler', () => {
 
       test.each([
         {
+          useESM: false,
+          supportsStaticESM: true,
+          moduleValue: 'ESNext',
+          moduleResolutionValue: undefined,
+          expectedModule: ts.ModuleKind.CommonJS,
+          expectedEsModuleInterop: false,
+          expectedResolution: ts.ModuleResolutionKind.Node10,
+        },
+        {
           useESM: true,
           supportsStaticESM: true,
           moduleValue: 'ESNext',
+          moduleResolutionValue: 'Node10',
           expectedModule: ts.ModuleKind.ESNext,
           expectedEsModuleInterop: false,
+          expectedResolution: ts.ModuleResolutionKind.Node10,
         },
         {
           useESM: true,
           supportsStaticESM: false,
           moduleValue: 'ESNext',
+          moduleResolutionValue: 'Node10',
           expectedModule: ts.ModuleKind.CommonJS,
           expectedEsModuleInterop: false,
+          expectedResolution: ts.ModuleResolutionKind.Node10,
         },
         {
           useESM: false,
           supportsStaticESM: true,
           moduleValue: 'ESNext',
+          moduleResolutionValue: 'Node10',
           expectedModule: ts.ModuleKind.CommonJS,
           expectedEsModuleInterop: false,
+          expectedResolution: ts.ModuleResolutionKind.Node10,
+        },
+        {
+          useESM: false,
+          supportsStaticESM: true,
+          moduleValue: 'ESNext',
+          moduleResolutionValue: 'Bundler',
+          expectedModule: ts.ModuleKind.CommonJS,
+          expectedEsModuleInterop: false,
+          expectedResolution: ts.ModuleResolutionKind.Bundler,
+        },
+        {
+          useESM: true,
+          supportsStaticESM: true,
+          moduleValue: 'ESNext',
+          moduleResolutionValue: 'Node16',
+          expectedModule: ts.ModuleKind.ESNext,
+          expectedEsModuleInterop: false,
+          expectedResolution: ts.ModuleResolutionKind.Node16,
+        },
+        {
+          useESM: true,
+          supportsStaticESM: true,
+          moduleValue: 'ESNext',
+          moduleResolutionValue: 'NodeNext',
+          expectedModule: ts.ModuleKind.ESNext,
+          expectedEsModuleInterop: false,
+          expectedResolution: ts.ModuleResolutionKind.NodeNext,
+        },
+        {
+          useESM: false,
+          supportsStaticESM: true,
+          moduleValue: 'ESNext',
+          moduleResolutionValue: 'Classic',
+          expectedModule: ts.ModuleKind.CommonJS,
+          expectedEsModuleInterop: false,
+          expectedResolution: ts.ModuleResolutionKind.Classic,
         },
       ])(
-        'should compile codes with useESM %p',
-        ({ useESM, supportsStaticESM, moduleValue, expectedModule, expectedEsModuleInterop }) => {
+        'should preserve user-specified moduleResolution %p with useESM %p',
+        ({
+          useESM,
+          supportsStaticESM,
+          moduleValue,
+          moduleResolutionValue,
+          expectedModule,
+          expectedEsModuleInterop,
+          expectedResolution,
+        }) => {
           const configSet = createConfigSet({
             tsJestConfig: {
               ...baseTsJestConfig,
               useESM,
               tsconfig: {
                 module: moduleValue as TsConfigJson.CompilerOptions['module'],
+                moduleResolution: moduleResolutionValue as TsConfigJson.CompilerOptions['moduleResolution'],
                 esModuleInterop: false,
                 customConditions: ['my-condition'],
               },
             },
           })
+          if (moduleResolutionValue === undefined) {
+            // The cwd tsconfig leaks `moduleResolution: Bundler` into the parsed config; clear it
+            // so this row exercises the "user did not specify moduleResolution" fallback path.
+            configSet.parsedTsConfig.options.moduleResolution = undefined
+          }
           const emptyFile = join(mockFolder, 'empty.ts')
           configSet.parsedTsConfig.fileNames.push(emptyFile)
           const compiler = new TsCompiler(configSet, new Map())
@@ -337,7 +402,7 @@ describe('TsCompiler', () => {
 
           expect(usedCompilerOptions.module).toBe(expectedModule)
           expect(usedCompilerOptions.esModuleInterop).toBe(expectedEsModuleInterop)
-          expect(usedCompilerOptions.moduleResolution).toBe(ts.ModuleResolutionKind.Node10)
+          expect(usedCompilerOptions.moduleResolution).toBe(expectedResolution)
           expect(usedCompilerOptions.customConditions).toBeUndefined()
           expect(output).toEqual({
             code: updateOutput(jsOutput, fileName, sourceMap),
@@ -360,6 +425,7 @@ describe('TsCompiler', () => {
             useESM: true,
             tsconfig: {
               module: 'NodeNext',
+              moduleResolution: 'NodeNext',
               esModuleInterop: false,
               customConditions: ['my-condition'],
             },
@@ -387,7 +453,7 @@ describe('TsCompiler', () => {
 
         expect(usedCompilerOptions.module).toBe(ts.ModuleKind.ESNext)
         expect(usedCompilerOptions.esModuleInterop).toBe(true)
-        expect(usedCompilerOptions.moduleResolution).toBe(ts.ModuleResolutionKind.Node10)
+        expect(usedCompilerOptions.moduleResolution).toBe(ts.ModuleResolutionKind.NodeNext)
         expect(usedCompilerOptions.customConditions).toBeUndefined()
         expect(output).toEqual({
           code: updateOutput(jsOutput, fileName, sourceMap),
