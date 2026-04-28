@@ -286,6 +286,7 @@ describe('TsCompiler', () => {
           moduleValue: 'ESNext',
           expectedModule: ts.ModuleKind.ESNext,
           expectedEsModuleInterop: false,
+          mockTsVersion: '5.9.0',
           expectedResolution: ts.ModuleResolutionKind.Node10,
         },
         {
@@ -294,6 +295,7 @@ describe('TsCompiler', () => {
           moduleValue: 'ESNext',
           expectedModule: ts.ModuleKind.CommonJS,
           expectedEsModuleInterop: false,
+          mockTsVersion: '5.9.0',
           expectedResolution: ts.ModuleResolutionKind.Node10,
         },
         {
@@ -302,6 +304,7 @@ describe('TsCompiler', () => {
           moduleValue: 'ESNext',
           expectedModule: ts.ModuleKind.CommonJS,
           expectedEsModuleInterop: false,
+          mockTsVersion: '5.9.0',
           expectedResolution: ts.ModuleResolutionKind.Node10,
         },
         {
