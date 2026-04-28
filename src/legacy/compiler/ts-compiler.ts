@@ -159,15 +159,17 @@ export class TsCompiler implements TsCompilerInstance {
 
   private fixupCompilerOptionsForModuleKind(compilerOptions: CompilerOptions, isEsm: boolean): CompilerOptions {
     /**
-     * `Bundler` is the most permissive resolution kind and is compatible with both `module: CommonJS`
-     * (forced below for the non-ESM path) and `module: ESNext`. `Node10` (and its TS 4.x alias `NodeJs`)
-     * is deprecated in TypeScript 6.0 and emits TS5107 even when the user's tsconfig is on `bundler`.
-     * Falling back through the chain keeps TS 4.x callers working since `Bundler` was added in TS 5.0.
+     * `Node10` is deprecated in TypeScript 6.0 and emits TS5107 on every test file. Switch the
+     * default to `Bundler` only under TS >= 6 — that's the version where `module: commonjs` +
+     * `moduleResolution: bundler` (the combination produced by the non-ESM path below) became
+     * a supported pairing. On TS 5.x and earlier the `Bundler` + `CommonJS` combo errors with
+     * TS5095, so keep the historical `Node10` (or its TS 4.x alias `NodeJs`) fallback there.
      */
+    const tsMajorVersion = parseInt(this._ts.version, 10)
     const moduleResolution =
-      this._ts.ModuleResolutionKind.Bundler ??
-      this._ts.ModuleResolutionKind.Node10 ??
-      this._ts.ModuleResolutionKind.NodeJs
+      tsMajorVersion >= 6
+        ? this._ts.ModuleResolutionKind.Bundler
+        : this._ts.ModuleResolutionKind.Node10 ?? this._ts.ModuleResolutionKind.NodeJs
     if (!isEsm) {
       return {
         ...compilerOptions,

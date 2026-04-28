@@ -337,7 +337,7 @@ describe('TsCompiler', () => {
 
           expect(usedCompilerOptions.module).toBe(expectedModule)
           expect(usedCompilerOptions.esModuleInterop).toBe(expectedEsModuleInterop)
-          expect(usedCompilerOptions.moduleResolution).toBe(ts.ModuleResolutionKind.Bundler)
+          expect(usedCompilerOptions.moduleResolution).toBe(ts.ModuleResolutionKind.Node10)
           expect(usedCompilerOptions.customConditions).toBeUndefined()
           expect(output).toEqual({
             code: updateOutput(jsOutput, fileName, sourceMap),
@@ -387,7 +387,7 @@ describe('TsCompiler', () => {
 
         expect(usedCompilerOptions.module).toBe(ts.ModuleKind.ESNext)
         expect(usedCompilerOptions.esModuleInterop).toBe(true)
-        expect(usedCompilerOptions.moduleResolution).toBe(ts.ModuleResolutionKind.Bundler)
+        expect(usedCompilerOptions.moduleResolution).toBe(ts.ModuleResolutionKind.Node10)
         expect(usedCompilerOptions.customConditions).toBeUndefined()
         expect(output).toEqual({
           code: updateOutput(jsOutput, fileName, sourceMap),
