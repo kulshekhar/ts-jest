@@ -414,7 +414,7 @@ describe('TsJestTransformer', () => {
       },
       {
         filePath: 'my-project/node_modules/foo.mjs',
-        expectedResult: `export default foo;`,
+        expectedResult: `exports.default = foo;`,
       },
     ])('should transpile js file from node_modules for CJS', ({ filePath, expectedResult }) => {
       const result = tr.process(
