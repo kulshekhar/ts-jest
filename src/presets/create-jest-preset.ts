@@ -87,6 +87,7 @@ export function createJsWithTsPreset(tsJestTransformOptions: JsWithTsTransformOp
   logger.debug('creating Js with Ts CJS Jest preset')
 
   return {
+    transformIgnorePatterns: [],
     transform: {
       [TS_JS_TRANSFORM_PATTERN]: ['ts-jest', tsJestTransformOptions],
     },
@@ -99,6 +100,7 @@ export function createJsWithTsLegacyPreset(
   logger.debug('creating Js with Ts CJS Jest preset')
 
   return {
+    transformIgnorePatterns: [],
     transform: {
       [TS_JS_TRANSFORM_PATTERN]: ['ts-jest/legacy', tsJestTransformOptions],
     },

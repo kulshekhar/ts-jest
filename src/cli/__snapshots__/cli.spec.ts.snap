@@ -130,6 +130,7 @@ exports[`config init should update package.json for config type js-with-ts-full-
   "name": "mock",
   "version": "0.0.0-mock.0",
   "jest": {
+    "transformIgnorePatterns": [],
     "transform": {
       "^.+\\\\.(?:[tj]sx?|mjs)$": [
         "ts-jest",

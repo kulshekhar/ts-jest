@@ -71,6 +71,7 @@ exports[`create-jest-preset CJS presets createJsWithTsLegacyPreset should return
       },
     ],
   },
+  "transformIgnorePatterns": [],
 }
 `;
 
@@ -85,6 +86,7 @@ exports[`create-jest-preset CJS presets createJsWithTsPreset should return prese
       },
     ],
   },
+  "transformIgnorePatterns": [],
 }
 `;
 
