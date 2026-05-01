@@ -1,4 +1,5 @@
 dist
+.worktrees
 
 # Logs
 logs
