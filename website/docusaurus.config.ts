@@ -13,13 +13,17 @@ const config: Config = {
   baseUrl: process.env.BASE_URL || '/ts-jest/',
   baseUrlIssueBanner: true,
   onBrokenLinks: 'throw',
-  onBrokenMarkdownLinks: 'warn',
+  markdown: {
+    hooks: {
+      onBrokenMarkdownLinks: 'warn',
+    },
+  },
   favicon: 'img/logo.svg',
   organizationName: 'kulshekhar',
   projectName: 'ts-jest',
   trailingSlash: false,
   future: {
-    experimental_faster: true,
+    faster: true,
     v4: true,
   },
   plugins: [
