@@ -40,7 +40,7 @@ const isNodeModule = (filePath: string) => {
   return path.normalize(filePath).split(path.sep).includes('node_modules')
 }
 
-const ESM_SYNTAX_REGEX = /(?:^|\n)[ \t]*export[\s{*]/
+const ESM_SYNTAX_REGEX = /(?:^|\n)[ \t]*(?:export[\s{*]|import[\s{*'"])/
 
 /**
  * @internal

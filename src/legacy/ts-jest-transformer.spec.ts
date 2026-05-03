@@ -432,6 +432,15 @@ describe('TsJestTransformer', () => {
       expect(omitLeadingWhitespace(result.code)).toContain(expectedResult)
     })
 
+    it('should transpile import-only ESM node_modules file', () => {
+      const result = tr.process(
+        `import './side-effect.mjs';`,
+        'my-project/node_modules/foo.mjs',
+        baseTransformOptions,
+      )
+      expect(result.code).toContain('require')
+    })
+
     it('should return CJS node_modules file as-is without transpilation', () => {
       const cjsSource = `"use strict";\nconst x = require('./x');\nmodule.exports = x;`
       const result = tr.process(cjsSource, 'my-project/node_modules/foo.js', baseTransformOptions)
