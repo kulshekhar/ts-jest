@@ -97,6 +97,12 @@ describe('create-jest-preset', () => {
           }),
         ).toMatchSnapshot()
       })
+
+      it('should include .mjs files in transform pattern', () => {
+        const preset = createJsWithTsPreset()
+        const patterns = Object.keys(preset.transform)
+        expect(patterns.some((p) => new RegExp(p).test('node_modules/foo/index.mjs'))).toBe(true)
+      })
     })
 
     describe('createJsWithTsLegacyPreset', () => {
