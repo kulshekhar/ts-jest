@@ -233,17 +233,22 @@ export class TsJestTransformer implements SyncTransformer<TsJestTransformerOptio
     } else if (isJsFile || isTsFile) {
       if (isJsFile && isNodeModule(sourcePath)) {
         const useESM = transformOptions.supportsStaticESM && transformOptions.transformerConfig.useESM
-        // .mjs extension causes TypeScript to ignore `module: CommonJS`; use .js filename to prevent it
-        const transpileFileName = !useESM ? sourcePath.replace(/\.mjs$/, '.js') : sourcePath
-        const transpiledResult = tsTranspileModule(sourceText, {
-          compilerOptions: {
-            ...configs.parsedTsConfig.options,
-            module: useESM ? ts.ModuleKind.ESNext : ts.ModuleKind.CommonJS,
-          },
-          fileName: transpileFileName,
-        })
-        result = {
-          code: updateOutput(transpiledResult.outputText, sourcePath, transpiledResult.sourceMapText),
+        // CJS files need no transformation — only transpile if ESM syntax is present
+        if (!useESM && !/(?:^|\n)[ \t]*export[\s{*]/.test(sourceText)) {
+          result = { code: sourceText }
+        } else {
+          // .mjs extension causes TypeScript to ignore `module: CommonJS`; use .js filename to prevent it
+          const transpileFileName = !useESM ? sourcePath.replace(/\.mjs$/, '.js') : sourcePath
+          const transpiledResult = tsTranspileModule(sourceText, {
+            compilerOptions: {
+              ...configs.parsedTsConfig.options,
+              module: useESM ? ts.ModuleKind.ESNext : ts.ModuleKind.CommonJS,
+            },
+            fileName: transpileFileName,
+          })
+          result = {
+            code: updateOutput(transpiledResult.outputText, sourcePath, transpiledResult.sourceMapText),
+          }
         }
       } else {
         // transpile TS code (source maps are included)
