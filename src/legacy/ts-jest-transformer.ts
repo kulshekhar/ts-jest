@@ -6,7 +6,6 @@ import type { Logger } from 'bs-logger'
 import ts from 'typescript'
 
 import { DECLARATION_TYPE_EXT, JS_JSX_REGEX, TS_TSX_REGEX } from '../constants'
-import { tsTranspileModule } from '../transpilers/typescript/transpile-module'
 import type {
   CompiledOutput,
   CompilerInstance,
@@ -239,7 +238,7 @@ export class TsJestTransformer implements SyncTransformer<TsJestTransformerOptio
         } else {
           // .mjs extension causes TypeScript to ignore `module: CommonJS`; use .js filename to prevent it
           const transpileFileName = !useESM ? sourcePath.replace(/\.mjs$/, '.js') : sourcePath
-          const transpiledResult = tsTranspileModule(sourceText, {
+          const transpiledResult = ts.transpileModule(sourceText, {
             compilerOptions: {
               ...configs.parsedTsConfig.options,
               module: useESM ? ts.ModuleKind.ESNext : ts.ModuleKind.CommonJS,
