@@ -433,11 +433,7 @@ describe('TsJestTransformer', () => {
     })
 
     it('should transpile import-only ESM node_modules file', () => {
-      const result = tr.process(
-        `import './side-effect.mjs';`,
-        'my-project/node_modules/foo.mjs',
-        baseTransformOptions,
-      )
+      const result = tr.process(`import './side-effect.mjs';`, 'my-project/node_modules/foo.mjs', baseTransformOptions)
       expect(result.code).toContain('require')
     })
 
