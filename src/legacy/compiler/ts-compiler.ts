@@ -80,6 +80,10 @@ export class TsCompiler implements TsCompilerInstance {
   /**
    * @internal
    */
+  private _previousCompiledModuleKind: CompilerOptions['module']
+  /**
+   * @internal
+   */
   private _languageService: LanguageService | undefined
   /**
    * @internal
@@ -347,6 +351,11 @@ export class TsCompiler implements TsCompilerInstance {
     this._compilerOptions = this.fixupCompilerOptionsForModuleKind(this._initialCompilerOptions, isEsmMode)
     const moduleKind = this._initialCompilerOptions.module
     const currentModuleKind = this._compilerOptions.module
+    // Without this, a Program rebuilt for one compile's module kind would be
+    // reused on the next compile when that compile expects a different kind.
+    const moduleKindChangedSinceLastCompile =
+      this._previousCompiledModuleKind !== undefined && this._previousCompiledModuleKind !== currentModuleKind
+    this._previousCompiledModuleKind = currentModuleKind
     if (this._languageService) {
       if (JS_JSX_REGEX.test(fileName) && !this._compilerOptions.allowJs) {
         this._logger.warn({ fileName: fileName }, interpolate(Errors.GotJsFileButAllowJsFalse, { path: fileName }))
@@ -359,7 +368,11 @@ export class TsCompiler implements TsCompilerInstance {
       this._logger.debug({ fileName }, 'getCompiledOutput(): compiling using language service')
 
       // Must set memory cache before attempting to compile
-      this._updateMemoryCache(fileContent, fileName, currentModuleKind === moduleKind)
+      this._updateMemoryCache(
+        fileContent,
+        fileName,
+        currentModuleKind === moduleKind && !moduleKindChangedSinceLastCompile,
+      )
       const output: EmitOutput = this._languageService.getEmitOutput(fileName)
       const diagnostics = this.getDiagnostics(fileName)
       if (isModernNodeModuleKind(this._initialCompilerOptions.module)) {

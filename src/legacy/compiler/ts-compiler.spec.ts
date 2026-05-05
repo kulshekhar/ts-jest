@@ -1154,6 +1154,86 @@ describe('TsCompiler', () => {
           ),
         )
       })
+
+      describe('cross-compile module kind tracking', () => {
+        const targetFile = join(mockFolder, 'thing.ts')
+        const otherFile = join(mockFolder, 'thing1.ts')
+        const stubbedEmit = {
+          outputFiles: [{ text: sourceMap }, { text: jsOutput }],
+          emitSkipped: false,
+        } as ts.EmitOutput
+
+        function buildCompiler(): TsCompiler {
+          const configSet = createConfigSet({
+            tsJestConfig: {
+              ...baseTsJestConfig,
+              useESM: true,
+              tsconfig: { module: 'ESNext' } as TsConfigJson,
+            },
+          })
+          configSet.parsedTsConfig.fileNames.push(targetFile)
+          const compiler = new TsCompiler(configSet, new Map())
+          // @ts-expect-error testing purpose
+          compiler._languageService.getEmitOutput = jest.fn().mockReturnValue(stubbedEmit)
+          // @ts-expect-error testing purpose
+          compiler.getDiagnostics = jest.fn().mockReturnValue([])
+          // Overwrite the disk-loaded snapshot for `targetFile` so the second
+          // compile's content matches the cache and the content-mismatch bump
+          // path of `_updateMemoryCache` does not fire — leaving the new
+          // module-kind-change tracking as the sole bump trigger under test.
+          // @ts-expect-error testing purpose
+          compiler._fileContentCache.set(targetFile, fileContent)
+          // @ts-expect-error testing purpose
+          compiler._fileVersionCache.set(targetFile, 1)
+
+          return compiler
+        }
+
+        test('should bump project version when consecutive compiles have different module kinds', () => {
+          const compiler = buildCompiler()
+          // First compile: a CJS-context file (supportsStaticESM=false forces
+          // the runtime module kind to CommonJS).
+          compiler.getCompiledOutput('const a = 1', otherFile, {
+            depGraphs: new Map(),
+            supportsStaticESM: false,
+            watchMode: false,
+          })
+          // @ts-expect-error testing purpose
+          const versionAfterFirstCompile = compiler._projectVersion
+
+          // Second compile: the target file in ESM context. Its caches and the
+          // tsconfig file list are seeded so the only bump trigger that can
+          // fire is the new module-kind-change tracking.
+          compiler.getCompiledOutput(fileContent, targetFile, {
+            depGraphs: new Map(),
+            supportsStaticESM: true,
+            watchMode: false,
+          })
+
+          // @ts-expect-error testing purpose
+          expect(compiler._projectVersion).toBeGreaterThan(versionAfterFirstCompile)
+        })
+
+        test('should not bump project version when consecutive compiles share the same module kind', () => {
+          const compiler = buildCompiler()
+          compiler.getCompiledOutput(fileContent, targetFile, {
+            depGraphs: new Map(),
+            supportsStaticESM: true,
+            watchMode: false,
+          })
+          // @ts-expect-error testing purpose
+          const versionAfterFirstCompile = compiler._projectVersion
+
+          compiler.getCompiledOutput(fileContent, targetFile, {
+            depGraphs: new Map(),
+            supportsStaticESM: true,
+            watchMode: false,
+          })
+
+          // @ts-expect-error testing purpose
+          expect(compiler._projectVersion).toBe(versionAfterFirstCompile)
+        })
+      })
     })
   })
 
