@@ -601,25 +601,7 @@ export class TsCompiler implements TsCompilerInstance {
   }
 
   /**
-   * Resolve a module specifier the same way `tsc` would for the importing
-   * file. The historical 5-argument call dropped the optional 7th
-   * `resolutionMode` parameter on `ts.resolveModuleName`, which is what
-   * tells TypeScript whether the importing file is in CJS or ESM context
-   * for the purpose of selecting `import` vs `require` `exports`
-   * conditions in hybrid packages — i.e., the `.d.mts` vs `.d.cts`
-   * mismatch tracked in #4221. `tsc` derives that mode via
-   * `ts.getImpliedNodeFormatForFile`; mirror it here so ts-jest's
-   * resolution matches `tsc`.
-   *
-   * `getImpliedNodeFormatForFile` was introduced in TypeScript 4.5. On
-   * older versions (ts-jest's peerDependency range goes back to 4.3) the
-   * helper is `undefined` at runtime; in that case we pass `undefined`
-   * for `resolutionMode`, which TypeScript treats the same as the
-   * historical no-mode behavior — so the fix is strictly additive across
-   * the supported TypeScript range.
-   *
    * @internal
-   * @see https://github.com/kulshekhar/ts-jest/issues/4221
    */
   private _resolveModuleName(
     moduleNameToResolve: string,
