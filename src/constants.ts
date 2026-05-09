@@ -1,6 +1,7 @@
 export const LINE_FEED = '\n'
 export const DECLARATION_TYPE_EXT = '.d.ts'
 export const JS_JSX_EXTENSIONS = ['.js', '.jsx']
+export const MJS_NODE_MODULES_TRANSFORM_PATTERN = 'node_modules/.+\\.mjs$'
 export const TS_TSX_REGEX = /\.[cm]?tsx?$/
 export const JS_JSX_REGEX = /\.[cm]?jsx?$/
 export const TS_TRANSFORM_PATTERN = '^.+\\.tsx?$'

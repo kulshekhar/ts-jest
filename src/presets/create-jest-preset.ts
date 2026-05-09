@@ -3,6 +3,7 @@ import type { Config } from '@jest/types'
 import {
   TS_EXT_TO_TREAT_AS_ESM,
   JS_EXT_TO_TREAT_AS_ESM,
+  MJS_NODE_MODULES_TRANSFORM_PATTERN,
   TS_TRANSFORM_PATTERN,
   TS_JS_TRANSFORM_PATTERN,
   JS_TRANSFORM_PATTERN,
@@ -29,12 +30,31 @@ import {
   JsWithTsLegacyPreset,
   JsWithTsPreset,
   JsWithTsTransformOptions,
+  NodeModulesTransformOptions,
   TsJestPresets,
   TsJestTransformerOptions,
 } from '../types'
-import { rootLogger } from '../utils'
+import { rootLogger, nodeModulesTransformPattern } from '../utils'
 
 const logger = rootLogger.child({ namespace: 'jest-preset' })
+
+function withNodeModulesTransform<T extends { transform: Record<string, unknown> }>(
+  preset: T,
+  transformer: 'ts-jest' | 'ts-jest/legacy',
+  options: object,
+  { mjsPackages = false, packageNames }: NodeModulesTransformOptions,
+): T {
+  if (!mjsPackages && !packageNames?.length) return preset
+
+  return {
+    ...preset,
+    transformIgnorePatterns: [nodeModulesTransformPattern({ mjsPackages, packageNames })],
+    transform: {
+      ...preset.transform,
+      ...(mjsPackages ? { [MJS_NODE_MODULES_TRANSFORM_PATTERN]: [transformer, options] } : {}),
+    },
+  } as T
+}
 
 /**
  * @deprecated use other functions below instead
@@ -63,46 +83,64 @@ export function createJestPreset(
   }
 }
 
-export function createDefaultPreset(tsJestTransformOptions: DefaultTransformOptions = {}): DefaultPreset {
+export function createDefaultPreset(
+  tsJestTransformOptions: DefaultTransformOptions = {},
+  nodeModulesTransformOptions: NodeModulesTransformOptions = {},
+): DefaultPreset {
   logger.debug('creating default CJS Jest preset')
 
-  return {
+  const preset: DefaultPreset = {
     transform: {
       [TS_TRANSFORM_PATTERN]: ['ts-jest', tsJestTransformOptions],
     },
   }
+
+  return withNodeModulesTransform(preset, 'ts-jest', tsJestTransformOptions, nodeModulesTransformOptions)
 }
 
-export function createDefaultLegacyPreset(tsJestTransformOptions: DefaultTransformOptions = {}): DefaultLegacyPreset {
+export function createDefaultLegacyPreset(
+  tsJestTransformOptions: DefaultTransformOptions = {},
+  nodeModulesTransformOptions: NodeModulesTransformOptions = {},
+): DefaultLegacyPreset {
   logger.debug('creating default CJS Jest preset')
 
-  return {
+  const preset: DefaultLegacyPreset = {
     transform: {
       [TS_TRANSFORM_PATTERN]: ['ts-jest/legacy', tsJestTransformOptions],
     },
   }
+
+  return withNodeModulesTransform(preset, 'ts-jest/legacy', tsJestTransformOptions, nodeModulesTransformOptions)
 }
 
-export function createJsWithTsPreset(tsJestTransformOptions: JsWithTsTransformOptions = {}): JsWithTsPreset {
+export function createJsWithTsPreset(
+  tsJestTransformOptions: JsWithTsTransformOptions = {},
+  nodeModulesTransformOptions: NodeModulesTransformOptions = {},
+): JsWithTsPreset {
   logger.debug('creating Js with Ts CJS Jest preset')
 
-  return {
+  const preset: JsWithTsPreset = {
     transform: {
       [TS_JS_TRANSFORM_PATTERN]: ['ts-jest', tsJestTransformOptions],
     },
   }
+
+  return withNodeModulesTransform(preset, 'ts-jest', tsJestTransformOptions, nodeModulesTransformOptions)
 }
 
 export function createJsWithTsLegacyPreset(
   tsJestTransformOptions: JsWithTsTransformOptions = {},
+  nodeModulesTransformOptions: NodeModulesTransformOptions = {},
 ): JsWithTsLegacyPreset {
   logger.debug('creating Js with Ts CJS Jest preset')
 
-  return {
+  const preset: JsWithTsLegacyPreset = {
     transform: {
       [TS_JS_TRANSFORM_PATTERN]: ['ts-jest/legacy', tsJestTransformOptions],
     },
   }
+
+  return withNodeModulesTransform(preset, 'ts-jest/legacy', tsJestTransformOptions, nodeModulesTransformOptions)
 }
 
 export function createJsWithBabelPreset(tsJestTransformOptions: JsWithBabelTransformerOptions = {}): JsWithBabelPreset {

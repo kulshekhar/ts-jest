@@ -13,6 +13,28 @@ exports[`create-jest-preset CJS presets createDefaultLegacyPreset should return 
 }
 `;
 
+exports[`create-jest-preset CJS presets createDefaultLegacyPreset should return preset config with mjsPackages 1`] = `
+{
+  "transform": {
+    "^.+\\.tsx?$": [
+      "ts-jest/legacy",
+      {
+        "tsconfig": "tsconfig.spec.json",
+      },
+    ],
+    "node_modules/.+\\.mjs$": [
+      "ts-jest/legacy",
+      {
+        "tsconfig": "tsconfig.spec.json",
+      },
+    ],
+  },
+  "transformIgnorePatterns": [
+    "/node_modules/(?!.*\\.mjs$)",
+  ],
+}
+`;
+
 exports[`create-jest-preset CJS presets createDefaultPreset should return preset config 1`] = `
 {
   "transform": {
@@ -23,6 +45,66 @@ exports[`create-jest-preset CJS presets createDefaultPreset should return preset
       },
     ],
   },
+}
+`;
+
+exports[`create-jest-preset CJS presets createDefaultPreset should return preset config with mjsPackages 1`] = `
+{
+  "transform": {
+    "^.+\\.tsx?$": [
+      "ts-jest",
+      {
+        "tsconfig": "tsconfig.spec.json",
+      },
+    ],
+    "node_modules/.+\\.mjs$": [
+      "ts-jest",
+      {
+        "tsconfig": "tsconfig.spec.json",
+      },
+    ],
+  },
+  "transformIgnorePatterns": [
+    "/node_modules/(?!.*\\.mjs$)",
+  ],
+}
+`;
+
+exports[`create-jest-preset CJS presets createDefaultPreset should return preset config with mjsPackages and packageNames 1`] = `
+{
+  "transform": {
+    "^.+\\.tsx?$": [
+      "ts-jest",
+      {
+        "tsconfig": "tsconfig.spec.json",
+      },
+    ],
+    "node_modules/.+\\.mjs$": [
+      "ts-jest",
+      {
+        "tsconfig": "tsconfig.spec.json",
+      },
+    ],
+  },
+  "transformIgnorePatterns": [
+    "/node_modules/(?!(until-async|rettime)/|.*\\.mjs$)",
+  ],
+}
+`;
+
+exports[`create-jest-preset CJS presets createDefaultPreset should return preset config with packageNames 1`] = `
+{
+  "transform": {
+    "^.+\\.tsx?$": [
+      "ts-jest",
+      {
+        "tsconfig": "tsconfig.spec.json",
+      },
+    ],
+  },
+  "transformIgnorePatterns": [
+    "/node_modules/(?!(until-async|rettime)/)",
+  ],
 }
 `;
 
@@ -74,6 +156,30 @@ exports[`create-jest-preset CJS presets createJsWithTsLegacyPreset should return
 }
 `;
 
+exports[`create-jest-preset CJS presets createJsWithTsLegacyPreset should return preset config with mjsPackages 1`] = `
+{
+  "transform": {
+    "^.+\\.[tj]sx?$": [
+      "ts-jest/legacy",
+      {
+        "isolatedModules": true,
+        "tsconfig": "tsconfig.spec.json",
+      },
+    ],
+    "node_modules/.+\\.mjs$": [
+      "ts-jest/legacy",
+      {
+        "isolatedModules": true,
+        "tsconfig": "tsconfig.spec.json",
+      },
+    ],
+  },
+  "transformIgnorePatterns": [
+    "/node_modules/(?!.*\\.mjs$)",
+  ],
+}
+`;
+
 exports[`create-jest-preset CJS presets createJsWithTsPreset should return preset config 1`] = `
 {
   "transform": {
@@ -85,6 +191,30 @@ exports[`create-jest-preset CJS presets createJsWithTsPreset should return prese
       },
     ],
   },
+}
+`;
+
+exports[`create-jest-preset CJS presets createJsWithTsPreset should return preset config with mjsPackages 1`] = `
+{
+  "transform": {
+    "^.+\\.[tj]sx?$": [
+      "ts-jest",
+      {
+        "isolatedModules": true,
+        "tsconfig": "tsconfig.spec.json",
+      },
+    ],
+    "node_modules/.+\\.mjs$": [
+      "ts-jest",
+      {
+        "isolatedModules": true,
+        "tsconfig": "tsconfig.spec.json",
+      },
+    ],
+  },
+  "transformIgnorePatterns": [
+    "/node_modules/(?!.*\\.mjs$)",
+  ],
 }
 `;
 

@@ -3,6 +3,7 @@ import { JS_EXT_TO_TREAT_AS_ESM, TS_EXT_TO_TREAT_AS_ESM } from '../constants'
 import {
   createJestPreset,
   createDefaultPreset,
+  createDefaultLegacyPreset,
   createJsWithBabelPreset,
   createJsWithTsPreset,
   createDefaultEsmPreset,
@@ -76,6 +77,25 @@ describe('create-jest-preset', () => {
           }),
         ).toMatchSnapshot()
       })
+
+      it('should return preset config with mjsPackages', () => {
+        expect(createDefaultPreset({ tsconfig: 'tsconfig.spec.json' }, { mjsPackages: true })).toMatchSnapshot()
+      })
+
+      it('should return preset config with packageNames', () => {
+        expect(
+          createDefaultPreset({ tsconfig: 'tsconfig.spec.json' }, { packageNames: ['until-async', 'rettime'] }),
+        ).toMatchSnapshot()
+      })
+
+      it('should return preset config with mjsPackages and packageNames', () => {
+        expect(
+          createDefaultPreset(
+            { tsconfig: 'tsconfig.spec.json' },
+            { mjsPackages: true, packageNames: ['until-async', 'rettime'] },
+          ),
+        ).toMatchSnapshot()
+      })
     })
 
     describe('createDefaultLegacyPreset', () => {
@@ -85,6 +105,10 @@ describe('create-jest-preset', () => {
             tsconfig: 'tsconfig.spec.json',
           }),
         ).toMatchSnapshot()
+      })
+
+      it('should return preset config with mjsPackages', () => {
+        expect(createDefaultLegacyPreset({ tsconfig: 'tsconfig.spec.json' }, { mjsPackages: true })).toMatchSnapshot()
       })
     })
 
@@ -97,6 +121,12 @@ describe('create-jest-preset', () => {
           }),
         ).toMatchSnapshot()
       })
+
+      it('should return preset config with mjsPackages', () => {
+        expect(
+          createJsWithTsPreset({ tsconfig: 'tsconfig.spec.json', isolatedModules: true }, { mjsPackages: true }),
+        ).toMatchSnapshot()
+      })
     })
 
     describe('createJsWithTsLegacyPreset', () => {
@@ -106,6 +136,12 @@ describe('create-jest-preset', () => {
             tsconfig: 'tsconfig.spec.json',
             isolatedModules: true,
           }),
+        ).toMatchSnapshot()
+      })
+
+      it('should return preset config with mjsPackages', () => {
+        expect(
+          createJsWithTsLegacyPreset({ tsconfig: 'tsconfig.spec.json', isolatedModules: true }, { mjsPackages: true }),
         ).toMatchSnapshot()
       })
     })
