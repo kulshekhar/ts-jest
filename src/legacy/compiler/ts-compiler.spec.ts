@@ -1162,6 +1162,10 @@ describe('TsCompiler', () => {
           outputFiles: [{ text: sourceMap }, { text: jsOutput }],
           emitSkipped: false,
         } as ts.EmitOutput
+        // With `useESM: true` and `tsconfig.module: 'ESNext'`, `supportsStaticESM`
+        // toggles the per-compile module kind: false → CommonJS, true → ESNext.
+        const cjsCompileOptions = { depGraphs: new Map(), supportsStaticESM: false, watchMode: false }
+        const esmCompileOptions = { depGraphs: new Map(), supportsStaticESM: true, watchMode: false }
 
         function buildCompiler(): TsCompiler {
           const configSet = createConfigSet({
@@ -1177,10 +1181,7 @@ describe('TsCompiler', () => {
           compiler._languageService.getEmitOutput = jest.fn().mockReturnValue(stubbedEmit)
           // @ts-expect-error testing purpose
           compiler.getDiagnostics = jest.fn().mockReturnValue([])
-          // Overwrite the disk-loaded snapshot for `targetFile` so the second
-          // compile's content matches the cache and the content-mismatch bump
-          // path of `_updateMemoryCache` does not fire — leaving the new
-          // module-kind-change tracking as the sole bump trigger under test.
+          // Pre-seed so the only bump trigger left is the module-kind-change check.
           // @ts-expect-error testing purpose
           compiler._fileContentCache.set(targetFile, fileContent)
           // @ts-expect-error testing purpose
@@ -1189,26 +1190,17 @@ describe('TsCompiler', () => {
           return compiler
         }
 
-        test('should bump project version when consecutive compiles have different module kinds', () => {
+        test('should bump project version when consecutive compiles produce different module kinds', () => {
           const compiler = buildCompiler()
-          // First compile: a CJS-context file (supportsStaticESM=false forces
-          // the runtime module kind to CommonJS).
-          compiler.getCompiledOutput('const a = 1', otherFile, {
-            depGraphs: new Map(),
-            supportsStaticESM: false,
-            watchMode: false,
-          })
+          compiler.getCompiledOutput('const a = 1', otherFile, cjsCompileOptions)
+          // @ts-expect-error testing purpose
+          expect(compiler._compilerOptions.module).toBe(ts.ModuleKind.CommonJS)
           // @ts-expect-error testing purpose
           const versionAfterFirstCompile = compiler._projectVersion
 
-          // Second compile: the target file in ESM context. Its caches and the
-          // tsconfig file list are seeded so the only bump trigger that can
-          // fire is the new module-kind-change tracking.
-          compiler.getCompiledOutput(fileContent, targetFile, {
-            depGraphs: new Map(),
-            supportsStaticESM: true,
-            watchMode: false,
-          })
+          compiler.getCompiledOutput(fileContent, targetFile, esmCompileOptions)
+          // @ts-expect-error testing purpose
+          expect(compiler._compilerOptions.module).toBe(ts.ModuleKind.ESNext)
 
           // @ts-expect-error testing purpose
           expect(compiler._projectVersion).toBeGreaterThan(versionAfterFirstCompile)
@@ -1216,19 +1208,15 @@ describe('TsCompiler', () => {
 
         test('should not bump project version when consecutive compiles share the same module kind', () => {
           const compiler = buildCompiler()
-          compiler.getCompiledOutput(fileContent, targetFile, {
-            depGraphs: new Map(),
-            supportsStaticESM: true,
-            watchMode: false,
-          })
+          compiler.getCompiledOutput(fileContent, targetFile, esmCompileOptions)
+          // @ts-expect-error testing purpose
+          expect(compiler._compilerOptions.module).toBe(ts.ModuleKind.ESNext)
           // @ts-expect-error testing purpose
           const versionAfterFirstCompile = compiler._projectVersion
 
-          compiler.getCompiledOutput(fileContent, targetFile, {
-            depGraphs: new Map(),
-            supportsStaticESM: true,
-            watchMode: false,
-          })
+          compiler.getCompiledOutput(fileContent, targetFile, esmCompileOptions)
+          // @ts-expect-error testing purpose
+          expect(compiler._compilerOptions.module).toBe(ts.ModuleKind.ESNext)
 
           // @ts-expect-error testing purpose
           expect(compiler._projectVersion).toBe(versionAfterFirstCompile)
