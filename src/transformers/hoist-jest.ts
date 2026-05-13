@@ -87,12 +87,17 @@ export function factory({ configSet }: TsCompilerInstance) {
       return statements
     }
 
-    return statements.sort((stmtA, stmtB) =>
-      isJestGlobalImport(stmtA) ||
-      (isHoistableStatement(stmtA) && !isHoistableStatement(stmtB) && !isJestGlobalImport(stmtB))
-        ? -1
-        : 1,
-    )
+    // Return 0 for same-category statements so stable sort preserves source
+    // order, the previous `-1 | 1`-only comparator violated ECMA's consistent
+    // comparison contract and let V8 reorder same-category pairs.
+    const priority = (stmt: _ts.Statement): number => {
+      if (isJestGlobalImport(stmt)) return 0
+      if (isHoistableStatement(stmt)) return 1
+
+      return 2
+    }
+
+    return statements.sort((a, b) => priority(a) - priority(b))
   }
 
   const createVisitor = (ctx: _ts.TransformationContext, _: _ts.SourceFile) => {

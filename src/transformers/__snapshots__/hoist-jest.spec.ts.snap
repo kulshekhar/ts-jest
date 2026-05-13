@@ -74,9 +74,9 @@ console.log(jestBackticks);
 `;
 
 exports[`hoist-jest should hoist correctly when using with @jest/globals 1`] = `
-"import * as JestGlobals from "@jest/globals";
+"import { jest } from "@jest/globals";
 import { jest as aliasedJest } from "@jest/globals";
-import { jest } from "@jest/globals";
+import * as JestGlobals from "@jest/globals";
 // These will all be hoisted above imports
 jest.unmock("react");
 aliasedJest.deepUnmock("../__test_modules__/Unmocked");

@@ -188,4 +188,20 @@ describe('hoist-jest', () => {
 
     expect(printer.printFile(transformedSourceFile)).toMatchSnapshot()
   })
+
+  test('should preserve source order across same-category statements', () => {
+    // Pins the inconsistent-comparator regression: under the previous sort,
+    // two `@jest/globals` imports both yielded `-1` from `compare(a, b)` and
+    // `compare(b, a)`, which V8's TimSort resolves by swapping the pair.
+    const code = `
+      import { jest } from '@jest/globals'
+      import { expect } from '@jest/globals'
+      test('foo', () => { expect(1).toBe(1) })
+    `
+    const sourceFile = ts.createSourceFile(__filename, code, ts.ScriptTarget.ES2015)
+    const result = ts.transform(sourceFile, [hoistJest(makeCompiler())])
+    const output = printer.printFile(result.transformed[0])
+
+    expect(output.indexOf('{ jest }')).toBeLessThan(output.indexOf('{ expect }'))
+  })
 })
