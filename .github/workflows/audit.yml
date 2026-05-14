@@ -49,7 +49,7 @@ jobs:
 
   osv-scan:
     name: Scan Vulnerabilities with OSV 🛡️
-    uses: 'google/osv-scanner-action/.github/workflows/osv-scanner-reusable-pr.yml@c51854704019a247608d928f370c98740469d4b5' # v2.3.5
+    uses: 'google/osv-scanner-action/.github/workflows/osv-scanner-reusable-pr.yml@9a498708959aeaef5ef730655706c5a1df1edbc2' # v2.3.8
     permissions:
       # Required to upload SARIF file to CodeQL. See: https://github.com/github/codeql-action/issues/2117
       actions: read
