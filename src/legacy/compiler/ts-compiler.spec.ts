@@ -1116,6 +1116,86 @@ describe('TsCompiler', () => {
           ),
         )
       })
+
+      describe('cross-compile module kind tracking', () => {
+        const targetFile = join(mockFolder, 'thing.ts')
+        const otherFile = join(mockFolder, 'thing1.ts')
+        const stubbedEmit = {
+          outputFiles: [{ text: sourceMap }, { text: jsOutput }],
+          emitSkipped: false,
+        } as ts.EmitOutput
+
+        function buildCompiler(): TsCompiler {
+          const configSet = createConfigSet({
+            tsJestConfig: {
+              ...baseTsJestConfig,
+              useESM: true,
+              tsconfig: { module: 'ESNext' } as TsConfigJson,
+            },
+          })
+          configSet.parsedTsConfig.fileNames.push(targetFile)
+          const compiler = new TsCompiler(configSet, new Map())
+          // @ts-expect-error testing purpose
+          compiler._languageService.getEmitOutput = jest.fn().mockReturnValue(stubbedEmit)
+          // @ts-expect-error testing purpose
+          compiler.getDiagnostics = jest.fn().mockReturnValue([])
+          // Pre-seed so the only bump trigger left is the module-kind-change check.
+          // @ts-expect-error testing purpose
+          compiler._fileContentCache.set(targetFile, fileContent)
+          // @ts-expect-error testing purpose
+          compiler._fileVersionCache.set(targetFile, 1)
+
+          return compiler
+        }
+
+        test('should bump project version when consecutive compiles produce different module kinds', () => {
+          const compiler = buildCompiler()
+          compiler.getCompiledOutput('const a = 1', otherFile, {
+            depGraphs: new Map(),
+            supportsStaticESM: false,
+            watchMode: false,
+          })
+          // @ts-expect-error testing purpose
+          expect(compiler._compilerOptions.module).toBe(ts.ModuleKind.CommonJS)
+          // @ts-expect-error testing purpose
+          const versionAfterFirstCompile = compiler._projectVersion
+
+          compiler.getCompiledOutput(fileContent, targetFile, {
+            depGraphs: new Map(),
+            supportsStaticESM: true,
+            watchMode: false,
+          })
+          // @ts-expect-error testing purpose
+          expect(compiler._compilerOptions.module).toBe(ts.ModuleKind.ESNext)
+
+          // @ts-expect-error testing purpose
+          expect(compiler._projectVersion).toBeGreaterThan(versionAfterFirstCompile)
+        })
+
+        test('should not bump project version when consecutive compiles share the same module kind', () => {
+          const compiler = buildCompiler()
+          compiler.getCompiledOutput(fileContent, targetFile, {
+            depGraphs: new Map(),
+            supportsStaticESM: true,
+            watchMode: false,
+          })
+          // @ts-expect-error testing purpose
+          expect(compiler._compilerOptions.module).toBe(ts.ModuleKind.ESNext)
+          // @ts-expect-error testing purpose
+          const versionAfterFirstCompile = compiler._projectVersion
+
+          compiler.getCompiledOutput(fileContent, targetFile, {
+            depGraphs: new Map(),
+            supportsStaticESM: true,
+            watchMode: false,
+          })
+          // @ts-expect-error testing purpose
+          expect(compiler._compilerOptions.module).toBe(ts.ModuleKind.ESNext)
+
+          // @ts-expect-error testing purpose
+          expect(compiler._projectVersion).toBe(versionAfterFirstCompile)
+        })
+      })
     })
   })
 
