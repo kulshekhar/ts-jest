@@ -1,9 +1,42 @@
+## [29.4.10](https://github.com/kulshekhar/ts-jest/compare/v29.4.9...v29.4.10) (2026-05-18)
+
+
+### Bug Fixes
+
+* pass `resolutionMode` to `ts.resolveModuleName` for hybrid module support ([b557a85](https://github.com/kulshekhar/ts-jest/commit/b557a85f85c3fd34523ec3a15293afbdc9dea83c))
+* rebuild `Program` when consecutive compiles need different module kinds ([a82a2b3](https://github.com/kulshekhar/ts-jest/commit/a82a2b32c4987a5249fd5284283117dd2fa3be47)), closes [#4774](https://github.com/kulshekhar/ts-jest/issues/4774)
+* respect tsconfig `moduleResolution` instead of forcing `Node10` ([1bffffc](https://github.com/kulshekhar/ts-jest/commit/1bffffc667557c173ae0c1f93dd436920775dac4))
+* **transformer:** transpile `mjs` files from `node_modules` for CJS mode ([96d025d](https://github.com/kulshekhar/ts-jest/commit/96d025dd912ea2bceb18b67d2d509ada7a756d9d))
+* **transformer:** use a consistent comparator in hoist-jest sortStatements ([8a8fd2f](https://github.com/kulshekhar/ts-jest/commit/8a8fd2fb8446655bba18367db9306a1089490e62))
+
+
+
+## [29.4.9](https://github.com/kulshekhar/ts-jest/compare/v29.4.8...v29.4.9) (2026-04-01)
+
+
+### Bug Fixes
+
+* use correct registry for npm OIDC trusted publishing ([f8a9cc9](https://github.com/kulshekhar/ts-jest/commit/f8a9cc9892))
+
+
+
+## [29.4.8](https://github.com/kulshekhar/ts-jest/compare/v29.4.7...v29.4.8) (2026-04-01)
+
+
+### Bug Fixes
+
+* wrong published assets
+
+
+
 ## [29.4.7](https://github.com/kulshekhar/ts-jest/compare/v29.4.6...v29.4.7) (2026-04-01)
 
 
 ### Features
 
 * support TypeScript v6 ([eda517d](https://github.com/kulshekhar/ts-jest/commit/eda517d226389317d99572887d3c1aa93c81be87))
+
+
 
 ## [29.4.6](https://github.com/kulshekhar/ts-jest/compare/v29.4.5...v29.4.6) (2025-12-01)
 
