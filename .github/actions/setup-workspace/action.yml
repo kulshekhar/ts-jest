@@ -2,11 +2,11 @@ name: Setup workspace
 
 inputs:
   os:
+    description: Runner OS used for workspace setup
     required: true
-    type: string
   node-version:
+    description: Node.js version to install
     required: true
-    type: string
 
 permissions: # added using https://github.com/step-security/secure-workflows
   contents: read
