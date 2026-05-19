@@ -1,0 +1,106 @@
+name: Tag release 🏷️
+
+on:
+  push:
+    branches:
+      - main
+      - next
+
+jobs:
+  verify_release:
+    name: Verify release 🔍
+    permissions:
+      contents: read
+    if: startsWith(github.event.head_commit.message, 'chore(release)')
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.check_tag.outputs.version }}
+      is_prerelease: ${{ steps.check_tag.outputs.is_prerelease_version == 'true' && github.ref_name == 'next' }}
+      is_stable_release: ${{ steps.check_tag.outputs.is_stable_version == 'true' && github.ref_name == 'main' }}
+      tag_exists: ${{ steps.check_tag.outputs.tag_exists }}
+
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+        with:
+          fetch-depth: 0
+
+      - name: Check tag details 🔍
+        id: check_tag
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          TAG="v$VERSION"
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+          if [[ "$VERSION" == *rc* ]] || [[ "$VERSION" == *next* ]] || [[ "$VERSION" == *alpha* ]] || [[ "$VERSION" == *beta* ]]; then
+            echo "is_prerelease_version=true" >> $GITHUB_OUTPUT
+            echo "This is a prerelease version"
+          else
+            echo "is_stable_version=true" >> $GITHUB_OUTPUT
+            echo "This is a stable release version"
+          fi
+
+          if git show-ref --tags --verify --quiet "refs/tags/$TAG"; then
+            echo "Tag $TAG already exists"
+            echo "tag_exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "Tag $TAG does not exist"
+            echo "tag_exists=false" >> $GITHUB_OUTPUT
+          fi
+
+  tagging:
+    name: Tagging the release 🏷️
+    needs: verify_release
+    if: needs.verify_release.outputs.is_prerelease == 'true' || needs.verify_release.outputs.is_stable_release == 'true'
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+        with:
+          fetch-tags: false
+
+      - name: Setup Node ⚙️
+        uses: ./.github/actions/setup-node
+        with:
+          cache-dependency-path: 'package-lock.json'
+          node-version: 24
+
+      - name: Install 🔧
+        run: npm ci --ignore-scripts
+
+      - name: Build 🔧
+        run: |
+          npm run build
+          npm run postbuild
+
+      - name: Create and push tag 🔖
+        id: create_tag
+        run: |
+          TAG_NAME="v${{ needs.verify_release.outputs.version }}"
+          EXPECTED_SHA="${GITHUB_SHA}"
+          echo "tag_name=$TAG_NAME" >> "$GITHUB_OUTPUT"
+
+          REMOTE_SHA="$(git ls-remote --refs --tags origin "refs/tags/$TAG_NAME" | awk '{print $1}')"
+          if [[ -n "$REMOTE_SHA" ]]; then
+            if [[ "$REMOTE_SHA" != "$EXPECTED_SHA" ]]; then
+              echo "Tag $TAG_NAME already exists on $REMOTE_SHA, expected $EXPECTED_SHA" >&2
+              exit 1
+            fi
+            echo "Tag $TAG_NAME already points at $EXPECTED_SHA; skipping push"
+          else
+            git tag "$TAG_NAME"
+            git push origin "refs/tags/$TAG_NAME"
+          fi
+
+      - name: Create release 🚢
+        uses: softprops/action-gh-release@b4309332981a82ec1c5618f44dd2e27cc8bfbfda # v3
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.create_tag.outputs.tag_name }}
+          body: Please refer to [CHANGELOG.md](https://github.com/kulshekhar/ts-jest/blob/main/CHANGELOG.md) for details.
+          draft: false
+          prerelease: ${{ needs.verify_release.outputs.is_prerelease == 'true' }}

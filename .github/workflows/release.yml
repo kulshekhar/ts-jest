@@ -1,0 +1,122 @@
+name: Publish Package 🚀
+
+on:
+  workflow_run:
+    workflows:
+      - Tag release 🏷️
+    branches:
+      - main
+      - next
+    types:
+      - completed
+
+permissions:
+  id-token: write # Required for OIDC
+  contents: read
+
+jobs:
+  identify_release_type:
+    if: github.event.workflow_run.conclusion == 'success' && startsWith(github.event.workflow_run.head_commit.message, 'chore(release)')
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    outputs:
+      isLatest: ${{ steps.release_type.outputs.latest }}
+
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+          fetch-depth: 1
+          fetch-tags: false
+
+      - id: release_type
+        name: Identify release type
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          if [[ "$VERSION" == *rc* || "$VERSION" == *next* || "$VERSION" == *alpha* || "$VERSION" == *beta* ]]; then
+            echo "latest=false" >> "$GITHUB_OUTPUT"
+            echo "Prerelease version $VERSION -> publish with next tag"
+          else
+            echo "latest=true" >> "$GITHUB_OUTPUT"
+            echo "Stable version $VERSION -> publish with latest tag"
+          fi
+
+  publish:
+    needs: [identify_release_type]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+          fetch-depth: 1
+          fetch-tags: false
+
+      - name: Setup Node ⚙️
+        uses: ./.github/actions/setup-node
+        with:
+          cache-dependency-path: 'package-lock.json'
+          node-version: 24
+
+      - name: Install 🔧
+        run: npm ci --ignore-scripts
+
+      - name: Build 🔧
+        run: |
+          npm run build
+          npm run postbuild
+
+      - name: Check release tag 🔖
+        id: tag_check
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          TAG="v$VERSION"
+          EXPECTED_SHA="${{ github.event.workflow_run.head_sha }}"
+          echo "tag_name=$TAG" >> "$GITHUB_OUTPUT"
+
+          TAG_SHA="$(git ls-remote --refs --tags origin "refs/tags/$TAG" | awk '{print $1}')"
+          if [[ -n "$TAG_SHA" && "$TAG_SHA" == "$EXPECTED_SHA" ]]; then
+            echo "tag_matches_head=true" >> "$GITHUB_OUTPUT"
+            echo "Tag $TAG matches $EXPECTED_SHA"
+          else
+            echo "tag_matches_head=false" >> "$GITHUB_OUTPUT"
+            echo "Tag $TAG is missing or points to $TAG_SHA instead of $EXPECTED_SHA"
+          fi
+
+      - name: Check npm publish state 📦
+        id: npm_state
+        run: |
+          PACKAGE_NAME=$(node -p "require('./package.json').name")
+          VERSION=$(node -p "require('./package.json').version")
+          echo "package_name=$PACKAGE_NAME" >> "$GITHUB_OUTPUT"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
+          if npm view "$PACKAGE_NAME@$VERSION" version > /dev/null 2>npm-view.err; then
+            echo "already_published=true" >> "$GITHUB_OUTPUT"
+            echo "$PACKAGE_NAME@$VERSION already published"
+          elif grep -q 'E404' npm-view.err; then
+            echo "already_published=false" >> "$GITHUB_OUTPUT"
+            echo "$PACKAGE_NAME@$VERSION not yet published"
+          else
+            echo "npm view failed with a non-E404 error:" >&2
+            cat npm-view.err >&2
+            exit 1
+          fi
+
+      - name: Publish with latest tag 🚀
+        if: ${{ steps.tag_check.outputs.tag_matches_head == 'true' && steps.npm_state.outputs.already_published != 'true' && needs.identify_release_type.outputs.isLatest == 'true' }}
+        run: npm publish --provenance --access public
+
+      - name: Publish with next tag 🚀
+        if: ${{ steps.tag_check.outputs.tag_matches_head == 'true' && steps.npm_state.outputs.already_published != 'true' && needs.identify_release_type.outputs.isLatest != 'true' }}
+        run: npm publish --provenance --access public --tag next
+
+      - name: Skip publish (already published) ℹ️
+        if: steps.npm_state.outputs.already_published == 'true'
+        run: echo "Skipping publish because ${{ steps.npm_state.outputs.package_name }}@${{ steps.npm_state.outputs.version }} already exists on npm."
+
+      - name: Skip publish (tag missing) ℹ️
+        if: steps.tag_check.outputs.tag_matches_head != 'true'
+        run: echo "Skipping publish because tag ${{ steps.tag_check.outputs.tag_name }} is missing or does not point to ${{ github.event.workflow_run.head_sha }}."
