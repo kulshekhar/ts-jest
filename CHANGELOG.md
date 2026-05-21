@@ -1,3 +1,12 @@
+## [29.4.11](https://github.com/kulshekhar/ts-jest/compare/v29.4.10...v29.4.11) (2026-05-21)
+
+
+### Bug Fixes
+
+* preserve Bundler on the CJS path under TypeScript >= 6 ([3941818](https://github.com/kulshekhar/ts-jest/commit/39418187515f11b6584d35a4e3ddf50231f74936)), closes [#4198](https://github.com/kulshekhar/ts-jest/issues/4198)
+
+
+
 ## [29.4.10](https://github.com/kulshekhar/ts-jest/compare/v29.4.9...v29.4.10) (2026-05-18)
 
 
