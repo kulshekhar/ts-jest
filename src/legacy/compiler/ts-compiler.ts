@@ -239,11 +239,11 @@ export class TsCompiler implements TsCompilerInstance {
    *     supports.)
    *
    *   - User-supplied Bundler with a non-Bundler-compatible forced module is
-   *     also TS5095 on the supported TS range — substitute Node10. (TypeScript
-   *     6 relaxed this for `module: CommonJS` specifically; that relaxation is
-   *     deliberately not encoded here so behavior stays consistent across the
-   *     full peerDependency range. See `isBundlerCompatibleModuleKind` for the
-   *     follow-up pointer.)
+   *     TS5095, substitute Node10. (TypeScript 6 relaxed this for
+   *     `module: CommonJS` specifically; that relaxation is encoded inside
+   *     `isBundlerCompatibleModuleKind` via a runtime version check, so on
+   *     TS ≥ 6 user-supplied Bundler passes through unchanged on the CJS
+   *     path.)
    *
    *   - Anything else (Node10 / Classic / unset) passes through or falls back
    *     to Node10. These pairings are valid with every forced module kind.
@@ -291,13 +291,12 @@ export class TsCompiler implements TsCompilerInstance {
    * user-supplied-`Bundler` pass-through, so neither path emits an invalid
    * pair when the user has selected a non-ES `module`.
    *
-   * Note: TypeScript 6.0 relaxed this restriction for `module: CommonJS`
-   * specifically (`CommonJS` + `Bundler` is now a valid pair on TS ≥ 6); the
-   * other non-ES module kinds (`AMD` / `UMD` / `System` / `None`) remain
-   * Bundler-incompatible on every TypeScript version. The TS 6 relaxation is
-   * intentionally not encoded here to keep behavior consistent across the full
-   * peerDependency range (`>=4.3 <7`); honoring it can ride in as a follow-up
-   * once the TS 6 baseline lands.
+   * TypeScript 6.0 relaxed TS5095 for `module: CommonJS` specifically
+   * (`CommonJS` + `Bundler` is a valid pair on TS ≥ 6); the other non-ES
+   * module kinds (`AMD` / `UMD` / `System` / `None`) remain Bundler-incompatible
+   * on every TypeScript version. The version is detected at runtime from
+   * `this._ts.version` so the function stays correct across the full
+   * peerDependency range (`>=4.3 <7`).
    *
    * @see https://www.typescriptlang.org/tsconfig/#moduleResolution
    */
@@ -311,6 +310,13 @@ export class TsCompiler implements TsCompilerInstance {
     // TypeScript versions the property is `undefined` at runtime.
     if (M.Preserve !== undefined && moduleKind === M.Preserve) {
       return true
+    }
+
+    // TS 6 made `CommonJS` + `Bundler` a valid pair.
+    if (moduleKind === M.CommonJS) {
+      const tsMajor = parseInt(this._ts.version.split('.')[0], 10)
+
+      return tsMajor >= 6
     }
 
     return false

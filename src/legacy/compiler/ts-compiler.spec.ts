@@ -545,11 +545,11 @@ describe('TsCompiler', () => {
 
       // Closes #4198. Each row is a `moduleResolution` value the user explicitly sets in
       // their tsconfig. The CJS path forces `module: CommonJS`, which TypeScript binds
-      // tightly to a small set of compatible resolutions:
+      // tightly to a small set of compatible resolutions on TS < 6:
       //   - Node10 / Classic: pass through (always valid with CommonJS)
       //   - Node16 / NodeNext: substitute → Node10 (TS5110 forbids them with CommonJS)
-      //   - Bundler: substitute → Node10 (TS5095 forbids CommonJS+Bundler on TS ≤ 5;
-      //     a TS6+ enhancement can pass Bundler through in a follow-up)
+      //   - Bundler: substitute → Node10 (TS5095 forbids CommonJS+Bundler on TS < 6)
+      // The TS >= 6 path is covered separately below.
       test.each([
         { moduleResolutionValue: 'Bundler', expectedKind: ts.ModuleResolutionKind.Node10 },
         { moduleResolutionValue: 'Node16', expectedKind: ts.ModuleResolutionKind.Node10 },
@@ -557,7 +557,7 @@ describe('TsCompiler', () => {
         { moduleResolutionValue: 'Classic', expectedKind: ts.ModuleResolutionKind.Classic },
         { moduleResolutionValue: 'Node10', expectedKind: ts.ModuleResolutionKind.Node10 },
       ])(
-        'should resolve user-supplied moduleResolution %p compatibly for non-ESM compilation',
+        'should resolve user-supplied moduleResolution %p compatibly for non-ESM compilation on TypeScript < 6',
         ({ moduleResolutionValue, expectedKind }) => {
           const configSet = createConfigSet({
             tsJestConfig: {
@@ -571,6 +571,56 @@ describe('TsCompiler', () => {
           const emptyFile = join(mockFolder, 'empty.ts')
           configSet.parsedTsConfig.fileNames.push(emptyFile)
           const compiler = new TsCompiler(configSet, new Map())
+          // @ts-expect-error testing purpose
+          compiler._languageService.getEmitOutput = jest.fn().mockReturnValueOnce({
+            outputFiles: [{ text: sourceMap }, { text: jsOutput }],
+            emitSkipped: false,
+          } as ts.EmitOutput)
+          // @ts-expect-error testing purpose
+          compiler.getDiagnostics = jest.fn().mockReturnValue([])
+
+          compiler.getCompiledOutput(fileContent, fileName, {
+            depGraphs: new Map(),
+            supportsStaticESM: false,
+            watchMode: false,
+          })
+
+          // @ts-expect-error testing purpose
+          const usedCompilerOptions = compiler._compilerOptions
+
+          expect(usedCompilerOptions.moduleResolution).toBe(expectedKind)
+        },
+      )
+
+      // TS 6 relaxed TS5095 to allow `module: CommonJS` paired with
+      // `moduleResolution: Bundler`. The CJS path now honors that: user-supplied
+      // Bundler is preserved instead of substituted to Node10, and Node16/NodeNext
+      // substitute to Bundler (matching the ESM-path substitution above) rather
+      // than Node10. The TS version is simulated by handing the compiler a ts-like
+      // proxy whose `version` reports 6.x; the real `ts` module is untouched.
+      test.each([
+        { moduleResolutionValue: 'Bundler', expectedKind: ts.ModuleResolutionKind.Bundler },
+        { moduleResolutionValue: 'Node16', expectedKind: ts.ModuleResolutionKind.Bundler },
+        { moduleResolutionValue: 'NodeNext', expectedKind: ts.ModuleResolutionKind.Bundler },
+        { moduleResolutionValue: 'Classic', expectedKind: ts.ModuleResolutionKind.Classic },
+        { moduleResolutionValue: 'Node10', expectedKind: ts.ModuleResolutionKind.Node10 },
+      ])(
+        'should resolve user-supplied moduleResolution %p compatibly for non-ESM compilation on TypeScript >= 6',
+        ({ moduleResolutionValue, expectedKind }) => {
+          const configSet = createConfigSet({
+            tsJestConfig: {
+              ...baseTsJestConfig,
+              tsconfig: {
+                module: 'CommonJS',
+                moduleResolution: moduleResolutionValue as TsConfigJson.CompilerOptions['moduleResolution'],
+              },
+            },
+          })
+          const emptyFile = join(mockFolder, 'empty.ts')
+          configSet.parsedTsConfig.fileNames.push(emptyFile)
+          const compiler = new TsCompiler(configSet, new Map())
+          // @ts-expect-error testing purpose: replace the ts reference on this compiler
+          compiler._ts = { ...ts, version: '6.0.0' } as unknown as typeof ts
           // @ts-expect-error testing purpose
           compiler._languageService.getEmitOutput = jest.fn().mockReturnValueOnce({
             outputFiles: [{ text: sourceMap }, { text: jsOutput }],
