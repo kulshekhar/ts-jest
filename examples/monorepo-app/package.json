@@ -17,7 +17,7 @@
     "@types/jest": "^30.0.0",
     "cross-env": "^7.0.3",
     "jest": "^30.4.2",
-    "ts-jest": "^29.4.9",
+    "ts-jest": "^29.4.10",
     "typescript": "~5.9.3"
   }
 }
