@@ -324,7 +324,7 @@ describe('transpileModules', () => {
     })
   })
 
-  describe('with diagnostics', () => {
+  describe('with compiler options diagnostics', () => {
     const testFilePath = path.join(workspaceRoot, 'foo.ts')
     beforeEach(() => {
       vol.reset()
@@ -349,7 +349,48 @@ describe('transpileModules', () => {
         },
       })
 
-      expect(result.diagnostics?.[0].messageText).toBeTruthy()
+      expect(result.diagnostics).toContainEqual(
+        expect.objectContaining({
+          code: 5109,
+          messageText:
+            "Option 'moduleResolution' must be set to 'Node16' (or left unspecified) when option 'module' is set to 'Node16'.",
+        }),
+      )
+    })
+  })
+
+  describe('with transpileOptions.reportDiagnostics === true', () => {
+    const testFilePath = path.join(workspaceRoot, 'foo.ts')
+    beforeEach(() => {
+      vol.reset()
+      vol.fromJSON(
+        {
+          './foo.ts': `
+          const foo: string = 123
+        `,
+        },
+        workspaceRoot,
+      )
+    })
+
+    it('should return type check diagnostics', () => {
+      const result = tsTranspileModule(vol.readFileSync(testFilePath, 'utf-8').toString(), {
+        fileName: testFilePath,
+        compilerOptions: {
+          lib: ['es2023'],
+          module: ts.ModuleKind.NodeNext,
+          target: ts.ScriptTarget.ES2023,
+          isolatedModules: true,
+        },
+        reportDiagnostics: true,
+      })
+
+      expect(result.diagnostics).toContainEqual(
+        expect.objectContaining({
+          code: 2322,
+          messageText: "Type 'number' is not assignable to type 'string'.",
+        }),
+      )
     })
   })
 })
