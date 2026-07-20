@@ -194,6 +194,11 @@ export class NativeDiagnosticsService {
   private _snapshot: NativeSnapshot | undefined
   private readonly _openedFiles = new Set<string>()
   private readonly _unresolvableFiles = new Set<string>()
+  /**
+   * Default-project lookups round-trip to the server, so resolutions are cached per snapshot
+   * (project handles are only valid within the snapshot that produced them).
+   */
+  private readonly _projectCache = new Map<string, NativeProject>()
   private readonly _logger: Logger
 
   constructor(private readonly _options: NativeDiagnosticsServiceOptions) {
@@ -220,6 +225,7 @@ export class NativeDiagnosticsService {
   private _replaceSnapshot(newSnapshot: NativeSnapshot): NativeSnapshot {
     const previous = this._snapshot
     this._snapshot = newSnapshot
+    this._projectCache.clear()
     /* istanbul ignore next */
     try {
       previous?.dispose()
@@ -232,7 +238,7 @@ export class NativeDiagnosticsService {
 
   private _projectFor(fileName: string): NativeProject | undefined {
     let snapshot = this._ensureSnapshot()
-    let project = snapshot.getDefaultProjectForFile(fileName)
+    let project = this._projectCache.get(fileName) ?? snapshot.getDefaultProjectForFile(fileName)
     if (!project && !this._openedFiles.has(fileName)) {
       // Files outside the tsconfig file list (e.g. specs not covered by `include`) need an
       // explicit open; they resolve to a containing configured project or an inferred project.
@@ -241,6 +247,7 @@ export class NativeDiagnosticsService {
       snapshot = this._replaceSnapshot(this._api!.updateSnapshot({ openFiles: [fileName] }))
       project = snapshot.getDefaultProjectForFile(fileName)
     }
+    if (project) this._projectCache.set(fileName, project)
 
     return project
   }
