@@ -484,6 +484,9 @@ describe('config-set', () => {
             stringify({
               version: configSet.compilerModule.version,
               compilerModuleName: configSet.compilerModuleName,
+              // @ts-expect-error testing purpose
+              diagnosticsEngine: configSet._diagnostics.engine,
+              nativeCompilerVersion: null,
               digest: configSet.tsJestDigest,
               babelConfig: configSet.babelConfig,
               tsconfig: {

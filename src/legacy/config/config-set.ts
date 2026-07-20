@@ -35,10 +35,11 @@ import { TsCompilerInstance } from '../../types'
 import { rootLogger, stringify, TsJestDiagnosticCodes } from '../../utils'
 import { backportJestConfig } from '../../utils/backports'
 import { importer } from '../../utils/importer'
-import { Deprecations, Errors, ImportReasons, interpolate } from '../../utils/messages'
+import { Deprecations, Errors, Helps, ImportReasons, interpolate } from '../../utils/messages'
 import { normalizeSlashes } from '../../utils/normalize-slashes'
 import { sha1 } from '../../utils/sha1'
 import { TSError } from '../../utils/ts-error'
+import { probeNativeApi } from '../compiler/native-diagnostics-service'
 
 import { resolveCompilerApi } from './compiler-api-resolver'
 
@@ -48,6 +49,7 @@ interface TsJestDiagnosticsCfg {
   exclude: string[]
   throws: boolean
   warnOnly?: boolean
+  engine: 'compiler' | 'native'
 }
 
 /**
@@ -134,6 +136,13 @@ export class ConfigSet {
    * @internal
    */
   readonly nativeTypeScriptVersion: string | undefined
+  /**
+   * Whether type-checking is delegated to the native TypeScript (7+) out-of-process checker.
+   * Resolved from `diagnostics.engine: 'native'` after probing that the native API is actually loadable.
+   *
+   * @internal
+   */
+  useNativeDiagnosticsEngine = false
   readonly isolatedModules: boolean
   readonly cwd: string
   readonly rootDir: string
@@ -163,6 +172,12 @@ export class ConfigSet {
    * @internal
    */
   private _diagnostics!: TsJestDiagnosticsCfg
+  /**
+   * Version of the native TypeScript package backing the native diagnostics engine, when active.
+   *
+   * @internal
+   */
+  private _nativeCompilerVersion: string | undefined
   /**
    * @internal
    */
@@ -253,6 +268,22 @@ export class ConfigSet {
       }
     }
     this.isolatedModules = this.parsedTsConfig.options.isolatedModules ?? false
+    // diagnostics engine (experimental native checker)
+    if (this._diagnostics.engine === 'native') {
+      if (this.isolatedModules) {
+        this.logger.warn(Helps.NativeCheckerIgnoredIsolatedModules)
+        this._diagnostics.engine = 'compiler'
+      } else {
+        const nativeApiProbe = probeNativeApi()
+        if (nativeApiProbe.available) {
+          this.useNativeDiagnosticsEngine = true
+          this._nativeCompilerVersion = nativeApiProbe.version
+        } else {
+          this.logger.warn(interpolate(Helps.NativeCheckerUnavailable, { reason: nativeApiProbe.reason }))
+          this._diagnostics.engine = 'compiler'
+        }
+      }
+    }
     this._resolveTsCacheDir()
   }
 
@@ -319,6 +350,13 @@ export class ConfigSet {
     // diagnostics
     const diagnosticsOpt = options.diagnostics ?? true
     const ignoreList: Array<string | number> = [...IGNORE_DIAGNOSTIC_CODES]
+    const engineOpt = typeof diagnosticsOpt === 'object' ? diagnosticsOpt.engine : undefined
+    let diagnosticsEngine: TsJestDiagnosticsCfg['engine'] = 'compiler'
+    if (engineOpt === 'native' || engineOpt === 'compiler') {
+      diagnosticsEngine = engineOpt
+    } else if (engineOpt !== undefined) {
+      this.logger.warn(interpolate(Helps.InvalidDiagnosticsEngine, { value: JSON.stringify(engineOpt) }))
+    }
     if (typeof diagnosticsOpt === 'object') {
       const { ignoreCodes } = diagnosticsOpt
       if (ignoreCodes) {
@@ -330,6 +368,7 @@ export class ConfigSet {
         exclude: diagnosticsOpt.exclude ?? [],
         ignoreCodes: toDiagnosticCodeList(ignoreList),
         throws: !diagnosticsOpt.warnOnly,
+        engine: diagnosticsEngine,
       }
     } else {
       this._diagnostics = {
@@ -337,6 +376,7 @@ export class ConfigSet {
         exclude: [],
         pretty: true,
         throws: diagnosticsOpt,
+        engine: diagnosticsEngine,
       }
     }
     if (diagnosticsOpt) {
@@ -457,6 +497,8 @@ export class ConfigSet {
       stringify({
         version: this.compilerModule.version,
         compilerModuleName: this.compilerModuleName,
+        diagnosticsEngine: this._diagnostics.engine,
+        nativeCompilerVersion: this._nativeCompilerVersion ?? null,
         digest: this.tsJestDigest,
         babelConfig: this.babelConfig,
         tsconfig: {
@@ -632,6 +674,16 @@ export class ConfigSet {
 
   shouldStringifyContent(filePath: string): boolean {
     return this._stringifyContentRegExp ? this._stringifyContentRegExp.test(filePath) : false
+  }
+
+  /**
+   * Path of the tsconfig file backing {@link ConfigSet.parsedTsConfig}, when it was read from disk.
+   * The native diagnostics engine loads the project from this file.
+   *
+   * @internal
+   */
+  get resolvedTsconfigFilePath(): string | undefined {
+    return this.tsconfigFilePath
   }
 
   raiseDiagnostics(diagnostics: ts.Diagnostic[], filePath?: string, logger = this.logger): void {

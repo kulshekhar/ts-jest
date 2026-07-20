@@ -132,6 +132,20 @@ export type TsJestGlobalOptions = Config.TransformerConfig[1] & {
          * @default `undefined` (TypeScript errors will be thrown as exceptions)
          */
         warnOnly?: boolean
+        /**
+         * **EXPERIMENTAL**
+         *
+         * Which engine performs type-checking:
+         * - `compiler` (default): the in-process JS TypeScript compiler (LanguageService)
+         * - `native`: the out-of-process native TypeScript compiler (requires the `typescript`
+         *   package to be native TypeScript 7+, and Node.js `require(esm)` support, i.e.
+         *   Node >= 20.19 / >= 22.12). Emit and AST transformers keep running on the JS compiler;
+         *   only diagnostics are delegated. When the native API cannot be loaded ts-jest falls
+         *   back to `compiler` with a warning.
+         *
+         * @default `compiler`
+         */
+        engine?: 'compiler' | 'native'
       }
 
   /**

@@ -42,6 +42,7 @@ import { Errors, Helps, interpolate } from '../../utils/messages'
 import type { ConfigSet } from '../config/config-set'
 
 import { updateOutput } from './compiler-utils'
+import { NativeDiagnosticsService } from './native-diagnostics-service'
 
 const assertCompilerOptionsWithJestTransformMode = (
   tsModule: TTypeScript,
@@ -100,6 +101,13 @@ export class TsCompiler implements TsCompilerInstance {
    */
   private readonly _moduleResolutionCache: ModuleResolutionCache | undefined
   /**
+   * Native (TypeScript 7+) out-of-process type-checker, active when `diagnostics.engine` is `native`.
+   * When set, the LanguageService is never constructed and emit flows through the transpile path.
+   *
+   * @internal
+   */
+  private readonly _nativeDiagnostics: NativeDiagnosticsService | undefined
+  /**
    * @internal
    */
   private _tsTranspileModuleFn: ExtendedTsTranspileModuleFn | undefined
@@ -140,7 +148,18 @@ export class TsCompiler implements TsCompilerInstance {
         this._ts.sys.useCaseSensitiveFileNames ? (x) => x : (x) => x.toLowerCase(),
         this._compilerOptions,
       )
-      this._createLanguageService()
+      if (this.configSet.useNativeDiagnosticsEngine) {
+        this._logger.debug('created new instance of native diagnostics service instead of language service')
+        this._nativeDiagnostics = new NativeDiagnosticsService({
+          ts: this._ts,
+          logger: this._logger,
+          cwd: this.configSet.cwd,
+          tsconfigPath: this.configSet.resolvedTsconfigFilePath,
+          readFile: (fileName) => this._cachedReadFile?.(fileName) ?? this._ts.sys.readFile(fileName),
+        })
+      } else {
+        this._createLanguageService()
+      }
     }
   }
 
@@ -461,13 +480,60 @@ export class TsCompiler implements TsCompilerInstance {
             diagnostics,
           }
     } else {
-      this._logger.debug({ fileName }, 'getCompiledOutput(): compiling as isolated module')
+      this._logger.debug(
+        { fileName },
+        this._nativeDiagnostics
+          ? 'getCompiledOutput(): compiling via transpile path with native engine type-checking'
+          : 'getCompiledOutput(): compiling as isolated module',
+      )
 
       assertCompilerOptionsWithJestTransformMode(this._ts, this._initialCompilerOptions, isEsmMode, this._logger)
 
       const result = this._transpileOutput(fileContent, fileName)
       if (result.diagnostics && this.configSet.shouldReportDiagnostics(fileName)) {
         this.configSet.raiseDiagnostics(result.diagnostics, fileName, this._logger)
+      }
+      if (this._nativeDiagnostics) {
+        if (options.watchMode) {
+          // the file changed on disk: refresh the native snapshot before checking (the equivalent
+          // of the memory-cache update on the language-service path)
+          this._nativeDiagnostics.invalidate([fileName])
+        }
+        const nativeDiagnostics = this.configSet.shouldReportDiagnostics(fileName)
+          ? this._nativeDiagnostics.check(fileName)
+          : []
+        if (isEsmMode) {
+          // mirror the language-service path: in ESM mode diagnostics are returned and raised by `processAsync()`
+          return {
+            code: updateOutput(result.outputText, fileName, result.sourceMapText),
+            diagnostics: nativeDiagnostics,
+          }
+        }
+        if (nativeDiagnostics.length) {
+          this.configSet.raiseDiagnostics(nativeDiagnostics, fileName, this._logger)
+          if (options.watchMode) {
+            this._logger.debug({ fileName }, '_doTypeChecking(): starting watch mode computing diagnostics')
+
+            for (const entry of options.depGraphs.entries()) {
+              const normalizedModuleNames = entry[1].resolvedModuleNames.map((moduleName) => normalize(moduleName))
+              const fileToReTypeCheck = entry[0]
+              if (
+                fileToReTypeCheck !== fileName &&
+                normalizedModuleNames.includes(fileName) &&
+                this.configSet.shouldReportDiagnostics(fileToReTypeCheck)
+              ) {
+                this._logger.debug(
+                  { fileToReTypeCheck },
+                  '_doTypeChecking(): computing diagnostics using native engine',
+                )
+
+                const importedModulesDiagnostics = this._nativeDiagnostics.check(fileToReTypeCheck)
+                // will raise or just warn diagnostics depending on config
+                this.configSet.raiseDiagnostics(importedModulesDiagnostics, fileName, this._logger)
+              }
+            }
+          }
+        }
       }
 
       return {
@@ -477,6 +543,10 @@ export class TsCompiler implements TsCompilerInstance {
   }
 
   protected _transpileOutput(fileContent: string, fileName: string): TranspileOutput {
+    // when the native engine performs type-checking, syntactic diagnostics come from it as well,
+    // so the transpiler should not compute (and duplicate) them
+    const shouldReportTranspileDiagnostics = (targetFileName: string): boolean =>
+      !this._nativeDiagnostics && this.configSet.shouldReportDiagnostics(targetFileName)
     /**
      * @deprecated
      *
@@ -487,7 +557,7 @@ export class TsCompiler implements TsCompilerInstance {
         fileName,
         transformers: this._makeTransformers(this.configSet.resolvedTransformers),
         compilerOptions: this._compilerOptions,
-        reportDiagnostics: this.configSet.shouldReportDiagnostics(fileName),
+        reportDiagnostics: shouldReportTranspileDiagnostics(fileName),
       })
     }
 
@@ -501,7 +571,7 @@ export class TsCompiler implements TsCompilerInstance {
         return this._makeTransformers(this.configSet.resolvedTransformers)
       },
       compilerOptions: this._initialCompilerOptions,
-      reportDiagnostics: fileName ? this.configSet.shouldReportDiagnostics(fileName) : false,
+      reportDiagnostics: fileName ? shouldReportTranspileDiagnostics(fileName) : false,
     })
   }
 
