@@ -2,7 +2,8 @@ import { basename, normalize } from 'path'
 
 import { LogContexts, Logger, LogLevels } from 'bs-logger'
 import memoize from 'lodash.memoize'
-import ts, {
+import type ts from 'typescript'
+import type {
   Bundle,
   CompilerOptions,
   CustomTransformerFactory,
@@ -23,7 +24,11 @@ import ts, {
 } from 'typescript'
 
 import { JS_JSX_REGEX, LINE_FEED, TS_TSX_REGEX } from '../../constants'
-import { isModernNodeModuleKind, tsTranspileModule } from '../../transpilers/typescript/transpile-module'
+import {
+  createTsTranspileModule,
+  ExtendedTsTranspileModuleFn,
+  isModernNodeModuleKind,
+} from '../../transpilers/typescript/transpile-module'
 import type {
   StringMap,
   TsCompilerInstance,
@@ -39,11 +44,12 @@ import type { ConfigSet } from '../config/config-set'
 import { updateOutput } from './compiler-utils'
 
 const assertCompilerOptionsWithJestTransformMode = (
-  compilerOptions: ts.CompilerOptions,
+  tsModule: TTypeScript,
+  compilerOptions: CompilerOptions,
   isEsmMode: boolean,
   logger: Logger,
 ): void => {
-  if (isEsmMode && compilerOptions.module === ts.ModuleKind.CommonJS) {
+  if (isEsmMode && compilerOptions.module === tsModule.ModuleKind.CommonJS) {
     logger.error(Errors.InvalidModuleKindForEsm)
   }
 }
@@ -93,6 +99,10 @@ export class TsCompiler implements TsCompilerInstance {
    * @internal
    */
   private readonly _moduleResolutionCache: ModuleResolutionCache | undefined
+  /**
+   * @internal
+   */
+  private _tsTranspileModuleFn: ExtendedTsTranspileModuleFn | undefined
 
   program: Program | undefined
 
@@ -453,7 +463,7 @@ export class TsCompiler implements TsCompilerInstance {
     } else {
       this._logger.debug({ fileName }, 'getCompiledOutput(): compiling as isolated module')
 
-      assertCompilerOptionsWithJestTransformMode(this._initialCompilerOptions, isEsmMode, this._logger)
+      assertCompilerOptionsWithJestTransformMode(this._ts, this._initialCompilerOptions, isEsmMode, this._logger)
 
       const result = this._transpileOutput(fileContent, fileName)
       if (result.diagnostics && this.configSet.shouldReportDiagnostics(fileName)) {
@@ -481,7 +491,9 @@ export class TsCompiler implements TsCompilerInstance {
       })
     }
 
-    return tsTranspileModule(fileContent, {
+    this._tsTranspileModuleFn ??= createTsTranspileModule(this._ts)
+
+    return this._tsTranspileModuleFn(fileContent, {
       fileName,
       transformers: (program) => {
         this.program = program

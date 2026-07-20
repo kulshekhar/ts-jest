@@ -7,7 +7,9 @@ import ts from 'typescript'
 import { dedent, omitLeadingWhitespace } from '../../__helpers__/dedent-string'
 import { workspaceRoot } from '../../__helpers__/workspace-root'
 
-import { tsTranspileModule } from './transpile-module'
+import { createTsTranspileModule } from './transpile-module'
+
+const tsTranspileModule = createTsTranspileModule(ts)
 
 jest.mock('fs', () => {
   const fsImpl = jest.requireActual('memfs').fs

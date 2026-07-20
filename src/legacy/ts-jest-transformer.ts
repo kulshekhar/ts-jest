@@ -3,7 +3,6 @@ import path from 'path'
 
 import type { SyncTransformer, TransformedSource } from '@jest/transform'
 import type { Logger } from 'bs-logger'
-import ts from 'typescript'
 
 import { DECLARATION_TYPE_EXT, JS_JSX_REGEX, TS_TSX_REGEX } from '../constants'
 import type {
@@ -231,6 +230,7 @@ export class TsJestTransformer implements SyncTransformer<TsJestTransformerOptio
       }
     } else if (isJsFile || isTsFile) {
       if (isJsFile && isNodeModule(sourcePath)) {
+        const ts = configs.compilerModule
         const transpiledResult = ts.transpileModule(sourceText, {
           compilerOptions: {
             ...configs.parsedTsConfig.options,

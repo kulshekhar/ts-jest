@@ -7,7 +7,6 @@ import ts from 'typescript'
 
 import { createConfigSet, makeCompiler } from '../../__helpers__/fakers'
 import { logTargetMock } from '../../__helpers__/mocks'
-import { tsTranspileModule } from '../../transpilers/typescript/transpile-module'
 import type { DepGraphInfo, TsJestTransformerOptions } from '../../types'
 import { Errors, Helps, interpolate } from '../../utils/messages'
 
@@ -23,16 +22,15 @@ jest.mock('typescript', () => {
     default: actualModule,
   }
 })
+const mockTsTranspileModule = jest.fn()
 jest.mock('../../transpilers/typescript/transpile-module', () => {
   const actualModule = jest.requireActual('../../transpilers/typescript/transpile-module')
 
   return {
     ...actualModule,
-    tsTranspileModule: jest.fn(),
+    createTsTranspileModule: jest.fn(() => mockTsTranspileModule),
   }
 })
-
-const mockTsTranspileModule = jest.mocked(tsTranspileModule)
 
 const mockFolder = join(process.cwd(), 'src', '__mocks__')
 
