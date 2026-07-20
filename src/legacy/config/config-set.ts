@@ -241,6 +241,14 @@ export class ConfigSet {
       'normalized compiler module config via ts-jest option',
     )
 
+    if (parseInt(this.compilerModule.version.split('.')[0], 10) >= 6) {
+      // TypeScript 6.x enforces the 7.0 migration deprecations as hard errors (e.g. TS5107 for
+      // the `moduleResolution=node10` runtime default ts-jest injects on the CJS path). Silence
+      // them for ts-jest's in-memory compilation only — the user's own `tsc` build still
+      // enforces migration. The value is only valid on 6.x+, hence the version gate.
+      this._overriddenCompilerOptions.ignoreDeprecations = '6.0'
+    }
+
     this._setupConfigSet(options)
     this._matchablePatterns = [...this._jestCfg.testMatch, ...this._jestCfg.testRegex].filter(
       (pattern) =>
