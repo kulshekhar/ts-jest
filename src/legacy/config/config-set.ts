@@ -40,6 +40,8 @@ import { normalizeSlashes } from '../../utils/normalize-slashes'
 import { sha1 } from '../../utils/sha1'
 import { TSError } from '../../utils/ts-error'
 
+import { resolveCompilerApi } from './compiler-api-resolver'
+
 interface TsJestDiagnosticsCfg {
   pretty: boolean
   ignoreCodes: number[]
@@ -113,6 +115,25 @@ export class ConfigSet {
   readonly tsJestDigest = MY_DIGEST
   readonly logger: Logger
   readonly compilerModule: TTypeScript
+  /**
+   * The module specifier {@link ConfigSet.compilerModule} was resolved from
+   * (`typescript`, `@typescript/typescript6`, or the `compiler` option value).
+   *
+   * @internal
+   */
+  readonly compilerModuleName: string
+  /**
+   * `true` when the project's `typescript` package is native TypeScript (7+) without a JS compiler API.
+   *
+   * @internal
+   */
+  readonly nativeTypeScriptPresent: boolean
+  /**
+   * Version of the project's native `typescript` package, when {@link ConfigSet.nativeTypeScriptPresent}.
+   *
+   * @internal
+   */
+  readonly nativeTypeScriptVersion: string | undefined
   readonly isolatedModules: boolean
   readonly cwd: string
   readonly rootDir: string
@@ -194,9 +215,16 @@ export class ConfigSet {
     const tsJestCfg = this._jestCfg.globals && this._jestCfg.globals['ts-jest']
     const options: TsJestTransformerOptions = tsJestCfg ?? Object.create(null)
     // compiler module
-    this.compilerModule = importer.typescript(ImportReasons.TsJest, options.compiler ?? 'typescript')
+    const resolvedCompilerApi = resolveCompilerApi(options.compiler, this.logger)
+    this.compilerModule = resolvedCompilerApi.module
+    this.compilerModuleName = resolvedCompilerApi.moduleName
+    this.nativeTypeScriptPresent = resolvedCompilerApi.nativeTypeScriptPresent
+    this.nativeTypeScriptVersion = resolvedCompilerApi.nativeTypeScriptVersion
 
-    this.logger.debug({ compilerModule: this.compilerModule }, 'normalized compiler module config via ts-jest option')
+    this.logger.debug(
+      { compilerModule: this.compilerModule, compilerModuleName: this.compilerModuleName },
+      'normalized compiler module config via ts-jest option',
+    )
 
     this._setupConfigSet(options)
     this._matchablePatterns = [...this._jestCfg.testMatch, ...this._jestCfg.testRegex].filter(
@@ -428,6 +456,7 @@ export class ConfigSet {
     this.cacheSuffix = sha1(
       stringify({
         version: this.compilerModule.version,
+        compilerModuleName: this.compilerModuleName,
         digest: this.tsJestDigest,
         babelConfig: this.babelConfig,
         tsconfig: {

@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`resolveCompilerApi with an explicit \`compiler\` option should throw an actionable error when the requested module has no JS API, never falling back 1`] = `
+"The \`compiler\` module "some-native-ts" (version 7.0.2) does not expose the TypeScript JS compiler API (\`transpileModule\`/\`createLanguageService\`) that ts-jest uses for emit and AST transforms. If this is native TypeScript 7+, install the official compatibility package alongside it:
+    ↳ \`npm i -D @typescript/typescript6\` (or \`yarn add --dev @typescript/typescript6\`)
+and either remove the \`compiler\` option (ts-jest will detect it automatically) or set \`compiler: "@typescript/typescript6"\`."
+`;
+
+exports[`resolveCompilerApi without a \`compiler\` option should throw an actionable error when \`typescript\` is native v7 and the compat package is missing 1`] = `
+"Your project's \`typescript\` package (version 7.0.2) is the native TypeScript compiler, which does not ship the JS compiler API that ts-jest uses for emit and AST transforms. Install the official compatibility package next to it:
+    ↳ \`npm i -D @typescript/typescript6\` (or \`yarn add --dev @typescript/typescript6\`)
+It is designed to coexist with native TypeScript, and ts-jest will pick it up automatically. Type-checking can still use the fast native compiler via the ts-jest option \`diagnostics: { engine: "native" }\`."
+`;

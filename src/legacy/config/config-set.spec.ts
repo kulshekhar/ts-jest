@@ -483,6 +483,7 @@ describe('config-set', () => {
           sha1(
             stringify({
               version: configSet.compilerModule.version,
+              compilerModuleName: configSet.compilerModuleName,
               digest: configSet.tsJestDigest,
               babelConfig: configSet.babelConfig,
               tsconfig: {

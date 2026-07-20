@@ -22,6 +22,8 @@ export const enum Errors {
   MissingTransformerName = 'The AST transformer {{file}} must have an `export const name = <your_transformer_name>`',
   MissingTransformerVersion = 'The AST transformer {{file}} must have an `export const version = <your_transformer_version>`',
   InvalidModuleKindForEsm = 'The current compiler option "module" value is not suitable for Jest ESM mode. Please either use ES module kinds or Node16/NodeNext module kinds with "type: module" in package.json',
+  CompilerModuleWithoutJsApi = 'The `compiler` module "{{module}}" (version {{version}}) does not expose the TypeScript JS compiler API (`transpileModule`/`createLanguageService`) that ts-jest uses for emit and AST transforms. If this is native TypeScript 7+, install the official compatibility package alongside it:\n    ↳ `npm i -D @typescript/typescript6` (or `yarn add --dev @typescript/typescript6`)\nand either remove the `compiler` option (ts-jest will detect it automatically) or set `compiler: "@typescript/typescript6"`.',
+  NativeTypeScriptWithoutCompatPackage = 'Your project\'s `typescript` package (version {{version}}) is the native TypeScript compiler, which does not ship the JS compiler API that ts-jest uses for emit and AST transforms. Install the official compatibility package next to it:\n    ↳ `npm i -D @typescript/typescript6` (or `yarn add --dev @typescript/typescript6`)\nIt is designed to coexist with native TypeScript, and ts-jest will pick it up automatically. Type-checking can still use the fast native compiler via the ts-jest option `diagnostics: { engine: "native" }`.',
 }
 
 /**
@@ -29,6 +31,14 @@ export const enum Errors {
  */
 export const Helps = {
   FixMissingModule: '{{label}}: `npm i -D {{module}}` (or `yarn add --dev {{module}}`)',
+  UsingTypescript6CompatPackage:
+    'Your project\'s `typescript` package (version {{version}}) is the native TypeScript compiler without a JS compiler API; ts-jest is using "@typescript/typescript6" (version {{compatVersion}}) for emit and AST transforms instead.',
+  NativeCheckerUnavailable:
+    'The ts-jest option `diagnostics.engine` was set to "native" but the native TypeScript API could not be loaded ({{reason}}). Falling back to `diagnostics.engine: "compiler"`. The native engine requires the `typescript` package to be native TypeScript 7 or later, running on a Node.js version that supports `require()` of ES modules (>=20.19 or >=22.12).',
+  NativeCheckerIgnoredIsolatedModules:
+    'The ts-jest option `diagnostics.engine: "native"` has no effect because `isolatedModules` is enabled and type-checking is skipped entirely.',
+  InvalidDiagnosticsEngine:
+    'Invalid value for the ts-jest option `diagnostics.engine`: {{value}}. Expected "compiler" or "native". Using "compiler".',
   MigrateConfigUsingCLI:
     'Your Jest configuration is outdated. Use the CLI to help migrating it: ts-jest config:migrate <config-file>.',
   UsingModernNodeResolution: `Using hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include ${TsJestDiagnosticCodes.ModernNodeModule} in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics`,
