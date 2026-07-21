@@ -473,12 +473,15 @@ export class TsCompiler implements TsCompilerInstance {
      * This code path should be removed in the next major version to benefit from checking on compiler options
      */
     if (!isModernNodeModuleKind(this._initialCompilerOptions.module)) {
-      return this._ts.transpileModule(fileContent, {
+      const result = this._ts.transpileModule(fileContent, {
         fileName,
         transformers: this._makeTransformers(this.configSet.resolvedTransformers),
         compilerOptions: this._compilerOptions,
         reportDiagnostics: this.configSet.shouldReportDiagnostics(fileName),
       })
+      const diagnostics = this._filterDiagnosticsFromTsJestDefaults(result.diagnostics)
+
+      return diagnostics === result.diagnostics ? result : { ...result, diagnostics }
     }
 
     return tsTranspileModule(fileContent, {
@@ -491,6 +494,27 @@ export class TsCompiler implements TsCompilerInstance {
       compilerOptions: this._initialCompilerOptions,
       reportDiagnostics: fileName ? this.configSet.shouldReportDiagnostics(fileName) : false,
     })
+  }
+
+  /**
+   * TypeScript 6 reports TS5107 when ts-jest's historical default of
+   * `moduleResolution: Node10` is passed to `transpileModule`. The diagnostic
+   * is an implementation detail when ts-jest injected that value, but remains
+   * actionable when the user selected Node10 themselves.
+   */
+  private _filterDiagnosticsFromTsJestDefaults(diagnostics: Diagnostic[] | undefined): Diagnostic[] | undefined {
+    const node10 = this._ts.ModuleResolutionKind.Node10 ?? this._ts.ModuleResolutionKind.NodeJs
+    const tsMajor = parseInt(this._ts.version.split('.')[0], 10)
+    const hasInjectedNode10 =
+      tsMajor >= 6 &&
+      this._initialCompilerOptions.moduleResolution === undefined &&
+      this._compilerOptions.moduleResolution === node10
+
+    if (!hasInjectedNode10 || !diagnostics?.some((diagnostic) => diagnostic.code === 5107)) {
+      return diagnostics
+    }
+
+    return diagnostics.filter((diagnostic) => diagnostic.code !== 5107)
   }
 
   protected _makeTransformers(customTransformers: TsJestAstTransformer): CustomTransformers {

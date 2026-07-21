@@ -5,6 +5,7 @@ import { TsJestDiagnosticCodes } from './diagnostics'
  */
 export const enum Errors {
   LoadingModuleFailed = 'Loading module {{module}} failed with error: {{error}}',
+  TypeScriptCompilerApiUnavailable = 'The TypeScript compiler "{{module}}" (version {{version}}) does not expose the JavaScript compiler API required by ts-jest. To use TypeScript 7 for project type-checking, install it as "@typescript/native" and alias "@typescript/typescript6" as "typescript" for ts-jest.',
   UnableToLoadOneModule = 'Unable to load the module {{module}}. {{reason}} To fix it:\n{{fix}}',
   UnableToLoadAnyModule = 'Unable to load any of these modules: {{module}}. {{reason}}. To fix it:\n{{fix}}',
   UnableToRequireDefinitionFile = 'Unable to require `.d.ts` file for file: {{file}}.\nThis is usually the result of a faulty configuration or import. Make sure there is a `.js`, `.json` or another executable extension available alongside `{{file}}`.',
