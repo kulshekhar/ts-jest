@@ -21,6 +21,7 @@
     "execa",
     "chalk"
   ],
+  "ignorePaths": [".github/workflows/audit.yml"],
   "packageRules": [
     {
       "matchPaths": ["**/*"],
