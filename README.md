@@ -42,6 +42,9 @@ These instructions will get you setup to use `ts-jest` in your project. For more
 | **Creating config** | `npx ts-jest config:init`      | `yarn ts-jest config:init`           |
 |   **Running tests** | `npm test` or `npx jest`       | `yarn test` or `yarn jest`           |
 
+If your project uses TypeScript 7, follow the [supported side-by-side compiler setup](website/docs/guides/typescript-7.md)
+instead of installing `typescript` directly.
+
 ## Built With
 
 - [TypeScript](https://www.typescriptlang.org/) - JavaScript that scales
