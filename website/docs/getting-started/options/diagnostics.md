@@ -26,6 +26,14 @@ The `diagnostics` option's value can also accept an object for more advanced con
   similar to `tsconfig` option [exclude](https://www.typescriptlang.org/tsconfig#exclude) with the only difference is that
   in TypeScript, `exclude` will also exclude files from compilation process.
 - **`pretty`**: Enables/disables colorful and pretty output of errors (default: _enabled_).
+- **`engine`** (**experimental**): Which engine performs type-checking (default: `'compiler'`).
+  - `'compiler'`: the in-process JS TypeScript compiler (LanguageService) — the historical behavior.
+  - `'native'`: the out-of-process native TypeScript compiler. Requires the project's `typescript` package to be
+    native TypeScript 7+ and a Node.js version supporting `require()` of ES modules (>= 20.19 / >= 22.12).
+    JavaScript emit, `jest.mock()` hoisting and custom `astTransformers` keep running on the JS compiler pipeline
+    (resolved via [`compiler`](./compiler)); only type-checking is delegated to the native compiler, which spawns
+    one server per Jest worker. When the native API cannot be loaded, `ts-jest` falls back to `'compiler'` with a
+    warning. The native API is officially unstable until TypeScript 7.1, hence the experimental status.
 
 ### Examples
 
