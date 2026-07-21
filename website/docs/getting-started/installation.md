@@ -11,6 +11,9 @@ You can install `ts-jest` and dependencies all at once with one of the following
 npm install --save-dev jest typescript ts-jest @types/jest
 ```
 
+If your project uses TypeScript 7, follow the [TypeScript 7 side-by-side setup](../guides/typescript-7.md) instead of
+installing `typescript` directly.
+
 :::tip
 
 Tip: If you get an error with the following `npm` commands such as `npx: command not found`, you can replace `npx XXX` with `node node_modules/.bin/XXX` from the root of your project.
