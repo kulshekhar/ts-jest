@@ -120,9 +120,25 @@ describe('babelJest', () => {
 
 describe('typescript', () => {
   it('should be typescript', () => {
-    modules = {
-      typescript: () => 'typescript',
+    const compilerModule = {
+      createLanguageService: jest.fn(),
+      parseJsonConfigFileContent: jest.fn(),
+      transpileModule: jest.fn(),
+      version: '6.0.0',
     }
-    expect(new Importer().typescript(fakers.importReason(), 'typescript')).toBe('typescript')
+    modules = {
+      typescript: () => compilerModule,
+    }
+    expect(new Importer().typescript(fakers.importReason(), 'typescript')).toBe(compilerModule)
+  })
+
+  it('should fail early when the compiler does not expose the JavaScript compiler API', () => {
+    modules = {
+      typescript: () => ({ version: '7.0.2' }),
+    }
+
+    expect(() => new Importer().typescript(fakers.importReason(), 'typescript')).toThrowErrorMatchingInlineSnapshot(
+      `"The TypeScript compiler "typescript" (version 7.0.2) does not expose the JavaScript compiler API required by ts-jest. To use TypeScript 7 for project type-checking, install it as "@typescript/native" and alias "@typescript/typescript6" as "typescript" for ts-jest."`,
+    )
   })
 })

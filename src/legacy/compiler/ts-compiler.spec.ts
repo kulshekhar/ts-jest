@@ -326,6 +326,90 @@ describe('TsCompiler', () => {
         }
       })
 
+      test('should ignore TS5107 only when TypeScript 6 sees ts-jest injected Node10 resolution', () => {
+        const compiler = makeCompiler({
+          tsJestConfig: {
+            tsconfig: join(mockFolder, 'tsconfig-no-module-resolution.json'),
+          },
+        })
+        const injectedDefaultDiagnostic: ts.Diagnostic = {
+          category: ts.DiagnosticCategory.Error,
+          code: 5107,
+          messageText: "Option 'moduleResolution=node10' is deprecated.",
+          file: undefined,
+          start: undefined,
+          length: undefined,
+        }
+        const unrelatedDeprecation: ts.Diagnostic = {
+          category: ts.DiagnosticCategory.Error,
+          code: 5101,
+          messageText: "Option 'baseUrl' is deprecated.",
+          file: undefined,
+          start: undefined,
+          length: undefined,
+        }
+        const transpileModule = jest.fn().mockReturnValue({
+          outputText: 'var bar = 1',
+          diagnostics: [injectedDefaultDiagnostic, unrelatedDeprecation],
+        })
+        // @ts-expect-error testing purpose: simulate the TypeScript 6 compatibility package
+        compiler._ts = { ...ts, version: '6.0.0', transpileModule }
+        compiler.configSet.raiseDiagnostics = jest.fn()
+
+        compiler.getCompiledOutput(fileContent, fileName, {
+          depGraphs: new Map(),
+          supportsStaticESM: false,
+          watchMode: false,
+        })
+
+        expect(compiler.configSet.raiseDiagnostics).toHaveBeenCalledWith(
+          [unrelatedDeprecation],
+          fileName,
+          // @ts-expect-error testing purpose
+          compiler._logger,
+        )
+      })
+
+      test('should preserve TS5107 when the user explicitly selects Node10 resolution', () => {
+        const compiler = makeCompiler({
+          tsJestConfig: {
+            tsconfig: {
+              isolatedModules: true,
+              module: 'CommonJS',
+              moduleResolution: 'Node10',
+            },
+          },
+        })
+        const diagnostic: ts.Diagnostic = {
+          category: ts.DiagnosticCategory.Error,
+          code: 5107,
+          messageText: "Option 'moduleResolution=node10' is deprecated.",
+          file: undefined,
+          start: undefined,
+          length: undefined,
+        }
+        // @ts-expect-error testing purpose: simulate the TypeScript 6 compatibility package
+        compiler._ts = {
+          ...ts,
+          version: '6.0.0',
+          transpileModule: jest.fn().mockReturnValue({ outputText: 'var bar = 1', diagnostics: [diagnostic] }),
+        }
+        compiler.configSet.raiseDiagnostics = jest.fn()
+
+        compiler.getCompiledOutput(fileContent, fileName, {
+          depGraphs: new Map(),
+          supportsStaticESM: false,
+          watchMode: false,
+        })
+
+        expect(compiler.configSet.raiseDiagnostics).toHaveBeenCalledWith(
+          [diagnostic],
+          fileName,
+          // @ts-expect-error testing purpose
+          compiler._logger,
+        )
+      })
+
       it('should use tsTranspileModule when Node16/NodeNext is used', () => {
         const compiler = makeCompiler({
           tsJestConfig: {

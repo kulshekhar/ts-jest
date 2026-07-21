@@ -35,7 +35,22 @@ export class Importer {
   }
 
   typescript(why: ImportReasons, which: string): TTypeScript {
-    return this._import(why, which)
+    const compilerModule = this._import<TTypeScript>(why, which)
+    const hasRequiredCompilerApi =
+      typeof compilerModule.createLanguageService === 'function' &&
+      typeof compilerModule.parseJsonConfigFileContent === 'function' &&
+      typeof compilerModule.transpileModule === 'function'
+
+    if (!hasRequiredCompilerApi) {
+      throw new Error(
+        interpolate(Errors.TypeScriptCompilerApiUnavailable, {
+          module: which,
+          version: compilerModule.version ?? 'unknown',
+        }),
+      )
+    }
+
+    return compilerModule
   }
 
   esBuild(why: ImportReasons): TEsBuild {
