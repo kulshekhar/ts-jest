@@ -27,6 +27,7 @@ module.exports = {
         'guides/mock-es6-class',
         'guides/react-native',
         'guides/troubleshooting',
+        'guides/typescript-7',
         'guides/using-with-monorepo',
       ],
     },

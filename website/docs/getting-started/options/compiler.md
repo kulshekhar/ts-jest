@@ -9,6 +9,9 @@ The loaded version will depend on the one installed in your project.
 
 If you use a custom compiler, such as `ttypescript`, make sure its API is the same as the original TypeScript, at least for what `ts-jest` is using.
 
+TypeScript 7.0's native package does not expose this API and cannot be selected here. See the
+[TypeScript 7 guide](../../guides/typescript-7.md) for the supported side-by-side setup.
+
 ### Example
 
 ```ts title="jest.config.ts"
