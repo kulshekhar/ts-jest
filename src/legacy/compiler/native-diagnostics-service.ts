@@ -295,5 +295,11 @@ export class NativeDiagnosticsService {
     }
     this._api = undefined
     this._snapshot = undefined
+    // everything below is scoped to the server that just went away: cached project handles are
+    // only valid within the snapshot that produced them, opened files are opens on the dead
+    // server, and previously unresolvable files may resolve fine on a fresh one
+    this._projectCache.clear()
+    this._openedFiles.clear()
+    this._unresolvableFiles.clear()
   }
 }

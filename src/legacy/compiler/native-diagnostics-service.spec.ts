@@ -136,44 +136,58 @@ describe('NativeDiagnosticsService', () => {
     diagnosticsByFile = {},
     openFilesResolveToInferredProject = true,
   }: FakeServerSetup = {}) => {
-    const files = new Set(projectFiles)
     const calls = {
       constructed: 0,
       updateSnapshot: [] as unknown[],
       closed: 0,
       disposedSnapshots: 0,
     }
-    const project: NativeProject = {
-      configFileName: tsconfigPath,
-      program: {
-        getSyntacticDiagnostics: (file?: string) =>
-          (file ? diagnosticsByFile[file] ?? [] : []).filter((d) => d.code === 1005),
-        getSemanticDiagnostics: (file?: string) =>
-          (file ? diagnosticsByFile[file] ?? [] : []).filter((d) => d.code !== 1005),
-      },
-    }
-    const makeSnapshot = (): NativeSnapshot => ({
-      getProjects: () => [project],
-      getDefaultProjectForFile: (file: string) => (files.has(file) ? project : undefined),
-      dispose: () => {
-        calls.disposedSnapshots++
-      },
-    })
+    // each server instance mints its own project handle whose program throws once that server is
+    // closed — mirroring the real API, where handles are only valid for the server/snapshot that
+    // produced them. This lets the dispose test catch stale-cache regressions across respawn.
     class FakeApi {
+      private readonly _files = new Set(projectFiles)
+      private _closed = false
+      private readonly _project: NativeProject
       constructor() {
         calls.constructed++
+        const assertAlive = () => {
+          if (this._closed) throw new Error('stale project handle: its server was closed')
+        }
+        this._project = {
+          configFileName: tsconfigPath,
+          program: {
+            getSyntacticDiagnostics: (file?: string) => {
+              assertAlive()
+
+              return (file ? diagnosticsByFile[file] ?? [] : []).filter((d) => d.code === 1005)
+            },
+            getSemanticDiagnostics: (file?: string) => {
+              assertAlive()
+
+              return (file ? diagnosticsByFile[file] ?? [] : []).filter((d) => d.code !== 1005)
+            },
+          },
+        }
       }
       updateSnapshot(params?: unknown): NativeSnapshot {
         calls.updateSnapshot.push(params)
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const openFiles: string[] | undefined = (params as any)?.openFiles
         if (openFiles && openFilesResolveToInferredProject) {
-          openFiles.forEach((file) => files.add(file))
+          openFiles.forEach((file) => this._files.add(file))
         }
 
-        return makeSnapshot()
+        return {
+          getProjects: () => [this._project],
+          getDefaultProjectForFile: (file: string) => (this._files.has(file) ? this._project : undefined),
+          dispose: () => {
+            calls.disposedSnapshots++
+          },
+        }
       }
       close(): void {
+        this._closed = true
         calls.closed++
       }
     }
@@ -267,17 +281,31 @@ describe('NativeDiagnosticsService', () => {
     expect(calls.updateSnapshot).toHaveLength(0)
   })
 
-  it('should close the server on dispose', () => {
-    const { service, calls } = createService()
+  it('should close the server on dispose and not reuse any snapshot-scoped state on respawn', () => {
+    const { service, calls } = createService({
+      diagnosticsByFile: {
+        [inProjectFile]: [
+          { fileName: inProjectFile, pos: 2, end: 3, code: 2322, category: ts.DiagnosticCategory.Error, text: 'sem' },
+        ],
+      },
+    })
+    // also populate the openFiles bookkeeping before disposing
+    service.check(orphanFile)
     service.check(inProjectFile)
 
     service.dispose()
 
     expect(calls.closed).toBe(1)
 
-    // and re-spawn cleanly if used again
-    service.check(inProjectFile)
-
+    // re-spawn cleanly: cached project handles from the dead server must not be used…
+    expect(service.check(inProjectFile).map((d) => d.code)).toEqual([2322])
     expect(calls.constructed).toBe(2)
+    // …and files opened on the dead server must be re-opened on the new one
+    expect(service.check(orphanFile)).toEqual([])
+    const openFileCalls = calls.updateSnapshot.filter(
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (params) => (params as any)?.openFiles?.includes(orphanFile),
+    )
+    expect(openFileCalls).toHaveLength(2)
   })
 })
