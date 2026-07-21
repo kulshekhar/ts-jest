@@ -15,6 +15,10 @@ Install the two compilers under separate package names:
 npm install --save-dev '@typescript/native@npm:typescript@^7.0.2' 'typescript@npm:@typescript/typescript6@^6.0.2'
 ```
 
+If npm reports `ERESOLVE` after replacing `typescript` with TypeScript 7 directly, do not bypass the peer dependency check
+with `--legacy-peer-deps`. Use the aliases above instead: the native package does not provide the compiler API required by
+ts-jest, while the `typescript` alias does.
+
 The equivalent `package.json` configuration is:
 
 ```json

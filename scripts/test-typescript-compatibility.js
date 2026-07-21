@@ -6,20 +6,26 @@ const rootDir = path.join(__dirname, '..')
 const fixtureDir = path.join(rootDir, 'e2e/typescript-compatibility')
 const jestBin = path.join(rootDir, 'node_modules/jest/bin/jest.js')
 const args = process.argv.slice(2)
+const usage = 'Usage: test-typescript-compatibility --api-major <major> --compiler-bin <name> [options]'
 
-const optionValue = (name) => {
-  const optionIndex = args.indexOf(name)
+const optionValues = (name) =>
+  args.flatMap((argument, index) => {
+    if (argument !== name) return []
 
-  return optionIndex === -1 ? undefined : args[optionIndex + 1]
-}
+    const value = args[index + 1]
 
-const apiMajor = optionValue('--api-major')
-const compilerBins = args.flatMap((argument, index) => (argument === '--compiler-bin' ? [args[index + 1]] : []))
+    if (!value || value.startsWith('--')) throw new Error(usage)
+
+    return [value]
+  })
+
+const [apiMajor] = optionValues('--api-major')
+const compilerBins = optionValues('--compiler-bin')
 const hasNativeCompiler = args.includes('--native')
 const shouldCheckPublicTypes = args.includes('--check-public-types')
 
 if (!apiMajor || compilerBins.length === 0) {
-  throw new Error('Usage: test-typescript-compatibility --api-major <major> --compiler-bin <name> [options]')
+  throw new Error(usage)
 }
 
 const run = (command, commandArgs, options = {}) => {
