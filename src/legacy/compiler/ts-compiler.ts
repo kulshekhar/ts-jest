@@ -503,8 +503,9 @@ export class TsCompiler implements TsCompilerInstance {
    * actionable when the user selected Node10 themselves.
    */
   private _filterDiagnosticsFromTsJestDefaults(diagnostics: Diagnostic[] | undefined): Diagnostic[] | undefined {
-    const node10 = this._ts.ModuleResolutionKind.Node10 ?? this._ts.ModuleResolutionKind.NodeJs
-    const tsMajor = parseInt(this._ts.version.split('.')[0], 10)
+    // `Node10` was exposed as `NodeJs` (with the same value) by older supported TypeScript releases.
+    const node10 = this._ts.ModuleResolutionKind.Node10 ?? 2
+    const tsMajor = Number.parseInt(this._ts.version.split('.')[0], 10)
     const hasInjectedNode10 =
       tsMajor >= 6 &&
       this._initialCompilerOptions.moduleResolution === undefined &&
