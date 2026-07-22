@@ -1,3 +1,10 @@
+## [29.4.12](https://github.com/kulshekhar/ts-jest/compare/v29.4.11...v29.4.12) (2026-07-22)
+
+
+### Features
+
+* **compiler:** support TypeScript 7 projects through compatibility aliases ([#5386](https://github.com/kulshekhar/ts-jest/pull/5386))
+
 ## [29.4.11](https://github.com/kulshekhar/ts-jest/compare/v29.4.10...v29.4.11) (2026-05-21)
 
 
@@ -2069,6 +2076,5 @@ For example
 
 <a name="0.0.0"></a>
 # 0.0.0 (2016-08-30)
-
 
 
