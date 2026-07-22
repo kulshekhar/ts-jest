@@ -1,4 +1,6 @@
+export { findTypeModulePackages } from './find-type-module-packages'
 export * from './json'
+export * from './node-modules-transform-pattern'
 export * from './jsonable-value'
 export * from './logger'
 export * from './diagnostics'
