@@ -28,7 +28,7 @@
     "eslint-plugin-prettier": "^5.5.6",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
-    "ts-jest": "^29.4.11",
+    "ts-jest": "^29.4.12",
     "typescript": "~5.9.3",
     "vite": "^8.1.5"
   }
