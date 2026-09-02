@@ -12,7 +12,7 @@
     "@babel/core": "^7.29.7",
     "@babel/preset-env": "^7.29.7",
     "@types/jest": "^30.0.0",
-    "babel-jest": "^30.4.1",
+    "babel-jest": "^30.5.0",
     "cross-env": "^7.0.3",
     "jest": "^30.4.2",
     "ts-jest": "^29.4.12",
