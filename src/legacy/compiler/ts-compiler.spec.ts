@@ -105,11 +105,13 @@ describe('TsCompiler', () => {
   describe('_resolveModuleName', () => {
     const fileName = join(mockFolder, 'thing.ts')
     const node10 = ts.ModuleResolutionKind.Node10 ?? ts.ModuleResolutionKind.NodeJs
-    const modernModuleResolutions = [
-      ['Node16', ts.ModuleResolutionKind.Node16],
-      ['NodeNext', ts.ModuleResolutionKind.NodeNext],
-      ['Bundler', ts.ModuleResolutionKind.Bundler],
-    ] as const
+    const modernModuleResolutions = (
+      [
+        ['Node16', ts.ModuleResolutionKind.Node16],
+        ['NodeNext', ts.ModuleResolutionKind.NodeNext],
+        ['Bundler', ts.ModuleResolutionKind.Bundler],
+      ] as const
+    ).filter(([, moduleResolution]) => moduleResolution !== undefined)
 
     function buildCompilerWithResolverSpies(): {
       compiler: TsCompiler
