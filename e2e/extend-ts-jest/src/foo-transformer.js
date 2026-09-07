@@ -1,4 +1,4 @@
-const tsJestTransformer = require('ts-jest')
+const tsJestTransformer = require('../../../dist')
 
 class FooTransformer extends tsJestTransformer.TsJestTransformer {
   async processAsync(sourceText, sourcePath, transformOptions) {

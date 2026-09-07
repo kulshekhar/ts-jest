@@ -1,4 +1,7 @@
 {
   "name": "hoist-jest",
-  "private": true
+  "private": true,
+  "devDependencies": {
+    "@jest/globals": "30.4.1"
+  }
 }

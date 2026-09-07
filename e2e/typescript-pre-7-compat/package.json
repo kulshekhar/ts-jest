@@ -1,0 +1,9 @@
+{
+  "name": "typescript-pre-7-compatibility",
+  "private": true,
+  "devDependencies": {
+    "@types/jest": "^29.5.14",
+    "jest": "30.4.2",
+    "typescript": "~5.9.3"
+  }
+}

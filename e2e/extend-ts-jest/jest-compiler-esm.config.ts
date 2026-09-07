@@ -1,15 +1,18 @@
-import { type JestConfigWithTsJest, TS_JS_TRANSFORM_PATTERN } from 'ts-jest'
+import { defineConfig } from 'jest'
 
-export default {
+import { TS_JS_TRANSFORM_PATTERN } from '../../dist/constants.js'
+import type { TsJestTransformerOptions } from '../../src'
+
+export default defineConfig({
   displayName: 'extend-ts-jest-compiler-esm',
   extensionsToTreatAsEsm: ['.ts'],
   transform: {
     [TS_JS_TRANSFORM_PATTERN]: [
-      'ts-jest',
+      '<rootDir>/../../dist/index.js',
       {
         tsconfig: '<rootDir>/tsconfig-esm.spec.json',
         useESM: true,
-      },
+      } satisfies TsJestTransformerOptions,
     ],
   },
-} satisfies JestConfigWithTsJest
+})

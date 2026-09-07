@@ -48,28 +48,14 @@ this is where you will write it in. Tests here usually don't require much if any
 
 ##### Integration tests
 
-There will be situations however where the work you have done cannot be tested alone using unit tests. In situations like this,
-you should write an integration test for your code. The integration tests reside within the `e2e` directory.
-Within this directory, there is a `__tests__` directory. This is where you will write the integration test itself.
-The tests within this directory execute jest itself using `run-jest.ts` and assertions are usually made on one if not all
-the output of the following `status`, `stdout` and `stderr`. The other subdirectories within the `e2e` directory are
-where you will write the files that jest will run for your integration tests. Feel free to take a look at any of the tests
-in the `__tests__` directory within `e2e` to have a better sense of how it is currently being done.
-
-It is possible to run the integration test itself manually to inspect that the new behaviour is indeed correct.
-Here is a small code snippet of how to do just that. This is useful when debugging a failing test.
+Integration tests reside in `e2e`. Controller tests under `e2e/__tests__` select isolated fixture projects and execute
+their local Jest configurations through `run-jest.ts`. Each fixture owns its package metadata, Jest configuration,
+TypeScript configuration, source files, and tests. Dependencies and lockfiles belong only to fixtures that require them.
 
 ```bash
-$ cd e2e/test-utils
-$ node ../../node_modules/jest/bin/jest.js # It is possible to use node --inspect or ndb
-PASS  __tests__/test-utils.spec.ts
-✓ stub (3ms)
-
-Test Suites: 1 passed, 1 total
-Tests:       1 passed, 1 total
-Snapshots:   0 total
-Time:        0.232 s, estimated 1 s
-Ran all test suites.
+npm run build
+npm run test-e2e
+npm run test-e2e -- --runTestsByPath e2e/__tests__/test-utils.test.ts
 ```
 
 ### Additional Workflow for any changes made to website or docs

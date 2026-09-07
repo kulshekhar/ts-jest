@@ -1,5 +1,5 @@
 {
-  "extends": "../tsconfig-esm.spec.json",
+  "extends": "./tsconfig-esm.spec.json",
   "compilerOptions": {
     "isolatedModules": true
   }
