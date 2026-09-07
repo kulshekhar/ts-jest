@@ -1,6 +1,8 @@
 {
-  "extends": [
-    "../tsconfig-js.json",
-    "../tsconfig-cjs.spec.json"
-  ]
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "module": "CommonJS",
+    "esModuleInterop": true,
+    "allowJs": true
+  }
 }

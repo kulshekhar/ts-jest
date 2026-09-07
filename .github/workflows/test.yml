@@ -71,9 +71,7 @@ jobs:
           npm run postbuild
 
       - name: Run e2e tests 🧪
-        run: |
-          npm run test-e2e-cjs
-          npm run test-e2e-esm
+        run: npm run test-e2e
 
   example-test:
     permissions:

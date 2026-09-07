@@ -1,13 +1,16 @@
-import { type JestConfigWithTsJest, TS_TRANSFORM_PATTERN } from 'ts-jest'
+import { defineConfig } from 'jest'
 
-export default {
+import { TS_TRANSFORM_PATTERN } from '../../dist/constants.js'
+import type { TsJestTransformerOptions } from '../../src'
+
+export default defineConfig({
   displayName: 'test-utils-compiler-cjs',
   transform: {
     [TS_TRANSFORM_PATTERN]: [
-      'ts-jest',
+      '<rootDir>/../../dist/index.js',
       {
-        tsconfig: '<rootDir>/../tsconfig-cjs.spec.json',
-      },
+        tsconfig: '<rootDir>/tsconfig-cjs.spec.json',
+      } satisfies TsJestTransformerOptions,
     ],
   },
-} satisfies JestConfigWithTsJest
+})

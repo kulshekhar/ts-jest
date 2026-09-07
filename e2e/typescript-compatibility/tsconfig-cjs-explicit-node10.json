@@ -1,6 +1,0 @@
-{
-  "extends": "./tsconfig-cjs-isolated.json",
-  "compilerOptions": {
-    "moduleResolution": "Node10"
-  }
-}

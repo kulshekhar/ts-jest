@@ -11,10 +11,9 @@ import {
   createJsWithBabelLegacyPreset,
   createJsWithBabelEsmPreset,
   createJsWithBabelEsmLegacyPreset,
-} from 'ts-jest'
-// @ts-expect-error to check if we export default preset
-import defaultPreset from 'ts-jest/jest-preset'
-import presets from 'ts-jest/presets'
+} from '../../../dist'
+import defaultPreset from '../../../jest-preset'
+import presets from '../../../presets'
 
 describe('presets', () => {
   it('should export default preset via jest-preset.js', () => {

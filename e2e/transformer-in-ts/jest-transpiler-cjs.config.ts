@@ -1,10 +1,13 @@
-import { type JestConfigWithTsJest, TS_TRANSFORM_PATTERN } from 'ts-jest'
+import { defineConfig } from 'jest'
 
-export default {
+import { TS_TRANSFORM_PATTERN } from '../../dist/constants.js'
+import type { TsJestTransformerOptions } from '../../src'
+
+export default defineConfig({
   displayName: 'transformer-in-ts-transpiler-cjs',
   transform: {
     [TS_TRANSFORM_PATTERN]: [
-      'ts-jest',
+      '<rootDir>/../../dist/index.js',
       {
         tsconfig: '<rootDir>/tsconfig-cjs-transpiler.spec.json',
         astTransformers: {
@@ -14,7 +17,7 @@ export default {
             },
           ],
         },
-      },
+      } satisfies TsJestTransformerOptions,
     ],
   },
-} satisfies JestConfigWithTsJest
+})

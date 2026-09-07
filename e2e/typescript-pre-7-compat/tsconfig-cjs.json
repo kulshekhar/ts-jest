@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "module": "CommonJS",
+    "sourceMap": true,
+    "target": "ES2019",
+    "types": ["jest"]
+  }
+}
