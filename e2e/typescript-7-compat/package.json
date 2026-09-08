@@ -4,7 +4,7 @@
   "devDependencies": {
     "@types/jest": "^29.5.14",
     "@typescript/native": "npm:typescript@7.0.2",
-    "jest": "30.4.2",
+    "jest": "30.5.1",
     "typescript": "npm:@typescript/typescript6@6.0.2"
   }
 }
