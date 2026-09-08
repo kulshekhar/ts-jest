@@ -2,6 +2,6 @@
   "name": "hoist-jest",
   "private": true,
   "devDependencies": {
-    "@jest/globals": "30.4.1"
+    "@jest/globals": "30.5.1"
   }
 }
