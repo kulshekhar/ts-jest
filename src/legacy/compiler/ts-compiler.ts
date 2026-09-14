@@ -647,22 +647,38 @@ export class TsCompiler implements TsCompilerInstance {
   /**
    * @internal
    */
+  private _getResolutionMode(containingFile: string) {
+    const getImpliedNodeFormat = this._ts.getImpliedNodeFormatForFile
+
+    if (typeof getImpliedNodeFormat !== 'function') {
+      return undefined
+    }
+
+    // @ts-expect-error internal TypeScript API
+    const moduleResolution = this._ts.getEmitModuleResolutionKind(this._compilerOptions)
+
+    const { Classic, Node10, NodeJs } = this._ts.ModuleResolutionKind
+
+    if (moduleResolution === (Node10 ?? NodeJs) || moduleResolution === Classic) {
+      return undefined
+    }
+
+    return getImpliedNodeFormat(
+      containingFile,
+      this._moduleResolutionCache?.getPackageJsonInfoCache?.(),
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      this._moduleResolutionHost!,
+      this._compilerOptions,
+    )
+  }
+
+  /**
+   * @internal
+   */
   private _resolveModuleName(
     moduleNameToResolve: string,
     containingFile: string,
   ): ResolvedModuleWithFailedLookupLocations {
-    const getImpliedNodeFormat = this._ts.getImpliedNodeFormatForFile
-    const resolutionMode =
-      typeof getImpliedNodeFormat === 'function'
-        ? getImpliedNodeFormat(
-            containingFile,
-            undefined,
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            this._moduleResolutionHost!,
-            this._compilerOptions,
-          )
-        : undefined
-
     return this._ts.resolveModuleName(
       moduleNameToResolve,
       containingFile,
@@ -672,7 +688,7 @@ export class TsCompiler implements TsCompilerInstance {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       this._moduleResolutionCache!,
       undefined,
-      resolutionMode,
+      this._getResolutionMode(containingFile),
     )
   }
 
