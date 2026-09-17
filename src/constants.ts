@@ -9,6 +9,7 @@ export const TS_JS_TRANSFORM_PATTERN = '^.+\\.[tj]sx?$'
 export const ESM_TS_JS_TRANSFORM_PATTERN = '^.+\\.m?[tj]sx?$'
 export const JS_TRANSFORM_PATTERN = '^.+\\.jsx?$'
 export const ESM_JS_TRANSFORM_PATTERN = '^.+\\.m?jsx?$'
+export const MJS_NODE_MODULES_TRANSFORM = '^.+/node_modules/.+\\.mjs$'
 // `extensionsToTreatAsEsm` will throw error with `.mjs`
 export const TS_EXT_TO_TREAT_AS_ESM = ['.ts', '.tsx', '.mts']
 export const JS_EXT_TO_TREAT_AS_ESM = ['.jsx']
