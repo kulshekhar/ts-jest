@@ -1,3 +1,5 @@
+import { pathToFileURL } from 'url'
+
 import { stringify } from '../../utils'
 
 /**
@@ -29,7 +31,8 @@ export function updateOutput(outputText: string, normalizedFileName: string, sou
 const updateSourceMap = (sourceMapText: string, normalizedFileName: string): string => {
   const sourceMap = JSON.parse(sourceMapText)
   sourceMap.file = normalizedFileName
-  sourceMap.sources = [normalizedFileName]
+  // Source-map consumers resolve sources as URLs, where Windows drive paths are relative.
+  sourceMap.sources = [pathToFileURL(normalizedFileName).href]
   delete sourceMap.sourceRoot
 
   return stringify(sourceMap)
