@@ -121,7 +121,7 @@ describe('packed package consumers', () => {
     )
   })
 
-  describe.each(packageConsumersToRun)('$name', ({ specifier }) => {
+  describe.each(packageConsumersToRun)('$name', ({ specifier, version }) => {
     beforeAll(() => installTypeScript(specifier))
 
     it('should run a CommonJS consumer', async () => {
@@ -135,5 +135,63 @@ describe('packed package consumers', () => {
 
       expect(result).toMatchObject({ exitCode: 0 })
     })
+
+    test.each([
+      {
+        name: 'CommonJS',
+        tsconfigFile: 'tsconfig-custom-conditions.json',
+        preserveForTypeScript6: true,
+        useESM: false,
+      },
+      {
+        name: 'Preserve',
+        tsconfigFile: 'tsconfig-custom-conditions-preserve.json',
+        preserveForTypeScript6: false,
+        useESM: true,
+      },
+    ])(
+      'should apply runtime-specific customConditions handling for $name when moduleResolution is omitted',
+      async ({ tsconfigFile, preserveForTypeScript6, useESM }) => {
+        const result = await runCommand(
+          process.execPath,
+          [
+            '-e',
+            `const path = require('node:path')
+const { ConfigSet } = require('ts-jest/dist/legacy/config/config-set')
+const { TsCompiler } = require('ts-jest/dist/legacy/compiler/ts-compiler')
+const configSet = new ConfigSet({
+  cwd: process.cwd(),
+  rootDir: process.cwd(),
+  globals: {
+    'ts-jest': {
+      isolatedModules: true,
+      useESM: ${useESM},
+      tsconfig: path.join(process.cwd(), '${tsconfigFile}'),
+    },
+  },
+  testMatch: [],
+  testRegex: [],
+})
+const compiler = new TsCompiler(configSet, new Map())
+compiler.getCompiledOutput('const value = 1', path.join(process.cwd(), 'value.ts'), {
+  depGraphs: new Map(),
+  supportsStaticESM: ${useESM},
+  watchMode: false,
+})
+console.log(JSON.stringify({
+  version: configSet.compilerModule.version,
+  customConditions: compiler._compilerOptions.customConditions,
+}))`,
+          ],
+          fixturePath,
+        )
+
+        expect(result).toMatchObject({ exitCode: 0 })
+        expect(JSON.parse(result.stdout.trim())).toEqual({
+          version,
+          customConditions: preserveForTypeScript6 && !version.startsWith('6.') ? undefined : ['runtime-condition'],
+        })
+      },
+    )
   })
 })

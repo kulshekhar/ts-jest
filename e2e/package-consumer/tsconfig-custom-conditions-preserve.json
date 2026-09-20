@@ -1,0 +1,8 @@
+{
+  "compilerOptions": {
+    "customConditions": ["runtime-condition"],
+    "module": "Preserve",
+    "target": "ES2022",
+    "types": []
+  }
+}

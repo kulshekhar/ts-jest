@@ -351,5 +351,96 @@ describe('transpileModules', () => {
 
       expect(result.diagnostics?.[0].messageText).toBeTruthy()
     })
+
+    it('should apply custom transformers with the checked compiler program', () => {
+      let checkedProgram: ts.Program | undefined
+      const transformerFactory = jest.fn((context: ts.TransformationContext) => {
+        const visitor: ts.Visitor = (node) => {
+          if (ts.isIdentifier(node) && node.text === 'value') {
+            return ts.factory.createIdentifier('renamed')
+          }
+
+          return ts.visitEachChild(node, visitor, context)
+        }
+
+        return (sourceFile: ts.SourceFile) => ts.visitNode(sourceFile, visitor)
+      })
+      const result = tsTranspileModule('const value = 1', {
+        compilerOptions: {
+          module: ts.ModuleKind.CommonJS,
+          target: ts.ScriptTarget.ESNext,
+        },
+        transformers: (program) => {
+          checkedProgram = program
+
+          return { before: [transformerFactory] }
+        },
+      })
+
+      expect(result.outputText).toContain('const renamed = 1;')
+      expect(result.diagnostics).toHaveLength(0)
+      expect(checkedProgram).toBeDefined()
+      expect(checkedProgram?.getRootFileNames()).toEqual(['module.ts'])
+      expect(checkedProgram?.getCompilerOptions()).toEqual(
+        expect.objectContaining({
+          module: ts.ModuleKind.CommonJS,
+          target: ts.ScriptTarget.ESNext,
+        }),
+      )
+      expect(transformerFactory).toHaveBeenCalledTimes(1)
+    })
+
+    it.each([
+      {
+        name: 'CommonJS',
+        fileName: 'module.ts',
+        compilerOptions: { module: ts.ModuleKind.CommonJS, moduleResolution: ts.ModuleResolutionKind.Node10 },
+        expectedModuleForm: /exports\.value/,
+      },
+      {
+        name: 'ESM',
+        fileName: 'module.ts',
+        compilerOptions: { module: ts.ModuleKind.ESNext, moduleResolution: ts.ModuleResolutionKind.Bundler },
+        expectedModuleForm: /export const value/,
+      },
+      {
+        name: 'Node16',
+        fileName: 'module.cts',
+        compilerOptions: { module: ts.ModuleKind.Node16, moduleResolution: ts.ModuleResolutionKind.Node16 },
+        expectedModuleForm: /exports\.value/,
+      },
+      {
+        name: 'NodeNext',
+        fileName: 'module.mts',
+        compilerOptions: { module: ts.ModuleKind.NodeNext, moduleResolution: ts.ModuleResolutionKind.NodeNext },
+        expectedModuleForm: /export const value/,
+      },
+      {
+        name: 'Bundler',
+        fileName: 'module.mts',
+        compilerOptions: { module: ts.ModuleKind.ESNext, moduleResolution: ts.ModuleResolutionKind.Bundler },
+        expectedModuleForm: /export const value/,
+      },
+    ])('should compile checked-transpiler $name mode', ({ fileName, compilerOptions, expectedModuleForm }) => {
+      let checkedProgram: ts.Program | undefined
+      const result = tsTranspileModule('export const value = 1', {
+        fileName,
+        compilerOptions: {
+          ...compilerOptions,
+          target: ts.ScriptTarget.ESNext,
+          types: [],
+        },
+        reportDiagnostics: true,
+        transformers: (program) => {
+          checkedProgram = program
+
+          return {}
+        },
+      })
+
+      expect(result.diagnostics).toHaveLength(0)
+      expect(result.outputText).toMatch(expectedModuleForm)
+      expect(checkedProgram?.getCompilerOptions()).toEqual(expect.objectContaining(compilerOptions))
+    })
   })
 })

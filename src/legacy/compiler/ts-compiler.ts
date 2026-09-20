@@ -173,15 +173,15 @@ export class TsCompiler implements TsCompilerInstance {
    *     `module` ts-jest forces at runtime (CommonJS on the CJS path, or
    *     ESNext / the user's original `module` on the ESM path) and otherwise
    *     substitutes a TypeScript-valid alternative. When the user has not set
-   *     a value the historical Node10 default is kept, so unchanged tsconfigs
-   *     see the exact same resolved options as before.
+   *     a value the option remains unset so TypeScript selects its own default
+   *     for the forced module kind.
    *
    *   - `customConditions` is delegated to `preserveCustomConditionsIfCompatible`,
    *     which keeps the user's value only when the resolved
    *     `moduleResolution` supports it (`Bundler` / `Node16` / `NodeNext`)
    *     and clears it otherwise. The pre-#4198 code unconditionally cleared
-   *     this option because the hardcoded `Node10` override always made it
-   *     incompatible; that is no longer true.
+   *     this option because the old forced `Node10` value always made it
+   *     incompatible; compatible user values are now preserved.
    *
    * @see https://github.com/kulshekhar/ts-jest/issues/4198
    */
@@ -191,38 +191,54 @@ export class TsCompiler implements TsCompilerInstance {
         this._ts.ModuleKind.CommonJS,
         compilerOptions.moduleResolution,
       )
+      const fixedCompilerOptions = { ...compilerOptions }
+      delete fixedCompilerOptions.moduleResolution
+      delete fixedCompilerOptions.customConditions
+      const customConditions = this.preserveCustomConditionsIfCompatible(
+        moduleResolution,
+        compilerOptions.customConditions,
+        this._ts.ModuleKind.CommonJS,
+      )
 
       return {
-        ...compilerOptions,
+        ...fixedCompilerOptions,
         module: this._ts.ModuleKind.CommonJS,
-        moduleResolution,
-        customConditions: this.preserveCustomConditionsIfCompatible(moduleResolution, compilerOptions.customConditions),
+        ...(moduleResolution === undefined ? {} : { moduleResolution }),
+        ...(customConditions === undefined ? {} : { customConditions }),
       }
     }
 
     let moduleKind = compilerOptions.module ?? this._ts.ModuleKind.ESNext
     let esModuleInterop = compilerOptions.esModuleInterop
-    if (isModernNodeModuleKind(moduleKind)) {
+    if (isModernNodeModuleKind(moduleKind, this._ts)) {
       esModuleInterop = true
       moduleKind = this._ts.ModuleKind.ESNext
     }
 
     const moduleResolution = this.resolveCompatibleModuleResolution(moduleKind, compilerOptions.moduleResolution)
+    const fixedCompilerOptions = { ...compilerOptions }
+    delete fixedCompilerOptions.moduleResolution
+    delete fixedCompilerOptions.customConditions
+    const customConditions = this.preserveCustomConditionsIfCompatible(
+      moduleResolution,
+      compilerOptions.customConditions,
+      moduleKind,
+    )
 
     return {
-      ...compilerOptions,
+      ...fixedCompilerOptions,
       module: moduleKind,
       esModuleInterop,
-      moduleResolution,
-      customConditions: this.preserveCustomConditionsIfCompatible(moduleResolution, compilerOptions.customConditions),
+      ...(moduleResolution === undefined ? {} : { moduleResolution }),
+      ...(customConditions === undefined ? {} : { customConditions }),
     }
   }
 
   /**
    * Pick a `moduleResolution` value that is valid alongside the `module` ts-jest
-   * forces at runtime. Closes #4198: previously this was hardcoded to Node10 and
-   * silently overrode whatever the user set in tsconfig, even when the user value
-   * would have been valid (e.g. Bundler with module: ESNext, Classic with CommonJS).
+   * forces at runtime. User values are preserved when valid; incompatible values
+   * use Bundler where it is valid and otherwise leave the option unset so
+   * TypeScript selects its default.
    *
    * Substitution rules — each tied to a specific TypeScript diagnostic that the
    * resulting combination would otherwise raise. The "Bundler-compatible" set is
@@ -232,51 +248,37 @@ export class TsCompiler implements TsCompilerInstance {
    *
    *   - Node16 / NodeNext require `module: Node16` or `module: NodeNext` (TS5110).
    *     ts-jest never emits those module kinds, so these user-supplied values are
-   *     substituted: to Bundler when the forced module is in the
-   *     Bundler-compatible set, or to Node10 otherwise. (Pairing Bundler with a
-   *     non-ES module raises TS5095, and Node10 is the only kind that has been
-   *     valid with non-ES modules across every TypeScript version ts-jest
-   *     supports.)
+   *     substituted to Bundler when the forced module is in the
+   *     Bundler-compatible set, or left unset otherwise so TypeScript can select
+   *     its default for the forced module kind.
    *
    *   - User-supplied Bundler with a non-Bundler-compatible forced module is
-   *     TS5095, substitute Node10. (TypeScript 6 relaxed this for
+   *     TS5095, so leave the option unset. (TypeScript 6 relaxed this for
    *     `module: CommonJS` specifically; that relaxation is encoded inside
    *     `isBundlerCompatibleModuleKind` via a runtime version check, so on
    *     TS ≥ 6 user-supplied Bundler passes through unchanged on the CJS
    *     path.)
    *
-   *   - Anything else (Node10 / Classic / unset) passes through or falls back
-   *     to Node10. These pairings are valid with every forced module kind.
+   *   - Anything else (Node10 / Classic) passes through unchanged.
    *
-   * Compatibility: `ModuleResolutionKind.Bundler` was introduced in
-   * TypeScript 5.0. ts-jest declares `peerDependencies: { typescript: ">=4.3 <7" }`,
-   * so the Bundler member is `undefined` at runtime on TypeScript 4.3 - 4.9.
-   * The Node16/NodeNext substitution falls back to Node10 in that case
-   * (`bundlerResolution` below) to keep the function deterministic across the
-   * full supported range. Users on TypeScript < 5 can never have set Bundler in
-   * tsconfig (the parser rejects it), so the user-supplied-Bundler branch is
-   * unreachable there and needs no separate guard.
    */
   private resolveCompatibleModuleResolution(
     forcedModule: ts.ModuleKind,
     userResolution: ts.ModuleResolutionKind | undefined,
-  ): ts.ModuleResolutionKind {
-    const node10Default = this._ts.ModuleResolutionKind.Node10 ?? this._ts.ModuleResolutionKind.NodeJs
-
+  ): ts.ModuleResolutionKind | undefined {
     if (userResolution === undefined) {
-      return node10Default
+      return undefined
     }
 
     const { Node16, NodeNext, Bundler } = this._ts.ModuleResolutionKind
-    const bundlerResolution = Bundler ?? node10Default
     const canUseBundler = this.isBundlerCompatibleModuleKind(forcedModule)
 
     if (userResolution === Node16 || userResolution === NodeNext) {
-      return canUseBundler ? bundlerResolution : node10Default
+      return canUseBundler ? Bundler : undefined
     }
 
     if (userResolution === Bundler && !canUseBundler) {
-      return node10Default
+      return undefined
     }
 
     return userResolution
@@ -295,8 +297,8 @@ export class TsCompiler implements TsCompilerInstance {
    * (`CommonJS` + `Bundler` is a valid pair on TS ≥ 6); the other non-ES
    * module kinds (`AMD` / `UMD` / `System` / `None`) remain Bundler-incompatible
    * on every TypeScript version. The version is detected at runtime from
-   * `this._ts.version` so the function stays correct across the full
-   * peerDependency range (`>=4.3 <7`).
+   * `this._ts.version` so the function stays correct across TypeScript 5.4+
+   * and TypeScript 6.
    *
    * @see https://www.typescriptlang.org/tsconfig/#moduleResolution
    */
@@ -306,42 +308,30 @@ export class TsCompiler implements TsCompilerInstance {
       return true
     }
 
-    // `ModuleKind.Preserve` was introduced in TypeScript 5.4; on older
-    // TypeScript versions the property is `undefined` at runtime.
-    if (M.Preserve !== undefined && moduleKind === M.Preserve) {
+    if (moduleKind === M.Preserve) {
       return true
     }
 
     // TS 6 made `CommonJS` + `Bundler` a valid pair.
     if (moduleKind === M.CommonJS) {
-      const tsMajor = parseInt(this._ts.version.split('.')[0], 10)
-
-      return tsMajor >= 6
+      return this.isTypeScript6OrLater()
     }
 
     return false
   }
 
   /**
-   * Pass `customConditions` through unchanged when the resolved
-   * `moduleResolution` is one of the kinds that supports it (`Bundler`,
-   * `Node16`, `NodeNext`); strip it otherwise. TypeScript raises TS5098
-   * when `customConditions` is paired with any other resolution kind
-   * (verified empirically against TypeScript 5.9.3 with `tsc -p`).
-   *
-   * Before #4198 the surrounding `fixupCompilerOptionsForModuleKind`
-   * unconditionally cleared `customConditions` because the hardcoded
-   * `Node10` override always made it incompatible. After #4198 the
-   * resolved `moduleResolution` can be `Bundler` (e.g. when the user
-   * has `Node16`/`NodeNext` paired with an ES-family `module`), so we
-   * need to preserve the user's `customConditions` in that case rather
-   * than silently dropping it.
+   * Preserve `customConditions` for supported explicit resolutions. TypeScript
+   * 6 also accepts it when resolution is omitted and the forced module kind
+   * selects a compatible default; TypeScript 5.4 must still strip it to avoid
+   * TS5098.
    *
    * @see https://www.typescriptlang.org/tsconfig/#customConditions
    */
   private preserveCustomConditionsIfCompatible(
-    resolvedModuleResolution: ts.ModuleResolutionKind,
+    resolvedModuleResolution: ts.ModuleResolutionKind | undefined,
     userCustomConditions: string[] | undefined,
+    forcedModule: ts.ModuleKind,
   ): string[] | undefined {
     const R = this._ts.ModuleResolutionKind
     const supportsCustomConditions =
@@ -349,7 +339,19 @@ export class TsCompiler implements TsCompilerInstance {
       resolvedModuleResolution === R.Node16 ||
       resolvedModuleResolution === R.NodeNext
 
-    return supportsCustomConditions ? userCustomConditions : undefined
+    const supportsDefaultCustomConditions =
+      resolvedModuleResolution === undefined &&
+      (forcedModule === this._ts.ModuleKind.Preserve ||
+        (this.isTypeScript6OrLater() &&
+          (this.isBundlerCompatibleModuleKind(forcedModule) ||
+            forcedModule === this._ts.ModuleKind.CommonJS ||
+            isModernNodeModuleKind(forcedModule, this._ts))))
+
+    return supportsCustomConditions || supportsDefaultCustomConditions ? userCustomConditions : undefined
+  }
+
+  private isTypeScript6OrLater(): boolean {
+    return parseInt(this._ts.version.split('.')[0], 10) >= 6
   }
 
   getCompiledOutput(fileContent: string, fileName: string, options: TsJestCompileOptions): CompiledOutput {
@@ -381,7 +383,7 @@ export class TsCompiler implements TsCompilerInstance {
       )
       const output: EmitOutput = this._languageService.getEmitOutput(fileName)
       const diagnostics = this.getDiagnostics(fileName)
-      if (isModernNodeModuleKind(this._initialCompilerOptions.module)) {
+      if (isModernNodeModuleKind(this._initialCompilerOptions.module, this._ts)) {
         this.configSet.raiseDiagnostics([
           {
             category: this._ts.DiagnosticCategory.Message,
@@ -467,55 +469,22 @@ export class TsCompiler implements TsCompilerInstance {
   }
 
   protected _transpileOutput(fileContent: string, fileName: string): TranspileOutput {
-    /**
-     * @deprecated
-     *
-     * This code path should be removed in the next major version to benefit from checking on compiler options
-     */
-    if (!isModernNodeModuleKind(this._initialCompilerOptions.module)) {
-      const result = this._ts.transpileModule(fileContent, {
+    return tsTranspileModule(
+      fileContent,
+      {
         fileName,
-        transformers: this._makeTransformers(this.configSet.resolvedTransformers),
-        compilerOptions: this._compilerOptions,
+        transformers: (program) => {
+          this.program = program
+
+          return this._makeTransformers(this.configSet.resolvedTransformers)
+        },
+        compilerOptions: isModernNodeModuleKind(this._initialCompilerOptions.module, this._ts)
+          ? this._initialCompilerOptions
+          : this._compilerOptions,
         reportDiagnostics: this.configSet.shouldReportDiagnostics(fileName),
-      })
-      const diagnostics = this._filterDiagnosticsFromTsJestDefaults(result.diagnostics)
-
-      return diagnostics === result.diagnostics ? result : { ...result, diagnostics }
-    }
-
-    return tsTranspileModule(fileContent, {
-      fileName,
-      transformers: (program) => {
-        this.program = program
-
-        return this._makeTransformers(this.configSet.resolvedTransformers)
       },
-      compilerOptions: this._initialCompilerOptions,
-      reportDiagnostics: fileName ? this.configSet.shouldReportDiagnostics(fileName) : false,
-    })
-  }
-
-  /**
-   * TypeScript 6 reports TS5107 when ts-jest's historical default of
-   * `moduleResolution: Node10` is passed to `transpileModule`. The diagnostic
-   * is an implementation detail when ts-jest injected that value, but remains
-   * actionable when the user selected Node10 themselves.
-   */
-  private _filterDiagnosticsFromTsJestDefaults(diagnostics: Diagnostic[] | undefined): Diagnostic[] | undefined {
-    // `Node10` was exposed as `NodeJs` (with the same value) by older supported TypeScript releases.
-    const node10 = this._ts.ModuleResolutionKind.Node10 ?? 2
-    const tsMajor = Number.parseInt(this._ts.version.split('.')[0], 10)
-    const hasInjectedNode10 =
-      tsMajor >= 6 &&
-      this._initialCompilerOptions.moduleResolution === undefined &&
-      this._compilerOptions.moduleResolution === node10
-
-    if (!hasInjectedNode10 || !diagnostics?.some((diagnostic) => diagnostic.code === 5107)) {
-      return diagnostics
-    }
-
-    return diagnostics.filter((diagnostic) => diagnostic.code !== 5107)
+      this._ts,
+    )
   }
 
   protected _makeTransformers(customTransformers: TsJestAstTransformer): CustomTransformers {
@@ -651,17 +620,13 @@ export class TsCompiler implements TsCompilerInstance {
     moduleNameToResolve: string,
     containingFile: string,
   ): ResolvedModuleWithFailedLookupLocations {
-    const getImpliedNodeFormat = this._ts.getImpliedNodeFormatForFile
-    const resolutionMode =
-      typeof getImpliedNodeFormat === 'function'
-        ? getImpliedNodeFormat(
-            containingFile,
-            undefined,
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            this._moduleResolutionHost!,
-            this._compilerOptions,
-          )
-        : undefined
+    const resolutionMode = this._ts.getImpliedNodeFormatForFile(
+      containingFile,
+      undefined,
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      this._moduleResolutionHost!,
+      this._compilerOptions,
+    )
 
     return this._ts.resolveModuleName(
       moduleNameToResolve,
