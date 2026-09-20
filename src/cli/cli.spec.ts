@@ -567,6 +567,89 @@ describe('config', () => {
       })
     })
 
+    it('should migrate legacy aliases into transform options without dropping unrelated globals', async () => {
+      fs.existsSync.mockImplementation(() => true)
+      const configPath = pkgPaths.nextCfg
+      jest.doMock(
+        configPath,
+        () => ({
+          globals: {
+            unrelated: { keep: true },
+            __TS_CONFIG__: { target: 'es6' },
+            __TRANSFORM_HTML__: true,
+            'ts-jest': {
+              typeCheck: false,
+              enableTsDiagnostics: '\\.spec\\.ts$',
+              useBabelrc: true,
+              skipBabel: true,
+            },
+          },
+          transform: {
+            [TS_TRANSFORM_PATTERN]: 'ts-jest',
+          },
+        }),
+        { virtual: true },
+      )
+
+      const res = await runCli(...noOption, configPath)
+      const migratedConfig = parseMigratedConfig(res.stdout)
+
+      expect(migratedConfig.globals).toEqual({ unrelated: { keep: true } })
+      expect(migratedConfig.transform).toEqual({
+        [TS_TRANSFORM_PATTERN]: [
+          'ts-jest',
+          {
+            tsconfig: { target: 'es6', isolatedModules: true },
+            stringifyContentPathRegex: '\\.html?$',
+            diagnostics: { warnOnly: true, exclude: ['\\.spec\\.ts$'] },
+            babelConfig: true,
+          },
+        ],
+      })
+    })
+
+    it('should migrate isolatedModules into inline tsconfig compiler options', async () => {
+      fs.existsSync.mockImplementation(() => true)
+      const configPath = pkgPaths.nextCfg
+      jest.doMock(
+        configPath,
+        () => ({
+          transform: {
+            [TS_TRANSFORM_PATTERN]: ['ts-jest', { isolatedModules: true }],
+          },
+        }),
+        { virtual: true },
+      )
+
+      const res = await runCli(...noOption, configPath)
+
+      expect(parseMigratedConfig(res.stdout).transform).toEqual({
+        [TS_TRANSFORM_PATTERN]: ['ts-jest', { tsconfig: { isolatedModules: true } }],
+      })
+    })
+
+    it('should warn and preserve isolatedModules when tsconfig path cannot be safely rewritten', async () => {
+      fs.existsSync.mockImplementation(() => true)
+      const configPath = pkgPaths.nextCfg
+      jest.doMock(
+        configPath,
+        () => ({
+          transform: {
+            [TS_TRANSFORM_PATTERN]: ['ts-jest', { tsconfig: 'tsconfig.json', isolatedModules: true }],
+          },
+        }),
+        { virtual: true },
+      )
+
+      const res = await runCli(...noOption, configPath)
+
+      expect(res.stderr).toContain('isolatedModules')
+      expect(res.stderr).toContain('tsconfig.json')
+      expect(parseMigratedConfig(res.stdout).transform).toEqual({
+        [TS_TRANSFORM_PATTERN]: ['ts-jest', { tsconfig: 'tsconfig.json', isolatedModules: true }],
+      })
+    })
+
     it('should preserve explicit user transforms over preset defaults', async () => {
       expect.assertions(1)
       fs.existsSync.mockImplementation(() => true)
@@ -639,7 +722,10 @@ describe('config', () => {
 
       expect(parseMigratedConfig(res.stdout).transform).toEqual({
         '^.+\\.resolved-root\\.tsx?$': ['ts-jest', { diagnostics: { warnOnly: true } }],
-        '^.+\\.resolved-legacy\\.tsx?$': ['ts-jest/legacy', { isolatedModules: true, diagnostics: { warnOnly: true } }],
+        '^.+\\.resolved-legacy\\.tsx?$': [
+          'ts-jest/legacy',
+          { tsconfig: { isolatedModules: true }, diagnostics: { warnOnly: true } },
+        ],
       })
     })
 
@@ -666,7 +752,7 @@ describe('config', () => {
         const res = await runCli(...noOption, configPath)
 
         expect(parseMigratedConfig(res.stdout).transform).toEqual({
-          [transformPattern]: [expectedTransformer, { isolatedModules: true }],
+          [transformPattern]: [expectedTransformer, { tsconfig: { isolatedModules: true } }],
         })
       },
     )
@@ -828,6 +914,89 @@ describe('config', () => {
 
       expect(res.exitCode).toBe(0)
       expect(res.stdout).toMatch(/^export default /)
+    })
+
+    it.each(['cjs', 'mjs'])(
+      'should preserve RegExp transformer options when reloading migrated %s output',
+      (extension) => {
+        const tempDir = realFs.mkdtempSync(join(tmpdir(), 'ts-jest-migrate-'))
+        try {
+          const sourcePath = join(tempDir, `source.${extension}`)
+          const migratedPath = join(tempDir, `migrated.${extension}`)
+          const source =
+            extension === 'cjs'
+              ? `module.exports = { globals: { 'ts-jest': { stringifyContentPathRegex: /\\.html$/i } } }\n`
+              : `export default { globals: { 'ts-jest': { stringifyContentPathRegex: /\\.html$/i } } }\n`
+          realFs.writeFileSync(sourcePath, source)
+
+          const first = execFileSync(process.execPath, [CLI_PATH, ...noOption, sourcePath], {
+            cwd: tempDir,
+            encoding: 'utf8',
+          })
+          realFs.writeFileSync(migratedPath, first)
+          const second = execFileSync(process.execPath, [CLI_PATH, ...noOption, migratedPath], {
+            cwd: tempDir,
+            encoding: 'utf8',
+          })
+
+          expect(first).toContain('stringifyContentPathRegex: /\\.html$/i')
+          expect(second).toBe('')
+        } finally {
+          realFs.rmSync(tempDir, { force: true, recursive: true })
+        }
+      },
+    )
+
+    it.each(['cjs', 'mjs'])(
+      'should preserve placeholder-like RegExp source when reloading migrated %s output',
+      (extension) => {
+        const tempDir = realFs.mkdtempSync(join(tmpdir(), 'ts-jest-migrate-'))
+        try {
+          const sourcePath = join(tempDir, `source.${extension}`)
+          const migratedPath = join(tempDir, `migrated.${extension}`)
+          const regexLiteral = `/["__ts_jest_regexp__0__"]/i`
+          const source =
+            extension === 'cjs'
+              ? `module.exports = { globals: { 'ts-jest': { stringifyContentPathRegex: ${regexLiteral} } } }\n`
+              : `export default { globals: { 'ts-jest': { stringifyContentPathRegex: ${regexLiteral} } } }\n`
+          realFs.writeFileSync(sourcePath, source)
+
+          const first = execFileSync(process.execPath, [CLI_PATH, ...noOption, sourcePath], {
+            cwd: tempDir,
+            encoding: 'utf8',
+          })
+          realFs.writeFileSync(migratedPath, first)
+          const second = execFileSync(process.execPath, [CLI_PATH, ...noOption, migratedPath], {
+            cwd: tempDir,
+            encoding: 'utf8',
+          })
+
+          expect(first).toContain(`stringifyContentPathRegex: ${regexLiteral}`)
+          expect(second).toBe('')
+        } finally {
+          realFs.rmSync(tempDir, { force: true, recursive: true })
+        }
+      },
+    )
+
+    it('should warn and avoid output when configuration contains unsupported runtime values', async () => {
+      expect.assertions(2)
+      fs.existsSync.mockImplementation(() => true)
+      const configPath = pkgPaths.nextCfg
+      jest.doMock(
+        configPath,
+        () => ({
+          globals: {
+            unrelated: { unsupported: () => true },
+          },
+        }),
+        { virtual: true },
+      )
+
+      const res = await runCli(...noOption, configPath)
+
+      expect(res.stdout).toBe('')
+      expect(res.stderr).toContain('unsupported runtime value')
     })
 
     it('should treat the nearest package scope without type as CommonJS', async () => {

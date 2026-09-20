@@ -29,6 +29,7 @@ import { backportJestConfig } from '../../utils/backports'
 import { JestPresetNames, type TsJestPresetDescriptor, allPresets } from '../helpers/presets'
 
 type TsJestTransformerName = 'ts-jest' | 'ts-jest/legacy'
+type MigrationState = { requiresManualAction: boolean }
 
 const normalizeTransformerPath = (transformerPath: string): string => transformerPath.replace(/\\/g, '/')
 
@@ -68,33 +69,187 @@ const isRecord = (value: unknown): value is Record<string, unknown> => {
   return typeof value === 'object' && value !== null && !Array.isArray(value)
 }
 
-const migrateTransformValue = (transformValue: unknown, globalsTsJestConfig: TsJestTransformerOptions | undefined) => {
+const isPlainObject = (value: object): boolean => {
+  const prototype = Object.getPrototypeOf(value)
+
+  return prototype === null || Object.getPrototypeOf(prototype) === null
+}
+
+const formatConfigPath = (path: string, key: string | number): string => {
+  return typeof key === 'number' ? `${path}[${key}]` : `${path}.${key}`
+}
+
+const findUnsupportedRuntimeValue = (
+  value: unknown,
+  path = 'config',
+  ancestors = new Set<object>(),
+  allowRegExp = true,
+): string | undefined => {
+  if (value === undefined) return path
+  if (typeof value === 'function' || typeof value === 'symbol' || typeof value === 'bigint') return path
+  if (!value || typeof value !== 'object') return undefined
+  if (value instanceof RegExp) return allowRegExp ? undefined : path
+  if (ancestors.has(value)) return path
+  if (Array.isArray(value)) {
+    ancestors.add(value)
+    for (const [index, item] of value.entries()) {
+      const unsupportedPath = findUnsupportedRuntimeValue(item, formatConfigPath(path, index), ancestors, allowRegExp)
+      if (unsupportedPath) return unsupportedPath
+    }
+    ancestors.delete(value)
+
+    return undefined
+  }
+  if (!isPlainObject(value)) return path
+  if (Object.getOwnPropertySymbols(value).length) return path
+
+  ancestors.add(value)
+  for (const [key, item] of Object.entries(value)) {
+    const unsupportedPath = findUnsupportedRuntimeValue(item, formatConfigPath(path, key), ancestors, allowRegExp)
+    if (unsupportedPath) return unsupportedPath
+  }
+  ancestors.delete(value)
+
+  return undefined
+}
+
+const containsString = (value: unknown, target: string, visited = new Set<object>()): boolean => {
+  if (typeof value === 'string') return value.includes(target)
+  if (!value || typeof value !== 'object' || value instanceof RegExp || visited.has(value)) return false
+  if (Array.isArray(value)) {
+    visited.add(value)
+
+    return value.some((item) => containsString(item, target, visited))
+  }
+  if (!isPlainObject(value)) return false
+
+  visited.add(value)
+
+  return Object.entries(value).some(([key, item]) => key.includes(target) || containsString(item, target, visited))
+}
+
+const serializeExecutableConfig = (config: Config.InitialOptions): string => {
+  let tokenPrefix = '__ts_jest_regexp__'
+  let suffix = 0
+  while (containsString(config, tokenPrefix)) {
+    tokenPrefix = `__ts_jest_regexp_${++suffix}__`
+  }
+
+  const regexLiterals = new Map<string, string>()
+  const serialized = stringifyJson5(
+    config,
+    (_key, value: unknown) => {
+      if (value instanceof RegExp) {
+        const token = `${tokenPrefix}${regexLiterals.size}__`
+        regexLiterals.set(token, `/${value.source}/${value.flags}`)
+
+        return token
+      }
+
+      return value
+    },
+    '  ',
+  )
+
+  if (!regexLiterals.size) return serialized
+  const tokenPattern = new RegExp(`(['"])(${tokenPrefix.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\d+__)\\1`, 'g')
+
+  // Replace placeholders in one pass so inserted regex literals are never scanned again.
+  return serialized.replace(tokenPattern, (match: string, _quote: string, token: string) => {
+    return regexLiterals.get(token) ?? match
+  })
+}
+
+const warnUnsupportedRuntimeValue = (file: string, path: string): void => {
+  process.stderr.write(
+    `\nUnable to migrate ${file}: unsupported runtime value at ${path} cannot be safely serialized. ` +
+      'Source configuration was not changed; migrate this configuration manually.\n',
+  )
+}
+
+const warnUnsafeIsolatedModulesMigration = (tsconfig: unknown, state: MigrationState): void => {
+  state.requiresManualAction = true
+  const location = typeof tsconfig === 'string' ? `in ${tsconfig}` : 'in the TypeScript compiler options'
+  process.stderr.write(
+    `\nUnable to automatically migrate transformer option "isolatedModules" ${location}. ` +
+      'Set "compilerOptions.isolatedModules": true in the TypeScript configuration, then remove ' +
+      '"isolatedModules" from the Jest transform options.\n',
+  )
+}
+
+const migrateTransformerOptions = (
+  options: TsJestTransformerOptions,
+  state: MigrationState,
+): TsJestTransformerOptions => {
+  const migratedOptions = { ...(options as Record<string, unknown>) }
+  if (!('isolatedModules' in migratedOptions)) return options
+
+  if (migratedOptions.isolatedModules !== true) {
+    delete migratedOptions.isolatedModules
+
+    return migratedOptions as TsJestTransformerOptions
+  }
+
+  const tsconfig = migratedOptions.tsconfig
+  if (typeof tsconfig === 'string' || tsconfig === false) {
+    warnUnsafeIsolatedModulesMigration(tsconfig, state)
+
+    return options
+  }
+
+  delete migratedOptions.isolatedModules
+  migratedOptions.tsconfig = {
+    ...(isRecord(tsconfig) ? tsconfig : {}),
+    isolatedModules: true,
+  }
+
+  return migratedOptions as TsJestTransformerOptions
+}
+
+const migrateTransformValue = (
+  transformValue: unknown,
+  globalsTsJestConfig: TsJestTransformerOptions | undefined,
+  state: MigrationState,
+) => {
   if (typeof transformValue === 'string') {
     const transformer = getTsJestTransformer(transformValue)
     if (!transformer) return transformValue
 
-    return globalsTsJestConfig ? [transformer, globalsTsJestConfig] : transformer
+    return globalsTsJestConfig ? [transformer, migrateTransformerOptions(globalsTsJestConfig, state)] : transformer
   }
   if (!Array.isArray(transformValue)) return transformValue
 
   const [transformer, options] = transformValue
   const normalizedTransformer = getTsJestTransformer(transformer)
   if (!normalizedTransformer) return transformValue
-  if (!globalsTsJestConfig) return [normalizedTransformer, ...transformValue.slice(1)]
+  if (!globalsTsJestConfig) {
+    if (!isRecord(options)) return [normalizedTransformer, ...transformValue.slice(1)]
 
-  return [normalizedTransformer, { ...globalsTsJestConfig, ...(isRecord(options) ? options : {}) }]
+    return [
+      normalizedTransformer,
+      migrateTransformerOptions(options as TsJestTransformerOptions, state),
+      ...transformValue.slice(2),
+    ]
+  }
+
+  return [
+    normalizedTransformer,
+    migrateTransformerOptions({ ...globalsTsJestConfig, ...(isRecord(options) ? options : {}) }, state),
+    ...transformValue.slice(2),
+  ]
 }
 
 const migrateGlobalConfigToTransformConfig = (
   transformConfig: Config.InitialOptions['transform'],
   globalsTsJestConfig: TsJestTransformerOptions | undefined,
+  state: MigrationState,
 ) => {
   if (!transformConfig) return {}
 
   return Object.entries(transformConfig).reduce(
     (previousValue, [key, transformValue]) => ({
       ...previousValue,
-      [key]: migrateTransformValue(transformValue, globalsTsJestConfig),
+      [key]: migrateTransformValue(transformValue, globalsTsJestConfig, state),
     }),
     {},
   )
@@ -104,10 +259,12 @@ const migratePresetToConfig = (
   config: Config.InitialOptions,
   preset: TsJestPresetDescriptor | undefined,
   globalsTsJestConfig: TsJestTransformerOptions | undefined,
+  state: MigrationState,
 ) => {
   if (!preset) return config
 
   const configFromPreset = createPresetTransform(preset, globalsTsJestConfig)
+  const migratedPresetTransform = migrateGlobalConfigToTransformConfig(configFromPreset.transform, undefined, state)
 
   return {
     ...config,
@@ -120,7 +277,7 @@ const migratePresetToConfig = (
     ...(config.testMatch === undefined && configFromPreset.testMatch !== undefined
       ? { testMatch: configFromPreset.testMatch }
       : {}),
-    transform: mergeTransformConfigs(config.transform, configFromPreset.transform),
+    transform: mergeTransformConfigs(config.transform, migratedPresetTransform),
   }
 }
 
@@ -240,6 +397,18 @@ export const run: CliCommand = async (args: CliCommandArgs /* , logger: Logger*/
   }
   if (!actualConfig) actualConfig = {}
 
+  const unsupportedRuntimeValuePath = findUnsupportedRuntimeValue(
+    actualConfig,
+    'config',
+    new Set(),
+    !file.endsWith('.json'),
+  )
+  if (unsupportedRuntimeValuePath) {
+    warnUnsupportedRuntimeValue(file, unsupportedRuntimeValuePath)
+
+    return
+  }
+
   // migrate
   // first we backport our options on a copy so the source config remains available for comparison
   const requestedPreset = actualConfig.preset
@@ -290,13 +459,18 @@ export const run: CliCommand = async (args: CliCommandArgs /* , logger: Logger*/
   }
 
   const globalsTsJestConfig = migratedConfig.globals?.['ts-jest'] as TsJestTransformerOptions | undefined
-  migratedConfig.transform = migrateGlobalConfigToTransformConfig(migratedConfig.transform, globalsTsJestConfig)
-  migratedConfig = migratePresetToConfig(migratedConfig, preset, globalsTsJestConfig)
+  const migrationState: MigrationState = { requiresManualAction: false }
+  migratedConfig.transform = migrateGlobalConfigToTransformConfig(
+    migratedConfig.transform,
+    globalsTsJestConfig,
+    migrationState,
+  )
+  migratedConfig = migratePresetToConfig(migratedConfig, preset, globalsTsJestConfig, migrationState)
 
   cleanupConfig(migratedConfig)
   const before = stableStringify(actualConfig)
   const after = stableStringify(migratedConfig)
-  if (after === before) {
+  if (after === before && !migrationState.requiresManualAction) {
     process.stderr.write(`
 No migration needed for given Jest configuration
     `)
@@ -314,7 +488,7 @@ const outputConfig = (
   isEsmConfig: boolean,
   message: string,
 ): void => {
-  const stringify = file.endsWith('.json') ? JSON.stringify : stringifyJson5
+  const serialized = file.endsWith('.json') ? JSON.stringify(config, undefined, 2) : serializeExecutableConfig(config)
   const prefix = isPackage
     ? '"jest": '
     : file.endsWith('.json')
@@ -324,7 +498,7 @@ const outputConfig = (
     : 'module.exports = '
 
   process.stderr.write(`\n${message}\n`)
-  process.stdout.write(`${prefix}${stringify(config, undefined, '  ')}\n`)
+  process.stdout.write(`${prefix}${serialized}\n`)
 }
 
 const isEsmConfigFile = (filePath: string, name: string): boolean => {

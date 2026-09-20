@@ -33,9 +33,8 @@ import type {
 } from '../../types'
 import { TsCompilerInstance } from '../../types'
 import { rootLogger, stringify, TsJestDiagnosticCodes } from '../../utils'
-import { backportJestConfig } from '../../utils/backports'
 import { importer } from '../../utils/importer'
-import { Deprecations, Errors, ImportReasons, interpolate } from '../../utils/messages'
+import { Errors, ImportReasons, interpolate } from '../../utils/messages'
 import { normalizeSlashes } from '../../utils/normalize-slashes'
 import { sha1 } from '../../utils/sha1'
 import { TSError } from '../../utils/ts-error'
@@ -184,15 +183,23 @@ export class ConfigSet {
    */
   private tsconfigFilePath: string | undefined
 
-  constructor(jestConfig: TsJestTransformOptions['config'] | undefined, readonly parentLogger?: Logger) {
+  constructor(
+    jestConfig: TsJestTransformOptions['config'] | undefined,
+    readonly parentLogger?: Logger,
+    transformerConfig?: TsJestTransformerOptions,
+  ) {
     this.logger = this.parentLogger
       ? this.parentLogger.child({ [LogContexts.namespace]: 'config' })
       : rootLogger.child({ namespace: 'config' })
-    this._backportJestCfg(jestConfig ?? Object.create(null))
+    const config = jestConfig ?? Object.create(null)
+    this._jestCfg = {
+      ...config,
+      testMatch: config.testMatch ?? DEFAULT_JEST_TEST_MATCH,
+      testRegex: config.testRegex ?? [],
+    }
     this.cwd = normalize(this._jestCfg.cwd ?? process.cwd())
     this.rootDir = normalize(this._jestCfg.rootDir ?? this.cwd)
-    const tsJestCfg = this._jestCfg.globals && this._jestCfg.globals['ts-jest']
-    const options: TsJestTransformerOptions = tsJestCfg ?? Object.create(null)
+    const options: TsJestTransformerOptions = transformerConfig ?? Object.create(null)
     // compiler module
     this.compilerModule = importer.typescript(ImportReasons.TsJest, options.compiler ?? 'typescript')
 
@@ -211,36 +218,8 @@ export class ConfigSet {
       this._matchablePatterns.push(...DEFAULT_JEST_TEST_MATCH)
     }
     this._matchTestFilePath = globsToMatcher(this._matchablePatterns.filter((pattern) => typeof pattern === 'string'))
-    // isolatedModules
-    if (options.isolatedModules) {
-      this.parsedTsConfig.options.isolatedModules = true
-      if (this.tsconfigFilePath) {
-        this.logger.warn(
-          interpolate(Deprecations.IsolatedModulesWithTsconfigPath, {
-            tsconfigFilePath: this.tsconfigFilePath,
-          }),
-        )
-      } else {
-        this.logger.warn(Deprecations.IsolatedModulesWithoutTsconfigPath)
-      }
-    }
     this.isolatedModules = this.parsedTsConfig.options.isolatedModules ?? false
     this._resolveTsCacheDir()
-  }
-
-  /**
-   * @internal
-   */
-  private _backportJestCfg(jestCfg: TsJestTransformOptions['config']): void {
-    const config = backportJestConfig(this.logger, jestCfg)
-
-    this.logger.debug({ jestConfig: config }, 'normalized jest config')
-
-    this._jestCfg = {
-      ...config,
-      testMatch: config.testMatch ?? DEFAULT_JEST_TEST_MATCH,
-      testRegex: config.testRegex ?? [],
-    }
   }
 
   /**

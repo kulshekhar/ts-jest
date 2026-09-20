@@ -15,7 +15,7 @@ import type {
 } from '../types'
 import { stringify, JsonableValue, rootLogger } from '../utils'
 import { importer } from '../utils/importer'
-import { Deprecations, Errors, interpolate } from '../utils/messages'
+import { Errors, interpolate } from '../utils/messages'
 import { sha1 } from '../utils/sha1'
 
 import { TsJestCompiler } from './compiler'
@@ -25,6 +25,7 @@ import { ConfigSet } from './config/config-set'
 interface CachedConfigSet {
   configSet: ConfigSet
   jestConfig: JsonableValue<TsJestTransformOptions['config']>
+  transformerConfig: string
   transformerCfgStr: string
   compiler: CompilerInstance
   depGraphs: Map<string, DepGraphInfo>
@@ -38,6 +39,21 @@ interface TsJestHooksMap {
 
 const isNodeModule = (filePath: string) => {
   return path.normalize(filePath).split(path.sep).includes('node_modules')
+}
+
+const serializeTransformerConfig = (config: TsJestTransformerOptions | undefined): string => {
+  const normalize = (value: unknown): unknown => {
+    if (value instanceof RegExp) return ['regexp', value.source, value.flags]
+    if (Array.isArray(value)) return ['array', value.map(normalize)]
+    if (!value || typeof value !== 'object') return value
+
+    const prototype = Object.getPrototypeOf(value)
+    if (prototype !== Object.prototype && prototype !== null) return value
+
+    return ['object', Object.fromEntries(Object.entries(value).map(([key, entry]) => [key, normalize(entry)]))]
+  }
+
+  return stringify(normalize(config))
 }
 
 /**
@@ -75,8 +91,10 @@ export class TsJestTransformer implements SyncTransformer<TsJestTransformerOptio
 
   private _configsFor(transformOptions: TsJestTransformOptions): ConfigSet {
     const { config, cacheFS } = transformOptions
+    const transformerConfig = transformOptions.transformerConfig ?? this.transformerOptions
+    const serializedTransformerConfig = serializeTransformerConfig(transformerConfig)
     const ccs: CachedConfigSet | undefined = TsJestTransformer._cachedConfigSets.find(
-      (cs) => cs.jestConfig.value === config,
+      (cs) => cs.jestConfig.value === config && cs.transformerConfig === serializedTransformerConfig,
     )
     let configSet: ConfigSet
     if (ccs) {
@@ -89,7 +107,7 @@ export class TsJestTransformer implements SyncTransformer<TsJestTransformerOptio
       // try to look-it up by stringified version
       const serializedJestCfg = stringify(config)
       const serializedCcs = TsJestTransformer._cachedConfigSets.find(
-        (cs) => cs.jestConfig.serialized === serializedJestCfg,
+        (cs) => cs.jestConfig.serialized === serializedJestCfg && cs.transformerConfig === serializedTransformerConfig,
       )
       if (serializedCcs) {
         // update the object so that we can find it later
@@ -105,33 +123,19 @@ export class TsJestTransformer implements SyncTransformer<TsJestTransformerOptio
         // create the new record in the index
         this._logger.info('no matching config-set found, creating a new one')
 
-        if (config.globals?.['ts-jest']) {
-          this._logger.warn(Deprecations.GlobalsTsJestConfigOption)
-        }
-        const jestGlobalsConfig = config.globals ?? {}
-        const tsJestGlobalsConfig = jestGlobalsConfig['ts-jest'] ?? {}
-        const migratedConfig = this.transformerOptions
-          ? {
-              ...config,
-              globals: {
-                ...jestGlobalsConfig,
-                'ts-jest': {
-                  ...tsJestGlobalsConfig,
-                  ...this.transformerOptions,
-                },
-              },
-            }
-          : config
-        configSet = this._createConfigSet(migratedConfig)
-        const jest = { ...migratedConfig }
+        configSet = this._createConfigSet(config, transformerConfig)
+        const jest = { ...config }
         // we need to remove some stuff from jest config
         // this which does not depend on config
         jest.cacheDirectory = undefined as any // eslint-disable-line @typescript-eslint/no-explicit-any
-        this._transformCfgStr = `${new JsonableValue(jest).serialized}${configSet.cacheSuffix}`
+        this._transformCfgStr = `${
+          new JsonableValue(jest).serialized
+        }${CACHE_KEY_EL_SEPARATOR}${serializedTransformerConfig}${CACHE_KEY_EL_SEPARATOR}${configSet.cacheSuffix}`
         this._createCompiler(configSet, cacheFS)
         this._watchMode = process.argv.includes('--watch')
         TsJestTransformer._cachedConfigSets.push({
           jestConfig: new JsonableValue(config),
+          transformerConfig: serializedTransformerConfig,
           configSet,
           transformerCfgStr: this._transformCfgStr,
           compiler: this._compiler,
@@ -144,8 +148,11 @@ export class TsJestTransformer implements SyncTransformer<TsJestTransformerOptio
     return configSet
   }
 
-  protected _createConfigSet(config: TsJestTransformOptions['config'] | undefined): ConfigSet {
-    return new ConfigSet(config)
+  protected _createConfigSet(
+    config: TsJestTransformOptions['config'] | undefined,
+    transformerConfig?: TsJestTransformerOptions,
+  ): ConfigSet {
+    return new ConfigSet(config, undefined, transformerConfig)
   }
 
   protected _createCompiler(configSet: ConfigSet, cacheFS: Map<string, string>): void {

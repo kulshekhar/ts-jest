@@ -77,15 +77,6 @@ export type TsJestGlobalOptions = Config.TransformerConfig[1] & {
   tsconfig?: boolean | string | RawCompilerOptions | TsConfigCompilerOptionsJson
 
   /**
-   * @deprecated use {@link TsConfigCompilerOptionsJson.isolatedModules} instead
-   *
-   * Compiles files as isolated modules (disables some features)
-   *
-   * @default `undefined` (disables transpiling files with {@link _ts.transpileModule})
-   */
-  isolatedModules?: boolean
-
-  /**
    * Compiler to use
    *
    * @default `typescript`
@@ -145,11 +136,11 @@ export type TsJestGlobalOptions = Config.TransformerConfig[1] & {
    */
   babelConfig?: boolean | string | BabelConfig
 
-  // should this be kept in here? it has nothing to do with TS after all...
   /**
-   * Kept for backward compatibility to handle __TRANSFORM_HTML__
-   * Any file which will match this regex will be transpiled as a module
-   * exporting the content of the file as a string
+   * Matches file paths whose content should be exported as a string module.
+   *
+   * The legacy `__TRANSFORM_HTML__` alias is recognized only by
+   * `ts-jest config:migrate`; it is not a runtime configuration option.
    */
   stringifyContentPathRegex?: string | RegExp
 
@@ -178,9 +169,7 @@ export interface TransformOptionsTsJest<TransformerConfig = unknown> extends Tra
  * For typings in `jest.config.ts`
  * @deprecated use `JestConfigWithTsJest` instead
  */
-export interface GlobalConfigTsJest extends Config.ConfigGlobals {
-  'ts-jest'?: TsJestGlobalOptions
-}
+export type GlobalConfigTsJest = Config.ConfigGlobals
 /**
  * @deprecated use `JestConfigWithTsJest` instead
  */
@@ -331,20 +320,5 @@ export type JsWithBabelEsmLegacyPreset = {
   transform: {
     [ESM_JS_TRANSFORM_PATTERN]: 'babel-jest'
     [ESM_TS_TRANSFORM_PATTERN]: ['ts-jest/legacy', { useESM: true } & JsWithBabelEsmTransformOptions]
-  }
-}
-
-declare module '@jest/types' {
-  // eslint-disable-next-line @typescript-eslint/no-namespace
-  namespace Config {
-    interface ConfigGlobals {
-      /**
-       * strangely `@ts-expect-error` doesn't work in this case when running
-       * `npm run build` vs `npm run pretest`
-       */
-      // eslint-disable-next-line
-      // @ts-ignore
-      'ts-jest'?: TsJestTransformerOptions
-    }
   }
 }

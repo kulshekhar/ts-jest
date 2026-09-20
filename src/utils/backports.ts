@@ -33,7 +33,7 @@ export const backportJestConfig = <T extends Config.InitialOptions | Config.Proj
   }
 
   if ('__TS_CONFIG__' in globals) {
-    warnConfig('globals.__TS_CONFIG__', 'globals.ts-jest.tsconfig')
+    warnConfig('globals.__TS_CONFIG__', 'transform tuple tsconfig')
     if (typeof globals.__TS_CONFIG__ === 'object') {
       mergeTsJest.tsconfig = globals.__TS_CONFIG__
     }
@@ -41,7 +41,7 @@ export const backportJestConfig = <T extends Config.InitialOptions | Config.Proj
   }
 
   if ('__TRANSFORM_HTML__' in globals) {
-    warnConfig('globals.__TRANSFORM_HTML__', 'globals.ts-jest.stringifyContentPathRegex')
+    warnConfig('globals.__TRANSFORM_HTML__', 'transform tuple stringifyContentPathRegex')
     if (globals.__TRANSFORM_HTML__) {
       mergeTsJest.stringifyContentPathRegex = '\\.html?$'
     }
@@ -49,13 +49,13 @@ export const backportJestConfig = <T extends Config.InitialOptions | Config.Proj
   }
 
   if ('typeCheck' in tsJest) {
-    warnConfig('globals.ts-jest.typeCheck', 'globals.ts-jest.isolatedModules')
+    warnConfig('globals.ts-jest.typeCheck', 'tsconfig.compilerOptions.isolatedModules')
     mergeTsJest.isolatedModules = !tsJest.typeCheck
     delete tsJest.typeCheck
   }
 
   if ('tsConfigFile' in tsJest) {
-    warnConfig('globals.ts-jest.tsConfigFile', 'globals.ts-jest.tsconfig')
+    warnConfig('globals.ts-jest.tsConfigFile', 'transform tuple tsconfig')
     if (tsJest.tsConfigFile) {
       mergeTsJest.tsconfig = tsJest.tsConfigFile
     }
@@ -63,7 +63,7 @@ export const backportJestConfig = <T extends Config.InitialOptions | Config.Proj
   }
 
   if ('tsConfig' in tsJest) {
-    warnConfig('globals.ts-jest.tsConfig', 'globals.ts-jest.tsconfig')
+    warnConfig('globals.ts-jest.tsConfig', 'transform tuple tsconfig')
     if (tsJest.tsConfig) {
       mergeTsJest.tsconfig = tsJest.tsConfig
     }
@@ -71,7 +71,7 @@ export const backportJestConfig = <T extends Config.InitialOptions | Config.Proj
   }
 
   if ('enableTsDiagnostics' in tsJest) {
-    warnConfig('globals.ts-jest.enableTsDiagnostics', 'globals.ts-jest.diagnostics')
+    warnConfig('globals.ts-jest.enableTsDiagnostics', 'transform tuple diagnostics')
     if (tsJest.enableTsDiagnostics) {
       mergeTsJest.diagnostics = { warnOnly: true }
       if (typeof tsJest.enableTsDiagnostics === 'string') mergeTsJest.diagnostics.exclude = [tsJest.enableTsDiagnostics]
@@ -82,7 +82,7 @@ export const backportJestConfig = <T extends Config.InitialOptions | Config.Proj
   }
 
   if ('useBabelrc' in tsJest) {
-    warnConfig('globals.ts-jest.useBabelrc', 'globals.ts-jest.babelConfig', Deprecations.ConfigOptionUseBabelRcNote)
+    warnConfig('globals.ts-jest.useBabelrc', 'transform tuple babelConfig', Deprecations.ConfigOptionUseBabelRcNote)
     if (tsJest.useBabelrc != null) {
       mergeTsJest.babelConfig = tsJest.useBabelrc ? true : {}
     }
@@ -90,7 +90,7 @@ export const backportJestConfig = <T extends Config.InitialOptions | Config.Proj
   }
 
   if ('skipBabel' in tsJest) {
-    warnConfig('globals.ts-jest.skipBabel', 'globals.ts-jest.babelConfig')
+    warnConfig('globals.ts-jest.skipBabel', 'transform tuple babelConfig')
     if (tsJest.skipBabel === false && !mergeTsJest.babelConfig) {
       mergeTsJest.babelConfig = true
     }
@@ -112,25 +112,5 @@ export const backportJestConfig = <T extends Config.InitialOptions | Config.Proj
         ...tsJest,
       },
     },
-  }
-}
-
-/**
- * @internal
- */
-export const backportTsJestDebugEnvVar = (logger: Logger): void => {
-  if ('TS_JEST_DEBUG' in process.env) {
-    const shouldLog = !/^\s*(?:0|f(?:alse)?|no?|disabled?|off|)\s*$/i.test(process.env.TS_JEST_DEBUG || '')
-    delete process.env.TS_JEST_DEBUG
-    if (shouldLog) {
-      process.env.TS_JEST_LOG = 'ts-jest.log,stderr:warn'
-    }
-    logger.warn(
-      context,
-      interpolate(Deprecations.EnvVar, {
-        old: 'TS_JEST_DEBUG',
-        new: 'TS_JEST_LOG',
-      }),
-    )
   }
 }

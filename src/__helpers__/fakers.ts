@@ -54,6 +54,9 @@ export function createConfigSet({
   [key: string]: any
 } = {}): ConfigSet {
   const jestCfg = getJestConfig(jestConfig, tsJestConfig)
+  // Preserve the helper's existing call shape while ConfigSet tests migrate to tuple options.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const legacyTsJestConfig = (jestConfig?.globals as any)?.['ts-jest'] as TsJestTransformerOptions | undefined
   const cs = new ConfigSet(
     {
       ...jestCfg,
@@ -62,6 +65,7 @@ export function createConfigSet({
       extensionsToTreatAsEsm: jestCfg.extensionsToTreatAsEsm ?? [],
     },
     logger,
+    tsJestConfig ?? legacyTsJestConfig,
   )
   if (resolve) {
     cs.resolvePath = resolve

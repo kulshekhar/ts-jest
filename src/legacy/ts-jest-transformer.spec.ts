@@ -44,6 +44,7 @@ describe('TsJestTransformer', () => {
       expect(Object.keys(TsJestTransformer._cachedConfigSets[0])).toMatchInlineSnapshot(`
         [
           "jestConfig",
+          "transformerConfig",
           "configSet",
           "transformerCfgStr",
           "compiler",
@@ -51,6 +52,29 @@ describe('TsJestTransformer', () => {
           "watchMode",
         ]
       `)
+    })
+
+    test('should keep ConfigSets distinct for RegExp transformer options', () => {
+      // @ts-expect-error testing purpose
+      TsJestTransformer._cachedConfigSets = []
+      const config = { cwd: process.cwd(), extensionsToTreatAsEsm: [], globals: {}, testMatch: [], testRegex: [] }
+      const transformer = new TsJestTransformer()
+      const first = transformer._configsFor({
+        config,
+        cacheFS: new Map(),
+        transformerConfig: { stringifyContentPathRegex: /\.html$/ },
+      })
+      const second = transformer._configsFor({
+        config,
+        cacheFS: new Map(),
+        transformerConfig: { stringifyContentPathRegex: /\.txt$/i },
+      })
+
+      expect(second).not.toBe(first)
+      expect(first.shouldStringifyContent('template.html')).toBe(true)
+      expect(first.shouldStringifyContent('template.txt')).toBe(false)
+      expect(second.shouldStringifyContent('template.html')).toBe(false)
+      expect(second.shouldStringifyContent('template.txt')).toBe(true)
     })
 
     test(
@@ -160,8 +184,8 @@ describe('TsJestTransformer', () => {
         ...input.transformOptions,
         config: {
           ...input.transformOptions.config,
-          globals: { 'ts-jest': { isolatedModules: true } },
         },
+        transformerConfig: { tsconfig: { isolatedModules: true } },
       })
 
       jest.spyOn(TsJestCompiler.prototype, 'getResolvedModules').mockReturnValueOnce([])
@@ -175,6 +199,25 @@ describe('TsJestTransformer', () => {
         new Map(),
       )
       expect(cacheKey1).not.toEqual(cacheKey2)
+    })
+
+    test('should include transformer tuple values in cache keys', () => {
+      const getCacheKey = (transformerConfig: TsJestTransformOptions['transformerConfig']) =>
+        tr.getCacheKey(input.fileContent, input.fileName, {
+          ...input.transformOptions,
+          transformerConfig,
+        })
+
+      const htmlRegex = getCacheKey({ stringifyContentPathRegex: /\.html$/ })
+      const textRegex = getCacheKey({ stringifyContentPathRegex: /\.txt$/ })
+      const caseInsensitiveHtmlRegex = getCacheKey({ stringifyContentPathRegex: /\.html$/i })
+      const esm = getCacheKey({ useESM: true })
+      const sameHtmlRegex = getCacheKey({ stringifyContentPathRegex: new RegExp('\\.html$') })
+
+      expect(textRegex).not.toBe(htmlRegex)
+      expect(caseInsensitiveHtmlRegex).not.toBe(htmlRegex)
+      expect(esm).not.toBe(htmlRegex)
+      expect(sameHtmlRegex).toBe(htmlRegex)
     })
 
     test('should be different between supportsStaticESM true and supportsStaticESM false', () => {
@@ -271,11 +314,9 @@ describe('TsJestTransformer', () => {
         ...baseTransformOptions,
         config: {
           ...baseTransformOptions.config,
-          globals: {
-            'ts-jest': {
-              stringifyContentPathRegex: '\\.html$',
-            },
-          },
+        },
+        transformerConfig: {
+          stringifyContentPathRegex: '\\.html$',
         },
       }
       tr.getCacheKey(fileContent, filePath, transformOptions)
@@ -287,6 +328,24 @@ describe('TsJestTransformer', () => {
           "code": "module.exports="<h1>Hello World</h1>"",
         }
       `)
+    })
+
+    test('should ignore ts-jest options in Jest globals', () => {
+      const result = tr.process('<h1>Hello World</h1>', 'foo.html', {
+        ...baseTransformOptions,
+        config: {
+          ...baseTransformOptions.config,
+          globals: {
+            'ts-jest': {
+              stringifyContentPathRegex: '\\.html$',
+            },
+          },
+        },
+      })
+
+      expect(result).toEqual({
+        code: '<h1>Hello World</h1>',
+      })
     })
 
     test('should process type definition input', () => {
@@ -328,10 +387,8 @@ describe('TsJestTransformer', () => {
           ...baseTransformOptions,
           config: {
             ...baseTransformOptions.config,
-            globals: {
-              'ts-jest': { tsconfig: { allowJs: true } },
-            },
           },
+          transformerConfig: { tsconfig: { allowJs: true } },
         }
         tr.getCacheKey(fileContent, filePath, transformOptions)
         logTarget.clear()
@@ -354,10 +411,8 @@ describe('TsJestTransformer', () => {
         ...baseTransformOptions,
         config: {
           ...baseTransformOptions.config,
-          globals: {
-            'ts-jest': { tsconfig: { allowJs: true } },
-          },
         },
+        transformerConfig: { tsconfig: { allowJs: true } },
       }
       tr.getCacheKey(fileContent, filePath, transformOptions)
       logTarget.clear()
@@ -379,10 +434,8 @@ describe('TsJestTransformer', () => {
         ...baseTransformOptions,
         config: {
           ...baseTransformOptions.config,
-          globals: {
-            'ts-jest': { babelConfig: true },
-          },
         },
+        transformerConfig: { babelConfig: true },
       }
       tr.getCacheKey(fileContent, filePath, transformOptions)
       logTarget.clear()
@@ -486,12 +539,8 @@ describe('TsJestTransformer', () => {
         ...baseTransformOptions,
         config: {
           ...baseTransformOptions.config,
-          globals: {
-            'ts-jest': {
-              babelConfig: true,
-            },
-          },
         },
+        transformerConfig: { babelConfig: true },
       }
       // @ts-expect-error `_configsFor` is private
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion

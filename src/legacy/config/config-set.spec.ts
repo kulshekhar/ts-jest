@@ -9,15 +9,13 @@ import { logTargetMock } from '../../__helpers__/mocks'
 import type { RawCompilerOptions } from '../../raw-compiler-options'
 import type { AstTransformerDesc, TsJestTransformerOptions } from '../../types'
 import { stringify } from '../../utils'
-import * as _backports from '../../utils/backports'
 import { getPackageVersion } from '../../utils/get-package-version'
-import { Deprecations, Errors, interpolate } from '../../utils/messages'
+import { Errors } from '../../utils/messages'
 import { normalizeSlashes } from '../../utils/normalize-slashes'
 import { sha1 } from '../../utils/sha1'
 
 import { ConfigSet, MY_DIGEST, TS_JEST_OUT_DIR } from './config-set'
 
-jest.mock('../../utils/backports')
 jest.mock('../index')
 jest.mock('../../utils/get-package-version')
 
@@ -29,13 +27,6 @@ jest.mock('typescript', () => {
     ...actualModule,
   }
 })
-
-const backports = jest.mocked(_backports)
-
-backports.backportJestConfig.mockImplementation((_, config) => ({
-  ...config,
-  __backported: true,
-}))
 
 describe('config-set', () => {
   beforeEach(() => {
@@ -308,18 +299,7 @@ describe('config-set', () => {
     })
 
     it('should return babelJestTransformer with babelConfig is true', () => {
-      const cs = createConfigSet({
-        jestConfig: {
-          rootDir: 'src',
-          cwd: 'src',
-          globals: {
-            'ts-jest': {
-              babelConfig: true,
-            },
-          },
-        },
-        resolve: null,
-      })
+      const cs = createConfigSet({ tsJestConfig: { babelConfig: true }, resolve: null })
       const babelJest = cs.babelJestTransformer as Transformer
 
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -342,13 +322,9 @@ describe('config-set', () => {
     ])('should return babelJestTransformer with non javascript file path', (data) => {
       const cs = createConfigSet({
         jestConfig: {
-          globals: {
-            'ts-jest': {
-              babelConfig: data.path,
-            },
-          },
           rootDir: data.rootDir,
         },
+        tsJestConfig: { babelConfig: data.path },
         resolve: null,
       })
       const babelJest = cs.babelJestTransformer as Transformer
@@ -372,13 +348,7 @@ describe('config-set', () => {
       'should return babelJestTransformer with javascript file path',
       (babelFilePath) => {
         const cs = createConfigSet({
-          jestConfig: {
-            globals: {
-              'ts-jest': {
-                babelConfig: babelFilePath,
-              },
-            },
-          },
+          tsJestConfig: { babelConfig: babelFilePath },
           resolve: null,
         })
         const babelJest = cs.babelJestTransformer as Transformer
@@ -403,13 +373,7 @@ describe('config-set', () => {
       // eslint-disable-next-line jest/no-mocks-import
       const babelConfig = require('../../__mocks__/babel-foo.config')
       const cs = createConfigSet({
-        jestConfig: {
-          globals: {
-            'ts-jest': {
-              babelConfig,
-            },
-          },
-        },
+        tsJestConfig: { babelConfig },
         resolve: null,
       })
       const babelJest = cs.babelJestTransformer as Transformer
@@ -432,13 +396,7 @@ describe('config-set', () => {
     it('should return babelJestTransformer with inline config', () => {
       const CONFIG = { comments: true }
       const cs = createConfigSet({
-        jestConfig: {
-          globals: {
-            'ts-jest': {
-              babelConfig: CONFIG,
-            },
-          },
-        },
+        tsJestConfig: { babelConfig: CONFIG },
         resolve: null,
       })
       const babelJest = cs.babelJestTransformer as Transformer
@@ -525,10 +483,8 @@ describe('config-set', () => {
         jestConfig: {
           cache: true,
           cacheDirectory: cacheDir,
-          globals: {
-            'ts-jest': { tsconfig: false },
-          },
         },
+        tsJestConfig: { tsconfig: false },
         projectPackageJson: pkg,
       })
 
@@ -1148,52 +1104,14 @@ describe('config-set', () => {
   }) // diagnostics
 
   describe('isolatedModules', () => {
-    const spyFindTsConfigFile = jest.spyOn(ts, 'findConfigFile')
+    it('should ignore isolatedModules configured in Jest globals', () => {
+      const configSet = new ConfigSet({
+        globals: { 'ts-jest': { isolatedModules: true } },
+        testMatch: [],
+        testRegex: [],
+      } as any) // eslint-disable-line @typescript-eslint/no-explicit-any
 
-    it('should show warning log when isolatedModules: true is used in transformer options when a tsconfig file path for tests exists', () => {
-      spyFindTsConfigFile.mockReturnValueOnce('foo/tsconfig.json')
-      const logger = testing.createLoggerMock()
-      createConfigSet({
-        logger,
-        jestConfig: {
-          rootDir: 'src',
-          cwd: 'src',
-        } as any, // eslint-disable-line @typescript-eslint/no-explicit-any
-        tsJestConfig: {
-          isolatedModules: true,
-        },
-        resolve: null,
-      })
-
-      expect(logger.target.filteredLines(LogLevels.warn)).toEqual(
-        expect.arrayContaining([
-          expect.stringContaining(
-            interpolate(Deprecations.IsolatedModulesWithTsconfigPath, {
-              tsconfigFilePath: 'foo/tsconfig.json',
-            }),
-          ),
-        ]),
-      )
-    })
-
-    it('should show warning log when isolatedModules: true is used in transformer options when a tsconfig file path does not exist', () => {
-      spyFindTsConfigFile.mockReturnValueOnce(undefined)
-      const logger = testing.createLoggerMock()
-      createConfigSet({
-        logger,
-        jestConfig: {
-          rootDir: 'src',
-          cwd: 'src',
-        } as any, // eslint-disable-line @typescript-eslint/no-explicit-any
-        tsJestConfig: {
-          isolatedModules: true,
-        },
-        resolve: null,
-      })
-
-      expect(logger.target.filteredLines(LogLevels.warn)).toEqual(
-        expect.arrayContaining([expect.stringContaining(Deprecations.IsolatedModulesWithoutTsconfigPath)]),
-      )
+      expect(configSet.isolatedModules).toBe(false)
     })
   })
 })

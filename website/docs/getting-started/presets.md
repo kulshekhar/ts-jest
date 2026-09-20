@@ -30,7 +30,7 @@ Create a configuration to process TypeScript files (`.ts`/`.tsx`).
 
 - `options` (**OPTIONAL**)
   - `tsconfig`: see more at [tsconfig options page](./options/tsconfig.md)
-  - `isolatedModules`: see more at [isolatedModules options page](./options/isolatedModules.md)
+  - Configure `isolatedModules` in `tsconfig.compilerOptions`: see the [TypeScript documentation](https://www.typescriptlang.org/tsconfig/#isolatedModules)
   - `compiler`: see more at [compiler options page](./options/compiler.md)
   - `astTransformers`: see more at [astTransformers options page](./options/astTransformers.md)
   - `diagnostics`: see more at [diagnostics options page](./options/diagnostics.md)
@@ -45,7 +45,6 @@ import type { TsConfigJson } from 'type-fest'
 
 interface TsJestTransformerOptions {
   tsconfig?: boolean | string | TsConfigJson.CompilerOptions
-  isolatedModules?: boolean
   astTransformers?: ConfigCustomTransformer
   diagnostics?:
     | boolean
@@ -89,7 +88,7 @@ Create a **LEGACY** configuration to process TypeScript files (`.ts`, `.tsx`).
 
 - `options` (**OPTIONAL**)
   - `tsconfig`: see more at [tsconfig options page](./options/tsconfig.md)
-  - `isolatedModules`: see more at [isolatedModules options page](./options/isolatedModules.md)
+  - Configure `isolatedModules` in `tsconfig.compilerOptions`: see the [TypeScript documentation](https://www.typescriptlang.org/tsconfig/#isolatedModules)
   - `compiler`: see more at [compiler options page](./options/compiler.md)
   - `astTransformers`: see more at [astTransformers options page](./options/astTransformers.md)
   - `diagnostics`: see more at [diagnostics options page](./options/diagnostics.md)
@@ -104,7 +103,6 @@ import type { TsConfigJson } from 'type-fest'
 
 interface TsJestTransformerOptions {
   tsconfig?: boolean | string | TsConfigJson.CompilerOptions
-  isolatedModules?: boolean
   astTransformers?: ConfigCustomTransformer
   diagnostics?:
     | boolean
@@ -148,7 +146,7 @@ Create an ESM configuration to process TypeScript files (`.ts`/`.mts`/`.tsx`/`.m
 
 - `options` (**OPTIONAL**)
   - `tsconfig`: see more at [tsconfig options page](./options/tsconfig.md)
-  - `isolatedModules`: see more at [isolatedModules options page](./options/isolatedModules.md)
+  - Configure `isolatedModules` in `tsconfig.compilerOptions`: see the [TypeScript documentation](https://www.typescriptlang.org/tsconfig/#isolatedModules)
   - `compiler`: see more at [compiler options page](./options/compiler.md)
   - `astTransformers`: see more at [astTransformers options page](./options/astTransformers.md)
   - `diagnostics`: see more at [diagnostics options page](./options/diagnostics.md)
@@ -161,7 +159,6 @@ An object contains Jest's `transform` property:
 ```ts
 interface TsJestTransformerOptions {
   tsconfig?: boolean | string | RawCompilerOptions
-  isolatedModules?: boolean
   astTransformers?: ConfigCustomTransformer
   diagnostics?:
     | boolean
@@ -206,7 +203,7 @@ Create a **LEGACY** ESM configuration to process TypeScript files (`.ts`/`.mts`/
 
 - `options` (**OPTIONAL**)
   - `tsconfig`: see more at [tsconfig options page](./options/tsconfig.md)
-  - `isolatedModules`: see more at [isolatedModules options page](./options/isolatedModules.md)
+  - Configure `isolatedModules` in `tsconfig.compilerOptions`: see the [TypeScript documentation](https://www.typescriptlang.org/tsconfig/#isolatedModules)
   - `compiler`: see more at [compiler options page](./options/compiler.md)
   - `astTransformers`: see more at [astTransformers options page](./options/astTransformers.md)
   - `diagnostics`: see more at [diagnostics options page](./options/diagnostics.md)
@@ -221,7 +218,6 @@ import type { TsConfigJson } from 'type-fest'
 
 interface TsJestTransformerOptions {
   tsconfig?: boolean | string | TsConfigJson.CompilerOptions
-  isolatedModules?: boolean
   astTransformers?: ConfigCustomTransformer
   diagnostics?:
     | boolean
@@ -266,7 +262,7 @@ Create a configuration to process JavaScript/TypeScript files (`.js`/`.jsx`/`.ts
 
 - `options` (**OPTIONAL**)
   - `tsconfig`: see more at [tsconfig options page](./options/tsconfig.md)
-  - `isolatedModules`: see more at [isolatedModules options page](./options/isolatedModules.md)
+  - Configure `isolatedModules` in `tsconfig.compilerOptions`: see the [TypeScript documentation](https://www.typescriptlang.org/tsconfig/#isolatedModules)
   - `compiler`: see more at [compiler options page](./options/compiler.md)
   - `astTransformers`: see more at [astTransformers options page](./options/astTransformers.md)
   - `diagnostics`: see more at [diagnostics options page](./options/diagnostics.md)
@@ -281,7 +277,6 @@ import type { TsConfigJson } from 'type-fest'
 
 interface TsJestTransformerOptions {
   tsconfig?: boolean | string | TsConfigJson.CompilerOptions
-  isolatedModules?: boolean
   astTransformers?: ConfigCustomTransformer
   diagnostics?:
     | boolean
@@ -325,7 +320,7 @@ Create a **LEGACY** configuration to process JavaScript/TypeScript files (`.js`/
 
 - `options` (**OPTIONAL**)
   - `tsconfig`: see more at [tsconfig options page](./options/tsconfig.md)
-  - `isolatedModules`: see more at [isolatedModules options page](./options/isolatedModules.md)
+  - Configure `isolatedModules` in `tsconfig.compilerOptions`: see the [TypeScript documentation](https://www.typescriptlang.org/tsconfig/#isolatedModules)
   - `compiler`: see more at [compiler options page](./options/compiler.md)
   - `astTransformers`: see more at [astTransformers options page](./options/astTransformers.md)
   - `diagnostics`: see more at [diagnostics options page](./options/diagnostics.md)
@@ -338,7 +333,6 @@ An object contains Jest's `transform` property:
 ```ts
 interface TsJestTransformerOptions {
   tsconfig?: boolean | string | RawCompilerOptions
-  isolatedModules?: boolean
   astTransformers?: ConfigCustomTransformer
   diagnostics?:
     | boolean
@@ -382,7 +376,7 @@ Create a ESM configuration to process JavaScript/TypeScript files (`.js`/`.mjs`/
 
 - `options` (**OPTIONAL**)
   - `tsconfig`: see more at [tsconfig options page](./options/tsconfig.md)
-  - `isolatedModules`: see more at [isolatedModules options page](./options/isolatedModules.md)
+  - Configure `isolatedModules` in `tsconfig.compilerOptions`: see the [TypeScript documentation](https://www.typescriptlang.org/tsconfig/#isolatedModules)
   - `compiler`: see more at [compiler options page](./options/compiler.md)
   - `astTransformers`: see more at [astTransformers options page](./options/astTransformers.md)
   - `diagnostics`: see more at [diagnostics options page](./options/diagnostics.md)
@@ -397,7 +391,6 @@ import type { TsConfigJson } from 'type-fest'
 
 interface TsJestTransformerOptions {
   tsconfig?: boolean | string | TsConfigJson.CompilerOptions
-  isolatedModules?: boolean
   astTransformers?: ConfigCustomTransformer
   diagnostics?:
     | boolean
@@ -441,7 +434,7 @@ Create a **LEGACY** ESM configuration to process JavaScript/TypeScript files (`.
 
 - `options` (**OPTIONAL**)
   - `tsconfig`: see more at [tsconfig options page](./options/tsconfig.md)
-  - `isolatedModules`: see more at [isolatedModules options page](./options/isolatedModules.md)
+  - Configure `isolatedModules` in `tsconfig.compilerOptions`: see the [TypeScript documentation](https://www.typescriptlang.org/tsconfig/#isolatedModules)
   - `compiler`: see more at [compiler options page](./options/compiler.md)
   - `astTransformers`: see more at [astTransformers options page](./options/astTransformers.md)
   - `diagnostics`: see more at [diagnostics options page](./options/diagnostics.md)
@@ -454,7 +447,6 @@ An object contains Jest's `transform` property:
 ```ts
 interface TsJestTransformerOptions {
   tsconfig?: boolean | string | RawCompilerOptions
-  isolatedModules?: boolean
   astTransformers?: ConfigCustomTransformer
   diagnostics?:
     | boolean
@@ -498,7 +490,7 @@ Create a configuration to process JavaScript/TypeScript files (`.js`/`.jsx`/`.ts
 
 - `options` (**OPTIONAL**):
   - `tsconfig`: see more at [tsconfig options page](./options/tsconfig.md)
-  - `isolatedModules`: see more at [isolatedModules options page](./options/isolatedModules.md)
+  - Configure `isolatedModules` in `tsconfig.compilerOptions`: see the [TypeScript documentation](https://www.typescriptlang.org/tsconfig/#isolatedModules)
   - `compiler`: see more at [compiler options page](./options/compiler.md)
   - `astTransformers`: see more at [astTransformers options page](./options/astTransformers.md)
   - `diagnostics`: see more at [diagnostics options page](./options/diagnostics.md)
@@ -514,7 +506,6 @@ import type { TsConfigJson } from 'type-fest'
 
 interface TsJestTransformerOptions {
   tsconfig?: boolean | string | TsConfigJson.CompilerOptions
-  isolatedModules?: boolean
   astTransformers?: ConfigCustomTransformer
   diagnostics?:
     | boolean
@@ -559,7 +550,7 @@ Create a **LEGACY** configuration to process JavaScript/TypeScript files (`.js`/
 
 - `options` (**OPTIONAL**):
   - `tsconfig`: see more at [tsconfig options page](./options/tsconfig.md)
-  - `isolatedModules`: see more at [isolatedModules options page](./options/isolatedModules.md)
+  - Configure `isolatedModules` in `tsconfig.compilerOptions`: see the [TypeScript documentation](https://www.typescriptlang.org/tsconfig/#isolatedModules)
   - `compiler`: see more at [compiler options page](./options/compiler.md)
   - `astTransformers`: see more at [astTransformers options page](./options/astTransformers.md)
   - `diagnostics`: see more at [diagnostics options page](./options/diagnostics.md)
@@ -573,7 +564,6 @@ An object contains Jest's `transform` property:
 ```ts
 interface TsJestTransformerOptions {
   tsconfig?: boolean | string | RawCompilerOptions
-  isolatedModules?: boolean
   astTransformers?: ConfigCustomTransformer
   diagnostics?:
     | boolean
@@ -618,7 +608,7 @@ Create a ESM configuration to process JavaScript/TypeScript files (`.js`/`.mjs`/
 
 - `options` (**OPTIONAL**):
   - `tsconfig`: see more at [tsconfig options page](./options/tsconfig.md)
-  - `isolatedModules`: see more at [isolatedModules options page](./options/isolatedModules.md)
+  - Configure `isolatedModules` in `tsconfig.compilerOptions`: see the [TypeScript documentation](https://www.typescriptlang.org/tsconfig/#isolatedModules)
   - `compiler`: see more at [compiler options page](./options/compiler.md)
   - `astTransformers`: see more at [astTransformers options page](./options/astTransformers.md)
   - `diagnostics`: see more at [diagnostics options page](./options/diagnostics.md)
@@ -634,7 +624,6 @@ import type { TsConfigJson } from 'type-fest'
 
 interface TsJestTransformerOptions {
   tsconfig?: boolean | string | TsConfigJson.CompilerOptions
-  isolatedModules?: boolean
   astTransformers?: ConfigCustomTransformer
   diagnostics?:
     | boolean
@@ -679,7 +668,7 @@ Create a **LEGACY** ESM configuration to process JavaScript/TypeScript files (`.
 
 - `options` (**OPTIONAL**):
   - `tsconfig`: see more at [tsconfig options page](./options/tsconfig.md)
-  - `isolatedModules`: see more at [isolatedModules options page](./options/isolatedModules.md)
+  - Configure `isolatedModules` in `tsconfig.compilerOptions`: see the [TypeScript documentation](https://www.typescriptlang.org/tsconfig/#isolatedModules)
   - `compiler`: see more at [compiler options page](./options/compiler.md)
   - `astTransformers`: see more at [astTransformers options page](./options/astTransformers.md)
   - `diagnostics`: see more at [diagnostics options page](./options/diagnostics.md)
@@ -693,7 +682,6 @@ An object contains Jest's `transform` property:
 ```ts
 interface TsJestTransformerOptions {
   tsconfig?: boolean | string | RawCompilerOptions
-  isolatedModules?: boolean
   astTransformers?: ConfigCustomTransformer
   diagnostics?:
     | boolean

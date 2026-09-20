@@ -1,41 +1,23 @@
 ---
-title: isolatedModules option
+title: TypeScript isolatedModules compiler option
 ---
-
-:::warning DEPRECATED
-
-This page is now **DEPRECATED** and will be removed together with the config option `isolatedModules` in the next major release. Please use `isolatedModules` option in `tsconfig.json` instead.
-
-:::
 
 By default `ts-jest` uses TypeScript compiler in the context of a project (yours), with full type-checking and features.
 But it can also be used to compile each file separately, what TypeScript calls an 'isolated module'.
-That's what the `isolatedModules` option (which defaults to `false`) does.
+That's what TypeScript's `compilerOptions.isolatedModules` option (which defaults to `false`) does.
 
 You'll lose type-checking ability and some features such as `const enum`, but in the case you plan on using Jest with the cache disabled (`jest --no-cache`), your tests will then run much faster.
 
-Here is how to disable type-checking and compile each file as an isolated module:
+Here is how to configure TypeScript to disable type-checking and compile each file as an isolated module:
 
 ### Example
 
-```ts title="jest.config.ts"
-import type { Config } from 'jest'
-
-const jestConfig: Config = {
-  // [...]
-  transform: {
-    // '^.+\\.[tj]sx?$' to process js/ts with `ts-jest`
-    // '^.+\\.m?[tj]sx?$' to process js/ts/mjs/mts with `ts-jest`
-    '^.+\\.tsx?$': [
-      'ts-jest',
-      {
-        isolatedModules: true,
-      },
-    ],
-  },
+```json title="tsconfig.json"
+{
+  "compilerOptions": {
+    "isolatedModules": true
+  }
 }
-
-export default jestConfig
 ```
 
 ## Performance
