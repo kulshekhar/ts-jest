@@ -162,40 +162,12 @@ exports[`config migrate should generate transform config with existing transform
       'ts-jest',
       {},
     ],
-    '^.+\\\\.tsx?$': [
-      'ts-jest',
-      {},
-    ],
   },
 }
 "
 `;
 
 exports[`config migrate should migrate preset if valid preset value is used 1`] = `
-""jest": {
-  "transform": {
-    "^.+\\\\.tsx?$": [
-      "ts-jest",
-      {}
-    ]
-  }
-}
-"
-`;
-
-exports[`config migrate should migrate preset if valid preset value is used 2`] = `
-""jest": {
-  "transform": {
-    "^.+\\\\.tsx?$": [
-      "ts-jest",
-      {}
-    ]
-  }
-}
-"
-`;
-
-exports[`config migrate should migrate preset if valid preset value is used 3`] = `
 ""jest": {
   "transform": {
     "^.+\\\\.tsx?$": [
