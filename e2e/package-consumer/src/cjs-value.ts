@@ -1,0 +1,1 @@
+export const packageFormat = 'commonjs'

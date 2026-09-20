@@ -9,12 +9,25 @@ on:
       node-version:
         required: true
         type: string
+      typescript-version:
+        required: false
+        type: string
+        default: ''
+      package-consumer-typescript-version:
+        required: false
+        type: string
+        default: '5.9.3'
+      package-consumer-only:
+        required: false
+        type: boolean
+        default: false
 
 permissions: # added using https://github.com/step-security/secure-workflows
   contents: read
 
 jobs:
   unit-test:
+    if: ${{ !inputs.package-consumer-only }}
     permissions:
       checks: write
       contents: read
@@ -33,6 +46,7 @@ jobs:
         with:
           os: ${{ inputs.os }}
           node-version: ${{ inputs.node-version }}
+          typescript-version: ${{ inputs.typescript-version }}
 
       - name: Build 🔧
         run: |
@@ -46,6 +60,7 @@ jobs:
           DISABLE_MOCKED_WARNING: true
 
   e2e-test:
+    if: ${{ !inputs.package-consumer-only }}
     permissions:
       checks: write
       contents: read
@@ -64,6 +79,7 @@ jobs:
         with:
           os: ${{ inputs.os }}
           node-version: ${{ inputs.node-version }}
+          typescript-version: ${{ inputs.typescript-version }}
 
       - name: Build 🔧
         run: |
@@ -74,6 +90,7 @@ jobs:
         run: npm run test-e2e
 
   example-test:
+    if: ${{ !inputs.package-consumer-only }}
     permissions:
       checks: write
       contents: read
@@ -92,6 +109,7 @@ jobs:
         with:
           os: ${{ inputs.os }}
           node-version: ${{ inputs.node-version }}
+          typescript-version: ${{ inputs.typescript-version }}
 
       - name: Build 🔧
         run: |
@@ -100,3 +118,34 @@ jobs:
 
       - name: Run tests in example projects 🧪
         run: npm run test-examples
+
+  package-consumer-test:
+    permissions:
+      checks: write
+      contents: read
+    name: Packed package consumer tests on Node v${{ inputs.node-version }} on ${{ inputs.os }}
+    runs-on: ${{ inputs.os }}
+
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 20
+          fetch-tags: false
+
+      - name: Setup workspace ⚙️
+        uses: ./.github/actions/setup-workspace
+        with:
+          os: ${{ inputs.os }}
+          node-version: ${{ inputs.node-version }}
+          typescript-version: ${{ inputs.typescript-version }}
+
+      - name: Build 🔧
+        run: |
+          npm run build
+          npm run postbuild
+
+      - name: Run packed package consumer tests 🧪
+        run: npm run test-package-consumer
+        env:
+          TS_JEST_PACKAGE_CONSUMER_TYPESCRIPT_VERSION: ${{ inputs.package-consumer-typescript-version }}

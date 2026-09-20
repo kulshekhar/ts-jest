@@ -27,7 +27,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node-version: [18, 20, 22]
+        node-version: [20, 22, 24]
     with:
       os: ubuntu-latest
       node-version: ${{ matrix.node-version }}
@@ -40,10 +40,35 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node-version: [18, 20, 22]
+        node-version: [20, 22, 24]
     with:
       os: windows-latest
       node-version: ${{ matrix.node-version }}
+
+  test-typescript:
+    uses: ./.github/workflows/test.yml
+    strategy:
+      fail-fast: false
+      matrix:
+        # TypeScript 6 compatibility is covered by the existing typescript-7-compat fixture,
+        # which aliases TypeScript 6's JavaScript API as the ts-jest compiler.
+        typescript-version: ['5.4.5', '5.9.3']
+    with:
+      os: ubuntu-latest
+      node-version: 22
+      typescript-version: ${{ matrix.typescript-version }}
+
+  test-package-consumer-typescript:
+    uses: ./.github/workflows/test.yml
+    strategy:
+      fail-fast: false
+      matrix:
+        package-consumer-typescript-version: ['5.4.5', '5.9.3', '6.0.2']
+    with:
+      os: ubuntu-latest
+      node-version: 22
+      package-consumer-typescript-version: ${{ matrix.package-consumer-typescript-version }}
+      package-consumer-only: true
 
   lint:
     runs-on: ubuntu-latest

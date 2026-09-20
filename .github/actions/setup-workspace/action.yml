@@ -7,6 +7,10 @@ inputs:
   node-version:
     description: Node.js version to install
     required: true
+  typescript-version:
+    description: TypeScript version to validate after installing the locked dependencies
+    required: false
+    default: ''
 
 permissions: # added using https://github.com/step-security/secure-workflows
   contents: read
@@ -22,4 +26,15 @@ runs:
 
     - name: Install 🔧
       run: npm ci --ignore-scripts --prefer-offline
+      shell: bash
+
+    - name: Install TypeScript validation version 🔧
+      if: inputs.typescript-version != ''
+      run: |
+        typescript_package_dir="$RUNNER_TEMP/ts-jest-typescript-${{ inputs.typescript-version }}"
+        mkdir -p "$typescript_package_dir"
+        typescript_archive="$(npm pack --silent --ignore-scripts --pack-destination "$typescript_package_dir" "typescript@${{ inputs.typescript-version }}")"
+        rm -rf node_modules/typescript
+        tar -xzf "$typescript_package_dir/$typescript_archive" -C "$typescript_package_dir"
+        mv "$typescript_package_dir/package" node_modules/typescript
       shell: bash

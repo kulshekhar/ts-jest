@@ -210,7 +210,9 @@ export class ConfigSet {
     if (!this._matchablePatterns.length) {
       this._matchablePatterns.push(...DEFAULT_JEST_TEST_MATCH)
     }
-    this._matchTestFilePath = globsToMatcher(this._matchablePatterns.filter((pattern) => typeof pattern === 'string'))
+    this._matchTestFilePath = globsToMatcher(
+      this._matchablePatterns.filter((pattern): pattern is string => typeof pattern === 'string'),
+    )
     // isolatedModules
     if (options.isolatedModules) {
       this.parsedTsConfig.options.isolatedModules = true

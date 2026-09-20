@@ -14,6 +14,7 @@
     "postbuild": "node scripts/post-build.js",
     "test": "jest -c=jest.config.ts",
     "test-e2e": "jest -c=e2e/jest.config.cts",
+    "test-package-consumer": "jest -c=e2e/jest.config.cts --runTestsByPath e2e/__tests__/package-consumer.test.ts",
     "test-examples": "node scripts/test-examples.js",
     "lint": "eslint .",
     "lint-fix": "eslint --fix .",
@@ -62,12 +63,12 @@
   },
   "peerDependencies": {
     "@babel/core": ">=7.0.0-beta.0 <8",
-    "@jest/transform": "^29.0.0 || ^30.0.0",
-    "@jest/types": "^29.0.0 || ^30.0.0",
-    "babel-jest": "^29.0.0 || ^30.0.0",
-    "jest": "^29.0.0 || ^30.0.0",
-    "jest-util": "^29.0.0 || ^30.0.0",
-    "typescript": ">=4.3 <7"
+    "@jest/transform": "^30.0.0",
+    "@jest/types": "^30.0.0",
+    "babel-jest": "^30.0.0",
+    "jest": "^30.0.0",
+    "jest-util": "^30.0.0",
+    "typescript": ">=5.4 <7"
   },
   "peerDependenciesMeta": {
     "@babel/core": {
@@ -100,7 +101,7 @@
     "@jest/types": "^30.5.1",
     "@types/babel__core": "^7.20.5",
     "@types/fs-extra": "^11.0.4",
-    "@types/jest": "^29.5.14",
+    "@types/jest": "^30.0.0",
     "@types/js-yaml": "^4.0.9",
     "@types/lodash.camelcase": "^4.3.9",
     "@types/lodash.memoize": "^4.1.9",
@@ -136,6 +137,6 @@
     "typescript-eslint": "^8.70.0"
   },
   "engines": {
-    "node": "^14.15.0 || ^16.10.0 || ^18.0.0 || >=20.0.0"
+    "node": ">=20.0.0"
   }
 }

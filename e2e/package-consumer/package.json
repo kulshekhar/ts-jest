@@ -1,0 +1,10 @@
+{
+  "name": "package-consumer",
+  "private": true,
+  "dependencies": {
+    "@typescript/old": "npm:typescript@6.0.2",
+    "@types/jest": "30.0.0",
+    "jest": "30.5.1",
+    "typescript": "5.9.3"
+  }
+}

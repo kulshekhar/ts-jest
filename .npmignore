@@ -8,6 +8,12 @@ src
 # Github Pages
 website
 
+# Internal planning documents
+docs/plans
+
+# Generated analysis artifacts
+graphify-out
+
 # Developement scripts
 scripts
 
