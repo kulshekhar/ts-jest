@@ -95,11 +95,11 @@ body:
           OS: Linux 5.10 Debian GNU/Linux 9 (stretch)
           CPU: (8) arm64
         Binaries:
-          Node: 14.17.0 - /usr/local/bin/node
-          Yarn: 1.22.5 - /usr/local/bin/yarn
-          npm: 6.14.13 - /usr/local/bin/npm
+          Node: 24.21.0 - /usr/local/bin/node
+          Yarn: 1.22.22 - /usr/local/bin/yarn
+          npm: 11.19.0 - /usr/local/bin/npm
         npmPackages:
-          jest: 27.0.6 => 27.0.6
+          jest: 30.0.0 => 30.0.0
       render: shell
     validations:
       required: true
