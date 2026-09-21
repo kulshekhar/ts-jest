@@ -1,6 +1,7 @@
 # Tests
 e2e
 examples
+type-tests
 
 # sources are inlined
 src
@@ -32,6 +33,7 @@ scripts
 # Tsconfig
 tsconfig.build.json
 tsconfig.eslint.json
+tsconfig.type-tests.json
 tsconfig.json
 
 # Logs

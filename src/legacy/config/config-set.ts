@@ -15,11 +15,10 @@ import { dirname, extname, isAbsolute, join, normalize, resolve } from 'path'
 import { LogContexts, Logger } from 'bs-logger'
 import { globsToMatcher } from 'jest-util'
 import json5 from 'json5'
+import type { TsConfigJson } from 'type-fest'
 import type * as ts from 'typescript'
 
-import type { TsConfigCompilerOptionsJson } from '../../config'
 import { DEFAULT_JEST_TEST_MATCH, JS_JSX_EXTENSIONS } from '../../constants'
-import type { RawCompilerOptions } from '../../raw-compiler-options'
 import * as hoistJestTransformer from '../../transformers/hoist-jest'
 import type {
   AstTransformer,
@@ -440,7 +439,7 @@ export class ConfigSet {
    * @internal
    */
   private _getAndResolveTsConfig(
-    compilerOptions?: RawCompilerOptions | TsConfigCompilerOptionsJson,
+    compilerOptions?: TsConfigJson.CompilerOptions,
     resolvedConfigFile?: string,
   ): ts.ParsedCommandLine {
     const result = this._resolveTsConfig(compilerOptions, resolvedConfigFile) as ts.ParsedCommandLine
@@ -537,12 +536,12 @@ export class ConfigSet {
    * Subclasses which extend `ConfigSet` can override the default behavior
    */
   protected _resolveTsConfig(
-    compilerOptions?: RawCompilerOptions | TsConfigCompilerOptionsJson,
+    compilerOptions?: TsConfigJson.CompilerOptions,
     resolvedConfigFile?: string,
   ): // eslint-disable-next-line @typescript-eslint/no-explicit-any
   Record<string, any>
   protected _resolveTsConfig(
-    compilerOptions?: RawCompilerOptions | TsConfigCompilerOptionsJson,
+    compilerOptions?: TsConfigJson.CompilerOptions,
     resolvedConfigFile?: string,
   ): ts.ParsedCommandLine {
     let config = { compilerOptions: Object.create(null) }

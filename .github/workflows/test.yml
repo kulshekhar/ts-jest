@@ -39,6 +39,9 @@ jobs:
           npm run build
           npm run postbuild
 
+      - name: Run type contract tests 🔠
+        run: npm run test:types
+
       - name: Run tests 🧪
         run: npm run test
         env:

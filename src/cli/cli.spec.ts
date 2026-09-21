@@ -129,6 +129,19 @@ describe('config', () => {
   // briefly tested, see header comment in `config/init.ts`
   describe('init', () => {
     const noOption = ['config:init']
+    it.each([
+      { option: '--babel', replacement: '--js babel' },
+      { option: '--allow-js', replacement: '--js ts' },
+    ])('should reject removed $option option without consuming a config filename', async ({ option, replacement }) => {
+      const configFile = 'custom-jest.config.js'
+
+      const res = await runCli(...noOption, option, configFile)
+
+      expect(res.log).toContain(`The '${option}' option was removed.`)
+      expect(res.log).toContain(`Use '${replacement}' instead.`)
+      expect(fs.existsSync).not.toHaveBeenCalled()
+    })
+
     const cliOptionCases = [
       {
         cliOptions: [...noOption],
@@ -227,7 +240,6 @@ describe('config', () => {
                                 babel-jest if 'babel'
           --no-jest-preset      Disable the use of Jest presets
           --tsconfig <file>     Path to the tsconfig.json file
-          --babel               Enable using Babel to process 'js' resulted content from 'ts-jest' processing
           --jsdom               Use 'jsdom' as test environment instead of 'node'
         ",
         }
@@ -253,7 +265,7 @@ describe('config', () => {
       },
     }
     const noOption = ['config:migrate']
-    const fullOptions = [...noOption, '--no-jest-preset', '--allow-js']
+    const fullOptions = [...noOption, '--no-jest-preset', '--js', 'ts']
     beforeEach(() => {
       mockedProcess.cwd.mockImplementation(() => __dirname)
     })
@@ -1132,12 +1144,12 @@ describe('config', () => {
       `)
     })
 
-    it('should generate transform config with allow-js in CLI options', async () => {
+    it('should generate transform config with js ts in CLI options', async () => {
       fs.existsSync.mockImplementation(() => true)
       jest.mock(pkgPaths.next, () => ({}), { virtual: true })
       jest.doMock(pkgPaths.nextCfg, () => ({}), { virtual: true })
 
-      const res = await runCli(...noOption, '--allow-js', pkgPaths.currentCfg)
+      const res = await runCli(...noOption, '--js', 'ts', pkgPaths.currentCfg)
 
       expect(res.stdout).toMatchInlineSnapshot(`
         "module.exports = {

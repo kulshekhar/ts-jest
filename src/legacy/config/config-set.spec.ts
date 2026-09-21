@@ -2,11 +2,11 @@ import { join, resolve } from 'path'
 
 import type { Transformer } from '@jest/transform'
 import { LogLevels, testing } from 'bs-logger'
+import type { TsConfigJson } from 'type-fest'
 import * as ts from 'typescript'
 
 import { createConfigSet } from '../../__helpers__/fakers'
 import { logTargetMock } from '../../__helpers__/mocks'
-import type { RawCompilerOptions } from '../../raw-compiler-options'
 import type { AstTransformerDesc, TsJestTransformerOptions } from '../../types'
 import { stringify } from '../../utils'
 import { getPackageVersion } from '../../utils/get-package-version'
@@ -172,7 +172,7 @@ describe('config-set', () => {
       target.clear()
       const cs = createConfigSet({
         tsJestConfig: {
-          tsconfig: { module: moduleString as RawCompilerOptions['module'], esModuleInterop: false },
+          tsconfig: { module: moduleString as TsConfigJson.CompilerOptions['module'], esModuleInterop: false },
           diagnostics: { warnOnly: true, pretty: false },
         },
         resolve: null,

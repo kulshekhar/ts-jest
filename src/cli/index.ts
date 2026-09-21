@@ -6,8 +6,20 @@ import type { TsJestTransformerOptions } from '../types'
 import { rootLogger } from '../utils'
 
 const VALID_COMMANDS = ['help', 'config:migrate', 'config:init']
+const REMOVED_OPTION_REPLACEMENTS = {
+  '--babel': '--js babel',
+  '--allow-js': '--js ts',
+} as const
 
 const logger = rootLogger.child({ [LogContexts.namespace]: 'cli', [LogContexts.application]: 'ts-jest' })
+
+const rejectRemovedOptions = (args: string[]): void => {
+  for (const [option, replacement] of Object.entries(REMOVED_OPTION_REPLACEMENTS)) {
+    if (args.some((argument) => argument === option || argument.startsWith(`${option}=`))) {
+      throw new Error(`The '${option}' option was removed. Use '${replacement}' instead.`)
+    }
+  }
+}
 
 /**
  * @internal
@@ -16,7 +28,6 @@ export type CliCommandArgs = Omit<Arguments, '$0'> & { _: Array<string | number>
   jestPreset?: boolean
   force?: boolean
   tsconfig?: TsJestTransformerOptions['tsconfig']
-  babel?: boolean
   jsdom?: boolean
   js?: 'ts' | 'babel'
 }
@@ -26,8 +37,10 @@ export type CliCommandArgs = Omit<Arguments, '$0'> & { _: Array<string | number>
 export type CliCommand = (argv: CliCommandArgs, logger: Logger) => Promise<void>
 
 async function cli(args: string[]): Promise<void> {
+  rejectRemovedOptions(args)
+
   const parsedArgv = yargsParser(args, {
-    boolean: ['dry-run', 'jest-preset', 'allow-js', 'diff', 'babel', 'force', 'jsdom'],
+    boolean: ['dry-run', 'jest-preset', 'diff', 'force', 'jsdom'],
     string: ['tsconfig', 'js'],
     count: ['verbose'],
     alias: { verbose: ['v'] },
@@ -41,12 +54,6 @@ async function cli(args: string[]): Promise<void> {
       },
     },
   })
-
-  // deprecated
-  if (parsedArgv.allowJs != null) {
-    if (parsedArgv.js) throw new Error("The 'allowJs' and 'js' options cannot be set together.")
-    parsedArgv.js = parsedArgv.allowJs ? 'ts' : undefined
-  }
 
   let command = parsedArgv._.shift() as string
   const isHelp = command === 'help'

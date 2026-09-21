@@ -13,6 +13,7 @@
     "build": "tsc -p tsconfig.build.json",
     "postbuild": "node scripts/post-build.js",
     "test": "jest -c=jest.config.ts",
+    "test:types": "tsc -p tsconfig.type-tests.json",
     "test-e2e": "jest -c=e2e/jest.config.cts",
     "test-examples": "node scripts/test-examples.js",
     "lint": "eslint .",

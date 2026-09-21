@@ -1,4 +1,4 @@
-import type { TsJestPresets } from '../../types'
+import type { Config } from '@jest/types'
 
 /** @internal */
 export const enum JestPresetNames {
@@ -22,7 +22,7 @@ export interface TsJestPresetDescriptor {
   fullName: string
   label: string
   jsVarName: string
-  value: TsJestPresets
+  value: Config.InitialOptions
   isDefault: boolean
   jsImport(varName?: string): string
 }

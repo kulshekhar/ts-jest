@@ -24,7 +24,7 @@ import {
   createJsWithTsLegacyPreset,
   createJsWithTsPreset,
 } from '../../presets/create-jest-preset'
-import type { TsJestPresets, TsJestTransformerOptions } from '../../types'
+import type { TsJestTransformerOptions } from '../../types'
 import { backportJestConfig } from '../../utils/backports'
 import { JestPresetNames, type TsJestPresetDescriptor, allPresets } from '../helpers/presets'
 
@@ -296,7 +296,7 @@ const mergeTransformConfigs = (
 const createPresetTransform = (
   preset: TsJestPresetDescriptor,
   globalsTsJestConfig: TsJestTransformerOptions | undefined,
-): TsJestPresets => {
+): Config.InitialOptions => {
   const isEsm = preset.fullName.includes('-esm')
   const isLegacy = preset.fullName.includes('-legacy')
 

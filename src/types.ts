@@ -2,9 +2,9 @@ import type { TransformedSource, Transformer, TransformOptions } from '@jest/tra
 import type { Config } from '@jest/types'
 import type * as babelJest from 'babel-jest'
 import type * as _babel from 'babel__core'
+import type { TsConfigJson } from 'type-fest'
 import type * as _ts from 'typescript'
 
-import type { TsConfigCompilerOptionsJson } from './config/types'
 import {
   ESM_JS_TRANSFORM_PATTERN,
   ESM_TS_JS_TRANSFORM_PATTERN,
@@ -14,7 +14,6 @@ import {
   TS_TRANSFORM_PATTERN,
 } from './constants'
 import type { ConfigSet } from './legacy/config/config-set'
-import type { RawCompilerOptions } from './raw-compiler-options'
 
 /**
  * @internal
@@ -42,7 +41,7 @@ export type BabelJestTransformer = {
   [K in Exclude<keyof Transformer, 'createTransformer'>]: Exclude<Transformer[K], undefined>
 }
 /**
- * Don't mark as internal because it is used in TsJestGlobalOptions which is an exposed type
+ * Don't mark as internal because it is used in TsJestTransformerOptions which is an exposed type.
  */
 export type BabelConfig = _babel.TransformOptions
 
@@ -57,10 +56,7 @@ export interface ConfigCustomTransformer {
   afterDeclarations?: Array<string | AstTransformer>
 }
 
-/**
- * @deprecated use {@link TsJestTransformerOptions} instead
- */
-export type TsJestGlobalOptions = Config.TransformerConfig[1] & {
+export type TsJestTransformerOptions = Config.TransformerConfig[1] & {
   /**
    * Compiler options. It can be:
    * - `true` (or `undefined`, it's the default): use default tsconfig file
@@ -72,9 +68,8 @@ export type TsJestGlobalOptions = Config.TransformerConfig[1] & {
    *
    * @remarks
    *
-   * {@link RawCompilerOptions} will be replaced with {@link TsConfigCompilerOptionsJson} in the next major release
    */
-  tsconfig?: boolean | string | RawCompilerOptions | TsConfigCompilerOptionsJson
+  tsconfig?: boolean | string | TsConfigJson.CompilerOptions
 
   /**
    * Compiler to use
@@ -151,33 +146,6 @@ export type TsJestGlobalOptions = Config.TransformerConfig[1] & {
   useESM?: boolean
 }
 
-/**
- * For transformers which extends `ts-jest`
- * @deprecated use `JestConfigWithTsJest` instead
- */
-export interface ProjectConfigTsJest extends Config.ProjectConfig {
-  globals: GlobalConfigTsJest
-}
-/**
- * @deprecated use `JestConfigWithTsJest` instead
- */
-export interface TransformOptionsTsJest<TransformerConfig = unknown> extends TransformOptions<TransformerConfig> {
-  config: Config.ProjectConfig
-}
-
-/**
- * For typings in `jest.config.ts`
- * @deprecated use `JestConfigWithTsJest` instead
- */
-export type GlobalConfigTsJest = Config.ConfigGlobals
-/**
- * @deprecated use `JestConfigWithTsJest` instead
- */
-export interface InitialOptionsTsJest extends Config.InitialOptions {
-  globals?: GlobalConfigTsJest
-}
-export type TsJestTransformerOptions = TsJestGlobalOptions
-
 export type TsJestTransformOptions = TransformOptions<TsJestTransformerOptions>
 
 export interface JestConfigWithTsJest extends Omit<Config.InitialOptions, 'transform'> {
@@ -232,14 +200,6 @@ export interface TsJestAstTransformer {
   after: AstTransformerDesc[]
   afterDeclarations: AstTransformerDesc[]
 }
-
-/**
- * @deprecated use other preset types below instead
- */
-export type TsJestPresets = Pick<
-  JestConfigWithTsJest,
-  'extensionsToTreatAsEsm' | 'moduleFileExtensions' | 'transform' | 'testMatch'
->
 
 export type DefaultTransformOptions = Omit<TsJestTransformerOptions, 'useESM'>
 export type DefaultPreset = {

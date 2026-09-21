@@ -76,6 +76,9 @@ jobs:
           npm run build
           npm run postbuild
 
+      - name: Run type contract tests 🔠
+        run: npm run test:types
+
       - name: Create and push tag 🔖
         id: create_tag
         run: |

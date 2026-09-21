@@ -37,7 +37,7 @@ const ensureOnlyUsingDoubleQuotes = (str: string): string => {
  * @internal
  */
 export const run: CliCommand = async (args: CliCommandArgs /* , logger: Logger */) => {
-  const { tsconfig: askedTsconfig, force, jsdom, js: jsFilesProcessor, babel: shouldPostProcessWithBabel } = args
+  const { tsconfig: askedTsconfig, force, jsdom, js: jsFilesProcessor } = args
   const file = args._[0]?.toString() ?? 'jest.config.js'
   const filePath = join(process.cwd(), file)
   const name = basename(file)
@@ -47,13 +47,6 @@ export const run: CliCommand = async (args: CliCommandArgs /* , logger: Logger *
   const isPackageJsonExisted = isPackageJsonConfig || existsSync(pkgFile)
   const tsconfig = askedTsconfig === 'tsconfig.json' ? undefined : askedTsconfig
   const pkgJsonContent = isPackageJsonExisted ? JSON.parse(readFileSync(pkgFile, 'utf8')) : {}
-  if (shouldPostProcessWithBabel) {
-    console.warn(
-      `The option --babel is deprecated and will be removed in the next major version.` +
-        ` Please specify 'js' option value (see more with npx ts-jest help) if you wish 'ts-jest' to process 'js' with TypeScript API or Babel.`,
-    )
-  }
-
   if (isPackageJsonConfig && !isJestConfigFileExisted) {
     throw new Error(`File ${file} does not exists.`)
   } else if (!isPackageJsonConfig && isJestConfigFileExisted && !force) {
@@ -77,7 +70,7 @@ export const run: CliCommand = async (args: CliCommandArgs /* , logger: Logger *
     : undefined
   let transformConfig: DefaultPreset | JsWithTsPreset | JsWithBabelPreset
   if (isPackageJsonConfig) {
-    if (jsFilesProcessor === 'babel' || shouldPostProcessWithBabel) {
+    if (jsFilesProcessor === 'babel') {
       transformConfig = createJsWithBabelPreset(transformOpts)
     } else if (jsFilesProcessor === 'ts') {
       transformConfig = createJsWithTsPreset(transformOpts)
@@ -96,7 +89,7 @@ export const run: CliCommand = async (args: CliCommandArgs /* , logger: Logger *
     )
   } else {
     let presetCreatorFn: string
-    if (jsFilesProcessor === 'babel' || shouldPostProcessWithBabel) {
+    if (jsFilesProcessor === 'babel') {
       presetCreatorFn = 'createJsWithBabelPreset'
     } else if (jsFilesProcessor === 'ts') {
       presetCreatorFn = 'createJsWithTsPreset'
@@ -139,7 +132,6 @@ Options:
                         babel-jest if 'babel'
   --no-jest-preset      Disable the use of Jest presets
   --tsconfig <file>     Path to the tsconfig.json file
-  --babel               Enable using Babel to process 'js' resulted content from 'ts-jest' processing
   --jsdom               Use 'jsdom' as test environment instead of 'node'
 `)
 }

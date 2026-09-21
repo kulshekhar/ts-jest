@@ -68,6 +68,9 @@ jobs:
           npm run build
           npm run postbuild
 
+      - name: Run type contract tests 🔠
+        run: npm run test:types
+
       - name: Check release tag 🔖
         id: tag_check
         run: |
