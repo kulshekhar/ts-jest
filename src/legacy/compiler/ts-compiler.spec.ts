@@ -337,9 +337,11 @@ describe('TsCompiler', () => {
             useESM,
             babelConfig,
             tsconfig: {
+              esModuleInterop: true,
               isolatedModules: true,
               customConditions: ['my-condition'],
               module,
+              moduleResolution: 'Bundler',
             } as TsConfigJson,
           },
         })
@@ -532,6 +534,7 @@ describe('TsCompiler', () => {
                 module: moduleValue as TsConfigJson.CompilerOptions['module'],
                 esModuleInterop: false,
                 customConditions: ['my-condition'],
+                moduleResolution: 'Bundler',
               },
             },
           })
@@ -586,6 +589,7 @@ describe('TsCompiler', () => {
               module: 'NodeNext',
               esModuleInterop: false,
               customConditions: ['my-condition'],
+              moduleResolution: 'Bundler',
             },
           },
         })

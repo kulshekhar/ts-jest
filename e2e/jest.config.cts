@@ -10,6 +10,7 @@ export default defineConfig({
       '<rootDir>/dist/index.js',
       {
         tsconfig: {
+          experimentalDecorators: true,
           isolatedModules: true,
           module: 'NodeNext',
           moduleResolution: 'NodeNext',

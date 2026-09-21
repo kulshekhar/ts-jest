@@ -160,6 +160,10 @@ export class ConfigSet {
   private _shouldIgnoreDiagnosticsForFile!: (filePath: string) => boolean
   /**
    * @internal
+   *
+   * TypeScript emits JavaScript in memory for ts-jest. These options prevent declaration or disk
+   * output from changing the transformed result; emission-blocking options are rejected before
+   * these overrides are applied.
    */
   private readonly _overriddenCompilerOptions: Partial<ts.CompilerOptions> = {
     inlineSourceMap: false,
@@ -329,6 +333,7 @@ export class ConfigSet {
     this.parsedTsConfig = this._getAndResolveTsConfig(
       typeof tsconfigOpt === 'object' ? tsconfigOpt : undefined,
       configFilePath,
+      tsconfigOpt === undefined || tsconfigOpt === true,
     )
     // throw errors if any matching wanted diagnostics
     this.raiseDiagnostics(this.parsedTsConfig.errors, configFilePath)
@@ -465,8 +470,15 @@ export class ConfigSet {
   private _getAndResolveTsConfig(
     compilerOptions?: RawCompilerOptions | TsConfigCompilerOptionsJson,
     resolvedConfigFile?: string,
+    shouldFindConfig = true,
   ): ts.ParsedCommandLine {
-    const result = this._resolveTsConfig(compilerOptions, resolvedConfigFile) as ts.ParsedCommandLine
+    const result = this._resolveTsConfig(compilerOptions, resolvedConfigFile, shouldFindConfig) as ts.ParsedCommandLine
+    if (result.options.noEmit) {
+      throw new Error(interpolate(Errors.ConfigNoEmit, { option: 'noEmit' }))
+    }
+    if (result.options.emitDeclarationOnly) {
+      throw new Error(interpolate(Errors.ConfigNoEmit, { option: 'emitDeclarationOnly' }))
+    }
     const { _overriddenCompilerOptions: forcedOptions } = this
     const finalOptions = result.options
     // Target ES2015 output by default (instead of ES3).
@@ -562,11 +574,13 @@ export class ConfigSet {
   protected _resolveTsConfig(
     compilerOptions?: RawCompilerOptions | TsConfigCompilerOptionsJson,
     resolvedConfigFile?: string,
+    shouldFindConfig?: boolean,
   ): // eslint-disable-next-line @typescript-eslint/no-explicit-any
   Record<string, any>
   protected _resolveTsConfig(
     compilerOptions?: RawCompilerOptions | TsConfigCompilerOptionsJson,
     resolvedConfigFile?: string,
+    shouldFindConfig = true,
   ): ts.ParsedCommandLine {
     let config = { compilerOptions: Object.create(null) }
     let basePath = normalizeSlashes(this.rootDir)
@@ -574,7 +588,9 @@ export class ConfigSet {
     // Read project configuration when available.
     this.tsconfigFilePath = resolvedConfigFile
       ? normalizeSlashes(resolvedConfigFile)
-      : ts.findConfigFile(normalizeSlashes(this.rootDir), ts.sys.fileExists)
+      : shouldFindConfig
+      ? ts.findConfigFile(normalizeSlashes(this.rootDir), ts.sys.fileExists)
+      : undefined
     if (this.tsconfigFilePath) {
       this.logger.debug({ tsConfigFileName: this.tsconfigFilePath }, 'readTsConfig(): reading', this.tsconfigFilePath)
 

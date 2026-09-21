@@ -63,14 +63,17 @@ export interface ConfigCustomTransformer {
 export type TsJestGlobalOptions = Config.TransformerConfig[1] & {
   /**
    * Compiler options. It can be:
-   * - `true` (or `undefined`, it's the default): use default tsconfig file
-   * - `false`: do NOT use default config file
-   * - `path/to/tsconfig.json`: path to a specific tsconfig file (<rootDir> can be used)
-   * - `{...}`: an object with inline compiler options
+   * - `true` or `undefined`: discover the nearest tsconfig file from Jest's `rootDir`
+   * - `false`: do not discover a tsconfig file; use ts-jest/TypeScript defaults
+   * - `path/to/tsconfig.json`: load exactly that tsconfig file (relative paths use Jest's `cwd`; <rootDir> can be used)
+   * - `{...}`: use the inline compiler options as a standalone configuration; no tsconfig file is discovered
    *
    * @default `undefined` (the default config file will be used if it exists)
    *
    * @remarks
+   *
+   * TypeScript configurations used by ts-jest must allow JavaScript emission. `noEmit: true` and
+   * `emitDeclarationOnly: true` are rejected because they cannot produce transformed test code.
    *
    * {@link RawCompilerOptions} will be replaced with {@link TsConfigCompilerOptionsJson} in the next major release
    */

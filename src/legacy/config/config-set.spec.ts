@@ -74,14 +74,14 @@ describe('config-set', () => {
           inlineSourceMap: true,
           declaration: true,
           isolatedDeclarations: true,
-          noEmit: true,
+          noEmit: false,
           removeComments: true,
           out: 'foo',
           outFile: 'foo.js',
           composite: true,
           declarationDir: 'foo',
           declarationMap: true,
-          emitDeclarationOnly: true,
+          emitDeclarationOnly: false,
           sourceRoot: 'foo',
           tsBuildInfoFile: 'foo.info',
           rewriteRelativeImportExtensions: true,
@@ -849,6 +849,81 @@ describe('config-set', () => {
       })
     })
 
+    describe('explicit tsconfig modes', () => {
+      beforeEach(() => {
+        parseConfig.mockClear()
+        findConfig.mockReturnValue('/root/tsconfig.json')
+        readConfig.mockReturnValue({
+          config: {
+            compilerOptions: {
+              module: 'CommonJS',
+              target: 'ES5',
+            },
+          },
+        })
+      })
+
+      afterEach(() => {
+        parseConfig.mockClear()
+      })
+
+      it('should not discover a tsconfig file when tsconfig is false', () => {
+        cs = createConfigSet({
+          jestConfig: { rootDir: '/root', cwd: '/cwd' } as any, // eslint-disable-line @typescript-eslint/no-explicit-any
+          tsJestConfig: { tsconfig: false },
+          resolve: null,
+        })
+
+        expect(findConfig).not.toHaveBeenCalled()
+        expect(readConfig).not.toHaveBeenCalled()
+        expect(cs.parsedTsConfig.options.target).toBe(ts.ScriptTarget.ES2015)
+      })
+
+      it('should not discover a tsconfig file when tsconfig is an inline object', () => {
+        cs = createConfigSet({
+          jestConfig: { rootDir: '/root', cwd: '/cwd' } as any, // eslint-disable-line @typescript-eslint/no-explicit-any
+          tsJestConfig: { tsconfig: { target: 'ESNext', module: 'CommonJS' } },
+          resolve: null,
+        })
+
+        expect(findConfig).not.toHaveBeenCalled()
+        expect(readConfig).not.toHaveBeenCalled()
+        expect(cs.parsedTsConfig.options.target).toBe(ts.ScriptTarget.ESNext)
+      })
+
+      it('should preserve explicitly enabled experimental decorators in standalone inline config', () => {
+        cs = createConfigSet({
+          jestConfig: { rootDir: '/root', cwd: '/cwd' } as any, // eslint-disable-line @typescript-eslint/no-explicit-any
+          tsJestConfig: { tsconfig: { experimentalDecorators: true } },
+          resolve: null,
+        })
+
+        expect(findConfig).not.toHaveBeenCalled()
+        expect(cs.parsedTsConfig.options.experimentalDecorators).toBe(true)
+      })
+
+      it('should use defaults without discovering a tsconfig file for an empty inline object', () => {
+        cs = createConfigSet({
+          jestConfig: { rootDir: '/root', cwd: '/cwd' } as any, // eslint-disable-line @typescript-eslint/no-explicit-any
+          tsJestConfig: { tsconfig: {} },
+          resolve: null,
+        })
+
+        expect(findConfig).not.toHaveBeenCalled()
+        expect(readConfig).not.toHaveBeenCalled()
+        expect(cs.parsedTsConfig.options.target).toBe(ts.ScriptTarget.ES2015)
+      })
+
+      it.each([
+        { option: 'noEmit', tsconfig: { noEmit: true } },
+        { option: 'emitDeclarationOnly', tsconfig: { emitDeclarationOnly: true } },
+      ])('should reject a tsconfig that disables JavaScript emission with $option', ({ option, tsconfig }) => {
+        expect(() => createConfigSet({ tsJestConfig: { tsconfig } })).toThrow(
+          `ts-jest cannot transform files when TypeScript compiler option "${option}" is enabled. Remove it or set it to false.`,
+        )
+      })
+    })
+
     describe('resolve configFileName normally', () => {
       beforeEach(() => {
         findConfig.mockImplementation((p: string) => `${p}/tsconfig.json`)
@@ -939,13 +1014,11 @@ describe('config-set', () => {
 
         it('should use correct paths when searching', () => {
           const tscfgPathStub = '/root/tsconfig.json'
-          jest.spyOn(ConfigSet.prototype, 'resolvePath').mockReturnValueOnce('')
-
           cs = createConfigSet({
             jestConfig: {
               rootDir: '/root',
               cwd: '/cwd',
-              globals: { 'ts-jest': { tsconfig: 'tsconfig.json' } },
+              globals: { 'ts-jest': {} },
             } as any, // eslint-disable-line @typescript-eslint/no-explicit-any
           })
 
@@ -1001,13 +1074,11 @@ describe('config-set', () => {
 
         it('should use correct paths when searching', () => {
           const tscfgPathStub = '/root/tsconfig.json'
-          jest.spyOn(ConfigSet.prototype, 'resolvePath').mockReturnValueOnce('')
-
           cs = createConfigSet({
             jestConfig: {
               rootDir: '/root',
               cwd: '/cwd',
-              globals: { 'ts-jest': { tsconfig: 'tsconfig.json' } },
+              globals: { 'ts-jest': {} },
             } as any, // eslint-disable-line @typescript-eslint/no-explicit-any
           })
 
@@ -1064,13 +1135,11 @@ describe('config-set', () => {
 
         it('should use correct paths when searching', () => {
           const tscfgPathStub = '/root/tsconfig.json'
-          jest.spyOn(ConfigSet.prototype, 'resolvePath').mockReturnValueOnce('')
-
           cs = createConfigSet({
             jestConfig: {
               rootDir: '/root',
               cwd: '/cwd',
-              globals: { 'ts-jest': { tsconfig: 'tsconfig.json' } },
+              globals: { 'ts-jest': {} },
             } as any, // eslint-disable-line @typescript-eslint/no-explicit-any
           })
 

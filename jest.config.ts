@@ -14,6 +14,7 @@ export default {
       {
         tsconfig: {
           target: 'ES2015',
+          experimentalDecorators: true,
           isolatedModules: true,
           module: 'NodeNext',
           moduleResolution: 'NodeNext',
