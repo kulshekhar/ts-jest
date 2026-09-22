@@ -162,7 +162,7 @@ describe('TsCompiler', () => {
         setCompilerOptions(compiler, { moduleResolution })
 
         // @ts-expect-error testing purpose: invoking a private method directly
-        compiler._resolveModuleName('lodash', fileName)
+        compiler._getImportedModulePaths("import 'lodash'", fileName)
 
         expect(getImpliedSpy).toHaveBeenCalledTimes(1)
         expect(resolveSpy).toHaveBeenCalledTimes(1)
@@ -184,7 +184,7 @@ describe('TsCompiler', () => {
       getImpliedSpy.mockClear()
 
       // @ts-expect-error testing purpose: invoking a private method directly
-      compiler._resolveModuleName('lodash', fileName)
+      compiler._getImportedModulePaths("import 'lodash'", fileName)
 
       const callsForOurFile = getImpliedSpy.mock.calls.filter((c: unknown[]) => c[0] === fileName)
       expect(callsForOurFile).toHaveLength(1)
@@ -204,7 +204,7 @@ describe('TsCompiler', () => {
       setCompilerOptions(compiler, { moduleResolution })
 
       // @ts-expect-error testing purpose: invoking a private method directly
-      compiler._resolveModuleName('lodash', fileName)
+      compiler._getImportedModulePaths("import 'lodash'", fileName)
 
       expect(getImpliedSpy).not.toHaveBeenCalled()
       expect(resolveSpy).toHaveBeenCalledTimes(1)
@@ -228,7 +228,7 @@ describe('TsCompiler', () => {
         setCompilerOptions(compiler, { module, moduleResolution: undefined })
 
         // @ts-expect-error testing purpose: invoking a private method directly
-        compiler._resolveModuleName('lodash', fileName)
+        compiler._getImportedModulePaths("import 'lodash'", fileName)
 
         expect(getEmitModuleResolutionKindSpy).toHaveBeenCalledWith(
           expect.objectContaining({ module, moduleResolution: undefined }),
@@ -254,7 +254,7 @@ describe('TsCompiler', () => {
       setCompilerOptions(compiler, { moduleResolution: ts.ModuleResolutionKind.Node16 })
 
       // @ts-expect-error testing purpose
-      compiler._resolveModuleName('lodash', fileName)
+      compiler._getImportedModulePaths("import 'lodash'", fileName)
 
       expect(resolveSpy).toHaveBeenCalledTimes(1)
       const call = resolveSpy.mock.calls[0]
@@ -265,19 +265,79 @@ describe('TsCompiler', () => {
     test.each([
       ['/some/file.mts', ts.ModuleKind.ESNext],
       ['/some/file.cts', ts.ModuleKind.CommonJS],
-    ] as const)(
-      'derives resolutionMode for explicit %s extension via getImpliedNodeFormatForFile',
-      (containingFile, expectedMode) => {
-        const { compiler, resolveSpy, getImpliedSpy } = buildCompilerWithResolverSpies()
-        getImpliedSpy.mockReturnValue(expectedMode)
-        setCompilerOptions(compiler, { moduleResolution: ts.ModuleResolutionKind.Node16 })
+    ] as const)('derives the actual resolutionMode for explicit %s extensions', (containingFile, expectedMode) => {
+      const { compiler, resolveSpy } = buildCompilerWithResolverSpies()
+      setCompilerOptions(compiler, { moduleResolution: ts.ModuleResolutionKind.Node16 })
 
-        // @ts-expect-error testing purpose
-        compiler._resolveModuleName('lodash', containingFile)
+      // @ts-expect-error testing purpose
+      compiler._getImportedModulePaths("import 'lodash'", containingFile)
 
-        expect(resolveSpy.mock.calls[0][6]).toBe(expectedMode)
-      },
-    )
+      expect(resolveSpy.mock.calls[0][6]).toBe(expectedMode)
+    })
+
+    test('derives resolutionMode once for every import in a containing file', () => {
+      const { compiler, resolveSpy, getImpliedSpy } = buildCompilerWithResolverSpies()
+      const fakeMode = ts.ModuleKind.ESNext
+      getImpliedSpy.mockReturnValue(fakeMode)
+      setCompilerOptions(compiler, { moduleResolution: ts.ModuleResolutionKind.Node16 })
+      getImpliedSpy.mockClear()
+
+      // @ts-expect-error testing purpose: invoking a private method directly
+      compiler._getImportedModulePaths("import 'lodash'\nimport 'typescript'", fileName)
+
+      expect(getImpliedSpy).toHaveBeenCalledTimes(1)
+      expect(resolveSpy).toHaveBeenCalledTimes(2)
+      expect(resolveSpy.mock.calls.every((call: unknown[]) => call[6] === fakeMode)).toBe(true)
+    })
+
+    test('does not derive resolutionMode for a file without imports', () => {
+      const { compiler, resolveSpy, getImpliedSpy } = buildCompilerWithResolverSpies()
+      setCompilerOptions(compiler, { moduleResolution: ts.ModuleResolutionKind.Node16 })
+      getImpliedSpy.mockClear()
+
+      // @ts-expect-error testing purpose: invoking a private method directly
+      compiler._getImportedModulePaths('const value = 1', fileName)
+
+      expect(getImpliedSpy).not.toHaveBeenCalled()
+      expect(resolveSpy).not.toHaveBeenCalled()
+    })
+
+    test('derives resolutionMode once for a language service module batch', () => {
+      const { compiler, resolveSpy, getImpliedSpy } = buildCompilerWithResolverSpies()
+      const fakeMode = ts.ModuleKind.ESNext
+      let serviceHost: ts.LanguageServiceHost | undefined
+      getImpliedSpy.mockReturnValue(fakeMode)
+      setCompilerOptions(compiler, { moduleResolution: ts.ModuleResolutionKind.Node16 })
+
+      // @ts-expect-error testing purpose: replace TypeScript language service creation to inspect its host
+      compiler._ts = {
+        // @ts-expect-error testing purpose: read the compiler-local TypeScript proxy
+        ...compiler._ts,
+        createLanguageService: jest.fn((host: ts.LanguageServiceHost) => {
+          serviceHost = host
+
+          return { getProgram: jest.fn() } as unknown as ts.LanguageService
+        }),
+      }
+      // @ts-expect-error testing purpose: recreate the service with the instrumented TypeScript proxy
+      compiler._createLanguageService()
+      getImpliedSpy.mockClear()
+      resolveSpy.mockClear()
+
+      const resolveModuleNames = serviceHost?.resolveModuleNames as (
+        moduleNames: string[],
+        containingFile: string,
+      ) => Array<ts.ResolvedModuleFull | undefined>
+      resolveModuleNames(['lodash', 'typescript'], fileName)
+
+      expect(getImpliedSpy).toHaveBeenCalledTimes(1)
+      expect(resolveSpy).toHaveBeenCalledTimes(2)
+      expect(resolveSpy.mock.calls.every((call: unknown[]) => call[6] === fakeMode)).toBe(true)
+
+      getImpliedSpy.mockClear()
+      resolveModuleNames([], fileName)
+      expect(getImpliedSpy).not.toHaveBeenCalled()
+    })
   })
 
   describe('getCompiledOutput', () => {

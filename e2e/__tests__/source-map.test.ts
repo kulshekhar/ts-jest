@@ -14,7 +14,7 @@ describe('source-map', () => {
     'jest-transpiler-cjs.config.ts',
     'jest-transpiler-esm.config.ts',
   ])('should map a failed TypeScript test with %s', async (configFile) => {
-    const result = await runJest('source-map', configFile, ['--json', '--no-colors'])
+    const result = await runJest('source-map', configFile, ['--runInBand', '--json', '--no-colors'])
     const output = JSON.parse(result.stdout) as JestJsonResult
     const message = stripVTControlCharacters(output.testResults[0].message).replaceAll('\\', '/')
 

@@ -1,5 +1,6 @@
 import fs from 'node:fs'
 import path from 'node:path'
+import { performance } from 'node:perf_hooks'
 
 import execa from 'execa'
 
@@ -8,6 +9,7 @@ export const PROJECT_ROOT_DIR = path.resolve(E2E_ROOT_DIR, '..')
 export const TS_JEST_PATH = path.join(PROJECT_ROOT_DIR, 'dist', 'index.js')
 
 export interface CommandResult {
+  durationMs: number
   exitCode: number
   stderr: string
   stdout: string
@@ -32,9 +34,11 @@ export const runCommand = async (
   cwd = PROJECT_ROOT_DIR,
   timeout = COMMAND_TIMEOUT,
 ): Promise<CommandResult> => {
+  const startTime = performance.now()
   const result = await execa(command, args, { cwd, reject: false, timeout })
 
   return {
+    durationMs: performance.now() - startTime,
     exitCode: result.exitCode ?? 1,
     stderr: result.timedOut ? `${result.stderr}\nCommand timed out after ${timeout}ms`.trim() : result.stderr,
     stdout: result.stdout,

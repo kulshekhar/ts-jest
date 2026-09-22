@@ -4,7 +4,11 @@ import { CommandResult, getFixturePath, PROJECT_ROOT_DIR, runCommand } from './u
 
 const JEST_PATH = path.join(PROJECT_ROOT_DIR, 'node_modules', 'jest', 'bin', 'jest.js')
 
-export const runJest = async (fixtureName: string, configFile: string, args: string[] = []): Promise<CommandResult> => {
+export const runJest = async (
+  fixtureName: string,
+  configFile: string,
+  args: string[] = ['--runInBand'],
+): Promise<CommandResult> => {
   const fixturePath = getFixturePath(fixtureName)
   const configPath = path.join(fixturePath, configFile)
   const usesEsm = configFile.includes('-esm.')
@@ -12,7 +16,7 @@ export const runJest = async (fixtureName: string, configFile: string, args: str
 
   return runCommand(
     process.execPath,
-    [...nodeOptions, JEST_PATH, '--config', configPath, '--runInBand', '--no-cache', ...args],
+    [...nodeOptions, JEST_PATH, '--config', configPath, '--no-cache', ...args],
     fixturePath,
   )
 }
