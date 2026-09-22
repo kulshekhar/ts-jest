@@ -1,5 +1,5 @@
-import { existsSync } from 'fs'
-import { basename, resolve } from 'path'
+import { existsSync } from 'node:fs'
+import { basename, resolve } from 'node:path'
 
 import type { Config } from '@jest/types'
 import { createLogger } from 'bs-logger'
