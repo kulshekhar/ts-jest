@@ -1,0 +1,11 @@
+{
+  "name": "babel-8-compatibility",
+  "private": true,
+  "devDependencies": {
+    "@babel/core": "^8.0.6",
+    "@types/jest": "^30.0.0",
+    "babel-jest": "^30.5.2",
+    "jest": "^30.5.2",
+    "typescript": "~5.9.3"
+  }
+}
