@@ -1,5 +1,5 @@
-const { createHash } = require('crypto')
-const { join, resolve } = require('path')
+const { createHash } = require('node:crypto')
+const { join, resolve } = require('node:path')
 
 const execa = require('execa')
 const glob = require('fast-glob')

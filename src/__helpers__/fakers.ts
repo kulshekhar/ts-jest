@@ -1,4 +1,4 @@
-import { resolve } from 'path'
+import { resolve } from 'node:path'
 
 import type { Config } from '@jest/types'
 import type { Logger } from 'bs-logger'

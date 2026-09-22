@@ -1,4 +1,4 @@
-import { basename, normalize } from 'path'
+import { basename, normalize } from 'node:path'
 
 import { LogContexts, Logger, LogLevels } from 'bs-logger'
 import memoize from 'lodash.memoize'

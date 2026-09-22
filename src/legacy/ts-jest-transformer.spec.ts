@@ -1,5 +1,5 @@
-import fs from 'fs'
-import path from 'path'
+import fs from 'node:fs'
+import path from 'node:path'
 
 import { LogLevels } from 'bs-logger'
 import { removeSync } from 'fs-extra'

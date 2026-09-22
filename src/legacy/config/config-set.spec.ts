@@ -1,4 +1,4 @@
-import { join, resolve } from 'path'
+import { join, resolve } from 'node:path'
 
 import type { Transformer } from '@jest/transform'
 import { LogLevels, testing } from 'bs-logger'

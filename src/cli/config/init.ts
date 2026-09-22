@@ -4,8 +4,8 @@
  * TODO: see what's the best path for this
  */
 
-import { existsSync, readFileSync, writeFileSync } from 'fs'
-import { basename, join } from 'path'
+import { existsSync, readFileSync, writeFileSync } from 'node:fs'
+import { basename, join } from 'node:path'
 
 import handlebars from 'handlebars'
 import { stringify as stringifyJson5 } from 'json5'

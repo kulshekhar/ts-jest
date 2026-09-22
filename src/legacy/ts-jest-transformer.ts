@@ -1,5 +1,5 @@
-import { existsSync, statSync } from 'fs'
-import path from 'path'
+import { existsSync, statSync } from 'node:fs'
+import path from 'node:path'
 
 import type { SyncTransformer, TransformedSource } from '@jest/transform'
 import type { Logger } from 'bs-logger'

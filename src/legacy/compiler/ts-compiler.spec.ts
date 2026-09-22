@@ -1,6 +1,6 @@
-import { mkdirSync, mkdtempSync, readFileSync, realpathSync, rmSync, writeFileSync } from 'fs'
-import { tmpdir } from 'os'
-import { basename, join, normalize } from 'path'
+import { mkdirSync, mkdtempSync, readFileSync, realpathSync, rmSync, writeFileSync } from 'node:fs'
+import { tmpdir } from 'node:os'
+import { basename, join, normalize } from 'node:path'
 
 import { LogLevels } from 'bs-logger'
 import type { TsConfigJson } from 'type-fest'
