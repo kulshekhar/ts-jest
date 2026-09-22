@@ -104,11 +104,20 @@ describe('TsCompiler', () => {
 
   describe('_resolveModuleName', () => {
     const fileName = join(mockFolder, 'thing.ts')
+    const node10 = ts.ModuleResolutionKind.Node10 ?? ts.ModuleResolutionKind.NodeJs
+    const modernModuleResolutions = (
+      [
+        ['Node16', ts.ModuleResolutionKind.Node16],
+        ['NodeNext', ts.ModuleResolutionKind.NodeNext],
+        ['Bundler', ts.ModuleResolutionKind.Bundler],
+      ] as const
+    ).filter(([, moduleResolution]) => moduleResolution !== undefined)
 
     function buildCompilerWithResolverSpies(): {
       compiler: TsCompiler
       resolveSpy: jest.Mock
       getImpliedSpy: jest.Mock
+      getEmitModuleResolutionKindSpy: jest.Mock
     } {
       if (typeof ts.getImpliedNodeFormatForFile !== 'function') {
         throw new Error(
@@ -121,51 +130,113 @@ describe('TsCompiler', () => {
         failedLookupLocations: [],
       } as unknown as ts.ResolvedModuleWithFailedLookupLocations)
       const getImpliedSpy = jest.fn(ts.getImpliedNodeFormatForFile) as unknown as jest.Mock
+      const getEmitModuleResolutionKind = (
+        ts as typeof ts & {
+          getEmitModuleResolutionKind(compilerOptions: ts.CompilerOptions): ts.ModuleResolutionKind
+        }
+      ).getEmitModuleResolutionKind
+      const getEmitModuleResolutionKindSpy = jest.fn(getEmitModuleResolutionKind) as unknown as jest.Mock
       const tsProxy = {
         ...ts,
         resolveModuleName: resolveSpy,
         getImpliedNodeFormatForFile: getImpliedSpy,
+        getEmitModuleResolutionKind: getEmitModuleResolutionKindSpy,
       } as unknown as typeof ts
       // @ts-expect-error testing purpose: replace the ts reference on this compiler instance only
       compiler._ts = tsProxy
 
-      return { compiler, resolveSpy, getImpliedSpy }
+      return { compiler, resolveSpy, getImpliedSpy, getEmitModuleResolutionKindSpy }
     }
 
-    test('passes the resolutionMode argument from getImpliedNodeFormatForFile to resolveModuleName', () => {
-      const { compiler, resolveSpy, getImpliedSpy } = buildCompilerWithResolverSpies()
-      const fakeMode = ts.ModuleKind.ESNext
-      getImpliedSpy.mockReturnValue(fakeMode)
+    function setCompilerOptions(compiler: TsCompiler, compilerOptions: ts.CompilerOptions): void {
+      // @ts-expect-error testing purpose: replacing private compiler options
+      compiler._compilerOptions = { ...compiler._compilerOptions, ...compilerOptions }
+    }
 
-      // @ts-expect-error testing purpose: invoking a private method directly
-      compiler._resolveModuleName('lodash', fileName)
+    test.each(modernModuleResolutions)(
+      'passes the resolutionMode argument from getImpliedNodeFormatForFile to resolveModuleName for %s',
+      (_description, moduleResolution) => {
+        const { compiler, resolveSpy, getImpliedSpy, getEmitModuleResolutionKindSpy } = buildCompilerWithResolverSpies()
+        const fakeMode = ts.ModuleKind.ESNext
+        getImpliedSpy.mockReturnValue(fakeMode)
+        setCompilerOptions(compiler, { moduleResolution })
 
-      expect(resolveSpy).toHaveBeenCalledTimes(1)
-      const call = resolveSpy.mock.calls[0]
-      expect(call).toHaveLength(7)
-      expect(call[0]).toBe('lodash')
-      expect(call[1]).toBe(fileName)
-      expect(call[5]).toBeUndefined()
-      expect(call[6]).toBe(fakeMode)
-    })
+        // @ts-expect-error testing purpose: invoking a private method directly
+        compiler._getImportedModulePaths("import 'lodash'", fileName)
+
+        expect(getImpliedSpy).toHaveBeenCalledTimes(1)
+        expect(resolveSpy).toHaveBeenCalledTimes(1)
+        const call = resolveSpy.mock.calls[0]
+        expect(call).toHaveLength(7)
+        expect(call[0]).toBe('lodash')
+        expect(call[1]).toBe(fileName)
+        expect(call[5]).toBeUndefined()
+        expect(call[6]).toBe(fakeMode)
+        expect(getEmitModuleResolutionKindSpy).toHaveBeenCalledWith(expect.objectContaining({ moduleResolution }))
+      },
+    )
 
     test('calls getImpliedNodeFormatForFile with the importing file, host, and compiler options', () => {
       const { compiler, getImpliedSpy } = buildCompilerWithResolverSpies()
       getImpliedSpy.mockReturnValue(ts.ModuleKind.ESNext)
+      setCompilerOptions(compiler, { moduleResolution: ts.ModuleResolutionKind.Node16 })
       // Clear calls made by the language service during compiler construction.
       getImpliedSpy.mockClear()
 
       // @ts-expect-error testing purpose: invoking a private method directly
-      compiler._resolveModuleName('lodash', fileName)
+      compiler._getImportedModulePaths("import 'lodash'", fileName)
 
       const callsForOurFile = getImpliedSpy.mock.calls.filter((c: unknown[]) => c[0] === fileName)
       expect(callsForOurFile).toHaveLength(1)
       const call = callsForOurFile[0]
       expect(call[0]).toBe(fileName)
-      expect(call[1]).toBeUndefined()
+      // @ts-expect-error testing purpose: inspecting the private module resolution cache
+      expect(call[1]).toBe(compiler._moduleResolutionCache?.getPackageJsonInfoCache())
       expect(call[2]).toBeDefined()
       expect(call[3]).toBeDefined()
     })
+
+    test.each([
+      ['Node10', node10],
+      ['Classic', ts.ModuleResolutionKind.Classic],
+    ] as const)('skips getImpliedNodeFormatForFile for explicit %s', (_description, moduleResolution) => {
+      const { compiler, resolveSpy, getImpliedSpy } = buildCompilerWithResolverSpies()
+      setCompilerOptions(compiler, { moduleResolution })
+
+      // @ts-expect-error testing purpose: invoking a private method directly
+      compiler._getImportedModulePaths("import 'lodash'", fileName)
+
+      expect(getImpliedSpy).not.toHaveBeenCalled()
+      expect(resolveSpy).toHaveBeenCalledTimes(1)
+      expect(resolveSpy.mock.calls[0][6]).toBeUndefined()
+    })
+
+    test.each([
+      ['TypeScript 5 CommonJS', ts.ModuleKind.CommonJS, node10, false],
+      ['TypeScript 6 AMD', ts.ModuleKind.AMD, ts.ModuleResolutionKind.Classic, false],
+      ['Node16', ts.ModuleKind.Node16, ts.ModuleResolutionKind.Node16, true],
+      ['NodeNext', ts.ModuleKind.NodeNext, ts.ModuleResolutionKind.NodeNext, true],
+      ['Preserve', ts.ModuleKind.Preserve, ts.ModuleResolutionKind.Bundler, true],
+      ['TypeScript 6 CommonJS', ts.ModuleKind.CommonJS, ts.ModuleResolutionKind.Bundler, true],
+    ] as const)(
+      'handles implicit module resolution for %s',
+      (_description, module, effectiveModuleResolution, usesResolutionMode) => {
+        const { compiler, resolveSpy, getImpliedSpy, getEmitModuleResolutionKindSpy } = buildCompilerWithResolverSpies()
+        const fakeMode = ts.ModuleKind.ESNext
+        getImpliedSpy.mockReturnValue(fakeMode)
+        getEmitModuleResolutionKindSpy.mockReturnValue(effectiveModuleResolution)
+        setCompilerOptions(compiler, { module, moduleResolution: undefined })
+
+        // @ts-expect-error testing purpose: invoking a private method directly
+        compiler._getImportedModulePaths("import 'lodash'", fileName)
+
+        expect(getEmitModuleResolutionKindSpy).toHaveBeenCalledWith(
+          expect.objectContaining({ module, moduleResolution: undefined }),
+        )
+        expect(getImpliedSpy).toHaveBeenCalledTimes(Number(usesResolutionMode))
+        expect(resolveSpy.mock.calls[0][6]).toBe(usesResolutionMode ? fakeMode : undefined)
+      },
+    )
 
     test('passes resolutionMode = undefined when getImpliedNodeFormatForFile is not available (TypeScript < 4.5)', () => {
       const compiler = makeCompiler({ tsJestConfig: baseTsJestConfig })
@@ -180,9 +251,10 @@ describe('TsCompiler', () => {
       } as unknown as typeof ts
       // @ts-expect-error testing purpose
       compiler._ts = tsProxyWithoutHelper
+      setCompilerOptions(compiler, { moduleResolution: ts.ModuleResolutionKind.Node16 })
 
       // @ts-expect-error testing purpose
-      compiler._resolveModuleName('lodash', fileName)
+      compiler._getImportedModulePaths("import 'lodash'", fileName)
 
       expect(resolveSpy).toHaveBeenCalledTimes(1)
       const call = resolveSpy.mock.calls[0]
@@ -193,18 +265,79 @@ describe('TsCompiler', () => {
     test.each([
       ['/some/file.mts', ts.ModuleKind.ESNext],
       ['/some/file.cts', ts.ModuleKind.CommonJS],
-    ] as const)(
-      'derives resolutionMode for explicit %s extension via getImpliedNodeFormatForFile',
-      (containingFile, expectedMode) => {
-        const { compiler, resolveSpy, getImpliedSpy } = buildCompilerWithResolverSpies()
-        getImpliedSpy.mockReturnValue(expectedMode)
+    ] as const)('derives the actual resolutionMode for explicit %s extensions', (containingFile, expectedMode) => {
+      const { compiler, resolveSpy } = buildCompilerWithResolverSpies()
+      setCompilerOptions(compiler, { moduleResolution: ts.ModuleResolutionKind.Node16 })
 
-        // @ts-expect-error testing purpose
-        compiler._resolveModuleName('lodash', containingFile)
+      // @ts-expect-error testing purpose
+      compiler._getImportedModulePaths("import 'lodash'", containingFile)
 
-        expect(resolveSpy.mock.calls[0][6]).toBe(expectedMode)
-      },
-    )
+      expect(resolveSpy.mock.calls[0][6]).toBe(expectedMode)
+    })
+
+    test('derives resolutionMode once for every import in a containing file', () => {
+      const { compiler, resolveSpy, getImpliedSpy } = buildCompilerWithResolverSpies()
+      const fakeMode = ts.ModuleKind.ESNext
+      getImpliedSpy.mockReturnValue(fakeMode)
+      setCompilerOptions(compiler, { moduleResolution: ts.ModuleResolutionKind.Node16 })
+      getImpliedSpy.mockClear()
+
+      // @ts-expect-error testing purpose: invoking a private method directly
+      compiler._getImportedModulePaths("import 'lodash'\nimport 'typescript'", fileName)
+
+      expect(getImpliedSpy).toHaveBeenCalledTimes(1)
+      expect(resolveSpy).toHaveBeenCalledTimes(2)
+      expect(resolveSpy.mock.calls.every((call: unknown[]) => call[6] === fakeMode)).toBe(true)
+    })
+
+    test('does not derive resolutionMode for a file without imports', () => {
+      const { compiler, resolveSpy, getImpliedSpy } = buildCompilerWithResolverSpies()
+      setCompilerOptions(compiler, { moduleResolution: ts.ModuleResolutionKind.Node16 })
+      getImpliedSpy.mockClear()
+
+      // @ts-expect-error testing purpose: invoking a private method directly
+      compiler._getImportedModulePaths('const value = 1', fileName)
+
+      expect(getImpliedSpy).not.toHaveBeenCalled()
+      expect(resolveSpy).not.toHaveBeenCalled()
+    })
+
+    test('derives resolutionMode once for a language service module batch', () => {
+      const { compiler, resolveSpy, getImpliedSpy } = buildCompilerWithResolverSpies()
+      const fakeMode = ts.ModuleKind.ESNext
+      let serviceHost: ts.LanguageServiceHost | undefined
+      getImpliedSpy.mockReturnValue(fakeMode)
+      setCompilerOptions(compiler, { moduleResolution: ts.ModuleResolutionKind.Node16 })
+
+      // @ts-expect-error testing purpose: replace TypeScript language service creation to inspect its host
+      compiler._ts = {
+        // @ts-expect-error testing purpose: read the compiler-local TypeScript proxy
+        ...compiler._ts,
+        createLanguageService: jest.fn((host: ts.LanguageServiceHost) => {
+          serviceHost = host
+
+          return { getProgram: jest.fn() } as unknown as ts.LanguageService
+        }),
+      }
+      // @ts-expect-error testing purpose: recreate the service with the instrumented TypeScript proxy
+      compiler._createLanguageService()
+      getImpliedSpy.mockClear()
+      resolveSpy.mockClear()
+
+      const resolveModuleNames = serviceHost?.resolveModuleNames as (
+        moduleNames: string[],
+        containingFile: string,
+      ) => Array<ts.ResolvedModuleFull | undefined>
+      resolveModuleNames(['lodash', 'typescript'], fileName)
+
+      expect(getImpliedSpy).toHaveBeenCalledTimes(1)
+      expect(resolveSpy).toHaveBeenCalledTimes(2)
+      expect(resolveSpy.mock.calls.every((call: unknown[]) => call[6] === fakeMode)).toBe(true)
+
+      getImpliedSpy.mockClear()
+      resolveModuleNames([], fileName)
+      expect(getImpliedSpy).not.toHaveBeenCalled()
+    })
   })
 
   describe('getCompiledOutput', () => {

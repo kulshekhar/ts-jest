@@ -15,6 +15,7 @@ import ts, {
   ModuleResolutionHost,
   ParsedCommandLine,
   Program,
+  ResolutionMode,
   ResolvedModuleFull,
   ResolvedModuleWithFailedLookupLocations,
   SourceFile,
@@ -599,8 +600,17 @@ export class TsCompiler implements TsCompilerInstance {
       getCompilationSettings: () => this._compilerOptions,
       getDefaultLibFileName: () => this._ts.getDefaultLibFilePath(this._compilerOptions),
       getCustomTransformers: () => this._makeTransformers(this.configSet.resolvedTransformers),
-      resolveModuleNames: (moduleNames: string[], containingFile: string): Array<ResolvedModuleFull | undefined> =>
-        moduleNames.map((moduleName) => this._resolveModuleName(moduleName, containingFile).resolvedModule),
+      resolveModuleNames: (moduleNames: string[], containingFile: string): Array<ResolvedModuleFull | undefined> => {
+        if (moduleNames.length === 0) {
+          return []
+        }
+
+        const resolutionMode = this._getResolutionMode(containingFile)
+
+        return moduleNames.map(
+          (moduleName) => this._resolveModuleName(moduleName, containingFile, resolutionMode).resolvedModule,
+        )
+      },
     }
 
     this._logger.debug('created language service')
@@ -631,10 +641,17 @@ export class TsCompiler implements TsCompilerInstance {
    * @internal
    */
   private _getImportedModulePaths(resolvedFileContent: string, containingFile: string): string[] {
-    return this._ts
-      .preProcessFile(resolvedFileContent, true, true)
-      .importedFiles.map((importedFile) => {
-        const { resolvedModule } = this._resolveModuleName(importedFile.fileName, containingFile)
+    const importedFiles = this._ts.preProcessFile(resolvedFileContent, true, true).importedFiles
+
+    if (importedFiles.length === 0) {
+      return []
+    }
+
+    const resolutionMode = this._getResolutionMode(containingFile)
+
+    return importedFiles
+      .map((importedFile) => {
+        const { resolvedModule } = this._resolveModuleName(importedFile.fileName, containingFile, resolutionMode)
         /* istanbul ignore next already covered  */
         const resolvedFileName = resolvedModule?.resolvedFileName
 
@@ -647,22 +664,39 @@ export class TsCompiler implements TsCompilerInstance {
   /**
    * @internal
    */
+  private _getResolutionMode(containingFile: string): ResolutionMode {
+    const getImpliedNodeFormat = this._ts.getImpliedNodeFormatForFile
+
+    if (typeof getImpliedNodeFormat !== 'function') {
+      return undefined
+    }
+
+    // @ts-expect-error internal TypeScript API
+    const moduleResolution = this._ts.getEmitModuleResolutionKind(this._compilerOptions)
+
+    const { Classic, Node10, NodeJs } = this._ts.ModuleResolutionKind
+
+    if (moduleResolution === (Node10 ?? NodeJs) || moduleResolution === Classic) {
+      return undefined
+    }
+
+    return getImpliedNodeFormat(
+      containingFile,
+      this._moduleResolutionCache?.getPackageJsonInfoCache?.(),
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      this._moduleResolutionHost!,
+      this._compilerOptions,
+    )
+  }
+
+  /**
+   * @internal
+   */
   private _resolveModuleName(
     moduleNameToResolve: string,
     containingFile: string,
+    resolutionMode: ResolutionMode,
   ): ResolvedModuleWithFailedLookupLocations {
-    const getImpliedNodeFormat = this._ts.getImpliedNodeFormatForFile
-    const resolutionMode =
-      typeof getImpliedNodeFormat === 'function'
-        ? getImpliedNodeFormat(
-            containingFile,
-            undefined,
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            this._moduleResolutionHost!,
-            this._compilerOptions,
-          )
-        : undefined
-
     return this._ts.resolveModuleName(
       moduleNameToResolve,
       containingFile,
