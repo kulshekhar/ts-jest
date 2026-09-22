@@ -1,4 +1,4 @@
-import { pathsToModuleNameMapper } from 'ts-jest'
+import { pathsToModuleNameMapper } from '../../../dist'
 
 describe('test-utils', () => {
   it('should expose pathsToModuleNameMapper', () => {

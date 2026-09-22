@@ -1,6 +1,8 @@
 {
-  "extends": [
-    "../tsconfig-js.json",
-    "../tsconfig-esm.spec.json"
-  ]
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "module": "ESNext",
+    "esModuleInterop": true,
+    "allowJs": true
+  }
 }

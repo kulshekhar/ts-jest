@@ -1,3 +1,7 @@
 {
-  "extends": "../tsconfig-js.json"
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "allowJs": true
+  }
 }

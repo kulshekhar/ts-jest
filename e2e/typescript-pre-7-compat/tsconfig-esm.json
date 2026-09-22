@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "module": "ESNext",
+    "sourceMap": true,
+    "target": "ES2019",
+    "types": ["jest"]
+  }
+}
