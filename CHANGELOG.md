@@ -1,3 +1,15 @@
+## [29.4.13](https://github.com/kulshekhar/ts-jest/compare/v29.4.12...v29.4.13) (2026-09-22)
+
+
+### Features
+
+* support Babel 8 ([#5466](https://github.com/kulshekhar/ts-jest/issues/5466)) ([c3a0b57](https://github.com/kulshekhar/ts-jest/commit/c3a0b57c00d8b6acfb72b020e2411752d39073e2)), closes [#5412](https://github.com/kulshekhar/ts-jest/issues/5412)
+
+
+### Performance Improvements
+
+* **compiler:** cache module resolution modes ([#5419](https://github.com/kulshekhar/ts-jest/issues/5419)) ([697d337](https://github.com/kulshekhar/ts-jest/commit/697d337c1b79a0804972a3d30c0875b02e73bf62)), closes [#5402](https://github.com/kulshekhar/ts-jest/issues/5402)
+
 ## [29.4.12](https://github.com/kulshekhar/ts-jest/compare/v29.4.11...v29.4.12) (2026-07-22)
 
 
