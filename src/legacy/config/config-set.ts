@@ -8,9 +8,9 @@
  * version of the `jest.ProjectConfig`, and then later it calls `process()`
  * with the complete, object version of it.
  */
-import { existsSync, readFileSync } from 'fs'
-import Module from 'module'
-import { dirname, extname, isAbsolute, join, normalize, resolve } from 'path'
+import { existsSync, readFileSync } from 'node:fs'
+import Module from 'node:module'
+import { dirname, extname, isAbsolute, join, normalize, resolve } from 'node:path'
 
 import { LogContexts, Logger } from 'bs-logger'
 import { globsToMatcher } from 'jest-util'
