@@ -1,3 +1,10 @@
+## [29.4.14](https://github.com/kulshekhar/ts-jest/compare/v29.4.13...v29.4.14) (2026-09-25)
+
+
+### Reverts
+
+* bring back prior changes of compiler util ([#5471](https://github.com/kulshekhar/ts-jest/issues/5471)) ([01e5a2e](https://github.com/kulshekhar/ts-jest/commit/01e5a2e17ac9c940880865d6a81751832dcc4184)), closes [#5469](https://github.com/kulshekhar/ts-jest/issues/5469)
+
 ## [29.4.13](https://github.com/kulshekhar/ts-jest/compare/v29.4.12...v29.4.13) (2026-09-22)
 
 
