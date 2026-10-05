@@ -139,6 +139,8 @@ correctly.
 To fix that, one can use `moduleNameMapper` in jest config to instruct Jest to load the correct **ESM** files or create a
 custom Jest [resolver](https://jestjs.io/docs/configuration#resolver-string).
 
+For packages inside `node_modules`, see the [Transform node_module packages](./troubleshooting.md#transform-node_module-packages) troubleshooting section.
+
 :::
 
 ### Using ESM presets
