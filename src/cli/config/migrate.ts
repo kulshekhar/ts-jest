@@ -70,7 +70,7 @@ export const run: CliCommand = async (args: CliCommandArgs /* , logger: Logger*/
   }
   const name = basename(file)
   const isPackage = name === 'package.json'
-  if (!/\.(js|json)$/.test(name)) {
+  if (!/\.(c?js|json)$/.test(name)) {
     throw new TypeError(`Configuration file ${file} must be a JavaScript or JSON file.`)
   }
 
@@ -185,7 +185,7 @@ Usage:
   ts-jest config:migrate [options] <config-file>
 
 Arguments:
-  <config-file>         Can be a js or json Jest config file. If it is a
+  <config-file>         Can be a js, cjs or json Jest config file. If it is a
                         package.json file, the configuration will be read from
                         the "jest" property.
 
