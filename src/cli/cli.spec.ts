@@ -505,6 +505,40 @@ describe('config', () => {
       `)
     })
 
+    it('should migrate from a .cjs config file', async () => {
+      fs.existsSync.mockImplementation(() => true)
+      jest.mock(pkgPaths.next, () => ({}), { virtual: true })
+      const cjsCfgPath = pkgPaths.nextCfg.replace(/\.js$/, '.cjs')
+      jest.doMock(
+        cjsCfgPath,
+        () => ({
+          globals: {
+            'ts-jest': {
+              tsconfig: 'tsconfig.test.json',
+            },
+          },
+        }),
+        { virtual: true },
+      )
+
+      const res = await runCli(...noOption, cjsCfgPath)
+
+      expect(res.exitCode).toBe(0)
+      expect(res.stdout).toMatchInlineSnapshot(`
+        "module.exports = {
+          transform: {
+            '^.+\\\\.tsx?$': [
+              'ts-jest',
+              {
+                tsconfig: 'tsconfig.test.json',
+              },
+            ],
+          },
+        }
+        "
+      `)
+    })
+
     it.each([
       {
         name: 'js-with-babel',
@@ -623,7 +657,7 @@ describe('config', () => {
           ts-jest config:migrate [options] <config-file>
 
         Arguments:
-          <config-file>         Can be a js or json Jest config file. If it is a
+          <config-file>         Can be a js, cjs or json Jest config file. If it is a
                                 package.json file, the configuration will be read from
                                 the "jest" property.
 
