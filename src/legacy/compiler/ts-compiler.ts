@@ -129,7 +129,7 @@ export class TsCompiler implements TsCompilerInstance {
       this._moduleResolutionCache = this._ts.createModuleResolutionCache(
         this.configSet.cwd,
         this._ts.sys.useCaseSensitiveFileNames ? (x) => x : (x) => x.toLowerCase(),
-        this._compilerOptions,
+        this._initialCompilerOptions,
       )
       this._createLanguageService()
     }
@@ -672,7 +672,7 @@ export class TsCompiler implements TsCompilerInstance {
     }
 
     // @ts-expect-error internal TypeScript API
-    const moduleResolution = this._ts.getEmitModuleResolutionKind(this._compilerOptions)
+    const moduleResolution = this._ts.getEmitModuleResolutionKind(this._initialCompilerOptions)
 
     const { Classic, Node10, NodeJs } = this._ts.ModuleResolutionKind
 
@@ -685,11 +685,19 @@ export class TsCompiler implements TsCompilerInstance {
       this._moduleResolutionCache?.getPackageJsonInfoCache?.(),
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       this._moduleResolutionHost!,
-      this._compilerOptions,
+      this._initialCompilerOptions,
     )
   }
 
   /**
+   * Resolve modules with the compiler options from tsconfig, not with the ones
+   * `fixupCompilerOptionsForModuleKind` derives for each compile. Those only adapt
+   * `module` and `moduleResolution` to what ts-jest emits, e.g. Node10 instead of
+   * Bundler on the CommonJS path, and switching between them made imports resolve
+   * differently depending on whether another file had been compiled first, i.e.
+   * on the state of Jest's cache.
+   *
+   * @see https://github.com/kulshekhar/ts-jest/issues/5216
    * @internal
    */
   private _resolveModuleName(
@@ -700,7 +708,7 @@ export class TsCompiler implements TsCompilerInstance {
     return this._ts.resolveModuleName(
       moduleNameToResolve,
       containingFile,
-      this._compilerOptions,
+      this._initialCompilerOptions,
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       this._moduleResolutionHost!,
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
