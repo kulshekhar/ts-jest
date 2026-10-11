@@ -1,4 +1,5 @@
-import { readFileSync } from 'fs'
+import { mkdirSync, mkdtempSync, readFileSync, realpathSync, writeFileSync } from 'fs'
+import { tmpdir } from 'os'
 import { basename, join, normalize } from 'path'
 
 import { LogLevels } from 'bs-logger'
@@ -102,6 +103,65 @@ describe('TsCompiler', () => {
     })
   })
 
+  describe('module resolution after a CommonJS compile', () => {
+    function createPackageWithExports(): { root: string; library: string } {
+      const root = realpathSync(mkdtempSync(join(tmpdir(), 'ts-jest-resolution-')))
+      const library = join(root, 'node_modules', 'library')
+      mkdirSync(join(library, 'foo'), { recursive: true })
+      writeFileSync(
+        join(library, 'package.json'),
+        JSON.stringify({ name: 'library', exports: { './foo': { types: './root.d.ts', default: './root.js' } } }),
+      )
+      writeFileSync(join(library, 'root.d.ts'), "export declare const thing: 'root'\n")
+      writeFileSync(join(library, 'nested.d.ts'), "export declare const thing: 'nested'\n")
+      writeFileSync(join(library, 'foo', 'package.json'), JSON.stringify({ types: '../nested.d.ts' }))
+
+      return { root, library }
+    }
+
+    function resolveFoo(compiler: TsCompiler, containingFile: string): string | undefined {
+      // @ts-expect-error testing purpose: invoking private methods directly
+      const resolutionMode = compiler._getResolutionMode(containingFile)
+
+      // @ts-expect-error testing purpose: invoking private methods directly
+      return compiler._resolveModuleName('library/foo', containingFile, resolutionMode).resolvedModule?.resolvedFileName
+    }
+
+    function compileCommonJs(compiler: TsCompiler, root: string): void {
+      const setupFile = join(root, 'setup.ts')
+      writeFileSync(setupFile, 'export const setup = 1\n')
+      compiler.getCompiledOutput('export const setup = 1\n', setupFile, {
+        depGraphs: new Map(),
+        supportsStaticESM: false,
+        watchMode: false,
+      })
+    }
+
+    const tsJestConfig: TsJestTransformerOptions = {
+      tsconfig: { module: 'es2020', moduleResolution: 'bundler' },
+    }
+
+    test('resolves package exports with the tsconfig module resolution when a file was compiled first', () => {
+      const { root, library } = createPackageWithExports()
+      const testFile = join(root, 'thing.test.ts')
+      const compiler = makeCompiler({ tsJestConfig })
+
+      compileCommonJs(compiler, root)
+
+      expect(resolveFoo(compiler, testFile)).toBe(join(library, 'root.d.ts'))
+    })
+
+    test('resolves package exports the same way before and after a file is compiled', () => {
+      const { root, library } = createPackageWithExports()
+      const testFile = join(root, 'thing.test.ts')
+      const compiler = makeCompiler({ tsJestConfig })
+
+      expect(resolveFoo(compiler, testFile)).toBe(join(library, 'root.d.ts'))
+      compileCommonJs(compiler, root)
+      expect(resolveFoo(compiler, testFile)).toBe(join(library, 'root.d.ts'))
+    })
+  })
+
   describe('_resolveModuleName', () => {
     const fileName = join(mockFolder, 'thing.ts')
     const node10 = ts.ModuleResolutionKind.Node10 ?? ts.ModuleResolutionKind.NodeJs
@@ -148,9 +208,10 @@ describe('TsCompiler', () => {
       return { compiler, resolveSpy, getImpliedSpy, getEmitModuleResolutionKindSpy }
     }
 
+    // Module resolution uses the compiler options from tsconfig, see #5216.
     function setCompilerOptions(compiler: TsCompiler, compilerOptions: ts.CompilerOptions): void {
       // @ts-expect-error testing purpose: replacing private compiler options
-      compiler._compilerOptions = { ...compiler._compilerOptions, ...compilerOptions }
+      compiler._initialCompilerOptions = { ...compiler._initialCompilerOptions, ...compilerOptions }
     }
 
     test.each(modernModuleResolutions)(
