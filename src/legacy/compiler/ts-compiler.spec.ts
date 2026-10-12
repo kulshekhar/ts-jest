@@ -105,7 +105,8 @@ describe('TsCompiler', () => {
 
   describe('module resolution after a CommonJS compile', () => {
     function createPackageWithExports(): { root: string; library: string } {
-      const root = realpathSync(mkdtempSync(join(tmpdir(), 'ts-jest-resolution-')))
+      // the native variant expands Windows 8.3 short names (e.g. RUNNER~1) like the TS module resolver does
+      const root = realpathSync.native(mkdtempSync(join(tmpdir(), 'ts-jest-resolution-')))
       const library = join(root, 'node_modules', 'library')
       mkdirSync(join(library, 'foo'), { recursive: true })
       writeFileSync(
@@ -124,7 +125,11 @@ describe('TsCompiler', () => {
       const resolutionMode = compiler._getResolutionMode(containingFile)
 
       // @ts-expect-error testing purpose: invoking private methods directly
-      return compiler._resolveModuleName('library/foo', containingFile, resolutionMode).resolvedModule?.resolvedFileName
+      const resolvedFileName = compiler._resolveModuleName('library/foo', containingFile, resolutionMode).resolvedModule
+        ?.resolvedFileName
+
+      // TypeScript always reports forward slashes, even on Windows
+      return resolvedFileName === undefined ? undefined : normalize(resolvedFileName)
     }
 
     function compileCommonJs(compiler: TsCompiler, root: string): void {
