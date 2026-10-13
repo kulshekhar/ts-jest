@@ -1,4 +1,4 @@
-import { mkdirSync, mkdtempSync, readFileSync, realpathSync, writeFileSync } from 'fs'
+import { mkdirSync, mkdtempSync, readFileSync, realpathSync, rmSync, writeFileSync } from 'fs'
 import { tmpdir } from 'os'
 import { basename, join, normalize } from 'path'
 
@@ -104,9 +104,18 @@ describe('TsCompiler', () => {
   })
 
   describe('module resolution after a CommonJS compile', () => {
+    const tempRoots: string[] = []
+
+    afterEach(() => {
+      for (const root of tempRoots.splice(0)) {
+        rmSync(root, { recursive: true, force: true })
+      }
+    })
+
     function createPackageWithExports(): { root: string; library: string } {
       // the native variant expands Windows 8.3 short names (e.g. RUNNER~1) like the TS module resolver does
       const root = realpathSync.native(mkdtempSync(join(tmpdir(), 'ts-jest-resolution-')))
+      tempRoots.push(root)
       const library = join(root, 'node_modules', 'library')
       mkdirSync(join(library, 'foo'), { recursive: true })
       writeFileSync(

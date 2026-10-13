@@ -691,9 +691,9 @@ export class TsCompiler implements TsCompilerInstance {
 
   /**
    * Resolve modules with the compiler options from tsconfig, not with the ones
-   * `fixupCompilerOptionsForModuleKind` derives for each compile. Those only adapt
-   * `module` and `moduleResolution` to what ts-jest emits, e.g. Node10 instead of
-   * Bundler on the CommonJS path, and switching between them made imports resolve
+   * `fixupCompilerOptionsForModuleKind` derives for each compile. Those adapt options
+   * such as `module` and `moduleResolution` to what ts-jest emits, e.g. Node10 instead
+   * of Bundler on the CommonJS path, and switching between them made imports resolve
    * differently depending on whether another file had been compiled first, i.e.
    * on the state of Jest's cache.
    *
