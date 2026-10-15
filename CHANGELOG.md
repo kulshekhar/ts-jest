@@ -1,3 +1,13 @@
+## [29.4.15](https://github.com/kulshekhar/ts-jest/compare/v29.4.14...v29.4.15) (2026-10-15)
+
+
+### Bug Fixes
+
+* **compiler:** resolve modules with tsconfig options regardless of cache state ([268746c](https://github.com/kulshekhar/ts-jest/commit/268746c0fcaf72476cebb348c5543e5c2aac3622)), closes [#5216](https://github.com/kulshekhar/ts-jest/issues/5216)
+* support `.cjs` config files in `config:migrate` ([4001b4e](https://github.com/kulshekhar/ts-jest/commit/4001b4e6d28aa461e7468f09157413e113f0bd92)), closes [#4485](https://github.com/kulshekhar/ts-jest/issues/4485)
+
+
+
 ## [29.4.14](https://github.com/kulshekhar/ts-jest/compare/v29.4.13...v29.4.14) (2026-09-25)
 
 
