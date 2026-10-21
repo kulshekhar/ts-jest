@@ -1,10 +1,10 @@
-import type { Config } from 'jest'
+import { defineConfig } from 'jest'
 
 import { TS_TRANSFORM_PATTERN } from './src'
 
 import './scripts/create-bundle.js'
 
-export default {
+export default defineConfig({
   collectCoverageFrom: ['src/**/*.ts'],
   setupFilesAfterEnv: ['<rootDir>/src/__helpers__/setup-jest.ts'],
   testMatch: ['<rootDir>/src/**/*.spec.ts'],
@@ -22,4 +22,4 @@ export default {
     ],
   },
   coverageProvider: 'v8',
-} satisfies Config
+})

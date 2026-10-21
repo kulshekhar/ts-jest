@@ -1,3 +1,5 @@
+import { describe, expect, it } from '@jest/globals'
+
 import { interpolate } from './messages'
 
 const MESSAGE_WITH_PARAMS = 'param1: {{param1}}, param2: {{param2}}, again param1: {{param1}}'

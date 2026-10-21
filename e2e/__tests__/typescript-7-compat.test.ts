@@ -1,3 +1,5 @@
+import { afterEach, beforeAll, beforeEach, describe, expect, it } from '@jest/globals'
+
 import { Importer } from '../../src/utils/importer'
 import { runJest } from '../run-jest'
 import { getFixturePath, runCommand, runNpmCi } from '../utils'
