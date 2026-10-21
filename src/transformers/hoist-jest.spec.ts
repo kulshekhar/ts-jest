@@ -46,7 +46,7 @@ const CODE_WITH_HOISTING_NO_JEST_GLOBALS =
       _isMock: true,
       fn: () => {
         // The \`jest.mock\` transform will allow require, built-ins and globals.
-        const path = require('path')
+        const path = require('node:path')
         const array = new Array(3)
         array[0] = path.sep
         return jest.fn(() => array)
@@ -121,7 +121,7 @@ const CODE_WITH_HOISTING_HAS_JEST_GLOBALS =
       _isMock: true,
       fn: () => {
         // The \`jest.mock\` transform will allow require, built-ins and globals.
-        const path = require('path')
+        const path = require('node:path')
         const array = new Array(3)
         array[0] = path.sep
         return jest.fn(() => array)

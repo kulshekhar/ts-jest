@@ -1,5 +1,5 @@
-import * as _fs from 'fs'
-import { normalize, resolve } from 'path'
+import * as _fs from 'node:fs'
+import { normalize, resolve } from 'node:path'
 
 import { logTargetMock, mockObject, mockWriteStream } from '../__helpers__/mocks'
 import { JS_TRANSFORM_PATTERN, TS_JS_TRANSFORM_PATTERN, TS_TRANSFORM_PATTERN } from '../constants'
@@ -7,7 +7,7 @@ import { JS_TRANSFORM_PATTERN, TS_JS_TRANSFORM_PATTERN, TS_TRANSFORM_PATTERN } f
 import { processArgv } from '.'
 
 // === helpers ================================================================
-jest.mock('fs')
+jest.mock('node:fs')
 
 const fs = jest.mocked(_fs)
 let lastExitCode: number | undefined
