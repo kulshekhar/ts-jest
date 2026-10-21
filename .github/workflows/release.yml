@@ -58,7 +58,7 @@ jobs:
         uses: ./.github/actions/setup-node
         with:
           cache-dependency-path: 'package-lock.json'
-          node-version: 24.22.0
+          node-version: 24.22.1
 
       - name: Install 🔧
         run: npm ci --ignore-scripts
