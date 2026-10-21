@@ -1,3 +1,5 @@
+import { describe, expect, it } from '@jest/globals'
+
 import { parse, stringify } from './json'
 
 describe('stringify/parse', () => {

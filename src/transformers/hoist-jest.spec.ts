@@ -1,3 +1,4 @@
+import { describe, expect, test } from '@jest/globals'
 import ts from 'typescript'
 
 import { makeCompiler } from '../__helpers__/fakers'

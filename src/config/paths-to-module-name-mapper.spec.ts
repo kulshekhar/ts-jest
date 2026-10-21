@@ -1,3 +1,5 @@
+import { describe, expect, test } from '@jest/globals'
+
 import { logTargetMock } from '../__helpers__/mocks'
 
 import { pathsToModuleNameMapper } from './paths-to-module-name-mapper'

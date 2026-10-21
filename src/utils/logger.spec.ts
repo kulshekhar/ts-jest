@@ -1,3 +1,5 @@
+import { describe, expect, it, jest } from '@jest/globals'
+
 import { rootLogger } from './logger'
 
 jest.unmock('./logger')

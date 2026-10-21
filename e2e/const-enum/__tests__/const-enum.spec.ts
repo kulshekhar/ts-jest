@@ -1,3 +1,5 @@
+import { describe, expect, it } from '@jest/globals'
+
 import { BarConstEnum } from '../src/bar-constant'
 import { FooConstEnum } from '../src/foo-constant'
 

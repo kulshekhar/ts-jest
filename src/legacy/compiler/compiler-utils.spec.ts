@@ -1,5 +1,7 @@
 import { resolve } from 'node:path'
 
+import { describe, expect, it } from '@jest/globals'
+
 import { updateOutput } from './compiler-utils'
 
 describe('updateOutput', () => {

@@ -1,3 +1,5 @@
+import { describe, expect, it } from '@jest/globals'
+
 import { BarEnum } from '../src/bar-constant'
 
 const getOne = (): string => BarEnum.one

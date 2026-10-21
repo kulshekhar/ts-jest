@@ -1,3 +1,5 @@
+import { describe, expect, it } from '@jest/globals'
+
 import { runJest } from '../run-jest'
 
 describe('hybrid-module', () => {

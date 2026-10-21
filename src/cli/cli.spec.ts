@@ -1,6 +1,8 @@
 import * as _fs from 'node:fs'
 import { normalize, resolve } from 'node:path'
 
+import { afterEach, beforeEach, describe, expect, it, jest } from '@jest/globals'
+
 import { logTargetMock, mockObject, mockWriteStream } from '../__helpers__/mocks'
 import { JS_TRANSFORM_PATTERN, TS_JS_TRANSFORM_PATTERN, TS_TRANSFORM_PATTERN } from '../constants'
 

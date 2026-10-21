@@ -1,3 +1,5 @@
+import { expect, it } from '@jest/globals'
+
 interface SourceMappedResult {
   actual: boolean
 }

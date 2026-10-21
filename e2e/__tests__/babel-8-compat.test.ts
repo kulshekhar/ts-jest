@@ -1,3 +1,5 @@
+import { beforeAll, describe, expect, it } from '@jest/globals'
+
 import { runJest } from '../run-jest'
 import { getFixturePath, runCommand, runNpmCi } from '../utils'
 

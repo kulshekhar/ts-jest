@@ -1,3 +1,4 @@
+import { expect, it } from '@jest/globals'
 import { valid } from 'semver'
 
 import { getPackageVersion } from './get-package-version'
