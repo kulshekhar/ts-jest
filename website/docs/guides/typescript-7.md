@@ -67,7 +67,7 @@ project configuration. Other TypeScript deprecations are not suppressed.
 
 ## Backward compatibility
 
-Projects using TypeScript 4.3 through 6 continue to install `typescript` normally and require no configuration changes. The
+Projects using TypeScript 5.8 through 6 continue to install `typescript` normally and require no configuration changes. The
 `typescript` alias above exposes version 6, so it also satisfies ts-jest's existing TypeScript peer dependency. This avoids a
 second runtime lookup or version-dependent transform path.
 
