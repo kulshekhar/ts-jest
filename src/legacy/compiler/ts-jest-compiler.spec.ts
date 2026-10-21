@@ -1,3 +1,5 @@
+import { describe, expect, jest, test } from '@jest/globals'
+
 import { createConfigSet } from '../../__helpers__/fakers'
 
 import { TsCompiler } from './ts-compiler'

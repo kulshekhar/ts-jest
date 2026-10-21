@@ -1,3 +1,5 @@
+import { expect, it } from '@jest/globals'
+
 import { sha1 } from './sha1'
 
 const ONE = 'fe05bcdcdc4928012781a5f1a2a77cbb5398e106'

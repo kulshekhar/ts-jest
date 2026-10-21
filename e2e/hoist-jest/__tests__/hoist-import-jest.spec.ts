@@ -1,5 +1,5 @@
 // eslint-disable-next-line import/no-duplicates
-import { jest } from '@jest/globals'
+import { describe, expect, it, jest } from '@jest/globals'
 // eslint-disable-next-line import/no-duplicates
 import { jest as aliasedJest } from '@jest/globals'
 import * as JestGlobals from '@jest/globals'

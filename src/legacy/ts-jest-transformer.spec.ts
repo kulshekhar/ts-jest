@@ -1,6 +1,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 
+import { afterEach, beforeEach, describe, expect, it, jest, test } from '@jest/globals'
 import { LogLevels } from 'bs-logger'
 import { removeSync } from 'fs-extra'
 
@@ -248,7 +249,7 @@ describe('TsJestTransformer', () => {
       const sourceText = 'const foo = 1'
       const sourcePath = 'foo.ts'
       const tr = new TsJestTransformer()
-      tr.getCacheKey = jest.fn()
+      tr.getCacheKey = jest.fn<typeof tr.getCacheKey>()
 
       await tr.getCacheKeyAsync(sourceText, sourcePath, baseTransformOptions)
 
@@ -504,6 +505,7 @@ describe('TsJestTransformer', () => {
 
       // @ts-expect-error `processWithTs` is private
       expect(tr.processWithTs).toHaveBeenCalledWith(sourceText, sourcePath, transformOptions)
+      // @ts-expect-error mocked processWithTs returns a string, so Babel receives undefined
       expect(babelJest.processAsync).toHaveBeenCalledWith(undefined, sourcePath, {
         ...transformOptions,
         instrument: false,

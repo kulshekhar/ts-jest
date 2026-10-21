@@ -1,3 +1,5 @@
+import { expect, test } from '@jest/globals'
+
 import { TsJestTransformer } from './legacy/ts-jest-transformer'
 
 import tsJest from '.'
