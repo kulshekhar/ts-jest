@@ -1,5 +1,6 @@
 import path from 'node:path'
 
+import { beforeEach, describe, expect, it, jest } from '@jest/globals'
 import { vol } from 'memfs'
 import type { PackageJson } from 'type-fest'
 import ts from 'typescript'
@@ -10,7 +11,7 @@ import { workspaceRoot } from '../../__helpers__/workspace-root'
 import { tsTranspileModule } from './transpile-module'
 
 jest.mock('fs', () => {
-  const fsImpl = jest.requireActual('memfs').fs
+  const fsImpl = jest.requireActual<typeof import('memfs')>('memfs').fs
 
   return {
     ...fsImpl,
@@ -24,7 +25,7 @@ jest.mock('fs', () => {
   }
 })
 jest.mock('node:fs', () => {
-  const fsImpl = jest.requireActual('memfs').fs
+  const fsImpl = jest.requireActual<typeof import('memfs')>('memfs').fs
 
   return {
     ...fsImpl,

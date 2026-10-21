@@ -1,5 +1,7 @@
 import { stripVTControlCharacters } from 'node:util'
 
+import { describe, expect, it } from '@jest/globals'
+
 import { runJest } from '../run-jest'
 
 interface JestJsonResult {
@@ -20,8 +22,8 @@ describe('source-map', () => {
 
     expect(result.exitCode).toBe(1)
     expect(output.numFailedTests).toBe(1)
-    expect(message).toContain('__tests__/source-map.test.ts:10:25')
-    expect(message).toContain('> 10 |   expect(result.actual).toBe(expected)')
+    expect(message).toContain('__tests__/source-map.test.ts:12:25')
+    expect(message).toContain('> 12 |   expect(result.actual).toBe(expected)')
     expect(message).toContain('|                         ^')
   })
 })

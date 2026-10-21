@@ -1,3 +1,5 @@
+import { expect, test } from '@jest/globals'
+
 import { double } from '../src/value'
 
 test('transforms TypeScript', () => {

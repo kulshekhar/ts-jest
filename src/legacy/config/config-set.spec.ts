@@ -1,5 +1,6 @@
 import { join, resolve } from 'node:path'
 
+import { afterEach, beforeEach, describe, expect, it, jest, test } from '@jest/globals'
 import type { Transformer } from '@jest/transform'
 import { LogLevels, testing } from 'bs-logger'
 import * as ts from 'typescript'
@@ -673,7 +674,9 @@ describe('config-set', () => {
           logger,
           tsJestConfig: { diagnostics: { exclude: ['/bar/'], pretty: false } },
         })
-        cs.compilerModule.formatDiagnostics = jest.fn().mockReturnValueOnce('warning TS9999: foo')
+        cs.compilerModule.formatDiagnostics = jest
+          .fn<typeof cs.compilerModule.formatDiagnostics>()
+          .mockReturnValueOnce('warning TS9999: foo')
         logger.target.clear()
 
         expect(() =>
@@ -702,7 +705,9 @@ describe('config-set', () => {
           logger,
           tsJestConfig: { diagnostics: { exclude: ['/foo/'], pretty: false, ignoreCodes: [1111] } },
         })
-        cs.compilerModule.formatDiagnostics = jest.fn().mockReturnValueOnce('warning TS9999: foo')
+        cs.compilerModule.formatDiagnostics = jest
+          .fn<typeof cs.compilerModule.formatDiagnostics>()
+          .mockReturnValueOnce('warning TS9999: foo')
         logger.target.clear()
 
         expect(() => cs.raiseDiagnostics([makeDiagnostic()])).toThrowErrorMatchingInlineSnapshot(

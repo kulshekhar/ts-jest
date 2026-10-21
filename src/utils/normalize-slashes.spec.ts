@@ -1,3 +1,5 @@
+import { expect, it } from '@jest/globals'
+
 import { normalizeSlashes } from './normalize-slashes'
 
 it('should replace windows slashes', () => {

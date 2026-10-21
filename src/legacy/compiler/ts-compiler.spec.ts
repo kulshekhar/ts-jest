@@ -2,6 +2,7 @@ import { mkdirSync, mkdtempSync, readFileSync, realpathSync, rmSync, writeFileSy
 import { tmpdir } from 'node:os'
 import { basename, join, normalize } from 'node:path'
 
+import { afterEach, beforeEach, describe, expect, it, jest, test } from '@jest/globals'
 import { LogLevels } from 'bs-logger'
 import type { TsConfigJson } from 'type-fest'
 import ts from 'typescript'
@@ -25,7 +26,9 @@ jest.mock('typescript', () => {
   }
 })
 jest.mock('../../transpilers/typescript/transpile-module', () => {
-  const actualModule = jest.requireActual('../../transpilers/typescript/transpile-module')
+  const actualModule = jest.requireActual<typeof import('../../transpilers/typescript/transpile-module')>(
+    '../../transpilers/typescript/transpile-module',
+  )
 
   return {
     ...actualModule,
@@ -499,8 +502,10 @@ describe('TsCompiler', () => {
           },
         })
         compiler.configSet.raiseDiagnostics = jest.fn()
-        compiler.configSet.shouldReportDiagnostics = jest.fn().mockReturnValue(shouldReport)
-        const compileOutput: ts.TranspileOutput = {
+        compiler.configSet.shouldReportDiagnostics = jest
+          .fn<typeof compiler.configSet.shouldReportDiagnostics>()
+          .mockReturnValue(shouldReport)
+        const compileOutput = {
           sourceMapText: '{}',
           outputText: 'var bar = 1',
           diagnostics: [
@@ -513,7 +518,7 @@ describe('TsCompiler', () => {
               length: 1,
             },
           ],
-        }
+        } satisfies ts.TranspileOutput
         // @ts-expect-error testing purpose
         compiler._ts.transpileModule = jest.fn().mockReturnValueOnce(compileOutput)
         compiler.getCompiledOutput(fileContent, fileName, {
@@ -1766,7 +1771,9 @@ describe('TsCompiler', () => {
           },
         })
         compiler.configSet.raiseDiagnostics = jest.fn()
-        compiler.configSet.shouldReportDiagnostics = jest.fn().mockReturnValue(shouldReport)
+        compiler.configSet.shouldReportDiagnostics = jest
+          .fn<typeof compiler.configSet.shouldReportDiagnostics>()
+          .mockReturnValue(shouldReport)
         // @ts-expect-error testing purpose
         compiler._languageService.getEmitOutput = jest.fn().mockReturnValueOnce({
           outputFiles: [{ text: sourceMap }, { text: jsOutput }],
@@ -1855,7 +1862,9 @@ describe('TsCompiler', () => {
           },
         ]
         compiler.configSet.raiseDiagnostics = jest.fn()
-        compiler.configSet.shouldReportDiagnostics = jest.fn().mockReturnValue(false)
+        compiler.configSet.shouldReportDiagnostics = jest
+          .fn<typeof compiler.configSet.shouldReportDiagnostics>()
+          .mockReturnValue(false)
         // @ts-expect-error testing purpose
         compiler._languageService.getEmitOutput = jest.fn().mockReturnValueOnce({
           outputFiles: [{ text: sourceMap }, { text: jsOutput }],
@@ -1900,7 +1909,9 @@ describe('TsCompiler', () => {
         resolvedModuleNames: ['bar.ts'],
       })
       compiler.configSet.raiseDiagnostics = jest.fn()
-      compiler.configSet.shouldReportDiagnostics = jest.fn().mockReturnValue(false)
+      compiler.configSet.shouldReportDiagnostics = jest
+        .fn<typeof compiler.configSet.shouldReportDiagnostics>()
+        .mockReturnValue(false)
       // @ts-expect-error testing purpose
       compiler._languageService.getEmitOutput = jest.fn().mockReturnValueOnce({
         outputFiles: [{ text: sourceMap }, { text: jsOutput }],
