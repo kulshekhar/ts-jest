@@ -1,5 +1,6 @@
 import { inspect } from 'node:util'
 
+import { beforeEach, describe, expect, it } from '@jest/globals'
 import { testing } from 'bs-logger'
 
 import { backportJestConfig } from './backports'

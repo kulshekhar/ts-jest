@@ -1,3 +1,5 @@
+import { describe, expect, it, test } from '@jest/globals'
+
 import { JS_EXT_TO_TREAT_AS_ESM, TS_EXT_TO_TREAT_AS_ESM } from '../constants'
 
 import {

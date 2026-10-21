@@ -1,3 +1,5 @@
+import { describe, expect, it } from '@jest/globals'
+
 // eslint-disable-next-line prettier/prettier
 import jsonImportAssertion from '../src/foo.json' with { type: 'json' }
 
