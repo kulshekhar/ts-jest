@@ -466,12 +466,11 @@ describe('TsCompiler', () => {
           after: [],
           afterDeclarations: [],
         }
-        // @ts-expect-error testing purpose
-        const transpileMock = (compiler._ts.transpileModule = jest.fn<typeof transpileModule>().mockReturnValueOnce({
+        const transpileMock = mockTsTranspileModule.mockReturnValueOnce({
           sourceMapText: '{}',
           outputText: 'var bar = 1',
           diagnostics: [],
-        } as ts.TranspileOutput))
+        })
         // @ts-expect-error testing purpose
         compiler._makeTransformers = jest.fn().mockReturnValueOnce(transformersStub)
         compiler.getCompiledOutput(fileContent, fileName, {
@@ -480,8 +479,8 @@ describe('TsCompiler', () => {
           watchMode: false,
         })
 
-        const usedCompilerOptions = transpileMock.mock.calls[0][1].compilerOptions as ts.CompilerOptions
         expect(transpileMock).toHaveBeenCalled()
+        const usedCompilerOptions = transpileMock.mock.calls.at(-1)?.[1].compilerOptions as ts.CompilerOptions
         expect({
           module: usedCompilerOptions.module,
           esModuleInterop: usedCompilerOptions.esModuleInterop,
@@ -519,8 +518,7 @@ describe('TsCompiler', () => {
             },
           ],
         } satisfies ts.TranspileOutput
-        // @ts-expect-error testing purpose
-        compiler._ts.transpileModule = jest.fn().mockReturnValueOnce(compileOutput)
+        mockTsTranspileModule.mockReturnValueOnce(compileOutput)
         compiler.getCompiledOutput(fileContent, fileName, {
           depGraphs: new Map(),
           supportsStaticESM: true,
@@ -566,7 +564,8 @@ describe('TsCompiler', () => {
           diagnostics: [injectedDefaultDiagnostic, unrelatedDeprecation],
         })
         // @ts-expect-error testing purpose: simulate the TypeScript 6 compatibility package
-        compiler._ts = { ...ts, version: '6.0.0', transpileModule }
+        compiler._ts = { ...ts, version: '6.0.0' }
+        mockTsTranspileModule.mockReturnValueOnce(transpileModule())
         compiler.configSet.raiseDiagnostics = jest.fn()
 
         compiler.getCompiledOutput(fileContent, fileName, {
@@ -602,11 +601,8 @@ describe('TsCompiler', () => {
           length: undefined,
         }
         // @ts-expect-error testing purpose: simulate the TypeScript 6 compatibility package
-        compiler._ts = {
-          ...ts,
-          version: '6.0.0',
-          transpileModule: jest.fn().mockReturnValue({ outputText: 'var bar = 1', diagnostics: [diagnostic] }),
-        }
+        compiler._ts = { ...ts, version: '6.0.0' }
+        mockTsTranspileModule.mockReturnValueOnce({ outputText: 'var bar = 1', diagnostics: [diagnostic] })
         compiler.configSet.raiseDiagnostics = jest.fn()
 
         compiler.getCompiledOutput(fileContent, fileName, {
@@ -623,29 +619,33 @@ describe('TsCompiler', () => {
         )
       })
 
-      it('should use tsTranspileModule when Node16/NodeNext is used', () => {
-        const compiler = makeCompiler({
-          tsJestConfig: {
-            ...baseTsJestConfig,
-            tsconfig: {
-              isolatedModules: true,
-              module: 'Node16',
-              moduleResolution: 'Node16',
+      it.each(['CommonJS', 'ESNext', 'Node16', 'NodeNext'])(
+        'should use tsTranspileModule when module kind is %s',
+        (module) => {
+          const compiler = makeCompiler({
+            tsJestConfig: {
+              ...baseTsJestConfig,
+              tsconfig: {
+                isolatedModules: true,
+                module,
+                moduleResolution: module === 'Node16' || module === 'NodeNext' ? module : undefined,
+              },
             },
-          },
-        })
-        mockTsTranspileModule.mockReturnValueOnce({
-          outputText: '',
-        })
+          })
+          mockTsTranspileModule.mockReturnValueOnce({
+            outputText: '',
+          })
 
-        compiler.getCompiledOutput(fileContent, fileName, {
-          depGraphs: new Map(),
-          supportsStaticESM: true,
-          watchMode: false,
-        })
+          compiler.getCompiledOutput(fileContent, fileName, {
+            depGraphs: new Map(),
+            supportsStaticESM: true,
+            watchMode: false,
+          })
 
-        expect(mockTsTranspileModule).toHaveBeenCalled()
-      })
+          expect(mockTsTranspileModule).toHaveBeenCalled()
+          expect(mockTsTranspileModule.mock.calls[0][2]).toBe(compiler._ts)
+        },
+      )
     })
 
     describe('isolatedModules false', () => {

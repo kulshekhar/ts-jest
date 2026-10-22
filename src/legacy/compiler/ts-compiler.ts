@@ -468,33 +468,25 @@ export class TsCompiler implements TsCompilerInstance {
   }
 
   protected _transpileOutput(fileContent: string, fileName: string): TranspileOutput {
-    /**
-     * @deprecated
-     *
-     * This code path should be removed in the next major version to benefit from checking on compiler options
-     */
-    if (!isModernNodeModuleKind(this._initialCompilerOptions.module)) {
-      const result = this._ts.transpileModule(fileContent, {
+    const result = tsTranspileModule(
+      fileContent,
+      {
         fileName,
-        transformers: this._makeTransformers(this.configSet.resolvedTransformers),
-        compilerOptions: this._compilerOptions,
+        transformers: (program) => {
+          this.program = program
+
+          return this._makeTransformers(this.configSet.resolvedTransformers)
+        },
+        compilerOptions: isModernNodeModuleKind(this._initialCompilerOptions.module)
+          ? this._initialCompilerOptions
+          : this._compilerOptions,
         reportDiagnostics: this.configSet.shouldReportDiagnostics(fileName),
-      })
-      const diagnostics = this._filterDiagnosticsFromTsJestDefaults(result.diagnostics)
-
-      return diagnostics === result.diagnostics ? result : { ...result, diagnostics }
-    }
-
-    return tsTranspileModule(fileContent, {
-      fileName,
-      transformers: (program) => {
-        this.program = program
-
-        return this._makeTransformers(this.configSet.resolvedTransformers)
       },
-      compilerOptions: this._initialCompilerOptions,
-      reportDiagnostics: fileName ? this.configSet.shouldReportDiagnostics(fileName) : false,
-    })
+      this._ts,
+    )
+    const diagnostics = this._filterDiagnosticsFromTsJestDefaults(result.diagnostics)
+
+    return diagnostics === result.diagnostics ? result : { ...result, diagnostics }
   }
 
   /**

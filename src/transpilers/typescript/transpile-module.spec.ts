@@ -352,5 +352,53 @@ describe('transpileModules', () => {
 
       expect(result.diagnostics?.[0].messageText).toBeTruthy()
     })
+
+    it.each([true, false])('should include syntactic diagnostics only when requested: %s', (reportDiagnostics) => {
+      const result = tsTranspileModule('const = 1', {
+        fileName: testFilePath,
+        compilerOptions: {
+          module: ts.ModuleKind.CommonJS,
+        },
+        reportDiagnostics,
+      })
+
+      expect(Boolean(result.diagnostics?.length)).toBe(reportDiagnostics)
+    })
+
+    it('should preserve source maps and provide its Program to custom transformers', () => {
+      let transformerProgram: ts.Program | undefined
+      const result = tsTranspileModule('export const value = 1', {
+        fileName: testFilePath,
+        compilerOptions: {
+          module: ts.ModuleKind.CommonJS,
+          sourceMap: true,
+        },
+        transformers: (program) => {
+          transformerProgram = program
+
+          return {}
+        },
+      })
+
+      expect(transformerProgram).toBeDefined()
+      expect(result.sourceMapText).toContain('"version":3')
+      expect(result.outputText).toContain('sourceMappingURL=foo.js.map')
+    })
+
+    it('should use the supplied TypeScript compiler module', () => {
+      const createProgram = jest.fn(ts.createProgram)
+      const compilerModule = { ...ts, createProgram }
+
+      tsTranspileModule(
+        'export const value = 1',
+        {
+          fileName: testFilePath,
+          compilerOptions: { module: ts.ModuleKind.CommonJS },
+        },
+        compilerModule,
+      )
+
+      expect(createProgram).toHaveBeenCalledTimes(1)
+    })
   })
 })
