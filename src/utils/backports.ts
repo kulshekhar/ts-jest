@@ -114,23 +114,3 @@ export const backportJestConfig = <T extends Config.InitialOptions | Config.Proj
     },
   }
 }
-
-/**
- * @internal
- */
-export const backportTsJestDebugEnvVar = (logger: Logger): void => {
-  if ('TS_JEST_DEBUG' in process.env) {
-    const shouldLog = !/^\s*(?:0|f(?:alse)?|no?|disabled?|off|)\s*$/i.test(process.env.TS_JEST_DEBUG || '')
-    delete process.env.TS_JEST_DEBUG
-    if (shouldLog) {
-      process.env.TS_JEST_LOG = 'ts-jest.log,stderr:warn'
-    }
-    logger.warn(
-      context,
-      interpolate(Deprecations.EnvVar, {
-        old: 'TS_JEST_DEBUG',
-        new: 'TS_JEST_LOG',
-      }),
-    )
-  }
-}

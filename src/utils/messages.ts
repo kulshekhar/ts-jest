@@ -39,7 +39,6 @@ export const Helps = {
  * @internal
  */
 export const enum Deprecations {
-  EnvVar = 'Using env. var "{{old}}" is deprecated, use "{{new}}" instead.',
   ConfigOption = '"[jest-config].{{oldPath}}" is deprecated, use "[jest-config].{{newPath}}" instead.',
   ConfigOptionWithNote = '"[jest-config].{{oldPath}}" is deprecated, use "[jest-config].{{newPath}}" instead.\n    ↳ {{note}}',
   ConfigOptionUseBabelRcNote = 'See `babel-jest` related issue: https://github.com/facebook/jest/issues/3845',

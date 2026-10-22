@@ -213,11 +213,24 @@ describe('config', () => {
                                 babel-jest if 'babel'
           --no-jest-preset      Disable the use of Jest presets
           --tsconfig <file>     Path to the tsconfig.json file
-          --babel               Enable using Babel to process 'js' resulted content from 'ts-jest' processing
           --jsdom               Use 'jsdom' as test environment instead of 'node'
         ",
         }
       `)
+    })
+
+    it('should ignore removed --babel flag', async () => {
+      fs.existsSync.mockImplementation((f) => f === FAKE_PKG)
+      fs.readFileSync.mockImplementation((f) => {
+        if (f === FAKE_PKG) return JSON.stringify({ name: 'mock', version: '0.0.0-mock.0' })
+        throw new Error('ENOENT')
+      })
+
+      await runCli('config:init', '--babel')
+
+      const generatedConfig = fs.writeFileSync.mock.calls[0][1].toString()
+      expect(generatedConfig).toContain('createDefaultPreset')
+      expect(generatedConfig).not.toContain('createJsWithBabelPreset')
     })
   })
 
@@ -239,7 +252,7 @@ describe('config', () => {
       },
     }
     const noOption = ['config:migrate']
-    const fullOptions = [...noOption, '--no-jest-preset', '--allow-js']
+    const fullOptions = [...noOption, '--no-jest-preset', '--js', 'ts']
     beforeEach(() => {
       mockedProcess.cwd.mockImplementation(() => __dirname)
     })
@@ -487,24 +500,15 @@ describe('config', () => {
       `)
     })
 
-    it('should generate transform config with allow-js in CLI options', async () => {
+    it('should ignore removed CLI flags when generating transform config', async () => {
       fs.existsSync.mockImplementation(() => true)
       jest.mock(pkgPaths.next, () => ({}), { virtual: true })
       jest.doMock(pkgPaths.nextCfg, () => ({}), { virtual: true })
 
-      const res = await runCli(...noOption, '--allow-js', pkgPaths.currentCfg)
+      const res = await runCli(...noOption, pkgPaths.currentCfg, '--allow-js', '--babel')
 
-      expect(res.stdout).toMatchInlineSnapshot(`
-        "module.exports = {
-          transform: {
-            '^.+\\\\.[tj]sx?$': [
-              'ts-jest',
-              {},
-            ],
-          },
-        }
-        "
-      `)
+      expect(res.stdout).toContain("'^.+\\\\.tsx?$'")
+      expect(res.stdout).not.toContain("'^.+\\\\.[tj]sx?$'")
     })
 
     it('should migrate from a .cjs config file', async () => {
