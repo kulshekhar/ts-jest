@@ -10,7 +10,6 @@ import { logTargetMock } from '../../__helpers__/mocks'
 import type { RawCompilerOptions } from '../../raw-compiler-options'
 import type { AstTransformerDesc, TsJestTransformerOptions } from '../../types'
 import { stringify } from '../../utils'
-import * as _backports from '../../utils/backports'
 import { getPackageVersion } from '../../utils/get-package-version'
 import { Deprecations, Errors, interpolate } from '../../utils/messages'
 import { normalizeSlashes } from '../../utils/normalize-slashes'
@@ -18,7 +17,6 @@ import { sha1 } from '../../utils/sha1'
 
 import { ConfigSet, MY_DIGEST, TS_JEST_OUT_DIR } from './config-set'
 
-jest.mock('../../utils/backports')
 jest.mock('../index')
 jest.mock('../../utils/get-package-version')
 
@@ -30,13 +28,6 @@ jest.mock('typescript', () => {
     ...actualModule,
   }
 })
-
-const backports = jest.mocked(_backports)
-
-backports.backportJestConfig.mockImplementation((_, config) => ({
-  ...config,
-  __backported: true,
-}))
 
 describe('config-set', () => {
   beforeEach(() => {
@@ -1114,6 +1105,24 @@ describe('config-set', () => {
       })
     })
   }) // readTsConfig
+
+  describe('runtime option compatibility', () => {
+    it('should ignore deprecated runtime option aliases', () => {
+      const options = { tsconfig: { isolatedModules: false }, diagnostics: false, typeCheck: false, skipBabel: false }
+      const configSet = createConfigSet({ tsJestConfig: options })
+
+      expect(configSet.isolatedModules).toBe(false)
+      expect(configSet.babelConfig).toBeUndefined()
+    })
+
+    it('should retain globals configuration and top-level isolatedModules', () => {
+      const configSet = createConfigSet({
+        jestConfig: { globals: { 'ts-jest': { tsconfig: { isolatedModules: false }, isolatedModules: true } } },
+      })
+
+      expect(configSet.isolatedModules).toBe(true)
+    })
+  })
 
   describe('diagnostics', () => {
     it.each([

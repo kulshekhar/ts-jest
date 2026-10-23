@@ -51,11 +51,38 @@ const migratePresetToTransformConfig = (
 
     return {
       ...transformConfig,
-      ...transformConfigFromPreset.transform,
+      ...Object.fromEntries(
+        Object.entries(transformConfigFromPreset.transform ?? {}).filter(
+          ([pattern]) => !(pattern in (transformConfig ?? {})),
+        ),
+      ),
     }
   }
 
   return transformConfig
+}
+
+const migrateTsJestOptions = (options: TsJestTransformerOptions, logger: ReturnType<typeof createLogger>) =>
+  backportJestConfig(logger, { globals: { 'ts-jest': { ...options } } }).globals?.[
+    'ts-jest'
+  ] as TsJestTransformerOptions
+
+const migrateTsJestTransformOptions = (
+  transformConfig: Config.InitialOptions['transform'],
+  logger: ReturnType<typeof createLogger>,
+): Config.InitialOptions['transform'] => {
+  if (!transformConfig) return transformConfig
+
+  return Object.fromEntries(
+    Object.entries(transformConfig).map(([pattern, transform]) => {
+      const transformName = Array.isArray(transform) ? transform[0] : transform
+      if (typeof transformName !== 'string' || !transformName.includes('ts-jest')) return [pattern, transform]
+
+      const options = Array.isArray(transform) && typeof transform[1] === 'object' ? transform[1] : {}
+
+      return [pattern, [transformName, migrateTsJestOptions(options as TsJestTransformerOptions, logger)]]
+    }),
+  ) as Config.InitialOptions['transform']
 }
 
 /**
@@ -125,6 +152,7 @@ export const run: CliCommand = async (args: CliCommandArgs /* , logger: Logger*/
   const globalsTsJestConfig = migratedConfig.globals?.['ts-jest'] as TsJestTransformerOptions | undefined
   migratedConfig.transform = migrateGlobalConfigToTransformConfig(migratedConfig.transform, globalsTsJestConfig)
   migratedConfig.transform = migratePresetToTransformConfig(migratedConfig.transform, preset, globalsTsJestConfig)
+  migratedConfig.transform = migrateTsJestTransformOptions(migratedConfig.transform, nullLogger)
 
   cleanupConfig(actualConfig)
   cleanupConfig(migratedConfig)

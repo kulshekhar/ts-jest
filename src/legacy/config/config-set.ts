@@ -33,7 +33,6 @@ import type {
 } from '../../types'
 import { TsCompilerInstance } from '../../types'
 import { rootLogger, stringify, TsJestDiagnosticCodes } from '../../utils'
-import { backportJestConfig } from '../../utils/backports'
 import { importer } from '../../utils/importer'
 import { Deprecations, Errors, ImportReasons, interpolate } from '../../utils/messages'
 import { normalizeSlashes } from '../../utils/normalize-slashes'
@@ -137,7 +136,7 @@ export class ConfigSet {
   /**
    * @internal
    */
-  private _jestCfg!: TsJestTransformOptions['config']
+  private readonly _jestCfg!: TsJestTransformOptions['config']
   /**
    * @internal
    */
@@ -188,7 +187,12 @@ export class ConfigSet {
     this.logger = this.parentLogger
       ? this.parentLogger.child({ [LogContexts.namespace]: 'config' })
       : rootLogger.child({ namespace: 'config' })
-    this._backportJestCfg(jestConfig ?? Object.create(null))
+    this._jestCfg = {
+      ...(jestConfig ?? Object.create(null)),
+      testMatch: jestConfig?.testMatch ?? DEFAULT_JEST_TEST_MATCH,
+      testRegex: jestConfig?.testRegex ?? [],
+    }
+    this.logger.debug({ jestConfig: this._jestCfg }, 'normalized jest config')
     this.cwd = normalize(this._jestCfg.cwd ?? process.cwd())
     this.rootDir = normalize(this._jestCfg.rootDir ?? this.cwd)
     const tsJestCfg = this._jestCfg.globals && this._jestCfg.globals['ts-jest']
@@ -226,21 +230,6 @@ export class ConfigSet {
     }
     this.isolatedModules = this.parsedTsConfig.options.isolatedModules ?? false
     this._resolveTsCacheDir()
-  }
-
-  /**
-   * @internal
-   */
-  private _backportJestCfg(jestCfg: TsJestTransformOptions['config']): void {
-    const config = backportJestConfig(this.logger, jestCfg)
-
-    this.logger.debug({ jestConfig: config }, 'normalized jest config')
-
-    this._jestCfg = {
-      ...config,
-      testMatch: config.testMatch ?? DEFAULT_JEST_TEST_MATCH,
-      testRegex: config.testRegex ?? [],
-    }
   }
 
   /**

@@ -253,6 +253,7 @@ describe('config', () => {
     }
     const noOption = ['config:migrate']
     const fullOptions = [...noOption, '--no-jest-preset', '--js', 'ts']
+    const getMigratedPackageConfig = (stdout: string) => JSON.parse(stdout.slice('"jest": '.length))
     beforeEach(() => {
       mockedProcess.cwd.mockImplementation(() => __dirname)
     })
@@ -359,6 +360,21 @@ describe('config', () => {
         }
       `)
       expect(fs.writeFileSync).not.toHaveBeenCalled()
+    })
+
+    it('should convert aliases in an existing transform tuple without overwriting its options', async () => {
+      fs.existsSync.mockImplementation(() => true)
+      jest.mock(
+        pkgPaths.next,
+        () => ({ jest: { transform: { '^.+\\.tsx?$': ['ts-jest', { tsConfig: 'custom.json', typeCheck: false }] } } }),
+        { virtual: true },
+      )
+
+      const res = await runCli(...noOption, pkgPaths.current)
+      const migratedConfig = getMigratedPackageConfig(res.stdout)
+
+      expect(res.exitCode).toBe(0)
+      expect(migratedConfig.transform['^.+\\.tsx?$'][1]).toEqual({ tsconfig: 'custom.json', isolatedModules: true })
     })
 
     it('should generate transform options while keeping other jest config options', async () => {
