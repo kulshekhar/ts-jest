@@ -377,6 +377,86 @@ describe('config', () => {
       expect(migratedConfig.transform['^.+\\.tsx?$'][1]).toEqual({ tsconfig: 'custom.json', isolatedModules: true })
     })
 
+    it.each([
+      { name: '--js babel', cliOptions: ['--js', 'babel'], preset: undefined },
+      { name: 'configured preset', cliOptions: [], preset: 'ts-jest/presets/js-with-babel' },
+    ])(
+      'should preserve explicit TypeScript transform options when adding Babel with $name',
+      async ({ cliOptions, preset }) => {
+        fs.existsSync.mockImplementation(() => true)
+        jest.mock(
+          pkgPaths.next,
+          () => ({
+            jest: {
+              preset,
+              displayName: 'babel-migration',
+              transform: {
+                [TS_TRANSFORM_PATTERN]: [
+                  'ts-jest',
+                  { tsConfig: 'custom.json', typeCheck: false, diagnostics: { warnOnly: true } },
+                ],
+                '^.+\\.css$': 'jest-css-transform',
+              },
+            },
+          }),
+          { virtual: true },
+        )
+
+        const res = await runCli(...noOption, ...cliOptions, pkgPaths.current)
+        const migratedConfig = getMigratedPackageConfig(res.stdout)
+
+        expect(res.exitCode).toBe(0)
+        expect(migratedConfig).toEqual({
+          displayName: 'babel-migration',
+          transform: {
+            [TS_TRANSFORM_PATTERN]: [
+              'ts-jest',
+              { tsconfig: 'custom.json', isolatedModules: true, diagnostics: { warnOnly: true } },
+            ],
+            '^.+\\.css$': 'jest-css-transform',
+            [JS_TRANSFORM_PATTERN]: 'babel-jest',
+          },
+        })
+        expect(Object.keys(migratedConfig.transform)).toEqual([
+          TS_TRANSFORM_PATTERN,
+          '^.+\\.css$',
+          JS_TRANSFORM_PATTERN,
+        ])
+        expect(fs.writeFileSync).not.toHaveBeenCalled()
+      },
+    )
+
+    it('should migrate an option-less ts-jest tuple while preserving other transform options', async () => {
+      fs.existsSync.mockImplementation(() => true)
+      jest.mock(
+        pkgPaths.next,
+        () => ({
+          jest: {
+            testEnvironment: 'node',
+            transform: {
+              [JS_TRANSFORM_PATTERN]: ['babel-jest', { configFile: 'babel.config.js' }],
+              [TS_TRANSFORM_PATTERN]: ['ts-jest'],
+            },
+          },
+        }),
+        { virtual: true },
+      )
+
+      const res = await runCli(...noOption, pkgPaths.current)
+      const migratedConfig = getMigratedPackageConfig(res.stdout)
+
+      expect(res.exitCode).toBe(0)
+      expect(migratedConfig).toEqual({
+        testEnvironment: 'node',
+        transform: {
+          [JS_TRANSFORM_PATTERN]: ['babel-jest', { configFile: 'babel.config.js' }],
+          [TS_TRANSFORM_PATTERN]: ['ts-jest', {}],
+        },
+      })
+      expect(Object.keys(migratedConfig.transform)).toEqual([JS_TRANSFORM_PATTERN, TS_TRANSFORM_PATTERN])
+      expect(fs.writeFileSync).not.toHaveBeenCalled()
+    })
+
     it('should generate transform options while keeping other jest config options', async () => {
       expect.assertions(1)
       fs.existsSync.mockImplementation(() => true)

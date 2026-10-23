@@ -12,10 +12,12 @@ import type { TsJestTransformerOptions } from '../../types'
 import { backportJestConfig } from '../../utils/backports'
 import { JestPresetNames, type TsJestPresetDescriptor, allPresets } from '../helpers/presets'
 
+type TransformConfig = NonNullable<Config.InitialOptions['transform']>
+
 const migrateGlobalConfigToTransformConfig = (
   transformConfig: Config.InitialOptions['transform'],
   globalsTsJestConfig: TsJestTransformerOptions | undefined,
-) => {
+): TransformConfig => {
   if (transformConfig) {
     return Object.entries(transformConfig).reduce((previousValue, currentValue) => {
       const [key, transformOptions] = currentValue
@@ -37,10 +39,10 @@ const migrateGlobalConfigToTransformConfig = (
 }
 
 const migratePresetToTransformConfig = (
-  transformConfig: Config.InitialOptions['transform'],
+  transformConfig: TransformConfig,
   preset: TsJestPresetDescriptor | undefined,
   globalsTsJestConfig: TsJestTransformerOptions | undefined,
-) => {
+): TransformConfig => {
   if (preset) {
     const transformConfigFromPreset =
       preset.name === JestPresetNames.jsWithTs
@@ -52,9 +54,7 @@ const migratePresetToTransformConfig = (
     return {
       ...transformConfig,
       ...Object.fromEntries(
-        Object.entries(transformConfigFromPreset.transform ?? {}).filter(
-          ([pattern]) => !(pattern in (transformConfig ?? {})),
-        ),
+        Object.entries(transformConfigFromPreset.transform).filter(([pattern]) => !(pattern in transformConfig)),
       ),
     }
   }
@@ -63,16 +63,12 @@ const migratePresetToTransformConfig = (
 }
 
 const migrateTsJestOptions = (options: TsJestTransformerOptions, logger: ReturnType<typeof createLogger>) =>
-  backportJestConfig(logger, { globals: { 'ts-jest': { ...options } } }).globals?.[
-    'ts-jest'
-  ] as TsJestTransformerOptions
+  backportJestConfig(logger, { globals: { 'ts-jest': { ...options } } }).globals['ts-jest'] as TsJestTransformerOptions
 
 const migrateTsJestTransformOptions = (
-  transformConfig: Config.InitialOptions['transform'],
+  transformConfig: TransformConfig,
   logger: ReturnType<typeof createLogger>,
-): Config.InitialOptions['transform'] => {
-  if (!transformConfig) return transformConfig
-
+): TransformConfig => {
   return Object.fromEntries(
     Object.entries(transformConfig).map(([pattern, transform]) => {
       const transformName = Array.isArray(transform) ? transform[0] : transform
@@ -82,7 +78,7 @@ const migrateTsJestTransformOptions = (
 
       return [pattern, [transformName, migrateTsJestOptions(options as TsJestTransformerOptions, logger)]]
     }),
-  ) as Config.InitialOptions['transform']
+  ) as TransformConfig
 }
 
 /**
