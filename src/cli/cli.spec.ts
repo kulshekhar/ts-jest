@@ -515,6 +515,35 @@ describe('config', () => {
       expect(fs.writeFileSync).not.toHaveBeenCalled()
     })
 
+    it('should let modern transform options override migrated globals options', async () => {
+      fs.existsSync.mockImplementation(() => true)
+      jest.mock(
+        pkgPaths.next,
+        () => ({
+          jest: {
+            globals: {
+              'ts-jest': {
+                isolatedModules: true,
+                tsconfig: { target: 'es6' },
+              },
+            },
+            transform: {
+              '^.+\\.ts$': ['ts-jest', { isolatedModules: false, tsconfig: { target: 'es2022' } }],
+            },
+          },
+        }),
+        { virtual: true },
+      )
+
+      const res = await runCli(...noOption, pkgPaths.current)
+
+      expect(res.exitCode).toBe(0)
+      const migratedConfig = getMigratedPackageConfig(res.stdout)
+      const transformPatterns = Object.keys(migratedConfig.transform)
+      expect(transformPatterns).toEqual(['^.+\\.ts$', '^.+\\.tsx?$'])
+      expect(migratedConfig.transform['^.+\\.ts$'][1].tsconfig).toEqual({ target: 'es2022' })
+    })
+
     it('should merge globals into existing transform tuples and preserve pattern order', async () => {
       fs.existsSync.mockImplementation(() => true)
       jest.mock(
