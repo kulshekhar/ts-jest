@@ -28,6 +28,20 @@ const migrateGlobalConfigToTransformConfig = (
         }
       }
 
+      if (
+        globalsTsJestConfig &&
+        Array.isArray(transformOptions) &&
+        typeof transformOptions[0] === 'string' &&
+        transformOptions[0].includes('ts-jest')
+      ) {
+        const tupleOptions = typeof transformOptions[1] === 'object' && transformOptions[1] ? transformOptions[1] : {}
+
+        return {
+          ...previousValue,
+          [key]: [transformOptions[0], { ...globalsTsJestConfig, ...tupleOptions }, ...transformOptions.slice(2)],
+        }
+      }
+
       return {
         ...previousValue,
         [key]: transformOptions,

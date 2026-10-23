@@ -301,14 +301,10 @@ describe('config-set', () => {
 
     it('should return babelJestTransformer with babelConfig is true', () => {
       const cs = createConfigSet({
+        tsJestConfig: { babelConfig: true },
         jestConfig: {
           rootDir: 'src',
           cwd: 'src',
-          globals: {
-            'ts-jest': {
-              babelConfig: true,
-            },
-          },
         },
         resolve: null,
       })
@@ -333,12 +329,8 @@ describe('config-set', () => {
       },
     ])('should return babelJestTransformer with non javascript file path', (data) => {
       const cs = createConfigSet({
+        tsJestConfig: { babelConfig: data.path },
         jestConfig: {
-          globals: {
-            'ts-jest': {
-              babelConfig: data.path,
-            },
-          },
           rootDir: data.rootDir,
         },
         resolve: null,
@@ -364,13 +356,7 @@ describe('config-set', () => {
       'should return babelJestTransformer with javascript file path',
       (babelFilePath) => {
         const cs = createConfigSet({
-          jestConfig: {
-            globals: {
-              'ts-jest': {
-                babelConfig: babelFilePath,
-              },
-            },
-          },
+          tsJestConfig: { babelConfig: babelFilePath },
           resolve: null,
         })
         const babelJest = cs.babelJestTransformer as Transformer
@@ -395,13 +381,7 @@ describe('config-set', () => {
       // eslint-disable-next-line jest/no-mocks-import
       const babelConfig = require('../../__mocks__/babel-foo.config')
       const cs = createConfigSet({
-        jestConfig: {
-          globals: {
-            'ts-jest': {
-              babelConfig,
-            },
-          },
-        },
+        tsJestConfig: { babelConfig },
         resolve: null,
       })
       const babelJest = cs.babelJestTransformer as Transformer
@@ -424,13 +404,7 @@ describe('config-set', () => {
     it('should return babelJestTransformer with inline config', () => {
       const CONFIG = { comments: true }
       const cs = createConfigSet({
-        jestConfig: {
-          globals: {
-            'ts-jest': {
-              babelConfig: CONFIG,
-            },
-          },
-        },
+        tsJestConfig: { babelConfig: CONFIG },
         resolve: null,
       })
       const babelJest = cs.babelJestTransformer as Transformer
@@ -453,20 +427,18 @@ describe('config-set', () => {
     it.each([
       undefined,
       {
-        'ts-jest': {
-          astTransformers: {
-            before: ['hummy-transformer'],
-          },
+        astTransformers: {
+          before: ['hummy-transformer'],
         },
       },
     ])(
       'should return value from which is the combination of ts jest config and jest config when running test with cache',
       (data) => {
         const configSet = createConfigSet({
+          tsJestConfig: data,
           jestConfig: {
             cache: true,
             cacheDirectory: cacheDir,
-            globals: data,
           },
           resolve: null,
         })
@@ -514,12 +486,10 @@ describe('config-set', () => {
       }
       const mock = jest.mocked(getPackageVersion).mockImplementation((moduleName: string) => realVersions[moduleName])
       const cs = createConfigSet({
+        tsJestConfig: { tsconfig: false },
         jestConfig: {
           cache: true,
           cacheDirectory: cacheDir,
-          globals: {
-            'ts-jest': { tsconfig: false },
-          },
         },
         projectPackageJson: pkg,
       })
@@ -830,10 +800,10 @@ describe('config-set', () => {
         jest.spyOn(ConfigSet.prototype, 'raiseDiagnostics').mockImplementationOnce(() => {})
 
         cs = createConfigSet({
+          tsJestConfig: { tsconfig: 'tsconfig.bar.json' },
           jestConfig: {
             rootDir: '/root',
             cwd: '/cwd',
-            globals: { 'ts-jest': { tsconfig: 'tsconfig.bar.json' } },
           } as any, // eslint-disable-line @typescript-eslint/no-explicit-any
         })
 
@@ -897,10 +867,10 @@ describe('config-set', () => {
           jest.spyOn(ConfigSet.prototype, 'resolvePath').mockReturnValueOnce(tscfgPathStub)
 
           cs = createConfigSet({
+            tsJestConfig: { tsconfig: 'tsconfig.bar.json' },
             jestConfig: {
               rootDir: '/root',
               cwd: '/cwd',
-              globals: { 'ts-jest': { tsconfig: 'tsconfig.bar.json' } },
               extensionsToTreatAsEsm: ['.ts'],
             } as any, // eslint-disable-line @typescript-eslint/no-explicit-any
           })
@@ -938,10 +908,10 @@ describe('config-set', () => {
           jest.spyOn(ConfigSet.prototype, 'resolvePath').mockReturnValueOnce('')
 
           cs = createConfigSet({
+            tsJestConfig: { tsconfig: 'tsconfig.json' },
             jestConfig: {
               rootDir: '/root',
               cwd: '/cwd',
-              globals: { 'ts-jest': { tsconfig: 'tsconfig.json' } },
             } as any, // eslint-disable-line @typescript-eslint/no-explicit-any
           })
 
@@ -959,10 +929,10 @@ describe('config-set', () => {
           jest.spyOn(ConfigSet.prototype, 'resolvePath').mockReturnValueOnce(tscfgPathStub)
 
           cs = createConfigSet({
+            tsJestConfig: { tsconfig: 'tsconfig.bar.json' },
             jestConfig: {
               rootDir: '/root',
               cwd: '/cwd',
-              globals: { 'ts-jest': { tsconfig: 'tsconfig.bar.json' } },
               extensionsToTreatAsEsm: ['.ts'],
             } as any, // eslint-disable-line @typescript-eslint/no-explicit-any
           })
@@ -1000,10 +970,10 @@ describe('config-set', () => {
           jest.spyOn(ConfigSet.prototype, 'resolvePath').mockReturnValueOnce('')
 
           cs = createConfigSet({
+            tsJestConfig: { tsconfig: 'tsconfig.json' },
             jestConfig: {
               rootDir: '/root',
               cwd: '/cwd',
-              globals: { 'ts-jest': { tsconfig: 'tsconfig.json' } },
             } as any, // eslint-disable-line @typescript-eslint/no-explicit-any
           })
 
@@ -1022,10 +992,10 @@ describe('config-set', () => {
           jest.spyOn(ConfigSet.prototype, 'resolvePath').mockReturnValueOnce(tscfgPathStub)
 
           cs = createConfigSet({
+            tsJestConfig: { tsconfig: 'tsconfig.bar.json' },
             jestConfig: {
               rootDir: '/root',
               cwd: '/cwd',
-              globals: { 'ts-jest': { tsconfig: 'tsconfig.bar.json' } },
               extensionsToTreatAsEsm: ['.ts'],
             } as any, // eslint-disable-line @typescript-eslint/no-explicit-any
           })
@@ -1063,10 +1033,10 @@ describe('config-set', () => {
           jest.spyOn(ConfigSet.prototype, 'resolvePath').mockReturnValueOnce('')
 
           cs = createConfigSet({
+            tsJestConfig: { tsconfig: 'tsconfig.json' },
             jestConfig: {
               rootDir: '/root',
               cwd: '/cwd',
-              globals: { 'ts-jest': { tsconfig: 'tsconfig.json' } },
             } as any, // eslint-disable-line @typescript-eslint/no-explicit-any
           })
 
@@ -1085,10 +1055,10 @@ describe('config-set', () => {
           jest.spyOn(ConfigSet.prototype, 'resolvePath').mockReturnValueOnce(tscfgPathStub)
 
           cs = createConfigSet({
+            tsJestConfig: { tsconfig: 'tsconfig.bar.json' },
             jestConfig: {
               rootDir: '/root',
               cwd: '/cwd',
-              globals: { 'ts-jest': { tsconfig: 'tsconfig.bar.json' } },
               extensionsToTreatAsEsm: ['.ts'],
             } as any, // eslint-disable-line @typescript-eslint/no-explicit-any
           })
@@ -1115,12 +1085,21 @@ describe('config-set', () => {
       expect(configSet.babelConfig).toBeUndefined()
     })
 
-    it('should retain globals configuration and top-level isolatedModules', () => {
+    it('should ignore ts-jest globals and preserve unrelated Jest globals and top-level isolatedModules', () => {
+      const globals = {
+        'ts-jest': { tsconfig: { isolatedModules: false }, isolatedModules: false, diagnostics: false },
+        unrelated: { option: true },
+      }
       const configSet = createConfigSet({
-        jestConfig: { globals: { 'ts-jest': { tsconfig: { isolatedModules: false }, isolatedModules: true } } },
+        jestConfig: { globals },
+        tsJestConfig: { tsconfig: { isolatedModules: false }, isolatedModules: true },
       })
 
       expect(configSet.isolatedModules).toBe(true)
+      // @ts-expect-error testing preserved Jest globals
+      expect(configSet._jestCfg.globals).toEqual(globals)
+      // @ts-expect-error testing that ts-jest globals no longer configure diagnostics
+      expect(configSet._diagnostics.throws).toBe(true)
     })
   })
 

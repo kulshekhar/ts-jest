@@ -515,6 +515,38 @@ describe('config', () => {
       expect(fs.writeFileSync).not.toHaveBeenCalled()
     })
 
+    it('should merge globals into existing transform tuples and preserve pattern order', async () => {
+      fs.existsSync.mockImplementation(() => true)
+      jest.mock(
+        pkgPaths.next,
+        () => ({
+          jest: {
+            globals: { 'ts-jest': { tsconfig: { target: 'es6' }, diagnostics: { pretty: false } } },
+            transform: {
+              '^.+\\.tsx?$': ['ts-jest', { diagnostics: false }],
+              '^.+\\.jsx?$': ['ts-jest', { stringifyContentPathRegex: '\\.html$' }],
+            },
+          },
+        }),
+        { virtual: true },
+      )
+
+      const res = await runCli(...noOption, pkgPaths.current)
+      const migratedConfig = getMigratedPackageConfig(res.stdout)
+
+      expect(res.exitCode).toBe(0)
+      expect(Object.keys(migratedConfig.transform).slice(0, 2)).toEqual(['^.+\\.tsx?$', '^.+\\.jsx?$'])
+      expect(migratedConfig.transform['^.+\\.tsx?$'][1]).toEqual({
+        tsconfig: { target: 'es6' },
+        diagnostics: false,
+      })
+      expect(migratedConfig.transform['^.+\\.jsx?$'][1]).toEqual({
+        tsconfig: { target: 'es6' },
+        diagnostics: { pretty: false },
+        stringifyContentPathRegex: '\\.html$',
+      })
+    })
+
     it('should generate transform options while keeping other jest config options', async () => {
       expect.assertions(1)
       fs.existsSync.mockImplementation(() => true)

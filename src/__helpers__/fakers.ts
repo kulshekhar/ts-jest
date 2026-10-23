@@ -19,17 +19,11 @@ const defaultTestMatch = ['**/__tests__/**/*.[jt]s?(x)', '**/?(*.)+(spec|test).[
 
 function getJestConfig<T extends Config.ProjectConfig>(
   options?: Partial<Config.InitialOptions | Config.ProjectConfig>,
-  tsJestOptions?: TsJestTransformerOptions,
 ): T {
-  const res = {
+  return {
     globals: {},
     ...options,
-  } as any // eslint-disable-line @typescript-eslint/no-explicit-any
-  if (tsJestOptions) {
-    res.globals['ts-jest'] = tsJestOptions
-  }
-
-  return res
+  } as T
 }
 
 export function importReason(text = '[[BECAUSE]]'): ImportReasons {
@@ -53,7 +47,7 @@ export function createConfigSet({
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: any
 } = {}): ConfigSet {
-  const jestCfg = getJestConfig(jestConfig, tsJestConfig)
+  const jestCfg = getJestConfig(jestConfig)
   const cs = new ConfigSet(
     {
       ...jestCfg,
@@ -62,6 +56,7 @@ export function createConfigSet({
       extensionsToTreatAsEsm: jestCfg.extensionsToTreatAsEsm ?? [],
     },
     logger,
+    tsJestConfig,
   )
   if (resolve) {
     cs.resolvePath = resolve
