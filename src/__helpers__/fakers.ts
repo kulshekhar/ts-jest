@@ -20,10 +20,7 @@ const defaultTestMatch = ['**/__tests__/**/*.[jt]s?(x)', '**/?(*.)+(spec|test).[
 function getJestConfig<T extends Config.ProjectConfig>(
   options?: Partial<Config.InitialOptions | Config.ProjectConfig>,
 ): T {
-  return {
-    globals: {},
-    ...options,
-  } as T
+  return { ...options } as T
 }
 
 export function importReason(text = '[[BECAUSE]]'): ImportReasons {

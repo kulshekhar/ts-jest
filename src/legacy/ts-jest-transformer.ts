@@ -76,7 +76,7 @@ export class TsJestTransformer implements SyncTransformer<TsJestTransformerOptio
 
   private _configsFor(transformOptions: TsJestTransformOptions): ConfigSet {
     const { config, cacheFS } = transformOptions
-    const serializedTransformerOptions = stringify(this.transformerOptions ?? {})
+    const serializedTransformerOptions = stringify(this.transformerOptions)
     const ccs: CachedConfigSet | undefined = TsJestTransformer._cachedConfigSets.find(
       (cs) => cs.jestConfig.value === config && cs.transformerOptions === serializedTransformerOptions,
     )
@@ -114,7 +114,7 @@ export class TsJestTransformer implements SyncTransformer<TsJestTransformerOptio
         // this which does not depend on config
         jest.cacheDirectory = undefined as any // eslint-disable-line @typescript-eslint/no-explicit-any
         this._transformCfgStr =
-          `${new JsonableValue({ jestConfig: jest, transformerOptions: this.transformerOptions ?? {} }).serialized}` +
+          `${new JsonableValue({ jestConfig: jest, transformerOptions: this.transformerOptions }).serialized}` +
           configSet.cacheSuffix
         this._createCompiler(configSet, cacheFS)
         this._watchMode = process.argv.includes('--watch')
