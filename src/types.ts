@@ -14,7 +14,6 @@ import {
   TS_TRANSFORM_PATTERN,
 } from './constants'
 import type { ConfigSet } from './legacy/config/config-set'
-import type { RawCompilerOptions } from './raw-compiler-options'
 
 /**
  * @internal
@@ -70,11 +69,8 @@ export type TsJestGlobalOptions = Config.TransformerConfig[1] & {
    *
    * @default `undefined` (the default config file will be used if it exists)
    *
-   * @remarks
-   *
-   * {@link RawCompilerOptions} will be replaced with {@link TsConfigCompilerOptionsJson} in the next major release
    */
-  tsconfig?: boolean | string | RawCompilerOptions | TsConfigCompilerOptionsJson
+  tsconfig?: boolean | string | TsConfigCompilerOptionsJson
 
   /**
    * @deprecated use {@link TsConfigCompilerOptionsJson.isolatedModules} instead
