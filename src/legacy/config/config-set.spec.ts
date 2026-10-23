@@ -7,7 +7,7 @@ import * as ts from 'typescript'
 
 import { createConfigSet } from '../../__helpers__/fakers'
 import { logTargetMock } from '../../__helpers__/mocks'
-import type { RawCompilerOptions } from '../../raw-compiler-options'
+import type { TsConfigCompilerOptionsJson } from '../../config/types'
 import type { AstTransformerDesc, TsJestTransformerOptions } from '../../types'
 import { stringify } from '../../utils'
 import * as _backports from '../../utils/backports'
@@ -182,7 +182,7 @@ describe('config-set', () => {
       target.clear()
       const cs = createConfigSet({
         tsJestConfig: {
-          tsconfig: { module: moduleString as RawCompilerOptions['module'], esModuleInterop: false },
+          tsconfig: { module: moduleString as TsConfigCompilerOptionsJson['module'], esModuleInterop: false },
           diagnostics: { warnOnly: true, pretty: false },
         },
         resolve: null,
