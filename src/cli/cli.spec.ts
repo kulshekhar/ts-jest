@@ -363,7 +363,9 @@ describe('config', () => {
       fs.existsSync.mockImplementation(() => true)
       jest.mock(
         pkgPaths.next,
-        () => ({ jest: { transform: { '^.+\\.tsx?$': ['ts-jest', { tsConfig: 'custom.json', typeCheck: false }] } } }),
+        () => ({
+          jest: { transform: { '^.+\\.tsx?$': ['ts-jest', { tsConfig: { target: 'ESNext' }, typeCheck: false }] } },
+        }),
         { virtual: true },
       )
 
@@ -371,7 +373,79 @@ describe('config', () => {
       const migratedConfig = getMigratedPackageConfig(res.stdout)
 
       expect(res.exitCode).toBe(0)
-      expect(migratedConfig.transform['^.+\\.tsx?$'][1]).toEqual({ tsconfig: 'custom.json', isolatedModules: true })
+      expect(migratedConfig.transform['^.+\\.tsx?$'][1]).toEqual({
+        tsconfig: { target: 'ESNext', isolatedModules: true },
+      })
+    })
+
+    it.each([
+      { tsconfig: undefined, expectedTsconfig: { isolatedModules: true } },
+      { tsconfig: { target: 'ESNext' }, expectedTsconfig: { target: 'ESNext', isolatedModules: true } },
+    ])('should migrate isolatedModules true into inline native options: %p', async ({ tsconfig, expectedTsconfig }) => {
+      fs.existsSync.mockImplementation(() => true)
+      jest.mock(pkgPaths.next, () => ({ jest: { globals: { 'ts-jest': { isolatedModules: true, tsconfig } } } }), {
+        virtual: true,
+      })
+
+      const res = await runCli(...noOption, pkgPaths.current)
+      const options = getMigratedPackageConfig(res.stdout).transform['^.+\\.tsx?$'][1]
+
+      expect(res.exitCode).toBe(0)
+      expect(options.tsconfig).toEqual(expectedTsconfig)
+      expect(options.isolatedModules).toBeUndefined()
+    })
+
+    it.each([
+      {
+        tsconfig: 'custom.json',
+        guidance: 'Manually set `compilerOptions.isolatedModules: true` in the referenced TypeScript config.',
+      },
+      {
+        tsconfig: false,
+        guidance:
+          'Manually set `tsconfig.isolatedModules` inline by replacing `tsconfig: false` with `tsconfig: { isolatedModules: true }`.',
+      },
+    ])(
+      'should give manual guidance when isolatedModules true conflicts with tsconfig $tsconfig',
+      async ({ tsconfig, guidance }) => {
+        fs.existsSync.mockImplementation(() => true)
+        jest.mock(pkgPaths.next, () => ({ jest: { globals: { 'ts-jest': { isolatedModules: true, tsconfig } } } }), {
+          virtual: true,
+        })
+
+        const res = await runCli(...noOption, pkgPaths.current)
+
+        expect(res.exitCode).toBe(1)
+        expect(res.log).toContain(guidance)
+        expect(res.stdout).toBe('')
+        expect(fs.writeFileSync).not.toHaveBeenCalled()
+      },
+    )
+
+    it('should preserve native isolatedModules true when deprecated override resolves false', async () => {
+      fs.existsSync.mockImplementation(() => true)
+      jest.mock(
+        pkgPaths.next,
+        () => ({
+          jest: {
+            globals: {
+              'ts-jest': {
+                typeCheck: true,
+                isolatedModules: false,
+                tsconfig: { target: 'ESNext', isolatedModules: true },
+              },
+            },
+          },
+        }),
+        { virtual: true },
+      )
+
+      const res = await runCli(...noOption, pkgPaths.current)
+      const options = getMigratedPackageConfig(res.stdout).transform['^.+\\.tsx?$'][1]
+
+      expect(res.exitCode).toBe(0)
+      expect(options.tsconfig).toEqual({ target: 'ESNext', isolatedModules: true })
+      expect(options.isolatedModules).toBeUndefined()
     })
 
     it.each([
@@ -436,6 +510,51 @@ describe('config', () => {
     })
 
     it.each([
+      {
+        name: 'inherited isolatedModules true',
+        globalsOptions: { isolatedModules: true, tsconfig: { target: 'ESNext' } },
+        transformOptions: { diagnostics: false },
+        expectedOptions: { tsconfig: { target: 'ESNext', isolatedModules: true }, diagnostics: false },
+      },
+      {
+        name: 'explicit isolatedModules false',
+        globalsOptions: { isolatedModules: true, tsconfig: 'custom.json' },
+        transformOptions: { isolatedModules: false },
+        expectedOptions: { tsconfig: 'custom.json' },
+      },
+      {
+        name: 'deprecated typeCheck override',
+        globalsOptions: { isolatedModules: true, tsconfig: 'custom.json' },
+        transformOptions: { typeCheck: true },
+        expectedOptions: { tsconfig: 'custom.json' },
+      },
+    ])(
+      'should lower isolatedModules after merging globals with $name',
+      async ({ globalsOptions, transformOptions, expectedOptions }) => {
+        fs.existsSync.mockImplementation(() => true)
+        jest.mock(
+          pkgPaths.next,
+          () => ({
+            jest: {
+              globals: { 'ts-jest': globalsOptions },
+              transform: { [TS_TRANSFORM_PATTERN]: ['ts-jest', transformOptions] },
+            },
+          }),
+          { virtual: true },
+        )
+
+        const res = await runCli(...noOption, pkgPaths.current)
+
+        expect(res.exitCode).toBe(0)
+        expect(getMigratedPackageConfig(res.stdout).transform[TS_TRANSFORM_PATTERN]).toEqual([
+          'ts-jest',
+          expectedOptions,
+        ])
+        expect(fs.writeFileSync).not.toHaveBeenCalled()
+      },
+    )
+
+    it.each([
       { name: '--js babel', cliOptions: ['--js', 'babel'], preset: undefined },
       { name: 'configured preset', cliOptions: [], preset: 'ts-jest/presets/js-with-babel' },
     ])(
@@ -451,7 +570,7 @@ describe('config', () => {
               transform: {
                 [TS_TRANSFORM_PATTERN]: [
                   'ts-jest',
-                  { tsConfig: 'custom.json', typeCheck: false, diagnostics: { warnOnly: true } },
+                  { tsConfig: { target: 'ESNext' }, typeCheck: false, diagnostics: { warnOnly: true } },
                 ],
                 '^.+\\.css$': 'jest-css-transform',
               },
@@ -469,7 +588,7 @@ describe('config', () => {
           transform: {
             [TS_TRANSFORM_PATTERN]: [
               'ts-jest',
-              { tsconfig: 'custom.json', isolatedModules: true, diagnostics: { warnOnly: true } },
+              { tsconfig: { target: 'ESNext', isolatedModules: true }, diagnostics: { warnOnly: true } },
             ],
             '^.+\\.css$': 'jest-css-transform',
             [JS_TRANSFORM_PATTERN]: 'babel-jest',
@@ -480,6 +599,35 @@ describe('config', () => {
           '^.+\\.css$',
           JS_TRANSFORM_PATTERN,
         ])
+        expect(fs.writeFileSync).not.toHaveBeenCalled()
+      },
+    )
+
+    it.each([
+      { name: '--js babel', cliOptions: ['--js', 'babel'], preset: undefined },
+      { name: 'configured preset', cliOptions: [], preset: 'ts-jest/presets/js-with-babel' },
+    ])(
+      'should give manual guidance for legacy path isolation when adding Babel with $name',
+      async ({ cliOptions, preset }) => {
+        fs.existsSync.mockImplementation(() => true)
+        jest.mock(
+          pkgPaths.next,
+          () => ({
+            jest: {
+              preset,
+              transform: { [TS_TRANSFORM_PATTERN]: ['ts-jest', { tsConfig: 'custom.json', typeCheck: false }] },
+            },
+          }),
+          { virtual: true },
+        )
+
+        const res = await runCli(...noOption, ...cliOptions, pkgPaths.current)
+
+        expect(res.exitCode).toBe(1)
+        expect(res.log).toContain(
+          'Manually set `compilerOptions.isolatedModules: true` in the referenced TypeScript config.',
+        )
+        expect(res.stdout).toBe('')
         expect(fs.writeFileSync).not.toHaveBeenCalled()
       },
     )

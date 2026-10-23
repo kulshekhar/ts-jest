@@ -42,12 +42,6 @@ export const enum Deprecations {
   ConfigOption = '"[jest-config].{{oldPath}}" is deprecated, use "[jest-config].{{newPath}}" instead.',
   ConfigOptionWithNote = '"[jest-config].{{oldPath}}" is deprecated, use "[jest-config].{{newPath}}" instead.\n    ↳ {{note}}',
   ConfigOptionUseBabelRcNote = 'See `babel-jest` related issue: https://github.com/facebook/jest/issues/3845',
-  IsolatedModulesWithTsconfigPath = `
-    The "ts-jest" config option "isolatedModules" is deprecated and will be removed in v30.0.0. Please use "isolatedModules: true" in {{tsconfigFilePath}} instead, see https://www.typescriptlang.org/tsconfig/#isolatedModules
-  `,
-  IsolatedModulesWithoutTsconfigPath = `
-    The "ts-jest" config option "isolatedModules" is deprecated and will be removed in v30.0.0. Please use "isolatedModules: true", see https://www.typescriptlang.org/tsconfig/#isolatedModules
-  `,
 }
 
 /**

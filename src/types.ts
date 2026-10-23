@@ -73,15 +73,6 @@ export type TsJestGlobalOptions = Config.TransformerConfig[1] & {
   tsconfig?: boolean | string | TsConfigCompilerOptionsJson
 
   /**
-   * @deprecated use {@link TsConfigCompilerOptionsJson.isolatedModules} instead
-   *
-   * Compiles files as isolated modules (disables some features)
-   *
-   * @default `undefined` (disables transpiling files with {@link _ts.transpileModule})
-   */
-  isolatedModules?: boolean
-
-  /**
    * Compiler to use
    *
    * @default `typescript`

@@ -11,7 +11,7 @@ import type { TsConfigCompilerOptionsJson } from '../../config/types'
 import type { AstTransformerDesc, TsJestTransformerOptions } from '../../types'
 import { stringify } from '../../utils'
 import { getPackageVersion } from '../../utils/get-package-version'
-import { Deprecations, Errors, interpolate } from '../../utils/messages'
+import { Errors } from '../../utils/messages'
 import { normalizeSlashes } from '../../utils/normalize-slashes'
 import { sha1 } from '../../utils/sha1'
 
@@ -762,6 +762,47 @@ describe('config-set', () => {
     })
   }) // resolvePath
 
+  describe('runtime option compatibility', () => {
+    it('should ignore deprecated runtime option aliases', () => {
+      const options = {
+        tsconfig: { isolatedModules: false },
+        isolatedModules: true,
+        diagnostics: false,
+        typeCheck: false,
+        skipBabel: false,
+      }
+      const configSet = createConfigSet({ tsJestConfig: options })
+
+      expect(configSet.isolatedModules).toBe(false)
+      expect(configSet.babelConfig).toBeUndefined()
+    })
+
+    it('should use native isolatedModules from tsconfig', () => {
+      const configSet = createConfigSet({
+        tsJestConfig: { tsconfig: { isolatedModules: true } },
+      })
+
+      expect(configSet.isolatedModules).toBe(true)
+    })
+
+    it('should ignore ts-jest globals and preserve unrelated Jest globals and native isolatedModules', () => {
+      const globals = {
+        'ts-jest': { tsconfig: { isolatedModules: false }, isolatedModules: false, diagnostics: false },
+        unrelated: { option: true },
+      }
+      const configSet = createConfigSet({
+        jestConfig: { globals },
+        tsJestConfig: { tsconfig: { isolatedModules: true } },
+      })
+
+      expect(configSet.isolatedModules).toBe(true)
+      // @ts-expect-error testing preserved Jest globals
+      expect(configSet._jestCfg.globals).toEqual(globals)
+      // @ts-expect-error testing that ts-jest globals no longer configure diagnostics
+      expect(configSet._diagnostics.throws).toBe(true)
+    })
+  })
+
   describe('_resolveTsConfig', () => {
     const findConfig = jest.spyOn(ts, 'findConfigFile')
     const readConfig = jest.spyOn(ts, 'readConfigFile')
@@ -1076,33 +1117,6 @@ describe('config-set', () => {
     })
   }) // readTsConfig
 
-  describe('runtime option compatibility', () => {
-    it('should ignore deprecated runtime option aliases', () => {
-      const options = { tsconfig: { isolatedModules: false }, diagnostics: false, typeCheck: false, skipBabel: false }
-      const configSet = createConfigSet({ tsJestConfig: options })
-
-      expect(configSet.isolatedModules).toBe(false)
-      expect(configSet.babelConfig).toBeUndefined()
-    })
-
-    it('should ignore ts-jest globals and preserve unrelated Jest globals and top-level isolatedModules', () => {
-      const globals = {
-        'ts-jest': { tsconfig: { isolatedModules: false }, isolatedModules: false, diagnostics: false },
-        unrelated: { option: true },
-      }
-      const configSet = createConfigSet({
-        jestConfig: { globals },
-        tsJestConfig: { tsconfig: { isolatedModules: false }, isolatedModules: true },
-      })
-
-      expect(configSet.isolatedModules).toBe(true)
-      // @ts-expect-error testing preserved Jest globals
-      expect(configSet._jestCfg.globals).toEqual(globals)
-      // @ts-expect-error testing that ts-jest globals no longer configure diagnostics
-      expect(configSet._diagnostics.throws).toBe(true)
-    })
-  })
-
   describe('diagnostics', () => {
     it.each([
       { diagnostics: true },
@@ -1139,54 +1153,4 @@ describe('config-set', () => {
       expect(createConfigSet({ tsJestConfig: { diagnostics: { ignoreCodes } } })).toBeDefined()
     })
   }) // diagnostics
-
-  describe('isolatedModules', () => {
-    const spyFindTsConfigFile = jest.spyOn(ts, 'findConfigFile')
-
-    it('should show warning log when isolatedModules: true is used in transformer options when a tsconfig file path for tests exists', () => {
-      spyFindTsConfigFile.mockReturnValueOnce('foo/tsconfig.json')
-      const logger = testing.createLoggerMock()
-      createConfigSet({
-        logger,
-        jestConfig: {
-          rootDir: 'src',
-          cwd: 'src',
-        } as any, // eslint-disable-line @typescript-eslint/no-explicit-any
-        tsJestConfig: {
-          isolatedModules: true,
-        },
-        resolve: null,
-      })
-
-      expect(logger.target.filteredLines(LogLevels.warn)).toEqual(
-        expect.arrayContaining([
-          expect.stringContaining(
-            interpolate(Deprecations.IsolatedModulesWithTsconfigPath, {
-              tsconfigFilePath: 'foo/tsconfig.json',
-            }),
-          ),
-        ]),
-      )
-    })
-
-    it('should show warning log when isolatedModules: true is used in transformer options when a tsconfig file path does not exist', () => {
-      spyFindTsConfigFile.mockReturnValueOnce(undefined)
-      const logger = testing.createLoggerMock()
-      createConfigSet({
-        logger,
-        jestConfig: {
-          rootDir: 'src',
-          cwd: 'src',
-        } as any, // eslint-disable-line @typescript-eslint/no-explicit-any
-        tsJestConfig: {
-          isolatedModules: true,
-        },
-        resolve: null,
-      })
-
-      expect(logger.target.filteredLines(LogLevels.warn)).toEqual(
-        expect.arrayContaining([expect.stringContaining(Deprecations.IsolatedModulesWithoutTsconfigPath)]),
-      )
-    })
-  })
 })
