@@ -160,7 +160,7 @@ An object contains Jest's `transform` property:
 
 ```ts
 interface TsJestTransformerOptions {
-  tsconfig?: boolean | string | RawCompilerOptions
+  tsconfig?: boolean | string | TsConfigCompilerOptionsJson
   isolatedModules?: boolean
   astTransformers?: ConfigCustomTransformer
   diagnostics?:
@@ -337,7 +337,7 @@ An object contains Jest's `transform` property:
 
 ```ts
 interface TsJestTransformerOptions {
-  tsconfig?: boolean | string | RawCompilerOptions
+  tsconfig?: boolean | string | TsConfigCompilerOptionsJson
   isolatedModules?: boolean
   astTransformers?: ConfigCustomTransformer
   diagnostics?:
@@ -453,7 +453,7 @@ An object contains Jest's `transform` property:
 
 ```ts
 interface TsJestTransformerOptions {
-  tsconfig?: boolean | string | RawCompilerOptions
+  tsconfig?: boolean | string | TsConfigCompilerOptionsJson
   isolatedModules?: boolean
   astTransformers?: ConfigCustomTransformer
   diagnostics?:
@@ -572,7 +572,7 @@ An object contains Jest's `transform` property:
 
 ```ts
 interface TsJestTransformerOptions {
-  tsconfig?: boolean | string | RawCompilerOptions
+  tsconfig?: boolean | string | TsConfigCompilerOptionsJson
   isolatedModules?: boolean
   astTransformers?: ConfigCustomTransformer
   diagnostics?:
@@ -692,7 +692,7 @@ An object contains Jest's `transform` property:
 
 ```ts
 interface TsJestTransformerOptions {
-  tsconfig?: boolean | string | RawCompilerOptions
+  tsconfig?: boolean | string | TsConfigCompilerOptionsJson
   isolatedModules?: boolean
   astTransformers?: ConfigCustomTransformer
   diagnostics?:
