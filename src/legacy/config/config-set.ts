@@ -75,7 +75,7 @@ const toDiagnosticCode = (code?: string | number): number | undefined =>
 const toDiagnosticCodeList = (items: Array<string | number>, into: number[] = []): number[] => {
   for (let item of items) {
     if (typeof item === 'string') {
-      const children = item.trim().split(/\s*,\s*/g)
+      const children = item.trim().split(',')
       if (children.length > 1) {
         toDiagnosticCodeList(children, into)
         continue
