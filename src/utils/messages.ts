@@ -42,12 +42,6 @@ export const enum Deprecations {
   ConfigOption = '"[jest-config].{{oldPath}}" is deprecated, use "[jest-config].{{newPath}}" instead.',
   ConfigOptionWithNote = '"[jest-config].{{oldPath}}" is deprecated, use "[jest-config].{{newPath}}" instead.\n    ↳ {{note}}',
   ConfigOptionUseBabelRcNote = 'See `babel-jest` related issue: https://github.com/facebook/jest/issues/3845',
-  // eslint-disable-next-line @typescript-eslint/prefer-literal-enum-member
-  GlobalsTsJestConfigOption = 'Define `ts-jest` config under `globals` is deprecated. Please do\n' +
-    'transform: {\n' +
-    "    <transform_regex>: ['ts-jest', { /* ts-jest config goes here in Jest */ }],\n" +
-    '},\n' +
-    'See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/presets#advanced',
   IsolatedModulesWithTsconfigPath = `
     The "ts-jest" config option "isolatedModules" is deprecated and will be removed in v30.0.0. Please use "isolatedModules: true" in {{tsconfigFilePath}} instead, see https://www.typescriptlang.org/tsconfig/#isolatedModules
   `,

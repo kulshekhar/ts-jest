@@ -102,7 +102,7 @@ describe('TsJestTransformer', () => {
       expect(typeCheckedConfigSet.isolatedModules).toBe(false)
     })
 
-    test('should inherit globals options while preserving tuple overrides and input config', () => {
+    test('should ignore globals options while preserving tuple options and input config', () => {
       // @ts-expect-error testing purpose
       TsJestTransformer._cachedConfigSets = []
       const globalsRegex = /\.txt$/
@@ -119,11 +119,15 @@ describe('TsJestTransformer', () => {
           },
         },
       }
-      const transformer = new TsJestTransformer({ stringifyContentPathRegex: /\.html$/i })
+      const transformer = new TsJestTransformer({
+        tsconfig: { isolatedModules: false },
+        stringifyContentPathRegex: /\.html$/i,
+      })
       // @ts-expect-error testing purpose
       const configSet = transformer._configsFor(transformOptions)
 
-      expect(configSet.parsedTsConfig.options).toMatchObject({ isolatedModules: true, allowJs: true })
+      expect(configSet.parsedTsConfig.options.isolatedModules).toBe(false)
+      expect(configSet.parsedTsConfig.options.allowJs).not.toBe(true)
       expect(configSet.shouldStringifyContent('template.HTML')).toBe(true)
       expect(configSet.shouldStringifyContent('template.txt')).toBe(false)
       expect(transformOptions.config.globals).toEqual({
@@ -133,7 +137,7 @@ describe('TsJestTransformer', () => {
           stringifyContentPathRegex: globalsRegex,
         },
       })
-      expect(logTarget.filteredLines(LogLevels.warn)).toHaveLength(1)
+      expect(logTarget.filteredLines(LogLevels.warn)).toHaveLength(0)
     })
 
     describe.each([
@@ -305,13 +309,8 @@ describe('TsJestTransformer', () => {
     test('should be different between isolatedModules true and isolatedModules false', () => {
       jest.spyOn(TsJestCompiler.prototype, 'getResolvedModules').mockReturnValueOnce([])
 
-      const cacheKey1 = tr.getCacheKey(input.fileContent, input.fileName, {
-        ...input.transformOptions,
-        config: {
-          ...input.transformOptions.config,
-          globals: { 'ts-jest': { isolatedModules: true } },
-        },
-      })
+      const isolatedTransformer = new TsJestTransformer({ isolatedModules: true })
+      const cacheKey1 = isolatedTransformer.getCacheKey(input.fileContent, input.fileName, input.transformOptions)
 
       jest.spyOn(TsJestCompiler.prototype, 'getResolvedModules').mockReturnValueOnce([])
       const tr1 = new TsJestTransformer()
@@ -416,20 +415,10 @@ describe('TsJestTransformer', () => {
     test('should process input as stringified content with content matching stringifyContentPathRegex option', () => {
       const filePath = 'foo.html'
       const fileContent = '<h1>Hello World</h1>'
-      const transformOptions = {
-        ...baseTransformOptions,
-        config: {
-          ...baseTransformOptions.config,
-          globals: {
-            'ts-jest': {
-              stringifyContentPathRegex: '\\.html$',
-            },
-          },
-        },
-      }
-      tr.getCacheKey(fileContent, filePath, transformOptions)
+      const transformer = new TsJestTransformer({ stringifyContentPathRegex: '\\.html$' })
+      transformer.getCacheKey(fileContent, filePath, baseTransformOptions)
 
-      const result = tr.process(fileContent, filePath, transformOptions)
+      const result = transformer.process(fileContent, filePath, baseTransformOptions)
 
       expect(result).toMatchInlineSnapshot(`
         {
@@ -473,22 +462,14 @@ describe('TsJestTransformer', () => {
       (filePath) => {
         const fileContent = 'const foo = 1'
         const output = 'var foo = 1'
-        const transformOptions = {
-          ...baseTransformOptions,
-          config: {
-            ...baseTransformOptions.config,
-            globals: {
-              'ts-jest': { tsconfig: { allowJs: true } },
-            },
-          },
-        }
-        tr.getCacheKey(fileContent, filePath, transformOptions)
+        const transformer = new TsJestTransformer({ tsconfig: { allowJs: true } })
+        transformer.getCacheKey(fileContent, filePath, baseTransformOptions)
         logTarget.clear()
         jest.spyOn(TsJestCompiler.prototype, 'getCompiledOutput').mockReturnValueOnce({
           code: output,
         })
 
-        const result = tr.process(fileContent, filePath, transformOptions)
+        const result = transformer.process(fileContent, filePath, baseTransformOptions)
 
         expect(result).toEqual({
           code: output,
@@ -499,19 +480,11 @@ describe('TsJestTransformer', () => {
     test('should process file with unknown extension and show warning message without babel-jest', () => {
       const fileContent = 'foo'
       const filePath = 'foo.bar'
-      const transformOptions = {
-        ...baseTransformOptions,
-        config: {
-          ...baseTransformOptions.config,
-          globals: {
-            'ts-jest': { tsconfig: { allowJs: true } },
-          },
-        },
-      }
-      tr.getCacheKey(fileContent, filePath, transformOptions)
+      const transformer = new TsJestTransformer({ tsconfig: { allowJs: true } })
+      transformer.getCacheKey(fileContent, filePath, baseTransformOptions)
       logTarget.clear()
 
-      const result = tr.process(fileContent, filePath, transformOptions)
+      const result = transformer.process(fileContent, filePath, baseTransformOptions)
 
       expect(result).toEqual({
         code: fileContent,
@@ -524,19 +497,11 @@ describe('TsJestTransformer', () => {
 
     test.each(['foo.bar', 'foo.js'])('should process file with babel-jest', (filePath) => {
       const fileContent = 'foo'
-      const transformOptions = {
-        ...baseTransformOptions,
-        config: {
-          ...baseTransformOptions.config,
-          globals: {
-            'ts-jest': { babelConfig: true },
-          },
-        },
-      }
-      tr.getCacheKey(fileContent, filePath, transformOptions)
+      const transformer = new TsJestTransformer({ babelConfig: true })
+      transformer.getCacheKey(fileContent, filePath, baseTransformOptions)
       logTarget.clear()
 
-      const result = tr.process('foo', filePath, transformOptions)
+      const result = transformer.process('foo', filePath, baseTransformOptions)
 
       expect(result.code.substring(0, result.code.indexOf(SOURCE_MAPPING_PREFIX))).toMatchSnapshot()
       if (filePath === 'foo.bar') {
@@ -628,20 +593,10 @@ describe('TsJestTransformer', () => {
     test('should call `process` method', async () => {
       const sourceText = 'const foo = 1'
       const sourcePath = 'foo.ts'
-      const tr = new TsJestTransformer()
+      const tr = new TsJestTransformer({ babelConfig: true })
       // @ts-expect-error `processWithTs` is private
       tr.processWithTs = jest.fn().mockReturnValueOnce('var foo = 1')
-      const transformOptions = {
-        ...baseTransformOptions,
-        config: {
-          ...baseTransformOptions.config,
-          globals: {
-            'ts-jest': {
-              babelConfig: true,
-            },
-          },
-        },
-      }
+      const transformOptions = baseTransformOptions
       // @ts-expect-error `_configsFor` is private
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       const babelJest = tr._configsFor(transformOptions).babelJestTransformer!

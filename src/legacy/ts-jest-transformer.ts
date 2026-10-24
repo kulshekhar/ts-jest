@@ -15,7 +15,7 @@ import type {
 } from '../types'
 import { stringify, JsonableValue, rootLogger } from '../utils'
 import { importer } from '../utils/importer'
-import { Deprecations, Errors, interpolate } from '../utils/messages'
+import { Errors, interpolate } from '../utils/messages'
 import { sha1 } from '../utils/sha1'
 
 import { TsJestCompiler } from './compiler'
@@ -119,25 +119,8 @@ export class TsJestTransformer implements SyncTransformer<TsJestTransformerOptio
         // create the new record in the index
         this._logger.info('no matching config-set found, creating a new one')
 
-        if (config.globals?.['ts-jest']) {
-          this._logger.warn(Deprecations.GlobalsTsJestConfigOption)
-        }
-        const jestGlobalsConfig = config.globals ?? {}
-        const tsJestGlobalsConfig = jestGlobalsConfig['ts-jest'] ?? {}
-        const migratedConfig = this.transformerOptions
-          ? {
-              ...config,
-              globals: {
-                ...jestGlobalsConfig,
-                'ts-jest': {
-                  ...tsJestGlobalsConfig,
-                  ...this.transformerOptions,
-                },
-              },
-            }
-          : config
-        configSet = this._createConfigSet(migratedConfig)
-        const jest = { ...migratedConfig }
+        configSet = this._createConfigSet(config, this.transformerOptions)
+        const jest = { ...config }
         // we need to remove some stuff from jest config
         // this which does not depend on config
         jest.cacheDirectory = undefined as any // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -160,8 +143,11 @@ export class TsJestTransformer implements SyncTransformer<TsJestTransformerOptio
     return configSet
   }
 
-  protected _createConfigSet(config: TsJestTransformOptions['config'] | undefined): ConfigSet {
-    return new ConfigSet(config)
+  protected _createConfigSet(
+    config: TsJestTransformOptions['config'] | undefined,
+    transformerOptions?: TsJestTransformerOptions,
+  ): ConfigSet {
+    return new ConfigSet(config, undefined, transformerOptions)
   }
 
   protected _createCompiler(configSet: ConfigSet, cacheFS: Map<string, string>): void {
