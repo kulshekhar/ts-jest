@@ -28,23 +28,6 @@ const migrateGlobalConfigToTransformConfig = (
         }
       }
 
-      if (
-        Array.isArray(transformOptions) &&
-        typeof transformOptions[0] === 'string' &&
-        transformOptions[0].includes('ts-jest')
-      ) {
-        return {
-          ...previousValue,
-          [key]: [
-            transformOptions[0],
-            {
-              ...globalsTsJestConfig,
-              ...(typeof transformOptions[1] === 'object' ? transformOptions[1] : {}),
-            },
-          ],
-        }
-      }
-
       return {
         ...previousValue,
         [key]: transformOptions,
