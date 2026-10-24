@@ -801,6 +801,40 @@ describe('TsCompiler', () => {
         )
       })
 
+      test.each(['Node16', 'NodeNext'] as const)(
+        'preserves TS5107 target deprecation for %s with implicit module resolution',
+        (module) => {
+          const folder = mkdtempSync(join(tmpdir(), 'ts-jest-modern-node-diagnostics-'))
+          const tsconfig = join(folder, 'tsconfig.json')
+          writeFileSync(tsconfig, JSON.stringify({ compilerOptions: { isolatedModules: true, module, target: 'ES5' } }))
+          try {
+            const compiler = makeCompiler({ tsJestConfig: { tsconfig } })
+            const diagnostic: ts.Diagnostic = {
+              category: ts.DiagnosticCategory.Error,
+              code: 5107,
+              messageText: "Option 'target=ES5' is deprecated.",
+              file: undefined,
+              start: undefined,
+              length: undefined,
+            }
+            // @ts-expect-error testing purpose: simulate the TypeScript 6 compatibility package
+            compiler._ts = { ...ts, version: '6.0.0' }
+            mockTsTranspileModule.mockReturnValueOnce({ outputText: 'var bar = 1', diagnostics: [diagnostic] })
+            compiler.configSet.raiseDiagnostics = jest.fn()
+
+            compiler.getCompiledOutput(fileContent, fileName, {
+              depGraphs: new Map(),
+              supportsStaticESM: false,
+              watchMode: false,
+            })
+
+            expect(compiler.configSet.raiseDiagnostics).toHaveBeenCalledWith([diagnostic], fileName, expect.anything())
+          } finally {
+            rmSync(folder, { recursive: true, force: true })
+          }
+        },
+      )
+
       test.each([undefined, []])('accepts TypeScript 6 output without deprecation diagnostics: %p', (diagnostics) => {
         const compiler = makeCompiler({
           tsJestConfig: { tsconfig: join(mockFolder, 'tsconfig-no-module-resolution.json') },
@@ -895,7 +929,7 @@ describe('TsCompiler', () => {
           })
 
           expect(mockTsTranspileModule).toHaveBeenCalled()
-          expect(mockTsTranspileModule.mock.calls[0][2]).toBe(compiler._ts)
+          expect(mockTsTranspileModule.mock.calls[0][2]).toBe(compiler.configSet.compilerModule)
         },
       )
     })

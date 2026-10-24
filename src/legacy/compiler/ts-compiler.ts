@@ -494,6 +494,7 @@ export class TsCompiler implements TsCompilerInstance {
    * `moduleResolution: Node10` is passed to `transpileModule`. The diagnostic
    * is an implementation detail when ts-jest injected that value, but remains
    * actionable when the user selected Node10 themselves.
+   * Modern Node modules use initial options without the injected default.
    */
   private _filterDiagnosticsFromTsJestDefaults(diagnostics: Diagnostic[] | undefined): Diagnostic[] | undefined {
     // `Node10` was exposed as `NodeJs` (with the same value) by older supported TypeScript releases.
@@ -501,6 +502,7 @@ export class TsCompiler implements TsCompilerInstance {
     const tsMajor = Number.parseInt(this._ts.version.split('.')[0], 10)
     const hasInjectedNode10 =
       tsMajor >= 6 &&
+      !isModernNodeModuleKind(this._initialCompilerOptions.module) &&
       this._initialCompilerOptions.moduleResolution === undefined &&
       this._compilerOptions.moduleResolution === node10
 
