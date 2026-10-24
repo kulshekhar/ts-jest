@@ -25,6 +25,12 @@ const baseTransformOptions: TsJestTransformOptions = {
   cacheFS: new Map(),
 } as any // eslint-disable-line @typescript-eslint/no-explicit-any
 
+const stringifyContentPathRegexCases = [
+  { name: 'sources', first: /\.html$/, second: /\.txt$/, filePath: 'template.txt' },
+  { name: 'flags', first: /\.html$/, second: /\.html$/i, filePath: 'template.HTML' },
+  { name: 'string and RegExp values', first: '/\\.html$/', second: /\.html$/, filePath: 'template.html' },
+]
+
 beforeEach(() => {
   logTarget.clear()
 })
@@ -44,6 +50,7 @@ describe('TsJestTransformer', () => {
       expect(Object.keys(TsJestTransformer._cachedConfigSets[0])).toMatchInlineSnapshot(`
         [
           "jestConfig",
+          "transformerOptions",
           "configSet",
           "transformerCfgStr",
           "compiler",
@@ -75,6 +82,109 @@ describe('TsJestTransformer', () => {
       const cs2 = new TsJestTransformer()._configsFor(obj2)
 
       expect(cs2).toBe(cs1)
+    })
+    test('should separate config sets for different transformer tuple options', () => {
+      // @ts-expect-error testing purpose
+      TsJestTransformer._cachedConfigSets = []
+      const isolated = new TsJestTransformer({ tsconfig: { isolatedModules: true } })
+      const typeChecked = new TsJestTransformer({ tsconfig: { isolatedModules: false } })
+      // @ts-expect-error testing purpose
+      const isolatedConfigSet = isolated._configsFor(baseTransformOptions)
+      // @ts-expect-error testing purpose
+      const typeCheckedConfigSet = typeChecked._configsFor({
+        ...baseTransformOptions,
+        config: { ...baseTransformOptions.config },
+      })
+
+      expect(typeCheckedConfigSet).not.toBe(isolatedConfigSet)
+      expect(isolatedConfigSet.isolatedModules).toBe(true)
+      expect(typeCheckedConfigSet.isolatedModules).toBe(false)
+    })
+
+    test('should inherit globals options while preserving tuple overrides and input config', () => {
+      // @ts-expect-error testing purpose
+      TsJestTransformer._cachedConfigSets = []
+      const globalsRegex = /\.txt$/
+      const transformOptions = {
+        ...baseTransformOptions,
+        config: {
+          ...baseTransformOptions.config,
+          globals: {
+            unrelated: 'retained',
+            'ts-jest': {
+              tsconfig: { isolatedModules: true, allowJs: true },
+              stringifyContentPathRegex: globalsRegex,
+            },
+          },
+        },
+      }
+      const transformer = new TsJestTransformer({ stringifyContentPathRegex: /\.html$/i })
+      // @ts-expect-error testing purpose
+      const configSet = transformer._configsFor(transformOptions)
+
+      expect(configSet.parsedTsConfig.options).toMatchObject({ isolatedModules: true, allowJs: true })
+      expect(configSet.shouldStringifyContent('template.HTML')).toBe(true)
+      expect(configSet.shouldStringifyContent('template.txt')).toBe(false)
+      expect(transformOptions.config.globals).toEqual({
+        unrelated: 'retained',
+        'ts-jest': {
+          tsconfig: { isolatedModules: true, allowJs: true },
+          stringifyContentPathRegex: globalsRegex,
+        },
+      })
+      expect(logTarget.filteredLines(LogLevels.warn)).toHaveLength(1)
+    })
+
+    describe.each([
+      { name: 'same', transformOptions: baseTransformOptions },
+      {
+        name: 'equivalent',
+        transformOptions: { ...baseTransformOptions, config: { ...baseTransformOptions.config } },
+      },
+    ])('RegExp tuple options with $name Jest config objects', ({ transformOptions }) => {
+      beforeEach(() => {
+        // @ts-expect-error testing purpose
+        TsJestTransformer._cachedConfigSets = []
+      })
+
+      test.each(stringifyContentPathRegexCases)(
+        'should separate config sets for different $name',
+        ({ first, second, filePath }) => {
+          const firstTransformer = new TsJestTransformer({
+            tsconfig: { isolatedModules: true },
+            stringifyContentPathRegex: first,
+          })
+          const secondTransformer = new TsJestTransformer({
+            tsconfig: { isolatedModules: true },
+            stringifyContentPathRegex: second,
+          })
+          // @ts-expect-error testing purpose
+          const firstConfigSet = firstTransformer._configsFor(baseTransformOptions)
+          // @ts-expect-error testing purpose
+          const secondConfigSet = secondTransformer._configsFor(transformOptions)
+
+          expect(secondConfigSet).not.toBe(firstConfigSet)
+          expect(firstConfigSet.shouldStringifyContent(filePath)).toBe(false)
+          expect(secondTransformer.process('content', filePath, transformOptions).code).toBe('module.exports="content"')
+        },
+      )
+
+      test('should reuse config sets for equivalent RegExp values', () => {
+        const firstTransformer = new TsJestTransformer({
+          tsconfig: { isolatedModules: true },
+          stringifyContentPathRegex: /\.html$/i,
+        })
+        const secondTransformer = new TsJestTransformer({
+          tsconfig: { isolatedModules: true },
+          stringifyContentPathRegex: /\.html$/i,
+        })
+        // @ts-expect-error testing purpose
+        const firstConfigSet = firstTransformer._configsFor(baseTransformOptions)
+        // @ts-expect-error testing purpose
+        const secondConfigSet = secondTransformer._configsFor(transformOptions)
+
+        expect(secondConfigSet).toBe(firstConfigSet)
+      })
     })
   })
 
@@ -151,6 +261,44 @@ describe('TsJestTransformer', () => {
         input.fileName,
         new Map(),
       )
+    })
+
+    test.each(stringifyContentPathRegexCases)(
+      'should be different for RegExp tuple options with different $name',
+      ({ first, second }) => {
+        const firstTransformer = new TsJestTransformer({
+          tsconfig: { isolatedModules: true },
+          stringifyContentPathRegex: first,
+        })
+        const firstKey = firstTransformer.getCacheKey(input.fileContent, input.fileName, input.transformOptions)
+        // Rebuild the config set to verify the output fingerprint independently of config-set reuse.
+        // @ts-expect-error testing purpose
+        TsJestTransformer._cachedConfigSets = []
+        const secondTransformer = new TsJestTransformer({
+          tsconfig: { isolatedModules: true },
+          stringifyContentPathRegex: second,
+        })
+        const secondKey = secondTransformer.getCacheKey(input.fileContent, input.fileName, input.transformOptions)
+
+        expect(secondKey).not.toBe(firstKey)
+      },
+    )
+
+    test('should be the same for equivalent RegExp tuple options', () => {
+      const firstTransformer = new TsJestTransformer({
+        tsconfig: { isolatedModules: true },
+        stringifyContentPathRegex: /\.html$/i,
+      })
+      const firstKey = firstTransformer.getCacheKey(input.fileContent, input.fileName, input.transformOptions)
+      // @ts-expect-error testing purpose
+      TsJestTransformer._cachedConfigSets = []
+      const secondTransformer = new TsJestTransformer({
+        tsconfig: { isolatedModules: true },
+        stringifyContentPathRegex: /\.html$/i,
+      })
+      const secondKey = secondTransformer.getCacheKey(input.fileContent, input.fileName, input.transformOptions)
+
+      expect(secondKey).toBe(firstKey)
     })
 
     test('should be different between isolatedModules true and isolatedModules false', () => {
