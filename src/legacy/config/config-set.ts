@@ -33,7 +33,7 @@ import type {
 import { TsCompilerInstance } from '../../types'
 import { rootLogger, stringify, TsJestDiagnosticCodes } from '../../utils'
 import { importer } from '../../utils/importer'
-import { Deprecations, Errors, ImportReasons, interpolate } from '../../utils/messages'
+import { Errors, ImportReasons, interpolate } from '../../utils/messages'
 import { normalizeSlashes } from '../../utils/normalize-slashes'
 import { sha1 } from '../../utils/sha1'
 import { TSError } from '../../utils/ts-error'
@@ -217,19 +217,6 @@ export class ConfigSet {
       this._matchablePatterns.push(...DEFAULT_JEST_TEST_MATCH)
     }
     this._matchTestFilePath = globsToMatcher(this._matchablePatterns.filter((pattern) => typeof pattern === 'string'))
-    // isolatedModules
-    if (options.isolatedModules) {
-      this.parsedTsConfig.options.isolatedModules = true
-      if (this.tsconfigFilePath) {
-        this.logger.warn(
-          interpolate(Deprecations.IsolatedModulesWithTsconfigPath, {
-            tsconfigFilePath: this.tsconfigFilePath,
-          }),
-        )
-      } else {
-        this.logger.warn(Deprecations.IsolatedModulesWithoutTsconfigPath)
-      }
-    }
     this.isolatedModules = this.parsedTsConfig.options.isolatedModules ?? false
     this._resolveTsCacheDir()
   }

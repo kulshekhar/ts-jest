@@ -62,8 +62,43 @@ const migratePresetToTransformConfig = (
   return transformConfig
 }
 
-const migrateTsJestOptions = (options: TsJestTransformerOptions, logger: ReturnType<typeof createLogger>) =>
-  backportJestConfig(logger, { globals: { 'ts-jest': { ...options } } }).globals['ts-jest'] as TsJestTransformerOptions
+const migrateTsJestOptions = (
+  options: TsJestTransformerOptions,
+  globalsTsJestConfig: TsJestTransformerOptions | undefined,
+  logger: ReturnType<typeof createLogger>,
+) => {
+  const normalizedOptions = {
+    ...globalsTsJestConfig,
+    ...(backportJestConfig(logger, { globals: { 'ts-jest': { ...options } } }).globals[
+      'ts-jest'
+    ] as TsJestTransformerOptions),
+  }
+  const { isolatedModules, tsconfig, ...remainingOptions } = normalizedOptions as TsJestTransformerOptions & {
+    isolatedModules?: boolean
+  }
+
+  if (isolatedModules !== true) {
+    return tsconfig === undefined ? remainingOptions : { ...remainingOptions, tsconfig }
+  }
+
+  if (typeof tsconfig === 'string' || tsconfig === false) {
+    const guidance =
+      typeof tsconfig === 'string'
+        ? 'Manually set `compilerOptions.isolatedModules: true` in the referenced TypeScript config.'
+        : 'Manually set `tsconfig.isolatedModules` inline by replacing `tsconfig: false` with `tsconfig: { isolatedModules: true }`.'
+    throw new Error(
+      `Cannot migrate isolatedModules: true with tsconfig set to a path or false. ${guidance} Remove the deprecated Jest option, then run config:migrate again.`,
+    )
+  }
+
+  return {
+    ...remainingOptions,
+    tsconfig: {
+      ...(typeof tsconfig === 'object' && tsconfig !== null ? tsconfig : {}),
+      isolatedModules: true,
+    },
+  }
+}
 
 const migrateTsJestTransformOptions = (
   transformConfig: TransformConfig,
@@ -79,10 +114,7 @@ const migrateTsJestTransformOptions = (
 
       return [
         pattern,
-        [
-          transformName,
-          { ...globalsTsJestConfig, ...migrateTsJestOptions(options as TsJestTransformerOptions, logger) },
-        ],
+        [transformName, migrateTsJestOptions(options as TsJestTransformerOptions, globalsTsJestConfig, logger)],
       ]
     }),
   ) as TransformConfig

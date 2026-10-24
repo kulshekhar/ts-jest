@@ -82,8 +82,8 @@ describe('TsJestTransformer', () => {
     test('should separate config sets for same Jest config and different transformer tuple options', () => {
       // @ts-expect-error testing purpose
       TsJestTransformer._cachedConfigSets = []
-      const isolated = new TsJestTransformer({ isolatedModules: true })
-      const typeChecked = new TsJestTransformer({ isolatedModules: false })
+      const isolated = new TsJestTransformer({ tsconfig: { isolatedModules: true } })
+      const typeChecked = new TsJestTransformer({ tsconfig: { isolatedModules: false } })
       const configA = { ...obj1 }
       const configB = { ...obj1, config: { ...obj1.config } }
       // @ts-expect-error testing purpose
@@ -175,7 +175,7 @@ describe('TsJestTransformer', () => {
     test('should be different between isolatedModules true and isolatedModules false', () => {
       jest.spyOn(TsJestCompiler.prototype, 'getResolvedModules').mockReturnValueOnce([])
 
-      const isolatedTransformer = new TsJestTransformer({ isolatedModules: true })
+      const isolatedTransformer = new TsJestTransformer({ tsconfig: { isolatedModules: true } })
       const cacheKey1 = isolatedTransformer.getCacheKey(input.fileContent, input.fileName, input.transformOptions)
 
       jest.spyOn(TsJestCompiler.prototype, 'getResolvedModules').mockReturnValueOnce([])

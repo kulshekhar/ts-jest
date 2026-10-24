@@ -94,8 +94,7 @@ describe('create-jest-preset', () => {
       it('should return preset config', () => {
         expect(
           createJsWithTsPreset({
-            tsconfig: 'tsconfig.spec.json',
-            isolatedModules: true,
+            tsconfig: { isolatedModules: true },
           }),
         ).toMatchSnapshot()
       })
@@ -105,8 +104,7 @@ describe('create-jest-preset', () => {
       it('should return preset config', () => {
         expect(
           createJsWithTsLegacyPreset({
-            tsconfig: 'tsconfig.spec.json',
-            isolatedModules: true,
+            tsconfig: { isolatedModules: true },
           }),
         ).toMatchSnapshot()
       })
@@ -164,8 +162,7 @@ describe('create-jest-preset', () => {
       it('should return preset config', () => {
         expect(
           createJsWithTsEsmPreset({
-            tsconfig: 'tsconfig.spec.json',
-            isolatedModules: true,
+            tsconfig: { isolatedModules: true },
           }),
         ).toMatchSnapshot()
       })
@@ -175,8 +172,7 @@ describe('create-jest-preset', () => {
       it('should return preset config', () => {
         expect(
           createJsWithTsEsmLegacyPreset({
-            tsconfig: 'tsconfig.spec.json',
-            isolatedModules: true,
+            tsconfig: { isolatedModules: true },
           }),
         ).toMatchSnapshot()
       })
