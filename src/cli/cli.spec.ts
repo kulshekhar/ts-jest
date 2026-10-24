@@ -221,10 +221,7 @@ describe('config', () => {
 
     it('should ignore removed --babel flag', async () => {
       fs.existsSync.mockImplementation((f) => f === FAKE_PKG)
-      fs.readFileSync.mockImplementation((f) => {
-        if (f === FAKE_PKG) return JSON.stringify({ name: 'mock', version: '0.0.0-mock.0' })
-        throw new Error('ENOENT')
-      })
+      fs.readFileSync.mockReturnValueOnce(JSON.stringify({ name: 'mock', version: '0.0.0-mock.0' }))
 
       await runCli('config:init', '--babel')
 
@@ -253,6 +250,7 @@ describe('config', () => {
     }
     const noOption = ['config:migrate']
     const fullOptions = [...noOption, '--no-jest-preset', '--js', 'ts']
+    const getMigratedPackageConfig = (stdout: string) => JSON.parse(stdout.slice('"jest": '.length))
     beforeEach(() => {
       mockedProcess.cwd.mockImplementation(() => __dirname)
     })
@@ -358,6 +356,162 @@ describe('config', () => {
         ",
         }
       `)
+      expect(fs.writeFileSync).not.toHaveBeenCalled()
+    })
+
+    it('should convert aliases in an existing transform tuple without overwriting its options', async () => {
+      fs.existsSync.mockImplementation(() => true)
+      jest.mock(
+        pkgPaths.next,
+        () => ({ jest: { transform: { '^.+\\.tsx?$': ['ts-jest', { tsConfig: 'custom.json', typeCheck: false }] } } }),
+        { virtual: true },
+      )
+
+      const res = await runCli(...noOption, pkgPaths.current)
+      const migratedConfig = getMigratedPackageConfig(res.stdout)
+
+      expect(res.exitCode).toBe(0)
+      expect(migratedConfig.transform['^.+\\.tsx?$'][1]).toEqual({ tsconfig: 'custom.json', isolatedModules: true })
+    })
+
+    it.each([
+      {
+        name: 'partial tuple',
+        transform: ['ts-jest', { diagnostics: false }],
+        expectedOptions: { tsconfig: 'custom.json', diagnostics: false, babelConfig: true },
+      },
+      {
+        name: 'tuple with explicit overrides',
+        transform: ['ts-jest/legacy', { tsconfig: false, diagnostics: false }],
+        expectedOptions: { tsconfig: false, diagnostics: false, babelConfig: true },
+      },
+      {
+        name: 'tuple with deprecated overrides',
+        transform: ['ts-jest', { tsConfig: 'tuple.json', enableTsDiagnostics: false }],
+        expectedOptions: { tsconfig: 'tuple.json', diagnostics: false, babelConfig: true },
+      },
+      {
+        name: 'option-less tuple',
+        transform: ['ts-jest'],
+        expectedOptions: { tsconfig: 'custom.json', diagnostics: { warnOnly: true }, babelConfig: true },
+      },
+    ])('should inherit migrated globals beneath options in $name', async ({ transform, expectedOptions }) => {
+      fs.existsSync.mockImplementation(() => true)
+      jest.mock(
+        pkgPaths.next,
+        () => ({
+          jest: {
+            displayName: 'globals-migration',
+            globals: {
+              'ts-jest': { tsConfig: 'custom.json', diagnostics: { warnOnly: true }, babelConfig: true },
+              keep: true,
+            },
+            transform: {
+              [JS_TRANSFORM_PATTERN]: ['babel-jest', { configFile: 'babel.config.js' }],
+              [TS_TRANSFORM_PATTERN]: transform,
+              '^.+\\.css$': 'jest-css-transform',
+            },
+          },
+        }),
+        { virtual: true },
+      )
+
+      const res = await runCli(...noOption, pkgPaths.current)
+
+      expect(res.exitCode).toBe(0)
+      expect(res.stderr).toContain('Migrated Jest configuration:')
+      const migratedConfig = getMigratedPackageConfig(res.stdout)
+
+      expect(migratedConfig).toEqual({
+        displayName: 'globals-migration',
+        globals: { keep: true },
+        transform: {
+          [JS_TRANSFORM_PATTERN]: ['babel-jest', { configFile: 'babel.config.js' }],
+          [TS_TRANSFORM_PATTERN]: [transform[0], expectedOptions],
+          '^.+\\.css$': 'jest-css-transform',
+        },
+      })
+      expect(Object.keys(migratedConfig.transform)).toEqual([JS_TRANSFORM_PATTERN, TS_TRANSFORM_PATTERN, '^.+\\.css$'])
+      expect(fs.writeFileSync).not.toHaveBeenCalled()
+    })
+
+    it.each([
+      { name: '--js babel', cliOptions: ['--js', 'babel'], preset: undefined },
+      { name: 'configured preset', cliOptions: [], preset: 'ts-jest/presets/js-with-babel' },
+    ])(
+      'should preserve explicit TypeScript transform options when adding Babel with $name',
+      async ({ cliOptions, preset }) => {
+        fs.existsSync.mockImplementation(() => true)
+        jest.mock(
+          pkgPaths.next,
+          () => ({
+            jest: {
+              preset,
+              displayName: 'babel-migration',
+              transform: {
+                [TS_TRANSFORM_PATTERN]: [
+                  'ts-jest',
+                  { tsConfig: 'custom.json', typeCheck: false, diagnostics: { warnOnly: true } },
+                ],
+                '^.+\\.css$': 'jest-css-transform',
+              },
+            },
+          }),
+          { virtual: true },
+        )
+
+        const res = await runCli(...noOption, ...cliOptions, pkgPaths.current)
+        const migratedConfig = getMigratedPackageConfig(res.stdout)
+
+        expect(res.exitCode).toBe(0)
+        expect(migratedConfig).toEqual({
+          displayName: 'babel-migration',
+          transform: {
+            [TS_TRANSFORM_PATTERN]: [
+              'ts-jest',
+              { tsconfig: 'custom.json', isolatedModules: true, diagnostics: { warnOnly: true } },
+            ],
+            '^.+\\.css$': 'jest-css-transform',
+            [JS_TRANSFORM_PATTERN]: 'babel-jest',
+          },
+        })
+        expect(Object.keys(migratedConfig.transform)).toEqual([
+          TS_TRANSFORM_PATTERN,
+          '^.+\\.css$',
+          JS_TRANSFORM_PATTERN,
+        ])
+        expect(fs.writeFileSync).not.toHaveBeenCalled()
+      },
+    )
+
+    it('should migrate an option-less ts-jest tuple while preserving other transform options', async () => {
+      fs.existsSync.mockImplementation(() => true)
+      jest.mock(
+        pkgPaths.next,
+        () => ({
+          jest: {
+            testEnvironment: 'node',
+            transform: {
+              [JS_TRANSFORM_PATTERN]: ['babel-jest', { configFile: 'babel.config.js' }],
+              [TS_TRANSFORM_PATTERN]: ['ts-jest'],
+            },
+          },
+        }),
+        { virtual: true },
+      )
+
+      const res = await runCli(...noOption, pkgPaths.current)
+      const migratedConfig = getMigratedPackageConfig(res.stdout)
+
+      expect(res.exitCode).toBe(0)
+      expect(migratedConfig).toEqual({
+        testEnvironment: 'node',
+        transform: {
+          [JS_TRANSFORM_PATTERN]: ['babel-jest', { configFile: 'babel.config.js' }],
+          [TS_TRANSFORM_PATTERN]: ['ts-jest', {}],
+        },
+      })
+      expect(Object.keys(migratedConfig.transform)).toEqual([JS_TRANSFORM_PATTERN, TS_TRANSFORM_PATTERN])
       expect(fs.writeFileSync).not.toHaveBeenCalled()
     })
 

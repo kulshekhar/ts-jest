@@ -1,15 +1,13 @@
 import { defineConfig } from 'jest'
 
-import { TS_TRANSFORM_PATTERN } from './src'
-
 import './scripts/create-bundle.js'
 
-export default defineConfig({
+export = defineConfig({
   collectCoverageFrom: ['src/**/*.ts'],
   setupFilesAfterEnv: ['<rootDir>/src/__helpers__/setup-jest.ts'],
   testMatch: ['<rootDir>/src/**/*.spec.ts'],
   transform: {
-    [TS_TRANSFORM_PATTERN]: [
+    '^.+\\.tsx?$': [
       '<rootDir>/dist/index.js',
       {
         tsconfig: {
