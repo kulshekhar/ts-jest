@@ -39,6 +39,9 @@ import type { ConfigSet } from '../config/config-set'
 
 import { updateOutput } from './compiler-utils'
 
+// Historical numeric value of ModuleResolutionKind.Node10/NodeJs; avoids deprecated enum references.
+const NODE10_MODULE_RESOLUTION = 2
+
 const assertCompilerOptionsWithJestTransformMode = (
   compilerOptions: ts.CompilerOptions,
   isEsmMode: boolean,
@@ -262,22 +265,20 @@ export class TsCompiler implements TsCompilerInstance {
     forcedModule: ts.ModuleKind,
     userResolution: ts.ModuleResolutionKind | undefined,
   ): ts.ModuleResolutionKind {
-    const node10Default = this._ts.ModuleResolutionKind.Node10 ?? this._ts.ModuleResolutionKind.NodeJs
-
     if (userResolution === undefined) {
-      return node10Default
+      return NODE10_MODULE_RESOLUTION
     }
 
     const { Node16, NodeNext, Bundler } = this._ts.ModuleResolutionKind
-    const bundlerResolution = Bundler ?? node10Default
+    const bundlerResolution = Bundler ?? NODE10_MODULE_RESOLUTION
     const canUseBundler = this.isBundlerCompatibleModuleKind(forcedModule)
 
     if (userResolution === Node16 || userResolution === NodeNext) {
-      return canUseBundler ? bundlerResolution : node10Default
+      return canUseBundler ? bundlerResolution : NODE10_MODULE_RESOLUTION
     }
 
     if (userResolution === Bundler && !canUseBundler) {
-      return node10Default
+      return NODE10_MODULE_RESOLUTION
     }
 
     return userResolution
@@ -497,14 +498,12 @@ export class TsCompiler implements TsCompilerInstance {
    * Modern Node modules use initial options without the injected default.
    */
   private _filterDiagnosticsFromTsJestDefaults(diagnostics: Diagnostic[] | undefined): Diagnostic[] | undefined {
-    // `Node10` was exposed as `NodeJs` (with the same value) by older supported TypeScript releases.
-    const node10 = this._ts.ModuleResolutionKind.Node10 ?? 2
     const tsMajor = Number.parseInt(this._ts.version.split('.')[0], 10)
     const hasInjectedNode10 =
       tsMajor >= 6 &&
       !isModernNodeModuleKind(this._initialCompilerOptions.module) &&
       this._initialCompilerOptions.moduleResolution === undefined &&
-      this._compilerOptions.moduleResolution === node10
+      this._compilerOptions.moduleResolution === NODE10_MODULE_RESOLUTION
 
     if (!hasInjectedNode10 || !diagnostics?.some((diagnostic) => diagnostic.code === 5107)) {
       return diagnostics
@@ -668,9 +667,9 @@ export class TsCompiler implements TsCompilerInstance {
     // @ts-expect-error internal TypeScript API
     const moduleResolution = this._ts.getEmitModuleResolutionKind(this._initialCompilerOptions)
 
-    const { Classic, Node10, NodeJs } = this._ts.ModuleResolutionKind
+    const { Classic } = this._ts.ModuleResolutionKind
 
-    if (moduleResolution === (Node10 ?? NodeJs) || moduleResolution === Classic) {
+    if (moduleResolution === NODE10_MODULE_RESOLUTION || moduleResolution === Classic) {
       return undefined
     }
 
