@@ -182,7 +182,11 @@ export class ConfigSet {
    */
   private tsconfigFilePath: string | undefined
 
-  constructor(jestConfig: TsJestTransformOptions['config'] | undefined, readonly parentLogger?: Logger) {
+  constructor(
+    jestConfig: TsJestTransformOptions['config'] | undefined,
+    readonly parentLogger?: Logger,
+    transformerOptions: TsJestTransformerOptions = Object.create(null),
+  ) {
     this.logger = this.parentLogger
       ? this.parentLogger.child({ [LogContexts.namespace]: 'config' })
       : rootLogger.child({ namespace: 'config' })
@@ -194,8 +198,7 @@ export class ConfigSet {
     this.logger.debug({ jestConfig: this._jestCfg }, 'normalized jest config')
     this.cwd = normalize(this._jestCfg.cwd ?? process.cwd())
     this.rootDir = normalize(this._jestCfg.rootDir ?? this.cwd)
-    const tsJestCfg = this._jestCfg.globals && this._jestCfg.globals['ts-jest']
-    const options: TsJestTransformerOptions = tsJestCfg ?? Object.create(null)
+    const options = transformerOptions
     // compiler module
     this.compilerModule = importer.typescript(ImportReasons.TsJest, options.compiler ?? 'typescript')
 
