@@ -66,8 +66,9 @@ exports[`create-jest-preset CJS presets createJsWithTsLegacyPreset should return
     "^.+\\.[tj]sx?$": [
       "ts-jest/legacy",
       {
-        "isolatedModules": true,
-        "tsconfig": "tsconfig.spec.json",
+        "tsconfig": {
+          "isolatedModules": true,
+        },
       },
     ],
   },
@@ -80,8 +81,9 @@ exports[`create-jest-preset CJS presets createJsWithTsPreset should return prese
     "^.+\\.[tj]sx?$": [
       "ts-jest",
       {
-        "isolatedModules": true,
-        "tsconfig": "tsconfig.spec.json",
+        "tsconfig": {
+          "isolatedModules": true,
+        },
       },
     ],
   },
@@ -186,8 +188,9 @@ exports[`create-jest-preset ESM presets createJsWithTsEsmLegacyPreset should ret
     "^.+\\.m?[tj]sx?$": [
       "ts-jest/legacy",
       {
-        "isolatedModules": true,
-        "tsconfig": "tsconfig.spec.json",
+        "tsconfig": {
+          "isolatedModules": true,
+        },
         "useESM": true,
       },
     ],
@@ -207,8 +210,9 @@ exports[`create-jest-preset ESM presets createJsWithTsEsmPreset should return pr
     "^.+\\.m?[tj]sx?$": [
       "ts-jest",
       {
-        "isolatedModules": true,
-        "tsconfig": "tsconfig.spec.json",
+        "tsconfig": {
+          "isolatedModules": true,
+        },
         "useESM": true,
       },
     ],
