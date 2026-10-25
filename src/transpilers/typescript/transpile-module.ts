@@ -25,15 +25,14 @@ interface Symbol {
     readonly [Symbol.toStringTag]: string;
 }`
 const barebonesLibName = 'lib.d.ts'
-let barebonesLibSourceFile: ts.SourceFile | undefined
 
 const carriageReturnLineFeed = '\r\n'
 const lineFeed = '\n'
-function getNewLineCharacter(options: ts.CompilerOptions): string {
+function getNewLineCharacter(options: ts.CompilerOptions, compiler: typeof ts): string {
   switch (options.newLine) {
-    case ts.NewLineKind.CarriageReturnLineFeed:
+    case compiler.NewLineKind.CarriageReturnLineFeed:
       return carriageReturnLineFeed
-    case ts.NewLineKind.LineFeed:
+    case compiler.NewLineKind.LineFeed:
     default:
       return lineFeed
   }
@@ -46,6 +45,7 @@ type ExtendedTranspileOptions = Omit<ts.TranspileOptions, 'transformers'> & {
 type ExtendedTsTranspileModuleFn = (
   fileContent: string,
   transpileOptions: ExtendedTranspileOptions,
+  compiler?: typeof ts,
 ) => ts.TranspileOutput
 
 export const isModernNodeModuleKind = (module: ts.ModuleKind | undefined): boolean => {
@@ -66,22 +66,20 @@ const shouldCheckProjectPkgJsonContent = (fileName: string, moduleKind: ts.Modul
  * - Remove generation of declaration files
  * - Allow using custom AST transformers with the internal created {@link Program}
  */
-const transpileWorker: ExtendedTsTranspileModuleFn = (input, transpileOptions) => {
-  if (!barebonesLibSourceFile) {
-    barebonesLibSourceFile = ts.createSourceFile(barebonesLibName, barebonesLibContent, {
-      languageVersion: ts.ScriptTarget.Latest,
-    })
-  }
+const transpileWorker: ExtendedTsTranspileModuleFn = (input, transpileOptions, compiler = ts) => {
+  const barebonesLibSourceFile = compiler.createSourceFile(barebonesLibName, barebonesLibContent, {
+    languageVersion: compiler.ScriptTarget.Latest,
+  })
 
   const diagnostics: ts.Diagnostic[] = []
 
   const options: ts.CompilerOptions = transpileOptions.compilerOptions
     ? // @ts-expect-error internal TypeScript API
-      ts.fixupCompilerOptions(transpileOptions.compilerOptions, diagnostics)
+      compiler.fixupCompilerOptions(transpileOptions.compilerOptions, diagnostics)
     : {}
 
   // mix in default options
-  const defaultOptions = ts.getDefaultCompilerOptions()
+  const defaultOptions = compiler.getDefaultCompilerOptions()
   for (const key in defaultOptions) {
     if (Object.hasOwn(defaultOptions, key) && options[key] === undefined) {
       options[key] = defaultOptions[key]
@@ -89,7 +87,7 @@ const transpileWorker: ExtendedTsTranspileModuleFn = (input, transpileOptions) =
   }
 
   // @ts-expect-error internal TypeScript API
-  for (const option of ts.transpileOptionValueCompilerOptions) {
+  for (const option of compiler.transpileOptionValueCompilerOptions) {
     // Do not set redundant config options if `verbatimModuleSyntax` was supplied.
     if (options.verbatimModuleSyntax && new Set(['isolatedModules']).has(option.name)) {
       continue
@@ -106,7 +104,7 @@ const transpileWorker: ExtendedTsTranspileModuleFn = (input, transpileOptions) =
   options.declaration = false
   options.declarationMap = false
 
-  const newLine = getNewLineCharacter(options)
+  const newLine = getNewLineCharacter(options, compiler)
   // if jsx is specified then treat file as .tsx
   const inputFileName =
     transpileOptions.fileName ?? (transpileOptions.compilerOptions?.jsx ? 'module.tsx' : 'module.ts')
@@ -114,12 +112,12 @@ const transpileWorker: ExtendedTsTranspileModuleFn = (input, transpileOptions) =
   const compilerHost: ts.CompilerHost = {
     getSourceFile: (fileName) => {
       // @ts-expect-error internal TypeScript API
-      if (fileName === ts.normalizePath(inputFileName)) {
+      if (fileName === compiler.normalizePath(inputFileName)) {
         return sourceFile
       }
 
       // @ts-expect-error internal TypeScript API
-      return fileName === ts.normalizePath(barebonesLibName) ? barebonesLibSourceFile : undefined
+      return fileName === compiler.normalizePath(barebonesLibName) ? barebonesLibSourceFile : undefined
     },
     writeFile: (name, text) => {
       if (path.extname(name) === '.map') {
@@ -135,14 +133,14 @@ const transpileWorker: ExtendedTsTranspileModuleFn = (input, transpileOptions) =
     getNewLine: () => newLine,
     fileExists: (fileName) => {
       if (shouldCheckProjectPkgJsonContent(fileName, options.module)) {
-        return ts.sys.fileExists(fileName)
+        return compiler.sys.fileExists(fileName)
       }
 
       return fileName === inputFileName
     },
     readFile: (fileName) => {
       if (shouldCheckProjectPkgJsonContent(fileName, options.module)) {
-        return ts.sys.readFile(fileName)
+        return compiler.sys.readFile(fileName)
       }
 
       return ''
@@ -151,17 +149,17 @@ const transpileWorker: ExtendedTsTranspileModuleFn = (input, transpileOptions) =
     getDirectories: () => [],
   }
 
-  const sourceFile = ts.createSourceFile(inputFileName, input, {
-    languageVersion: options.target ?? ts.ScriptTarget.ESNext,
-    impliedNodeFormat: ts.getImpliedNodeFormatForFile(
+  const sourceFile = compiler.createSourceFile(inputFileName, input, {
+    languageVersion: options.target ?? compiler.ScriptTarget.ESNext,
+    impliedNodeFormat: compiler.getImpliedNodeFormatForFile(
       inputFileName,
       /*packageJsonInfoCache*/ undefined,
       compilerHost,
       options,
     ),
     // @ts-expect-error internal TypeScript API
-    setExternalModuleIndicator: ts.getSetExternalModuleIndicator(options),
-    jsDocParsingMode: transpileOptions.jsDocParsingMode ?? ts.JSDocParsingMode.ParseAll,
+    setExternalModuleIndicator: compiler.getSetExternalModuleIndicator(options),
+    jsDocParsingMode: transpileOptions.jsDocParsingMode ?? compiler.JSDocParsingMode.ParseAll,
   })
   if (transpileOptions.moduleName) {
     sourceFile.moduleName = transpileOptions.moduleName
@@ -176,7 +174,7 @@ const transpileWorker: ExtendedTsTranspileModuleFn = (input, transpileOptions) =
   let outputText: string | undefined
   let sourceMapText: string | undefined
   const inputs = [inputFileName]
-  const program = ts.createProgram(inputs, options, compilerHost)
+  const program = compiler.createProgram(inputs, options, compilerHost)
 
   if (transpileOptions.reportDiagnostics) {
     diagnostics.push(...program.getSyntacticDiagnostics(sourceFile))
@@ -197,7 +195,7 @@ const transpileWorker: ExtendedTsTranspileModuleFn = (input, transpileOptions) =
 
   if (outputText === undefined) {
     diagnostics.push({
-      category: ts.DiagnosticCategory.Error,
+      category: compiler.DiagnosticCategory.Error,
       code: TsJestDiagnosticCodes.Generic,
       messageText: 'No output generated',
       file: sourceFile,
