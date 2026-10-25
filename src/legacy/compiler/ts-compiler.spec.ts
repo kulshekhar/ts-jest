@@ -10,7 +10,7 @@ import ts from 'typescript'
 import { createConfigSet, makeCompiler } from '../../__helpers__/fakers'
 import { logTargetMock } from '../../__helpers__/mocks'
 import { tsTranspileModule } from '../../transpilers/typescript/transpile-module'
-import type { DepGraphInfo, TsJestTransformerOptions } from '../../types'
+import type { DepGraphInfo, TsJestAstTransformer, TsJestTransformerOptions } from '../../types'
 import { Errors, Helps, interpolate } from '../../utils/messages'
 
 import { updateOutput } from './compiler-utils'
@@ -104,6 +104,188 @@ describe('TsCompiler', () => {
           .map((resolvedFileName) => normalize(resolvedFileName)),
       ).toEqual([importedModule3, importedModule1, importedModule2])
     })
+
+    test.each([true, false])('uses the watch cache only when the initial cache is empty: %p', (initialCacheIsEmpty) => {
+      const importedFile = join(mockFolder, 'thing1.ts')
+      const nestedFile = join(mockFolder, 'thing2.ts')
+      const initialCache = new Map(initialCacheIsEmpty ? [] : [[importedFile, 'export const value = 1']])
+      const watchCache = new Map([
+        [importedFile, "import './thing2'"],
+        [nestedFile, 'export const value = 2'],
+      ])
+      const compiler = makeCompiler({ tsJestConfig: baseTsJestConfig }, initialCache)
+
+      expect(compiler.getResolvedModules("import './thing1'", fileName, watchCache).map(normalize)).toEqual(
+        initialCacheIsEmpty ? [importedFile, nestedFile] : [importedFile],
+      )
+    })
+
+    test('deduplicates local imports and excludes unresolved and external library imports', () => {
+      const importedFile = join(mockFolder, 'thing1.ts')
+      const nestedFile = join(mockFolder, 'thing2.ts')
+      const compiler = makeCompiler(
+        { tsJestConfig: baseTsJestConfig },
+        new Map([
+          [importedFile, "import './thing2'"],
+          [nestedFile, 'export const value = 2'],
+        ]),
+      )
+
+      expect(
+        compiler
+          .getResolvedModules(
+            "import './thing1'\nimport './thing1'\nimport './thing2'\nimport './missing-module'\nimport 'typescript'",
+            fileName,
+            new Map(),
+          )
+          .map(normalize),
+      ).toEqual([importedFile, nestedFile])
+    })
+  })
+
+  describe('language service host', () => {
+    function createCompilerWithHost({
+      fileNames = [],
+      runtimeCache = new Map<string, string>(),
+      sys = ts.sys,
+    }: {
+      fileNames?: string[]
+      runtimeCache?: Map<string, string>
+      sys?: typeof ts.sys
+    } = {}) {
+      const service = {
+        getProgram: jest.fn<ts.LanguageService['getProgram']>(),
+        getEmitOutput: jest.fn<ts.LanguageService['getEmitOutput']>().mockReturnValue({
+          emitSkipped: false,
+          diagnostics: [],
+          outputFiles: [{ name: 'output.js', text: 'var value = 1', writeByteOrderMark: false }],
+        }),
+        getSemanticDiagnostics: jest.fn<ts.LanguageService['getSemanticDiagnostics']>().mockReturnValue([]),
+        getSyntacticDiagnostics: jest.fn<ts.LanguageService['getSyntacticDiagnostics']>().mockReturnValue([]),
+      }
+      const createLanguageService = jest
+        .fn<typeof ts.createLanguageService>()
+        .mockReturnValue(service as unknown as ts.LanguageService)
+      const createModuleResolutionCache = jest.fn(ts.createModuleResolutionCache)
+      const configSet = createConfigSet({
+        tsJestConfig: {
+          ...baseTsJestConfig,
+          tsconfig: { isolatedModules: false, sourceMap: false },
+        },
+        compilerModule: { ...ts, sys, createLanguageService, createModuleResolutionCache },
+      })
+      configSet.parsedTsConfig.fileNames = fileNames
+      const compiler = new TsCompiler(configSet, runtimeCache)
+      const [host] = createLanguageService.mock.calls[0]
+
+      return { compiler, host, service, createModuleResolutionCache }
+    }
+
+    test('tracks only non-test TypeScript roots and reports unknown script versions as undefined', () => {
+      const fileName = join(mockFolder, 'empty.ts')
+      const testFile = join(mockFolder, 'thing.spec.ts')
+      const jsFile = join(mockFolder, 'babel-foo.config.js')
+      const { host } = createCompilerWithHost({ fileNames: [fileName, testFile, jsFile] })
+
+      expect(host.getScriptFileNames()).toEqual([fileName])
+      expect(host.getScriptVersion(`${mockFolder}/nested/../empty.ts`)).toBe('0')
+      expect(host.getScriptVersion(testFile)).toBeUndefined()
+      expect(host.getProjectVersion?.()).toBe('1')
+    })
+
+    test.each(['export const value = 1', ''])('caches runtime snapshots, including empty source: %p', (contents) => {
+      const fileName = join(mockFolder, 'virtual.ts')
+      const runtimeCache = new Map([[fileName, contents]])
+      const readFile = jest.fn<typeof ts.sys.readFile>()
+      const { host } = createCompilerWithHost({
+        fileNames: [fileName],
+        runtimeCache,
+        sys: { ...ts.sys, readFile },
+      })
+      const snapshot = host.getScriptSnapshot(`${mockFolder}/nested/../virtual.ts`)
+
+      expect(snapshot?.getText(0, snapshot.getLength())).toBe(contents)
+      expect(host.getScriptVersion(fileName)).toBe('1')
+      runtimeCache.set(fileName, 'export const changed = true')
+      const cachedSnapshot = host.getScriptSnapshot(fileName)
+      expect(cachedSnapshot?.getText(0, cachedSnapshot.getLength())).toBe(contents)
+      expect(readFile).not.toHaveBeenCalled()
+    })
+
+    test('memoizes filesystem reads and leaves missing snapshots and versions undefined', () => {
+      const fileName = join(mockFolder, 'empty.ts')
+      const missingFile = join(mockFolder, 'missing-script.ts')
+      const readFile = jest.fn(ts.sys.readFile)
+      const { host } = createCompilerWithHost({ sys: { ...ts.sys, readFile } })
+
+      expect(host.readFile(fileName)).toBe('')
+      expect(host.readFile(fileName)).toBe('')
+      const snapshot = host.getScriptSnapshot(fileName)
+      expect(snapshot?.getLength()).toBe(0)
+      expect(readFile.mock.calls.filter(([name]) => name === fileName)).toHaveLength(1)
+      expect(host.getScriptSnapshot(missingFile)).toBeUndefined()
+      expect(host.getScriptVersion(missingFile)).toBeUndefined()
+      expect(host.getScriptFileNames()).toEqual([fileName])
+    })
+
+    test('exposes filesystem operations, transformer factories, and current compilation settings to TypeScript', () => {
+      const fileName = join(mockFolder, 'empty.ts')
+      const { compiler, host } = createCompilerWithHost()
+      const transform = jest.fn<ts.TransformerFactory<ts.SourceFile>>()
+      const options = { enabled: true }
+      const factory = jest.fn<TsJestAstTransformer['before'][number]['factory']>().mockReturnValue(transform)
+      compiler.configSet.resolvedTransformers.before = [{ name: 'custom', version: 1, options, factory }]
+
+      expect(host.useCaseSensitiveFileNames?.()).toBe(ts.sys.useCaseSensitiveFileNames)
+      expect(host.getCurrentDirectory()).toBe(compiler.configSet.cwd)
+      expect(host.getNewLine?.()).toBe('\n')
+      expect(host.fileExists(fileName)).toBe(true)
+      expect(host.directoryExists?.(mockFolder)).toBe(true)
+      expect(host.getDirectories?.(mockFolder)).toEqual(ts.sys.getDirectories(mockFolder))
+      expect(host.readDirectory?.(mockFolder, ['.ts'], undefined, ['empty.ts']).map(normalize)).toEqual([fileName])
+      expect(host.realpath?.(fileName)).toBe(ts.sys.realpath?.(fileName))
+      expect(host.getDefaultLibFileName(host.getCompilationSettings())).toBe(
+        ts.getDefaultLibFilePath(host.getCompilationSettings()),
+      )
+      expect(host.getCustomTransformers?.()).toEqual({ before: [transform], after: [], afterDeclarations: [] })
+      expect(factory).toHaveBeenCalledWith(compiler, options)
+
+      expect(
+        compiler.getCompiledOutput('const value = 1', fileName, {
+          depGraphs: new Map(),
+          supportsStaticESM: false,
+          watchMode: false,
+        }),
+      ).toEqual({ code: 'var value = 1', diagnostics: [] })
+      expect(host.getCompilationSettings().module).toBe(ts.ModuleKind.CommonJS)
+      expect(host.getProjectVersion?.()).toBe('2')
+    })
+
+    test.each([true, false])(
+      'respects host case sensitivity for module resolution cache entries: %p',
+      (useCaseSensitiveFileNames) => {
+        const { compiler, host, createModuleResolutionCache } = createCompilerWithHost({
+          sys: { ...ts.sys, useCaseSensitiveFileNames, realpath: undefined },
+        })
+        const resolutionCache = createModuleResolutionCache.mock.results[0].value as ts.ModuleResolutionCache
+        const directory = join(mockFolder, 'MixedCase')
+        const originalDirectoryCache = resolutionCache.getOrCreateCacheForDirectory(directory, undefined)
+        const lowerCaseDirectoryCache = resolutionCache.getOrCreateCacheForDirectory(directory.toLowerCase(), undefined)
+
+        if (useCaseSensitiveFileNames) {
+          expect(originalDirectoryCache).not.toBe(lowerCaseDirectoryCache)
+        } else {
+          expect(originalDirectoryCache).toBe(lowerCaseDirectoryCache)
+        }
+        expect(host.useCaseSensitiveFileNames?.()).toBe(useCaseSensitiveFileNames)
+        expect(host.realpath).toBeUndefined()
+        // @ts-expect-error testing purpose: inspect the host passed to TypeScript module resolution
+        const resolutionHost = compiler._moduleResolutionHost as ts.ModuleResolutionHost
+        expect(resolutionHost.getCurrentDirectory?.()).toBe(compiler.configSet.cwd)
+        expect((resolutionHost.useCaseSensitiveFileNames as () => boolean)()).toBe(useCaseSensitiveFileNames)
+        expect(resolutionHost.realpath).toBeUndefined()
+      },
+    )
   })
 
   describe('module resolution after a CommonJS compile', () => {
@@ -466,12 +648,11 @@ describe('TsCompiler', () => {
           after: [],
           afterDeclarations: [],
         }
-        // @ts-expect-error testing purpose
-        const transpileMock = (compiler._ts.transpileModule = jest.fn<typeof transpileModule>().mockReturnValueOnce({
+        const transpileMock = mockTsTranspileModule.mockReturnValueOnce({
           sourceMapText: '{}',
           outputText: 'var bar = 1',
           diagnostics: [],
-        } as ts.TranspileOutput))
+        })
         // @ts-expect-error testing purpose
         compiler._makeTransformers = jest.fn().mockReturnValueOnce(transformersStub)
         compiler.getCompiledOutput(fileContent, fileName, {
@@ -480,8 +661,8 @@ describe('TsCompiler', () => {
           watchMode: false,
         })
 
-        const usedCompilerOptions = transpileMock.mock.calls[0][1].compilerOptions as ts.CompilerOptions
         expect(transpileMock).toHaveBeenCalled()
+        const usedCompilerOptions = transpileMock.mock.calls.at(-1)?.[1].compilerOptions as ts.CompilerOptions
         expect({
           module: usedCompilerOptions.module,
           esModuleInterop: usedCompilerOptions.esModuleInterop,
@@ -519,8 +700,7 @@ describe('TsCompiler', () => {
             },
           ],
         } satisfies ts.TranspileOutput
-        // @ts-expect-error testing purpose
-        compiler._ts.transpileModule = jest.fn().mockReturnValueOnce(compileOutput)
+        mockTsTranspileModule.mockReturnValueOnce(compileOutput)
         compiler.getCompiledOutput(fileContent, fileName, {
           depGraphs: new Map(),
           supportsStaticESM: true,
@@ -566,7 +746,8 @@ describe('TsCompiler', () => {
           diagnostics: [injectedDefaultDiagnostic, unrelatedDeprecation],
         })
         // @ts-expect-error testing purpose: simulate the TypeScript 6 compatibility package
-        compiler._ts = { ...ts, version: '6.0.0', transpileModule }
+        compiler._ts = { ...ts, version: '6.0.0' }
+        mockTsTranspileModule.mockReturnValueOnce(transpileModule())
         compiler.configSet.raiseDiagnostics = jest.fn()
 
         compiler.getCompiledOutput(fileContent, fileName, {
@@ -602,11 +783,8 @@ describe('TsCompiler', () => {
           length: undefined,
         }
         // @ts-expect-error testing purpose: simulate the TypeScript 6 compatibility package
-        compiler._ts = {
-          ...ts,
-          version: '6.0.0',
-          transpileModule: jest.fn().mockReturnValue({ outputText: 'var bar = 1', diagnostics: [diagnostic] }),
-        }
+        compiler._ts = { ...ts, version: '6.0.0' }
+        mockTsTranspileModule.mockReturnValueOnce({ outputText: 'var bar = 1', diagnostics: [diagnostic] })
         compiler.configSet.raiseDiagnostics = jest.fn()
 
         compiler.getCompiledOutput(fileContent, fileName, {
@@ -623,29 +801,137 @@ describe('TsCompiler', () => {
         )
       })
 
-      it('should use tsTranspileModule when Node16/NodeNext is used', () => {
+      test.each(['Node16', 'NodeNext'] as const)(
+        'preserves TS5107 target deprecation for %s with implicit module resolution',
+        (module) => {
+          const folder = mkdtempSync(join(tmpdir(), 'ts-jest-modern-node-diagnostics-'))
+          const tsconfig = join(folder, 'tsconfig.json')
+          writeFileSync(tsconfig, JSON.stringify({ compilerOptions: { isolatedModules: true, module, target: 'ES5' } }))
+          try {
+            const compiler = makeCompiler({ tsJestConfig: { tsconfig } })
+            const diagnostic: ts.Diagnostic = {
+              category: ts.DiagnosticCategory.Error,
+              code: 5107,
+              messageText: "Option 'target=ES5' is deprecated.",
+              file: undefined,
+              start: undefined,
+              length: undefined,
+            }
+            // @ts-expect-error testing purpose: simulate the TypeScript 6 compatibility package
+            compiler._ts = { ...ts, version: '6.0.0' }
+            mockTsTranspileModule.mockReturnValueOnce({ outputText: 'var bar = 1', diagnostics: [diagnostic] })
+            compiler.configSet.raiseDiagnostics = jest.fn()
+
+            compiler.getCompiledOutput(fileContent, fileName, {
+              depGraphs: new Map(),
+              supportsStaticESM: false,
+              watchMode: false,
+            })
+
+            expect(compiler.configSet.raiseDiagnostics).toHaveBeenCalledWith([diagnostic], fileName, expect.anything())
+          } finally {
+            rmSync(folder, { recursive: true, force: true })
+          }
+        },
+      )
+
+      test.each([undefined, []])('accepts TypeScript 6 output without deprecation diagnostics: %p', (diagnostics) => {
+        const compiler = makeCompiler({
+          tsJestConfig: { tsconfig: join(mockFolder, 'tsconfig-no-module-resolution.json') },
+        })
+        // @ts-expect-error testing purpose: simulate the TypeScript 6 compatibility package
+        compiler._ts = { ...ts, version: '6.0.0' }
+        compiler.configSet.raiseDiagnostics = jest.fn()
+        mockTsTranspileModule.mockReturnValueOnce({ outputText: 'var bar = 1', diagnostics })
+
+        expect(
+          compiler.getCompiledOutput(fileContent, fileName, {
+            depGraphs: new Map(),
+            supportsStaticESM: false,
+            watchMode: false,
+          }),
+        ).toEqual({ code: 'var bar = 1' })
+        if (diagnostics) {
+          expect(compiler.configSet.raiseDiagnostics).toHaveBeenCalledWith(diagnostics, fileName, expect.anything())
+        } else {
+          expect(compiler.configSet.raiseDiagnostics).not.toHaveBeenCalled()
+        }
+      })
+
+      test('logs the CommonJS configuration error when Jest requests ESM output', () => {
         const compiler = makeCompiler({
           tsJestConfig: {
-            ...baseTsJestConfig,
-            tsconfig: {
-              isolatedModules: true,
-              module: 'Node16',
-              moduleResolution: 'Node16',
-            },
+            useESM: true,
+            tsconfig: { isolatedModules: true, module: 'CommonJS' },
           },
         })
-        mockTsTranspileModule.mockReturnValueOnce({
-          outputText: '',
-        })
+        mockTsTranspileModule.mockReturnValueOnce({ outputText: 'var bar = 1' })
 
+        expect(
+          compiler.getCompiledOutput(fileContent, fileName, {
+            depGraphs: new Map(),
+            supportsStaticESM: true,
+            watchMode: false,
+          }),
+        ).toEqual({ code: 'var bar = 1' })
+        expect(logTarget.filteredLines(LogLevels.error)).toEqual(
+          expect.arrayContaining([expect.stringContaining(Errors.InvalidModuleKindForEsm)]),
+        )
+      })
+
+      test('sets the transpiler program before creating custom transformers', () => {
+        const compiler = makeCompiler({ tsJestConfig: { tsconfig: { isolatedModules: true } } })
+        const program = ts.createProgram([], {})
+        const transform = jest.fn<ts.TransformerFactory<ts.SourceFile>>()
+        const programsSeenByFactory: Array<ts.Program | undefined> = []
+        const factory = jest.fn(() => {
+          programsSeenByFactory.push(compiler.program)
+
+          return transform
+        })
+        compiler.configSet.resolvedTransformers.before = [{ name: 'custom', version: 1, factory }]
+        mockTsTranspileModule.mockReturnValueOnce({ outputText: 'var bar = 1' })
         compiler.getCompiledOutput(fileContent, fileName, {
           depGraphs: new Map(),
-          supportsStaticESM: true,
+          supportsStaticESM: false,
           watchMode: false,
         })
+        const createTransformers = mockTsTranspileModule.mock.calls.at(-1)?.[1].transformers as (
+          program: ts.Program,
+        ) => ts.CustomTransformers
 
-        expect(mockTsTranspileModule).toHaveBeenCalled()
+        expect(createTransformers(program)).toEqual({ before: [transform], after: [], afterDeclarations: [] })
+        expect(programsSeenByFactory).toEqual([program])
+        expect(compiler.program).toBe(program)
       })
+
+      it.each(['CommonJS', 'ESNext', 'Node16', 'NodeNext'])(
+        'should use tsTranspileModule when module kind is %s',
+        (module) => {
+          const compiler = makeCompiler({
+            tsJestConfig: {
+              ...baseTsJestConfig,
+              tsconfig: {
+                isolatedModules: true,
+                module,
+                moduleResolution: module === 'Node16' || module === 'NodeNext' ? module : undefined,
+              },
+            },
+          })
+          mockTsTranspileModule.mockReturnValueOnce({
+            outputText: '',
+          })
+
+          compiler.getCompiledOutput(fileContent, fileName, {
+            depGraphs: new Map(),
+            supportsStaticESM: true,
+            watchMode: false,
+          })
+
+          expect(mockTsTranspileModule).toHaveBeenCalled()
+          expect(mockTsTranspileModule.mock.calls[0][2]).toBe(compiler.configSet.compilerModule)
+        },
+      )
     })
 
     describe('isolatedModules false', () => {
@@ -1381,7 +1667,7 @@ describe('TsCompiler', () => {
 
       test('should show a warning message and return original file content for non ts/tsx files if emitSkipped is true', () => {
         const compiler = makeCompiler({
-          tsJestConfig: { ...baseTsJestConfig },
+          tsJestConfig: { ...baseTsJestConfig, tsconfig: { allowJs: true } },
         })
         // @ts-expect-error testing purpose
         compiler._languageService.getEmitOutput = jest.fn().mockReturnValueOnce({
@@ -1402,6 +1688,10 @@ describe('TsCompiler', () => {
 
         // @ts-expect-error testing purpose
         expect(compiler._logger.warn).toHaveBeenCalled()
+        // @ts-expect-error testing purpose
+        expect(compiler._logger.warn).toHaveBeenCalledWith(
+          interpolate(Errors.CannotProcessFileReturnOriginal, { file: fileToCheck }),
+        )
         expect(output).toEqual({
           code: updateOutput(fileContent, fileToCheck),
         })
@@ -1761,6 +2051,75 @@ describe('TsCompiler', () => {
     const fileContent = 'const bar = 1'
     const jsOutput = 'var bar = 1'
     const sourceMap = '{}'
+
+    test('rechecks reportable importers in watch mode and preserves diagnostic order', () => {
+      const ignoredImporter = join(mockFolder, 'ignored.ts')
+      const unrelatedFile = join(mockFolder, 'unrelated.ts')
+      const runtimeCache = new Map([[fileName1, 'export const value = 1']])
+      const compiler = makeCompiler({ tsJestConfig: { tsconfig: { module: 'CommonJS' } } }, runtimeCache)
+      const diagnostic = (code: number): ts.Diagnostic => ({
+        category: ts.DiagnosticCategory.Error,
+        code,
+        messageText: `Diagnostic ${code}`,
+        file: undefined,
+        start: undefined,
+        length: undefined,
+      })
+      const originalDiagnostic = diagnostic(2322)
+      const importerSemanticDiagnostic = diagnostic(2339)
+      const importerSyntacticDiagnostic: ts.DiagnosticWithLocation = {
+        ...diagnostic(1005),
+        file: ts.createSourceFile(fileName1, 'export const value = 1', ts.ScriptTarget.ESNext),
+        start: 0,
+        length: 1,
+      }
+      const getSemanticDiagnostics = jest
+        .fn<ts.LanguageService['getSemanticDiagnostics']>()
+        .mockImplementation((file) => (file === fileName ? [originalDiagnostic] : [importerSemanticDiagnostic]))
+      const getSyntacticDiagnostics = jest
+        .fn<ts.LanguageService['getSyntacticDiagnostics']>()
+        .mockImplementation((file) => (file === fileName ? [] : [importerSyntacticDiagnostic]))
+      // @ts-expect-error testing purpose: replace language service diagnostics with deterministic results
+      compiler._languageService.getSemanticDiagnostics = getSemanticDiagnostics
+      // @ts-expect-error testing purpose: replace language service diagnostics with deterministic results
+      compiler._languageService.getSyntacticDiagnostics = getSyntacticDiagnostics
+      // @ts-expect-error testing purpose: isolate emit from the diagnostic checks
+      compiler._languageService.getEmitOutput = jest.fn().mockReturnValue({
+        emitSkipped: false,
+        outputFiles: [{ text: sourceMap }, { text: jsOutput }],
+      })
+      compiler.configSet.raiseDiagnostics = jest.fn()
+      compiler.configSet.shouldReportDiagnostics = jest
+        .fn<typeof compiler.configSet.shouldReportDiagnostics>()
+        .mockImplementation((file) => file !== ignoredImporter)
+      const depGraphs = new Map<string, DepGraphInfo>([
+        [fileName1, { fileContent: 'export const value = 1', resolvedModuleNames: [fileName] }],
+        [ignoredImporter, { fileContent: '', resolvedModuleNames: [fileName] }],
+        [unrelatedFile, { fileContent: '', resolvedModuleNames: [join(mockFolder, 'other.ts')] }],
+      ])
+
+      compiler.getCompiledOutput(fileContent, fileName, {
+        depGraphs,
+        supportsStaticESM: false,
+        watchMode: true,
+      })
+
+      expect(getSemanticDiagnostics.mock.calls).toEqual([[fileName], [fileName1]])
+      expect(getSyntacticDiagnostics.mock.calls).toEqual([[fileName], [fileName1]])
+      expect(compiler.configSet.raiseDiagnostics).toHaveBeenCalledTimes(2)
+      expect(compiler.configSet.raiseDiagnostics).toHaveBeenNthCalledWith(
+        1,
+        [originalDiagnostic],
+        fileName,
+        expect.anything(),
+      )
+      expect(compiler.configSet.raiseDiagnostics).toHaveBeenNthCalledWith(
+        2,
+        [importerSemanticDiagnostic, importerSyntacticDiagnostic],
+        fileName,
+        expect.anything(),
+      )
+    })
 
     test.each([true, false])(
       'should/should not report diagnostics if shouldReportDiagnostics is %p in non-watch mode',
