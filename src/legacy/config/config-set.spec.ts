@@ -15,7 +15,7 @@ import { Deprecations, Errors, interpolate } from '../../utils/messages'
 import { normalizeSlashes } from '../../utils/normalize-slashes'
 import { sha1 } from '../../utils/sha1'
 
-import { ConfigSet, MY_DIGEST, TS_JEST_OUT_DIR } from './config-set'
+import { ConfigSet, IGNORE_DIAGNOSTIC_CODES, MY_DIGEST, TS_JEST_OUT_DIR } from './config-set'
 
 jest.mock('../../utils/backports')
 jest.mock('../index')
@@ -1111,6 +1111,24 @@ describe('config-set', () => {
   }) // readTsConfig
 
   describe('diagnostics', () => {
+    it.each([' \tTS1009 \t,\n TS2571 , , 4072, TS1009,\t', [' \tTS1009 , TS2571\n', 4072, 'TS1009', ' ', '']])(
+      'should normalize comma-separated diagnostic codes with whitespace and TS prefixes: %p',
+      (ignoreCodes) => {
+        const configSet = createConfigSet({ tsJestConfig: { diagnostics: { ignoreCodes } } })
+
+        // @ts-expect-error testing normalized diagnostic configuration
+        expect(configSet._diagnostics.ignoreCodes).toEqual([...IGNORE_DIAGNOSTIC_CODES, 1009, 2571, 4072])
+      },
+    )
+
+    it('should preserve valid diagnostic codes after an entry with long internal whitespace', () => {
+      const ignoreCodes = `invalid${' '.repeat(32768)}!, TS2571`
+      const configSet = createConfigSet({ tsJestConfig: { diagnostics: { ignoreCodes } } })
+
+      // @ts-expect-error testing normalized diagnostic configuration
+      expect(configSet._diagnostics.ignoreCodes).toEqual([...IGNORE_DIAGNOSTIC_CODES, 2571])
+    })
+
     it.each([
       { diagnostics: true },
       { diagnostics: false },
