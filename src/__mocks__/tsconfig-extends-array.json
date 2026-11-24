@@ -1,0 +1,6 @@
+{
+  "extends": ["./tsconfig-extends-base-a.json", "./tsconfig-extends-base-b.json"],
+  "compilerOptions": {
+    "noUnusedLocals": true
+  }
+}
