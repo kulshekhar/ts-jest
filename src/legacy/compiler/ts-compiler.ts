@@ -423,6 +423,15 @@ export class TsCompiler implements TsCompilerInstance {
       }
       if (output.emitSkipped) {
         if (TS_TSX_REGEX.test(fileName)) {
+          // When emit is skipped because of errors (e.g. `noEmitOnError: true`), surface the actual
+          // errors instead of the generic message, otherwise the real cause stays hidden.
+          const emitErrors = (output.diagnostics ?? []).filter(
+            (diagnostic) => diagnostic.category === this._ts.DiagnosticCategory.Error,
+          )
+          if (emitErrors.length) {
+            throw this.configSet.createTsError(emitErrors)
+          }
+
           throw new Error(interpolate(Errors.CannotProcessFile, { file: fileName }))
         } else {
           this._logger.warn(interpolate(Errors.CannotProcessFileReturnOriginal, { file: fileName }))

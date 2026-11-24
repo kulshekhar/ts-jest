@@ -1430,6 +1430,94 @@ describe('TsCompiler', () => {
         },
       )
 
+      test('should throw the generic error when emitSkipped is true without error diagnostics', () => {
+        const compiler = makeCompiler({
+          tsJestConfig: { ...baseTsJestConfig },
+        })
+        // @ts-expect-error testing purpose
+        compiler._languageService.getEmitOutput = jest.fn().mockReturnValueOnce({
+          outputFiles: [],
+          emitSkipped: true,
+          diagnostics: [],
+        } as ts.EmitOutput)
+        // @ts-expect-error testing purpose
+        compiler.getDiagnostics = jest.fn().mockReturnValue([])
+
+        expect(() =>
+          compiler.getCompiledOutput(fileContent, fileName, {
+            depGraphs: new Map(),
+            supportsStaticESM: false,
+            watchMode: false,
+          }),
+        ).toThrow(interpolate(Errors.CannotProcessFile, { file: fileName }))
+      })
+
+      test('should throw emit error diagnostics for ts files if emitSkipped is true', () => {
+        const compiler = makeCompiler({
+          tsJestConfig: { ...baseTsJestConfig },
+        })
+        // @ts-expect-error testing purpose
+        compiler._languageService.getEmitOutput = jest.fn().mockReturnValueOnce({
+          outputFiles: [],
+          emitSkipped: true,
+          diagnostics: [
+            {
+              category: ts.DiagnosticCategory.Warning,
+              code: 1111,
+              messageText: 'Some warning',
+              file: undefined,
+              start: undefined,
+              length: undefined,
+            },
+            {
+              category: ts.DiagnosticCategory.Error,
+              code: 2322,
+              messageText: "Type 'string' is not assignable to type 'number'.",
+              file: undefined,
+              start: undefined,
+              length: undefined,
+            },
+          ],
+        } as ts.EmitOutput)
+        // @ts-expect-error testing purpose
+        compiler.getDiagnostics = jest.fn().mockReturnValue([])
+
+        let thrown: unknown
+        try {
+          compiler.getCompiledOutput(fileContent, fileName, {
+            depGraphs: new Map(),
+            supportsStaticESM: false,
+            watchMode: false,
+          })
+        } catch (error) {
+          thrown = error
+        }
+
+        expect(thrown).toBeInstanceOf(Error)
+        expect((thrown as Error).message).toContain("error TS2322: Type 'string' is not assignable to type 'number'.")
+        expect((thrown as Error).message).not.toContain('TS1111')
+        expect((thrown as Error).message).not.toContain('outDir')
+      })
+
+      test('should report the type error instead of the generic error with noEmitOnError in ESM mode', () => {
+        const compiler = makeCompiler({
+          tsJestConfig: {
+            useESM: true,
+            tsconfig: {
+              noEmitOnError: true,
+            },
+          },
+        })
+
+        expect(() =>
+          compiler.getCompiledOutput("const foo: number = 'bar'", fileName, {
+            depGraphs: new Map(),
+            supportsStaticESM: true,
+            watchMode: false,
+          }),
+        ).toThrow("error TS2322: Type 'string' is not assignable to type 'number'.")
+      })
+
       test('should throw error when there are no outputFiles', () => {
         const compiler = makeCompiler({
           tsJestConfig: {
