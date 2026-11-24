@@ -136,6 +136,21 @@ describe('config-set', () => {
       })
     })
 
+    it('should be able to read extends with an array of config files', () => {
+      const cs = createConfigSet({
+        tsJestConfig: { tsconfig: 'src/__mocks__/tsconfig-extends-array.json' },
+        resolve: null,
+      })
+
+      expect(cs.parsedTsConfig.options).toMatchObject({
+        strict: true,
+        noImplicitReturns: true,
+        noUnusedLocals: true,
+        // the last config in `extends` wins
+        target: ts.ScriptTarget.ES2022,
+      })
+    })
+
     it('should warn about possibly wrong module config and set synth. default imports with module None/AMD/UMD/System', () => {
       const target = logTargetMock()
       target.clear()
