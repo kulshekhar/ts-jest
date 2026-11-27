@@ -1,3 +1,5 @@
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'fs'
+import { tmpdir } from 'os'
 import { join, resolve } from 'path'
 
 import type { Transformer } from '@jest/transform'
@@ -307,6 +309,47 @@ describe('config-set', () => {
       })
 
       expect(cs.resolvedTransformers).toMatchSnapshot()
+    })
+
+    test('should resolve relative imports of a ts transformer located in a directory containing `.ts`', () => {
+      const tmpDir = mkdtempSync(join(tmpdir(), 'ts-jest-transformer-'))
+      const transformerDir = join(tmpDir, 'with.ts-in-name')
+      mkdirSync(transformerDir)
+      writeFileSync(join(transformerDir, 'transformer-name.js'), "module.exports = 'relative-import-transformer'")
+      writeFileSync(
+        join(transformerDir, 'relative-import-transformer.ts'),
+        [
+          "import transformerName = require('./transformer-name')",
+          '',
+          'export const version = 1',
+          'export const name = transformerName',
+          'export function factory() {',
+          '  return () => (sf: unknown) => sf',
+          '}',
+        ].join('\n'),
+      )
+
+      try {
+        const cs = createConfigSet({
+          jestConfig: {
+            rootDir: 'src',
+            cwd: 'src',
+          } as any, // eslint-disable-line @typescript-eslint/no-explicit-any
+          tsJestConfig: {
+            astTransformers: {
+              before: [join(transformerDir, 'relative-import-transformer.ts')],
+            },
+          },
+          resolve: null,
+        })
+
+        expect(cs.resolvedTransformers.before?.map((transformer) => transformer.name)).toEqual([
+          'hoist-jest',
+          'relative-import-transformer',
+        ])
+      } finally {
+        rmSync(tmpDir, { recursive: true, force: true })
+      }
     })
   })
 

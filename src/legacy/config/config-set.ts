@@ -360,7 +360,7 @@ export class ConfigSet {
               format: 'cjs',
               target: 'es2015',
             }).code
-          transformerFunc = requireFromString(compiledTransformer, transformerPath.replace('.ts', '.js'))
+          transformerFunc = requireFromString(compiledTransformer, transformerPath.replace(/\.ts$/, '.js'))
         } else {
           transformerFunc = require(transformerPath)
         }
